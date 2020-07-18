@@ -3,12 +3,18 @@ set(SOURCES
         src/NonMovableEntity.cpp
         src/Game.cpp
         src/Timer.cpp
+        src/KeyboardStatus.cpp
+        src/DefaultInputManager.cpp
+        src/InputObserverHandler.cpp
         )
 
 set(UT_SOURCES
         src/MovableEntityTest.cpp
         src/NonMovableEntityTest.cpp
         src/TimerTest.cpp
+        src/KeyboardStatusTest.cpp
+        src/DefaultInputManagerTest.cpp
+        src/InputObserverHandlerTest.cpp
         )
 
 add_library(game ${SOURCES})
