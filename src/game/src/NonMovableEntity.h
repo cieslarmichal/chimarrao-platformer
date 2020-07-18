@@ -1,14 +1,14 @@
 #pragma once
 
-#include "Entity.h"
 #include "Vector.h"
+#include "Entity.h"
 
 namespace game
 {
 class NonMovableEntity : public Entity
 {
 public:
-    NonMovableEntity(Vector2f positionInit, Vector2f sizeInit);
+    NonMovableEntity(utils::Vector2f positionInit, utils::Vector2f sizeInit);
     ~NonMovableEntity() = default;
 
     double getX() const override;
@@ -17,7 +17,7 @@ public:
     double getHeight() const override;
 
 private:
-    Vector2f position;
-    Vector2f size;
+    utils::Vector2f position;
+    utils::Vector2f size;
 };
 }

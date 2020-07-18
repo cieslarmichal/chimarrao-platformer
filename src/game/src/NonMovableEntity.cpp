@@ -2,7 +2,7 @@
 
 namespace game
 {
-NonMovableEntity::NonMovableEntity(Vector2f positionInit, Vector2f sizeInit)
+NonMovableEntity::NonMovableEntity(utils::Vector2f positionInit, utils::Vector2f sizeInit)
     : position{positionInit}, size{sizeInit}
 {
 }

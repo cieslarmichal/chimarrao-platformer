@@ -12,9 +12,9 @@ const float width{10.0};
 const float height{20.0};
 const float velocityX{-2.0};
 const float velocityY{1.0};
-const Vector2f position{xPosition, yPosition};
-const Vector2f velocity{velocityX, velocityY};
-const Vector2f size{width, height};
+const utils::Vector2f position{xPosition, yPosition};
+const utils::Vector2f velocity{velocityX, velocityY};
+const utils::Vector2f size{width, height};
 }
 
 class MovableEntityTest : public Test

@@ -12,8 +12,8 @@ set(UT_SOURCES
         )
 
 add_library(game ${SOURCES})
-target_include_directories(game PUBLIC ${SFML_INCLUDE_DIR})
-target_link_libraries (game PUBLIC sfml-graphics sfml-window sfml-system)
+target_include_directories(game PUBLIC ${SFML_INCLUDE_DIR} src)
+target_link_libraries (game PUBLIC utils graphics)
 
 add_executable(gameUT ${UT_SOURCES})
 target_link_libraries(gameUT PUBLIC gtest_main gmock game)
