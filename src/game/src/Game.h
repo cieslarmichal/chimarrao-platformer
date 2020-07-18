@@ -1,12 +1,23 @@
 #pragma once
 
+#include "Timer.h"
 
-class Game {
+namespace game
+{
+class Game
+{
 private:
+    Timer timer;
+
     void processInput();
-    void update();
+
+    void update(DeltaTime dt);
+
     void render();
+
 public:
+    Game();
+
     void run();
 };
-
+}
