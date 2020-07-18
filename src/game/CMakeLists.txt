@@ -2,11 +2,13 @@ set(SOURCES
         src/MovableEntity.cpp
         src/NonMovableEntity.cpp
         src/Game.cpp
+        src/Timer.cpp
         )
 
 set(UT_SOURCES
         src/MovableEntityTest.cpp
         src/NonMovableEntityTest.cpp
+        src/TimerTest.cpp
         )
 
 add_library(game ${SOURCES})
