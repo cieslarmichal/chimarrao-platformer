@@ -1,5 +1,6 @@
 set(SOURCES
         src/WindowSfml.cpp
+        src/WindowProxySfml.cpp
         )
 
 add_library(graphics ${SOURCES})
