@@ -10,8 +10,8 @@ const float xPosition{2.0};
 const float yPosition{-1.0};
 const float width{10.0};
 const float height{20.0};
-const Vector2f position{xPosition, yPosition};
-const Vector2f size{width, height};
+const utils::Vector2f position{xPosition, yPosition};
+const utils::Vector2f size{width, height};
 }
 
 class NonMovableEntityTest : public Test

@@ -2,7 +2,7 @@
 
 namespace game
 {
-MovableEntity::MovableEntity(Vector2f positionInit, Vector2f velocityInit, Vector2f sizeInit)
+MovableEntity::MovableEntity(utils::Vector2f positionInit, utils::Vector2f velocityInit, utils::Vector2f sizeInit)
     : position{positionInit}, velocity{velocityInit}, size{sizeInit}
 {
 }
@@ -27,7 +27,7 @@ double MovableEntity::getHeight() const
     return size.y;
 }
 
-Vector2f MovableEntity::getVelocity() const
+utils::Vector2f MovableEntity::getVelocity() const
 {
     return velocity;
 }
