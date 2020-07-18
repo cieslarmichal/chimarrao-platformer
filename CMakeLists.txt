@@ -12,6 +12,7 @@ set(FLAGS -std=c++17 -Wall -g3 -fno-omit-frame-pointer -Wextra -Werror)
 set(GMOCK_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/externals/googletest/googlemock/include")
 set(GTEST_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/externals/googletest/googletest/include")
 set(JSON_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/externals/json/include")
+set(SFML_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/externals/sfml/include")
 
 enable_testing()
 
