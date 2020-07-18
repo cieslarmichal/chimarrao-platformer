@@ -1,3 +1,6 @@
+#include "Game.h"
+
 int main(int argc, char ** argv) {
-    return 0;
+    Game game;
+    game.run();
 }
