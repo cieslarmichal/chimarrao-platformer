@@ -8,6 +8,7 @@ namespace game
 class NonMovableEntity : public Entity
 {
 public:
+    NonMovableEntity(Vector2f positionInit, Vector2f sizeInit);
     ~NonMovableEntity() = default;
 
     double getX() const override;

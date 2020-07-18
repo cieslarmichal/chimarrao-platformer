@@ -2,6 +2,11 @@
 
 namespace game
 {
+NonMovableEntity::NonMovableEntity(Vector2f positionInit, Vector2f sizeInit)
+    : position{positionInit}, size{sizeInit}
+{
+}
+
 double NonMovableEntity::getX() const
 {
     return position.x;
