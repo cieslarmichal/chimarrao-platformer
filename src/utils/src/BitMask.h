@@ -25,4 +25,6 @@ private:
 
     uint32_t bits;
 };
+
+bool operator==(const BitMask&, const BitMask&);
 }

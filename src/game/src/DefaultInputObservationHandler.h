@@ -1,16 +1,17 @@
 #pragma once
 
-#include "ObserverHandler.h"
 #include <vector>
+
+#include "InputObservationHandler.h"
 
 namespace game
 {
-class InputObserverHandler : public ObserverHandler
+class DefaultInputObservationHandler : public InputObservationHandler
 {
 public:
     void registerObserver(InputObserver* observer) override;
     void removeObserver(InputObserver* observer) override;
-    void notifyObservers(const KeyboardStatus&) override;
+    void notifyObservers(const InputStatus&) override;
 
 private:
     std::vector<InputObserver*> observers;

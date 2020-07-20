@@ -1,7 +1,7 @@
 #pragma once
 
 #include "InputObserver.h"
-#include "KeyboardStatus.h"
+#include "InputStatus.h"
 
 namespace game
 {
@@ -14,6 +14,6 @@ public:
     virtual void removeObserver(InputObserver*) = 0;
 
 protected:
-    virtual void notifyObservers(const KeyboardStatus&) = 0;
+    virtual void notifyObservers(const InputStatus&) = 0;
 };
 }

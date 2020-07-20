@@ -1,5 +1,6 @@
-#include "gtest/gtest.h"
 #include "NonMovableEntity.h"
+
+#include "gtest/gtest.h"
 
 using namespace game;
 using namespace ::testing;
@@ -47,4 +48,3 @@ TEST_F(NonMovableEntityTest, shouldReturnHeight)
 
     ASSERT_EQ(actualHeight, height);
 }
-

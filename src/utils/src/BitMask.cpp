@@ -61,4 +61,9 @@ bool BitMask::positionIsInvalid(unsigned int position) const
     return position >= 32;
 }
 
+bool operator==(const BitMask& lhs, const BitMask& rhs)
+{
+    return lhs.getMask() == rhs.getMask();
+}
+
 }

@@ -2,55 +2,55 @@
 
 #include <iostream>
 
+#include "InputKey.h"
 #include "SFML/Window/Keyboard.hpp"
 
 namespace game
 {
 
-DefaultInputManager::DefaultInputManager(std::unique_ptr<ObserverHandler> handler) : observerHandler{std::move(handler)}
+DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler> handler)
+    : observerHandler{std::move(handler)}
 {
-
 }
 
 void DefaultInputManager::readInput()
 {
-    KeyboardStatus keyboardStatus;
+    inputKeysStatus.clearStatus();
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
-        std::cout<<"x";
-        keyboardStatus.setUpPressed();
+        inputKeysStatus.setKeyPressed(InputKey::Up);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
-        keyboardStatus.setDownPressed();
+        inputKeysStatus.setKeyPressed(InputKey::Down);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        keyboardStatus.setLeftPressed();
+        inputKeysStatus.setKeyPressed(InputKey::Left);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        keyboardStatus.setRightPressed();
+        inputKeysStatus.setKeyPressed(InputKey::Right);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
     {
-        keyboardStatus.setSpacePressed();
+        inputKeysStatus.setKeyPressed(InputKey::Space);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
     {
-        keyboardStatus.setShiftPressed();
+        inputKeysStatus.setKeyPressed(InputKey::Shift);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
     {
-        keyboardStatus.setEnterPressed();
+        inputKeysStatus.setKeyPressed(InputKey::Enter);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
     {
-        keyboardStatus.setEscapePressed();
+        inputKeysStatus.setKeyPressed(InputKey::Escape);
     }
 
-    notifyObservers(keyboardStatus);
+    notifyObservers(inputKeysStatus);
 }
 
 void DefaultInputManager::registerObserver(InputObserver* observer)
@@ -63,7 +63,7 @@ void DefaultInputManager::removeObserver(InputObserver* observer)
     observerHandler->removeObserver(observer);
 }
 
-void DefaultInputManager::notifyObservers(const KeyboardStatus& keyboardStatus)
+void DefaultInputManager::notifyObservers(const InputStatus& keyboardStatus)
 {
     observerHandler->notifyObservers(keyboardStatus);
 }
