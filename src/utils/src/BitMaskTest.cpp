@@ -37,7 +37,7 @@ TEST_F(BitMaskTest, createdMaskWithInitializedByBitSet_shouldContainThisValue)
 
 TEST_F(BitMaskTest, createdMaskWithInitializedByNumber_shouldContainThisValue)
 {
-    BitMask bitMask{bitSet2};
+    BitMask bitMask{mask2};
 
     const auto currentBitMask = bitMask.getMask();
     ASSERT_EQ(currentBitMask, mask2);
