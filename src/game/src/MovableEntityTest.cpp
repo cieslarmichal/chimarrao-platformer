@@ -1,5 +1,6 @@
-#include "gtest/gtest.h"
 #include "MovableEntity.h"
+
+#include "gtest/gtest.h"
 
 using namespace game;
 using namespace ::testing;
@@ -57,4 +58,3 @@ TEST_F(MovableEntityTest, shouldReturnHeight)
 
     ASSERT_EQ(actualHeight, height);
 }
-

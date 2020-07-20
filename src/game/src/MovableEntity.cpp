@@ -2,7 +2,8 @@
 
 namespace game
 {
-MovableEntity::MovableEntity(utils::Vector2f positionInit, utils::Vector2f velocityInit, utils::Vector2f sizeInit)
+MovableEntity::MovableEntity(utils::Vector2f positionInit, utils::Vector2f velocityInit,
+                             utils::Vector2f sizeInit)
     : position{positionInit}, velocity{velocityInit}, size{sizeInit}
 {
 }

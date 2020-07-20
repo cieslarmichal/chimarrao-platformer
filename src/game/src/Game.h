@@ -4,22 +4,24 @@
 
 #include "Timer.h"
 #include "Window.h"
+#include "InputManager.h"
 
 namespace game
 {
 class Game
 {
+public:
+    explicit Game();
+
+    void run();
+
 private:
-    Timer timer;
-    std::unique_ptr<graphics::Window> window;
-
     void processInput();
-
-    void update(DeltaTime dt);
-
+    void update(DeltaTime);
     void render();
 
-public:
-    void run();
+    Timer timer;
+    std::unique_ptr<graphics::Window> window;
+    std::unique_ptr<InputManager> inputManager;
 };
 }

@@ -1,9 +1,15 @@
-file(WRITE src/dummy.cpp "")
+set(SOURCES
+        src/BitMask.cpp
+        )
 
-set(SOURCES src/dummy.cpp)
+set(UT_SOURCES
+        src/BitMaskTest.cpp
+        )
 
 add_library(utils ${SOURCES})
+add_executable(utilsUT ${UT_SOURCES})
 
 target_include_directories(utils PUBLIC src)
 
-target_link_libraries (utils PUBLIC sfml-graphics sfml-window sfml-system)
+target_link_libraries(utils PUBLIC sfml-graphics sfml-window sfml-system)
+target_link_libraries(utilsUT PUBLIC gtest_main gmock utils)

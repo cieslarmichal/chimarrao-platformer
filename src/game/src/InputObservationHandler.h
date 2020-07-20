@@ -1,17 +1,17 @@
 #pragma once
 
 #include "InputObserver.h"
-#include "KeyboardStatus.h"
+#include "InputStatus.h"
 
 namespace game
 {
-class ObserverHandler
+class InputObservationHandler
 {
 public:
-    virtual ~ObserverHandler() = default;
+    virtual ~InputObservationHandler() = default;
 
     virtual void registerObserver(InputObserver*) = 0;
     virtual void removeObserver(InputObserver*) = 0;
-    virtual void notifyObservers(const KeyboardStatus&) = 0;
+    virtual void notifyObservers(const InputStatus&) = 0;
 };
 }

@@ -1,20 +1,20 @@
-#include <algorithm>
+#include "DefaultInputObservationHandler.h"
 
-#include "InputObserverHandler.h"
+#include <algorithm>
 
 namespace game
 {
-void InputObserverHandler::registerObserver(InputObserver* observer)
+void DefaultInputObservationHandler::registerObserver(InputObserver* observer)
 {
     observers.push_back(observer);
 }
 
-void InputObserverHandler::removeObserver(InputObserver* observer)
+void DefaultInputObservationHandler::removeObserver(InputObserver* observer)
 {
     observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
 }
 
-void InputObserverHandler::notifyObservers(const KeyboardStatus& keyboardStatus)
+void DefaultInputObservationHandler::notifyObservers(const InputStatus& keyboardStatus)
 {
     for (const auto& observer : observers)
     {

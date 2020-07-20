@@ -3,14 +3,14 @@
 #include <memory>
 
 #include "InputManager.h"
-#include "ObserverHandler.h"
+#include "InputObservationHandler.h"
 
 namespace game
 {
 class DefaultInputManager : public InputManager
 {
 public:
-    explicit DefaultInputManager(std::unique_ptr<ObserverHandler>);
+    explicit DefaultInputManager(std::unique_ptr<InputObservationHandler>);
 
     void readInput() override;
 
@@ -18,8 +18,9 @@ public:
     void removeObserver(InputObserver*) override;
 
 private:
-    void notifyObservers(const KeyboardStatus&) override;
+    void notifyObservers(const InputStatus&) override;
 
-    std::unique_ptr<ObserverHandler> observerHandler;
+    std::unique_ptr<InputObservationHandler> observerHandler;
+    InputStatus inputKeysStatus;
 };
 }

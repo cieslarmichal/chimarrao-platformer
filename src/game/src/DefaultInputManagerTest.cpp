@@ -1,7 +1,8 @@
 #include "DefaultInputManager.h"
 
 #include "gtest/gtest.h"
-#include "ObserverHandlerMock.h"
+
+#include "InputObservationHandlerMock.h"
 #include "InputObserverMock.h"
 
 using namespace ::testing;
@@ -9,17 +10,16 @@ using namespace game;
 
 namespace
 {
-const KeyboardStatus keyboardStatus;
+const InputStatus keyboardStatus;
 }
 
 class DefaultInputManagerTest : public Test
 {
 public:
-    std::shared_ptr<InputObserverMock> observer1 =
-        std::make_shared<StrictMock<InputObserverMock>>();
-    std::unique_ptr<ObserverHandlerMock> observerHandlerInit =
-        std::make_unique<StrictMock<ObserverHandlerMock>>();
-    ObserverHandlerMock* observerHandler = observerHandlerInit.get();
+    std::shared_ptr<InputObserverMock> observer1 = std::make_shared<StrictMock<InputObserverMock>>();
+    std::unique_ptr<InputObservationHandlerMock> observerHandlerInit =
+        std::make_unique<StrictMock<InputObservationHandlerMock>>();
+    InputObservationHandlerMock* observerHandler = observerHandlerInit.get();
 
     DefaultInputManager inputManager{std::move(observerHandlerInit)};
 };
@@ -44,4 +44,3 @@ TEST_F(DefaultInputManagerTest, shouldRemoveObserver)
 
     inputManager.removeObserver(observer1.get());
 }
-
