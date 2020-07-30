@@ -2,18 +2,17 @@
 
 #include "gmock/gmock.h"
 
-#include "WindowProxy.h"
+#include "Window.h"
 
 namespace graphics
 {
-class WindowProxyMock : public WindowProxy
+class WindowMock : public Window
 {
 public:
-    MOCK_METHOD(void, create, (utils::Vector2i windowSize, std::string windowTitle), ());
     MOCK_METHOD(bool, isOpen, (), (const));
     MOCK_METHOD(void, display, (), ());
+    MOCK_METHOD(void, update, (), ());
     MOCK_METHOD(void, close, (), ());
     MOCK_METHOD(void, clear, (), ());
-    MOCK_METHOD(bool, pollEvent, (sf::Event & event), ());
 };
 }

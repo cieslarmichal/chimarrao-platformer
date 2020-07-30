@@ -23,7 +23,7 @@ public:
 TEST_F(DefaultInputObservationHandlerTest, givenRegisteredObserver_shouldNotifyObserverAboutChanges)
 {
     inputObservationHandler.registerObserver(observer1.get());
-    EXPECT_CALL(*observer1, update(inputStatus));
+    EXPECT_CALL(*observer1, handleInputStatus(inputStatus));
 
     inputObservationHandler.notifyObservers(inputStatus);
 }
@@ -32,8 +32,8 @@ TEST_F(DefaultInputObservationHandlerTest, givenRegisteredObservers_shouldNotify
 {
     inputObservationHandler.registerObserver(observer1.get());
     inputObservationHandler.registerObserver(observer2.get());
-    EXPECT_CALL(*observer1, update(inputStatus));
-    EXPECT_CALL(*observer2, update(inputStatus));
+    EXPECT_CALL(*observer1, handleInputStatus(inputStatus));
+    EXPECT_CALL(*observer2, handleInputStatus(inputStatus));
 
     inputObservationHandler.notifyObservers(inputStatus);
 }
@@ -61,7 +61,7 @@ TEST_F(DefaultInputObservationHandlerTest, givenRemovedOneObserverFromTwo_should
     inputObservationHandler.registerObserver(observer1.get());
     inputObservationHandler.registerObserver(observer2.get());
     inputObservationHandler.removeObserver(observer2.get());
-    EXPECT_CALL(*observer1, update(inputStatus));
+    EXPECT_CALL(*observer1, handleInputStatus(inputStatus));
 
     inputObservationHandler.notifyObservers(inputStatus);
 }

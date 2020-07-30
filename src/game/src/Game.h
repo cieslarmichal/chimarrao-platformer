@@ -5,6 +5,9 @@
 #include "Timer.h"
 #include "Window.h"
 #include "InputManager.h"
+#include <stack>
+#include <map>
+#include "GameState.h"
 
 namespace game
 {
@@ -17,11 +20,14 @@ public:
 
 private:
     void processInput();
-    void update(DeltaTime);
+    void update();
     void render();
+    void initStates();
 
     Timer timer;
-    std::unique_ptr<graphics::Window> window;
+    utils::DeltaTime dt;
+    std::shared_ptr<graphics::Window> window;
     std::unique_ptr<InputManager> inputManager;
+    std::stack<std::unique_ptr<GameState>> states;
 };
 }

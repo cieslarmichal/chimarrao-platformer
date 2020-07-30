@@ -14,13 +14,16 @@ bool WindowSFML::isOpen() const
     return window->isOpen();
 }
 
-void WindowSFML::display() {
+void WindowSFML::display()
+{
     window->display();
 }
 
-void WindowSFML::update() {
+void WindowSFML::update()
+{
     sf::Event event;
 
+    // TODO: not a place for tracking events
     while(window->pollEvent(event))
     {
         if(sf::Event::Closed == event.type)
@@ -32,5 +35,15 @@ void WindowSFML::update() {
             //TODO: implement resize
         }
     }
+}
+
+void WindowSFML::clear()
+{
+    window->clear();
+}
+
+void WindowSFML::close()
+{
+    window->close();
 }
 }

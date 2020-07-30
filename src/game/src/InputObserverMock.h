@@ -9,6 +9,6 @@ namespace game
 class InputObserverMock : public InputObserver
 {
 public:
-    MOCK_METHOD1(update, void(const InputStatus&));
+    MOCK_METHOD1(handleInputStatus, void(const InputStatus&));
 };
 }

@@ -1,5 +1,11 @@
 #pragma once
 
+#include <memory>
+
+#include "DeltaTime.h"
+#include "PhysicsComponent.h"
+#include "SFML/Graphics/RenderTarget.hpp"
+
 namespace game
 {
 class Entity
@@ -7,9 +13,10 @@ class Entity
 public:
     virtual ~Entity() = default;
 
-    virtual double getX() const = 0;
-    virtual double getY() const = 0;
-    virtual double getWidth() const = 0;
-    virtual double getHeight() const = 0;
+    virtual void update(const utils::DeltaTime&) = 0;
+    virtual void render(sf::RenderTarget*) = 0;
+
+protected:
+    std::unique_ptr<physics::PhysicsComponent> physicsComponent;
 };
 }
