@@ -17,10 +17,10 @@ public:
 
 private:
     void processInput();
-    void update(DeltaTime);
+    void update(utils::DeltaTime);
     void render();
 
-    Timer timer;
+    utils::Timer timer;
     std::unique_ptr<graphics::Window> window;
     std::unique_ptr<InputManager> inputManager;
 };

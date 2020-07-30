@@ -1,6 +1,6 @@
 #include "Timer.h"
 
-namespace game
+namespace utils
 {
 DeltaTime Timer::getDurationFromLastUpdate()
 {

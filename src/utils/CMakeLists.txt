@@ -1,9 +1,11 @@
 set(SOURCES
         src/BitMask.cpp
+        src/Timer.cpp
         )
 
 set(UT_SOURCES
         src/BitMaskTest.cpp
+        src/TimerTest.cpp
         )
 
 add_library(utils ${SOURCES})

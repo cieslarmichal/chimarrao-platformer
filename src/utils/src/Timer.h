@@ -3,7 +3,7 @@
 #include <chrono>
 #include "DeltaTime.h"
 
-namespace game
+namespace utils
 {
 class Timer
 {

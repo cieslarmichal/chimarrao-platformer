@@ -32,7 +32,7 @@ void Game::processInput()
     inputManager->readInput();
 }
 
-void Game::update(DeltaTime dt)
+void Game::update(utils::DeltaTime dt)
 {
     window->update();
 }
