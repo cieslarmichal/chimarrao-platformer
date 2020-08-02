@@ -6,6 +6,9 @@ set(SOURCES
         src/GraphicsIdGenerator.cpp
         src/RendererPoolSfml.cpp
         src/RectangleShape.cpp
+        src/RenderTargetSfml.cpp
+        src/GraphicsFactory.cpp
+        src/DefaultGraphicsFactory.cpp
         )
 
 add_library(graphics ${SOURCES})
@@ -19,6 +22,7 @@ set(UT_SOURCES
         src/TextureStorageSfmlTest.cpp
         src/RectangleShapeTest.cpp
         src/RendererPoolSfmlTest.cpp
+        src/RenderTargetSfmlTest.cpp
         )
 set(UT_SOURCES
         src/WindowSfmlTest.cpp

@@ -5,8 +5,9 @@
 #include "TextureStorage.h"
 
 namespace graphics{
-class TextureStorageMock : public TextureStorage {
+class TextureStorageMock : public TextureStorage
+{
 public:
-    MOCK_METHOD(boost::optional<sf::Texture&>, getTexture,(const TexturePath&));
+    MOCK_METHOD(boost::optional<const sf::Texture&>, getTexture,(const TexturePath&));
 };
 }

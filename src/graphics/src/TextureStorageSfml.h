@@ -13,7 +13,7 @@ class TextureStorageSfml : public TextureStorage
 public:
     explicit TextureStorageSfml(std::unique_ptr<TextureLoader> loader);
 
-    boost::optional<sf::Texture&> getTexture(const TexturePath& path) override;
+    boost::optional<const sf::Texture&> getTexture(const TexturePath& path) override;
 
 private:
     bool loadTexture(const TexturePath& path);

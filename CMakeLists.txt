@@ -5,7 +5,7 @@ project(chimarrao CXX)
 add_subdirectory(externals)
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS_DEBUG "-fsanitize=address")
+set(SFML_MINIMAL_VERSION 2.4.2)
 set(FLAGS -std=c++17 -Wall -g3 -fno-omit-frame-pointer -Wextra -Werror)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})

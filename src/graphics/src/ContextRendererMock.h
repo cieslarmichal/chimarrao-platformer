@@ -1,19 +1,18 @@
 #pragma once
 
 #include "gmock/gmock.h"
-#include "RendererPool.h"
+#include "ContextRenderer.h"
 
 namespace graphics
 {
-class RendererPoolMock : public RendererPool
+class ContextRendererMock : public ContextRenderer
 {
 public:
     MOCK_METHOD(void, initialize, ());
+    MOCK_METHOD(void, clear, (const sf::Color&));
+    MOCK_METHOD(void, draw, (const RectangleShape&));
+    MOCK_METHOD(void, setView, ());
+    MOCK_METHOD(void, setViewSize, (const utils::Vector2u& windowsSize));
 };
 }
-    virtual void initialize() = 0;
-    virtual void clear(const sf::Color&) = 0;
-    virtual void draw(const RectangleShape&) = 0;
-    virtual void setView() = 0;
-    virtual void setViewSize(const utils::Vector2u& windowsSize) = 0;
 

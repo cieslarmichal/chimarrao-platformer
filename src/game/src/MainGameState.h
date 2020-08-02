@@ -9,10 +9,10 @@ namespace game
 class MainGameState : public GameState
 {
 public:
-    explicit MainGameState(std::shared_ptr<graphics::Window>, InputManager&);
+    explicit MainGameState(std::shared_ptr<graphics::Window>, InputManager&, std::shared_ptr<graphics::RendererPool>);
 
     void update(const utils::DeltaTime&) override;
-    void render(sf::RenderTarget*) override;
+    void render() override;
     void checkIfEnded() override;
 
 private:

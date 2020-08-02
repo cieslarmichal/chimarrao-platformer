@@ -8,6 +8,7 @@
 #include <stack>
 #include <map>
 #include "GameState.h"
+#include "RendererPool.h"
 
 namespace game
 {
@@ -24,9 +25,10 @@ private:
     void render();
     void initStates();
 
-    Timer timer;
+    utils::Timer timer;
     utils::DeltaTime dt;
     std::shared_ptr<graphics::Window> window;
+    std::shared_ptr<graphics::RendererPool> rendererPool;
     std::unique_ptr<InputManager> inputManager;
     std::stack<std::unique_ptr<GameState>> states;
 };

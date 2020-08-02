@@ -10,7 +10,7 @@ class WindowProxy
 {
 public:
     virtual ~WindowProxy() = default;
-    virtual void create(utils::Vector2i windowSize, std::string windowTitle) = 0;
+    virtual void create(utils::Vector2u windowSize, std::string windowTitle) = 0;
 
     virtual bool isOpen() const = 0;
     virtual void display() = 0;

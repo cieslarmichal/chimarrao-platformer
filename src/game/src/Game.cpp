@@ -1,19 +1,25 @@
 #include "Game.h"
 
-#include <WindowProxySfml.h>
+#include <iostream>
 
 #include "DefaultInputManager.h"
 #include "DefaultInputObservationHandler.h"
-#include "Vector.h"
-#include "WindowSfml.h"
+#include "GraphicsFactory.h"
 #include "MainGameState.h"
+#include "Vector.h"
 
 namespace game
 {
 Game::Game()
 {
-    window = std::make_shared<graphics::WindowSFML>(utils::Vector2i(800, 600), "chimarrao",
-                                                    std::make_unique<graphics::WindowProxySFML>());
+    auto graphicsFactory = graphics::GraphicsFactory::createGraphicsFactory();
+
+    auto windowSize = utils::Vector2u{800, 600};
+    window = graphicsFactory->createWindow(windowSize, "chimarrao");
+    const utils::Vector2u mapSize{15, 15};
+
+    rendererPool = graphicsFactory->createRendererPool(windowSize, mapSize);
+
     inputManager = std::make_unique<DefaultInputManager>(std::make_unique<DefaultInputObservationHandler>());
     timer.start();
     initStates();
@@ -52,14 +58,14 @@ void Game::render()
 {
     if (not states.empty())
     {
-//        states.top()->render(window.get());
+        states.top()->render();
     }
     window->display();
 }
 
 void Game::initStates()
 {
-    states.push(std::make_unique<MainGameState>(window, *inputManager));
+    states.push(std::make_unique<MainGameState>(window, *inputManager, rendererPool));
 }
 
 }

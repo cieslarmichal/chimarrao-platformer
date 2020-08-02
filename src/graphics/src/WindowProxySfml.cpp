@@ -2,44 +2,39 @@
 
 namespace graphics
 {
-WindowProxySFML::WindowProxySFML()
+WindowProxySfml::WindowProxySfml()
 {
     window = std::make_unique<sf::RenderWindow>();
 }
 
-void WindowProxySFML::create(utils::Vector2i windowSize, std::string windowTitle)
+void WindowProxySfml::create(utils::Vector2u windowSize, std::string windowTitle)
 {
     window->create(sf::VideoMode(windowSize.x, windowSize.y), windowTitle);
 }
 
-bool WindowProxySFML::isOpen() const
+bool WindowProxySfml::isOpen() const
 {
     return window->isOpen();
 }
 
-void WindowProxySFML::display()
+void WindowProxySfml::display()
 {
     window->display();
 }
 
-void WindowProxySFML::close()
+void WindowProxySfml::close()
 {
     window->close();
 }
 
-void WindowProxySFML::clear()
+void WindowProxySfml::clear()
 {
     window->clear();
 }
 
-bool WindowProxySFML::pollEvent(sf::Event& event)
+bool WindowProxySfml::pollEvent(sf::Event& event)
 {
     return window->pollEvent(event);
-}
-
-const sf::RenderWindow& WindowProxySFML::getRenderWindow() const
-{
-    return *window;
 }
 
 }

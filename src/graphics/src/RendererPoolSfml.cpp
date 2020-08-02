@@ -1,5 +1,9 @@
 #include "RendererPoolSfml.h"
 
+#include <iostream>
+
+#include "GraphicsIdGenerator.h"
+
 namespace graphics
 {
 
@@ -18,11 +22,9 @@ static auto& getShapeByPosition(const std::vector<RectangleShape>& shapes,
 }
 
 RendererPoolSfml::RendererPoolSfml(std::unique_ptr<ContextRenderer> contextRendererInit,
-                                   std::unique_ptr<TextureStorage> textureStorageInit,
-                                   std::unique_ptr<GraphicsIdGenerator> graphicsIdGeneratorInit)
+                                   std::unique_ptr<TextureStorage> textureStorageInit)
     : contextRenderer{std::move(contextRendererInit)},
-      textureStorage{std::move(textureStorageInit)},
-      idGenerator{std::move(graphicsIdGeneratorInit)}
+      textureStorage{std::move(textureStorageInit)}
 {
     contextRenderer->initialize();
     contextRenderer->setView();
@@ -31,7 +33,7 @@ RendererPoolSfml::RendererPoolSfml(std::unique_ptr<ContextRenderer> contextRende
 GraphicsId RendererPoolSfml::acquire(const utils::Vector2f& size, const utils::Vector2f& position,
                                      const Color& color)
 {
-    auto id = idGenerator->generateId();
+    auto id = GraphicsIdGenerator::generateId();
     shapes.emplace_back(id, size, position, color);
     return id;
 }
@@ -51,13 +53,16 @@ void RendererPoolSfml::release(const GraphicsId& id)
 
 void RendererPoolSfml::renderAll()
 {
-    cleanUnusedShapes();
-    renderer->clear(sf::Color::White);
-    renderer->setView();
+    if (not shapesToRemove.empty())
+    {
+        cleanUnusedShapes();
+    }
+    contextRenderer->clear(sf::Color::White);
+    contextRenderer->setView();
 
     for (const auto& shape : shapes)
     {
-        renderer->draw(shape);
+        contextRenderer->draw(shape);
     }
 }
 
@@ -79,11 +84,12 @@ utils::Vector2f RendererPoolSfml::getPosition(const GraphicsId& id)
         const auto& shape = getShapeByPosition(shapes, shapeIter);
         return shape.getPosition();
     }
+    return {};
 }
 
 void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path)
 {
-    boost::optional<sf::Texture&> textureOpt = textureStorage->getTexture(path);
+    boost::optional<const sf::Texture&> textureOpt = textureStorage->getTexture(path);
     if (not textureOpt)
     {
         return;
@@ -93,7 +99,7 @@ void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path)
     if (shapeIter != shapes.end())
     {
         auto& shape = getShapeByPosition(shapes, shapeIter);
-        shape.setTexture(*texture);
+        shape.setTexture(&(*textureOpt));
     }
 }
 

@@ -5,11 +5,12 @@
 namespace game
 {
 
-MainGameState::MainGameState(std::shared_ptr<graphics::Window> window, InputManager& inputManagerInit)
-    : GameState{std::move(window), inputManagerInit}
+MainGameState::MainGameState(std::shared_ptr<graphics::Window> window, InputManager& inputManagerInit, std::shared_ptr<graphics::RendererPool> rendererPoolInit)
+    : GameState{std::move(window), inputManagerInit, std::move(rendererPoolInit)}
 {
-    player = std::make_unique<Player>(
-        std::make_unique<physics::PhysicsSfmlComponent>(utils::Vector2f{50, 50}, utils::Vector2f{50, 50}));
+    auto graphicsId = rendererPool->acquire({5,5}, {10, 10}, graphics::Color::Magenta);
+
+    player = std::make_unique<Player>(graphicsId, rendererPool);
 
     auto* playerAsObserver = dynamic_cast<Player*>(player.get());
     if (playerAsObserver)
@@ -23,9 +24,9 @@ void MainGameState::update(const utils::DeltaTime& dt)
     player->update(dt);
 }
 
-void MainGameState::render(sf::RenderTarget* target)
+void MainGameState::render()
 {
-    player->render(target);
+    rendererPool->renderAll();
 }
 
 void MainGameState::checkIfEnded() {}

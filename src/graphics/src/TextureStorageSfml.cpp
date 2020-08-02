@@ -6,7 +6,7 @@ namespace graphics
 {
 TextureStorageSfml::TextureStorageSfml(std::unique_ptr<TextureLoader> loader) : loader(std::move(loader)) {}
 
-boost::optional<sf::Texture&> TextureStorageSfml::getTexture(const TexturePath& path)
+boost::optional<const sf::Texture&> TextureStorageSfml::getTexture(const TexturePath& path)
 {
     if (not inTextureMap(path))
     {
