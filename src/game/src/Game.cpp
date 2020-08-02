@@ -16,7 +16,7 @@ Game::Game()
 
     auto windowSize = utils::Vector2u{800, 600};
     window = graphicsFactory->createWindow(windowSize, "chimarrao");
-    const utils::Vector2u mapSize{15, 15};
+    const utils::Vector2u mapSize{30, 30};
 
     rendererPool = graphicsFactory->createRendererPool(windowSize, mapSize);
 
@@ -29,8 +29,8 @@ void Game::run()
 {
     while (window->isOpen())
     {
-        processInput();
         dt = timer.getDurationFromLastUpdate();
+        processInput();
         update();
         render();
     }

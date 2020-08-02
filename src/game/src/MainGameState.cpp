@@ -1,6 +1,7 @@
 #include "MainGameState.h"
 
 #include "PhysicsSfmlComponent.h"
+#include "GetProjectPath.h"
 
 namespace game
 {
@@ -8,7 +9,7 @@ namespace game
 MainGameState::MainGameState(std::shared_ptr<graphics::Window> window, InputManager& inputManagerInit, std::shared_ptr<graphics::RendererPool> rendererPoolInit)
     : GameState{std::move(window), inputManagerInit, std::move(rendererPoolInit)}
 {
-    auto graphicsId = rendererPool->acquire({5,5}, {10, 10}, graphics::Color::Magenta);
+    auto graphicsId = rendererPool->acquire({5,5}, {10, 10}, utils::getProjectPath("chimarrao") + "xxx.png");
 
     player = std::make_unique<Player>(graphicsId, rendererPool);
 

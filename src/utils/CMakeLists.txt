@@ -1,11 +1,17 @@
 set(SOURCES
         src/BitMask.cpp
         src/Timer.cpp
+        src/GetExecutablePath.cpp
+        src/GetProjectPath.cpp
+        src/StringHelper.cpp
         )
 
 set(UT_SOURCES
         src/BitMaskTest.cpp
         src/TimerTest.cpp
+        src/GetExecutablePathTest.cpp
+        src/GetProjectPathTest.cpp
+        src/StringHelperTest.cpp
         )
 
 add_library(utils ${SOURCES})
