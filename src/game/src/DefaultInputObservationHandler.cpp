@@ -20,7 +20,7 @@ void DefaultInputObservationHandler::notifyObservers(const InputStatus& keyboard
     {
         if (observer)
         {
-            observer->update(keyboardStatus);
+            observer->handleInputStatus(keyboardStatus);
         }
     }
 }

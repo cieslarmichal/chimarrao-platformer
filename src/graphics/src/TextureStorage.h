@@ -13,6 +13,6 @@ class TextureStorage
 {
 public:
     virtual ~TextureStorage() = default;
-    virtual boost::optional<sf::Texture&> getTexture(const TexturePath&) = 0;
+    virtual boost::optional<const sf::Texture&> getTexture(const TexturePath&) = 0;
 };
 }

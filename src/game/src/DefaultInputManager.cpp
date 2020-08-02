@@ -41,7 +41,7 @@ void DefaultInputManager::readInput()
     {
         inputKeysStatus.setKeyPressed(InputKey::Shift);
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
     {
         inputKeysStatus.setKeyPressed(InputKey::Enter);
     }

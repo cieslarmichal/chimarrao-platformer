@@ -1,5 +1,7 @@
 #pragma once
 
+#include "DeltaTime.h"
+
 namespace game
 {
 class Entity
@@ -7,9 +9,7 @@ class Entity
 public:
     virtual ~Entity() = default;
 
-    virtual double getX() const = 0;
-    virtual double getY() const = 0;
-    virtual double getWidth() const = 0;
-    virtual double getHeight() const = 0;
+    virtual void update(const utils::DeltaTime&) = 0;
+    virtual bool isDead() = 0;
 };
 }

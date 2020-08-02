@@ -1,5 +1,6 @@
 add_subdirectory(utils)
 add_subdirectory(graphics)
+add_subdirectory(physics)
 add_subdirectory(game)
 
 add_executable(chimarrao main.cpp)

@@ -9,6 +9,6 @@ class InputObserver
 public:
     virtual ~InputObserver() = default;
 
-    virtual void update(const InputStatus&) = 0;
+    virtual void handleInputStatus(const InputStatus&) = 0;
 };
 }

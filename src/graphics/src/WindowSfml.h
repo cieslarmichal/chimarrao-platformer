@@ -7,15 +7,17 @@
 
 namespace graphics
 {
-class WindowSFML : public Window
+class WindowSfml : public Window
 {
-private:
-    std::unique_ptr<WindowProxy> window;
 public:
-    WindowSFML(utils::Vector2i windowSize, std::string windowTitle, std::unique_ptr<WindowProxy> window);
+    WindowSfml(utils::Vector2u windowSize, std::string windowTitle, std::unique_ptr<WindowProxy> window);
 
     bool isOpen() const override;
     void display() override;
     void update() override;
+    void close() override;
+
+private:
+    std::unique_ptr<WindowProxy> window;
 };
 }

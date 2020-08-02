@@ -5,18 +5,18 @@
 
 namespace graphics
 {
-class WindowProxySFML : public WindowProxy
+class WindowProxySfml : public WindowProxy
 {
-private:
-    std::unique_ptr<sf::Window> window;
-
 public:
-    ~WindowProxySFML();
-    WindowProxySFML();
-    void create(utils::Vector2i windowSize, std::string windowTitle) override;
+    WindowProxySfml();
+
+    void create(utils::Vector2u windowSize, std::string windowTitle) override;
     bool isOpen() const override;
     void display() override;
     void close() override;
     bool pollEvent(sf::Event& event) override;
+
+private:
+    sf::Window window;
 };
 }

@@ -8,10 +8,10 @@ namespace utils
 class Timer
 {
 private:
-    TimePoint startTimePoint;
-    TimePoint previousUpdateTimePoint;
+    utils::TimePoint startTimePoint;
+    utils::TimePoint previousUpdateTimePoint;
 public:
     void start();
-    DeltaTime getDurationFromLastUpdate();
+    utils::DeltaTime getDurationFromLastUpdate();
 };
 }

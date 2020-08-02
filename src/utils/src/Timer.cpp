@@ -2,7 +2,7 @@
 
 namespace utils
 {
-DeltaTime Timer::getDurationFromLastUpdate()
+utils::DeltaTime Timer::getDurationFromLastUpdate()
 {
     auto now = std::chrono::high_resolution_clock::now();
     auto dt = now - previousUpdateTimePoint;
