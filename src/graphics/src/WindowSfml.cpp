@@ -41,11 +41,6 @@ void WindowSfml::update()
     }
 }
 
-void WindowSfml::clear()
-{
-    window->clear();
-}
-
 void WindowSfml::close()
 {
     window->close();

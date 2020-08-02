@@ -1,6 +1,4 @@
 set(SOURCES
-        src/MovableEntity.cpp
-        src/NonMovableEntity.cpp
         src/InputStatus.cpp
         src/DefaultInputManager.cpp
         src/DefaultInputObservationHandler.cpp
@@ -11,8 +9,6 @@ set(SOURCES
         )
 
 set(UT_SOURCES
-        src/MovableEntityTest.cpp
-        src/NonMovableEntityTest.cpp
         src/InputStatusTest.cpp
         src/DefaultInputManagerTest.cpp
         src/DefaultInputObservationHandlerTest.cpp

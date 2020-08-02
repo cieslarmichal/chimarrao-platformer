@@ -61,15 +61,6 @@ TEST_F(WindowSfmlTest, shouldCloseWindowAfterCloseEvent)
     window->update();
 }
 
-TEST_F(WindowSfmlTest, shouldClear)
-{
-    EXPECT_CALL(*windowProxyPtr, create(utils::Vector2i{windowSize}, std::string{title}));
-    auto window = std::make_unique<WindowSfml>(windowSize, title, std::move(windowProxyMock));
-    EXPECT_CALL(*windowProxyPtr, clear());
-
-    window->clear();
-}
-
 TEST_F(WindowSfmlTest, shouldClose)
 {
     EXPECT_CALL(*windowProxyPtr, create(utils::Vector2i{windowSize}, std::string{title}));

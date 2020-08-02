@@ -29,7 +29,6 @@ void Game::run()
 {
     while (window->isOpen())
     {
-        dt = timer.getDurationFromLastUpdate();
         processInput();
         update();
         render();
@@ -43,6 +42,8 @@ void Game::processInput()
 
 void Game::update()
 {
+    dt = timer.getDurationFromLastUpdate();
+
     if (states.empty())
     {
         window->close();

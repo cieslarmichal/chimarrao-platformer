@@ -15,7 +15,6 @@ public:
     bool isOpen() const override;
     void display() override;
     void update() override;
-    void clear() override;
     void close() override;
 
 private:

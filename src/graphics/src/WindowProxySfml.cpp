@@ -4,37 +4,32 @@ namespace graphics
 {
 WindowProxySfml::WindowProxySfml()
 {
-    window = std::make_unique<sf::RenderWindow>();
+    window.setFramerateLimit(60);
 }
 
 void WindowProxySfml::create(utils::Vector2u windowSize, std::string windowTitle)
 {
-    window->create(sf::VideoMode(windowSize.x, windowSize.y), windowTitle);
+    window.create(sf::VideoMode(windowSize.x, windowSize.y), windowTitle);
 }
 
 bool WindowProxySfml::isOpen() const
 {
-    return window->isOpen();
+    return window.isOpen();
 }
 
 void WindowProxySfml::display()
 {
-    window->display();
+    window.display();
 }
 
 void WindowProxySfml::close()
 {
-    window->close();
-}
-
-void WindowProxySfml::clear()
-{
-    window->clear();
+    window.close();
 }
 
 bool WindowProxySfml::pollEvent(sf::Event& event)
 {
-    return window->pollEvent(event);
+    return window.pollEvent(event);
 }
 
 }

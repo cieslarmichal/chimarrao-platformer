@@ -13,7 +13,6 @@ public:
     MOCK_METHOD(bool, isOpen, (), (const));
     MOCK_METHOD(void, display, (), ());
     MOCK_METHOD(void, close, (), ());
-    MOCK_METHOD(void, clear, (), ());
     MOCK_METHOD(bool, pollEvent, (sf::Event & event), ());
 };
 }

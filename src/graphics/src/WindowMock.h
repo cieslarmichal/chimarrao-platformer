@@ -13,6 +13,5 @@ public:
     MOCK_METHOD(void, display, (), ());
     MOCK_METHOD(void, update, (), ());
     MOCK_METHOD(void, close, (), ());
-    MOCK_METHOD(void, clear, (), ());
 };
 }
