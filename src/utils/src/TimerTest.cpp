@@ -5,7 +5,7 @@
 
 #include "gtest/gtest.h"
 
-using namespace game;
+using namespace utils;
 using namespace std::literals::chrono_literals;
 
 class TimerTest : public testing::Test

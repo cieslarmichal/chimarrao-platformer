@@ -1,6 +1,8 @@
 set(SOURCES
         src/WindowSfml.cpp
         src/WindowProxySfml.cpp
+        src/TextureLoaderSfml.cpp
+        src/TextureStorageSfml.cpp
         src/GraphicsIdGenerator.cpp
         src/RendererPoolSfml.cpp
         src/RectangleShape.cpp
@@ -14,8 +16,13 @@ target_include_directories(graphics PUBLIC src)
 
 set(UT_SOURCES
         src/WindowSfmlTest.cpp
+        src/TextureStorageSfmlTest.cpp
         src/RectangleShapeTest.cpp
         src/RendererPoolSfmlTest.cpp
+        )
+set(UT_SOURCES
+        src/WindowSfmlTest.cpp
+
         )
 
 add_executable(graphicsUT ${UT_SOURCES})
