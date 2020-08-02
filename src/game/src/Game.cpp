@@ -52,7 +52,7 @@ void Game::render()
 {
     if (not states.empty())
     {
-        states.top()->render(window.get());
+//        states.top()->render(window.get());
     }
     window->display();
 }

@@ -1,6 +1,9 @@
 set(SOURCES
         src/WindowSfml.cpp
         src/WindowProxySfml.cpp
+        src/GraphicsIdGenerator.cpp
+        src/RendererPoolSfml.cpp
+        src/RectangleShape.cpp
         )
 
 add_library(graphics ${SOURCES})
@@ -9,8 +12,12 @@ target_link_libraries(graphics PUBLIC utils sfml-graphics sfml-window sfml-syste
 
 target_include_directories(graphics PUBLIC src)
 
-set(UT_SOURCE src/WindowSfmlTest.cpp)
+set(UT_SOURCES
+        src/WindowSfmlTest.cpp
+        src/RectangleShapeTest.cpp
+        src/RendererPoolSfmlTest.cpp
+        )
 
-add_executable(graphicsUT ${UT_SOURCE})
+add_executable(graphicsUT ${UT_SOURCES})
 
 target_link_libraries(graphicsUT PUBLIC gtest_main gmock graphics)
