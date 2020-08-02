@@ -5,7 +5,7 @@ set(SOURCES
 set(UT_SOURCES src/PhysicsSfmlComponentTest.cpp)
 
 add_library(physics ${SOURCES})
-target_link_libraries(physics PUBLIC utils sfml-graphics sfml-window sfml-system)
+target_link_libraries(physics PUBLIC utils ${SFML_LIBRARIES})
 target_include_directories(physics PUBLIC src)
 
 

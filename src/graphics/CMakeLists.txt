@@ -8,7 +8,7 @@ set(SOURCES
 
 add_library(graphics ${SOURCES})
 
-target_link_libraries(graphics PUBLIC utils sfml-graphics sfml-window sfml-system)
+target_link_libraries(graphics PUBLIC utils ${SFML_LIBRARIES})
 
 target_include_directories(graphics PUBLIC src)
 

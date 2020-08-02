@@ -23,7 +23,7 @@ set(UT_SOURCES
         )
 
 add_library(game ${SOURCES})
-target_include_directories(game PUBLIC ${SFML_INCLUDE_DIR} src)
+target_include_directories(game PUBLIC src)
 target_link_libraries (game PUBLIC utils graphics physics)
 
 add_executable(gameUT ${UT_SOURCES})
