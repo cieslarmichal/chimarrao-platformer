@@ -12,7 +12,6 @@ public:
     virtual ~PhysicsComponent() = default;
 
     virtual void update(const utils::DeltaTime&) = 0;
-    virtual void move(const utils::DeltaTime&) = 0;
     virtual void setPosition(const utils::Vector2f&) = 0;
     virtual utils::Vector2f getPosition() const = 0;
     virtual utils::Vector2f getSize() const = 0;
