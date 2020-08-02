@@ -1,10 +1,12 @@
 set(SOURCES
         src/PhysicsIdGenerator.cpp
         src/PhysicsEntity.cpp
+        src/DefaultPhysicsEngine.cpp
         )
 
 set(UT_SOURCES
         src/PhysicsEntityTest.cpp
+        src/DefaultPhysicsEngineTest.cpp
         )
 
 add_library(physics ${SOURCES})
