@@ -1,9 +1,9 @@
 #pragma once
 
-#include "SFML/Graphics/RectangleShape.hpp"
-#include "GraphicsId.h"
-#include "Vector.h"
 #include "Color.h"
+#include "GraphicsId.h"
+#include "SFML/Graphics/RectangleShape.hpp"
+#include "Vector.h"
 
 namespace graphics
 {

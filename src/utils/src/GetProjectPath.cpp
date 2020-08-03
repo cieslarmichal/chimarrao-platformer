@@ -1,8 +1,9 @@
 #include "GetProjectPath.h"
 
+#include <stdexcept>
+
 #include "GetExecutablePath.h"
 #include "StringHelper.h"
-#include <stdexcept>
 
 namespace utils
 {

@@ -1,8 +1,13 @@
 set(SOURCES
-        src/PhysicsSfmlComponent.cpp
+        src/PhysicsIdGenerator.cpp
+        src/PhysicsEntity.cpp
+        src/DefaultPhysicsEngine.cpp
         )
 
-set(UT_SOURCES src/PhysicsSfmlComponentTest.cpp)
+set(UT_SOURCES
+        src/PhysicsEntityTest.cpp
+        src/DefaultPhysicsEngineTest.cpp
+        )
 
 add_library(physics ${SOURCES})
 target_link_libraries(physics PUBLIC utils ${SFML_LIBRARIES})

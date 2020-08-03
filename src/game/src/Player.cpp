@@ -5,16 +5,22 @@
 namespace game
 {
 
-Player::Player(const graphics::GraphicsId& id, std::shared_ptr<graphics::RendererPool> pool)
-    : graphicsId{id}, rendererPool{std::move(pool)}
+Player::Player(const graphics::GraphicsId& graphicsIdInit,
+               std::shared_ptr<graphics::RendererPool> rendererPoolInit,
+               const physics::PhysicsId& physicsIdInit,
+               std::shared_ptr<physics::PhysicsEngine> physicsEngineInit)
+    : graphicsId{graphicsIdInit},
+      rendererPool{std::move(rendererPoolInit)},
+      physicsId{physicsIdInit},
+      physicsEngine{std::move(physicsEngineInit)}
 {
+    physicsEngine->setMovementSpeed(physicsId, {10.0f, 10.0f});
 }
 
 void Player::update(const utils::DeltaTime& deltaTime)
 {
-    position.x += 10.0f * direction.x * deltaTime.count();
-    position.y += 10.0f * direction.y * deltaTime.count();
-    rendererPool->setPosition(graphicsId, position);
+    const auto position = physicsEngine->getPosition(physicsId);
+    rendererPool->setPosition(graphicsId, *position);
 }
 
 bool Player::isDead()
@@ -24,25 +30,27 @@ bool Player::isDead()
 
 void Player::handleInputStatus(const InputStatus& inputStatus)
 {
-    direction.x = direction.y = 0.0f;
+    utils::Vector2i newDirection{0, 0};
 
     if (inputStatus.isKeyPressed(InputKey::Up))
     {
-        direction.y = -1.0f;
+        newDirection.y = -1;
     }
     else if (inputStatus.isKeyPressed(InputKey::Down))
     {
-        direction.y = 1.0f;
+        newDirection.y = 1;
     }
 
-    if (inputStatus.isKeyPressed(InputKey::Right))
+    if (inputStatus.isKeyPressed(InputKey::Left))
     {
-        direction.x = 1.0f;
+        newDirection.x = -1;
     }
-    else if (inputStatus.isKeyPressed(InputKey::Left))
+    else if (inputStatus.isKeyPressed(InputKey::Right))
     {
-        direction.x = -1.0f;
+        newDirection.x = 1;
     }
+
+    physicsEngine->setMovementDirection(physicsId, newDirection);
 }
 
 }

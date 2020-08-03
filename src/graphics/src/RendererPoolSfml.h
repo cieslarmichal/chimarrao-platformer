@@ -1,15 +1,15 @@
 #pragma once
 
-#include <memory>
-#include <vector>
 #include <boost/functional/hash.hpp>
+#include <memory>
+#include <unordered_set>
+#include <vector>
 
+#include "ContextRenderer.h"
 #include "GraphicsIdGenerator.h"
 #include "RectangleShape.h"
 #include "RendererPool.h"
 #include "TextureStorage.h"
-#include "ContextRenderer.h"
-#include <unordered_set>
 
 namespace graphics
 {
@@ -24,6 +24,7 @@ public:
     void release(const GraphicsId&) override;
     void renderAll() override;
     void setPosition(const GraphicsId&, const utils::Vector2f&) override;
+    // TODO: add optional to getPosition
     utils::Vector2f getPosition(const GraphicsId&) override;
     void setTexture(const GraphicsId&, const TexturePath&) override;
     void setRenderingSize(const utils::Vector2u&) override;

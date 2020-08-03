@@ -4,10 +4,11 @@
 
 #include "TextureStorage.h"
 
-namespace graphics{
+namespace graphics
+{
 class TextureStorageMock : public TextureStorage
 {
 public:
-    MOCK_METHOD(boost::optional<const sf::Texture&>, getTexture,(const TexturePath&));
+    MOCK_METHOD(boost::optional<const sf::Texture&>, getTexture, (const TexturePath&));
 };
 }

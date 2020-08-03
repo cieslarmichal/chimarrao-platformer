@@ -14,9 +14,9 @@ public:
 
     virtual std::unique_ptr<RendererPool>
     createRendererPool(const utils::Vector2u& renderingRegionSize,
-                         const utils::Vector2u& logicalRegionSize) const = 0;
+                       const utils::Vector2u& logicalRegionSize) const = 0;
     virtual std::unique_ptr<Window> createWindow(const utils::Vector2u& windowSize,
-                                          const std::string& title) const = 0;
+                                                 const std::string& title) const = 0;
 
     static std::unique_ptr<GraphicsFactory> createGraphicsFactory();
 };

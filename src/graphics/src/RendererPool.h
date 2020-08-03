@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Color.h"
-#include "Vector.h"
-#include "GraphicsId.h"
 #include <string>
+
+#include "Color.h"
+#include "GraphicsId.h"
+#include "Vector.h"
 
 namespace graphics
 {
@@ -15,7 +16,7 @@ public:
     virtual ~RendererPool() = default;
 
     virtual GraphicsId acquire(const utils::Vector2f& size, const utils::Vector2f& position,
-                                const Color&) = 0;
+                               const Color&) = 0;
     virtual GraphicsId acquire(const utils::Vector2f& size, const utils::Vector2f& position,
                                const TexturePath&) = 0;
     virtual void release(const GraphicsId&) = 0;

@@ -1,6 +1,6 @@
-#include "gtest/gtest.h"
-
 #include "InputStatus.h"
+
+#include "gtest/gtest.h"
 
 using namespace ::testing;
 using namespace game;

@@ -1,4 +1,5 @@
 #include "GraphicsFactory.h"
+
 #include "DefaultGraphicsFactory.h"
 
 namespace graphics
