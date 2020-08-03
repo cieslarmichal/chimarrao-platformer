@@ -1,12 +1,12 @@
 #pragma once
 
-#include <string>
-
 #include <boost/optional.hpp>
+#include <string>
 
 #include "SFML/Graphics.hpp"
 
-namespace graphics{
+namespace graphics
+{
 using TexturePath = std::string;
 
 class TextureStorage

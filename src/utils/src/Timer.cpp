@@ -10,7 +10,8 @@ utils::DeltaTime Timer::getDurationFromLastUpdate()
     return dt;
 }
 
-void Timer::start() {
+void Timer::start()
+{
     previousUpdateTimePoint = std::chrono::high_resolution_clock::now();
 }
 }

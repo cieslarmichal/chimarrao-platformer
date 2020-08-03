@@ -1,9 +1,10 @@
 #pragma once
 
-#include "Vector.h"
-#include "PhysicsId.h"
-#include "DeltaTime.h"
 #include <boost/optional.hpp>
+
+#include "DeltaTime.h"
+#include "PhysicsId.h"
+#include "Vector.h"
 
 namespace physics
 {

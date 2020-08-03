@@ -23,8 +23,7 @@ static auto& getShapeByPosition(const std::vector<RectangleShape>& shapes,
 
 RendererPoolSfml::RendererPoolSfml(std::unique_ptr<ContextRenderer> contextRendererInit,
                                    std::unique_ptr<TextureStorage> textureStorageInit)
-    : contextRenderer{std::move(contextRendererInit)},
-      textureStorage{std::move(textureStorageInit)}
+    : contextRenderer{std::move(contextRendererInit)}, textureStorage{std::move(textureStorageInit)}
 {
     contextRenderer->initialize();
     contextRenderer->setView();

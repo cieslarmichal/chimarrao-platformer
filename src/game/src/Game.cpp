@@ -4,6 +4,7 @@
 
 #include "DefaultInputManager.h"
 #include "DefaultInputObservationHandler.h"
+#include "DefaultPhysicsEngine.h"
 #include "GraphicsFactory.h"
 #include "MainGameState.h"
 #include "Vector.h"
@@ -19,6 +20,8 @@ Game::Game()
     const utils::Vector2u mapSize{30, 30};
 
     rendererPool = graphicsFactory->createRendererPool(windowSize, mapSize);
+    // TODO: add physics factory
+    physicsEngine = std::make_shared<physics::DefaultPhysicsEngine>();
 
     inputManager = std::make_unique<DefaultInputManager>(std::make_unique<DefaultInputObservationHandler>());
     timer.start();
@@ -66,7 +69,7 @@ void Game::render()
 
 void Game::initStates()
 {
-    states.push(std::make_unique<MainGameState>(window, *inputManager, rendererPool));
+    states.push(std::make_unique<MainGameState>(window, *inputManager, rendererPool, physicsEngine));
 }
 
 }

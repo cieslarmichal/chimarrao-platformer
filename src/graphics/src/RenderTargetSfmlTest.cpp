@@ -18,12 +18,10 @@ namespace graphics
 class render_target_base_functions_test : public Test
 {
 public:
-    render_target<render_target_stub> renderTarget{window_size{200, 300},
-                                                   {100, 100}};
+    render_target<render_target_stub> renderTarget{window_size{200, 300}, {100, 100}};
 };
 
-TEST_F(render_target_base_functions_test,
-       initializeShouldInvokeInitializeFromBaseClass)
+TEST_F(render_target_base_functions_test, initializeShouldInvokeInitializeFromBaseClass)
 {
     renderTarget.shouldInitialize = true;
     renderTarget.initialize();
@@ -38,8 +36,7 @@ TEST_F(render_target_base_functions_test, clearShouldInvokeClearFromBaseClass)
 
 TEST_F(render_target_base_functions_test, drawShouldInvokeDrawFromBaseClass)
 {
-    const sfml_rectangle_shape shape(shape_id, size2f{200, 100},
-                                     position2f(1.f, 2.3f), color{23, 34, 52});
+    const sfml_rectangle_shape shape(shape_id, size2f{200, 100}, position2f(1.f, 2.3f), color{23, 34, 52});
     renderTarget.expectDraw(shape);
     renderTarget.draw(shape);
 }
@@ -54,8 +51,7 @@ TEST(RenderTargetOverridedFuncionsTest, setAndGetSize)
     EXPECT_EQ(size_400x300, renderTarget400x300.getSize());
 }
 
-TEST(RenderTargetOverridedFuncionsTest,
-     setActive_dummyMethodShouldJustReturnTrue)
+TEST(RenderTargetOverridedFuncionsTest, setActive_dummyMethodShouldJustReturnTrue)
 {
     const window_size dummy_size{200, 300};
     sfml_render_target renderTarget{dummy_size, {100, 100}};

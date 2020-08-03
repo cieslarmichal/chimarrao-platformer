@@ -2,10 +2,10 @@
 
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/View.hpp>
-#include "Vector.h"
 #include <memory>
 
 #include "ContextRenderer.h"
+#include "Vector.h"
 
 namespace graphics
 {

@@ -14,9 +14,9 @@ public:
     Timer timer;
 };
 
-TEST_F(TimerTest,timerCountTimePropertly)
+TEST_F(TimerTest, timerCountTimePropertly)
 {
     timer.start();
     std::this_thread::sleep_for(10ms);
-    ASSERT_TRUE(timer.getDurationFromLastUpdate()  >= 10ms);
+    ASSERT_TRUE(timer.getDurationFromLastUpdate() >= 10ms);
 }

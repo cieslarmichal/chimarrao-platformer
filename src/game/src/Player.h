@@ -1,18 +1,22 @@
 #pragma once
 
-#include "Entity.h"
-#include "InputObserver.h"
-#include "Vector.h"
-#include "GraphicsId.h"
-#include "RendererPool.h"
 #include <memory>
+
+#include "Entity.h"
+#include "GraphicsId.h"
+#include "InputObserver.h"
+#include "PhysicsEngine.h"
+#include "PhysicsId.h"
+#include "RendererPool.h"
+#include "Vector.h"
 
 namespace game
 {
 class Player : public Entity, public InputObserver
 {
 public:
-    explicit Player(const graphics::GraphicsId&, std::shared_ptr<graphics::RendererPool>);
+    explicit Player(const graphics::GraphicsId&, std::shared_ptr<graphics::RendererPool>,
+                    const physics::PhysicsId&, std::shared_ptr<physics::PhysicsEngine>);
 
     void update(const utils::DeltaTime&) override;
     bool isDead() override;
@@ -21,7 +25,7 @@ public:
 private:
     graphics::GraphicsId graphicsId;
     std::shared_ptr<graphics::RendererPool> rendererPool;
-    utils::Vector2i direction;
-    utils::Vector2f position;
+    physics::PhysicsId physicsId;
+    std::shared_ptr<physics::PhysicsEngine> physicsEngine;
 };
 }

@@ -1,8 +1,8 @@
+#include "DefaultInputObservationHandler.h"
+
 #include "gtest/gtest.h"
 
 #include "InputObserverMock.h"
-
-#include "DefaultInputObservationHandler.h"
 
 using namespace ::testing;
 using namespace game;
@@ -56,7 +56,8 @@ TEST_F(DefaultInputObservationHandlerTest, givenRemovedObservers_shouldNotNotify
     inputObservationHandler.notifyObservers(inputStatus);
 }
 
-TEST_F(DefaultInputObservationHandlerTest, givenRemovedOneObserverFromTwo_shouldNotNotifyOneObserverAboutChanges)
+TEST_F(DefaultInputObservationHandlerTest,
+       givenRemovedOneObserverFromTwo_shouldNotNotifyOneObserverAboutChanges)
 {
     inputObservationHandler.registerObserver(observer1.get());
     inputObservationHandler.registerObserver(observer2.get());

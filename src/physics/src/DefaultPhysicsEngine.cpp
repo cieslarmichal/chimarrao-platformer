@@ -22,11 +22,22 @@ static auto& getEntityByPosition(const std::vector<PhysicsEntity>& entities,
 
 DefaultPhysicsEngine::DefaultPhysicsEngine() : idGenerator{std::make_unique<PhysicsIdGenerator>()} {}
 
-void DefaultPhysicsEngine::update(const utils::DeltaTime&)
+void DefaultPhysicsEngine::update(const utils::DeltaTime& deltaTime)
 {
     if (not entitiesToRemove.empty())
     {
         cleanUnusedEntities();
+    }
+
+    for (auto& entity : entities)
+    {
+        const auto& currentPosition = entity.getPosition();
+        const auto nextPosition =
+            currentPosition +
+            utils::Vector2f{entity.getMovementDirection().x * entity.getMovementSpeed().x * deltaTime.count(),
+                            entity.getMovementDirection().y * entity.getMovementSpeed().y *
+                                deltaTime.count()};
+        entity.setPosition(nextPosition);
     }
 }
 

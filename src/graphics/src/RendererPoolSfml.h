@@ -1,15 +1,15 @@
 #pragma once
 
-#include <memory>
-#include <vector>
 #include <boost/functional/hash.hpp>
+#include <memory>
+#include <unordered_set>
+#include <vector>
 
+#include "ContextRenderer.h"
 #include "GraphicsIdGenerator.h"
 #include "RectangleShape.h"
 #include "RendererPool.h"
 #include "TextureStorage.h"
-#include "ContextRenderer.h"
-#include <unordered_set>
 
 namespace graphics
 {

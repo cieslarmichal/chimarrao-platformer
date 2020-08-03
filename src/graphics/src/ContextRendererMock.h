@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gmock/gmock.h"
+
 #include "ContextRenderer.h"
 
 namespace graphics
@@ -15,4 +16,3 @@ public:
     MOCK_METHOD(void, setViewSize, (const utils::Vector2u& windowsSize));
 };
 }
-
