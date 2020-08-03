@@ -10,10 +10,10 @@ class PhysicsEntity
 public:
     PhysicsEntity(const PhysicsId&, const utils::Vector2f& size, const utils::Vector2f& position);
 
-    utils::Vector2f getPosition() const;
-    utils::Vector2f getSize() const;
-    utils::Vector2i getMovementDirection() const;
-    utils::Vector2f getMovementSpeed() const;
+    const utils::Vector2f& getPosition() const;
+    const utils::Vector2f& getSize() const;
+    const utils::Vector2i& getMovementDirection() const;
+    const utils::Vector2f& getMovementSpeed() const;
     PhysicsId getPhysicsId() const;
     void setPosition(const utils::Vector2f& position);
     void setMovementDirection(const utils::Vector2i& direction);

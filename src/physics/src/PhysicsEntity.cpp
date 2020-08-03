@@ -9,22 +9,22 @@ PhysicsEntity::PhysicsEntity(const PhysicsId& initId, const utils::Vector2f& siz
 {
 }
 
-utils::Vector2f PhysicsEntity::getPosition() const
+const utils::Vector2f& PhysicsEntity::getPosition() const
 {
     return position;
 }
 
-utils::Vector2f PhysicsEntity::getSize() const
+const utils::Vector2f& PhysicsEntity::getSize() const
 {
     return size;
 }
 
-utils::Vector2i PhysicsEntity::getMovementDirection() const
+const utils::Vector2i& PhysicsEntity::getMovementDirection() const
 {
     return movementDirection;
 }
 
-utils::Vector2f PhysicsEntity::getMovementSpeed() const
+const utils::Vector2f& PhysicsEntity::getMovementSpeed() const
 {
     return movementSpeed;
 }

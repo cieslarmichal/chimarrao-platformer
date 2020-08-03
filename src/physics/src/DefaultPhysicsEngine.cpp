@@ -42,7 +42,7 @@ void DefaultPhysicsEngine::release(const PhysicsId& id)
     entitiesToRemove.emplace(id);
 }
 
-utils::Vector2f DefaultPhysicsEngine::getPosition(const PhysicsId& id)
+boost::optional<const utils::Vector2f&> DefaultPhysicsEngine::getPosition(const PhysicsId& id)
 {
     const auto entityIter = findEntityPosition(id);
     if (entityIter != entities.end())
@@ -50,11 +50,11 @@ utils::Vector2f DefaultPhysicsEngine::getPosition(const PhysicsId& id)
         const auto& entity = getEntityByPosition(entities, entityIter);
         return entity.getPosition();
     }
-    std::cerr << "Physics entity with id: " << id << "not found";
-    return {};
+    std::cerr << "Physics entity with id: " << id << " not found\n";
+    return boost::none;
 }
 
-utils::Vector2i DefaultPhysicsEngine::getMovementDirection(const PhysicsId& id) const
+boost::optional<const utils::Vector2i&> DefaultPhysicsEngine::getMovementDirection(const PhysicsId& id) const
 {
     const auto entityIter = findEntityPosition(id);
     if (entityIter != entities.end())
@@ -62,11 +62,11 @@ utils::Vector2i DefaultPhysicsEngine::getMovementDirection(const PhysicsId& id) 
         const auto& entity = getEntityByPosition(entities, entityIter);
         return entity.getMovementDirection();
     }
-    std::cerr << "Physics entity with id: " << id << "not found";
-    return {};
+    std::cerr << "Physics entity with id: " << id << " not found\n";
+    return boost::none;
 }
 
-utils::Vector2f DefaultPhysicsEngine::getMovementSpeed(const PhysicsId& id) const
+boost::optional<const utils::Vector2f&> DefaultPhysicsEngine::getMovementSpeed(const PhysicsId& id) const
 {
     const auto entityIter = findEntityPosition(id);
     if (entityIter != entities.end())
@@ -74,8 +74,8 @@ utils::Vector2f DefaultPhysicsEngine::getMovementSpeed(const PhysicsId& id) cons
         const auto& entity = getEntityByPosition(entities, entityIter);
         return entity.getMovementSpeed();
     }
-    std::cerr << "Physics entity with id: " << id << "not found";
-    return {};
+    std::cerr << "Physics entity with id: " << id << " not found\n";
+    return boost::none;
 }
 
 void DefaultPhysicsEngine::setPosition(const PhysicsId& id, const utils::Vector2f& positionToSet)
@@ -84,9 +84,9 @@ void DefaultPhysicsEngine::setPosition(const PhysicsId& id, const utils::Vector2
     if (entityIter != entities.end())
     {
         auto& entity = getEntityByPosition(entities, entityIter);
-        return entity.setMovementSpeed(positionToSet);
+        return entity.setPosition(positionToSet);
     }
-    std::cerr << "Physics entity with id: " << id << "not found";
+    std::cerr << "Physics entity with id: " << id << " not found\n";
 }
 
 void DefaultPhysicsEngine::setMovementDirection(const PhysicsId& id, const utils::Vector2i& directionToSet)
@@ -97,7 +97,7 @@ void DefaultPhysicsEngine::setMovementDirection(const PhysicsId& id, const utils
         auto& entity = getEntityByPosition(entities, entityIter);
         return entity.setMovementDirection(directionToSet);
     }
-    std::cerr << "Physics entity with id: " << id << "not found";
+    std::cerr << "Physics entity with id: " << id << " not found\n";
 }
 
 void DefaultPhysicsEngine::setMovementSpeed(const PhysicsId& id, const utils::Vector2f& movementSpeedToSet)
@@ -108,7 +108,7 @@ void DefaultPhysicsEngine::setMovementSpeed(const PhysicsId& id, const utils::Ve
         auto& entity = getEntityByPosition(entities, entityIter);
         return entity.setMovementSpeed(movementSpeedToSet);
     }
-    std::cerr << "Physics entity with id: " << id << "not found";
+    std::cerr << "Physics entity with id: " << id << " not found\n";
 }
 
 std::vector<PhysicsEntity>::const_iterator

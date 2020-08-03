@@ -24,6 +24,7 @@ public:
     void release(const GraphicsId&) override;
     void renderAll() override;
     void setPosition(const GraphicsId&, const utils::Vector2f&) override;
+    // TODO: add optional to getPosition
     utils::Vector2f getPosition(const GraphicsId&) override;
     void setTexture(const GraphicsId&, const TexturePath&) override;
     void setRenderingSize(const utils::Vector2u&) override;
