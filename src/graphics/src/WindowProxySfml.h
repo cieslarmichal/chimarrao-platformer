@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SFML/Window.hpp"
+#include "SFML/Graphics/RenderWindow.hpp"
 #include "WindowProxy.h"
 
 namespace graphics
@@ -17,6 +17,6 @@ public:
     bool pollEvent(sf::Event& event) override;
 
 private:
-    sf::Window window;
+    sf::RenderWindow window;
 };
 }
