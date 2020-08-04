@@ -4,7 +4,7 @@ namespace graphics
 {
 WindowProxySfml::WindowProxySfml()
 {
-    window.setFramerateLimit(60);
+    window.setVerticalSyncEnabled(true);
 }
 
 void WindowProxySfml::create(utils::Vector2u windowSize, std::string windowTitle)

@@ -52,11 +52,12 @@ void RendererPoolSfml::release(const GraphicsId& id)
 
 void RendererPoolSfml::renderAll()
 {
+    contextRenderer->clear(sf::Color::White);
+
     if (not shapesToRemove.empty())
     {
         cleanUnusedShapes();
     }
-    contextRenderer->clear(sf::Color::White);
     contextRenderer->setView();
 
     for (const auto& shape : shapes)
