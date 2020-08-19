@@ -15,21 +15,21 @@ class WindowSfmlTest : public Test
 {
 public:
     const std::string title = "Window Title";
-    const utils::Vector2i windowSize = utils::Vector2i(800, 600);
+    const utils::Vector2u windowSize{800, 600};
     std::unique_ptr<WindowProxyMock> windowProxyMock = std::make_unique<StrictMock<WindowProxyMock>>();
     WindowProxyMock* windowProxyPtr = windowProxyMock.get();
 };
 
 TEST_F(WindowSfmlTest, shouldCallCreateMethod)
 {
-    EXPECT_CALL(*windowProxyPtr, create(utils::Vector2i{windowSize}, std::string{title}));
+    EXPECT_CALL(*windowProxyPtr, create(windowSize, title));
 
     const auto window = std::make_unique<WindowSfml>(windowSize, title, std::move(windowProxyMock));
 }
 
 TEST_F(WindowSfmlTest, shouldReturnValueAfterCallIsOpen)
 {
-    EXPECT_CALL(*windowProxyPtr, create(utils::Vector2i{windowSize}, std::string{title}));
+    EXPECT_CALL(*windowProxyPtr, create(windowSize, title));
     const auto window = std::make_unique<WindowSfml>(windowSize, title, std::move(windowProxyMock));
 
     EXPECT_CALL(*windowProxyPtr, isOpen()).WillOnce(Return(true));
@@ -40,7 +40,7 @@ TEST_F(WindowSfmlTest, shouldReturnValueAfterCallIsOpen)
 
 TEST_F(WindowSfmlTest, shouldCallDisplay)
 {
-    EXPECT_CALL(*windowProxyPtr, create(utils::Vector2i{windowSize}, std::string{title}));
+    EXPECT_CALL(*windowProxyPtr, create(windowSize, title));
     auto window = std::make_unique<WindowSfml>(windowSize, title, std::move(windowProxyMock));
     EXPECT_CALL(*windowProxyPtr, display());
 
@@ -49,7 +49,7 @@ TEST_F(WindowSfmlTest, shouldCallDisplay)
 
 TEST_F(WindowSfmlTest, shouldCloseWindowAfterCloseEvent)
 {
-    EXPECT_CALL(*windowProxyPtr, create(utils::Vector2i{windowSize}, std::string{title}));
+    EXPECT_CALL(*windowProxyPtr, create(windowSize, title));
     auto window = std::make_unique<WindowSfml>(windowSize, title, std::move(windowProxyMock));
     EXPECT_CALL(*windowProxyPtr, pollEvent(_))
         .Times(2)
@@ -63,7 +63,7 @@ TEST_F(WindowSfmlTest, shouldCloseWindowAfterCloseEvent)
 
 TEST_F(WindowSfmlTest, shouldClose)
 {
-    EXPECT_CALL(*windowProxyPtr, create(utils::Vector2i{windowSize}, std::string{title}));
+    EXPECT_CALL(*windowProxyPtr, create(windowSize, title));
     auto window = std::make_unique<WindowSfml>(windowSize, title, std::move(windowProxyMock));
     EXPECT_CALL(*windowProxyPtr, close());
 

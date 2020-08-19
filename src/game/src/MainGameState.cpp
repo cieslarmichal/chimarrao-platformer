@@ -1,6 +1,7 @@
 #include "MainGameState.h"
 
 #include "GetProjectPath.h"
+#include "PlayerAnimator.h"
 
 namespace game
 {
@@ -14,7 +15,8 @@ MainGameState::MainGameState(std::shared_ptr<graphics::Window> window, InputMana
     auto graphicsId = rendererPool->acquire({5, 5}, {10, 10}, utils::getProjectPath("chimarrao") + "xxx.png");
     auto physicsId = physicsEngine->acquire({5, 5}, {10, 10});
 
-    player = std::make_unique<Player>(graphicsId, rendererPool, physicsId, physicsEngine);
+    player = std::make_unique<Player>(graphicsId, rendererPool, physicsId, physicsEngine,
+                                      std::make_unique<graphics::PlayerAnimator>(graphicsId, rendererPool));
 
     auto* playerAsObserver = dynamic_cast<Player*>(player.get());
     if (playerAsObserver)
