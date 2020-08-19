@@ -21,7 +21,7 @@ public:
     void setView() override;
     void setViewSize(const utils::Vector2u& windowsSize) override;
     sf::Vector2u getSize() const override;
-    bool activate(bool active) override;
+    bool setActive(bool active) override;
 
 private:
     utils::Vector2u windowSize;

@@ -9,12 +9,12 @@ set(SOURCES
         src/RenderTargetSfml.cpp
         src/GraphicsFactory.cpp
         src/DefaultGraphicsFactory.cpp
+        src/Animation.cpp
+        src/PlayerAnimator.cpp
         )
 
 add_library(graphics ${SOURCES})
-
 target_link_libraries(graphics PUBLIC utils ${SFML_LIBRARIES})
-
 target_include_directories(graphics PUBLIC src)
 
 set(UT_SOURCES
@@ -23,12 +23,9 @@ set(UT_SOURCES
         src/RectangleShapeTest.cpp
         src/RendererPoolSfmlTest.cpp
         src/RenderTargetSfmlTest.cpp
-        )
-set(UT_SOURCES
-        src/WindowSfmlTest.cpp
-
+        src/AnimationTest.cpp
+        src/PlayerAnimatorTest.cpp
         )
 
 add_executable(graphicsUT ${UT_SOURCES})
-
 target_link_libraries(graphicsUT PUBLIC gtest_main gmock graphics)

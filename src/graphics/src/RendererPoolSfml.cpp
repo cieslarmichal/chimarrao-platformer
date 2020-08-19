@@ -40,7 +40,7 @@ GraphicsId RendererPoolSfml::acquire(const utils::Vector2f& size, const utils::V
 GraphicsId RendererPoolSfml::acquire(const utils::Vector2f& size, const utils::Vector2f& position,
                                      const TexturePath& path)
 {
-    const auto id = acquire(size, position, Color::White);
+    const auto id = acquire(size, position, Color::Red);
     setTexture(id, path);
     return id;
 }
@@ -87,7 +87,7 @@ utils::Vector2f RendererPoolSfml::getPosition(const GraphicsId& id)
     return {};
 }
 
-void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path)
+void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path, const utils::Vector2f& scale)
 {
     boost::optional<const sf::Texture&> textureOpt = textureStorage->getTexture(path);
     if (not textureOpt)
@@ -100,6 +100,15 @@ void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path)
     {
         auto& shape = getShapeByPosition(shapes, shapeIter);
         shape.setTexture(&(*textureOpt));
+        shape.setScale(scale);
+        if (scale.x < 0)
+        {
+            shape.setOrigin(shape.getGlobalBounds().width / (-scale.x), 0);
+        }
+        else
+        {
+            shape.setOrigin(0, 0);
+        }
     }
 }
 

@@ -48,7 +48,7 @@ sf::Vector2u RenderTargetSfml::getSize() const
     return windowSize;
 }
 
-bool RenderTargetSfml::activate(bool active)
+bool RenderTargetSfml::setActive(bool active)
 {
     return true;
 }

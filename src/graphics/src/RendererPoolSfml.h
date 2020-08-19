@@ -23,11 +23,11 @@ public:
                        const TexturePath&) override;
     void release(const GraphicsId&) override;
     void renderAll() override;
-    void setPosition(const GraphicsId&, const utils::Vector2f&) override;
+    void setPosition(const GraphicsId&, const utils::Vector2f& position) override;
     // TODO: add optional to getPosition
     utils::Vector2f getPosition(const GraphicsId&) override;
-    void setTexture(const GraphicsId&, const TexturePath&) override;
-    void setRenderingSize(const utils::Vector2u&) override;
+    void setTexture(const GraphicsId&, const TexturePath&, const utils::Vector2f& scale = {1,1}) override;
+    void setRenderingSize(const utils::Vector2u& renderingSize) override;
 
 private:
     void cleanUnusedShapes();
