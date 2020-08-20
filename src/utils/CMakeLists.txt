@@ -4,6 +4,7 @@ set(SOURCES
         src/GetExecutablePath.cpp
         src/GetProjectPath.cpp
         src/StringHelper.cpp
+        src/IncrementalFilePathsCreator.cpp
         )
 
 set(UT_SOURCES
@@ -12,6 +13,7 @@ set(UT_SOURCES
         src/GetExecutablePathTest.cpp
         src/GetProjectPathTest.cpp
         src/StringHelperTest.cpp
+        src/IncrementalFilePathsCreatorTest.cpp
         )
 
 add_library(utils ${SOURCES})

@@ -1,6 +1,7 @@
 #include "PlayerAnimator.h"
 
 #include "GetProjectPath.h"
+#include "IncrementalFilePathsCreator.h"
 
 namespace graphics
 {
@@ -9,17 +10,10 @@ namespace
 const std::string playerResourcesPath = utils::getProjectPath("chimarrao") + "/resources/Player/";
 const std::string idleResourcesPath = playerResourcesPath + "Idle/";
 const std::string walkResourcesPath = playerResourcesPath + "Walk/";
-std::vector<TexturePath> idleTexturePaths{
-    idleResourcesPath + "idle-with-weapon-1.png", idleResourcesPath + "idle-with-weapon-2.png",
-    idleResourcesPath + "idle-with-weapon-3.png", idleResourcesPath + "idle-with-weapon-4.png",
-    idleResourcesPath + "idle-with-weapon-5.png", idleResourcesPath + "idle-with-weapon-6.png"};
-std::vector<TexturePath> walkTexturePaths{
-    walkResourcesPath + "walk-with-weapon-1.png", walkResourcesPath + "walk-with-weapon-2.png",
-    walkResourcesPath + "walk-with-weapon-3.png", walkResourcesPath + "walk-with-weapon-4.png",
-    walkResourcesPath + "walk-with-weapon-5.png", walkResourcesPath + "walk-with-weapon-6.png",
-    walkResourcesPath + "walk-with-weapon-7.png", walkResourcesPath + "walk-with-weapon-8.png",
-    walkResourcesPath + "walk-with-weapon-9.png", walkResourcesPath + "walk-with-weapon-10.png",
-    walkResourcesPath + "walk-with-weapon-11.png"};
+const TexturePath idleTexturePath = idleResourcesPath + "idle-with-weapon-1.png";
+const TexturePath walkTexturePath = walkResourcesPath + "walk-with-weapon-1.png";
+const int numberOfIdleTextures = 6;
+const int numberOfWalkTextures = 11;
 }
 
 PlayerAnimator::PlayerAnimator(graphics::GraphicsId graphicsIdInit,
@@ -30,9 +24,7 @@ PlayerAnimator::PlayerAnimator(graphics::GraphicsId graphicsIdInit,
       currentAnimationType{animationTypeInit},
       currentAnimationDirection{animationDirectionInit}
 {
-    animations.reserve(3);
-    animations.insert({AnimationType::Idle, Animation{idleTexturePaths, 0.3f}});
-    animations.insert({AnimationType::Walk, Animation{walkTexturePaths, 0.1f}});
+    initializeAnimations();
 }
 
 void PlayerAnimator::update(const utils::DeltaTime& deltaTime)
@@ -64,4 +56,18 @@ void PlayerAnimator::setAnimation(AnimationType animationType, AnimationDirectio
         animations.at(currentAnimationType).reset();
     }
 }
+
+void PlayerAnimator::initializeAnimations()
+{
+    animations.reserve(3);
+
+    const auto idleTexturesPaths =
+        utils::IncrementalFilePathsCreator::createFilePaths(idleTexturePath, numberOfIdleTextures);
+    const auto walkTexturesPaths =
+        utils::IncrementalFilePathsCreator::createFilePaths(walkTexturePath, numberOfWalkTextures);
+
+    animations.insert({AnimationType::Idle, Animation{idleTexturesPaths, 0.3f}});
+    animations.insert({AnimationType::Walk, Animation{walkTexturesPaths, 0.1f}});
+}
+
 }

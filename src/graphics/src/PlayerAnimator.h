@@ -23,6 +23,8 @@ public:
     void setAnimation(AnimationType, AnimationDirection) override;
 
 private:
+    void initializeAnimations();
+
     graphics::GraphicsId graphicsId;
     std::shared_ptr<graphics::RendererPool> rendererPool;
     std::unordered_map<AnimationType, Animation> animations;
