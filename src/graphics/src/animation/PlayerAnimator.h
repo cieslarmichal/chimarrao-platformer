@@ -10,7 +10,7 @@
 #include "GraphicsId.h"
 #include "RendererPool.h"
 
-namespace graphics
+namespace graphics::animation
 {
 class PlayerAnimator : public Animator
 {

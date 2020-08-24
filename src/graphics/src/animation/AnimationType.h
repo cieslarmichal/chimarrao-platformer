@@ -1,6 +1,6 @@
 #pragma once
 
-namespace graphics
+namespace graphics::animation
 {
 enum class AnimationType
 {

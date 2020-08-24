@@ -1,0 +1,6 @@
+
+animators:
+  - name: player
+    animations:
+      - type: idle
+        numberOfTextures: 6

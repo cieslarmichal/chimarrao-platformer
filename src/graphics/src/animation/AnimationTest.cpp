@@ -6,6 +6,7 @@
 
 using namespace ::testing;
 using namespace graphics;
+using namespace animation;
 
 class AnimationTest : public Test
 {

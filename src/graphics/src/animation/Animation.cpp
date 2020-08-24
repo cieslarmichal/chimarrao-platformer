@@ -2,7 +2,7 @@
 
 #include "exceptions/TexturesNotInitialized.h"
 
-namespace graphics
+namespace graphics::animation
 {
 
 Animation::Animation(std::vector<TexturePath> consecutiveTexturePathsInit, float timeBetweenTexturesInit)

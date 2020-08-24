@@ -3,7 +3,7 @@
 #include "GetProjectPath.h"
 #include "IncrementalFilePathsCreator.h"
 
-namespace graphics
+namespace graphics::animation
 {
 namespace
 {

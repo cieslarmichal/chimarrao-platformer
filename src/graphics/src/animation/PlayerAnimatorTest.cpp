@@ -5,6 +5,7 @@
 #include "RendererPoolMock.h"
 
 using namespace graphics;
+using namespace animation;
 using namespace ::testing;
 
 namespace

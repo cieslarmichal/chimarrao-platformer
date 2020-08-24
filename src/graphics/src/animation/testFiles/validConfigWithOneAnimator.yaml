@@ -1,0 +1,10 @@
+
+animators:
+  - name: player
+    animations:
+      - type: idle
+        firstTexturePath: resources/Player/Idle/idle-with-weapon-1.png
+        numberOfTextures: 6
+      - type: walk
+        firstTexturePath: resources/Player/Walk/walk-with-weapon-1.png
+        numberOfTextures: 11

@@ -1,0 +1,19 @@
+
+animators:
+  - name: player
+    animations:
+      - type: idle
+        firstTexturePath: resources/Player/Idle/idle-with-weapon-1.png
+        numberOfTextures: 6
+      - type: walk
+        firstTexturePath: resources/Player/Walk/walk-with-weapon-1.png
+        numberOfTextures: 11
+
+  - name: enemy
+    animations:
+      - type: idle
+        firstTexturePath: resources/Enemy/Idle/idle-with-weapon-1.png
+        numberOfTextures: 3
+      - type: walk
+        firstTexturePath: resources/Enemy/Walk/walk-with-weapon-1.png
+        numberOfTextures: 2

@@ -5,7 +5,7 @@
 #include "DeltaTime.h"
 #include "TexturePath.h"
 
-namespace graphics
+namespace graphics::animation
 {
 class Animation
 {

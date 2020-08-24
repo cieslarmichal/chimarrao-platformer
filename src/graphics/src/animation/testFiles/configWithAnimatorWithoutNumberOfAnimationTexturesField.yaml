@@ -1,0 +1,6 @@
+
+animators:
+  - name: player
+    animations:
+      - type: idle
+        firstTexturePath: resources/Player/Idle/idle-with-weapon-1.png
