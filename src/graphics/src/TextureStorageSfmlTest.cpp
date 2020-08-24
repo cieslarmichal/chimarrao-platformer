@@ -7,28 +7,22 @@
 using namespace graphics;
 using namespace ::testing;
 
-namespace
-{
-
-}
-
 class TextureStorageSfmlTest : public ::testing::Test
 {
 public:
     TexturePath goodPath = "~/chimarrao/resources/someTexture";
     TexturePath wrongPath = "C:\\wrong\\path";
 
-    std::unique_ptr<TextureLoaderMock> loader = std::make_unique<NiceMock<TextureLoaderMock>>();
+    std::unique_ptr<TextureLoaderMock> loader = std::make_unique<StrictMock<TextureLoaderMock>>();
     TextureLoaderMock* loaderPtr = loader.get();
 
-    sf::Texture texture{};
+    sf::Texture texture;
 
     std::unique_ptr<TextureStorageSfml> storage = std::make_unique<TextureStorageSfml>(std::move(loader));
 };
 
 TEST_F(TextureStorageSfmlTest, getTextureShouldReturnTextureOnGoodPath)
 {
-
     EXPECT_CALL(*loaderPtr, load(_, goodPath)).WillOnce(DoAll(SetArgReferee<0>(texture), Return()));
     auto result = storage->getTexture(goodPath);
     ASSERT_TRUE(result);

@@ -30,5 +30,6 @@ private:
     std::unordered_map<AnimationType, Animation> animations;
     AnimationType currentAnimationType;
     AnimationDirection currentAnimationDirection;
+    // TODO: PlayerAnimatorSettings containing all info about animations, number of paths, time of animation
 };
 }
