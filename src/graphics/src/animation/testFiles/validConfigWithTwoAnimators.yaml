@@ -5,15 +5,19 @@ animators:
       - type: idle
         firstTexturePath: resources/Player/Idle/idle-with-weapon-1.png
         numberOfTextures: 6
+        timeBetweenTexturesInSeconds: 0.3
       - type: walk
         firstTexturePath: resources/Player/Walk/walk-with-weapon-1.png
         numberOfTextures: 11
+        timeBetweenTexturesInSeconds: 0.7
 
   - name: enemy
     animations:
       - type: idle
         firstTexturePath: resources/Enemy/Idle/idle-with-weapon-1.png
         numberOfTextures: 3
+        timeBetweenTexturesInSeconds: 0.4
       - type: walk
         firstTexturePath: resources/Enemy/Walk/walk-with-weapon-1.png
         numberOfTextures: 2
+        timeBetweenTexturesInSeconds: 0.8

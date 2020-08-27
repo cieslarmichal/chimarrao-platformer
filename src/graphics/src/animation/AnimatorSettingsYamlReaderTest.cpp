@@ -26,16 +26,18 @@ const std::string configWithAnimatorWithoutAnimatorNameField{
     testDirectory + "configWithAnimatorWithoutAnimatorNameField.yaml"};
 const std::string configWithAnimatorWithoutNumberOfAnimationTexturesField{
     testDirectory + "configWithAnimatorWithoutNumberOfAnimationTexturesField.yaml"};
+const std::string configWithAnimatorWithoutTimeBetweenTexturesField{
+    testDirectory + "configWithAnimatorWithoutTimeBetweenTexturesField.yaml"};
 const std::string configWithEmptyAnimators{testDirectory + "configWithEmptyAnimators.yaml"};
 const std::string configWithoutAnimatorsField{testDirectory + "configWithoutAnimatorsField.yaml"};
 const std::string validPathWithOneAnimator{testDirectory + "validConfigWithOneAnimator.yaml"};
 const std::string validPathWithTwoAnimators{testDirectory + "validConfigWithTwoAnimators.yaml"};
 
-const AnimationSettings playerAnimationSettings1{"idle", "resources/Player/Idle/idle-with-weapon-1.png", 6};
-const AnimationSettings playerAnimationSettings2{"walk", "resources/Player/Walk/walk-with-weapon-1.png", 11};
+const AnimationSettings playerAnimationSettings1{"idle", "resources/Player/Idle/idle-with-weapon-1.png", 6, 0.3};
+const AnimationSettings playerAnimationSettings2{"walk", "resources/Player/Walk/walk-with-weapon-1.png", 11, 0.7};
 const AnimationsSettings playerAnimationsSettings{playerAnimationSettings1, playerAnimationSettings2};
-const AnimationSettings enemyAnimationSettings1{"idle", "resources/Enemy/Idle/idle-with-weapon-1.png", 3};
-const AnimationSettings enemyAnimationSettings2{"walk", "resources/Enemy/Walk/walk-with-weapon-1.png", 2};
+const AnimationSettings enemyAnimationSettings1{"idle", "resources/Enemy/Idle/idle-with-weapon-1.png", 3, 0.4};
+const AnimationSettings enemyAnimationSettings2{"walk", "resources/Enemy/Walk/walk-with-weapon-1.png", 2, 0.8};
 const AnimationsSettings enemyAnimationsSettings{enemyAnimationSettings1, enemyAnimationSettings2};
 const AnimatorsSettings animatorsSettings1{{"player", playerAnimationsSettings}};
 const AnimatorsSettings animatorsSettings2{{"player", playerAnimationsSettings},
@@ -116,6 +118,15 @@ TEST_F(AnimatorSettingsYamlReaderTest,
 {
     const auto actualAnimatorsSettings = animatorsSettingsReader.readAnimatorsSettings(
         configWithAnimatorWithoutNumberOfAnimationTexturesField);
+
+    ASSERT_EQ(actualAnimatorsSettings, boost::none);
+}
+
+TEST_F(AnimatorSettingsYamlReaderTest,
+       givenConfigFileWithAnimationsWithoutTimeBetweenTexturesField_shouldReturnNone)
+{
+    const auto actualAnimatorsSettings = animatorsSettingsReader.readAnimatorsSettings(
+        configWithAnimatorWithoutTimeBetweenTexturesField);
 
     ASSERT_EQ(actualAnimatorsSettings, boost::none);
 }

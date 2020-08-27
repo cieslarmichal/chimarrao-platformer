@@ -4,3 +4,4 @@ animators:
     animations:
       - type: idle
         numberOfTextures: 6
+        timeBetweenTexturesInSeconds: 0.3

@@ -4,4 +4,4 @@ animators:
     animations:
       - type: idle
         firstTexturePath: resources/Player/Idle/idle-with-weapon-1.png
-        timeBetweenTexturesInSeconds: 0.3
+        numberOfTextures: 6

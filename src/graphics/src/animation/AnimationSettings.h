@@ -11,12 +11,14 @@ struct AnimationSettings
     std::string animationType;
     TexturePath firstTexturePath;
     int numberOfTextures;
+    float timeBetweenTexturesInSeconds;
 };
 
 inline bool operator==(const AnimationSettings& lhs, const AnimationSettings& rhs)
 {
     auto tieStruct = [](const AnimationSettings& settings) {
-        return std::tie(settings.animationType, settings.firstTexturePath, settings.numberOfTextures);
+        return std::tie(settings.animationType, settings.firstTexturePath, settings.numberOfTextures,
+                        settings.timeBetweenTexturesInSeconds);
     };
     return tieStruct(lhs) == tieStruct(rhs);
 }

@@ -9,13 +9,14 @@
 #include "Animator.h"
 #include "GraphicsId.h"
 #include "RendererPool.h"
+#include "AnimatorSettings.h"
 
 namespace graphics::animation
 {
 class PlayerAnimator : public Animator
 {
 public:
-    PlayerAnimator(graphics::GraphicsId, std::shared_ptr<graphics::RendererPool>,
+    PlayerAnimator(graphics::GraphicsId, std::shared_ptr<graphics::RendererPool>, const AnimatorSettings&,
                    AnimationType = AnimationType::Idle, AnimationDirection = AnimationDirection::Right);
 
     void update(const utils::DeltaTime&) override;
@@ -23,13 +24,14 @@ public:
     void setAnimation(AnimationType, AnimationDirection) override;
 
 private:
-    void initializeAnimations();
+    void initializeAnimations(const AnimationsSettings&);
+    bool containsAnimation(const AnimationType&) const;
 
     graphics::GraphicsId graphicsId;
     std::shared_ptr<graphics::RendererPool> rendererPool;
     std::unordered_map<AnimationType, Animation> animations;
     AnimationType currentAnimationType;
     AnimationDirection currentAnimationDirection;
-    // TODO: PlayerAnimatorSettings containing all info about animations, number of paths, time of animation
+    std::string animatorName;
 };
 }

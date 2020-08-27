@@ -12,6 +12,7 @@ set(SOURCES
         src/animation/Animation.cpp
         src/animation/PlayerAnimator.cpp
         src/animation/AnimatorSettingsYamlReader.cpp
+        src/animation/AnimationsFromSettingsLoader.cpp
         )
 
 add_library(graphics ${SOURCES})
@@ -27,6 +28,8 @@ set(UT_SOURCES
         src/animation/AnimationTest.cpp
         src/animation/PlayerAnimatorTest.cpp
         src/animation/AnimatorSettingsYamlReaderTest.cpp
+        src/animation/AnimationTypeTest.cpp
+        src/animation/AnimationsFromSettingsLoaderTest.cpp
         )
 
 add_executable(graphicsUT ${UT_SOURCES})

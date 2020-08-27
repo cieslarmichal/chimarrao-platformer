@@ -18,7 +18,7 @@ class PlayerAnimatorTest : public Test
 public:
     std::shared_ptr<RendererPoolMock> rendererPool = std::make_shared<StrictMock<RendererPoolMock>>();
 
-    PlayerAnimator animator{graphicsId, rendererPool};
+    PlayerAnimator animator{graphicsId, rendererPool, {}};
 };
 
 //void update(const utils::DeltaTime&) override;
