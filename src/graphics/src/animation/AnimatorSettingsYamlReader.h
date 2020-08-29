@@ -1,7 +1,8 @@
 #pragma once
 
-#include "AnimatorSettingsReader.h"
 #include "yaml-cpp/yaml.h"
+
+#include "AnimatorSettingsReader.h"
 
 namespace graphics::animation
 {

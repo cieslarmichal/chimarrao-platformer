@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SFML/Window.hpp"
+
 #include "Vector.h"
 #include "Window.h"
 #include "WindowProxy.h"

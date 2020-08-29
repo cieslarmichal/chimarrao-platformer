@@ -8,25 +8,25 @@
 //
 //#include "RectangleShape.h"
 //
-//using namespace ::testing;
+// using namespace ::testing;
 //
-//namespace graphics
+// namespace graphics
 //{
-//namespace
+// namespace
 //{
-//const utils::Vector2f size1{20, 30};
-//const utils::Vector2f size2{100, 100};
-//const utils::Vector2f position{0, 10};
+// const utils::Vector2f size1{20, 30};
+// const utils::Vector2f size2{100, 100};
+// const utils::Vector2f position{0, 10};
 //}
 //
-//ACTION_P(SaveTexture, texture)
+// ACTION_P(SaveTexture, texture)
 //{
 //    return texture = arg0.getTexture();
 //}
 //
-//class sfml_renderer_pool_test : public ::testing::Test
+// class sfml_renderer_pool_test : public ::testing::Test
 //{
-//public:
+// public:
 //    std::unique_ptr<renderer_pool> create_renderer_pool()
 //    {
 //        return std::make_unique<sfml_renderer_pool>(
@@ -69,14 +69,14 @@
 //    mock_texture_warehouse* textures{unique_texture_warehouse.get()};
 //};
 //
-//TEST_F(sfml_renderer_pool_test, contextShouldBeInitializedByRendererPool)
+// TEST_F(sfml_renderer_pool_test, contextShouldBeInitializedByRendererPool)
 //{
 //    EXPECT_CALL(*context, initialize());
 //    EXPECT_CALL(*context, set_view());
 //    create_renderer_pool();
 //}
 //
-//TEST_F(sfml_renderer_pool_test, acquireTwoRenderableObject_positionShouldMatch)
+// TEST_F(sfml_renderer_pool_test, acquireTwoRenderableObject_positionShouldMatch)
 //{
 //    auto renderer_pool = create_renderer_pool();
 //    auto const position1 = math::Position2f{30.f, 10.f};
@@ -89,7 +89,7 @@
 //    expect_eq_position(position2, renderer_pool->get_position(id2));
 //}
 //
-//TEST_F(sfml_renderer_pool_test, renderableObjectShouldBeMovable)
+// TEST_F(sfml_renderer_pool_test, renderableObjectShouldBeMovable)
 //{
 //    auto renderer_pool = create_renderer_pool();
 //    auto const id = renderer_pool->acquire(dummy_size, dummy_position, defaultColor);
@@ -117,21 +117,21 @@
 //    expect_eq_position(new_position, renderer_pool->get_position(id));
 //}
 //
-//TEST_F(sfml_renderer_pool_test, getPositionOfInvalidIdShouldThrow)
+// TEST_F(sfml_renderer_pool_test, getPositionOfInvalidIdShouldThrow)
 //{
 //    auto const not_existing_shape_id = renderer_id_generator::generate();
 //    auto renderer_pool = create_renderer_pool();
 //    ASSERT_DEATH(renderer_pool->get_position(not_existing_shape_id), "");
 //}
 //
-//TEST_F(sfml_renderer_pool_test, setPositiontOfInvalidIdShouldThrow)
+// TEST_F(sfml_renderer_pool_test, setPositiontOfInvalidIdShouldThrow)
 //{
 //    auto const not_existing_shape_id = renderer_id_generator::generate();
 //    auto renderer_pool = create_renderer_pool();
 //    ASSERT_DEATH(renderer_pool->set_position(not_existing_shape_id, dummy_position), "");
 //}
 //
-//TEST_F(sfml_renderer_pool_test, renderColoredObject)
+// TEST_F(sfml_renderer_pool_test, renderColoredObject)
 //{
 //    auto renderer_pool = create_renderer_pool();
 //    auto const shape{create_object_with_color(*renderer_pool, math::Size2f{10.f, 12.f},
@@ -143,7 +143,7 @@
 //    renderer_pool->render_all();
 //}
 //
-//TEST_F(sfml_renderer_pool_test, renderTexturedObject)
+// TEST_F(sfml_renderer_pool_test, renderTexturedObject)
 //{
 //    const auto shape_size{math::Size2f{10.f, 12.f}};
 //    const auto shape_position{math::Position2f{100.f, 77.f}};
@@ -153,7 +153,8 @@
 //    EXPECT_CALL(*textures, get_access(red_texture_path)).WillOnce(ReturnRef(red_texture));
 //
 //    auto renderer_pool = create_renderer_pool();
-//    auto const shape{create_object_with_texture(*renderer_pool, shape_size, shape_position, red_texture_path,
+//    auto const shape{create_object_with_texture(*renderer_pool, shape_size, shape_position,
+//    red_texture_path,
 //                                                red_texture)};
 //
 //    EXPECT_CALL(*context, draw(shape));
@@ -162,7 +163,7 @@
 //    renderer_pool->render_all();
 //}
 //
-//TEST_F(sfml_renderer_pool_test, releasedObjectShouldNotBeDrawn)
+// TEST_F(sfml_renderer_pool_test, releasedObjectShouldNotBeDrawn)
 //{
 //    auto renderer_pool = create_renderer_pool();
 //    auto const first_shape{
@@ -179,7 +180,7 @@
 //    renderer_pool->render_all();
 //}
 //
-//TEST_F(sfml_renderer_pool_test, renderAllObjectInOrderOfCreation)
+// TEST_F(sfml_renderer_pool_test, renderAllObjectInOrderOfCreation)
 //{
 //    auto renderer_pool = create_renderer_pool();
 //    auto const first_shape{create_object_with_color(*renderer_pool, math::Size2f{10.f, 12.f},
@@ -197,7 +198,7 @@
 //    renderer_pool->render_all();
 //}
 //
-//TEST_F(sfml_renderer_pool_test, onlyClearTheScreenIfNoObjectToDraw)
+// TEST_F(sfml_renderer_pool_test, onlyClearTheScreenIfNoObjectToDraw)
 //{
 //    auto renderer_pool = create_renderer_pool();
 //
@@ -208,7 +209,7 @@
 //    renderer_pool->render_all();
 //}
 //
-//TEST_F(sfml_renderer_pool_test, clearScreenBeforeDraw)
+// TEST_F(sfml_renderer_pool_test, clearScreenBeforeDraw)
 //{
 //    auto renderer_pool = create_renderer_pool();
 //    auto const shape{
@@ -223,7 +224,7 @@
 //    renderer_pool->render_all();
 //}
 //
-//TEST_F(sfml_renderer_pool_test, createdObjectAfterReleaseOneShouldBeDrawn)
+// TEST_F(sfml_renderer_pool_test, createdObjectAfterReleaseOneShouldBeDrawn)
 //{
 //    auto renderer_pool = create_renderer_pool();
 //
@@ -231,7 +232,8 @@
 //        create_object_with_color(*renderer_pool, dummy_size, dummy_position, graphics::colors::red)};
 //
 //    auto const second_shape{create_object_with_color(*renderer_pool, math::Size2f{13.f, 11.f},
-//                                                     math::Position2f{140.f, 177.f}, graphics::colors::red)};
+//                                                     math::Position2f{140.f, 177.f},
+//                                                     graphics::colors::red)};
 //
 //    renderer_pool->release(first_shape.get_id());
 //
@@ -245,7 +247,7 @@
 //    renderer_pool->render_all();
 //}
 //
-//TEST_F(sfml_renderer_pool_test, acquiredObjectWithSelectedColor)
+// TEST_F(sfml_renderer_pool_test, acquiredObjectWithSelectedColor)
 //{
 //    auto renderer_pool = create_renderer_pool();
 //    auto const id = renderer_pool->acquire(dummy_size, dummy_position, graphics::colors::red);
@@ -253,7 +255,7 @@
 //    EXPECT_EQ(graphics::colors::red, renderer_pool->get_color(id));
 //}
 //
-//TEST_F(sfml_renderer_pool_test, acquiredObjectWithTextureShouldSetColorToWhite)
+// TEST_F(sfml_renderer_pool_test, acquiredObjectWithTextureShouldSetColorToWhite)
 //{
 //    const auto default_texture_path{texture_path{"texture"}};
 //    auto default_texture{sf::Texture{}};

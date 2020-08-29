@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <unordered_map>
+
 #include "exceptions/AnimationTypeNotFound.h"
 
 namespace graphics::animation

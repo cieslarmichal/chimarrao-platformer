@@ -47,12 +47,12 @@ void Player::handleInputStatus(const InputStatus& inputStatus)
     if (inputStatus.isKeyPressed(InputKey::Left))
     {
         animator->setAnimation(graphics::AnimationType::Walk, graphics::AnimationDirection::Left);
-//        newDirection.x = -1;
+        //        newDirection.x = -1;
     }
     else if (inputStatus.isKeyPressed(InputKey::Right))
     {
         animator->setAnimation(graphics::AnimationType::Walk, graphics::AnimationDirection::Right);
-//        newDirection.x = 1;
+        //        newDirection.x = 1;
     }
     else
     {

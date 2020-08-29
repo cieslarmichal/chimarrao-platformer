@@ -29,15 +29,17 @@ TEST_F(AnimationTest, newAnimationShouldReturnFirstFrame)
 
 TEST_F(AnimationTest, aniationShouldReturnNextTexture)
 {
-    animation.update(utils::DeltaTime(timeBetweenTextures + 1));
+    const auto animationChanged = animation.update(utils::DeltaTime(timeBetweenTextures + 1));
 
+    ASSERT_TRUE(animationChanged);
     ASSERT_EQ(textures[1], animation.getCurrentTexturePath());
 }
 
 TEST_F(AnimationTest, animationShouldNotReturnNextTexture)
 {
-    animation.update(utils::DeltaTime(timeBetweenTextures - 1));
+    const auto animationChanged = animation.update(utils::DeltaTime(timeBetweenTextures - 1));
 
+    ASSERT_FALSE(animationChanged);
     ASSERT_EQ(textures[0], animation.getCurrentTexturePath());
 }
 

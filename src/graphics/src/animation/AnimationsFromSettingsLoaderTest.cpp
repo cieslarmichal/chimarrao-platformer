@@ -2,6 +2,8 @@
 
 #include "gtest/gtest.h"
 
+#include "exceptions/AnimationsFromSettingsNotFound.h"
+
 using namespace ::testing;
 using namespace graphics::animation;
 
@@ -17,18 +19,11 @@ public:
                                                 {"walk", "/elo/123.txt", 2, 0.7}};
 };
 
-TEST_F(AnimationsFromSettingsLoaderTest, givenNonEmptyAnimationsAndEmptySettings_ShouldClearAnimations)
+TEST_F(AnimationsFromSettingsLoaderTest, givenEmptyAnimationsSettings_shouldThrowAnimationsNotFound)
 {
-    AnimationsFromSettingsLoader::loadAnimationsFromSettings(nonEmptyAnimations, emptyAnimationsSettings);
-
-    ASSERT_TRUE(nonEmptyAnimations.empty());
-}
-
-TEST_F(AnimationsFromSettingsLoaderTest, givenEmptyAnimationsAndEmptySettings_ShouldNotChangeAnimations)
-{
-    AnimationsFromSettingsLoader::loadAnimationsFromSettings(animations, emptyAnimationsSettings);
-
-    ASSERT_TRUE(animations.empty());
+    ASSERT_THROW(
+        AnimationsFromSettingsLoader::loadAnimationsFromSettings(animations, emptyAnimationsSettings),
+        exceptions::AnimationsFromSettingsNotFound);
 }
 
 TEST_F(AnimationsFromSettingsLoaderTest, shouldLoadAnimationsFromSettings)
@@ -37,4 +32,14 @@ TEST_F(AnimationsFromSettingsLoaderTest, shouldLoadAnimationsFromSettings)
 
     ASSERT_EQ(animations.at(AnimationType::Idle).getCurrentTexturePath(), "/dev/x1.txt");
     ASSERT_EQ(animations.at(AnimationType::Walk).getCurrentTexturePath(), "/elo/123.txt");
+}
+
+TEST_F(AnimationsFromSettingsLoaderTest,
+       givenNonEmptyAnimations_shouldClearAnimationsAndLoadAnimationsFromSettings)
+{
+    AnimationsFromSettingsLoader::loadAnimationsFromSettings(nonEmptyAnimations, animationsSettings);
+
+    ASSERT_TRUE(nonEmptyAnimations.count(AnimationType::Jump) == 0);
+    ASSERT_EQ(nonEmptyAnimations.at(AnimationType::Idle).getCurrentTexturePath(), "/dev/x1.txt");
+    ASSERT_EQ(nonEmptyAnimations.at(AnimationType::Walk).getCurrentTexturePath(), "/elo/123.txt");
 }

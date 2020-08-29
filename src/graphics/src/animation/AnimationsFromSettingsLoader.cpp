@@ -1,6 +1,7 @@
 #include "AnimationsFromSettingsLoader.h"
 
 #include "IncrementalFilePathsCreator.h"
+#include "exceptions/AnimationsFromSettingsNotFound.h"
 
 namespace graphics::animation
 {
@@ -8,6 +9,11 @@ namespace graphics::animation
 void AnimationsFromSettingsLoader::loadAnimationsFromSettings(
     std::unordered_map<AnimationType, Animation>& animations, const AnimationsSettings& animationsSettings)
 {
+    if (animationsSettings.empty())
+    {
+        throw exceptions::AnimationsFromSettingsNotFound{"Animations not found in settings"};
+    }
+
     animations.clear();
     animations.reserve(animationsSettings.size());
 

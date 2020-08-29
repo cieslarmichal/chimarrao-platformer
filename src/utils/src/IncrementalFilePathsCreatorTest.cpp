@@ -56,7 +56,8 @@ TEST_F(IncrementalFilePathsCreatorTest, givenValidFilePathAndZeroNumberOfFile_sh
     ASSERT_TRUE(actualFilePaths.empty());
 }
 
-TEST_F(IncrementalFilePathsCreatorTest, givenValidFilePathAndNonZeroValue_shouldReturnFilePathsWithIncrementedNames)
+TEST_F(IncrementalFilePathsCreatorTest,
+       givenValidFilePathAndNonZeroValue_shouldReturnFilePathsWithIncrementedNames)
 {
     const auto actualFilePaths = filePathsCreator.createFilePaths(filePathWithFileNameSeparator, 3);
 

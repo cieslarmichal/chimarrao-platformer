@@ -7,9 +7,9 @@
 #include "AnimationDirection.h"
 #include "AnimationType.h"
 #include "Animator.h"
+#include "AnimatorSettings.h"
 #include "GraphicsId.h"
 #include "RendererPool.h"
-#include "AnimatorSettings.h"
 
 namespace graphics::animation
 {

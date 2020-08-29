@@ -35,18 +35,23 @@ PlayerAnimator::PlayerAnimator(graphics::GraphicsId graphicsIdInit,
 
 void PlayerAnimator::update(const utils::DeltaTime& deltaTime)
 {
-    animations.at(currentAnimationType).update(deltaTime);
-    // TODO: check if texture is changed from animation
-    // TODO: get rid of ternary operation
-    rendererPool->setTexture(graphicsId, animations.at(currentAnimationType).getCurrentTexturePath(),
-                             {(currentAnimationDirection == AnimationDirection::Left ? -1.5f : 1.5f), 1.5f});
+    const auto animationChanged = animations.at(currentAnimationType).update(deltaTime);
+
+    if (animationChanged)
+    {
+        const utils::Vector2f scale = (currentAnimationDirection == AnimationDirection::Left) ?
+                                          utils::Vector2f(-1.5f, 1.5f) :
+                                          utils::Vector2f(1.5f, 1.5f);
+        rendererPool->setTexture(graphicsId, animations.at(currentAnimationType).getCurrentTexturePath(),
+                                 scale);
+    }
 }
 
 void PlayerAnimator::setAnimation(AnimationType animationType)
 {
     if (not containsAnimation(animationType))
     {
-        throw exceptions::AnimationTypeNotSupported{"Animation of type: " + toString(currentAnimationType) +
+        throw exceptions::AnimationTypeNotSupported{"Animation of type: " + toString(animationType) +
                                                     " is not supported in " + animatorName};
     }
 
@@ -57,7 +62,7 @@ void PlayerAnimator::setAnimation(AnimationType animationType, AnimationDirectio
 {
     if (not containsAnimation(animationType))
     {
-        throw exceptions::AnimationTypeNotSupported{"Animation of type: " + toString(currentAnimationType) +
+        throw exceptions::AnimationTypeNotSupported{"Animation of type: " + toString(animationType) +
                                                     " is not supported in " + animatorName};
     }
 
@@ -79,9 +84,9 @@ void PlayerAnimator::initializeAnimations(const AnimationsSettings& animationsSe
     AnimationsFromSettingsLoader::loadAnimationsFromSettings(animations, animationsSettings);
 }
 
-bool PlayerAnimator::containsAnimation(const AnimationType&) const
+bool PlayerAnimator::containsAnimation(const AnimationType& animationType) const
 {
-    return animations.count(currentAnimationType);
+    return animations.count(animationType);
 }
 
 }
