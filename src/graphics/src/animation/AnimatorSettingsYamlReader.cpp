@@ -18,7 +18,7 @@ const auto timeBetweenTexturesInSecondsField{"timeBetweenTexturesInSeconds"};
 }
 
 boost::optional<AnimatorsSettings>
-AnimatorSettingsYamlReader::readAnimatorsSettings(const utils::FilePath& yamlFilePath) const
+AnimatorSettingsYamlReader::readAnimatorsSettings(const utils::FilePath& yamlFilePath)
 {
     try
     {
@@ -37,7 +37,7 @@ AnimatorSettingsYamlReader::readAnimatorsSettings(const utils::FilePath& yamlFil
     return boost::none;
 }
 
-YAML::Node AnimatorSettingsYamlReader::loadYamlFile(const utils::FilePath& yamlFilePath) const
+YAML::Node AnimatorSettingsYamlReader::loadYamlFile(const utils::FilePath& yamlFilePath)
 {
     try
     {
@@ -50,7 +50,7 @@ YAML::Node AnimatorSettingsYamlReader::loadYamlFile(const utils::FilePath& yamlF
 }
 
 boost::optional<AnimatorsSettings>
-AnimatorSettingsYamlReader::readAnimatorsSettings(const YAML::Node& animators) const
+AnimatorSettingsYamlReader::readAnimatorsSettings(const YAML::Node& animators)
 {
     AnimatorsSettings animatorsSettings;
 
@@ -77,7 +77,7 @@ AnimatorSettingsYamlReader::readAnimatorsSettings(const YAML::Node& animators) c
 }
 
 boost::optional<AnimationsSettings>
-AnimatorSettingsYamlReader::readAnimationsSettings(const YAML::Node& animations) const
+AnimatorSettingsYamlReader::readAnimationsSettings(const YAML::Node& animations)
 {
     AnimationsSettings animationsSettings;
 

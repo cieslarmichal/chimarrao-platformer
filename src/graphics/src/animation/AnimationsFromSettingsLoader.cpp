@@ -1,5 +1,6 @@
 #include "AnimationsFromSettingsLoader.h"
 
+#include "GetProjectPath.h"
 #include "IncrementalFilePathsCreator.h"
 #include "exceptions/AnimationsFromSettingsNotFound.h"
 
@@ -21,7 +22,8 @@ void AnimationsFromSettingsLoader::loadAnimationsFromSettings(
     {
         const auto animationType = toAnimationType(animationSettings.animationType);
         const auto texturePaths = utils::IncrementalFilePathsCreator::createFilePaths(
-            animationSettings.firstTexturePath, animationSettings.numberOfTextures);
+            utils::getProjectPath("chimarrao") + animationSettings.firstTexturePath,
+            animationSettings.numberOfTextures);
         const auto timeBetweenTextures = animationSettings.timeBetweenTexturesInSeconds;
         animations.insert({animationType, Animation{texturePaths, timeBetweenTextures}});
     }

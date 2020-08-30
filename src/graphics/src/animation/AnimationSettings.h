@@ -23,5 +23,14 @@ inline bool operator==(const AnimationSettings& lhs, const AnimationSettings& rh
     return tieStruct(lhs) == tieStruct(rhs);
 }
 
+inline std::ostream& operator<<(std::ostream& os, const AnimationSettings& animationSettings)
+{
+    return os << "animationType: " + animationSettings.animationType +
+                     " firstTexturePath: " + animationSettings.firstTexturePath +
+                     " numberOfTextures: " + std::to_string(animationSettings.numberOfTextures) +
+                     " timeBetweenTexturesInSeconds: " +
+                     std::to_string(animationSettings.timeBetweenTexturesInSeconds);
+}
+
 using AnimationsSettings = std::vector<AnimationSettings>;
 }
