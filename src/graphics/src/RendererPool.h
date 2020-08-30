@@ -5,6 +5,7 @@
 #include "Color.h"
 #include "GraphicsId.h"
 #include "Vector.h"
+#include <boost/optional.hpp>
 
 namespace graphics
 {
@@ -22,7 +23,7 @@ public:
     virtual void release(const GraphicsId&) = 0;
     virtual void renderAll() = 0;
     virtual void setPosition(const GraphicsId&, const utils::Vector2f& position) = 0;
-    virtual utils::Vector2f getPosition(const GraphicsId&) = 0;
+    virtual boost::optional<utils::Vector2f> getPosition(const GraphicsId&) = 0;
     // TODO: remove scale
     virtual void setTexture(const GraphicsId&, const TexturePath&, const utils::Vector2f& scale = {1, 1}) = 0;
     virtual void setRenderingSize(const utils::Vector2u&) = 0;

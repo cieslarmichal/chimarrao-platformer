@@ -1,8 +1,9 @@
 #include "TextureLoaderSfml.h"
 
-#include "exceptions/CannotAccess.h"
 #include "gtest/gtest.h"
+
 #include "GetProjectPath.h"
+#include "exceptions/CannotAccessTextureFile.h"
 
 using namespace graphics;
 using namespace ::testing;
@@ -20,7 +21,7 @@ public:
 
 TEST_F(TextureLoaderSfmlTest, givenNonExistingTexturePath_shouldThrowCannotAccess)
 {
-    ASSERT_THROW(textureLoader.load(texture, nonExistingTexturePath), exceptions::CannotAccess);
+    ASSERT_THROW(textureLoader.load(texture, nonExistingTexturePath), exceptions::CannotAccessTextureFile);
 }
 
 TEST_F(TextureLoaderSfmlTest, givenExistingTexturePath_shouldLoadTextureAndNotThrow)
