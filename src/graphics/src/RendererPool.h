@@ -1,11 +1,11 @@
 #pragma once
 
+#include <boost/optional.hpp>
 #include <string>
 
 #include "Color.h"
 #include "GraphicsId.h"
 #include "Vector.h"
-#include <boost/optional.hpp>
 
 namespace graphics
 {

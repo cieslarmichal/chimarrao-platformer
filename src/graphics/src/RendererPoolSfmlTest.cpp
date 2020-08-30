@@ -6,9 +6,9 @@
 
 #include "ContextRendererMock.h"
 #include "TextureStorageMock.h"
-#include "exceptions/TextureNotAvailable.h"
 
 #include "RectangleShape.h"
+#include "exceptions/TextureNotAvailable.h"
 
 using namespace ::testing;
 using namespace graphics;
@@ -50,7 +50,6 @@ public:
     RendererPoolSfml rendererPool{std::move(contextRendererInit), std::move(textureStorageInit)};
 };
 
-
 TEST_F(RendererPoolSfmlTest, acquireShapeWithColor_positionShouldMatch)
 {
     const auto shapeId = rendererPool.acquire(size1, position, color);
@@ -62,7 +61,8 @@ TEST_F(RendererPoolSfmlTest, acquireShapeWithColor_positionShouldMatch)
 
 TEST_F(RendererPoolSfmlTest, acquireShapeWithTexture_textureNotAvailable_shouldThrowTextureNotAvailable)
 {
-    EXPECT_CALL(*textureStorage, getTexture(invalidTexturePath)).WillOnce(Throw(exceptions::TextureNotAvailable{""}));
+    EXPECT_CALL(*textureStorage, getTexture(invalidTexturePath))
+        .WillOnce(Throw(exceptions::TextureNotAvailable{""}));
 
     ASSERT_THROW(rendererPool.acquire(size1, position, invalidTexturePath), exceptions::TextureNotAvailable);
 }
@@ -131,10 +131,8 @@ TEST_F(RendererPoolSfmlTest, setTextureWithValidTexturePath_shouldNoThrow)
 TEST_F(RendererPoolSfmlTest, setTextureWithInvalidTexturePath_shouldThrowTextureNotAvailable)
 {
     const auto shapeId = rendererPool.acquire(size1, position, color);
-    EXPECT_CALL(*textureStorage, getTexture(invalidTexturePath)).WillOnce(Throw(exceptions::TextureNotAvailable{""}));
+    EXPECT_CALL(*textureStorage, getTexture(invalidTexturePath))
+        .WillOnce(Throw(exceptions::TextureNotAvailable{""}));
 
     ASSERT_THROW(rendererPool.setTexture(shapeId, invalidTexturePath), exceptions::TextureNotAvailable);
-
 }
-
-

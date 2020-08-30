@@ -27,7 +27,7 @@ public:
                                                 {"walk", "elo/123.txt", 2, 2.0}};
     const std::string projectPath{utils::getProjectPath("chimarrao")};
     const TexturePath secondIdleTexturePath{projectPath + "dev/x2.txt"};
-    const TexturePath secondWalkTexturePath{projectPath +"elo/124.txt"};
+    const TexturePath secondWalkTexturePath{projectPath + "elo/124.txt"};
     const AnimatorSettings animatorSettingsWithDifferentName{"diffName", animationsSettings};
     const AnimatorSettings animatorSettingsWithEmptyAnimationsSettings{"player", emptyAnimationsSettings};
     const AnimatorSettings animatorSettings{"player", animationsSettings};

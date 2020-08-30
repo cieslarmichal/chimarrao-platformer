@@ -25,7 +25,6 @@ set(UT_SOURCES
         src/TextureStorageSfmlTest.cpp
         src/RectangleShapeTest.cpp
         src/RendererPoolSfmlTest.cpp
-        src/RenderTargetSfmlTest.cpp
         src/animation/AnimationTest.cpp
         src/animation/PlayerAnimatorTest.cpp
         src/animation/AnimatorSettingsYamlReaderTest.cpp
