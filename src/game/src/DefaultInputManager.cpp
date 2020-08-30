@@ -2,8 +2,9 @@
 
 #include <iostream>
 
-#include "InputKey.h"
 #include "SFML/Window/Keyboard.hpp"
+
+#include "InputKey.h"
 
 namespace game
 {

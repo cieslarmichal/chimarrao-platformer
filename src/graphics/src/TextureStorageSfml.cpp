@@ -2,39 +2,39 @@
 
 #include <iostream>
 
+#include "exceptions/CannotAccessTextureFile.h"
+#include "exceptions/TextureNotAvailable.h"
+
 namespace graphics
 {
 TextureStorageSfml::TextureStorageSfml(std::unique_ptr<TextureLoader> loader) : loader(std::move(loader)) {}
 
-boost::optional<const sf::Texture&> TextureStorageSfml::getTexture(const TexturePath& path)
+const sf::Texture& TextureStorageSfml::getTexture(const TexturePath& path)
 {
-    if (not inTextureMap(path))
+    if (not textureInStorage(path))
     {
-        if (not loadTexture(path))
-        {
-            return boost::none;
-        }
+        loadTexture(path);
     }
-    return *textures[path];
+    return *textures.at(path);
 }
-bool TextureStorageSfml::loadTexture(const TexturePath& path)
+
+void TextureStorageSfml::loadTexture(const TexturePath& path)
 {
     auto texture = std::make_unique<sf::Texture>();
     try
     {
         loader->load(*texture, path);
     }
-    catch (const TextureLoader::CannotAccess& e)
+    catch (const exceptions::CannotAccessTextureFile& e)
     {
         std::cerr << e.what() << std::endl;
-        return false;
+        throw exceptions::TextureNotAvailable{e.what()};
     }
     textures[path] = std::move(texture);
-    return true;
 }
 
-bool TextureStorageSfml::inTextureMap(const TexturePath& path)
+bool TextureStorageSfml::textureInStorage(const TexturePath& path)
 {
-    return textures.count(path) > 0;
+    return textures.count(path) == 1;
 }
 }

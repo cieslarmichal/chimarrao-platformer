@@ -12,7 +12,7 @@ namespace
 const utils::Vector2f position{3.0f, 2.0f};
 const utils::Vector2f size{200, 100};
 const auto color{Color::Magenta};
-auto shapeId = GraphicsIdGenerator::generateId();
+const auto shapeId = GraphicsIdGenerator::generateId();
 }
 
 class RectangleShapeTest : public Test

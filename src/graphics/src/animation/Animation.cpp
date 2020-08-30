@@ -2,7 +2,7 @@
 
 #include "exceptions/TexturesNotInitialized.h"
 
-namespace graphics
+namespace graphics::animation
 {
 
 Animation::Animation(std::vector<TexturePath> consecutiveTexturePathsInit, float timeBetweenTexturesInit)
@@ -16,14 +16,16 @@ Animation::Animation(std::vector<TexturePath> consecutiveTexturePathsInit, float
     reset();
 }
 
-void Animation::update(const utils::DeltaTime& deltaTime)
+AnimationChanged Animation::update(const utils::DeltaTime& deltaTime)
 {
     timeUntilNextTexture -= deltaTime.count();
     if (timeUntilNextTexture <= 0)
     {
         moveToNextTexture();
         timeUntilNextTexture = timeBetweenTextures;
+        return true;
     }
+    return false;
 }
 
 const TexturePath& Animation::getCurrentTexturePath() const

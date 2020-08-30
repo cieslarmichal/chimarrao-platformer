@@ -3,7 +3,7 @@
 #include "AnimationType.h"
 #include "DeltaTime.h"
 
-namespace graphics
+namespace graphics::animation
 {
 class Animator
 {

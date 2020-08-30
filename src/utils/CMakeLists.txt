@@ -4,6 +4,8 @@ set(SOURCES
         src/GetExecutablePath.cpp
         src/GetProjectPath.cpp
         src/StringHelper.cpp
+        src/IncrementalFilePathsCreator.cpp
+        src/RandomNumberMersenneTwisterGenerator.cpp
         )
 
 set(UT_SOURCES
@@ -12,6 +14,8 @@ set(UT_SOURCES
         src/GetExecutablePathTest.cpp
         src/GetProjectPathTest.cpp
         src/StringHelperTest.cpp
+        src/IncrementalFilePathsCreatorTest.cpp
+        src/RandomNumberMersenneTwisterGeneratorTest.cpp
         )
 
 add_library(utils ${SOURCES})

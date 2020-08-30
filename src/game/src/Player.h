@@ -7,9 +7,9 @@
 #include "InputObserver.h"
 #include "PhysicsEngine.h"
 #include "PhysicsId.h"
-#include "PlayerAnimator.h"
 #include "RendererPool.h"
 #include "Vector.h"
+#include "animation/PlayerAnimator.h"
 
 namespace game
 {
@@ -18,7 +18,7 @@ class Player : public Entity, public InputObserver
 public:
     explicit Player(const graphics::GraphicsId&, std::shared_ptr<graphics::RendererPool>,
                     const physics::PhysicsId&, std::shared_ptr<physics::PhysicsEngine>,
-                    std::unique_ptr<graphics::Animator>);
+                    std::unique_ptr<graphics::animation::Animator>);
 
     void update(const utils::DeltaTime&) override;
     bool isDead() override;
@@ -29,6 +29,6 @@ private:
     std::shared_ptr<graphics::RendererPool> rendererPool;
     physics::PhysicsId physicsId;
     std::shared_ptr<physics::PhysicsEngine> physicsEngine;
-    std::unique_ptr<graphics::Animator> animator;
+    std::unique_ptr<graphics::animation::Animator> animator;
 };
 }

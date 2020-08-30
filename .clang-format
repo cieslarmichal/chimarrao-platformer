@@ -44,7 +44,7 @@ IncludeBlocks: Regroup
 IncludeCategories:
   - Regex:           '<.+>'
     Priority:        1
-  - Regex:           '^"(gtest|gmock|boost|nlohmann|curl)/'
+  - Regex:           '^"(gtest|gmock|boost|nlohmann|curl|yaml-cpp|SFML)/'
     Priority:        2
   - Regex:           '^"Aa'
     Priority:        3

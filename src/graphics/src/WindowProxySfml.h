@@ -1,6 +1,7 @@
 #pragma once
 
 #include "SFML/Graphics/RenderWindow.hpp"
+
 #include "WindowProxy.h"
 
 namespace graphics

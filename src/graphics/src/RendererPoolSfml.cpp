@@ -76,7 +76,7 @@ void RendererPoolSfml::setPosition(const GraphicsId& id, const utils::Vector2f& 
     }
 }
 
-utils::Vector2f RendererPoolSfml::getPosition(const GraphicsId& id)
+boost::optional<utils::Vector2f> RendererPoolSfml::getPosition(const GraphicsId& id)
 {
     auto shapeIter = findShapePosition(id);
     if (shapeIter != shapes.end())
@@ -84,22 +84,18 @@ utils::Vector2f RendererPoolSfml::getPosition(const GraphicsId& id)
         const auto& shape = getShapeByPosition(shapes, shapeIter);
         return shape.getPosition();
     }
-    return {};
+    return boost::none;
 }
 
 void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path, const utils::Vector2f& scale)
 {
-    boost::optional<const sf::Texture&> textureOpt = textureStorage->getTexture(path);
-    if (not textureOpt)
-    {
-        return;
-    }
+    const sf::Texture& texture = textureStorage->getTexture(path);
 
     auto shapeIter = findShapePosition(id);
     if (shapeIter != shapes.end())
     {
         auto& shape = getShapeByPosition(shapes, shapeIter);
-        shape.setTexture(&(*textureOpt));
+        shape.setTexture(&texture);
         shape.setScale(scale);
         if (scale.x < 0)
         {

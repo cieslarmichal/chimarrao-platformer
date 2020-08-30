@@ -9,7 +9,7 @@ Player::Player(const graphics::GraphicsId& graphicsIdInit,
                std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                const physics::PhysicsId& physicsIdInit,
                std::shared_ptr<physics::PhysicsEngine> physicsEngineInit,
-               std::unique_ptr<graphics::Animator> animatorInit)
+               std::unique_ptr<graphics::animation::Animator> animatorInit)
     : graphicsId{graphicsIdInit},
       rendererPool{std::move(rendererPoolInit)},
       physicsId{physicsIdInit},
@@ -46,17 +46,19 @@ void Player::handleInputStatus(const InputStatus& inputStatus)
 
     if (inputStatus.isKeyPressed(InputKey::Left))
     {
-        animator->setAnimation(graphics::AnimationType::Walk, graphics::AnimationDirection::Left);
-//        newDirection.x = -1;
+        animator->setAnimation(graphics::animation::AnimationType::Walk,
+                               graphics::animation::AnimationDirection::Left);
+        //        newDirection.x = -1;
     }
     else if (inputStatus.isKeyPressed(InputKey::Right))
     {
-        animator->setAnimation(graphics::AnimationType::Walk, graphics::AnimationDirection::Right);
-//        newDirection.x = 1;
+        animator->setAnimation(graphics::animation::AnimationType::Walk,
+                               graphics::animation::AnimationDirection::Right);
+        //        newDirection.x = 1;
     }
     else
     {
-        animator->setAnimation(graphics::AnimationType::Idle);
+        animator->setAnimation(graphics::animation::AnimationType::Idle);
     }
 
     physicsEngine->setMovementDirection(physicsId, newDirection);
