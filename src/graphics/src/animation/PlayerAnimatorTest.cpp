@@ -4,6 +4,7 @@
 
 #include "RendererPoolMock.h"
 
+#include "GetProjectPath.h"
 #include "GraphicsIdGenerator.h"
 #include "animation/exceptions/AnimationTypeNotSupported.h"
 #include "animation/exceptions/AnimationsFromSettingsNotFound.h"
@@ -22,10 +23,11 @@ public:
     const utils::DeltaTime timeExceedingTimeBetweenTextures{2.5};
     const utils::Vector2f scaleRightDirection{1.5, 1.5};
     const utils::Vector2f scaleLeftDirection{-1.5, 1.5};
-    const AnimationsSettings animationsSettings{{"idle", "/dev/x1.txt", 3, 1.2},
-                                                {"walk", "/elo/123.txt", 2, 2.0}};
-    const TexturePath secondIdleTexturePath{"/dev/x2.txt"};
-    const TexturePath secondWalkTexturePath{"/elo/124.txt"};
+    const AnimationsSettings animationsSettings{{"idle", "dev/x1.txt", 3, 1.2},
+                                                {"walk", "elo/123.txt", 2, 2.0}};
+    const std::string projectPath{utils::getProjectPath("chimarrao")};
+    const TexturePath secondIdleTexturePath{projectPath + "dev/x2.txt"};
+    const TexturePath secondWalkTexturePath{projectPath +"elo/124.txt"};
     const AnimatorSettings animatorSettingsWithDifferentName{"diffName", animationsSettings};
     const AnimatorSettings animatorSettingsWithEmptyAnimationsSettings{"player", emptyAnimationsSettings};
     const AnimatorSettings animatorSettings{"player", animationsSettings};

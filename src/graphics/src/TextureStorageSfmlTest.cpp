@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "TextureLoaderMock.h"
+#include "exceptions/CannotAccess.h"
 
 using namespace graphics;
 using namespace ::testing;
@@ -39,7 +40,7 @@ TEST_F(TextureStorageSfmlTest, getTextureShouldRememberLoadedTexture)
 
 TEST_F(TextureStorageSfmlTest, getTextureShouldReturnBoostNoneOnWrongPath)
 {
-    EXPECT_CALL(*loaderPtr, load(_, wrongPath)).WillOnce(Throw(TextureLoader::CannotAccess{"test"}));
+    EXPECT_CALL(*loaderPtr, load(_, wrongPath)).WillOnce(Throw(exceptions::CannotAccess{"test"}));
     auto result = storage->getTexture(wrongPath);
     ASSERT_FALSE(result);
 }

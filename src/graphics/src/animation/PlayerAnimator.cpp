@@ -82,11 +82,6 @@ void PlayerAnimator::setAnimation(AnimationType animationType, AnimationDirectio
 void PlayerAnimator::initializeAnimations(const AnimationsSettings& animationsSettings)
 {
     AnimationsFromSettingsLoader::loadAnimationsFromSettings(animations, animationsSettings);
-
-    for (const auto& animation : animationsSettings)
-    {
-        std::cerr << animation << std::endl;
-    }
 }
 
 bool PlayerAnimator::containsAnimation(const AnimationType& animationType) const

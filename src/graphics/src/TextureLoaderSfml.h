@@ -6,6 +6,7 @@ namespace graphics
 {
 class TextureLoaderSfml : public TextureLoader
 {
-    void load(sf::Texture&, const TexturePath&) override;
+public:
+    void load(sf::Texture&, const TexturePath&) const override;
 };
 }

@@ -1,6 +1,7 @@
 #include "TextureStorageSfml.h"
 
 #include <iostream>
+#include "exceptions/CannotAccess.h"
 
 namespace graphics
 {
@@ -24,7 +25,7 @@ bool TextureStorageSfml::loadTexture(const TexturePath& path)
     {
         loader->load(*texture, path);
     }
-    catch (const TextureLoader::CannotAccess& e)
+    catch (const exceptions::CannotAccess& e)
     {
         std::cerr << e.what() << std::endl;
         return false;

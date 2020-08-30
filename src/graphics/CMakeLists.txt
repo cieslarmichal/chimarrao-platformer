@@ -21,6 +21,7 @@ target_include_directories(graphics PUBLIC src)
 
 set(UT_SOURCES
         src/WindowSfmlTest.cpp
+        src/TextureLoaderSfmlTest.cpp
         src/TextureStorageSfmlTest.cpp
         src/RectangleShapeTest.cpp
         src/RendererPoolSfmlTest.cpp
