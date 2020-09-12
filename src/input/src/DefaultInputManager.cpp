@@ -6,9 +6,8 @@
 
 #include "InputKey.h"
 
-namespace game
+namespace input
 {
-
 DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler> handler)
     : observerHandler{std::move(handler)}
 {

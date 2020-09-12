@@ -9,7 +9,7 @@ namespace game
 class MainGameState : public GameState
 {
 public:
-    explicit MainGameState(std::shared_ptr<graphics::Window>, InputManager&,
+    explicit MainGameState(std::shared_ptr<graphics::Window>, input::InputManager&,
                            std::shared_ptr<graphics::RendererPool>, std::shared_ptr<physics::PhysicsEngine>);
 
     void update(const utils::DeltaTime&) override;

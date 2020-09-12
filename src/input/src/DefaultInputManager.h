@@ -5,7 +5,7 @@
 #include "InputManager.h"
 #include "InputObservationHandler.h"
 
-namespace game
+namespace input
 {
 class DefaultInputManager : public InputManager
 {

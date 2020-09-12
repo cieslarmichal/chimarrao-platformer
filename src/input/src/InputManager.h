@@ -1,7 +1,8 @@
 #pragma once
+
 #include "ObservableInput.h"
 
-namespace game
+namespace input
 {
 class InputManager : public ObservableInput
 {

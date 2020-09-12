@@ -3,7 +3,7 @@
 #include "BitMask.h"
 #include "InputKey.h"
 
-namespace game
+namespace input
 {
 class InputStatus
 {

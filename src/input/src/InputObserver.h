@@ -2,7 +2,7 @@
 
 #include "InputStatus.h"
 
-namespace game
+namespace input
 {
 class InputObserver
 {

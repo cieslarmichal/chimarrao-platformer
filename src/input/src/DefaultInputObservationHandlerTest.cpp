@@ -5,7 +5,7 @@
 #include "InputObserverMock.h"
 
 using namespace ::testing;
-using namespace game;
+using namespace input;
 
 namespace
 {

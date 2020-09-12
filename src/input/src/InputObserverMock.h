@@ -4,7 +4,7 @@
 
 #include "InputObserver.h"
 
-namespace game
+namespace input
 {
 class InputObserverMock : public InputObserver
 {

@@ -1,8 +1,7 @@
 #include "InputStatus.h"
 
-namespace game
+namespace input
 {
-
 bool InputStatus::isKeyPressed(InputKey key) const
 {
     return inputKeyMask.isBitSet(static_cast<unsigned>(key));

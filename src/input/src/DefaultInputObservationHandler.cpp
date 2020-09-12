@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-namespace game
+namespace input
 {
 void DefaultInputObservationHandler::registerObserver(InputObserver* observer)
 {

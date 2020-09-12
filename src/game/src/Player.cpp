@@ -31,30 +31,30 @@ bool Player::isDead()
     return false;
 }
 
-void Player::handleInputStatus(const InputStatus& inputStatus)
+void Player::handleInputStatus(const input::InputStatus& inputStatus)
 {
     utils::Vector2i newDirection{0, 0};
 
-    if (inputStatus.isKeyPressed(InputKey::Up))
+    if (inputStatus.isKeyPressed(input::InputKey::Up))
     {
         newDirection.y = -1;
     }
-    else if (inputStatus.isKeyPressed(InputKey::Down))
+    else if (inputStatus.isKeyPressed(input::InputKey::Down))
     {
         newDirection.y = 1;
     }
 
-    if (inputStatus.isKeyPressed(InputKey::Left))
+    if (inputStatus.isKeyPressed(input::InputKey::Left))
     {
         animator->setAnimation(graphics::animation::AnimationType::Walk,
                                graphics::animation::AnimationDirection::Left);
-        //        newDirection.x = -1;
+        newDirection.x = -1;
     }
-    else if (inputStatus.isKeyPressed(InputKey::Right))
+    else if (inputStatus.isKeyPressed(input::InputKey::Right))
     {
         animator->setAnimation(graphics::animation::AnimationType::Walk,
                                graphics::animation::AnimationDirection::Right);
-        //        newDirection.x = 1;
+        newDirection.x = 1;
     }
     else
     {

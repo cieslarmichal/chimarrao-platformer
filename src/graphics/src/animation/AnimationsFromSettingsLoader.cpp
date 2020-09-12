@@ -22,7 +22,7 @@ void AnimationsFromSettingsLoader::loadAnimationsFromSettings(
     {
         const auto animationType = toAnimationType(animationSettings.animationType);
         const auto texturePaths = utils::IncrementalFilePathsCreator::createFilePaths(
-            utils::getProjectPath("chimarrao") + animationSettings.firstTexturePath,
+            utils::getProjectPath("chimarrao-platformer") + animationSettings.firstTexturePath,
             animationSettings.numberOfTextures);
         const auto timeBetweenTextures = animationSettings.timeBetweenTexturesInSeconds;
         animations.insert({animationType, Animation{texturePaths, timeBetweenTextures}});

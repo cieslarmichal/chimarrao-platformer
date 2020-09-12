@@ -4,7 +4,7 @@
 
 #include "InputManager.h"
 
-namespace game
+namespace input
 {
 class InputManagerMock : public InputManager
 {

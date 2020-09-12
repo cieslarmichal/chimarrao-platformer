@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "DefaultInputManager.h"
-#include "DefaultInputObservationHandler.h"
+#include "../../input/src/DefaultInputManager.h"
+#include "../../input/src/DefaultInputObservationHandler.h"
 #include "DefaultPhysicsEngine.h"
 #include "GraphicsFactory.h"
 #include "MainGameState.h"
@@ -23,7 +23,7 @@ Game::Game()
     // TODO: add physics factory
     physicsEngine = std::make_shared<physics::DefaultPhysicsEngine>();
 
-    inputManager = std::make_unique<DefaultInputManager>(std::make_unique<DefaultInputObservationHandler>());
+    inputManager = std::make_unique<input::DefaultInputManager>(std::make_unique<input::DefaultInputObservationHandler>());
     timer.start();
     initStates();
 }

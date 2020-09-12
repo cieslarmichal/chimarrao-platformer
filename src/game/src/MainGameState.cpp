@@ -7,19 +7,19 @@
 namespace game
 {
 
-MainGameState::MainGameState(std::shared_ptr<graphics::Window> window, InputManager& inputManagerInit,
+MainGameState::MainGameState(std::shared_ptr<graphics::Window> window, input::InputManager& inputManagerInit,
                              std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                              std::shared_ptr<physics::PhysicsEngine> physicsEngineInit)
     : GameState{std::move(window), inputManagerInit, std::move(rendererPoolInit),
                 std::move(physicsEngineInit)}
 {
     auto graphicsId = rendererPool->acquire({5, 5}, {10, 10},
-                                            utils::getProjectPath("chimarrao") +
+                                            utils::getProjectPath("chimarrao-platformer") +
                                                 "resources/Player/Idle/idle-with-weapon-1.png");
     auto physicsId = physicsEngine->acquire({5, 5}, {10, 10});
 
     auto animatorsSettings = graphics::animation::AnimatorSettingsYamlReader::readAnimatorsSettings(
-        utils::getProjectPath("chimarrao") + "config/animators.yaml");
+        utils::getProjectPath("chimarrao-platformer") + "config/animators.yaml");
 
     // TODO: add animatorsSettings base for all animators from vector to concrete animator
     // TODO: clean up

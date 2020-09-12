@@ -4,8 +4,8 @@
 #include <memory>
 #include <stack>
 
+#include "../../input/src/InputManager.h"
 #include "GameState.h"
-#include "InputManager.h"
 #include "PhysicsEngine.h"
 #include "RendererPool.h"
 #include "Timer.h"
@@ -31,7 +31,7 @@ private:
     std::shared_ptr<graphics::Window> window;
     std::shared_ptr<graphics::RendererPool> rendererPool;
     std::shared_ptr<physics::PhysicsEngine> physicsEngine;
-    std::unique_ptr<InputManager> inputManager;
+    std::unique_ptr<input::InputManager> inputManager;
     std::stack<std::unique_ptr<GameState>> states;
 };
 }
