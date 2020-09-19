@@ -60,13 +60,13 @@ MainGameState::MainGameState(std::shared_ptr<graphics::Window> window,
         }
     }
 
-    player->awake();
-//    initialize();
+    initialize();
 }
 
 void MainGameState::initialize()
 {
-    player->initialize();
+    player->loadDependentComponents();
+    player->start();
 }
 
 void MainGameState::update(const utils::DeltaTime& deltaTime)

@@ -14,11 +14,10 @@ class ComponentOwner
 public:
     ComponentOwner(const utils::Vector2f& position);
 
-    void awake();
-    void initialize();
+    void loadDependentComponents();
+    void start();
     void update(utils::DeltaTime);
     void lateUpdate(utils::DeltaTime);
-    void draw();
 
     template <typename T, typename... Args>
     std::shared_ptr<T> addComponent(Args... args)

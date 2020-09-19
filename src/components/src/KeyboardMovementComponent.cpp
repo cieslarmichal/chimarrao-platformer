@@ -11,7 +11,7 @@ KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* owner, cons
     inputManager->registerObserver(this);
 }
 
-void KeyboardMovementComponent::awake()
+void KeyboardMovementComponent::loadDependentComponents()
 {
     animation = owner->getComponent<AnimationComponent>();
 }

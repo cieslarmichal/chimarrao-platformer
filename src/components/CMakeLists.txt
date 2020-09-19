@@ -19,4 +19,4 @@ set(UT_SOURCES
         )
 
 add_executable(componentsUT ${UT_SOURCES})
-target_link_libraries(componentsUT PUBLIC gtest_main gmock)
+target_link_libraries(componentsUT PUBLIC gtest_main gmock components)

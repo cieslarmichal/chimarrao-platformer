@@ -1,7 +1,5 @@
 #include "RendererPoolSfml.h"
 
-#include <SFML/Graphics/Texture.hpp>
-
 #include "gtest/gtest.h"
 
 #include "ContextRendererMock.h"

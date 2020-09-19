@@ -1,6 +1,5 @@
 #include "GraphicsComponent.h"
 #include "ComponentOwner.h"
-#include <iostream>
 
 namespace components
 {
@@ -15,7 +14,6 @@ GraphicsComponent::GraphicsComponent(ComponentOwner* owner,
 
 void GraphicsComponent::lateUpdate(utils::DeltaTime deltaTime)
 {
-    std::cerr << owner->transform->getPosition() << std::endl;
     rendererPool->setPosition(id, owner->transform->getPosition());
 }
 

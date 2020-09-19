@@ -14,7 +14,7 @@ class KeyboardMovementComponent : public Component, public input::InputObserver
 public:
     KeyboardMovementComponent(ComponentOwner*, const std::shared_ptr<input::InputManager>&);
 
-    void awake() override;
+    void loadDependentComponents() override;
     void update(utils::DeltaTime) override;
     void handleInputStatus(const input::InputStatus&) override;
     void setMovementSpeed(float speed);

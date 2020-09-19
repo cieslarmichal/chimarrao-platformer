@@ -7,19 +7,19 @@ ComponentOwner::ComponentOwner(const utils::Vector2f& position)
     transform = addComponent<TransformComponent>(position);
 }
 
-void ComponentOwner::awake()
+void ComponentOwner::loadDependentComponents()
 {
     for (int i = components.size() - 1; i >= 0; i--)
     {
-        components[i]->awake();
+        components[i]->loadDependentComponents();
     }
 }
 
-void ComponentOwner::initialize()
+void ComponentOwner::start()
 {
     for (int i = components.size() - 1; i >= 0; i--)
     {
-        components[i]->initialize();
+        components[i]->start();
     }
 }
 
@@ -39,11 +39,4 @@ void ComponentOwner::lateUpdate(utils::DeltaTime deltaTime)
     }
 }
 
-void ComponentOwner::draw()
-{
-    for (int i = components.size() - 1; i >= 0; i--)
-    {
-        components[i]->draw();
-    }
-}
 }
