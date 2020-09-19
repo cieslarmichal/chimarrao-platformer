@@ -8,16 +8,16 @@
 
 namespace graphics::animation
 {
-using AnimationChanged = bool;
+using TextureChanged = bool;
 
 class Animation
 {
 public:
     explicit Animation(std::vector<TexturePath> consecutiveTexturePaths, float timeBetweenTextures);
 
-    AnimationChanged update(const utils::DeltaTime&);
+    TextureChanged update(const utils::DeltaTime&);
     void reset();
-    const TexturePath& getCurrentTexturePath() const;
+    [[nodiscard]] const TexturePath& getCurrentTexturePath() const;
 
 private:
     void moveToNextTexture();

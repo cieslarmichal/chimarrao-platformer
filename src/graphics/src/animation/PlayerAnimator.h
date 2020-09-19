@@ -19,13 +19,17 @@ public:
     PlayerAnimator(graphics::GraphicsId, std::shared_ptr<graphics::RendererPool>, const AnimatorSettings&,
                    AnimationType = AnimationType::Idle, AnimationDirection = AnimationDirection::Right);
 
-    void update(const utils::DeltaTime&) override;
+    AnimationChanged update(const utils::DeltaTime&) override;
     void setAnimation(AnimationType) override;
     void setAnimation(AnimationType, AnimationDirection) override;
+    void setAnimationDirection(AnimationDirection) override;
+    AnimationType getAnimationType() const override;
+    AnimationDirection getAnimationDirection() const override;
 
 private:
     void initializeAnimations(const AnimationsSettings&);
     bool containsAnimation(const AnimationType&) const;
+    bool animationChanged(TextureChanged) const;
 
     graphics::GraphicsId graphicsId;
     std::shared_ptr<graphics::RendererPool> rendererPool;
@@ -33,5 +37,7 @@ private:
     AnimationType currentAnimationType;
     AnimationDirection currentAnimationDirection;
     std::string animatorName;
+    bool newAnimationTypeIsSet;
+    bool newAnimationDirectionIsSet;
 };
 }

@@ -1,28 +1,24 @@
 #include "MainGameState.h"
 
+#include "AnimationComponent.h"
 #include "GetProjectPath.h"
+#include "GraphicsComponent.h"
+#include "KeyboardMovementComponent.h"
 #include "animation/AnimatorSettingsYamlReader.h"
 #include "animation/PlayerAnimator.h"
 
 namespace game
 {
 
-MainGameState::MainGameState(std::shared_ptr<graphics::Window> window, InputManager& inputManagerInit,
-                             std::shared_ptr<graphics::RendererPool> rendererPoolInit,
-                             std::shared_ptr<physics::PhysicsEngine> physicsEngineInit)
-    : GameState{std::move(window), inputManagerInit, std::move(rendererPoolInit),
-                std::move(physicsEngineInit)}
+MainGameState::MainGameState(const std::shared_ptr<graphics::Window>& windowInit,
+                             const std::shared_ptr<input::InputManager>& inputManagerInit,
+                             const std::shared_ptr<graphics::RendererPool>& rendererPoolInit)
+    : GameState{windowInit, inputManagerInit, rendererPoolInit}
 {
-    auto graphicsId = rendererPool->acquire({5, 5}, {10, 10},
-                                            utils::getProjectPath("chimarrao") +
-                                                "resources/Player/Idle/idle-with-weapon-1.png");
-    auto physicsId = physicsEngine->acquire({5, 5}, {10, 10});
-
     auto animatorsSettings = graphics::animation::AnimatorSettingsYamlReader::readAnimatorsSettings(
-        utils::getProjectPath("chimarrao") + "config/animators.yaml");
+        utils::getProjectPath("chimarrao-platformer") + "config/animators.yaml");
 
     // TODO: add animatorsSettings base for all animators from vector to concrete animator
-    // TODO: clean up
     if (animatorsSettings)
     {
         auto playerAnimatorSettings =
@@ -33,23 +29,34 @@ MainGameState::MainGameState(std::shared_ptr<graphics::Window> window, InputMana
 
         if (playerAnimatorSettings != animatorsSettings->cend())
         {
-            player = std::make_unique<Player>(graphicsId, rendererPool, physicsId, physicsEngine,
-                                              std::make_unique<graphics::animation::PlayerAnimator>(
-                                                  graphicsId, rendererPool, *playerAnimatorSettings));
-
-            auto* playerAsObserver = dynamic_cast<Player*>(player.get());
-            if (playerAsObserver)
-            {
-                inputManager.registerObserver(playerAsObserver);
-            }
+            player = std::make_shared<components::ComponentOwner>(utils::Vector2f{10, 10});
+            auto graphicsComponent = player->addComponent<components::GraphicsComponent>(
+                rendererPool, utils::Vector2f{5, 5}, utils::Vector2f{10, 10});
+            auto graphicsId = graphicsComponent->getGraphicsId();
+            player->addComponent<components::KeyboardMovementComponent>(inputManager);
+            auto playerAnimator = std::make_shared<graphics::animation::PlayerAnimator>(
+                graphicsId, rendererPool, *playerAnimatorSettings);
+            player->addComponent<components::AnimationComponent>(playerAnimator);
         }
     }
+
+    initialize();
 }
 
-void MainGameState::update(const utils::DeltaTime& dt)
+void MainGameState::initialize()
 {
-    player->update(dt);
-    physicsEngine->update(dt);
+    player->loadDependentComponents();
+    player->start();
+}
+
+void MainGameState::update(const utils::DeltaTime& deltaTime)
+{
+    player->update(deltaTime);
+}
+
+void MainGameState::lateUpdate(const utils::DeltaTime& deltaTime)
+{
+    player->lateUpdate(deltaTime);
 }
 
 void MainGameState::render()

@@ -16,7 +16,7 @@ Animation::Animation(std::vector<TexturePath> consecutiveTexturePathsInit, float
     reset();
 }
 
-AnimationChanged Animation::update(const utils::DeltaTime& deltaTime)
+TextureChanged Animation::update(const utils::DeltaTime& deltaTime)
 {
     timeUntilNextTexture -= deltaTime.count();
     if (timeUntilNextTexture <= 0)

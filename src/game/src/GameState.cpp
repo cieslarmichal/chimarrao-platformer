@@ -3,13 +3,12 @@
 namespace game
 {
 
-GameState::GameState(std::shared_ptr<graphics::Window> windowInit, InputManager& inputManagerInit,
-                     std::shared_ptr<graphics::RendererPool> rendererPoolInit,
-                     std::shared_ptr<physics::PhysicsEngine> physicsEngineInit)
+GameState::GameState(std::shared_ptr<graphics::Window> windowInit,
+                     std::shared_ptr<input::InputManager> inputManagerInit,
+                     std::shared_ptr<graphics::RendererPool> rendererPoolInit)
     : window{std::move(windowInit)},
-      inputManager{inputManagerInit},
-      rendererPool{std::move(rendererPoolInit)},
-      physicsEngine{std::move(physicsEngineInit)}
+      inputManager{std::move(inputManagerInit)},
+      rendererPool{std::move(rendererPoolInit)}
 {
 }
 }

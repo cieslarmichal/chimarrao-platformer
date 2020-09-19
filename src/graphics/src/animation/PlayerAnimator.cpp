@@ -16,7 +16,9 @@ PlayerAnimator::PlayerAnimator(graphics::GraphicsId graphicsIdInit,
       rendererPool{std::move(rendererPoolInit)},
       currentAnimationType{animationTypeInit},
       currentAnimationDirection{animationDirectionInit},
-      animatorName{"player"}
+      animatorName{"player"},
+      newAnimationTypeIsSet{false},
+      newAnimationDirectionIsSet{false}
 {
     if (animatorSettings.animatorName != animatorName)
     {
@@ -31,30 +33,30 @@ PlayerAnimator::PlayerAnimator(graphics::GraphicsId graphicsIdInit,
         throw exceptions::AnimationTypeNotSupported{"Animation of type: " + toString(currentAnimationType) +
                                                     " is not supported in " + animatorName};
     }
+
+    rendererPool->setTexture(graphicsId, animations.at(currentAnimationType).getCurrentTexturePath());
 }
 
-void PlayerAnimator::update(const utils::DeltaTime& deltaTime)
+AnimationChanged PlayerAnimator::update(const utils::DeltaTime& deltaTime)
 {
-    const auto animationChanged = animations.at(currentAnimationType).update(deltaTime);
+    const auto textureChanged = animations.at(currentAnimationType).update(deltaTime);
 
-    if (animationChanged)
+    if (animationChanged(textureChanged))
     {
         const utils::Vector2f scale = (currentAnimationDirection == AnimationDirection::Left) ?
-                                          utils::Vector2f(-1.5f, 1.5f) :
-                                          utils::Vector2f(1.5f, 1.5f);
+                                          utils::Vector2f(-1.0f, 1.0f) :
+                                          utils::Vector2f(1.0f, 1.0f);
         rendererPool->setTexture(graphicsId, animations.at(currentAnimationType).getCurrentTexturePath(),
                                  scale);
+        newAnimationTypeIsSet = false;
+        newAnimationDirectionIsSet = false;
+        return true;
     }
+    return false;
 }
 
 void PlayerAnimator::setAnimation(AnimationType animationType)
 {
-    if (not containsAnimation(animationType))
-    {
-        throw exceptions::AnimationTypeNotSupported{"Animation of type: " + toString(animationType) +
-                                                    " is not supported in " + animatorName};
-    }
-
     setAnimation(animationType, currentAnimationDirection);
 }
 
@@ -70,13 +72,35 @@ void PlayerAnimator::setAnimation(AnimationType animationType, AnimationDirectio
     {
         currentAnimationType = animationType;
         animations.at(currentAnimationType).reset();
+        newAnimationTypeIsSet = true;
     }
 
     if (currentAnimationDirection != animationDirection)
     {
         currentAnimationDirection = animationDirection;
         animations.at(currentAnimationType).reset();
+        newAnimationDirectionIsSet = true;
     }
+}
+
+void PlayerAnimator::setAnimationDirection(AnimationDirection animationDirection)
+{
+    if (currentAnimationDirection != animationDirection)
+    {
+        currentAnimationDirection = animationDirection;
+        animations.at(currentAnimationType).reset();
+        newAnimationDirectionIsSet = true;
+    }
+}
+
+AnimationType PlayerAnimator::getAnimationType() const
+{
+    return currentAnimationType;
+}
+
+AnimationDirection PlayerAnimator::getAnimationDirection() const
+{
+    return currentAnimationDirection;
 }
 
 void PlayerAnimator::initializeAnimations(const AnimationsSettings& animationsSettings)
@@ -87,6 +111,11 @@ void PlayerAnimator::initializeAnimations(const AnimationsSettings& animationsSe
 bool PlayerAnimator::containsAnimation(const AnimationType& animationType) const
 {
     return animations.count(animationType);
+}
+
+bool PlayerAnimator::animationChanged(TextureChanged textureChanged) const
+{
+    return textureChanged || newAnimationTypeIsSet || newAnimationDirectionIsSet;
 }
 
 }
