@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Component.h"
+#include "InputManager.h"
 #include "InputObserver.h"
 #include "Vector.h"
-#include "InputManager.h"
 
 namespace components
 {
@@ -18,6 +18,7 @@ public:
     void update(utils::DeltaTime) override;
     void handleInputStatus(const input::InputStatus&) override;
     void setMovementSpeed(float speed);
+    float getMovementSpeed() const;
 
 private:
     std::shared_ptr<AnimationComponent> animation;

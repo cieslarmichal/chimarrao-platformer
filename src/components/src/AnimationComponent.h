@@ -15,6 +15,7 @@ public:
     void setAnimation(graphics::animation::AnimationType, graphics::animation::AnimationDirection);
     void setAnimationDirection(graphics::animation::AnimationDirection);
     graphics::animation::AnimationType getAnimationType() const;
+    graphics::animation::AnimationDirection getAnimationDirection() const;
 
 private:
     std::shared_ptr<graphics::animation::Animator> animator;

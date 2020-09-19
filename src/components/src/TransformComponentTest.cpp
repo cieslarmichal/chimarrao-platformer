@@ -69,4 +69,3 @@ TEST_F(TransformComponentTest, setY_shouldSetOnlyYCoordinate)
     ASSERT_EQ(transformComponent.getPosition().y, y);
     ASSERT_EQ(transformComponent.getPosition().x, position1.x);
 }
-

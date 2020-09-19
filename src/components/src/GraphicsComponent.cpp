@@ -1,4 +1,5 @@
 #include "GraphicsComponent.h"
+
 #include "ComponentOwner.h"
 
 namespace components

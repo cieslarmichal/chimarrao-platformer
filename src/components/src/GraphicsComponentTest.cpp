@@ -5,8 +5,8 @@
 #include "RendererPoolMock.h"
 
 #include "ComponentOwner.h"
-#include "GraphicsIdGenerator.h"
 #include "DeltaTime.h"
+#include "GraphicsIdGenerator.h"
 
 using namespace ::testing;
 using namespace graphics;

@@ -1,11 +1,13 @@
 #include "KeyboardMovementComponent.h"
-#include "ComponentOwner.h"
+
 #include "AnimationComponent.h"
+#include "ComponentOwner.h"
 
 namespace components
 {
 
-KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* owner, const std::shared_ptr<input::InputManager>& inputManager)
+KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* owner,
+                                                     const std::shared_ptr<input::InputManager>& inputManager)
     : Component{owner}, movementSpeed{10.f}
 {
     inputManager->registerObserver(this);
@@ -60,6 +62,11 @@ void KeyboardMovementComponent::handleInputStatus(const input::InputStatus& inpu
 void KeyboardMovementComponent::setMovementSpeed(float speed)
 {
     movementSpeed = speed;
+}
+
+float KeyboardMovementComponent::getMovementSpeed() const
+{
+    return movementSpeed;
 }
 
 }

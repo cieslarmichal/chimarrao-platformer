@@ -16,7 +16,9 @@ PlayerAnimator::PlayerAnimator(graphics::GraphicsId graphicsIdInit,
       rendererPool{std::move(rendererPoolInit)},
       currentAnimationType{animationTypeInit},
       currentAnimationDirection{animationDirectionInit},
-      animatorName{"player"}
+      animatorName{"player"},
+      newAnimationTypeIsSet{false},
+      newAnimationDirectionIsSet{false}
 {
     if (animatorSettings.animatorName != animatorName)
     {
@@ -35,24 +37,22 @@ PlayerAnimator::PlayerAnimator(graphics::GraphicsId graphicsIdInit,
     rendererPool->setTexture(graphicsId, animations.at(currentAnimationType).getCurrentTexturePath());
 }
 
-void PlayerAnimator::update(const utils::DeltaTime& deltaTime)
+AnimationChanged PlayerAnimator::update(const utils::DeltaTime& deltaTime)
 {
-    const auto animationMovedToAnotherTexture = animations.at(currentAnimationType).update(deltaTime);
+    const auto textureChanged = animations.at(currentAnimationType).update(deltaTime);
 
-    if (textureNeedsToBeChanged(animationMovedToAnotherTexture))
+    if (animationChanged(textureChanged))
     {
         const utils::Vector2f scale = (currentAnimationDirection == AnimationDirection::Left) ?
-                                          utils::Vector2f(-1.5f, 1.5f) :
-                                          utils::Vector2f(1.5f, 1.5f);
+                                          utils::Vector2f(-1.0f, 1.0f) :
+                                          utils::Vector2f(1.0f, 1.0f);
         rendererPool->setTexture(graphicsId, animations.at(currentAnimationType).getCurrentTexturePath(),
                                  scale);
         newAnimationTypeIsSet = false;
         newAnimationDirectionIsSet = false;
+        return true;
     }
-}
-bool PlayerAnimator::textureNeedsToBeChanged(const AnimationChanged animationMovedToAnotherTexture) const
-{
-    return animationMovedToAnotherTexture || newAnimationTypeIsSet || newAnimationDirectionIsSet;
+    return false;
 }
 
 void PlayerAnimator::setAnimation(AnimationType animationType)
@@ -85,7 +85,6 @@ void PlayerAnimator::setAnimation(AnimationType animationType, AnimationDirectio
 
 void PlayerAnimator::setAnimationDirection(AnimationDirection animationDirection)
 {
-    // TODO: test this method
     if (currentAnimationDirection != animationDirection)
     {
         currentAnimationDirection = animationDirection;
@@ -99,6 +98,11 @@ AnimationType PlayerAnimator::getAnimationType() const
     return currentAnimationType;
 }
 
+AnimationDirection PlayerAnimator::getAnimationDirection() const
+{
+    return currentAnimationDirection;
+}
+
 void PlayerAnimator::initializeAnimations(const AnimationsSettings& animationsSettings)
 {
     AnimationsFromSettingsLoader::loadAnimationsFromSettings(animations, animationsSettings);
@@ -107,6 +111,11 @@ void PlayerAnimator::initializeAnimations(const AnimationsSettings& animationsSe
 bool PlayerAnimator::containsAnimation(const AnimationType& animationType) const
 {
     return animations.count(animationType);
+}
+
+bool PlayerAnimator::animationChanged(TextureChanged textureChanged) const
+{
+    return textureChanged || newAnimationTypeIsSet || newAnimationDirectionIsSet;
 }
 
 }

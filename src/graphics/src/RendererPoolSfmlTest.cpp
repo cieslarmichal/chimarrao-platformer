@@ -4,6 +4,7 @@
 
 #include "ContextRendererMock.h"
 #include "TextureStorageMock.h"
+#include "SFML/Graphics/Texture.hpp"
 
 #include "RectangleShape.h"
 #include "exceptions/TextureNotAvailable.h"

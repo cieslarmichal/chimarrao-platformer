@@ -17,5 +17,5 @@ private:
     utils::BitMask inputKeyMask;
 };
 
-bool operator==(const InputStatus&, const InputStatus&);
+inline bool operator==(const InputStatus&, const InputStatus&);
 }

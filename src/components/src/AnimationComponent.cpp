@@ -34,4 +34,9 @@ graphics::animation::AnimationType AnimationComponent::getAnimationType() const
     return animator->getAnimationType();
 }
 
+graphics::animation::AnimationDirection AnimationComponent::getAnimationDirection() const
+{
+    return animator->getAnimationDirection();
+}
+
 }
