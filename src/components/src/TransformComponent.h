@@ -8,10 +8,10 @@ namespace components
 class TransformComponent : public Component
 {
 public:
-    TransformComponent(ComponentOwner*, const utils::Vector2f&);
+    TransformComponent(ComponentOwner*, const utils::Vector2f& positionInit);
 
     void setPosition(float x, float y);
-    void setPosition(const utils::Vector2f&);
+    void setPosition(const utils::Vector2f& position);
     void addPosition(float deltaX, float deltaY);
     void addPosition(const utils::Vector2f& deltaPosition);
     void setX(float x);

@@ -1,6 +1,5 @@
 add_subdirectory(utils)
 add_subdirectory(graphics)
-add_subdirectory(physics)
 add_subdirectory(input)
 add_subdirectory(components)
 add_subdirectory(game)

@@ -10,23 +10,15 @@
 namespace game
 {
 
-MainGameState::MainGameState(std::shared_ptr<graphics::Window> window,
-                             std::shared_ptr<input::InputManager> inputManagerInit,
-                             std::shared_ptr<graphics::RendererPool> rendererPoolInit,
-                             std::shared_ptr<physics::PhysicsEngine> physicsEngineInit)
-    : GameState{std::move(window), std::move(inputManagerInit), std::move(rendererPoolInit),
-                std::move(physicsEngineInit)}
+MainGameState::MainGameState(const std::shared_ptr<graphics::Window>& windowInit,
+                             const std::shared_ptr<input::InputManager>& inputManagerInit,
+                             const std::shared_ptr<graphics::RendererPool>& rendererPoolInit)
+    : GameState{windowInit, inputManagerInit, rendererPoolInit}
 {
-    //    auto graphicsId = rendererPool->acquire({5, 5}, {10, 10},
-    //                                            utils::getProjectPath("chimarrao-platformer") +
-    //                                                "resources/Player/Idle/idle-with-weapon-1.png");
-    //    auto physicsId = physicsEngine->acquire({5, 5}, {10, 10});
-
     auto animatorsSettings = graphics::animation::AnimatorSettingsYamlReader::readAnimatorsSettings(
         utils::getProjectPath("chimarrao-platformer") + "config/animators.yaml");
 
     // TODO: add animatorsSettings base for all animators from vector to concrete animator
-    // TODO: clean up
     if (animatorsSettings)
     {
         auto playerAnimatorSettings =
@@ -45,18 +37,6 @@ MainGameState::MainGameState(std::shared_ptr<graphics::Window> window,
             auto playerAnimator = std::make_shared<graphics::animation::PlayerAnimator>(
                 graphicsId, rendererPool, *playerAnimatorSettings);
             player->addComponent<components::AnimationComponent>(playerAnimator);
-
-//            player = std::make_unique<Player>(graphicsId, rendererPool, physicsId,
-//            physicsEngine,
-//                                              std::make_unique<graphics::animation::PlayerAnimator>(
-//                                                  graphicsId, rendererPool,
-//                                                  *playerAnimatorSettings));
-
-//            auto* playerAsObserver = dynamic_cast<Player*>(player.get());
-//            if (playerAsObserver)
-//            {
-//                inputManager.registerObserver(playerAsObserver);
-//            }
         }
     }
 
@@ -72,7 +52,6 @@ void MainGameState::initialize()
 void MainGameState::update(const utils::DeltaTime& deltaTime)
 {
     player->update(deltaTime);
-    physicsEngine->update(deltaTime);
 }
 
 void MainGameState::lateUpdate(const utils::DeltaTime& deltaTime)
