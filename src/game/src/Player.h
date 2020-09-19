@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "../../input/src/InputObserver.h"
+#include "InputObserver.h"
 #include "Entity.h"
 #include "GraphicsId.h"
 #include "PhysicsEngine.h"

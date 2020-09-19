@@ -17,7 +17,7 @@ public:
 
     AnimationChanged update(const utils::DeltaTime&);
     void reset();
-    const TexturePath& getCurrentTexturePath() const;
+    [[nodiscard]] const TexturePath& getCurrentTexturePath() const;
 
 private:
     void moveToNextTexture();

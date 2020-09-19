@@ -22,10 +22,13 @@ public:
     void update(const utils::DeltaTime&) override;
     void setAnimation(AnimationType) override;
     void setAnimation(AnimationType, AnimationDirection) override;
+    void setAnimationDirection(AnimationDirection) override;
+    AnimationType getAnimationType() const override;
 
 private:
     void initializeAnimations(const AnimationsSettings&);
     bool containsAnimation(const AnimationType&) const;
+    bool textureNeedsToBeChanged(AnimationChanged) const;
 
     graphics::GraphicsId graphicsId;
     std::shared_ptr<graphics::RendererPool> rendererPool;
@@ -33,5 +36,7 @@ private:
     AnimationType currentAnimationType;
     AnimationDirection currentAnimationDirection;
     std::string animatorName;
+    bool newAnimationTypeIsSet;
+    bool newAnimationDirectionIsSet;
 };
 }

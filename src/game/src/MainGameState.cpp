@@ -1,22 +1,26 @@
 #include "MainGameState.h"
 
+#include "AnimationComponent.h"
 #include "GetProjectPath.h"
+#include "GraphicsComponent.h"
+#include "KeyboardMovementComponent.h"
 #include "animation/AnimatorSettingsYamlReader.h"
 #include "animation/PlayerAnimator.h"
 
 namespace game
 {
 
-MainGameState::MainGameState(std::shared_ptr<graphics::Window> window, input::InputManager& inputManagerInit,
+MainGameState::MainGameState(std::shared_ptr<graphics::Window> window,
+                             std::shared_ptr<input::InputManager> inputManagerInit,
                              std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                              std::shared_ptr<physics::PhysicsEngine> physicsEngineInit)
-    : GameState{std::move(window), inputManagerInit, std::move(rendererPoolInit),
+    : GameState{std::move(window), std::move(inputManagerInit), std::move(rendererPoolInit),
                 std::move(physicsEngineInit)}
 {
-    auto graphicsId = rendererPool->acquire({5, 5}, {10, 10},
-                                            utils::getProjectPath("chimarrao-platformer") +
-                                                "resources/Player/Idle/idle-with-weapon-1.png");
-    auto physicsId = physicsEngine->acquire({5, 5}, {10, 10});
+    //    auto graphicsId = rendererPool->acquire({5, 5}, {10, 10},
+    //                                            utils::getProjectPath("chimarrao-platformer") +
+    //                                                "resources/Player/Idle/idle-with-weapon-1.png");
+    //    auto physicsId = physicsEngine->acquire({5, 5}, {10, 10});
 
     auto animatorsSettings = graphics::animation::AnimatorSettingsYamlReader::readAnimatorsSettings(
         utils::getProjectPath("chimarrao-platformer") + "config/animators.yaml");
@@ -33,23 +37,47 @@ MainGameState::MainGameState(std::shared_ptr<graphics::Window> window, input::In
 
         if (playerAnimatorSettings != animatorsSettings->cend())
         {
-            player = std::make_unique<Player>(graphicsId, rendererPool, physicsId, physicsEngine,
-                                              std::make_unique<graphics::animation::PlayerAnimator>(
-                                                  graphicsId, rendererPool, *playerAnimatorSettings));
+            player = std::make_shared<components::ComponentOwner>(utils::Vector2f{10, 10});
+            auto graphicsComponent = player->addComponent<components::GraphicsComponent>(
+                rendererPool, utils::Vector2f{5, 5}, utils::Vector2f{10, 10});
+            auto graphicsId = graphicsComponent->getGraphicsId();
+            player->addComponent<components::KeyboardMovementComponent>(inputManager);
+            auto playerAnimator = std::make_shared<graphics::animation::PlayerAnimator>(
+                graphicsId, rendererPool, *playerAnimatorSettings);
+            player->addComponent<components::AnimationComponent>(playerAnimator);
 
-            auto* playerAsObserver = dynamic_cast<Player*>(player.get());
-            if (playerAsObserver)
-            {
-                inputManager.registerObserver(playerAsObserver);
-            }
+//            player = std::make_unique<Player>(graphicsId, rendererPool, physicsId,
+//            physicsEngine,
+//                                              std::make_unique<graphics::animation::PlayerAnimator>(
+//                                                  graphicsId, rendererPool,
+//                                                  *playerAnimatorSettings));
+
+//            auto* playerAsObserver = dynamic_cast<Player*>(player.get());
+//            if (playerAsObserver)
+//            {
+//                inputManager.registerObserver(playerAsObserver);
+//            }
         }
     }
+
+    player->awake();
+//    initialize();
 }
 
-void MainGameState::update(const utils::DeltaTime& dt)
+void MainGameState::initialize()
 {
-    player->update(dt);
-    physicsEngine->update(dt);
+    player->initialize();
+}
+
+void MainGameState::update(const utils::DeltaTime& deltaTime)
+{
+    player->update(deltaTime);
+    physicsEngine->update(deltaTime);
+}
+
+void MainGameState::lateUpdate(const utils::DeltaTime& deltaTime)
+{
+    player->lateUpdate(deltaTime);
 }
 
 void MainGameState::render()

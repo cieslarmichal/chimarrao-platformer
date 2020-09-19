@@ -17,6 +17,7 @@ using namespace ::testing;
 class PlayerAnimatorTest : public Test
 {
 public:
+    // TODO: better test because getAnimationType is available!!!!!!
     const GraphicsId graphicsId{GraphicsIdGenerator::generateId()};
     const AnimationsSettings emptyAnimationsSettings{};
     const utils::DeltaTime timeNotExceedingTimeBetweenTextures{1.0};
