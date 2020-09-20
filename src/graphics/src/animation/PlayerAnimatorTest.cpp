@@ -8,7 +8,7 @@
 #include "GraphicsIdGenerator.h"
 #include "animation/exceptions/AnimationTypeNotSupported.h"
 #include "animation/exceptions/AnimationsFromSettingsNotFound.h"
-#include "animation/exceptions/InvalidAnimatorConfigFile.h"
+#include "animation/exceptions/InvalidAnimatorSettings.h"
 
 using namespace graphics;
 using namespace animation;
@@ -62,7 +62,7 @@ TEST_F(PlayerAnimatorTest,
        givenAnimatorSettingsWithDifferentNameThanPlayer_shouldThrowInvalidAnimatorConfigFile)
 {
     ASSERT_THROW(PlayerAnimator(graphicsId1, rendererPool, animatorSettingsWithDifferentName),
-                 exceptions::InvalidAnimatorConfigFile);
+                 exceptions::InvalidAnimatorSettings);
 }
 
 TEST_F(PlayerAnimatorTest,

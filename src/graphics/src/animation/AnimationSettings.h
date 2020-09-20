@@ -1,6 +1,8 @@
 #pragma once
 
+#include <ostream>
 #include <string>
+#include <tuple>
 
 #include "TexturePath.h"
 
@@ -25,11 +27,10 @@ inline bool operator==(const AnimationSettings& lhs, const AnimationSettings& rh
 
 inline std::ostream& operator<<(std::ostream& os, const AnimationSettings& animationSettings)
 {
-    return os << "animationType: " + animationSettings.animationType +
-                     " firstTexturePath: " + animationSettings.firstTexturePath +
-                     " numberOfTextures: " + std::to_string(animationSettings.numberOfTextures) +
-                     " timeBetweenTexturesInSeconds: " +
-                     std::to_string(animationSettings.timeBetweenTexturesInSeconds);
+    return os << "animationType: " << animationSettings.animationType
+              << " firstTexturePath: " << animationSettings.firstTexturePath
+              << " numberOfTextures: " << animationSettings.numberOfTextures
+              << " timeBetweenTexturesInSeconds: " << animationSettings.timeBetweenTexturesInSeconds;
 }
 
 using AnimationsSettings = std::vector<AnimationSettings>;

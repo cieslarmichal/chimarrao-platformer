@@ -4,7 +4,7 @@
 
 namespace graphics::animation::exceptions
 {
-struct InvalidAnimatorConfigFile : std::runtime_error
+struct InvalidAnimatorSettings : std::runtime_error
 {
     using std::runtime_error::runtime_error;
 };

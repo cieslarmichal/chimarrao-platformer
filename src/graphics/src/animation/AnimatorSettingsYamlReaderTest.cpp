@@ -4,6 +4,7 @@
 
 #include "GetProjectPath.h"
 #include "animation/exceptions/AnimatorsConfigFileNotFound.h"
+#include "animation/exceptions/InvalidAnimatorsConfigFile.h"
 
 using namespace ::testing;
 using namespace graphics;
@@ -11,7 +12,7 @@ using namespace animation;
 
 namespace
 {
-const std::string projectPath{utils::getProjectPath("chimarrao")};
+const std::string projectPath{utils::getProjectPath("chimarrao-platformer")};
 const std::string testDirectory = projectPath + "src/graphics/src/animation/testFiles/";
 const std::string invalidPath{testDirectory + "aaaaaaa.yaml"};
 const std::string invalidYaml{testDirectory + "invalidYaml.yaml"};
@@ -59,19 +60,17 @@ TEST_F(AnimatorSettingsYamlReaderTest, givenInvalidPath_shouldThrowAnimatorsConf
                  exceptions::AnimatorsConfigFileNotFound);
 }
 
-TEST_F(AnimatorSettingsYamlReaderTest, givenInvalidYamlFile_shouldReturnNone)
+TEST_F(AnimatorSettingsYamlReaderTest, givenInvalidYamlFile_shouldThrowInvalidAnimatorsConfigFile)
 {
-    const auto actualAnimatorsSettings = animatorsSettingsReader.readAnimatorsSettings(invalidYaml);
-
-    ASSERT_EQ(actualAnimatorsSettings, boost::none);
+    ASSERT_THROW(animatorsSettingsReader.readAnimatorsSettings(invalidYaml),
+                 exceptions::InvalidAnimatorsConfigFile);
 }
 
-TEST_F(AnimatorSettingsYamlReaderTest, givenConfigFileWithoutAnimatorsField_shouldReturnNone)
+TEST_F(AnimatorSettingsYamlReaderTest,
+       givenConfigFileWithoutAnimatorsField_shouldThrowInvalidAnimatorsConfigFile)
 {
-    const auto actualAnimatorsSettings =
-        animatorsSettingsReader.readAnimatorsSettings(configWithoutAnimatorsField);
-
-    ASSERT_EQ(actualAnimatorsSettings, boost::none);
+    ASSERT_THROW(animatorsSettingsReader.readAnimatorsSettings(configWithoutAnimatorsField),
+                 exceptions::InvalidAnimatorsConfigFile);
 }
 
 TEST_F(AnimatorSettingsYamlReaderTest, givenConfigFileWithEmptyAnimators_shouldReturnEmptySettings)
@@ -79,59 +78,52 @@ TEST_F(AnimatorSettingsYamlReaderTest, givenConfigFileWithEmptyAnimators_shouldR
     const auto actualAnimatorsSettings =
         animatorsSettingsReader.readAnimatorsSettings(configWithEmptyAnimators);
 
-    ASSERT_TRUE(actualAnimatorsSettings->empty());
-}
-
-TEST_F(AnimatorSettingsYamlReaderTest, givenConfigFileWithAnimatorWithoutAnimatorNameField_shouldReturnNone)
-{
-    const auto actualAnimatorsSettings =
-        animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutAnimatorNameField);
-
-    ASSERT_EQ(actualAnimatorsSettings, boost::none);
-}
-
-TEST_F(AnimatorSettingsYamlReaderTest, givenConfigFileWithAnimatorWithoutAnimationsField_shouldReturnNone)
-{
-    const auto actualAnimatorsSettings =
-        animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutAnimationsField);
-
-    ASSERT_EQ(actualAnimatorsSettings, boost::none);
+    ASSERT_TRUE(actualAnimatorsSettings.empty());
 }
 
 TEST_F(AnimatorSettingsYamlReaderTest,
-       givenConfigFileWithAnimationsWithoutAnimationTypeField_shouldReturnNone)
+       givenConfigFileWithAnimatorWithoutAnimatorNameField_shouldThrowInvalidAnimatorsConfigFile)
 {
-    const auto actualAnimatorsSettings =
-        animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutAnimationTypeField);
-
-    ASSERT_EQ(actualAnimatorsSettings, boost::none);
+    ASSERT_THROW(animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutAnimatorNameField),
+                 exceptions::InvalidAnimatorsConfigFile);
 }
 
 TEST_F(AnimatorSettingsYamlReaderTest,
-       givenConfigFileWithAnimationsWithoutAnimationTexturePathField_shouldReturnNone)
+       givenConfigFileWithAnimatorWithoutAnimationsField_shouldThrowInvalidAnimatorsConfigFile)
 {
-    const auto actualAnimatorsSettings =
-        animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutAnimationTexturePathField);
-
-    ASSERT_EQ(actualAnimatorsSettings, boost::none);
+    ASSERT_THROW(animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutAnimationsField),
+                 exceptions::InvalidAnimatorsConfigFile);
 }
 
 TEST_F(AnimatorSettingsYamlReaderTest,
-       givenConfigFileWithAnimationsWithoutNumberOfAnimationsField_shouldReturnNone)
+       givenConfigFileWithAnimationsWithoutAnimationTypeField_shouldThrowInvalidAnimatorsConfigFile)
 {
-    const auto actualAnimatorsSettings = animatorsSettingsReader.readAnimatorsSettings(
-        configWithAnimatorWithoutNumberOfAnimationTexturesField);
-
-    ASSERT_EQ(actualAnimatorsSettings, boost::none);
+    ASSERT_THROW(animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutAnimationTypeField),
+                 exceptions::InvalidAnimatorsConfigFile);
 }
 
 TEST_F(AnimatorSettingsYamlReaderTest,
-       givenConfigFileWithAnimationsWithoutTimeBetweenTexturesField_shouldReturnNone)
+       givenConfigFileWithAnimationsWithoutAnimationTexturePathField_shouldThrowInvalidAnimatorsConfigFile)
 {
-    const auto actualAnimatorsSettings =
-        animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutTimeBetweenTexturesField);
+    ASSERT_THROW(
+        animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutAnimationTexturePathField),
+        exceptions::InvalidAnimatorsConfigFile);
+}
 
-    ASSERT_EQ(actualAnimatorsSettings, boost::none);
+TEST_F(AnimatorSettingsYamlReaderTest,
+       givenConfigFileWithAnimationsWithoutNumberOfAnimationsField_shouldThrowInvalidAnimatorsConfigFile)
+{
+    ASSERT_THROW(animatorsSettingsReader.readAnimatorsSettings(
+                     configWithAnimatorWithoutNumberOfAnimationTexturesField),
+                 exceptions::InvalidAnimatorsConfigFile);
+}
+
+TEST_F(AnimatorSettingsYamlReaderTest,
+       givenConfigFileWithAnimationsWithoutTimeBetweenTexturesField_shouldThrowInvalidAnimatorsConfigFile)
+{
+    ASSERT_THROW(
+        animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutTimeBetweenTexturesField),
+        exceptions::InvalidAnimatorsConfigFile);
 }
 
 TEST_F(AnimatorSettingsYamlReaderTest, givenValidConfigWithOneAnimator_shouldReturnAnimatorsSettings)
@@ -139,7 +131,7 @@ TEST_F(AnimatorSettingsYamlReaderTest, givenValidConfigWithOneAnimator_shouldRet
     const auto actualAnimatorsSettings =
         animatorsSettingsReader.readAnimatorsSettings(validPathWithOneAnimator);
 
-    ASSERT_EQ(*actualAnimatorsSettings, animatorsSettings1);
+    ASSERT_EQ(actualAnimatorsSettings, animatorsSettings1);
 }
 
 TEST_F(AnimatorSettingsYamlReaderTest, givenValidConfigWithTwoAnimators_shouldReturnAnimatorsSettings)
@@ -147,5 +139,5 @@ TEST_F(AnimatorSettingsYamlReaderTest, givenValidConfigWithTwoAnimators_shouldRe
     const auto actualAnimatorsSettings =
         animatorsSettingsReader.readAnimatorsSettings(validPathWithTwoAnimators);
 
-    ASSERT_EQ(*actualAnimatorsSettings, animatorsSettings2);
+    ASSERT_EQ(actualAnimatorsSettings, animatorsSettings2);
 }
