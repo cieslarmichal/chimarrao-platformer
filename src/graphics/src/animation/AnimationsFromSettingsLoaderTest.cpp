@@ -16,7 +16,7 @@ public:
     std::unordered_map<AnimationType, Animation> nonEmptyAnimations{{AnimationType::Jump, animation}};
     std::unordered_map<AnimationType, Animation> animations;
     const AnimationsSettings emptyAnimationsSettings{};
-    const std::string projectPath{utils::getProjectPath("chimarrao")};
+    const std::string projectPath{utils::getProjectPath("chimarrao-platformer")};
     const AnimationsSettings animationsSettings{{"idle", "dev/x1.txt", 3, 0.4},
                                                 {"walk", "elo/123.txt", 2, 0.7}};
 };

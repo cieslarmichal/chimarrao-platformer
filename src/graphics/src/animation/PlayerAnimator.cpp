@@ -3,7 +3,7 @@
 #include "AnimationsFromSettingsLoader.h"
 #include "GetProjectPath.h"
 #include "exceptions/AnimationTypeNotSupported.h"
-#include "exceptions/InvalidAnimatorConfigFile.h"
+#include "exceptions/InvalidAnimatorSettings.h"
 
 namespace graphics::animation
 {
@@ -22,7 +22,7 @@ PlayerAnimator::PlayerAnimator(graphics::GraphicsId graphicsIdInit,
 {
     if (animatorSettings.animatorName != animatorName)
     {
-        throw exceptions::InvalidAnimatorConfigFile{"Invalid settings for " + animatorName + ": " +
+        throw exceptions::InvalidAnimatorSettings{"Invalid settings for " + animatorName + ": " +
                                                     animatorSettings.animatorName};
     }
 

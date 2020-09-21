@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "exceptions/AnimatorsConfigFileNotFound.h"
+#include "exceptions/InvalidAnimatorsConfigFile.h"
 
 namespace graphics::animation
 {
@@ -17,27 +18,29 @@ const auto numberOfTexturesField{"numberOfTextures"};
 const auto timeBetweenTexturesInSecondsField{"timeBetweenTexturesInSeconds"};
 }
 
-boost::optional<AnimatorsSettings>
-AnimatorSettingsYamlReader::readAnimatorsSettings(const utils::FilePath& yamlFilePath)
+AnimatorsSettings
+AnimatorSettingsYamlReader::readAnimatorsSettings(const utils::FilePath& yamlFilePath) const
 {
     try
     {
         const auto animatorsConfig = loadYamlFile(yamlFilePath);
-        if (const auto animators = animatorsConfig[animatorsField])
+        if (not animatorsConfig[animatorsField])
         {
-            return readAnimatorsSettings(animators);
+            auto errorMessage = "Missing animator field";
+            std::cerr << errorMessage << "\n";
+            throw exceptions::InvalidAnimatorsConfigFile{errorMessage};
         }
+        return readAnimatorsSettings(animatorsConfig[animatorsField]);
     }
     catch (const YAML::Exception& e)
     {
-        std::cerr << "Error while reading animators config file: " << e.what() << "\n";
-        return boost::none;
+        auto errorMessage = std::string{"Error while reading animators config file: "} + e.what();
+        std::cerr << errorMessage << "\n";
+        throw exceptions::InvalidAnimatorsConfigFile{errorMessage};
     }
-
-    return boost::none;
 }
 
-YAML::Node AnimatorSettingsYamlReader::loadYamlFile(const utils::FilePath& yamlFilePath)
+YAML::Node AnimatorSettingsYamlReader::loadYamlFile(const utils::FilePath& yamlFilePath) const
 {
     try
     {
@@ -45,12 +48,13 @@ YAML::Node AnimatorSettingsYamlReader::loadYamlFile(const utils::FilePath& yamlF
     }
     catch (const YAML::BadFile& badFile)
     {
+        std::cerr << badFile.what() << "\n";
         throw exceptions::AnimatorsConfigFileNotFound{badFile.what()};
     }
 }
 
-boost::optional<AnimatorsSettings>
-AnimatorSettingsYamlReader::readAnimatorsSettings(const YAML::Node& animators)
+AnimatorsSettings
+AnimatorSettingsYamlReader::readAnimatorsSettings(const YAML::Node& animators) const
 {
     AnimatorsSettings animatorsSettings;
 
@@ -61,23 +65,19 @@ AnimatorSettingsYamlReader::readAnimatorsSettings(const YAML::Node& animators)
 
         if (not animatorName || not animations)
         {
-            std::cerr << "Missing fields in animators\n";
-            return boost::none;
+            auto errorMessage = "Missing fields in animators";
+            std::cerr << errorMessage << "\n";
+            throw exceptions::InvalidAnimatorsConfigFile{errorMessage};
+
         }
-        if (const auto animationsSettings = readAnimationsSettings(animations))
-        {
-            animatorsSettings.push_back({animatorName.as<std::string>(), *animationsSettings});
-        }
-        else
-        {
-            return boost::none;
-        }
+        const auto animationsSettings = readAnimationsSettings(animations);
+        animatorsSettings.push_back({animatorName.as<std::string>(), animationsSettings});
     }
     return animatorsSettings;
 }
 
-boost::optional<AnimationsSettings>
-AnimatorSettingsYamlReader::readAnimationsSettings(const YAML::Node& animations)
+AnimationsSettings
+AnimatorSettingsYamlReader::readAnimationsSettings(const YAML::Node& animations) const
 {
     AnimationsSettings animationsSettings;
 
@@ -90,8 +90,9 @@ AnimatorSettingsYamlReader::readAnimationsSettings(const YAML::Node& animations)
 
         if (not type || not firstTexturePath || not numberOfTextures || not timeBetweenTexturesInSeconds)
         {
-            std::cerr << "Missing fields in animations\n";
-            return boost::none;
+            auto errorMessage = "Missing fields in animations";
+            std::cerr << errorMessage << "\n";
+            throw exceptions::InvalidAnimatorsConfigFile{errorMessage};
         }
         animationsSettings.push_back({type.as<std::string>(), firstTexturePath.as<std::string>(),
                                       numberOfTextures.as<int>(), timeBetweenTexturesInSeconds.as<float>()});

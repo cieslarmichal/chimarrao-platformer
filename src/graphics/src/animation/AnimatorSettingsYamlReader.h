@@ -1,22 +1,19 @@
 #pragma once
 
-#include <boost/optional.hpp>
+#include "AnimatorSettingsReader.h"
 
 #include "yaml-cpp/yaml.h"
 
-#include "AnimatorSettings.h"
-#include "FilePath.h"
-
 namespace graphics::animation
 {
-class AnimatorSettingsYamlReader
+class AnimatorSettingsYamlReader : public AnimatorSettingsReader
 {
 public:
-    static boost::optional<AnimatorsSettings> readAnimatorsSettings(const utils::FilePath& yamlFilePath);
+    [[nodiscard]] AnimatorsSettings readAnimatorsSettings(const utils::FilePath& yamlFilePath) const;
 
 private:
-    static YAML::Node loadYamlFile(const utils::FilePath& yamlFilePath);
-    static boost::optional<AnimatorsSettings> readAnimatorsSettings(const YAML::Node&);
-    static boost::optional<AnimationsSettings> readAnimationsSettings(const YAML::Node&);
+    YAML::Node loadYamlFile(const utils::FilePath& yamlFilePath) const;
+    AnimatorsSettings readAnimatorsSettings(const YAML::Node&) const;
+    AnimationsSettings readAnimationsSettings(const YAML::Node&) const;
 };
 }
