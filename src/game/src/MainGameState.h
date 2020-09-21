@@ -2,15 +2,13 @@
 
 #include "ComponentOwner.h"
 #include "GameState.h"
-#include "Window.h"
 
 namespace game
 {
 class MainGameState : public GameState
 {
 public:
-    explicit MainGameState(const std::shared_ptr<graphics::Window>&,
-                           const std::shared_ptr<input::InputManager>&,
+    explicit MainGameState(const std::shared_ptr<gui::Window>&, const std::shared_ptr<input::InputManager>&,
                            const std::shared_ptr<graphics::RendererPool>&);
 
     void initialize();

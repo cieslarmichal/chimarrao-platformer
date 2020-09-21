@@ -18,9 +18,9 @@ public:
     void removeObserver(InputObserver*) override;
 
 private:
-    void notifyObservers(const InputStatus&) override;
+    void notifyObservers() override;
 
     std::unique_ptr<InputObservationHandler> observerHandler;
-    InputStatus inputKeysStatus;
+    InputStatus inputStatus;
 };
 }

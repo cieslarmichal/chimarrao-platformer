@@ -1,7 +1,6 @@
 #pragma once
 
 #include "InputObserver.h"
-#include "InputStatus.h"
 
 namespace input
 {
@@ -14,6 +13,6 @@ public:
     virtual void removeObserver(InputObserver*) = 0;
 
 protected:
-    virtual void notifyObservers(const InputStatus&) = 0;
+    virtual void notifyObservers() = 0;
 };
 }

@@ -11,7 +11,8 @@ using namespace ::testing;
 class TextureLoaderSfmlTest : public Test
 {
 public:
-    const std::string testDirectory{utils::getProjectPath("chimarrao-platformer") + "src/graphics/src/testTexture/"};
+    const std::string testDirectory{utils::getProjectPath("chimarrao-platformer") +
+                                    "src/graphics/src/testTexture/"};
     const std::string nonExistingTexturePath{testDirectory + "nonExistingFile"};
     const std::string existingTexturePath{testDirectory + "attack-A1.png"};
     sf::Texture texture;

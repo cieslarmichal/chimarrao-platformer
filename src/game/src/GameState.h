@@ -13,7 +13,7 @@ namespace game
 class GameState
 {
 public:
-    explicit GameState(std::shared_ptr<graphics::Window>, std::shared_ptr<input::InputManager>,
+    explicit GameState(std::shared_ptr<gui::Window>, std::shared_ptr<input::InputManager>,
                        std::shared_ptr<graphics::RendererPool>);
     virtual ~GameState() = default;
 
@@ -24,7 +24,7 @@ public:
 
 protected:
     std::shared_ptr<input::InputManager> inputManager;
-    std::shared_ptr<graphics::Window> window;
+    std::shared_ptr<gui::Window> window;
     std::shared_ptr<graphics::RendererPool> rendererPool;
 
 private:

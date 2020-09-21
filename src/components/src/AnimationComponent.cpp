@@ -3,7 +3,7 @@
 namespace components
 {
 AnimationComponent::AnimationComponent(ComponentOwner* owner,
-                                       std::shared_ptr<graphics::animation::Animator> animatorInit)
+                                       std::shared_ptr<animations::Animator> animatorInit)
     : Component(owner), animator{std::move(animatorInit)}
 {
 }
@@ -13,28 +13,28 @@ void AnimationComponent::update(utils::DeltaTime deltaTime)
     animator->update(deltaTime);
 }
 
-void AnimationComponent::setAnimation(graphics::animation::AnimationType animationType)
+void AnimationComponent::setAnimation(animations::AnimationType animationType)
 {
     animator->setAnimation(animationType);
 }
 
-void AnimationComponent::setAnimation(graphics::animation::AnimationType animationType,
-                                      graphics::animation::AnimationDirection animationDirection)
+void AnimationComponent::setAnimation(animations::AnimationType animationType,
+                                      animations::AnimationDirection animationDirection)
 {
     animator->setAnimation(animationType, animationDirection);
 }
 
-void AnimationComponent::setAnimationDirection(graphics::animation::AnimationDirection animationDirection)
+void AnimationComponent::setAnimationDirection(animations::AnimationDirection animationDirection)
 {
     animator->setAnimationDirection(animationDirection);
 }
 
-graphics::animation::AnimationType AnimationComponent::getAnimationType() const
+animations::AnimationType AnimationComponent::getAnimationType() const
 {
     return animator->getAnimationType();
 }
 
-graphics::animation::AnimationDirection AnimationComponent::getAnimationDirection() const
+animations::AnimationDirection AnimationComponent::getAnimationDirection() const
 {
     return animator->getAnimationDirection();
 }
