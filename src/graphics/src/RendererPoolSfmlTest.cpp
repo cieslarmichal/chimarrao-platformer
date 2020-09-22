@@ -26,7 +26,7 @@ const TexturePath validTexturePath2{"validTexturePath2"};
 const TexturePath invalidTexturePath{"invalidTexturePath"};
 const FontPath validFontPath{"validFontPath"};
 const FontPath invalidFontPath{"invalidFontPath"};
-const std::string& text{"text"};
+const std::string text{"text"};
 const unsigned characterSize = 15;
 const auto invalidId = GraphicsIdGenerator::generateId();
 }

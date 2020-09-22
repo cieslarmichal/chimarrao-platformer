@@ -17,7 +17,7 @@ Game::Game() : dt{0}
 
     auto windowSize = utils::Vector2u{800, 600};
     window = guiFactory->createWindow(windowSize, "chimarrao-platformer");
-    const utils::Vector2u mapSize{30, 30};
+    const utils::Vector2u mapSize{80, 40};
 
     rendererPool = graphicsFactory->createRendererPool(windowSize, mapSize);
     inputManager = std::make_unique<input::DefaultInputManager>(

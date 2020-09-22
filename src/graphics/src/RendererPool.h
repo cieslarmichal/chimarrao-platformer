@@ -21,7 +21,7 @@ public:
     virtual GraphicsId acquire(const utils::Vector2f& size, const utils::Vector2f& position,
                                const TexturePath&) = 0;
     virtual GraphicsId acquireText(const utils::Vector2f& position, const std::string& text, const FontPath&,
-                                   unsigned characterSize = 10, const Color& = Color::White) = 0;
+                                   unsigned characterSize = 5, const Color& = Color::Black) = 0;
     virtual void release(const GraphicsId&) = 0;
     virtual void renderAll() = 0;
     virtual void setPosition(const GraphicsId&, const utils::Vector2f& position) = 0;

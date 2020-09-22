@@ -3,16 +3,18 @@
 #include "AnimationComponent.h"
 #include "AnimatorSettingsYamlReader.h"
 #include "DefaultAnimatorSettingsRepository.h"
+#include "GetProjectPath.h"
 #include "GraphicsComponent.h"
 #include "KeyboardMovementComponent.h"
 #include "PlayerAnimator.h"
+#include "TextComponent.h"
 
 namespace game
 {
 
 GameState::GameState(const std::shared_ptr<gui::Window>& windowInit,
-                             const std::shared_ptr<input::InputManager>& inputManagerInit,
-                             const std::shared_ptr<graphics::RendererPool>& rendererPoolInit)
+                     const std::shared_ptr<input::InputManager>& inputManagerInit,
+                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit)
     : State{windowInit, inputManagerInit, rendererPoolInit}
 {
     animations::DefaultAnimatorSettingsRepository settingsRepository{
@@ -27,6 +29,10 @@ GameState::GameState(const std::shared_ptr<gui::Window>& windowInit,
     auto playerAnimator =
         std::make_shared<animations::PlayerAnimator>(graphicsId, rendererPool, *playerAnimatorSettings);
     player->addComponent<components::AnimationComponent>(playerAnimator);
+    player->addComponent<components::TextComponent>(rendererPool, utils::Vector2f{10, 10}, "hello",
+                                                    utils::getProjectPath("chimarrao-platformer") +
+                                                        "resources/fonts/VeraMono.ttf",
+                                                    1, graphics::Color::Black);
 
     initialize();
 }

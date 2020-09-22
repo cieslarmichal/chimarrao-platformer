@@ -4,6 +4,7 @@ set(SOURCES
         src/GraphicsComponent.cpp
         src/KeyboardMovementComponent.cpp
         src/AnimationComponent.cpp
+        src/TextComponent.cpp
         )
 
 add_library(components ${SOURCES})
@@ -16,6 +17,7 @@ set(UT_SOURCES
         src/GraphicsComponentTest.cpp
         src/KeyboardMovementComponentTest.cpp
         src/AnimationComponentTest.cpp
+        src/TextComponentTest.cpp
         )
 
 add_executable(componentsUT ${UT_SOURCES})
