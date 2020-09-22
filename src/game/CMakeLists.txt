@@ -1,13 +1,13 @@
 set(SOURCES
         src/Game.cpp
+        src/State.cpp
         src/GameState.cpp
-        src/MainGameState.cpp
         src/MainMenuState.cpp
         )
 
 set(UT_SOURCES
         src/GameTest.cpp
-        src/MainGameStateTest.cpp
+        src/GameStateTest.cpp
         src/MainMenuStateTest.cpp
         )
 

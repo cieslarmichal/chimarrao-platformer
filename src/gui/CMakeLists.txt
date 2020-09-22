@@ -6,7 +6,7 @@ set(SOURCES
         )
 
 add_library(gui ${SOURCES})
-target_link_libraries(gui PUBLIC utils ${SFML_LIBRARIES})
+target_link_libraries(gui PUBLIC ${SFML_LIBRARIES} utils input components)
 target_include_directories(gui PUBLIC src)
 
 set(UT_SOURCES
@@ -14,4 +14,4 @@ set(UT_SOURCES
         )
 
 add_executable(guiUT ${UT_SOURCES})
-target_link_libraries(guiUT PUBLIC gtest_main gmock)
+target_link_libraries(guiUT PUBLIC gtest_main gmock gui)

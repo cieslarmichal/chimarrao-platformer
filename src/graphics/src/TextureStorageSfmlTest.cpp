@@ -2,9 +2,7 @@
 
 #include "gtest/gtest.h"
 
-#include "TextureLoaderMock.h"
-
-#include "exceptions/CannotAccessTextureFile.h"
+#include "GetProjectPath.h"
 #include "exceptions/TextureNotAvailable.h"
 
 using namespace graphics;
@@ -13,34 +11,29 @@ using namespace ::testing;
 class TextureStorageSfmlTest : public ::testing::Test
 {
 public:
-    TexturePath goodPath = "~/chimarrao/resources/someTexture";
-    TexturePath wrongPath = "C:\\wrong\\path";
+    const std::string testDirectory{utils::getProjectPath("chimarrao-platformer") +
+                                    "src/graphics/src/testResources/"};
+    const std::string nonExistingTexturePath{testDirectory + "nonExistingFile"};
+    const std::string existingTexturePath{testDirectory + "attack-A1.png"};
+    sf::Texture texture;
 
-    std::unique_ptr<TextureLoaderMock> loaderInit = std::make_unique<StrictMock<TextureLoaderMock>>();
-    TextureLoaderMock* loader = loaderInit.get();
-    std::unique_ptr<TextureStorageSfml> storage = std::make_unique<TextureStorageSfml>(std::move(loaderInit));
+    TextureStorageSfml storage;
 };
 
-TEST_F(TextureStorageSfmlTest, getTextureShouldNoThrow)
+TEST_F(TextureStorageSfmlTest, getTextureWithExistingTexturePath_shouldNoThrow)
 {
-    EXPECT_CALL(*loader, load(_, goodPath)).WillOnce(Return());
-
-    ASSERT_NO_THROW(storage->getTexture(goodPath));
+    ASSERT_NO_THROW(storage.getTexture(existingTexturePath));
 }
 
 TEST_F(TextureStorageSfmlTest, getTexture_shouldRememberLoadedTexture)
 {
-    EXPECT_CALL(*loader, load(_, goodPath)).WillOnce(Return());
+    const auto& texture1 = storage.getTexture(existingTexturePath);
+    const auto& texture2 = storage.getTexture(existingTexturePath);
 
-    const auto& result1 = storage->getTexture(goodPath);
-    const auto& result2 = storage->getTexture(goodPath);
-
-    ASSERT_EQ(&result1, &result2);
+    ASSERT_EQ(&texture1, &texture2);
 }
 
-TEST_F(TextureStorageSfmlTest, getTextureWithNonExistingPath_shouldThrowCannotAccessTextureFile)
+TEST_F(TextureStorageSfmlTest, getTextureWithNonExistingPath_shouldThrowTextureNotAvailable)
 {
-    EXPECT_CALL(*loader, load(_, wrongPath)).WillOnce(Throw(exceptions::CannotAccessTextureFile{""}));
-
-    ASSERT_THROW(storage->getTexture(wrongPath), exceptions::TextureNotAvailable);
+    ASSERT_THROW(storage.getTexture(nonExistingTexturePath), exceptions::TextureNotAvailable);
 }

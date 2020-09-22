@@ -22,4 +22,11 @@ const graphics::GraphicsId& GraphicsComponent::getGraphicsId()
 {
     return id;
 }
+
+void GraphicsComponent::setColor(const graphics::Color& color)
+{
+    // TODO: test
+    rendererPool->setColor(id, color);
+}
+
 }

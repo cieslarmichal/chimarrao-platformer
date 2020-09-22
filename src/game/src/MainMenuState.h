@@ -1,11 +1,11 @@
 #pragma once
 
+#include "State.h"
 #include "Window.h"
-#include "GameState.h"
 
 namespace game
 {
-class MainMenuState : public GameState
+class MainMenuState : public State
 {
 public:
     explicit MainMenuState(const std::shared_ptr<gui::Window>&, const std::shared_ptr<input::InputManager>&,
@@ -15,6 +15,5 @@ public:
     void update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
-    void checkIfEnded() override;
 };
 }

@@ -14,13 +14,13 @@ void DefaultInputObservationHandler::removeObserver(InputObserver* observer)
     observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
 }
 
-void DefaultInputObservationHandler::notifyObservers(const InputStatus& keyboardStatus)
+void DefaultInputObservationHandler::notifyObservers(const InputStatus& inputStatus)
 {
     for (const auto& observer : observers)
     {
         if (observer)
         {
-            observer->handleInputStatus(keyboardStatus);
+            observer->handleInputStatus(inputStatus);
         }
     }
 }

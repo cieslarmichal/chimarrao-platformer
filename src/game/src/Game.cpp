@@ -2,9 +2,9 @@
 
 #include "DefaultInputManager.h"
 #include "DefaultInputObservationHandler.h"
+#include "GameState.h"
 #include "GraphicsFactory.h"
 #include "GuiFactory.h"
-#include "MainGameState.h"
 #include "MainMenuState.h"
 #include "Vector.h"
 
@@ -21,7 +21,7 @@ Game::Game() : dt{0}
 
     rendererPool = graphicsFactory->createRendererPool(windowSize, mapSize);
     inputManager = std::make_unique<input::DefaultInputManager>(
-        std::make_unique<input::DefaultInputObservationHandler>());
+        std::make_unique<input::DefaultInputObservationHandler>(), window);
     timer.start();
     initStates();
 }
@@ -83,7 +83,7 @@ void Game::render()
 
 void Game::initStates()
 {
-    states.push(std::make_unique<MainGameState>(window, inputManager, rendererPool));
+    states.push(std::make_unique<GameState>(window, inputManager, rendererPool));
     //    states.push(std::make_unique<MainGameState>(window, inputManager, rendererPool));
 }
 

@@ -12,6 +12,16 @@ void InputStatus::setKeyPressed(InputKey key)
     inputKeyMask.setBit(static_cast<unsigned>(key));
 }
 
+void InputStatus::setMousePosition(const utils::Vector2f& position)
+{
+    mousePosition = position;
+}
+
+utils::Vector2f InputStatus::getMousePosition() const
+{
+    return mousePosition;
+}
+
 utils::BitMask InputStatus::getMaskStatus() const
 {
     return inputKeyMask;

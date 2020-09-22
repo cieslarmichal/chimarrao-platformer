@@ -1,18 +1,14 @@
 #pragma once
 
-#include <string>
+#include "SFML/Graphics/Texture.hpp"
 
-#include "SFML/Graphics.hpp"
+#include "TexturePath.h"
 
 namespace graphics
 {
-using TexturePath = std::string;
-
 class TextureLoader
 {
 public:
-    virtual ~TextureLoader() = default;
-
-    virtual void load(sf::Texture&, const TexturePath&) const = 0;
+    static void load(sf::Texture&, const TexturePath&);
 };
 }

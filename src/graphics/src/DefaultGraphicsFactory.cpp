@@ -1,8 +1,8 @@
 #include "DefaultGraphicsFactory.h"
 
+#include "FontStorageSfml.h"
 #include "RenderTargetSfml.h"
 #include "RendererPoolSfml.h"
-#include "TextureLoaderSfml.h"
 #include "TextureStorageSfml.h"
 
 namespace graphics
@@ -14,7 +14,7 @@ DefaultGraphicsFactory::createRendererPool(const utils::Vector2u& renderingRegio
 {
     return std::make_unique<RendererPoolSfml>(
         std::make_unique<RenderTargetSfml>(renderingRegionSize, logicalRegionSize),
-        std::make_unique<TextureStorageSfml>(std::make_unique<TextureLoaderSfml>()));
+        std::make_unique<TextureStorageSfml>(), std::make_unique<FontStorageSfml>());
 }
 
 }

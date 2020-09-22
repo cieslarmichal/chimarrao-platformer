@@ -1,10 +1,10 @@
-#include "TextureLoaderSfml.h"
+#include "TextureLoader.h"
 
 #include "exceptions/CannotAccessTextureFile.h"
 
 namespace graphics
 {
-void graphics::TextureLoaderSfml::load(sf::Texture& texture, const TexturePath& path) const
+void graphics::TextureLoader::load(sf::Texture& texture, const TexturePath& path)
 {
     if (not texture.loadFromFile(path))
     {

@@ -4,11 +4,11 @@
 #include <memory>
 #include <stack>
 
-#include "Window.h"
-#include "GameState.h"
 #include "InputManager.h"
 #include "RendererPool.h"
+#include "State.h"
 #include "Timer.h"
+#include "Window.h"
 
 namespace game
 {
@@ -31,6 +31,6 @@ private:
     std::shared_ptr<gui::Window> window;
     std::shared_ptr<graphics::RendererPool> rendererPool;
     std::shared_ptr<input::InputManager> inputManager;
-    std::stack<std::unique_ptr<GameState>> states;
+    std::stack<std::unique_ptr<State>> states;
 };
 }

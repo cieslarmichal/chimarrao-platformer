@@ -1,13 +1,15 @@
 #include "DefaultInputManager.h"
 
+#include <utility>
+
 #include "SFML/Window/Keyboard.hpp"
 
 #include "InputKey.h"
 
 namespace input
 {
-DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler> handler)
-    : observerHandler{std::move(handler)}
+DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler> handler, std::shared_ptr<gui::Window> windowInit)
+    : observerHandler{std::move(handler)}, window{std::move(windowInit)}
 {
 }
 
@@ -52,6 +54,8 @@ void DefaultInputManager::readInput()
     {
         inputStatus.setKeyPressed(InputKey::Escape);
     }
+
+    inputStatus.setMousePosition(window->getMousePosition());
 
     notifyObservers();
 }

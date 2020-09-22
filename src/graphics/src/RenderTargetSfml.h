@@ -16,8 +16,8 @@ public:
     RenderTargetSfml(const utils::Vector2u& windowSize, const utils::Vector2u& areaSize);
 
     void initialize() override;
-    void clear(const sf::Color&) override;
-    void draw(const RectangleShape&) override;
+    void clear(const Color&) override;
+    void draw(const sf::Drawable&) override;
     void setView() override;
     void setViewSize(const utils::Vector2u& windowsSize) override;
     sf::Vector2u getSize() const override;
