@@ -10,7 +10,7 @@ namespace components
 
 KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* owner,
                                                      std::shared_ptr<input::InputManager> inputManagerInit)
-    : Component{owner}, inputManager{std::move(inputManagerInit)}, movementSpeed{10.f}
+    : Component{owner}, inputManager{std::move(inputManagerInit)}, movementSpeed{30.f}
 {
     inputManager->registerObserver(this);
 }

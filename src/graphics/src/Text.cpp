@@ -10,8 +10,8 @@ Text::Text(const GraphicsId& graphicsId, const utils::Vector2f& position, const 
     setFont(font);
     setString(text);
     setFillColor(color);
-    setOutlineColor(graphics::Color::Black);
-    setOutlineThickness(1);
+//    setOutlineColor(graphics::Color::Black);
+//    setOutlineThickness(0.2);
     setCharacterSize(characterSize);
     setPosition(position);
 }

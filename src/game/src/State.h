@@ -21,7 +21,7 @@ class State : public gui::WindowObserver
 public:
     explicit State(std::shared_ptr<gui::Window>, std::shared_ptr<input::InputManager>,
                        std::shared_ptr<graphics::RendererPool>);
-    virtual ~State() = default;
+    virtual ~State();
 
     virtual void update(const utils::DeltaTime&) = 0;
     virtual void lateUpdate(const utils::DeltaTime&) = 0;

@@ -10,6 +10,12 @@ State::State(std::shared_ptr<gui::Window> windowInit,
       inputManager{std::move(inputManagerInit)},
       rendererPool{std::move(rendererPoolInit)}
 {
+    window->registerObserver(this);
+}
+
+State::~State()
+{
+    window->removeObserver(this);
 }
 
 void State::windowSizeChanged(const utils::Vector2u& windowSize)

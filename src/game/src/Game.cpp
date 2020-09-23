@@ -17,7 +17,7 @@ Game::Game() : dt{0}
 
     auto windowSize = utils::Vector2u{800, 600};
     window = guiFactory->createWindow(windowSize, "chimarrao-platformer");
-    const utils::Vector2u mapSize{80, 40};
+    const utils::Vector2u mapSize{200, 100};
 
     rendererPool = graphicsFactory->createRendererPool(windowSize, mapSize);
     inputManager = std::make_unique<input::DefaultInputManager>(
@@ -54,7 +54,6 @@ void Game::update()
     {
         states.top()->update(dt);
     }
-    window->update();
 }
 
 void Game::lateUpdate()
@@ -69,7 +68,6 @@ void Game::lateUpdate()
     {
         states.top()->lateUpdate(dt);
     }
-    window->update();
 }
 
 void Game::render()
@@ -78,6 +76,8 @@ void Game::render()
     {
         states.top()->render();
     }
+
+    window->update();
     window->display();
 }
 
