@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(chimarrao CXX)
+project(chimarrao-platformer CXX)
 
 add_subdirectory(externals)
 

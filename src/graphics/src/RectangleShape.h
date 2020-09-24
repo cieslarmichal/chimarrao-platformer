@@ -13,8 +13,6 @@ class RectangleShape : public sf::RectangleShape
 public:
     RectangleShape(GraphicsId, const utils::Vector2f& size, const utils::Vector2f& position, const Color&);
 
-    utils::Vector2f getPosition() const;
-    utils::Vector2f getSize() const;
     GraphicsId getGraphicsId() const;
 
 private:
