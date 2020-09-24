@@ -1,33 +1,22 @@
 #pragma once
 
-#include <memory>
-#include <vector>
-
-#include "DeltaTime.h"
-#include "InputManager.h"
-#include "RendererPool.h"
-#include "Window.h"
+#include "ComponentOwner.h"
+#include "State.h"
 
 namespace game
 {
-class GameState
+class GameState : public State
 {
 public:
-    explicit GameState(std::shared_ptr<graphics::Window>, std::shared_ptr<input::InputManager>,
-                       std::shared_ptr<graphics::RendererPool>);
-    virtual ~GameState() = default;
+    explicit GameState(const std::shared_ptr<gui::Window>&, const std::shared_ptr<input::InputManager>&,
+                           const std::shared_ptr<graphics::RendererPool>&);
 
-    virtual void update(const utils::DeltaTime&) = 0;
-    virtual void lateUpdate(const utils::DeltaTime&) = 0;
-    virtual void render() = 0;
-    virtual void checkIfEnded() = 0;
-
-protected:
-    std::shared_ptr<input::InputManager> inputManager;
-    std::shared_ptr<graphics::Window> window;
-    std::shared_ptr<graphics::RendererPool> rendererPool;
+    void initialize();
+    void update(const utils::DeltaTime&) override;
+    void lateUpdate(const utils::DeltaTime&) override;
+    void render() override;
 
 private:
-    bool stateIsEnded;
+    std::shared_ptr<components::ComponentOwner> player;
 };
 }

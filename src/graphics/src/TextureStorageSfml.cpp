@@ -2,13 +2,12 @@
 
 #include <iostream>
 
+#include "TextureLoader.h"
 #include "exceptions/CannotAccessTextureFile.h"
 #include "exceptions/TextureNotAvailable.h"
 
 namespace graphics
 {
-TextureStorageSfml::TextureStorageSfml(std::unique_ptr<TextureLoader> loader) : loader(std::move(loader)) {}
-
 const sf::Texture& TextureStorageSfml::getTexture(const TexturePath& path)
 {
     if (not textureInStorage(path))
@@ -23,7 +22,7 @@ void TextureStorageSfml::loadTexture(const TexturePath& path)
     auto texture = std::make_unique<sf::Texture>();
     try
     {
-        loader->load(*texture, path);
+        TextureLoader::load(*texture, path);
     }
     catch (const exceptions::CannotAccessTextureFile& e)
     {

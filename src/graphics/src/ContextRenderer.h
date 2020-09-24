@@ -13,8 +13,8 @@ public:
     virtual ~ContextRenderer() = default;
 
     virtual void initialize() = 0;
-    virtual void clear(const sf::Color&) = 0;
-    virtual void draw(const RectangleShape&) = 0;
+    virtual void clear(const Color&) = 0;
+    virtual void draw(const sf::Drawable&) = 0;
     virtual void setView() = 0;
     virtual void setViewSize(const utils::Vector2u& windowsSize) = 0;
 };

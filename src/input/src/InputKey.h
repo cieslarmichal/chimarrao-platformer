@@ -11,6 +11,8 @@ enum class InputKey
     Space = 4,
     Shift = 5,
     Enter = 6,
-    Escape = 7
+    Escape = 7,
+    MouseLeft = 8,
+    MouseRight = 9
 };
 }

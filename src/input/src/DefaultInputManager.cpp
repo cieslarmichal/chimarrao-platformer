@@ -1,6 +1,6 @@
 #include "DefaultInputManager.h"
 
-#include <iostream>
+#include <utility>
 
 #include "SFML/Window/Keyboard.hpp"
 
@@ -8,49 +8,56 @@
 
 namespace input
 {
-DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler> handler)
-    : observerHandler{std::move(handler)}
+DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler> handler, std::shared_ptr<gui::Window> windowInit)
+    : observerHandler{std::move(handler)}, window{std::move(windowInit)}
 {
 }
 
 void DefaultInputManager::readInput()
 {
-    inputKeysStatus.clearStatus();
+    inputStatus.clearStatus();
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
-        inputKeysStatus.setKeyPressed(InputKey::Up);
+        inputStatus.setKeyPressed(InputKey::Up);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
     {
-        inputKeysStatus.setKeyPressed(InputKey::Down);
+        inputStatus.setKeyPressed(InputKey::Down);
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
     {
-        inputKeysStatus.setKeyPressed(InputKey::Left);
+        inputStatus.setKeyPressed(InputKey::Left);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
     {
-        inputKeysStatus.setKeyPressed(InputKey::Right);
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-    {
-        inputKeysStatus.setKeyPressed(InputKey::Space);
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-    {
-        inputKeysStatus.setKeyPressed(InputKey::Shift);
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Return))
-    {
-        inputKeysStatus.setKeyPressed(InputKey::Enter);
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-    {
-        inputKeysStatus.setKeyPressed(InputKey::Escape);
+        inputStatus.setKeyPressed(InputKey::Right);
     }
 
-    notifyObservers(inputKeysStatus);
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    {
+        inputStatus.setKeyPressed(InputKey::Space);
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+    {
+        inputStatus.setKeyPressed(InputKey::Shift);
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
+    {
+        inputStatus.setKeyPressed(InputKey::Enter);
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
+    {
+        inputStatus.setKeyPressed(InputKey::Escape);
+    }
+
+    inputStatus.setMousePosition(window->getMousePosition());
+
+    notifyObservers();
 }
 
 void DefaultInputManager::registerObserver(InputObserver* observer)
@@ -63,9 +70,9 @@ void DefaultInputManager::removeObserver(InputObserver* observer)
     observerHandler->removeObserver(observer);
 }
 
-void DefaultInputManager::notifyObservers(const InputStatus& keyboardStatus)
+void DefaultInputManager::notifyObservers()
 {
-    observerHandler->notifyObservers(keyboardStatus);
+    observerHandler->notifyObservers(inputStatus);
 }
 
 }

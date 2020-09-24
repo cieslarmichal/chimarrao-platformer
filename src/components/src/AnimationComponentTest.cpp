@@ -2,15 +2,14 @@
 
 #include "gtest/gtest.h"
 
-#include "animation/AnimatorMock.h"
+#include "AnimatorMock.h"
 
 #include "ComponentOwner.h"
 #include "DeltaTime.h"
 
 using namespace ::testing;
 using namespace components;
-using namespace graphics;
-using namespace animation;
+using namespace animations;
 
 class AnimationComponentTest : public Test
 {

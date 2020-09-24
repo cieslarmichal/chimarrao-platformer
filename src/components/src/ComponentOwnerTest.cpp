@@ -1,12 +1,14 @@
 #include "ComponentOwner.h"
 
-#include "AnimationComponent.h"
-#include "animation/AnimatorMock.h"
 #include "gtest/gtest.h"
+
+#include "AnimatorMock.h"
+
+#include "AnimationComponent.h"
 
 using namespace ::testing;
 using namespace components;
-using namespace graphics::animation;
+using namespace animations;
 
 class ComponentOwnerTest : public Test
 {

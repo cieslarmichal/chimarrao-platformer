@@ -15,6 +15,8 @@ const auto space = InputKey::Space;
 const auto shift = InputKey::Shift;
 const auto enter = InputKey::Enter;
 const auto escape = InputKey::Escape;
+const utils::Vector2f position{10.2, 3.0};
+const utils::Vector2f zeroPosition{0.0, 0.0};
 }
 
 class InputStatusTest : public Test
@@ -22,6 +24,12 @@ class InputStatusTest : public Test
 public:
     InputStatus inputStatus;
 };
+
+TEST_F(InputStatusTest, initialInputStatus_inputKeysAndMousePositionShouldBeSetToZero)
+{
+    ASSERT_EQ(inputStatus.getMaskStatus().getMask(), 0);
+    ASSERT_EQ(inputStatus.getMousePosition(), zeroPosition);
+}
 
 TEST_F(InputStatusTest, initialInputKeysStatus_shouldReturnUnpressedKeys)
 {
@@ -51,4 +59,11 @@ TEST_F(InputStatusTest, shouldClearKeysStatus)
 
     ASSERT_FALSE(inputStatus.isKeyPressed(up));
     ASSERT_FALSE(inputStatus.isKeyPressed(down));
+}
+
+TEST_F(InputStatusTest, shouldSetMousePosition)
+{
+    inputStatus.setMousePosition(position);
+
+    ASSERT_EQ(inputStatus.getMousePosition(), position);
 }

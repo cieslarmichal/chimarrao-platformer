@@ -24,9 +24,9 @@ void RenderTargetSfml::clear(const Color& color)
     RenderTarget::clear(color);
 }
 
-void RenderTargetSfml::draw(const RectangleShape& shape)
+void RenderTargetSfml::draw(const sf::Drawable& drawable)
 {
-    sf::RenderTarget::draw(shape);
+    sf::RenderTarget::draw(drawable);
 }
 
 void RenderTargetSfml::setView()

@@ -1,5 +1,7 @@
 #include "KeyboardMovementComponent.h"
 
+#include <utility>
+
 #include "AnimationComponent.h"
 #include "ComponentOwner.h"
 
@@ -7,10 +9,15 @@ namespace components
 {
 
 KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* owner,
-                                                     const std::shared_ptr<input::InputManager>& inputManager)
-    : Component{owner}, movementSpeed{10.f}
+                                                     std::shared_ptr<input::InputManager> inputManagerInit)
+    : Component{owner}, inputManager{std::move(inputManagerInit)}, movementSpeed{30.f}
 {
     inputManager->registerObserver(this);
+}
+
+KeyboardMovementComponent::~KeyboardMovementComponent()
+{
+    inputManager->removeObserver(this);
 }
 
 void KeyboardMovementComponent::loadDependentComponents()
@@ -31,12 +38,12 @@ void KeyboardMovementComponent::handleInputStatus(const input::InputStatus& inpu
     if (inputStatus.isKeyPressed(input::InputKey::Left))
     {
         currentMovementSpeed.x = -movementSpeed;
-        animation->setAnimationDirection(graphics::animation::AnimationDirection::Left);
+        animation->setAnimationDirection(animations::AnimationDirection::Left);
     }
     else if (inputStatus.isKeyPressed(input::InputKey::Right))
     {
         currentMovementSpeed.x = movementSpeed;
-        animation->setAnimationDirection(graphics::animation::AnimationDirection::Right);
+        animation->setAnimationDirection(animations::AnimationDirection::Right);
     }
 
     currentMovementSpeed.y = 0;
@@ -51,11 +58,11 @@ void KeyboardMovementComponent::handleInputStatus(const input::InputStatus& inpu
 
     if (currentMovementSpeed.x == 0 && currentMovementSpeed.y == 0)
     {
-        animation->setAnimation(graphics::animation::AnimationType::Idle);
+        animation->setAnimation(animations::AnimationType::Idle);
     }
     else
     {
-        animation->setAnimation(graphics::animation::AnimationType::Walk);
+        animation->setAnimation(animations::AnimationType::Walk);
     }
 }
 

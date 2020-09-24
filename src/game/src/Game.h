@@ -5,8 +5,8 @@
 #include <stack>
 
 #include "InputManager.h"
-#include "GameState.h"
 #include "RendererPool.h"
+#include "State.h"
 #include "Timer.h"
 #include "Window.h"
 
@@ -28,9 +28,9 @@ private:
 
     utils::Timer timer;
     utils::DeltaTime dt;
-    std::shared_ptr<graphics::Window> window;
+    std::shared_ptr<gui::Window> window;
     std::shared_ptr<graphics::RendererPool> rendererPool;
     std::shared_ptr<input::InputManager> inputManager;
-    std::stack<std::unique_ptr<GameState>> states;
+    std::stack<std::unique_ptr<State>> states;
 };
 }

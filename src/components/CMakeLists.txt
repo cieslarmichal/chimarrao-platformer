@@ -4,10 +4,11 @@ set(SOURCES
         src/GraphicsComponent.cpp
         src/KeyboardMovementComponent.cpp
         src/AnimationComponent.cpp
+        src/TextComponent.cpp
         )
 
 add_library(components ${SOURCES})
-target_link_libraries(components PUBLIC utils graphics input)
+target_link_libraries(components PUBLIC utils graphics animations input)
 target_include_directories(components PUBLIC src)
 
 set(UT_SOURCES
@@ -16,6 +17,7 @@ set(UT_SOURCES
         src/GraphicsComponentTest.cpp
         src/KeyboardMovementComponentTest.cpp
         src/AnimationComponentTest.cpp
+        src/TextComponentTest.cpp
         )
 
 add_executable(componentsUT ${UT_SOURCES})

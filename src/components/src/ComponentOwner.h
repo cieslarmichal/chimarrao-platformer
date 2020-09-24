@@ -56,7 +56,7 @@ public:
 
     std::shared_ptr<TransformComponent> transform;
 
-private:
+protected:
     std::vector<std::shared_ptr<Component>> components;
 };
 }

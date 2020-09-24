@@ -2,8 +2,8 @@
 
 #include "gtest/gtest.h"
 
+#include "AnimatorMock.h"
 #include "InputManagerMock.h"
-#include "animation/AnimatorMock.h"
 
 #include "AnimationComponent.h"
 #include "ComponentOwner.h"
@@ -12,8 +12,7 @@
 using namespace ::testing;
 using namespace input;
 using namespace components;
-using namespace graphics;
-using namespace animation;
+using namespace animations;
 
 class KeyboardMovementComponentTest_Base : public Test
 {
@@ -21,6 +20,7 @@ public:
     KeyboardMovementComponentTest_Base()
     {
         EXPECT_CALL(*inputManager, registerObserver(_));
+        EXPECT_CALL(*inputManager, removeObserver(_));
     }
 
     std::shared_ptr<StrictMock<InputManagerMock>> inputManager =
