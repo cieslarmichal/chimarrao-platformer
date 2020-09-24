@@ -1,6 +1,7 @@
 #include "IncrementalFilePathsCreator.h"
 
 #include <boost/algorithm/string.hpp>
+#include <sstream>
 
 #include "StringHelper.h"
 

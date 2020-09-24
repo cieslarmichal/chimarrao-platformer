@@ -5,16 +5,16 @@
 #include "Vector.h"
 #include "Window.h"
 
-namespace gui
+namespace window
 {
-class GuiFactory
+class WindowFactory
 {
 public:
-    virtual ~GuiFactory() = default;
+    virtual ~WindowFactory() = default;
 
     virtual std::unique_ptr<Window> createWindow(const utils::Vector2u& windowSize,
                                                  const std::string& title) const = 0;
 
-    static std::unique_ptr<GuiFactory> createGuiFactory();
+    static std::unique_ptr<WindowFactory> createGuiFactory();
 };
 }

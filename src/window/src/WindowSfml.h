@@ -5,7 +5,7 @@
 #include "Vector.h"
 #include "Window.h"
 
-namespace gui
+namespace window
 {
 class WindowSfml : public Window
 {

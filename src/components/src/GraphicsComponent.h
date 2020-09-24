@@ -5,6 +5,7 @@
 #include "Component.h"
 #include "RendererPool.h"
 #include "Vector.h"
+#include "Layer.h"
 
 namespace components
 {
@@ -12,7 +13,7 @@ class GraphicsComponent : public Component
 {
 public:
     GraphicsComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>, const utils::Vector2f& size,
-                      const utils::Vector2f& position);
+                      const utils::Vector2f& position, graphics::Layer = graphics::Layer::First);
 
     void lateUpdate(utils::DeltaTime) override;
     const graphics::GraphicsId& getGraphicsId();

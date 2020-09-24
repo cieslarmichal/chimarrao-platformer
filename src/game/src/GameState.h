@@ -8,7 +8,7 @@ namespace game
 class GameState : public State
 {
 public:
-    explicit GameState(const std::shared_ptr<gui::Window>&, const std::shared_ptr<input::InputManager>&,
+    explicit GameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
                            const std::shared_ptr<graphics::RendererPool>&);
 
     void initialize();

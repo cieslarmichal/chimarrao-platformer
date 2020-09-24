@@ -2,7 +2,7 @@
 
 #include <SFML/Window/Event.hpp>
 
-namespace gui
+namespace window
 {
 WindowSfml::WindowSfml(const utils::Vector2u& windowSize, const std::string& windowTitle)
 {

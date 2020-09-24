@@ -2,7 +2,7 @@
 
 #include "Vector.h"
 
-namespace gui
+namespace window
 {
 class WindowObserver
 {

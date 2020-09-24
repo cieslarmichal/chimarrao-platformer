@@ -2,11 +2,11 @@
 
 #include <memory>
 
-#include "GuiFactory.h"
+#include "WindowFactory.h"
 
-namespace gui
+namespace window
 {
-class DefaultGuiFactory : public GuiFactory
+class DefaultWindowFactory : public WindowFactory
 {
 public:
     std::unique_ptr<Window> createWindow(const utils::Vector2u& windowSize,

@@ -7,10 +7,11 @@ namespace components
 
 GraphicsComponent::GraphicsComponent(ComponentOwner* owner,
                                      std::shared_ptr<graphics::RendererPool> rendererPoolInit,
-                                     const utils::Vector2f& size, const utils::Vector2f& position)
+                                     const utils::Vector2f& size, const utils::Vector2f& position,
+                                     graphics::Layer layer)
     : Component{owner}, rendererPool{std::move(rendererPoolInit)}
 {
-    id = rendererPool->acquire(size, position, graphics::Color::Red);
+    id = rendererPool->acquire(size, position, graphics::Color::Red, layer);
 }
 
 void GraphicsComponent::lateUpdate(utils::DeltaTime deltaTime)

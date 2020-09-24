@@ -1,8 +1,5 @@
 set(SOURCES
-        src/WindowSfml.cpp
         src/Button.cpp
-        src/GuiFactory.cpp
-        src/DefaultGuiFactory.cpp
         )
 
 add_library(gui ${SOURCES})
