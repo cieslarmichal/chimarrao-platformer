@@ -21,3 +21,5 @@ set(UT_SOURCES
 
 add_executable(animationsUT ${UT_SOURCES})
 target_link_libraries(animationsUT PUBLIC gtest_main gmock utils graphics yaml-cpp animations)
+
+add_test(animationsUT animationsUT --gtest_color=yes)

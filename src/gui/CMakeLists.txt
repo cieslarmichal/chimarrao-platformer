@@ -15,3 +15,5 @@ set(UT_SOURCES
 
 add_executable(guiUT ${UT_SOURCES})
 target_link_libraries(guiUT PUBLIC gtest_main gmock gui)
+
+add_test(guiUT guiUT --gtest_color=yes)

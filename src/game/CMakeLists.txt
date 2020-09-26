@@ -17,3 +17,5 @@ target_link_libraries(game PUBLIC utils graphics input components gui)
 
 add_executable(gameUT ${UT_SOURCES})
 target_link_libraries(gameUT PUBLIC gtest_main gmock game)
+
+add_test(gameUT gameUT --gtest_color=yes)

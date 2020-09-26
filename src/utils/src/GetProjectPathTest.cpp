@@ -9,8 +9,8 @@ using namespace utils;
 class GetProjectPathTest : public Test
 {
 public:
-    const std::string validProjectName{"chimarrao"};
-    const std::string validPathEnd{"chimarrao/"};
+    const std::string validProjectName{"chimarrao-platformer"};
+    const std::string validPathEnd{"chimarrao-platformer/"};
     const std::string invalidProjectName{"nasjxanxjqq"};
 };
 

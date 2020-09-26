@@ -16,3 +16,5 @@ set(UT_SOURCES
 
 add_executable(inputUT ${UT_SOURCES})
 target_link_libraries(inputUT PUBLIC gtest_main gmock input)
+
+add_test(inputUT inputUT --gtest_color=yes)
