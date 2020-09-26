@@ -1,16 +1,15 @@
 #include "KeyboardMovementComponent.h"
 
-#include <utility>
-
 #include "AnimationComponent.h"
 #include "ComponentOwner.h"
+#include "exceptions/DependentComponentNotFound.h"
 
 namespace components
 {
 
 KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* owner,
                                                      std::shared_ptr<input::InputManager> inputManagerInit)
-    : Component{owner}, inputManager{std::move(inputManagerInit)}, movementSpeed{30.f}
+    : Component{owner}, inputManager{std::move(inputManagerInit)}, movementSpeed{10.f}
 {
     inputManager->registerObserver(this);
 }
@@ -23,6 +22,10 @@ KeyboardMovementComponent::~KeyboardMovementComponent()
 void KeyboardMovementComponent::loadDependentComponents()
 {
     animation = owner->getComponent<AnimationComponent>();
+    if (not animation)
+    {
+        throw exceptions::DependentComponentNotFound{"Animation component not found"};
+    }
 }
 
 void KeyboardMovementComponent::update(utils::DeltaTime deltaTime)
