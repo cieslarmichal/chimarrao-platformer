@@ -3,7 +3,7 @@
 #include "Vector.h"
 #include "ObservableWindow.h"
 
-namespace gui
+namespace window
 {
 class Window : public ObservableWindow
 {

@@ -18,5 +18,6 @@ public:
 
 private:
     std::shared_ptr<components::ComponentOwner> player;
+    std::shared_ptr<components::ComponentOwner> background;
 };
 }

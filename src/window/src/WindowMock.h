@@ -4,7 +4,7 @@
 
 #include "Window.h"
 
-namespace gui
+namespace window
 {
 class WindowMock : public Window
 {

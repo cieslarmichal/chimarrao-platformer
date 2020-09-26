@@ -3,7 +3,7 @@
 namespace game
 {
 
-MainMenuState::MainMenuState(const std::shared_ptr<gui::Window>& window,
+MainMenuState::MainMenuState(const std::shared_ptr<window::Window>& window,
                              const std::shared_ptr<input::InputManager>& inputManager,
                              const std::shared_ptr<graphics::RendererPool>& rendererPool, std::stack<std::unique_ptr<State>>& states)
     : State{window, inputManager, rendererPool, states}

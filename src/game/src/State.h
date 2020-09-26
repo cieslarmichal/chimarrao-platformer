@@ -17,7 +17,7 @@ class Event;
 
 namespace game
 {
-class State : public gui::WindowObserver
+class State : public window::WindowObserver
 {
 public:
     explicit State(std::shared_ptr<gui::Window>, std::shared_ptr<input::InputManager>,
@@ -30,7 +30,7 @@ public:
     void windowSizeChanged(const utils::Vector2u& windowSize) override;
 
 protected:
-    std::shared_ptr<gui::Window> window;
+    std::shared_ptr<window::Window> window;
     std::shared_ptr<input::InputManager> inputManager;
     std::shared_ptr<graphics::RendererPool> rendererPool;
     std::stack<std::unique_ptr<State>>& states;

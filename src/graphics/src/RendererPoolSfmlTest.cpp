@@ -170,6 +170,34 @@ TEST_F(RendererPoolSfmlTest, renderShapesAndTexts)
     rendererPool.renderAll();
 }
 
+ACTION_P(addGraphicsIdToVector, graphicsIds)
+{
+    const auto& rectangleShape = dynamic_cast<const RectangleShape&>(arg0);
+    graphicsIds->push_back(rectangleShape.getGraphicsId());
+}
+
+TEST_F(RendererPoolSfmlTest, renderShapesInLayers)
+{
+    const auto firstLayerGraphicsId =
+        rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::First);
+    const auto thirdLayerGraphicsId =
+        rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::Third);
+    const auto backgroundGraphicsId =
+        rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::Background);
+    const auto secondLayerGraphicsId =
+        rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::Second);
+    std::vector<GraphicsId> graphicsIds;
+    EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
+    EXPECT_CALL(*contextRenderer, setView());
+    EXPECT_CALL(*contextRenderer, draw(_)).Times(4).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
+
+    rendererPool.renderAll();
+    EXPECT_EQ(graphicsIds[0], backgroundGraphicsId);
+    EXPECT_EQ(graphicsIds[1], thirdLayerGraphicsId);
+    EXPECT_EQ(graphicsIds[2], secondLayerGraphicsId);
+    EXPECT_EQ(graphicsIds[3], firstLayerGraphicsId);
+}
+
 TEST_F(RendererPoolSfmlTest, releasedShapeShouldNotBeRendered)
 {
     const auto id = rendererPool.acquire(size1, position, color);

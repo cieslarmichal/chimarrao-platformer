@@ -5,6 +5,7 @@ add_subdirectory(gui)
 add_subdirectory(input)
 add_subdirectory(components)
 add_subdirectory(game)
+add_subdirectory(window)
 
 add_executable(chimarrao-platformer main.cpp)
 

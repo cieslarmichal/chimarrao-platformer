@@ -3,7 +3,7 @@
 namespace game
 {
 
-State::State(std::shared_ptr<gui::Window> windowInit,
+State::State(std::shared_ptr<window::Window> windowInit,
                      std::shared_ptr<input::InputManager> inputManagerInit,
                      std::shared_ptr<graphics::RendererPool> rendererPoolInit, std::stack<std::unique_ptr<State>>& statesInit)
     : window{std::move(windowInit)},

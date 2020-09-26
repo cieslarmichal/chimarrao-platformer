@@ -4,20 +4,21 @@
 #include "DefaultInputObservationHandler.h"
 #include "GameState.h"
 #include "GraphicsFactory.h"
-#include "GuiFactory.h"
 #include "MainMenuState.h"
 #include "Vector.h"
+#include "WindowFactory.h"
 
 namespace game
 {
 Game::Game() : dt{0}
 {
     auto graphicsFactory = graphics::GraphicsFactory::createGraphicsFactory();
-    auto guiFactory = gui::GuiFactory::createGuiFactory();
+    auto guiFactory = window::WindowFactory::createGuiFactory();
 
     auto windowSize = utils::Vector2u{800, 600};
     window = guiFactory->createWindow(windowSize, "chimarrao-platformer");
-    const utils::Vector2u mapSize{40, 40};
+
+    const utils::Vector2u mapSize{80, 60};
 
     rendererPool = graphicsFactory->createRendererPool(windowSize, mapSize);
     inputManager = std::make_unique<input::DefaultInputManager>(

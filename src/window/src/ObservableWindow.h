@@ -2,7 +2,7 @@
 
 #include "WindowObserver.h"
 
-namespace gui
+namespace window
 {
 class ObservableWindow
 {

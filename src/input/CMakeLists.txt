@@ -5,7 +5,7 @@ set(SOURCES
         )
 
 add_library(input ${SOURCES})
-target_link_libraries(input PUBLIC utils gui)
+target_link_libraries(input PUBLIC utils window)
 target_include_directories(input PUBLIC src)
 
 set(UT_SOURCES

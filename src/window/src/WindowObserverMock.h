@@ -2,7 +2,7 @@
 
 #include "gmock/gmock.h"
 
-namespace gui
+namespace window
 {
 class WindowObserverMock
 {

@@ -8,17 +8,17 @@ namespace graphics
 {
 namespace
 {
-static auto& getShapeByPosition(std::vector<RectangleShape>& shapes,
-                                std::vector<RectangleShape>::const_iterator position)
+static auto& getShapeByPosition(std::vector<LayeredShape>& shapes,
+                                std::vector<LayeredShape>::const_iterator position)
 {
-    const auto distance = std::vector<RectangleShape>::size_type(std::distance(shapes.cbegin(), position));
+    const auto distance = std::vector<LayeredShape>::size_type(std::distance(shapes.cbegin(), position));
     return shapes.at(distance);
 }
 
-static auto& getShapeByPosition(const std::vector<RectangleShape>& shapes,
-                                std::vector<RectangleShape>::const_iterator position)
+static auto& getShapeByPosition(const std::vector<LayeredShape>& shapes,
+                                std::vector<LayeredShape>::const_iterator position)
 {
-    const auto distance = std::vector<RectangleShape>::size_type(std::distance(shapes.cbegin(), position));
+    const auto distance = std::vector<LayeredShape>::size_type(std::distance(shapes.cbegin(), position));
     return shapes.at(distance);
 }
 
@@ -47,17 +47,18 @@ RendererPoolSfml::RendererPoolSfml(std::unique_ptr<ContextRenderer> contextRende
 }
 
 GraphicsId RendererPoolSfml::acquire(const utils::Vector2f& size, const utils::Vector2f& position,
-                                     const Color& color)
+                                     const Color& color, VisibilityLayer layer)
 {
     auto id = GraphicsIdGenerator::generateId();
-    shapes.emplace_back(id, size, position, color);
+    auto item = LayeredShape{layer, RectangleShape{id, size, position, color}};
+    layeredShapes.insert(upper_bound(layeredShapes.begin(), layeredShapes.end(), item), item);
     return id;
 }
 
 GraphicsId RendererPoolSfml::acquire(const utils::Vector2f& size, const utils::Vector2f& position,
-                                     const TexturePath& path)
+                                     const TexturePath& path, VisibilityLayer layer)
 {
-    const auto id = acquire(size, position, Color::Red);
+    const auto id = acquire(size, position, Color::White, layer);
     setTexture(id, path);
     return id;
 }
@@ -86,9 +87,9 @@ void RendererPoolSfml::renderAll()
     }
     contextRenderer->setView();
 
-    for (const auto& shape : shapes)
+    for (const auto& layeredShape : layeredShapes)
     {
-        contextRenderer->draw(shape);
+        contextRenderer->draw(layeredShape.shape);
     }
 
     for (const auto& text : texts)
@@ -99,10 +100,10 @@ void RendererPoolSfml::renderAll()
 
 void RendererPoolSfml::setPosition(const GraphicsId& id, const utils::Vector2f& newPosition)
 {
-    if (const auto shapeIter = findShapePosition(id); shapeIter != shapes.end())
+    if (const auto shapeIter = findShapePosition(id); shapeIter != layeredShapes.end())
     {
-        auto& shape = getShapeByPosition(shapes, shapeIter);
-        shape.setPosition(newPosition);
+        auto& layeredShape = getShapeByPosition(layeredShapes, shapeIter);
+        layeredShape.shape.setPosition(newPosition);
         return;
     }
 
@@ -115,10 +116,10 @@ void RendererPoolSfml::setPosition(const GraphicsId& id, const utils::Vector2f& 
 
 boost::optional<utils::Vector2f> RendererPoolSfml::getPosition(const GraphicsId& id)
 {
-    if (const auto shapeIter = findShapePosition(id); shapeIter != shapes.end())
+    if (const auto shapeIter = findShapePosition(id); shapeIter != layeredShapes.end())
     {
-        const auto& shape = getShapeByPosition(shapes, shapeIter);
-        return shape.getPosition();
+        const auto& layeredShape = getShapeByPosition(layeredShapes, shapeIter);
+        return layeredShape.shape.getPosition();
     }
 
     if (const auto textIter = findTextPosition(id); textIter != texts.end())
@@ -134,28 +135,28 @@ void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path,
 {
     const sf::Texture& texture = textureStorage->getTexture(path);
 
-    if (const auto shapeIter = findShapePosition(id); shapeIter != shapes.end())
+    if (const auto shapeIter = findShapePosition(id); shapeIter != layeredShapes.end())
     {
-        auto& shape = getShapeByPosition(shapes, shapeIter);
-        shape.setTexture(&texture);
-        shape.setScale(scale);
+        auto& layeredShape = getShapeByPosition(layeredShapes, shapeIter);
+        layeredShape.shape.setTexture(&texture);
+        layeredShape.shape.setScale(scale);
         if (scale.x < 0)
         {
-            shape.setOrigin(shape.getGlobalBounds().width / (-scale.x), 0);
+            layeredShape.shape.setOrigin(layeredShape.shape.getGlobalBounds().width / (-scale.x), 0);
         }
         else
         {
-            shape.setOrigin(0, 0);
+            layeredShape.shape.setOrigin(0, 0);
         }
     }
 }
 
 void RendererPoolSfml::setColor(const GraphicsId& id, const Color& color)
 {
-    if (const auto shapeIter = findShapePosition(id); shapeIter != shapes.end())
+    if (const auto shapeIter = findShapePosition(id); shapeIter != layeredShapes.end())
     {
-        auto& shape = getShapeByPosition(shapes, shapeIter);
-        shape.setFillColor(color);
+        auto& shape = getShapeByPosition(layeredShapes, shapeIter);
+        shape.shape.setFillColor(color);
     }
 
     if (const auto textIter = findTextPosition(id); textIter != texts.end())
@@ -173,11 +174,12 @@ void RendererPoolSfml::setRenderingSize(const utils::Vector2u& renderingSize)
 
 void RendererPoolSfml::cleanUnusedShapes()
 {
-    shapes.erase(std::remove_if(shapes.begin(), shapes.end(),
-                                [&](const RectangleShape& shape) {
-                                    return graphicsObjectsToRemove.count(shape.getGraphicsId());
-                                }),
-                 shapes.end());
+    layeredShapes.erase(std::remove_if(layeredShapes.begin(), layeredShapes.end(),
+                                       [&](const LayeredShape& layeredShape) {
+                                           return graphicsObjectsToRemove.count(
+                                               layeredShape.shape.getGraphicsId());
+                                       }),
+                        layeredShapes.end());
 
     texts.erase(
         std::remove_if(texts.begin(), texts.end(),
@@ -187,12 +189,13 @@ void RendererPoolSfml::cleanUnusedShapes()
     graphicsObjectsToRemove.clear();
 }
 
-std::vector<RectangleShape>::const_iterator
+std::vector<LayeredShape>::const_iterator
 RendererPoolSfml::findShapePosition(const GraphicsId& graphicsIdToFind) const
 {
-    return std::find_if(shapes.begin(), shapes.end(), [&graphicsIdToFind](const RectangleShape& shape) {
-        return shape.getGraphicsId() == graphicsIdToFind;
-    });
+    return std::find_if(layeredShapes.begin(), layeredShapes.end(),
+                        [&graphicsIdToFind](const LayeredShape& layeredShape) {
+                            return layeredShape.shape.getGraphicsId() == graphicsIdToFind;
+                        });
 }
 
 std::vector<Text>::const_iterator RendererPoolSfml::findTextPosition(const GraphicsId& graphicsIdToFind) const
