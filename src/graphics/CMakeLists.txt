@@ -28,3 +28,5 @@ set(UT_SOURCES
 
 add_executable(graphicsUT ${UT_SOURCES})
 target_link_libraries(graphicsUT PUBLIC gtest_main gmock graphics)
+
+add_test(graphicsUT graphicsUT --gtest_color=yes)

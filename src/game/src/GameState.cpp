@@ -14,15 +14,15 @@ namespace game
 
 GameState::GameState(const std::shared_ptr<gui::Window>& windowInit,
                      const std::shared_ptr<input::InputManager>& inputManagerInit,
-                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit)
-    : State{windowInit, inputManagerInit, rendererPoolInit}
+                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit, std::stack<std::unique_ptr<State>>& states)
+    : State{windowInit, inputManagerInit, rendererPoolInit, states}
 {
     animations::DefaultAnimatorSettingsRepository settingsRepository{
         std::make_unique<animations::AnimatorSettingsYamlReader>()};
 
     player = std::make_shared<components::ComponentOwner>(utils::Vector2f{10, 10});
     auto graphicsComponent = player->addComponent<components::GraphicsComponent>(
-        rendererPool, utils::Vector2f{50, 50}, utils::Vector2f{10, 10});
+        rendererPool, utils::Vector2f{10, 10}, utils::Vector2f{10, 10});
     auto graphicsId = graphicsComponent->getGraphicsId();
     player->addComponent<components::KeyboardMovementComponent>(inputManager);
     auto playerAnimatorSettings = settingsRepository.getAnimatorSettings("player");
