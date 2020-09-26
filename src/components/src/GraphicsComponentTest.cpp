@@ -17,12 +17,17 @@ class GraphicsComponentTest : public Test
 public:
     void expectCreateGraphicsComponent()
     {
-        EXPECT_CALL(*rendererPool, acquire(size, position1, Color::Red)).WillOnce(Return(graphicsId));
+        EXPECT_CALL(*rendererPool, acquire(size, position1, Color::Red, VisibilityLayer::First)).WillOnce(Return(graphicsId));
     }
 
     std::shared_ptr<GraphicsComponent> createGraphicsComponent()
     {
         return std::make_shared<GraphicsComponent>(&componentOwner, rendererPool, size, position1);
+    }
+
+    std::shared_ptr<GraphicsComponent> createGraphicsComponentWithTexturePath()
+    {
+        return std::make_shared<GraphicsComponent>(&componentOwner, rendererPool, size, position1, texturePath);
     }
 
     const utils::Vector2f size{0, 10};
@@ -33,13 +38,21 @@ public:
         std::make_shared<StrictMock<RendererPoolMock>>();
     ComponentOwner componentOwner{position1};
     utils::DeltaTime deltaTime{1};
+    graphics::TexturePath texturePath{"/path/to/texture"};
 };
 
 TEST_F(GraphicsComponentTest, createGraphicsComponent_shouldCreateGraphicsShape)
 {
-    EXPECT_CALL(*rendererPool, acquire(size, position1, Color::Red)).WillOnce(Return(graphicsId));
+    EXPECT_CALL(*rendererPool, acquire(size, position1, Color::Red, VisibilityLayer::First)).WillOnce(Return(graphicsId));
 
     createGraphicsComponent();
+}
+
+TEST_F(GraphicsComponentTest, createGraphicsComponent_shouldCreateGraphicsShapeWithTexturePath)
+{
+    EXPECT_CALL(*rendererPool, acquire(size, position1, texturePath, VisibilityLayer::First)).WillOnce(Return(graphicsId));
+
+    createGraphicsComponentWithTexturePath();
 }
 
 TEST_F(GraphicsComponentTest, getGraphicsId_shouldReturnGraphicsIdCreatedWithConstructionOfComponent)

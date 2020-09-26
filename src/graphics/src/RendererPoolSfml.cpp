@@ -47,7 +47,7 @@ RendererPoolSfml::RendererPoolSfml(std::unique_ptr<ContextRenderer> contextRende
 }
 
 GraphicsId RendererPoolSfml::acquire(const utils::Vector2f& size, const utils::Vector2f& position,
-                                     const Color& color, Layer layer)
+                                     const Color& color, VisibilityLayer layer)
 {
     auto id = GraphicsIdGenerator::generateId();
     auto item = LayeredShape{layer, RectangleShape{id, size, position, color}};
@@ -56,9 +56,9 @@ GraphicsId RendererPoolSfml::acquire(const utils::Vector2f& size, const utils::V
 }
 
 GraphicsId RendererPoolSfml::acquire(const utils::Vector2f& size, const utils::Vector2f& position,
-                                     const TexturePath& path, Layer layer)
+                                     const TexturePath& path, VisibilityLayer layer)
 {
-    const auto id = acquire(size, position, Color::Red, layer);
+    const auto id = acquire(size, position, Color::White, layer);
     setTexture(id, path);
     return id;
 }

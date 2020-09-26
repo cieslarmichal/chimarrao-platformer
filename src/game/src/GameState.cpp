@@ -22,7 +22,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
 
     player = std::make_shared<components::ComponentOwner>(utils::Vector2f{10, 10});
     auto graphicsComponent = player->addComponent<components::GraphicsComponent>(
-        rendererPool, utils::Vector2f{7.5, 7.5}, utils::Vector2f{10, 10});
+        rendererPool, utils::Vector2f{7, 7}, utils::Vector2f{10, 10}, graphics::VisibilityLayer::Second);
     auto graphicsId = graphicsComponent->getGraphicsId();
     player->addComponent<components::KeyboardMovementComponent>(inputManager);
     auto playerAnimatorSettings = settingsRepository.getAnimatorSettings("player");
@@ -32,8 +32,13 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     player->addComponent<components::TextComponent>(rendererPool, utils::Vector2f{10, 10}, "hello",
                                                     utils::getProjectPath("chimarrao-platformer") +
                                                         "resources/fonts/VeraMono.ttf",
-                                                    13, graphics::Color::Black,utils::Vector2f{1.5, -1.5});
+                                                    13, graphics::Color::Black, utils::Vector2f{1.5, -1.5});
 
+    background = std::make_shared<components::ComponentOwner>(utils::Vector2f{0, 0});
+    background->addComponent<components::GraphicsComponent>(
+        rendererPool, utils::Vector2f{80, 60}, utils::Vector2f{0, 0},
+        utils::getProjectPath("chimarrao-platformer") + "resources/BG/background_glacial_mountains.png",
+        graphics::VisibilityLayer::Background);
     initialize();
 }
 
