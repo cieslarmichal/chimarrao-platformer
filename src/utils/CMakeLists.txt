@@ -25,3 +25,5 @@ target_include_directories(utils PUBLIC src)
 
 target_link_libraries(utils PUBLIC ${SFML_LIBRARIES})
 target_link_libraries(utilsUT PUBLIC gtest_main gmock utils)
+
+add_test(utilsUT utilsUT --gtest_color=yes)

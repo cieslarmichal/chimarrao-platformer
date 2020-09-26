@@ -5,6 +5,8 @@ set(SOURCES
         src/KeyboardMovementComponent.cpp
         src/AnimationComponent.cpp
         src/TextComponent.cpp
+        src/ClickableComponent.cpp
+        src/HitboxComponent.cpp
         )
 
 add_library(components ${SOURCES})
@@ -18,7 +20,11 @@ set(UT_SOURCES
         src/KeyboardMovementComponentTest.cpp
         src/AnimationComponentTest.cpp
         src/TextComponentTest.cpp
+        src/ClickableComponentTest.cpp
+        src/HitboxComponentTest.cpp
         )
 
 add_executable(componentsUT ${UT_SOURCES})
 target_link_libraries(componentsUT PUBLIC gtest_main gmock components)
+
+add_test(componentsUT componentsUT --gtest_color=yes)

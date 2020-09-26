@@ -17,6 +17,7 @@ Game::Game() : dt{0}
 
     auto windowSize = utils::Vector2u{800, 600};
     window = guiFactory->createWindow(windowSize, "chimarrao-platformer");
+
     const utils::Vector2u mapSize{80, 60};
 
     rendererPool = graphicsFactory->createRendererPool(windowSize, mapSize);
@@ -83,7 +84,7 @@ void Game::render()
 
 void Game::initStates()
 {
-    states.push(std::make_unique<GameState>(window, inputManager, rendererPool));
+    states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
     //    states.push(std::make_unique<MainGameState>(window, inputManager, rendererPool));
 }
 

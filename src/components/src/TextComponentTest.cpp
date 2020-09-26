@@ -17,8 +17,8 @@ class TextComponentTest : public Test
 public:
     void expectCreateTextComponent()
     {
-        EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath,
-                                               characterSize, color)).WillOnce(Return(graphicsId));
+        EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath, characterSize, color))
+            .WillOnce(Return(graphicsId));
     }
 
     std::shared_ptr<TextComponent> createTextComponent()
@@ -49,8 +49,8 @@ public:
 
 TEST_F(TextComponentTest, createTextComponent_shouldCreateGraphicsObject)
 {
-    EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath,
-                                           characterSize, color)).WillOnce(Return(graphicsId));
+    EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath, characterSize, color))
+        .WillOnce(Return(graphicsId));
 
     createTextComponent();
 }
@@ -65,7 +65,8 @@ TEST_F(TextComponentTest, getGraphicsId_shouldReturnGraphicsIdCreatedWithConstru
     ASSERT_EQ(actualGraphicsId, graphicsId);
 }
 
-TEST_F(TextComponentTest, componentWithoutTransformOffset_lateUpdate_shouldSynchronizePositionWithTransformComponent)
+TEST_F(TextComponentTest,
+       componentWithoutTransformOffset_lateUpdate_shouldSynchronizePositionWithTransformComponent)
 {
     expectCreateTextComponent();
     auto textComponent = createTextComponent();
@@ -75,7 +76,9 @@ TEST_F(TextComponentTest, componentWithoutTransformOffset_lateUpdate_shouldSynch
     textComponent->lateUpdate(deltaTime);
 }
 
-TEST_F(TextComponentTest, componentWithTransformOffset_lateUpdate_shouldSynchronizePositionWithTransformComponentConsideringTransformOffset)
+TEST_F(
+    TextComponentTest,
+    componentWithTransformOffset_lateUpdate_shouldSynchronizePositionWithTransformComponentConsideringTransformOffset)
 {
     expectCreateTextComponent();
     auto textComponent = createTextComponentWithOffset();
