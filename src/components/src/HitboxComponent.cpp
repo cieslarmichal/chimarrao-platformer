@@ -7,7 +7,7 @@ namespace components
 
 HitboxComponent::HitboxComponent(ComponentOwner* ownerInit, const utils::Vector2f& sizeInit,
                                  const utils::Vector2f& offsetInit)
-    : Component(ownerInit), offset{offsetInit}
+    : Component(ownerInit), size{sizeInit}, offset{offsetInit}
 {
 }
 

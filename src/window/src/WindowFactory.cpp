@@ -5,7 +5,7 @@
 namespace window
 {
 
-std::unique_ptr<WindowFactory> WindowFactory::createGuiFactory()
+std::unique_ptr<WindowFactory> WindowFactory::createWindowFactory()
 {
     return std::make_unique<DefaultWindowFactory>();
 }

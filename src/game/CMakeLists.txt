@@ -13,7 +13,7 @@ set(UT_SOURCES
 
 add_library(game ${SOURCES})
 target_include_directories(game PUBLIC src)
-target_link_libraries(game PUBLIC utils graphics input components gui)
+target_link_libraries(game PUBLIC utils graphics input components)
 
 add_executable(gameUT ${UT_SOURCES})
 target_link_libraries(gameUT PUBLIC gtest_main gmock game)

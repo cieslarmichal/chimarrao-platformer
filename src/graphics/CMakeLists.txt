@@ -13,7 +13,7 @@ set(SOURCES
         )
 
 add_library(graphics ${SOURCES})
-target_link_libraries(graphics PUBLIC utils ${SFML_LIBRARIES})
+target_link_libraries(graphics PUBLIC ${SFML_LIBRARIES} utils window)
 target_include_directories(graphics PUBLIC src)
 
 set(UT_SOURCES
