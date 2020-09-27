@@ -24,8 +24,7 @@ public:
 
     GraphicsId acquire(const utils::Vector2f& size, const utils::Vector2f& position, const Color&,
                        VisibilityLayer = VisibilityLayer::First) override;
-    GraphicsId acquire(const utils::Vector2f& size, const utils::Vector2f& position,
-                       const TexturePath&,
+    GraphicsId acquire(const utils::Vector2f& size, const utils::Vector2f& position, const TexturePath&,
                        VisibilityLayer = VisibilityLayer::First) override;
     GraphicsId acquireText(const utils::Vector2f& position, const std::string& text, const FontPath&,
                            unsigned characterSize, const Color&) override;

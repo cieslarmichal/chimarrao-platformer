@@ -23,6 +23,7 @@ public:
 
 private:
     std::shared_ptr<input::InputManager> inputManager;
+    const input::InputStatus* inputStatus;
     std::shared_ptr<AnimationComponent> animation;
     utils::Vector2f currentMovementSpeed;
     float movementSpeed;

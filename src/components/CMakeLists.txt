@@ -7,6 +7,7 @@ set(SOURCES
         src/TextComponent.cpp
         src/ClickableComponent.cpp
         src/HitboxComponent.cpp
+        src/MouseOverComponent.cpp
         )
 
 add_library(components ${SOURCES})
@@ -22,6 +23,7 @@ set(UT_SOURCES
         src/TextComponentTest.cpp
         src/ClickableComponentTest.cpp
         src/HitboxComponentTest.cpp
+        src/MouseOverComponentTest.cpp
         )
 
 add_executable(componentsUT ${UT_SOURCES})

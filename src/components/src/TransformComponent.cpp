@@ -3,8 +3,8 @@
 namespace components
 {
 
-TransformComponent::TransformComponent(ComponentOwner* owner, const utils::Vector2f& positionInit)
-    : Component{owner}, position{positionInit}
+TransformComponent::TransformComponent(ComponentOwner* ownerInit, const utils::Vector2f& positionInit)
+    : Component{ownerInit}, position{positionInit}
 {
 }
 

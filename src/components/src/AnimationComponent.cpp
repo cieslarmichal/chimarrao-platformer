@@ -2,9 +2,9 @@
 
 namespace components
 {
-AnimationComponent::AnimationComponent(ComponentOwner* owner,
+AnimationComponent::AnimationComponent(ComponentOwner* ownerInit,
                                        std::shared_ptr<animations::Animator> animatorInit)
-    : Component(owner), animator{std::move(animatorInit)}
+    : Component(ownerInit), animator{std::move(animatorInit)}
 {
 }
 

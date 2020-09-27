@@ -17,22 +17,25 @@ class GraphicsComponentTest : public Test
 public:
     void expectCreateGraphicsComponent()
     {
-        EXPECT_CALL(*rendererPool, acquire(size, position1, Color::Red, VisibilityLayer::First)).WillOnce(Return(graphicsId));
+        EXPECT_CALL(*rendererPool, acquire(size, position1, Color::Red, VisibilityLayer::First))
+            .WillOnce(Return(graphicsId));
     }
 
     std::shared_ptr<GraphicsComponent> createGraphicsComponent()
     {
-        return std::make_shared<GraphicsComponent>(&componentOwner, rendererPool, size, position1);
+        return std::make_shared<GraphicsComponent>(&componentOwner, rendererPool, size, position1, color);
     }
 
     std::shared_ptr<GraphicsComponent> createGraphicsComponentWithTexturePath()
     {
-        return std::make_shared<GraphicsComponent>(&componentOwner, rendererPool, size, position1, texturePath);
+        return std::make_shared<GraphicsComponent>(&componentOwner, rendererPool, size, position1,
+                                                   texturePath);
     }
 
     const utils::Vector2f size{0, 10};
     const utils::Vector2f position1{0, 10};
     const utils::Vector2f position2{12, 2};
+    const Color color{Color::Red};
     const GraphicsId graphicsId = GraphicsIdGenerator::generateId();
     std::shared_ptr<StrictMock<RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<RendererPoolMock>>();
@@ -43,14 +46,16 @@ public:
 
 TEST_F(GraphicsComponentTest, createGraphicsComponent_shouldCreateGraphicsShape)
 {
-    EXPECT_CALL(*rendererPool, acquire(size, position1, Color::Red, VisibilityLayer::First)).WillOnce(Return(graphicsId));
+    EXPECT_CALL(*rendererPool, acquire(size, position1, Color::Red, VisibilityLayer::First))
+        .WillOnce(Return(graphicsId));
 
     createGraphicsComponent();
 }
 
 TEST_F(GraphicsComponentTest, createGraphicsComponent_shouldCreateGraphicsShapeWithTexturePath)
 {
-    EXPECT_CALL(*rendererPool, acquire(size, position1, texturePath, VisibilityLayer::First)).WillOnce(Return(graphicsId));
+    EXPECT_CALL(*rendererPool, acquire(size, position1, texturePath, VisibilityLayer::First))
+        .WillOnce(Return(graphicsId));
 
     createGraphicsComponentWithTexturePath();
 }

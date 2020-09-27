@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Vector.h"
 #include "ObservableWindow.h"
+#include "Vector.h"
 
 namespace sf
 {

@@ -1,16 +1,18 @@
 #pragma once
 
+#include "ComponentOwner.h"
 #include "State.h"
 #include "Window.h"
-#include "ComponentOwner.h"
 
 namespace game
 {
 class MainMenuState : public State
 {
 public:
-    explicit MainMenuState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
-                           const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&);
+    explicit MainMenuState(const std::shared_ptr<window::Window>&,
+                           const std::shared_ptr<input::InputManager>&,
+                           const std::shared_ptr<graphics::RendererPool>&,
+                           std::stack<std::unique_ptr<State>>&);
 
     void initialize();
     void update(const utils::DeltaTime&) override;
@@ -24,8 +26,10 @@ private:
     void createMapEditorButton();
     void createSettingsButton();
     void createExitButton();
+    void addButton(const utils::Vector2f& position, const std::string& text,
+                   const utils::Vector2f& textOffset, std::function<void(void)> clickAction);
 
-    std::shared_ptr<components::ComponentOwner> background;
-    std::vector<std::shared_ptr<components::ComponentOwner>> buttons;
+    std::unique_ptr<components::ComponentOwner> background;
+    std::vector<std::unique_ptr<components::ComponentOwner>> buttons;
 };
 }

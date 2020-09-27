@@ -17,8 +17,7 @@ class RendererPool
 public:
     virtual ~RendererPool() = default;
 
-    virtual GraphicsId acquire(const utils::Vector2f& size, const utils::Vector2f& position,
-                               const Color&,
+    virtual GraphicsId acquire(const utils::Vector2f& size, const utils::Vector2f& position, const Color&,
                                VisibilityLayer = VisibilityLayer::First) = 0;
     virtual GraphicsId acquire(const utils::Vector2f& size, const utils::Vector2f& position,
                                const TexturePath&, VisibilityLayer = VisibilityLayer::First) = 0;

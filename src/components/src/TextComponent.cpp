@@ -5,11 +5,12 @@
 namespace components
 {
 
-TextComponent::TextComponent(ComponentOwner* owner, std::shared_ptr<graphics::RendererPool> rendererPoolInit,
+TextComponent::TextComponent(ComponentOwner* ownerInit,
+                             std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                              const utils::Vector2f& position, const std::string& text,
                              const graphics::FontPath& fontPath, unsigned characterSize,
                              const graphics::Color& color, const utils::Vector2f& offset)
-    : Component{owner}, rendererPool{std::move(rendererPoolInit)}, transformOffset{offset}
+    : Component{ownerInit}, rendererPool{std::move(rendererPoolInit)}, transformOffset{offset}
 {
     id = rendererPool->acquireText(position, text, fontPath, characterSize, color);
 }

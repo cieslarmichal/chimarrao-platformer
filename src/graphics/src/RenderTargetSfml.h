@@ -5,8 +5,8 @@
 #include <memory>
 
 #include "ContextRenderer.h"
-#include "Window.h"
 #include "Vector.h"
+#include "Window.h"
 
 namespace graphics
 {
@@ -14,7 +14,8 @@ namespace graphics
 class RenderTargetSfml : public ContextRenderer, public sf::RenderTarget
 {
 public:
-    RenderTargetSfml(std::shared_ptr<window::Window>, const utils::Vector2u& windowSize, const utils::Vector2u& areaSize);
+    RenderTargetSfml(std::shared_ptr<window::Window>, const utils::Vector2u& windowSize,
+                     const utils::Vector2u& areaSize);
 
     void initialize() override;
     void clear(const Color&) override;

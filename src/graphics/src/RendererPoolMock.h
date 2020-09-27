@@ -10,9 +10,11 @@ class RendererPoolMock : public RendererPool
 {
 public:
     MOCK_METHOD(GraphicsId, acquire,
-                (const utils::Vector2f& size, const utils::Vector2f& position, const Color&, VisibilityLayer));
+                (const utils::Vector2f& size, const utils::Vector2f& position, const Color&,
+                 VisibilityLayer));
     MOCK_METHOD(GraphicsId, acquire,
-                (const utils::Vector2f& size, const utils::Vector2f& position, const TexturePath&, VisibilityLayer));
+                (const utils::Vector2f& size, const utils::Vector2f& position, const TexturePath&,
+                 VisibilityLayer));
     MOCK_METHOD(GraphicsId, acquireText,
                 (const utils::Vector2f& position, const std::string& text, const FontPath&,
                  unsigned characterSize, const Color&));

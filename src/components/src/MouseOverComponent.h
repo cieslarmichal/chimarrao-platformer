@@ -9,12 +9,12 @@
 
 namespace components
 {
-class ClickableComponent : public Component, public input::InputObserver
+class MouseOverComponent : public Component, public input::InputObserver
 {
 public:
-    ClickableComponent(ComponentOwner*, std::shared_ptr<input::InputManager>,
-                       std::function<void(void)> action);
-    ~ClickableComponent();
+    MouseOverComponent(ComponentOwner*, std::shared_ptr<input::InputManager>,
+                       std::function<void(void)> mouseOverAction, std::function<void(void)> mouseOutAction);
+    ~MouseOverComponent();
 
     void loadDependentComponents() override;
     void update(utils::DeltaTime) override;
@@ -24,7 +24,8 @@ private:
     std::shared_ptr<input::InputManager> inputManager;
     const input::InputStatus* inputStatus;
     std::shared_ptr<HitboxComponent> hitbox;
-    std::function<void(void)> action;
-    bool clicked;
+    std::function<void(void)> mouseOverAction;
+    std::function<void(void)> mouseOutAction;
+    bool mouseOver;
 };
 }

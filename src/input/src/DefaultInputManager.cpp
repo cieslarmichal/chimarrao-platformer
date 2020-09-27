@@ -9,7 +9,8 @@
 
 namespace input
 {
-DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler> handler, std::shared_ptr<window::Window> windowInit)
+DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler> handler,
+                                         std::shared_ptr<window::Window> windowInit)
     : observerHandler{std::move(handler)}, window{std::move(windowInit)}
 {
 }
