@@ -11,7 +11,10 @@ namespace components
 ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
                                        std::shared_ptr<input::InputManager> inputManagerInit,
                                        std::function<void(void)> actionInit)
-    : Component(ownerInit), inputManager{std::move(inputManagerInit)}, action{std::move(actionInit)}
+    : Component(ownerInit),
+      inputManager{std::move(inputManagerInit)},
+      action{std::move(actionInit)},
+      clicked{false}
 {
     inputManager->registerObserver(this);
 }
@@ -26,16 +29,17 @@ void ClickableComponent::loadDependentComponents()
     hitbox = owner->getComponent<HitboxComponent>();
     if (not hitbox)
     {
-        throw exceptions::DependentComponentNotFound{"Hitbox component not found"};
+        throw exceptions::DependentComponentNotFound{"ClickableComponent: Hitbox component not found"};
     }
 }
 
 void ClickableComponent::handleInputStatus(const input::InputStatus& inputStatus)
 {
-    if (inputStatus.isKeyPressed(input::InputKey::MouseLeft) &&
+    if (not clicked && inputStatus.isKeyPressed(input::InputKey::MouseLeft) &&
         hitbox->intersects(inputStatus.getMousePosition()))
     {
         action();
+        clicked = true;
     }
 }
 

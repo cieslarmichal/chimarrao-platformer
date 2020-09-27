@@ -26,7 +26,6 @@ void WindowSfml::update()
 {
     sf::Event event{};
 
-    // TODO: not a place for tracking events
     while (window->pollEvent(event))
     {
         if (event.type == sf::Event::Closed)
@@ -43,6 +42,11 @@ void WindowSfml::update()
 void WindowSfml::close()
 {
     window->close();
+}
+
+void WindowSfml::setView(const sf::View& view)
+{
+    window->setView(view);
 }
 
 utils::Vector2f WindowSfml::getMousePosition() const

@@ -3,6 +3,11 @@
 #include "Vector.h"
 #include "ObservableWindow.h"
 
+namespace sf
+{
+class View;
+}
+
 namespace window
 {
 class Window : public ObservableWindow
@@ -14,6 +19,7 @@ public:
     virtual void display() = 0;
     virtual void update() = 0;
     virtual void close() = 0;
+    virtual void setView(const sf::View&) = 0;
     virtual utils::Vector2f getMousePosition() const = 0;
 };
 }

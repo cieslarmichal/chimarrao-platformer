@@ -9,8 +9,9 @@ namespace
 sf::View getLetterboxView(sf::View view, unsigned windowWidth, unsigned windowHeight);
 }
 
-RenderTargetSfml::RenderTargetSfml(const utils::Vector2u& windowSizeInit, const utils::Vector2u& areaSizeInit)
-    : windowSize{windowSizeInit}, areaSize{areaSizeInit}
+RenderTargetSfml::RenderTargetSfml(std::shared_ptr<window::Window> windowInit,
+                                   const utils::Vector2u& windowSizeInit, const utils::Vector2u& areaSizeInit)
+    : window{std::move(windowInit)}, windowSize{windowSizeInit}, areaSize{areaSizeInit}
 {
 }
 
@@ -34,6 +35,7 @@ void RenderTargetSfml::setView()
     view.setSize(boost::numeric_cast<float>(areaSize.x), boost::numeric_cast<float>(areaSize.y));
     view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
     view = getLetterboxView(view, windowSize.x, windowSize.y);
+    window->setView(view);
 
     sf::RenderTarget::setView(view);
 }

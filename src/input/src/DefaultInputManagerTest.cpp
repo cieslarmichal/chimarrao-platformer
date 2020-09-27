@@ -20,7 +20,7 @@ class DefaultInputManagerTest : public Test
 public:
     std::shared_ptr<StrictMock<InputObserverMock>> observer1 =
         std::make_shared<StrictMock<InputObserverMock>>();
-    std::shared_ptr<StrictMock<window::WindowMock>> window = std::make_shared<StrictMock<gui::WindowMock>>();
+    std::shared_ptr<StrictMock<window::WindowMock>> window = std::make_shared<StrictMock<window::WindowMock>>();
     std::unique_ptr<InputObservationHandlerMock> observerHandlerInit =
         std::make_unique<StrictMock<InputObservationHandlerMock>>();
     InputObservationHandlerMock* observerHandler = observerHandlerInit.get();
