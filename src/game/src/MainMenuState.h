@@ -19,6 +19,12 @@ public:
     std::string getName() const override;
 
 private:
+    void createBackground();
+    void createPlayGameButton();
+    void createMapEditorButton();
+    void createSettingsButton();
+    void createExitButton();
+
     std::shared_ptr<components::ComponentOwner> background;
     std::vector<std::shared_ptr<components::ComponentOwner>> buttons;
 };
