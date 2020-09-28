@@ -73,8 +73,9 @@ public:
 TEST_F(ClickableComponentTest, givenMousePositionOutsideHitboxAndLeftMouseKeyNotClicked_shouldNotCallAction)
 {
     const auto inputStatus = prepareInputStatus(positionOutsideTarget);
-
     clickableComponent.handleInputStatus(inputStatus);
+
+    clickableComponent.update(deltaTime);
 
     ASSERT_FALSE(actionPerformed());
 }
@@ -82,8 +83,9 @@ TEST_F(ClickableComponentTest, givenMousePositionOutsideHitboxAndLeftMouseKeyNot
 TEST_F(ClickableComponentTest, givenMousePositionOutsideHitboxAndLeftMouseKeyClicked_shouldNotCallAction)
 {
     const auto mouseLeftKeyInputStatus = prepareInputStatus(InputKey::MouseLeft, positionOutsideTarget);
-
     clickableComponent.handleInputStatus(mouseLeftKeyInputStatus);
+
+    clickableComponent.update(deltaTime);
 
     ASSERT_FALSE(actionPerformed());
 }
@@ -91,8 +93,9 @@ TEST_F(ClickableComponentTest, givenMousePositionOutsideHitboxAndLeftMouseKeyCli
 TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxAndLeftMouseKeyNotClicked_shouldNotCallAction)
 {
     const auto inputStatus = prepareInputStatus(positionInsideTarget);
-
     clickableComponent.handleInputStatus(inputStatus);
+
+    clickableComponent.update(deltaTime);
 
     ASSERT_FALSE(actionPerformed());
 }
@@ -100,8 +103,9 @@ TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxAndLeftMouseKeyNotC
 TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxRightMouseKeyClicked_shouldNotCallAction)
 {
     const auto mouseRightKeyInputStatus = prepareInputStatus(InputKey::MouseRight, positionInsideTarget);
-
     clickableComponent.handleInputStatus(mouseRightKeyInputStatus);
+
+    clickableComponent.update(deltaTime);
 
     ASSERT_FALSE(actionPerformed());
 }
@@ -109,8 +113,9 @@ TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxRightMouseKeyClicke
 TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxLeftMouseKeyClicked_shouldCallAction)
 {
     const auto mouseLeftInputStatus = prepareInputStatus(InputKey::MouseLeft, positionInsideTarget);
-
     clickableComponent.handleInputStatus(mouseLeftInputStatus);
+
+    clickableComponent.update(deltaTime);
 
     ASSERT_TRUE(actionPerformed());
 }

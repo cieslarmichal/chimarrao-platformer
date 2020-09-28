@@ -4,6 +4,7 @@
 #include <string>
 #include <unordered_map>
 
+#include "StringHelper.h"
 #include "exceptions/AnimationDirectionNotFound.h"
 
 namespace animations
@@ -17,7 +18,7 @@ enum class AnimationDirection
 inline std::string toString(AnimationDirection animationDirection)
 {
     std::unordered_map<AnimationDirection, std::string> animationDirectionToString{
-        {AnimationDirection::Right, "right"}, {AnimationDirection::Left, "left"}};
+        {AnimationDirection::Right, "Right"}, {AnimationDirection::Left, "Left"}};
 
     try
     {
@@ -31,12 +32,14 @@ inline std::string toString(AnimationDirection animationDirection)
 
 inline AnimationDirection toAnimationDirection(const std::string& animationDirectionAsString)
 {
+    const auto animationDirectionLowerString = utils::getLowerCases(animationDirectionAsString);
+
     std::unordered_map<std::string, AnimationDirection> stringToAnimationDirection{
         {"right", AnimationDirection::Right}, {"left", AnimationDirection::Left}};
 
     try
     {
-        return stringToAnimationDirection.at(animationDirectionAsString);
+        return stringToAnimationDirection.at(animationDirectionLowerString);
     }
     catch (const std::out_of_range& e)
     {

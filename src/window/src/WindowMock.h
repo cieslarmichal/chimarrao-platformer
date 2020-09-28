@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SFML/Graphics/View.hpp"
 #include "gmock/gmock.h"
 
 #include "Window.h"

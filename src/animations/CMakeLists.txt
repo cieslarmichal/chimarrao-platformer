@@ -15,6 +15,7 @@ set(UT_SOURCES
         src/PlayerAnimatorTest.cpp
         src/AnimatorSettingsYamlReaderTest.cpp
         src/AnimationTypeTest.cpp
+        src/AnimationDirectionTest.cpp
         src/AnimationsFromSettingsLoaderTest.cpp
         src/DefaultAnimatorSettingsRepositoryTest.cpp
         )

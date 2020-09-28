@@ -43,20 +43,18 @@ public:
         return inputStatus;
     }
 
-    void expectRightKeyPressed()
+    void expectRightKeyPressed(const InputStatus& inputStatus)
     {
-        const auto rightKeyInputStatus = prepareInputStatus(InputKey::Right);
         EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Right));
         EXPECT_CALL(*animator, setAnimation(AnimationType::Walk));
-        keyboardMovementComponent.handleInputStatus(rightKeyInputStatus);
+        keyboardMovementComponent.handleInputStatus(inputStatus);
     }
 
-    void expectLeftKeyPressed()
+    void expectLeftKeyPressed(const InputStatus& inputStatus)
     {
-        const auto leftKeyInputStatus = prepareInputStatus(InputKey::Left);
         EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Left));
         EXPECT_CALL(*animator, setAnimation(AnimationType::Walk));
-        keyboardMovementComponent.handleInputStatus(leftKeyInputStatus);
+        keyboardMovementComponent.handleInputStatus(inputStatus);
     }
 
     const float movementSpeed{10.0};
@@ -71,29 +69,32 @@ public:
 TEST_F(KeyboardMovementComponentTest, givenInputStatusWithNoKeyPressed_shouldSetAnimationTypeToIdle)
 {
     const auto noKeyInputStatus = InputStatus{};
+    keyboardMovementComponent.handleInputStatus(noKeyInputStatus);
     EXPECT_CALL(*animator, setAnimation(AnimationType::Idle));
 
-    keyboardMovementComponent.handleInputStatus(noKeyInputStatus);
+    keyboardMovementComponent.update(deltaTime);
 }
 
 TEST_F(KeyboardMovementComponentTest,
        givenInputStatusWithRightKeyPressed_shouldSetAnimationDirectionToRightAndSetAnimationTypeToWalk)
 {
-    const auto rightKeyInputStatus = prepareInputStatus(InputKey::Right);
+    InputStatus rightKeyInputStatus = prepareInputStatus(InputKey::Right);
+    keyboardMovementComponent.handleInputStatus(rightKeyInputStatus);
     EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Right));
     EXPECT_CALL(*animator, setAnimation(AnimationType::Walk));
 
-    keyboardMovementComponent.handleInputStatus(rightKeyInputStatus);
+    keyboardMovementComponent.update(deltaTime);
 }
 
 TEST_F(KeyboardMovementComponentTest,
        givenInputStatusWithLeftKeyPressed_shouldSetAnimationDirectionToLeftAndSetAnimationTypeToWalk)
 {
     const auto leftKeyInputStatus = prepareInputStatus(InputKey::Left);
+    keyboardMovementComponent.handleInputStatus(leftKeyInputStatus);
     EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Left));
     EXPECT_CALL(*animator, setAnimation(AnimationType::Walk));
 
-    keyboardMovementComponent.handleInputStatus(leftKeyInputStatus);
+    keyboardMovementComponent.update(deltaTime);
 }
 
 TEST_F(KeyboardMovementComponentTest, setMovementSpeed)
@@ -106,7 +107,8 @@ TEST_F(KeyboardMovementComponentTest, setMovementSpeed)
 TEST_F(KeyboardMovementComponentTest,
        givenRightKeyPressed_update_shouldAddPositionChangeFromInputToTransformComponent)
 {
-    expectRightKeyPressed();
+    InputStatus rightKeyInputStatus = prepareInputStatus(InputKey::Right);
+    expectRightKeyPressed(rightKeyInputStatus);
     const auto positionBeforeUpdate = componentOwner.transform->getPosition();
 
     keyboardMovementComponent.update(deltaTime);
@@ -121,7 +123,8 @@ TEST_F(KeyboardMovementComponentTest,
 TEST_F(KeyboardMovementComponentTest,
        givenLeftKeyPressed_update_shouldAddPositionChangeFromInputToTransformComponent)
 {
-    expectLeftKeyPressed();
+    const auto leftKeyInputStatus = prepareInputStatus(InputKey::Left);
+    expectLeftKeyPressed(leftKeyInputStatus);
     const auto positionBeforeUpdate = componentOwner.transform->getPosition();
 
     keyboardMovementComponent.update(deltaTime);

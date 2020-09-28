@@ -9,6 +9,7 @@ target_link_libraries(input PUBLIC utils window)
 target_include_directories(input PUBLIC src)
 
 set(UT_SOURCES
+        src/InputKeyTest.cpp
         src/InputStatusTest.cpp
         src/DefaultInputManagerTest.cpp
         src/DefaultInputObservationHandlerTest.cpp

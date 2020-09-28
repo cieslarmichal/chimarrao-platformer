@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ostream>
+
 #include "BitMask.h"
 #include "InputKey.h"
 #include "Vector.h"
@@ -22,4 +24,5 @@ private:
 };
 
 bool operator==(const InputStatus&, const InputStatus&);
+std::ostream& operator<<(std::ostream& os, const InputStatus&);
 }

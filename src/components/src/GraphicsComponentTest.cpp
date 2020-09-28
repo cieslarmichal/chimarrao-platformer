@@ -17,8 +17,13 @@ class GraphicsComponentTest : public Test
 public:
     void expectCreateGraphicsComponent()
     {
-        EXPECT_CALL(*rendererPool, acquire(size, position1, Color::Red, VisibilityLayer::First))
+        EXPECT_CALL(*rendererPool, acquire(size, position1, color, VisibilityLayer::First))
             .WillOnce(Return(graphicsId));
+    }
+
+    void expectReleaseGraphicsId()
+    {
+        EXPECT_CALL(*rendererPool, release(graphicsId));
     }
 
     std::shared_ptr<GraphicsComponent> createGraphicsComponent()
@@ -46,10 +51,12 @@ public:
 
 TEST_F(GraphicsComponentTest, createGraphicsComponent_shouldCreateGraphicsShape)
 {
-    EXPECT_CALL(*rendererPool, acquire(size, position1, Color::Red, VisibilityLayer::First))
+    EXPECT_CALL(*rendererPool, acquire(size, position1, color, VisibilityLayer::First))
         .WillOnce(Return(graphicsId));
 
-    createGraphicsComponent();
+    const auto graphicsComponent = createGraphicsComponent();
+
+    expectReleaseGraphicsId();
 }
 
 TEST_F(GraphicsComponentTest, createGraphicsComponent_shouldCreateGraphicsShapeWithTexturePath)
@@ -57,25 +64,30 @@ TEST_F(GraphicsComponentTest, createGraphicsComponent_shouldCreateGraphicsShapeW
     EXPECT_CALL(*rendererPool, acquire(size, position1, texturePath, VisibilityLayer::First))
         .WillOnce(Return(graphicsId));
 
-    createGraphicsComponentWithTexturePath();
+    const auto graphicsComponent = createGraphicsComponentWithTexturePath();
+
+    expectReleaseGraphicsId();
 }
 
 TEST_F(GraphicsComponentTest, getGraphicsId_shouldReturnGraphicsIdCreatedWithConstructionOfComponent)
 {
     expectCreateGraphicsComponent();
-    auto graphicsComponent = createGraphicsComponent();
+    const auto graphicsComponent = createGraphicsComponent();
 
     const auto actualGraphicsId = graphicsComponent->getGraphicsId();
 
     ASSERT_EQ(actualGraphicsId, graphicsId);
+    expectReleaseGraphicsId();
 }
 
 TEST_F(GraphicsComponentTest, lateUpdate_shouldSynchronizePositionWithTransformComponent)
 {
     expectCreateGraphicsComponent();
-    auto graphicsComponent = createGraphicsComponent();
+    const auto graphicsComponent = createGraphicsComponent();
     componentOwner.transform->setPosition(position2);
     EXPECT_CALL(*rendererPool, setPosition(graphicsId, position2));
 
     graphicsComponent->lateUpdate(deltaTime);
+
+    expectReleaseGraphicsId();
 }

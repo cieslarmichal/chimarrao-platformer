@@ -98,8 +98,9 @@ TEST_F(MouseOverComponentTest, givenMousePositionOutsideHitbox_shouldNotCallAnyA
 TEST_F(MouseOverComponentTest, givenMousePositionInsideHitbox_shouldCallMouseOverAction)
 {
     const auto mouseInsideInput = prepareInputStatus(positionInsideTarget1);
-
     mouseOverComponent.handleInputStatus(mouseInsideInput);
+
+    mouseOverComponent.update(deltaTime);
 
     ASSERT_FALSE(mouseWasOut());
     ASSERT_TRUE(mouseWasOver(1));
@@ -112,7 +113,10 @@ TEST_F(MouseOverComponentTest,
     const auto mouseOutsideInput = prepareInputStatus(positionOutsideTarget1);
 
     mouseOverComponent.handleInputStatus(mouseInsideInput);
+    mouseOverComponent.update(deltaTime);
+
     mouseOverComponent.handleInputStatus(mouseOutsideInput);
+    mouseOverComponent.update(deltaTime);
 
     ASSERT_TRUE(mouseWasOut(1));
     ASSERT_TRUE(mouseWasOver(1));
@@ -124,7 +128,10 @@ TEST_F(MouseOverComponentTest, givenMousePositionInsideHitboxTwice_shouldCallMou
     const auto mouseInsideInput2 = prepareInputStatus(positionInsideTarget2);
 
     mouseOverComponent.handleInputStatus(mouseInsideInput1);
+    mouseOverComponent.update(deltaTime);
+
     mouseOverComponent.handleInputStatus(mouseInsideInput2);
+    mouseOverComponent.update(deltaTime);
 
     ASSERT_FALSE(mouseWasOut());
     ASSERT_TRUE(mouseWasOver(1));
@@ -137,8 +144,13 @@ TEST_F(MouseOverComponentTest, givenMousePositionInsideHitboxOutAndAgainInside_s
     const auto mouseInsideInput2 = prepareInputStatus(positionInsideTarget2);
 
     mouseOverComponent.handleInputStatus(mouseInsideInput1);
+    mouseOverComponent.update(deltaTime);
+
     mouseOverComponent.handleInputStatus(mouseOutsideInput);
+    mouseOverComponent.update(deltaTime);
+
     mouseOverComponent.handleInputStatus(mouseInsideInput2);
+    mouseOverComponent.update(deltaTime);
 
     ASSERT_TRUE(mouseWasOut(1));
     ASSERT_TRUE(mouseWasOver(2));
@@ -152,9 +164,16 @@ TEST_F(MouseOverComponentTest, givenMousePositionTwiceOverAndOut_shouldCallMouse
     const auto mouseOutsideInput2 = prepareInputStatus(positionOutsideTarget2);
 
     mouseOverComponent.handleInputStatus(mouseInsideInput1);
+    mouseOverComponent.update(deltaTime);
+
     mouseOverComponent.handleInputStatus(mouseOutsideInput1);
+    mouseOverComponent.update(deltaTime);
+
     mouseOverComponent.handleInputStatus(mouseInsideInput2);
+    mouseOverComponent.update(deltaTime);
+
     mouseOverComponent.handleInputStatus(mouseOutsideInput2);
+    mouseOverComponent.update(deltaTime);
 
     ASSERT_TRUE(mouseWasOut(2));
     ASSERT_TRUE(mouseWasOver(2));
