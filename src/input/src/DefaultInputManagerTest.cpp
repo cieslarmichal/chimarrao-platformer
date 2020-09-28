@@ -22,32 +22,32 @@ public:
         std::make_shared<StrictMock<InputObserverMock>>();
     std::shared_ptr<StrictMock<window::WindowMock>> window =
         std::make_shared<StrictMock<window::WindowMock>>();
-    std::unique_ptr<InputObservationHandlerMock> observerHandlerInit =
+    std::unique_ptr<InputObservationHandlerMock> observationHandlerInit =
         std::make_unique<StrictMock<InputObservationHandlerMock>>();
-    InputObservationHandlerMock* observerHandler = observerHandlerInit.get();
+    InputObservationHandlerMock* observationHandler = observationHandlerInit.get();
 
-    DefaultInputManager inputManager{std::move(observerHandlerInit), window};
+    DefaultInputManager inputManager{std::move(observationHandlerInit), window};
 };
 
 TEST_F(DefaultInputManagerTest,
        readInput_shouldReadMousePositionFromWindowAnddNotifyObserversAboutInputStatus)
 {
     EXPECT_CALL(*window, getMousePosition()).WillOnce(Return(mousePosition));
-    EXPECT_CALL(*observerHandler, notifyObservers(inputStatus));
+    EXPECT_CALL(*observationHandler, notifyObservers(inputStatus));
 
     inputManager.readInput();
 }
 
 TEST_F(DefaultInputManagerTest, shouldRegisterObserver)
 {
-    EXPECT_CALL(*observerHandler, registerObserver(observer1.get()));
+    EXPECT_CALL(*observationHandler, registerObserver(observer1.get()));
 
     inputManager.registerObserver(observer1.get());
 }
 
 TEST_F(DefaultInputManagerTest, shouldRemoveObserver)
 {
-    EXPECT_CALL(*observerHandler, removeObserver(observer1.get()));
+    EXPECT_CALL(*observationHandler, removeObserver(observer1.get()));
 
     inputManager.removeObserver(observer1.get());
 }

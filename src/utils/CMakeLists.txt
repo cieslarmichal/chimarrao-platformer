@@ -19,11 +19,9 @@ set(UT_SOURCES
         )
 
 add_library(utils ${SOURCES})
-add_executable(utilsUT ${UT_SOURCES})
-
 target_include_directories(utils PUBLIC src)
-
 target_link_libraries(utils PUBLIC ${SFML_LIBRARIES})
-target_link_libraries(utilsUT PUBLIC gtest_main gmock utils)
 
+add_executable(utilsUT ${UT_SOURCES})
+target_link_libraries(utilsUT PUBLIC gtest_main gmock utils)
 add_test(utilsUT utilsUT --gtest_color=yes)

@@ -20,7 +20,7 @@ State::~State()
     window->removeObserver(this);
 }
 
-void State::windowSizeChanged(const utils::Vector2u& windowSize)
+void State::handleWindowSizeChange(const utils::Vector2u& windowSize)
 {
     rendererPool->setRenderingSize(windowSize);
 }

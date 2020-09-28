@@ -11,7 +11,7 @@ namespace input
 {
 DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler> handler,
                                          std::shared_ptr<window::Window> windowInit)
-    : observerHandler{std::move(handler)}, window{std::move(windowInit)}
+    : observationHandler{std::move(handler)}, window{std::move(windowInit)}
 {
 }
 
@@ -74,17 +74,17 @@ void DefaultInputManager::readInput()
 
 void DefaultInputManager::registerObserver(InputObserver* observer)
 {
-    observerHandler->registerObserver(observer);
+    observationHandler->registerObserver(observer);
 }
 
 void DefaultInputManager::removeObserver(InputObserver* observer)
 {
-    observerHandler->removeObserver(observer);
+    observationHandler->removeObserver(observer);
 }
 
 void DefaultInputManager::notifyObservers()
 {
-    observerHandler->notifyObservers(inputStatus);
+    observationHandler->notifyObservers(inputStatus);
 }
 
 }

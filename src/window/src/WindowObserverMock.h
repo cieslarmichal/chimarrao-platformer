@@ -4,9 +4,9 @@
 
 namespace window
 {
-class WindowObserverMock
+class WindowObserverMock : public WindowObserver
 {
 public:
-    MOCK_METHOD(void, windowSizeChanged, (const utils::Vector2u& windowSize), (override));
+    MOCK_METHOD(void, handleWindowSizeChange, (const utils::Vector2u& windowSize), (override));
 };
 }

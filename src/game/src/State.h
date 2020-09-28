@@ -29,7 +29,7 @@ public:
     virtual void render() = 0;
     virtual std::string getName() const = 0;
 //    virtual void isActive() const = 0;
-    void windowSizeChanged(const utils::Vector2u& windowSize) override;
+    void handleWindowSizeChange(const utils::Vector2u& windowSize) override;
 
 protected:
     std::shared_ptr<window::Window> window;

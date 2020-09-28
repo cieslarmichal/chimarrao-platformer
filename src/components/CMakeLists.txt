@@ -10,10 +10,6 @@ set(SOURCES
         src/MouseOverComponent.cpp
         )
 
-add_library(components ${SOURCES})
-target_link_libraries(components PUBLIC utils graphics animations input)
-target_include_directories(components PUBLIC src)
-
 set(UT_SOURCES
         src/ComponentOwnerTest.cpp
         src/TransformComponentTest.cpp
@@ -26,7 +22,10 @@ set(UT_SOURCES
         src/MouseOverComponentTest.cpp
         )
 
+add_library(components ${SOURCES})
+target_link_libraries(components PUBLIC utils graphics animations input)
+target_include_directories(components PUBLIC src)
+
 add_executable(componentsUT ${UT_SOURCES})
 target_link_libraries(componentsUT PUBLIC gtest_main gmock components)
-
 add_test(componentsUT componentsUT --gtest_color=yes)
