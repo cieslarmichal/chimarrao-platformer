@@ -34,9 +34,10 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                 utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png",
                 graphics::VisibilityLayer::Invisible);
             clickableTile->addComponent<components::HitboxComponent>(utils::Vector2f{5, 5});
-            clickableTile->addComponent<components::ClickableComponent>(inputManager, [&]() {
+            clickableTile->addComponent<components::ClickableComponent>(inputManager, [=]() {
                 tileMap->setTile({x, y}, 1);
                 graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
+                //std::cout << x << " " << y << "\n";
             });
             clickableTileMap.push_back(std::move(clickableTile));
         }
