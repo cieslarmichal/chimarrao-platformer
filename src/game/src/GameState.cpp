@@ -14,7 +14,8 @@ namespace game
 
 GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<input::InputManager>& inputManagerInit,
-                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit, std::stack<std::unique_ptr<State>>& states)
+                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
+                     std::stack<std::unique_ptr<State>>& states)
     : State{windowInit, inputManagerInit, rendererPoolInit, states}
 {
     animations::DefaultAnimatorSettingsRepository settingsRepository{

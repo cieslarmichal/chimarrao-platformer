@@ -20,7 +20,7 @@ namespace game
 class State : public window::WindowObserver
 {
 public:
-    explicit State(std::shared_ptr<gui::Window>, std::shared_ptr<input::InputManager>,
+    explicit State(std::shared_ptr<window::Window>, std::shared_ptr<input::InputManager>,
                        std::shared_ptr<graphics::RendererPool>, std::stack<std::unique_ptr<State>>&);
     virtual ~State();
 

@@ -23,6 +23,7 @@ public:
     void lateUpdate(utils::DeltaTime) override;
     const graphics::GraphicsId& getGraphicsId();
     void setColor(const graphics::Color&);
+    void setVisibility(graphics::VisibilityLayer);
 
 private:
     std::shared_ptr<graphics::RendererPool> rendererPool;

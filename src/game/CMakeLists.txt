@@ -3,7 +3,7 @@ set(SOURCES
         src/State.cpp
         src/GameState.cpp
         src/MainMenuState.cpp
-        )
+        src/EditorState.cpp src/TileMap.cpp)
 
 set(UT_SOURCES
         src/GameTest.cpp

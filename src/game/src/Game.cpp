@@ -3,6 +3,7 @@
 #include "DefaultInputManager.h"
 #include "DefaultInputObservationHandler.h"
 #include "GameState.h"
+#include "EditorState.h"
 #include "GraphicsFactory.h"
 #include "MainMenuState.h"
 #include "Vector.h"
@@ -84,7 +85,7 @@ void Game::render()
 
 void Game::initStates()
 {
-    states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
+    states.push(std::make_unique<EditorState>(window, inputManager, rendererPool, states));
     //    states.push(std::make_unique<MainGameState>(window, inputManager, rendererPool));
 }
 

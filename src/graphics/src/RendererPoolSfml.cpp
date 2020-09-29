@@ -50,8 +50,8 @@ GraphicsId RendererPoolSfml::acquire(const utils::Vector2f& size, const utils::V
                                      const Color& color, VisibilityLayer layer)
 {
     auto id = GraphicsIdGenerator::generateId();
-    auto item = LayeredShape{layer, RectangleShape{id, size, position, color}};
-    layeredShapes.insert(upper_bound(layeredShapes.begin(), layeredShapes.end(), item), item);
+    auto layeredShape = LayeredShape{layer, RectangleShape{id, size, position, color}};
+    layeredShapes.insert(upper_bound(layeredShapes.begin(), layeredShapes.end(), layeredShape), layeredShape);
     return id;
 }
 
@@ -89,7 +89,10 @@ void RendererPoolSfml::renderAll()
 
     for (const auto& layeredShape : layeredShapes)
     {
-        contextRenderer->draw(layeredShape.shape);
+        if(layeredShape.layer != VisibilityLayer::Invisible)
+        {
+            contextRenderer->draw(layeredShape.shape);
+        }
     }
 
     for (const auto& text : texts)
@@ -133,11 +136,10 @@ boost::optional<utils::Vector2f> RendererPoolSfml::getPosition(const GraphicsId&
 
 void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path, const utils::Vector2f& scale)
 {
-    const sf::Texture& texture = textureStorage->getTexture(path);
-
     if (const auto shapeIter = findShapePosition(id); shapeIter != layeredShapes.end())
     {
         auto& layeredShape = getShapeByPosition(layeredShapes, shapeIter);
+        const sf::Texture& texture = textureStorage->getTexture(path);
         layeredShape.shape.setTexture(&texture);
         layeredShape.shape.setScale(scale);
         if (scale.x < 0)
@@ -148,6 +150,17 @@ void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path,
         {
             layeredShape.shape.setOrigin(0, 0);
         }
+    }
+}
+
+void RendererPoolSfml::setVisibility(const GraphicsId& id, VisibilityLayer layer)
+{
+    if (const auto shapeIter = findShapePosition(id); shapeIter != layeredShapes.end())
+    {
+        auto shape = *shapeIter;
+        shape.layer = layer;
+        layeredShapes.erase(shapeIter);
+        layeredShapes.insert(upper_bound(layeredShapes.begin(), layeredShapes.end(), shape), shape);
     }
 }
 
@@ -204,5 +217,4 @@ std::vector<Text>::const_iterator RendererPoolSfml::findTextPosition(const Graph
         return text.getGraphicsId() == graphicsIdToFind;
     });
 }
-
 }
