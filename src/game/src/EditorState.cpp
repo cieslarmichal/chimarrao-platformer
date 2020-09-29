@@ -70,4 +70,8 @@ void EditorState::render()
 {
     rendererPool->renderAll();
 }
+std::string EditorState::getName() const
+{
+    return "Editor state";
+}
 }
