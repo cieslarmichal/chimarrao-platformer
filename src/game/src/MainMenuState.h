@@ -2,6 +2,7 @@
 
 #include "State.h"
 #include "Window.h"
+#include "ComponentOwner.h"
 
 namespace game
 {
@@ -15,5 +16,10 @@ public:
     void update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
+    std::string getName() const override;
+
+private:
+    std::shared_ptr<components::ComponentOwner> background;
+    std::vector<std::shared_ptr<components::ComponentOwner>> buttons;
 };
 }

@@ -23,5 +23,6 @@ private:
     std::shared_ptr<input::InputManager> inputManager;
     std::shared_ptr<HitboxComponent> hitbox;
     std::function<void(void)> action;
+    bool clicked;
 };
 }

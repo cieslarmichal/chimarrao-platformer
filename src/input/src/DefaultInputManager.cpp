@@ -1,5 +1,6 @@
 #include "DefaultInputManager.h"
 
+#include <SFML/Window/Mouse.hpp>
 #include <utility>
 
 #include "SFML/Window/Keyboard.hpp"
@@ -53,6 +54,16 @@ void DefaultInputManager::readInput()
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
     {
         inputStatus.setKeyPressed(InputKey::Escape);
+    }
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    {
+        inputStatus.setKeyPressed(InputKey::MouseLeft);
+    }
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
+    {
+        inputStatus.setKeyPressed(InputKey::MouseRight);
     }
 
     inputStatus.setMousePosition(window->getMousePosition());

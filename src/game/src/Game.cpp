@@ -14,14 +14,14 @@ namespace game
 Game::Game() : dt{0}
 {
     auto graphicsFactory = graphics::GraphicsFactory::createGraphicsFactory();
-    auto guiFactory = window::WindowFactory::createGuiFactory();
+    auto windowFactory = window::WindowFactory::createWindowFactory();
 
     auto windowSize = utils::Vector2u{800, 600};
-    window = guiFactory->createWindow(windowSize, "chimarrao-platformer");
+    window = windowFactory->createWindow(windowSize, "chimarrao-platformer");
 
     const utils::Vector2u mapSize{80, 60};
 
-    rendererPool = graphicsFactory->createRendererPool(windowSize, mapSize);
+    rendererPool = graphicsFactory->createRendererPool(window, windowSize, mapSize);
     inputManager = std::make_unique<input::DefaultInputManager>(
         std::make_unique<input::DefaultInputObservationHandler>(), window);
     timer.start();
@@ -54,6 +54,7 @@ void Game::update()
     }
     else
     {
+        std::cout<< states.top()->getName() << std::endl;
         states.top()->update(dt);
     }
 }

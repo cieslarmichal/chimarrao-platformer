@@ -24,7 +24,7 @@ void KeyboardMovementComponent::loadDependentComponents()
     animation = owner->getComponent<AnimationComponent>();
     if (not animation)
     {
-        throw exceptions::DependentComponentNotFound{"Animation component not found"};
+        throw exceptions::DependentComponentNotFound{"KeyboardMovementComponent: Animation component not found"};
     }
 }
 
