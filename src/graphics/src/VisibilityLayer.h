@@ -7,6 +7,7 @@ enum class VisibilityLayer
     First,
     Second,
     Third,
-    Background
+    Background,
+    Invisible
 };
 }

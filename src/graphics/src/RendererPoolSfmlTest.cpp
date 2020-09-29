@@ -55,7 +55,6 @@ public:
 class RendererPoolSfmlTest : public RendererPoolSfmlTest_Base
 {
 public:
-    // TODO: test setColor() method
     RendererPoolSfml rendererPool{std::move(contextRendererInit), std::move(textureStorageInit),
                                   std::move(fontStorageInit)};
 };
@@ -192,13 +191,57 @@ TEST_F(RendererPoolSfmlTest, renderShapesInLayers)
     EXPECT_CALL(*contextRenderer, draw(_)).Times(4).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
 
     rendererPool.renderAll();
+
     EXPECT_EQ(graphicsIds[0], backgroundGraphicsId);
     EXPECT_EQ(graphicsIds[1], thirdLayerGraphicsId);
     EXPECT_EQ(graphicsIds[2], secondLayerGraphicsId);
     EXPECT_EQ(graphicsIds[3], firstLayerGraphicsId);
 }
 
-TEST_F(RendererPoolSfmlTest, releasedShapeShouldNotBeRendered)
+TEST_F(RendererPoolSfmlTest, setVisibility_shouldChangeOrderOfShapes)
+{
+    const auto firstLayerGraphicsId =
+        rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::First);
+    const auto secondLayerGraphicsId =
+        rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::Second);
+    const auto backgroundGraphicsId =
+        rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::Background);
+    std::vector<GraphicsId> graphicsIds;
+
+    rendererPool.setVisibility(firstLayerGraphicsId, VisibilityLayer::Third);
+
+    EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
+    EXPECT_CALL(*contextRenderer, setView());
+    EXPECT_CALL(*contextRenderer, draw(_)).Times(3).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
+    rendererPool.renderAll();
+    EXPECT_EQ(graphicsIds[0], backgroundGraphicsId);
+    EXPECT_EQ(graphicsIds[1], firstLayerGraphicsId);
+    EXPECT_EQ(graphicsIds[2], secondLayerGraphicsId);
+}
+
+TEST_F(RendererPoolSfmlTest, setVisibilityLayerToInvisibility_shuldNotRenderThisShape)
+{
+    const auto firstLayerGraphicsId =
+        rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::First);
+    const auto backgroundGraphicsId =
+        rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::Background);
+    std::vector<GraphicsId> graphicsIds;
+
+    rendererPool.setVisibility(firstLayerGraphicsId, VisibilityLayer::Invisible);
+
+    EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
+    EXPECT_CALL(*contextRenderer, setView());
+    EXPECT_CALL(*contextRenderer, draw(_)).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
+    rendererPool.renderAll();
+    EXPECT_EQ(graphicsIds[0], backgroundGraphicsId);
+}
+
+TEST_F(RendererPoolSfmlTest, setVisibilityWithInvalidGraphicsId_shouldNotThrow)
+{
+    ASSERT_NO_THROW(rendererPool.setVisibility(invalidId, VisibilityLayer::Invisible));
+}
+
+TEST_F(RendererPoolSfmlTest, releasedShape_shouldNotBeRendered)
 {
     const auto id = rendererPool.acquire(size1, position, color);
     rendererPool.release(id);
@@ -208,7 +251,7 @@ TEST_F(RendererPoolSfmlTest, releasedShapeShouldNotBeRendered)
     rendererPool.renderAll();
 }
 
-TEST_F(RendererPoolSfmlTest, releasedTextShouldNotBeRendered)
+TEST_F(RendererPoolSfmlTest, releasedTex_shouldNotBeRendered)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
     const auto id = rendererPool.acquireText(position, text, validFontPath, characterSize, color);
@@ -234,4 +277,15 @@ TEST_F(RendererPoolSfmlTest, setTextureWithInvalidTexturePath_shouldThrowTexture
         .WillOnce(Throw(exceptions::TextureNotAvailable{""}));
 
     ASSERT_THROW(rendererPool.setTexture(shapeId, invalidTexturePath), exceptions::TextureNotAvailable);
+}
+
+TEST_F(RendererPoolSfmlTest, setTextureWithInvalidGraphicsId_shouldNotThrow)
+{
+    ASSERT_NO_THROW(rendererPool.setTexture(invalidId, validTexturePath));
+}
+
+// TODO: test setColor with validId
+TEST_F(RendererPoolSfmlTest, setColorWithInvalidGraphicsId_shouldNotThrow)
+{
+    ASSERT_NO_THROW(rendererPool.setColor(invalidId, sf::Color::Red));
 }
