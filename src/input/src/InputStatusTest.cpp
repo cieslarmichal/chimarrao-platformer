@@ -19,7 +19,11 @@ public:
 
 TEST_F(InputStatusTest, initialInputStatus_inputKeysAndMousePositionShouldBeSetToZero)
 {
-    ASSERT_EQ(inputStatus.getMaskStatus().getMask(), 0);
+    for (const auto& key : allKeys)
+    {
+        ASSERT_FALSE(inputStatus.isKeyPressed(key));
+    }
+
     ASSERT_EQ(inputStatus.getMousePosition(), zeroPosition);
 }
 

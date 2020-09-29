@@ -17,8 +17,13 @@ class TextComponentTest : public Test
 public:
     void expectCreateTextComponent()
     {
-        EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath, characterSize, color))
+        EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath, characterSize, initialVisibility, color))
             .WillOnce(Return(graphicsId));
+    }
+
+    void expectReleaseGraphicsId()
+    {
+        EXPECT_CALL(*rendererPool, release(graphicsId));
     }
 
     std::shared_ptr<TextComponent> createTextComponent()
@@ -40,6 +45,8 @@ public:
     const std::string text{"text"};
     const unsigned characterSize{15};
     const Color color{Color::Black};
+    const VisibilityLayer initialVisibility{VisibilityLayer::First};
+    const VisibilityLayer invisible{VisibilityLayer::Invisible};
     const GraphicsId graphicsId{GraphicsIdGenerator::generateId()};
     std::shared_ptr<StrictMock<RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<RendererPoolMock>>();
@@ -49,31 +56,50 @@ public:
 
 TEST_F(TextComponentTest, createTextComponent_shouldCreateGraphicsObject)
 {
-    EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath, characterSize, color))
+    EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath, characterSize, initialVisibility, color))
         .WillOnce(Return(graphicsId));
 
-    createTextComponent();
+    const auto textComponent = createTextComponent();
+
+    expectReleaseGraphicsId();
 }
 
 TEST_F(TextComponentTest, getGraphicsId_shouldReturnGraphicsIdCreatedWithConstructionOfComponent)
 {
     expectCreateTextComponent();
-    auto textComponent = createTextComponent();
+    const auto textComponent = createTextComponent();
 
     const auto actualGraphicsId = textComponent->getGraphicsId();
 
     ASSERT_EQ(actualGraphicsId, graphicsId);
+    expectReleaseGraphicsId();
 }
 
 TEST_F(TextComponentTest,
        componentWithoutTransformOffset_lateUpdate_shouldSynchronizePositionWithTransformComponent)
 {
     expectCreateTextComponent();
-    auto textComponent = createTextComponent();
+    const auto textComponent = createTextComponent();
     componentOwner.transform->setPosition(position2);
     EXPECT_CALL(*rendererPool, setPosition(graphicsId, position2));
 
     textComponent->lateUpdate(deltaTime);
+
+    expectReleaseGraphicsId();
+}
+
+TEST_F(TextComponentTest,
+       componentDisabled_lateUpdate_shouldNotSynchronizePositionWithTransformComponent)
+{
+    expectCreateTextComponent();
+    const auto textComponent = createTextComponent();
+    componentOwner.transform->setPosition(position2);
+    EXPECT_CALL(*rendererPool, setVisibility(graphicsId, invisible));
+    textComponent->disable();
+
+    textComponent->lateUpdate(deltaTime);
+
+    expectReleaseGraphicsId();
 }
 
 TEST_F(
@@ -81,9 +107,37 @@ TEST_F(
     componentWithTransformOffset_lateUpdate_shouldSynchronizePositionWithTransformComponentConsideringTransformOffset)
 {
     expectCreateTextComponent();
-    auto textComponent = createTextComponentWithOffset();
+    const auto textComponent = createTextComponentWithOffset();
     componentOwner.transform->setPosition(position2);
     EXPECT_CALL(*rendererPool, setPosition(graphicsId, position2 + offset));
 
     textComponent->lateUpdate(deltaTime);
+
+    expectReleaseGraphicsId();
+}
+
+TEST_F(TextComponentTest, disableComponent_shouldSetInvisibleAndSetDisabled)
+{
+    expectCreateTextComponent();
+    const auto textComponent = createTextComponent();
+    EXPECT_CALL(*rendererPool, setVisibility(graphicsId, invisible));
+
+    textComponent->disable();
+
+    EXPECT_FALSE(textComponent->isEnabled());
+    expectReleaseGraphicsId();
+}
+
+TEST_F(TextComponentTest, enableDisabledComponent_shouldSetInitialVisibilityLayerAndSetEnabled)
+{
+    expectCreateTextComponent();
+    const auto textComponent = createTextComponent();
+    EXPECT_CALL(*rendererPool, setVisibility(graphicsId, invisible));
+    textComponent->disable();
+
+    EXPECT_CALL(*rendererPool, setVisibility(graphicsId, initialVisibility));
+    textComponent->enable();
+
+    EXPECT_TRUE(textComponent->isEnabled());
+    expectReleaseGraphicsId();
 }

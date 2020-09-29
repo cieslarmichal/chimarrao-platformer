@@ -36,6 +36,11 @@ void MouseOverComponent::loadDependentComponents()
 
 void MouseOverComponent::update(utils::DeltaTime)
 {
+    if (not enabled)
+    {
+        return;
+    }
+
     if (not mouseOver && hitbox->intersects(inputStatus->getMousePosition()))
     {
         mouseOverAction();
@@ -51,6 +56,16 @@ void MouseOverComponent::update(utils::DeltaTime)
 void MouseOverComponent::handleInputStatus(const input::InputStatus& inputStatusInit)
 {
     inputStatus = &inputStatusInit;
+}
+
+void MouseOverComponent::disable()
+{
+    Component::disable();
+    if (mouseOver)
+    {
+        mouseOutAction();
+        mouseOver = false;
+    }
 }
 
 }

@@ -34,6 +34,11 @@ void KeyboardMovementComponent::loadDependentComponents()
 
 void KeyboardMovementComponent::update(utils::DeltaTime deltaTime)
 {
+    if (not enabled)
+    {
+        return;
+    }
+
     currentMovementSpeed.x = 0;
     if (inputStatus->isKeyPressed(input::InputKey::Left))
     {

@@ -18,6 +18,8 @@ public:
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;
+    void activate() override;
+    void deactivate() override;
 
 private:
     std::unique_ptr<components::ComponentOwner> background;

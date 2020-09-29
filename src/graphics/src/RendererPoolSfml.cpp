@@ -8,30 +8,32 @@ namespace graphics
 {
 namespace
 {
-static auto& getShapeByPosition(std::vector<LayeredShape>& shapes,
-                                std::vector<LayeredShape>::const_iterator position)
+static auto& getLayeredShapeByPosition(std::vector<LayeredShape>& shapes,
+                                       std::vector<LayeredShape>::const_iterator position)
 {
     const auto distance = std::vector<LayeredShape>::size_type(std::distance(shapes.cbegin(), position));
     return shapes.at(distance);
 }
 
-static auto& getShapeByPosition(const std::vector<LayeredShape>& shapes,
-                                std::vector<LayeredShape>::const_iterator position)
+static auto& getLayeredShapeByPosition(const std::vector<LayeredShape>& shapes,
+                                       std::vector<LayeredShape>::const_iterator position)
 {
     const auto distance = std::vector<LayeredShape>::size_type(std::distance(shapes.cbegin(), position));
     return shapes.at(distance);
 }
 
-static auto& getTextByPosition(std::vector<Text>& texts, std::vector<Text>::const_iterator position)
+static auto& getLayeredTextByPosition(std::vector<LayeredText>& layeredTexts,
+                                      std::vector<LayeredText>::const_iterator position)
 {
-    const auto distance = std::vector<Text>::size_type(std::distance(texts.cbegin(), position));
-    return texts.at(distance);
+    const auto distance = std::vector<LayeredText>::size_type(std::distance(layeredTexts.cbegin(), position));
+    return layeredTexts.at(distance);
 }
 
-static auto& getTextByPosition(const std::vector<Text>& texts, std::vector<Text>::const_iterator position)
+static auto& getLayeredTextByPosition(const std::vector<LayeredText>& layeredTexts,
+                                      std::vector<LayeredText>::const_iterator position)
 {
-    const auto distance = std::vector<Text>::size_type(std::distance(texts.cbegin(), position));
-    return texts.at(distance);
+    const auto distance = std::vector<LayeredText>::size_type(std::distance(layeredTexts.cbegin(), position));
+    return layeredTexts.at(distance);
 }
 }
 
@@ -64,11 +66,13 @@ GraphicsId RendererPoolSfml::acquire(const utils::Vector2f& size, const utils::V
 }
 
 GraphicsId RendererPoolSfml::acquireText(const utils::Vector2f& position, const std::string& text,
-                                         const FontPath& fontPath, unsigned characterSize, const Color& color)
+                                         const FontPath& fontPath, unsigned characterSize,
+                                         VisibilityLayer layer, const Color& color)
 {
     auto id = GraphicsIdGenerator::generateId();
     const auto& font = fontStorage->getFont(fontPath);
-    texts.emplace_back(id, position, text, font, characterSize, color);
+    auto layeredText = LayeredText{layer, Text{id, position, text, font, characterSize, color}};
+    layeredTexts.insert(upper_bound(layeredTexts.begin(), layeredTexts.end(), layeredText), layeredText);
     return id;
 }
 
@@ -85,6 +89,7 @@ void RendererPoolSfml::renderAll()
     {
         cleanUnusedShapes();
     }
+
     contextRenderer->setView();
 
     for (const auto& layeredShape : layeredShapes)
@@ -95,40 +100,43 @@ void RendererPoolSfml::renderAll()
         }
     }
 
-    for (const auto& text : texts)
+    for (const auto& layeredText : layeredTexts)
     {
-        contextRenderer->draw(text);
+        if (layeredText.layer != VisibilityLayer::Invisible)
+        {
+            contextRenderer->draw(layeredText.text);
+        }
     }
 }
 
 void RendererPoolSfml::setPosition(const GraphicsId& id, const utils::Vector2f& newPosition)
 {
-    if (const auto shapeIter = findShapePosition(id); shapeIter != layeredShapes.end())
+    if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
     {
-        auto& layeredShape = getShapeByPosition(layeredShapes, shapeIter);
+        auto& layeredShape = getLayeredShapeByPosition(layeredShapes, layeredShapeIter);
         layeredShape.shape.setPosition(newPosition);
         return;
     }
 
-    if (const auto textIter = findTextPosition(id); textIter != texts.end())
+    if (const auto layeredTextIter = findLayeredTextPosition(id); layeredTextIter != layeredTexts.end())
     {
-        auto& text = getTextByPosition(texts, textIter);
-        text.setPosition(newPosition);
+        auto& layeredText = getLayeredTextByPosition(layeredTexts, layeredTextIter);
+        layeredText.text.setPosition(newPosition);
     }
 }
 
 boost::optional<utils::Vector2f> RendererPoolSfml::getPosition(const GraphicsId& id)
 {
-    if (const auto shapeIter = findShapePosition(id); shapeIter != layeredShapes.end())
+    if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
     {
-        const auto& layeredShape = getShapeByPosition(layeredShapes, shapeIter);
+        const auto& layeredShape = getLayeredShapeByPosition(layeredShapes, layeredShapeIter);
         return layeredShape.shape.getPosition();
     }
 
-    if (const auto textIter = findTextPosition(id); textIter != texts.end())
+    if (const auto layeredTextIter = findLayeredTextPosition(id); layeredTextIter != layeredTexts.end())
     {
-        const auto& text = getTextByPosition(texts, textIter);
-        return text.getPosition();
+        const auto& layeredText = getLayeredTextByPosition(layeredTexts, layeredTextIter);
+        return layeredText.text.getPosition();
     }
 
     return boost::none;
@@ -136,9 +144,9 @@ boost::optional<utils::Vector2f> RendererPoolSfml::getPosition(const GraphicsId&
 
 void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path, const utils::Vector2f& scale)
 {
-    if (const auto shapeIter = findShapePosition(id); shapeIter != layeredShapes.end())
+    if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
     {
-        auto& layeredShape = getShapeByPosition(layeredShapes, shapeIter);
+        auto& layeredShape = getLayeredShapeByPosition(layeredShapes, layeredShapeIter);
         const sf::Texture& texture = textureStorage->getTexture(path);
         layeredShape.shape.setTexture(&texture);
         layeredShape.shape.setScale(scale);
@@ -155,33 +163,43 @@ void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path,
 
 void RendererPoolSfml::setVisibility(const GraphicsId& id, VisibilityLayer layer)
 {
-    if (const auto shapeIter = findShapePosition(id); shapeIter != layeredShapes.end())
+    if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
     {
-        auto shape = *shapeIter;
-        shape.layer = layer;
-        layeredShapes.erase(shapeIter);
-        layeredShapes.insert(upper_bound(layeredShapes.begin(), layeredShapes.end(), shape), shape);
+        auto layeredShape = *layeredShapeIter;
+        layeredShape.layer = layer;
+        layeredShapes.erase(layeredShapeIter);
+        layeredShapes.insert(upper_bound(layeredShapes.begin(), layeredShapes.end(), layeredShape),
+                             layeredShape);
+        return;
+    }
+
+    if (const auto layeredTextIter = findLayeredTextPosition(id); layeredTextIter != layeredTexts.end())
+    {
+        auto layeredText = *layeredTextIter;
+        layeredText.layer = layer;
+        layeredTexts.erase(layeredTextIter);
+        layeredTexts.insert(upper_bound(layeredTexts.begin(), layeredTexts.end(), layeredText), layeredText);
     }
 }
 
 void RendererPoolSfml::setColor(const GraphicsId& id, const Color& color)
 {
-    if (const auto shapeIter = findShapePosition(id); shapeIter != layeredShapes.end())
+    if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
     {
-        auto& shape = getShapeByPosition(layeredShapes, shapeIter);
-        shape.shape.setFillColor(color);
+        auto& layeredShape = getLayeredShapeByPosition(layeredShapes, layeredShapeIter);
+        layeredShape.shape.setFillColor(color);
+        return;
     }
 
-    if (const auto textIter = findTextPosition(id); textIter != texts.end())
+    if (const auto layeredTextIter = findLayeredTextPosition(id); layeredTextIter != layeredTexts.end())
     {
-        auto& text = getTextByPosition(texts, textIter);
-        text.setFillColor(color);
+        auto& layeredText = getLayeredTextByPosition(layeredTexts, layeredTextIter);
+        layeredText.text.setFillColor(color);
     }
 }
 
 void RendererPoolSfml::setRenderingSize(const utils::Vector2u& renderingSize)
 {
-    // TODO: not working as it suppose
     contextRenderer->setViewSize(renderingSize);
 }
 
@@ -194,16 +212,18 @@ void RendererPoolSfml::cleanUnusedShapes()
                                        }),
                         layeredShapes.end());
 
-    texts.erase(
-        std::remove_if(texts.begin(), texts.end(),
-                       [&](const Text& text) { return graphicsObjectsToRemove.count(text.getGraphicsId()); }),
-        texts.end());
+    layeredTexts.erase(std::remove_if(layeredTexts.begin(), layeredTexts.end(),
+                                      [&](const LayeredText& layeredText) {
+                                          return graphicsObjectsToRemove.count(
+                                              layeredText.text.getGraphicsId());
+                                      }),
+                       layeredTexts.end());
 
     graphicsObjectsToRemove.clear();
 }
 
 std::vector<LayeredShape>::const_iterator
-RendererPoolSfml::findShapePosition(const GraphicsId& graphicsIdToFind) const
+RendererPoolSfml::findLayeredShapePosition(const GraphicsId& graphicsIdToFind) const
 {
     return std::find_if(layeredShapes.begin(), layeredShapes.end(),
                         [&graphicsIdToFind](const LayeredShape& layeredShape) {
@@ -211,10 +231,12 @@ RendererPoolSfml::findShapePosition(const GraphicsId& graphicsIdToFind) const
                         });
 }
 
-std::vector<Text>::const_iterator RendererPoolSfml::findTextPosition(const GraphicsId& graphicsIdToFind) const
+std::vector<LayeredText>::const_iterator
+RendererPoolSfml::findLayeredTextPosition(const GraphicsId& graphicsIdToFind) const
 {
-    return std::find_if(texts.begin(), texts.end(), [&graphicsIdToFind](const Text& text) {
-        return text.getGraphicsId() == graphicsIdToFind;
-    });
+    return std::find_if(layeredTexts.begin(), layeredTexts.end(),
+                        [&graphicsIdToFind](const LayeredText& layeredText) {
+                            return layeredText.text.getGraphicsId() == graphicsIdToFind;
+                        });
 }
 }

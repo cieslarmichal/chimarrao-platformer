@@ -178,3 +178,31 @@ TEST_F(MouseOverComponentTest, givenMousePositionTwiceOverAndOut_shouldCallMouse
     ASSERT_TRUE(mouseWasOut(2));
     ASSERT_TRUE(mouseWasOver(2));
 }
+
+TEST_F(MouseOverComponentTest,
+       componentDisabled_givenMousePositionInside_shouldNotCallAnyAction)
+{
+    const auto mouseInsideInput = prepareInputStatus(positionInsideTarget1);
+    const auto mouseOutsideInput = prepareInputStatus(positionOutsideTarget1);
+    mouseOverComponent.disable();
+
+    mouseOverComponent.handleInputStatus(mouseInsideInput);
+    mouseOverComponent.update(deltaTime);
+
+    ASSERT_FALSE(mouseWasOut());
+    ASSERT_FALSE(mouseWasOver());
+}
+
+TEST_F(MouseOverComponentTest,
+       givenMousePositionInsideHitbox_thenComponentDisabled_shouldCallOverActionAndOutAction)
+{
+    const auto mouseInsideInput = prepareInputStatus(positionInsideTarget1);
+    const auto mouseOutsideInput = prepareInputStatus(positionOutsideTarget1);
+    mouseOverComponent.handleInputStatus(mouseInsideInput);
+    mouseOverComponent.update(deltaTime);
+
+    mouseOverComponent.disable();
+
+    ASSERT_TRUE(mouseWasOut(1));
+    ASSERT_TRUE(mouseWasOver(1));
+}

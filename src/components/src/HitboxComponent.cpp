@@ -13,12 +13,22 @@ HitboxComponent::HitboxComponent(ComponentOwner* ownerInit, const utils::Vector2
 
 void HitboxComponent::lateUpdate(utils::DeltaTime)
 {
+    if (not enabled)
+    {
+        return;
+    }
     originPosition = owner->transform->getPosition() + offset;
 }
 
 bool HitboxComponent::intersects(const utils::Vector2f& position) const
 {
+    if (not enabled)
+    {
+        return false;
+    }
+
     return position.x >= originPosition.x && position.x <= originPosition.x + size.x &&
            position.y >= originPosition.y && position.y <= originPosition.y + size.y;
 }
+
 }

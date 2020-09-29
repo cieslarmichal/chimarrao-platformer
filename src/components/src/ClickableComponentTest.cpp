@@ -110,6 +110,7 @@ TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxRightMouseKeyClicke
     ASSERT_FALSE(actionPerformed());
 }
 
+
 TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxLeftMouseKeyClicked_shouldCallAction)
 {
     const auto mouseLeftInputStatus = prepareInputStatus(InputKey::MouseLeft, positionInsideTarget);
@@ -118,4 +119,15 @@ TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxLeftMouseKeyClicked
     clickableComponent.update(deltaTime);
 
     ASSERT_TRUE(actionPerformed());
+}
+
+TEST_F(ClickableComponentTest, componentDisabled_givenMousePositionInsideHitboxLeftMouseKeyClicked_shouldNotCallAction)
+{
+    const auto mouseLeftInputStatus = prepareInputStatus(InputKey::MouseLeft, positionInsideTarget);
+    clickableComponent.handleInputStatus(mouseLeftInputStatus);
+    clickableComponent.disable();
+
+    clickableComponent.update(deltaTime);
+
+    ASSERT_FALSE(actionPerformed());
 }

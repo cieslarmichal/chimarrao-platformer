@@ -6,10 +6,10 @@
 
 namespace game
 {
-class MainMenuState : public State
+class MenuState : public State
 {
 public:
-    explicit MainMenuState(const std::shared_ptr<window::Window>&,
+    explicit MenuState(const std::shared_ptr<window::Window>&,
                            const std::shared_ptr<input::InputManager>&,
                            const std::shared_ptr<graphics::RendererPool>&,
                            std::stack<std::unique_ptr<State>>&);
@@ -19,6 +19,8 @@ public:
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;
+    void activate() override;
+    void deactivate() override;
 
 private:
     void createBackground();

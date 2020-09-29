@@ -8,7 +8,8 @@
 #include "ContextRenderer.h"
 #include "FontStorage.h"
 #include "GraphicsIdGenerator.h"
-#include "LayerdShape.h"
+#include "LayeredShape.h"
+#include "LayeredText.h"
 #include "RectangleShape.h"
 #include "RendererPool.h"
 #include "Text.h"
@@ -27,7 +28,8 @@ public:
     GraphicsId acquire(const utils::Vector2f& size, const utils::Vector2f& position, const TexturePath&,
                        VisibilityLayer = VisibilityLayer::First) override;
     GraphicsId acquireText(const utils::Vector2f& position, const std::string& text, const FontPath&,
-                           unsigned characterSize, const Color&) override;
+                           unsigned characterSize, VisibilityLayer = VisibilityLayer::First,
+                           const Color& = Color::Black) override;
     void release(const GraphicsId&) override;
     void renderAll() override;
     void setPosition(const GraphicsId&, const utils::Vector2f& position) override;
@@ -39,15 +41,14 @@ public:
 
 private:
     void cleanUnusedShapes();
-    std::vector<LayeredShape>::const_iterator findShapePosition(const GraphicsId&) const;
-    std::vector<Text>::const_iterator findTextPosition(const GraphicsId&) const;
+    std::vector<LayeredShape>::const_iterator findLayeredShapePosition(const GraphicsId&) const;
+    std::vector<LayeredText>::const_iterator findLayeredTextPosition(const GraphicsId&) const;
 
     std::unique_ptr<ContextRenderer> contextRenderer;
     std::unique_ptr<TextureStorage> textureStorage;
     std::unique_ptr<FontStorage> fontStorage;
-    std::unique_ptr<GraphicsIdGenerator> idGenerator;
     std::vector<LayeredShape> layeredShapes;
-    std::vector<Text> texts;
+    std::vector<LayeredText> layeredTexts;
     std::unordered_set<GraphicsId, boost::hash<GraphicsId>> graphicsObjectsToRemove;
 };
 }

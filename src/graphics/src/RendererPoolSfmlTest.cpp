@@ -90,7 +90,7 @@ TEST_F(RendererPoolSfmlTest, acquireText_fontNotAvailable_shouldThrowFontNotAvai
 {
     EXPECT_CALL(*fontStorage, getFont(invalidFontPath)).WillOnce(Throw(exceptions::FontNotAvailable{""}));
 
-    ASSERT_THROW(rendererPool.acquireText(position, text, invalidFontPath, characterSize, color),
+    ASSERT_THROW(rendererPool.acquireText(position, text, invalidFontPath, characterSize),
                  exceptions::FontNotAvailable);
 }
 
@@ -98,7 +98,7 @@ TEST_F(RendererPoolSfmlTest, acquireText_fontAvailable_positionShouldMatch)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
 
-    const auto textId = rendererPool.acquireText(position, text, validFontPath, characterSize, color);
+    const auto textId = rendererPool.acquireText(position, text, validFontPath, characterSize);
 
     const auto actualTextPosition = rendererPool.getPosition(textId);
     ASSERT_EQ(actualTextPosition, position);
@@ -128,7 +128,7 @@ TEST_F(RendererPoolSfmlTest, setPositionWithShape)
 TEST_F(RendererPoolSfmlTest, setPositionWithText)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
-    const auto textId = rendererPool.acquireText(position, text, validFontPath, characterSize, color);
+    const auto textId = rendererPool.acquireText(position, text, validFontPath, characterSize);
 
     rendererPool.setPosition(textId, newPosition);
 
@@ -148,7 +148,7 @@ TEST_F(RendererPoolSfmlTest, renderShape)
 TEST_F(RendererPoolSfmlTest, renderText)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
-    rendererPool.acquireText(position, text, validFontPath, characterSize, color);
+    rendererPool.acquireText(position, text, validFontPath, characterSize);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
     EXPECT_CALL(*contextRenderer, draw(_));
@@ -159,7 +159,7 @@ TEST_F(RendererPoolSfmlTest, renderText)
 TEST_F(RendererPoolSfmlTest, renderShapesAndTexts)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
-    rendererPool.acquireText(position, text, validFontPath, characterSize, color);
+    rendererPool.acquireText(position, text, validFontPath, characterSize);
     rendererPool.acquire(size1, position, color);
     rendererPool.acquire(size1, position, color);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
@@ -171,8 +171,17 @@ TEST_F(RendererPoolSfmlTest, renderShapesAndTexts)
 
 ACTION_P(addGraphicsIdToVector, graphicsIds)
 {
-    const auto& rectangleShape = dynamic_cast<const RectangleShape&>(arg0);
-    graphicsIds->push_back(rectangleShape.getGraphicsId());
+    if (const auto* rectangleShape = dynamic_cast<const RectangleShape*>(&arg0); rectangleShape != nullptr)
+    {
+        graphicsIds->push_back(rectangleShape->getGraphicsId());
+        return;
+    }
+
+    if (const auto* text = dynamic_cast<const Text*>(&arg0); text != nullptr)
+    {
+        graphicsIds->push_back(text->getGraphicsId());
+        return;
+    }
 }
 
 TEST_F(RendererPoolSfmlTest, renderShapesInLayers)
@@ -198,7 +207,7 @@ TEST_F(RendererPoolSfmlTest, renderShapesInLayers)
     EXPECT_EQ(graphicsIds[3], firstLayerGraphicsId);
 }
 
-TEST_F(RendererPoolSfmlTest, setVisibility_shouldChangeOrderOfShapes)
+TEST_F(RendererPoolSfmlTest, setShapeVisibility_shouldChangeOrderOfShapes)
 {
     const auto firstLayerGraphicsId =
         rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::First);
@@ -206,10 +215,10 @@ TEST_F(RendererPoolSfmlTest, setVisibility_shouldChangeOrderOfShapes)
         rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::Second);
     const auto backgroundGraphicsId =
         rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::Background);
-    std::vector<GraphicsId> graphicsIds;
 
     rendererPool.setVisibility(firstLayerGraphicsId, VisibilityLayer::Third);
 
+    std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
     EXPECT_CALL(*contextRenderer, draw(_)).Times(3).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
@@ -225,15 +234,103 @@ TEST_F(RendererPoolSfmlTest, setVisibilityLayerToInvisibility_shuldNotRenderThis
         rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::First);
     const auto backgroundGraphicsId =
         rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::Background);
-    std::vector<GraphicsId> graphicsIds;
 
     rendererPool.setVisibility(firstLayerGraphicsId, VisibilityLayer::Invisible);
 
+    std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
     EXPECT_CALL(*contextRenderer, draw(_)).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
     rendererPool.renderAll();
     EXPECT_EQ(graphicsIds[0], backgroundGraphicsId);
+}
+
+TEST_F(RendererPoolSfmlTest, renderTextsInLayers)
+{
+    EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillRepeatedly(ReturnRef(font));
+    const auto firstLayerGraphicsId =
+        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::First);
+    const auto thirdLayerGraphicsId =
+        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Third);
+    const auto backgroundGraphicsId =
+        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Background);
+    const auto secondLayerGraphicsId =
+        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Second);
+    std::vector<GraphicsId> graphicsIds;
+    EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
+    EXPECT_CALL(*contextRenderer, setView());
+    EXPECT_CALL(*contextRenderer, draw(_)).Times(4).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
+
+    rendererPool.renderAll();
+
+    EXPECT_EQ(graphicsIds[0], backgroundGraphicsId);
+    EXPECT_EQ(graphicsIds[1], thirdLayerGraphicsId);
+    EXPECT_EQ(graphicsIds[2], secondLayerGraphicsId);
+    EXPECT_EQ(graphicsIds[3], firstLayerGraphicsId);
+}
+
+TEST_F(RendererPoolSfmlTest, setTextVisibility_shouldChangeOrderOfTexts)
+{
+    EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillRepeatedly(ReturnRef(font));
+    const auto firstLayerGraphicsId =
+        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::First);
+    const auto secondLayerGraphicsId =
+        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Second);
+    const auto backgroundGraphicsId =
+        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Background);
+
+    rendererPool.setVisibility(firstLayerGraphicsId, VisibilityLayer::Third);
+
+    std::vector<GraphicsId> graphicsIds;
+    EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
+    EXPECT_CALL(*contextRenderer, setView());
+    EXPECT_CALL(*contextRenderer, draw(_)).Times(3).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
+    rendererPool.renderAll();
+    EXPECT_EQ(graphicsIds[0], backgroundGraphicsId);
+    EXPECT_EQ(graphicsIds[1], firstLayerGraphicsId);
+    EXPECT_EQ(graphicsIds[2], secondLayerGraphicsId);
+}
+
+TEST_F(RendererPoolSfmlTest, setVisibilityLayerToInvisibility_shuldNotRenderThisText)
+{
+    EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillRepeatedly(ReturnRef(font));
+    const auto firstLayerGraphicsId =
+        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::First);
+    const auto backgroundGraphicsId =
+        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Background);
+
+    rendererPool.setVisibility(firstLayerGraphicsId, VisibilityLayer::Invisible);
+
+    std::vector<GraphicsId> graphicsIds;
+    EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
+    EXPECT_CALL(*contextRenderer, setView());
+    EXPECT_CALL(*contextRenderer, draw(_)).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
+    rendererPool.renderAll();
+    EXPECT_EQ(graphicsIds[0], backgroundGraphicsId);
+}
+
+TEST_F(RendererPoolSfmlTest, shapesShouldBeRenderedBeforeTexts)
+{
+    EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillRepeatedly(ReturnRef(font));
+    const auto firstLayerTextGraphicsId =
+        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::First);
+    const auto backgroundTextGraphicsId =
+        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Background);
+    const auto secondLayerShapeGraphicsId =
+        rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::Second);
+    const auto backgroundShapeGraphicsId =
+        rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::Background);
+    std::vector<GraphicsId> graphicsIds;
+    EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
+    EXPECT_CALL(*contextRenderer, setView());
+    EXPECT_CALL(*contextRenderer, draw(_)).Times(4).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
+
+    rendererPool.renderAll();
+
+    EXPECT_EQ(graphicsIds[0], backgroundShapeGraphicsId);
+    EXPECT_EQ(graphicsIds[1], secondLayerShapeGraphicsId);
+    EXPECT_EQ(graphicsIds[2], backgroundTextGraphicsId);
+    EXPECT_EQ(graphicsIds[3], firstLayerTextGraphicsId);
 }
 
 TEST_F(RendererPoolSfmlTest, setVisibilityWithInvalidGraphicsId_shouldNotThrow)
@@ -251,10 +348,10 @@ TEST_F(RendererPoolSfmlTest, releasedShape_shouldNotBeRendered)
     rendererPool.renderAll();
 }
 
-TEST_F(RendererPoolSfmlTest, releasedTex_shouldNotBeRendered)
+TEST_F(RendererPoolSfmlTest, releasedText_shouldNotBeRendered)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
-    const auto id = rendererPool.acquireText(position, text, validFontPath, characterSize, color);
+    const auto id = rendererPool.acquireText(position, text, validFontPath, characterSize);
     rendererPool.release(id);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());

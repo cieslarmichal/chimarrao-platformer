@@ -70,4 +70,14 @@ std::string GameState::getName() const
     return "Game state";
 }
 
+void GameState::activate()
+{
+    active = true;
+}
+
+void GameState::deactivate()
+{
+    active = false;
+}
+
 }

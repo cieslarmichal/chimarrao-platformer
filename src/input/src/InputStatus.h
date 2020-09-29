@@ -13,13 +13,17 @@ class InputStatus
 public:
     bool isKeyPressed(InputKey) const;
     void setKeyPressed(InputKey);
+    bool isKeyReleased(InputKey) const;
+    void setKeyReleased(InputKey);
     void setMousePosition(const utils::Vector2f&);
     utils::Vector2f getMousePosition() const;
-    utils::BitMask getMaskStatus() const;
+    utils::BitMask getPressedKeysMask() const;
+    utils::BitMask getReleasedKeysMask() const;
     void clearStatus();
 
 private:
-    utils::BitMask inputKeyMask{};
+    utils::BitMask pressedKeysMask{};
+    utils::BitMask releasedKeysMask{};
     utils::Vector2f mousePosition{};
 };
 

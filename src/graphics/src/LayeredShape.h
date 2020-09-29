@@ -1,4 +1,5 @@
 #pragma once
+
 #include "RectangleShape.h"
 #include "VisibilityLayer.h"
 

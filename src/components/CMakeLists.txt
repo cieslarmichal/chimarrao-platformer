@@ -12,6 +12,7 @@ set(SOURCES
 
 set(UT_SOURCES
         src/ComponentOwnerTest.cpp
+        src/ComponentTest.cpp
         src/TransformComponentTest.cpp
         src/GraphicsComponentTest.cpp
         src/KeyboardMovementComponentTest.cpp

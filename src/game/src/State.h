@@ -28,7 +28,9 @@ public:
     virtual void lateUpdate(const utils::DeltaTime&) = 0;
     virtual void render() = 0;
     virtual std::string getName() const = 0;
-//    virtual void isActive() const = 0;
+    virtual void activate() = 0;
+    virtual void deactivate() = 0;
+//    virtual bool isActive() const = 0;
     void handleWindowSizeChange(const utils::Vector2u& windowSize) override;
 
 protected:
@@ -36,8 +38,6 @@ protected:
     std::shared_ptr<input::InputManager> inputManager;
     std::shared_ptr<graphics::RendererPool> rendererPool;
     std::stack<std::unique_ptr<State>>& states;
-
-private:
-    bool stateIsEnded;
+    bool active;
 };
 }

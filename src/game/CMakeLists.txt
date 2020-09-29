@@ -2,13 +2,15 @@ set(SOURCES
         src/Game.cpp
         src/State.cpp
         src/GameState.cpp
-        src/MainMenuState.cpp
-        src/EditorState.cpp src/TileMap.cpp)
+        src/MenuState.cpp
+        src/EditorState.cpp
+        src/TileMap.cpp
+        )
 
 set(UT_SOURCES
         src/GameTest.cpp
         src/GameStateTest.cpp
-        src/MainMenuStateTest.cpp
+        src/MenuStateTest.cpp
         )
 
 add_library(game ${SOURCES})

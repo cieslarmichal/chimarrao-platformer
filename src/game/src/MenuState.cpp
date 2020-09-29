@@ -1,8 +1,7 @@
-#include "MainMenuState.h"
-
-#include <utility>
+#include "MenuState.h"
 
 #include "ClickableComponent.h"
+#include "EditorState.h"
 #include "GameState.h"
 #include "GetProjectPath.h"
 #include "GraphicsComponent.h"
@@ -21,7 +20,7 @@ const auto buttonSize = utils::Vector2f{23, 6};
 const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
 }
 
-MainMenuState::MainMenuState(const std::shared_ptr<window::Window>& windowInit,
+MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<input::InputManager>& inputManagerInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                              std::stack<std::unique_ptr<State>>& statesInit)
@@ -36,7 +35,7 @@ MainMenuState::MainMenuState(const std::shared_ptr<window::Window>& windowInit,
     initialize();
 }
 
-void MainMenuState::initialize()
+void MenuState::initialize()
 {
     for (auto& button : buttons)
     {
@@ -45,7 +44,7 @@ void MainMenuState::initialize()
     }
 }
 
-void MainMenuState::update(const utils::DeltaTime& deltaTime)
+void MenuState::update(const utils::DeltaTime& deltaTime)
 {
     for (auto& button : buttons)
     {
@@ -53,7 +52,7 @@ void MainMenuState::update(const utils::DeltaTime& deltaTime)
     }
 }
 
-void MainMenuState::lateUpdate(const utils::DeltaTime& deltaTime)
+void MenuState::lateUpdate(const utils::DeltaTime& deltaTime)
 {
     for (auto& button : buttons)
     {
@@ -61,17 +60,37 @@ void MainMenuState::lateUpdate(const utils::DeltaTime& deltaTime)
     }
 }
 
-void MainMenuState::render()
+void MenuState::render()
 {
     rendererPool->renderAll();
 }
 
-std::string MainMenuState::getName() const
+std::string MenuState::getName() const
 {
-    return "Main menu state";
+    return "Menu state";
 }
 
-void MainMenuState::createBackground()
+void MenuState::activate()
+{
+    active = true;
+
+    for (auto& button : buttons)
+    {
+        button->enable();
+    }
+}
+
+void MenuState::deactivate()
+{
+    active = false;
+
+    for (auto& button : buttons)
+    {
+        button->disable();
+    }
+}
+
+void MenuState::createBackground()
 {
     background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
     background->addComponent<components::GraphicsComponent>(
@@ -80,30 +99,31 @@ void MainMenuState::createBackground()
         graphics::VisibilityLayer::Background);
 }
 
-void MainMenuState::createPlayGameButton()
+void MenuState::createPlayGameButton()
 {
     const auto gameButtonPosition = utils::Vector2f{50, 12};
 
     auto runGame = [&] {
+        states.top()->deactivate();
       states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
     };
 
     addButton(gameButtonPosition, "Play", utils::Vector2f{7, 1}, runGame);
 }
 
-void MainMenuState::createMapEditorButton()
+void MenuState::createMapEditorButton()
 {
     const auto mapEditorButtonPosition = utils::Vector2f{50, 22};
 
     const auto runMapEditor = [&] {
-        // TODO: add map editor
-        std::cout << "Map editor\n";
+      states.top()->deactivate();
+      states.push(std::make_unique<EditorState>(window, inputManager, rendererPool, states));
     };
 
     addButton(mapEditorButtonPosition, "Map Editor", utils::Vector2f{1, 1}, runMapEditor);
 }
 
-void MainMenuState::createSettingsButton()
+void MenuState::createSettingsButton()
 {
     const auto settingsButtonPosition = utils::Vector2f{50, 32};
 
@@ -115,7 +135,7 @@ void MainMenuState::createSettingsButton()
     addButton(settingsButtonPosition, "Settings", utils::Vector2f{3, 1}, runSettings);
 }
 
-void MainMenuState::createExitButton()
+void MenuState::createExitButton()
 {
     const auto exitButtonPosition = utils::Vector2f{50, 42};
 
@@ -127,7 +147,7 @@ void MainMenuState::createExitButton()
     addButton(exitButtonPosition, "Exit", utils::Vector2f{7, 1}, exit);
 }
 
-void MainMenuState::addButton(const utils::Vector2f& position, const std::string& text,
+void MenuState::addButton(const utils::Vector2f& position, const std::string& text,
                               const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
 {
     auto button = std::make_unique<components::ComponentOwner>(position);

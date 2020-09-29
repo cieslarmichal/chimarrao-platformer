@@ -26,9 +26,12 @@ public:
     const graphics::GraphicsId& getGraphicsId();
     void setColor(const graphics::Color&);
     void setVisibility(graphics::VisibilityLayer);
+    void enable() override;
+    void disable() override;
 
 private:
     std::shared_ptr<graphics::RendererPool> rendererPool;
     graphics::GraphicsId id;
+    const graphics::VisibilityLayer visibilityLayer;
 };
 }

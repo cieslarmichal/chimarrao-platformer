@@ -36,6 +36,11 @@ void ClickableComponent::loadDependentComponents()
 
 void ClickableComponent::update(utils::DeltaTime)
 {
+    if (not enabled)
+    {
+        return;
+    }
+
     if (not clicked && inputStatus->isKeyPressed(input::InputKey::MouseLeft) &&
         hitbox->intersects(inputStatus->getMousePosition()))
     {
@@ -47,6 +52,12 @@ void ClickableComponent::update(utils::DeltaTime)
 void ClickableComponent::handleInputStatus(const input::InputStatus& inputStatusInit)
 {
     inputStatus = &inputStatusInit;
+}
+
+void ClickableComponent::disable()
+{
+    Component::disable();
+    clicked = false;
 }
 
 }

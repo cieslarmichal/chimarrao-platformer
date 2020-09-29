@@ -10,15 +10,26 @@ TextComponent::TextComponent(ComponentOwner* ownerInit,
                              const utils::Vector2f& position, const std::string& text,
                              const graphics::FontPath& fontPath, unsigned characterSize,
                              const graphics::Color& color, const utils::Vector2f& offset)
-    : Component{ownerInit}, rendererPool{std::move(rendererPoolInit)}, transformOffset{offset}
+    : Component{ownerInit},
+      rendererPool{std::move(rendererPoolInit)},
+      transformOffset{offset},
+      visibilityLayer{graphics::VisibilityLayer::First}
 {
-    id = rendererPool->acquireText(position, text, fontPath, characterSize, color);
+    id = rendererPool->acquireText(position, text, fontPath, characterSize, visibilityLayer, color);
+}
+
+TextComponent::~TextComponent()
+{
+    rendererPool->release(id);
 }
 
 void TextComponent::lateUpdate(utils::DeltaTime)
 {
-    utils::Vector2f textPosition = owner->transform->getPosition() + transformOffset;
-    rendererPool->setPosition(id, textPosition);
+    if (enabled)
+    {
+        utils::Vector2f textPosition = owner->transform->getPosition() + transformOffset;
+        rendererPool->setPosition(id, textPosition);
+    }
 }
 
 const graphics::GraphicsId& TextComponent::getGraphicsId()
@@ -29,6 +40,18 @@ const graphics::GraphicsId& TextComponent::getGraphicsId()
 void TextComponent::setColor(const graphics::Color& color)
 {
     rendererPool->setColor(id, color);
+}
+
+void TextComponent::enable()
+{
+    Component::enable();
+    rendererPool->setVisibility(id, visibilityLayer);
+}
+
+void TextComponent::disable()
+{
+    Component::disable();
+    rendererPool->setVisibility(id, graphics::VisibilityLayer::Invisible);
 }
 
 }

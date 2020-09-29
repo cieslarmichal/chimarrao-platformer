@@ -10,7 +10,8 @@ State::State(std::shared_ptr<window::Window> windowInit,
     : window{std::move(windowInit)},
       inputManager{std::move(inputManagerInit)},
       rendererPool{std::move(rendererPoolInit)},
-      states{statesInit}
+      states{statesInit},
+      active{false}
 {
     window->registerObserver(this);
 }
