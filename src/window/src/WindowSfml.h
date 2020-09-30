@@ -19,8 +19,8 @@ public:
     void update() override;
     void close() override;
     void setView(const sf::View&) override;
+    bool pollEvent(sf::Event& event) const override;
     utils::Vector2f getMousePosition() const override;
-    bool pollEvent(sf::Event& event);
     void registerObserver(WindowObserver*) override;
     void removeObserver(WindowObserver*) override;
 

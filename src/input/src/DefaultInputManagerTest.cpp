@@ -11,7 +11,6 @@ using namespace input;
 
 namespace
 {
-const InputStatus inputStatus{};
 const utils::Vector2f mousePosition{3, 4};
 }
 
@@ -25,13 +24,13 @@ public:
     std::unique_ptr<InputObservationHandlerMock> observationHandlerInit =
         std::make_unique<StrictMock<InputObservationHandlerMock>>();
     InputObservationHandlerMock* observationHandler = observationHandlerInit.get();
-
     DefaultInputManager inputManager{std::move(observationHandlerInit), window};
 };
 
-TEST_F(DefaultInputManagerTest,
-       readInput_shouldReadMousePositionFromWindowAnddNotifyObserversAboutInputStatus)
+TEST_F(DefaultInputManagerTest, readInput_shouldReadMousePositionFromWindowAndNotifyObserversAboutInputStatus)
 {
+    InputStatus inputStatus{};
+    inputStatus.setMousePosition(mousePosition);
     EXPECT_CALL(*window, getMousePosition()).WillOnce(Return(mousePosition));
     EXPECT_CALL(*observationHandler, notifyObservers(inputStatus));
 

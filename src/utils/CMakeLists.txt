@@ -1,5 +1,4 @@
 set(SOURCES
-        src/BitMask.cpp
         src/Timer.cpp
         src/GetExecutablePath.cpp
         src/GetProjectPath.cpp
@@ -9,7 +8,6 @@ set(SOURCES
         )
 
 set(UT_SOURCES
-        src/BitMaskTest.cpp
         src/TimerTest.cpp
         src/GetExecutablePathTest.cpp
         src/GetProjectPathTest.cpp

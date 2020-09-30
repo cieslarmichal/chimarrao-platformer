@@ -1,9 +1,7 @@
 #include "DefaultInputManager.h"
 
-#include <SFML/Window/Mouse.hpp>
-#include <utility>
-
 #include "SFML/Window/Keyboard.hpp"
+#include "SFML/Window/Mouse.hpp"
 
 #include "InputKey.h"
 
@@ -17,7 +15,7 @@ DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler
 
 void DefaultInputManager::readInput()
 {
-    inputStatus.clearStatus();
+    inputStatus.clearPressedKeys();
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
@@ -67,8 +65,8 @@ void DefaultInputManager::readInput()
         inputStatus.setKeyPressed(InputKey::MouseRight);
     }
 
+    inputStatus.setReleasedKeys();
     inputStatus.setMousePosition(window->getMousePosition());
-
     notifyObservers();
 }
 

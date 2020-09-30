@@ -7,14 +7,11 @@
 using namespace ::testing;
 using namespace input;
 
-namespace
-{
-const InputStatus inputStatus;
-}
 
 class DefaultInputObservationHandlerTest : public Test
 {
 public:
+    const InputStatus inputStatus{};
     std::shared_ptr<InputObserverMock> observer1 = std::make_shared<StrictMock<InputObserverMock>>();
     std::shared_ptr<InputObserverMock> observer2 = std::make_shared<StrictMock<InputObserverMock>>();
     DefaultInputObservationHandler inputObservationHandler;

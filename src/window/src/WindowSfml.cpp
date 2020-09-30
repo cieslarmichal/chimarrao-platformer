@@ -52,16 +52,16 @@ void WindowSfml::setView(const sf::View& view)
     window->setView(view);
 }
 
+bool WindowSfml::pollEvent(sf::Event& event) const
+{
+    return window->pollEvent(event);
+}
+
 utils::Vector2f WindowSfml::getMousePosition() const
 {
     sf::Vector2i windowCoordinates = sf::Mouse::getPosition(*window);
     sf::Vector2f worldCoordinates = window->mapPixelToCoords(windowCoordinates);
     return worldCoordinates;
-}
-
-bool WindowSfml::pollEvent(sf::Event& event)
-{
-    return window->pollEvent(event);
 }
 
 void WindowSfml::registerObserver(WindowObserver* observer)

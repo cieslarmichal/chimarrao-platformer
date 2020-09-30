@@ -1,8 +1,8 @@
 #pragma once
 
 #include <ostream>
+#include <vector>
 
-#include "BitMask.h"
 #include "InputKey.h"
 #include "Vector.h"
 
@@ -11,19 +11,21 @@ namespace input
 class InputStatus
 {
 public:
+    InputStatus();
+
     bool isKeyPressed(InputKey) const;
     void setKeyPressed(InputKey);
     bool isKeyReleased(InputKey) const;
-    void setKeyReleased(InputKey);
+    void setReleasedKeys();
     void setMousePosition(const utils::Vector2f&);
     utils::Vector2f getMousePosition() const;
-    utils::BitMask getPressedKeysMask() const;
-    utils::BitMask getReleasedKeysMask() const;
-    void clearStatus();
+    void clearPressedKeys();
 
 private:
-    utils::BitMask pressedKeysMask{};
-    utils::BitMask releasedKeysMask{};
+    const unsigned long numberOfKeys;
+    std::vector<bool> pressedKeys;
+    std::vector<bool> pressedKeysHistory;
+    std::vector<bool> releasedKeys;
     utils::Vector2f mousePosition{};
 };
 
