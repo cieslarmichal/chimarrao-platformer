@@ -19,6 +19,7 @@ public:
     void loadDependentComponents() override;
     void update(utils::DeltaTime) override;
     void handleInputStatus(const input::InputStatus&) override;
+    void enable() override;
     void disable() override;
 
 private:

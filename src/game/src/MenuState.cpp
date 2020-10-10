@@ -103,6 +103,7 @@ void MenuState::createPlayGameButton()
     const auto gameButtonPosition = utils::Vector2f{50, 12};
 
     const auto runGame = [&] {
+        std::cerr << "aaaa";
         states.top()->deactivate();
       states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
     };

@@ -54,6 +54,13 @@ void ClickableComponent::handleInputStatus(const input::InputStatus& inputStatus
     inputStatus = &inputStatusInit;
 }
 
+void ClickableComponent::enable()
+{
+    // TODO: test
+    Component::enable();
+    clicked = false;
+}
+
 void ClickableComponent::disable()
 {
     Component::disable();

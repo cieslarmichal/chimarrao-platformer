@@ -2,16 +2,38 @@
 
 namespace utils
 {
-utils::DeltaTime Timer::getDurationFromLastUpdate()
+Timer::Timer()
 {
-    auto now = std::chrono::high_resolution_clock::now();
-    auto dt = now - previousUpdateTimePoint;
-    previousUpdateTimePoint = now;
-    return dt;
+    elapsed = clock.getElapsedTime();
 }
 
 void Timer::start()
 {
-    previousUpdateTimePoint = std::chrono::high_resolution_clock::now();
+    timeOfPreviousUpdate = std::chrono::high_resolution_clock::now();
 }
+
+void Timer::restart()
+{
+    clock.restart();
+}
+
+utils::DeltaTime Timer::getDurationFromLastUpdate()
+{
+    auto now = std::chrono::high_resolution_clock::now();
+    auto deltaTime = now - timeOfPreviousUpdate;
+    timeOfPreviousUpdate = now;
+    return deltaTime;
+}
+
+float Timer::getElapsedSeconds()
+{
+    elapsed = clock.getElapsedTime();
+    return elapsed.asSeconds();
+}
+
+float Timer::getElapsedAndRestart()
+{
+    return clock.restart().asSeconds();
+}
+
 }

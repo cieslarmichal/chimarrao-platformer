@@ -13,7 +13,7 @@ namespace
 {
 const auto buttonColor = graphics::Color(251, 190, 102);
 const auto buttonHoverColor = graphics::Color(205, 128, 66);
-const auto buttonSize = utils::Vector2f{23, 6};
+const auto buttonSize = utils::Vector2f{27, 6};
 const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
 }
 
@@ -23,7 +23,9 @@ PauseState::PauseState(const std::shared_ptr<window::Window>& windowInit,
                        std::stack<std::unique_ptr<State>>& statesInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
-      backToGameCallback{[&] { states.pop(); }}
+      timeAfterLeaveStateIsPossible{0.5f},
+      shouldBackToGame{false},
+      shouldBackToMenu{false}
 {
     inputManager->registerObserver(this);
 
@@ -46,13 +48,28 @@ void PauseState::initialize()
         button->loadDependentComponents();
         button->start();
     }
+
+    timer.start();
 }
 
 void PauseState::update(const utils::DeltaTime& deltaTime)
 {
-    if (inputStatus->isKeyPressed(input::InputKey::Escape))
+    if (timer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
+        inputStatus->isKeyPressed(input::InputKey::Escape))
     {
-        backToGameCallback();
+        shouldBackToGame = true;
+    }
+
+    if (shouldBackToGame)
+    {
+        backToGame();
+        return;
+    }
+
+    if (shouldBackToMenu)
+    {
+        backToMenu();
+        return;
     }
 
     for (auto& button : buttons)
@@ -94,33 +111,51 @@ void PauseState::handleInputStatus(const input::InputStatus& inputStatusInit)
     inputStatus = &inputStatusInit;
 }
 
+void PauseState::backToGame()
+{
+    states.pop();
+
+    if (not states.empty())
+    {
+        states.top()->activate();
+    }
+}
+
+void PauseState::backToMenu()
+{
+    while (not states.empty() && states.top()->getName() != "Menu state")
+    {
+        states.pop();
+    }
+
+    if (not states.empty())
+    {
+        states.top()->activate();
+    }
+}
+
 void PauseState::createBackground()
 {
     background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::GraphicsComponent>(rendererPool, utils::Vector2f{80, 60},
-                                                            utils::Vector2f{0, 0}, graphics::Color::Black,
-                                                            graphics::VisibilityLayer::Background);
+    background->addComponent<components::GraphicsComponent>(
+        rendererPool, utils::Vector2f{80, 60}, utils::Vector2f{0, 0}, graphics::Color::Transparent,
+        graphics::VisibilityLayer::Background);
 }
 
 void PauseState::createBackToGameButton()
 {
-    const auto backToGameButtonPosition = utils::Vector2f{30, 12};
+    const auto backToGameButtonPosition = utils::Vector2f{26, 15};
 
-    addButton(backToGameButtonPosition, "Back to game", utils::Vector2f{3, 1}, backToGameCallback);
+    addButton(backToGameButtonPosition, "Back to game", utils::Vector2f{1, 1},
+              [this] { shouldBackToGame = true; });
 }
 
 void PauseState::createMenuButton()
 {
-    const auto backToMenuButtonPosition = utils::Vector2f{30, 22};
+    const auto backToMenuButtonPosition = utils::Vector2f{26, 27};
 
-    const auto backToMenu = [&] {
-        while (states.top()->getName() != "Menu state" && not states.empty())
-        {
-            states.pop();
-        }
-    };
-
-    addButton(backToMenuButtonPosition, "Back to menu", utils::Vector2f{3, 1}, backToMenu);
+    addButton(backToMenuButtonPosition, "Back to menu", utils::Vector2f{1, 1},
+              [this] { shouldBackToMenu = true; });
 }
 
 void PauseState::addButton(const utils::Vector2f& position, const std::string& text,
