@@ -11,7 +11,6 @@
 
 namespace game
 {
-
 namespace
 {
 const auto buttonColor = graphics::Color(251, 190, 102);
@@ -103,7 +102,7 @@ void MenuState::createPlayGameButton()
 {
     const auto gameButtonPosition = utils::Vector2f{50, 12};
 
-    auto runGame = [&] {
+    const auto runGame = [&] {
         states.top()->deactivate();
       states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
     };

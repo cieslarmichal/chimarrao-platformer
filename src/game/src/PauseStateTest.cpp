@@ -1,4 +1,4 @@
-#include "MenuState.h"
+#include "PauseState.h"
 
 namespace game
 {
