@@ -58,6 +58,13 @@ void MouseOverComponent::handleInputStatus(const input::InputStatus& inputStatus
     inputStatus = &inputStatusInit;
 }
 
+void MouseOverComponent::enable()
+{
+    // TODO: test
+    Component::enable();
+    mouseOver = false;
+}
+
 void MouseOverComponent::disable()
 {
     Component::disable();

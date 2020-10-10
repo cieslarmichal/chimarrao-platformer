@@ -3,6 +3,7 @@
 #include "ComponentOwner.h"
 #include "State.h"
 #include "InputObserver.h"
+#include "Timer.h"
 
 namespace game
 {
@@ -25,6 +26,8 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
+    void backToGame();
+    void backToMenu();
     void createBackground();
     void createBackToGameButton();
     void createMenuButton();
@@ -32,7 +35,10 @@ private:
                    const utils::Vector2f& textOffset, std::function<void(void)> clickAction);
 
     const input::InputStatus* inputStatus;
-    std::function<void(void)> backToGameCallback;
+    utils::Timer timer;
+    const float timeAfterLeaveStateIsPossible;
+    bool shouldBackToGame;
+    bool shouldBackToMenu;
     std::unique_ptr<components::ComponentOwner> background;
     std::vector<std::unique_ptr<components::ComponentOwner>> buttons;
 };

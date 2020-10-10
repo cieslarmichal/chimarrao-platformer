@@ -17,7 +17,10 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<input::InputManager>& inputManagerInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                      std::stack<std::unique_ptr<State>>& statesInit)
-    : State{windowInit, inputManagerInit, rendererPoolInit, statesInit}, inputStatus{nullptr}, paused{false}
+    : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
+      inputStatus{nullptr},
+      paused{false},
+      timeAfterStateCouldBePaused{0.5f}
 {
     inputManager->registerObserver(this);
 
@@ -56,11 +59,13 @@ void GameState::initialize()
 {
     player->loadDependentComponents();
     player->start();
+    timer.start();
 }
 
 void GameState::update(const utils::DeltaTime& deltaTime)
 {
-    if (inputStatus->isKeyPressed(input::InputKey::Escape))
+    if (timer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
+        inputStatus->isKeyPressed(input::InputKey::Escape))
     {
         pause();
     }
@@ -73,7 +78,10 @@ void GameState::update(const utils::DeltaTime& deltaTime)
 
 void GameState::lateUpdate(const utils::DeltaTime& deltaTime)
 {
-    player->lateUpdate(deltaTime);
+    if (not paused)
+    {
+        player->lateUpdate(deltaTime);
+    }
 }
 
 void GameState::render()
@@ -90,11 +98,14 @@ void GameState::activate()
 {
     active = true;
     paused = false;
+    player->enable();
+    timer.restart();
 }
 
 void GameState::deactivate()
 {
     active = false;
+    timer.restart();
 }
 
 void GameState::handleInputStatus(const input::InputStatus& inputStatusInit)
