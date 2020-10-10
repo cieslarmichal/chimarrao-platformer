@@ -12,10 +12,6 @@ set(SOURCES
         src/Text.cpp
         )
 
-add_library(graphics ${SOURCES})
-target_link_libraries(graphics PUBLIC ${SFML_LIBRARIES} utils window)
-target_include_directories(graphics PUBLIC src)
-
 set(UT_SOURCES
         src/TextureLoaderTest.cpp
         src/FontLoaderTest.cpp
@@ -26,7 +22,10 @@ set(UT_SOURCES
         src/TextTest.cpp
         )
 
+add_library(graphics ${SOURCES})
+target_link_libraries(graphics PUBLIC ${SFML_LIBRARIES} utils window)
+target_include_directories(graphics PUBLIC src)
+
 add_executable(graphicsUT ${UT_SOURCES})
 target_link_libraries(graphicsUT PUBLIC gtest_main gmock graphics)
-
 add_test(graphicsUT graphicsUT --gtest_color=yes)

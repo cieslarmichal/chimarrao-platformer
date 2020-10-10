@@ -9,6 +9,6 @@ class WindowObserver
 public:
     virtual ~WindowObserver() = default;
 
-    virtual void windowSizeChanged(const utils::Vector2u& windowSize) = 0;
+    virtual void handleWindowSizeChange(const utils::Vector2u& windowSize) = 0;
 };
 }

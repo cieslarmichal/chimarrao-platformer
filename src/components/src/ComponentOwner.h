@@ -18,6 +18,8 @@ public:
     void start();
     void update(utils::DeltaTime);
     void lateUpdate(utils::DeltaTime);
+    void enable();
+    void disable();
 
     template <typename T, typename... Args>
     std::shared_ptr<T> addComponent(Args... args)

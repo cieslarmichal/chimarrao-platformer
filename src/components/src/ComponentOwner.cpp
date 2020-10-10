@@ -39,4 +39,20 @@ void ComponentOwner::lateUpdate(utils::DeltaTime deltaTime)
     }
 }
 
+void ComponentOwner::enable()
+{
+    for (int i = components.size() - 1; i >= 0; i--)
+    {
+        components[i]->enable();
+    }
+}
+
+void ComponentOwner::disable()
+{
+    for (int i = components.size() - 1; i >= 0; i--)
+    {
+        components[i]->disable();
+    }
+}
+
 }

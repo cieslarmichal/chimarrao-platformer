@@ -13,6 +13,7 @@ ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
                                        std::function<void(void)> actionInit)
     : Component(ownerInit),
       inputManager{std::move(inputManagerInit)},
+      inputStatus{nullptr},
       action{std::move(actionInit)},
       clicked{false}
 {
@@ -33,14 +34,30 @@ void ClickableComponent::loadDependentComponents()
     }
 }
 
-void ClickableComponent::handleInputStatus(const input::InputStatus& inputStatus)
+void ClickableComponent::update(utils::DeltaTime)
 {
-    if (not clicked && inputStatus.isKeyPressed(input::InputKey::MouseLeft) &&
-        hitbox->intersects(inputStatus.getMousePosition()))
+    if (not enabled)
+    {
+        return;
+    }
+
+    if (not clicked && inputStatus->isKeyPressed(input::InputKey::MouseLeft) &&
+        hitbox->intersects(inputStatus->getMousePosition()))
     {
         action();
         clicked = true;
     }
+}
+
+void ClickableComponent::handleInputStatus(const input::InputStatus& inputStatusInit)
+{
+    inputStatus = &inputStatusInit;
+}
+
+void ClickableComponent::disable()
+{
+    Component::disable();
+    clicked = false;
 }
 
 }

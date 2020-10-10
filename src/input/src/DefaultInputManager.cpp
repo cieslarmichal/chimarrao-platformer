@@ -1,22 +1,21 @@
 #include "DefaultInputManager.h"
 
-#include <SFML/Window/Mouse.hpp>
-#include <utility>
-
 #include "SFML/Window/Keyboard.hpp"
+#include "SFML/Window/Mouse.hpp"
 
 #include "InputKey.h"
 
 namespace input
 {
-DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler> handler, std::shared_ptr<window::Window> windowInit)
-    : observerHandler{std::move(handler)}, window{std::move(windowInit)}
+DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler> handler,
+                                         std::shared_ptr<window::Window> windowInit)
+    : observationHandler{std::move(handler)}, window{std::move(windowInit)}
 {
 }
 
 void DefaultInputManager::readInput()
 {
-    inputStatus.clearStatus();
+    inputStatus.clearPressedKeys();
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
     {
@@ -66,24 +65,24 @@ void DefaultInputManager::readInput()
         inputStatus.setKeyPressed(InputKey::MouseRight);
     }
 
+    inputStatus.setReleasedKeys();
     inputStatus.setMousePosition(window->getMousePosition());
-
     notifyObservers();
 }
 
 void DefaultInputManager::registerObserver(InputObserver* observer)
 {
-    observerHandler->registerObserver(observer);
+    observationHandler->registerObserver(observer);
 }
 
 void DefaultInputManager::removeObserver(InputObserver* observer)
 {
-    observerHandler->removeObserver(observer);
+    observationHandler->removeObserver(observer);
 }
 
 void DefaultInputManager::notifyObservers()
 {
-    observerHandler->notifyObservers(inputStatus);
+    observationHandler->notifyObservers(inputStatus);
 }
 
 }

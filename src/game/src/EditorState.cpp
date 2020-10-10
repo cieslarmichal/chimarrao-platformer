@@ -37,7 +37,6 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
             clickableTile->addComponent<components::ClickableComponent>(inputManager, [=]() {
                 tileMap->setTile({x, y}, 1);
                 graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
-                //std::cout << x << " " << y << "\n";
             });
             clickableTileMap.push_back(std::move(clickableTile));
         }
@@ -45,6 +44,7 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
 
     initialize();
 }
+
 void EditorState::initialize()
 {
     for (auto& tile : clickableTileMap)
@@ -53,6 +53,7 @@ void EditorState::initialize()
         tile->start();
     }
 }
+
 void EditorState::update(const utils::DeltaTime& dt)
 {
     for (auto& tile : clickableTileMap)
@@ -60,6 +61,7 @@ void EditorState::update(const utils::DeltaTime& dt)
         tile->update(dt);
     }
 }
+
 void EditorState::lateUpdate(const utils::DeltaTime& dt)
 {
     for (auto& tile : clickableTileMap)
@@ -67,12 +69,25 @@ void EditorState::lateUpdate(const utils::DeltaTime& dt)
         tile->lateUpdate(dt);
     }
 }
+
 void EditorState::render()
 {
     rendererPool->renderAll();
 }
+
 std::string EditorState::getName() const
 {
     return "Editor state";
 }
+
+void EditorState::activate()
+{
+    active = true;
+}
+
+void EditorState::deactivate()
+{
+    active = false;
+}
+
 }

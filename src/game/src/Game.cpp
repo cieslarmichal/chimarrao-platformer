@@ -2,10 +2,10 @@
 
 #include "DefaultInputManager.h"
 #include "DefaultInputObservationHandler.h"
-#include "GameState.h"
 #include "EditorState.h"
+#include "GameState.h"
 #include "GraphicsFactory.h"
-#include "MainMenuState.h"
+#include "MenuState.h"
 #include "Vector.h"
 #include "WindowFactory.h"
 
@@ -54,7 +54,7 @@ void Game::update()
     }
     else
     {
-        //std::cout<< states.top()->getName() << std::endl;
+        std::cout << states.top()->getName() << std::endl;
         states.top()->update(dt);
     }
 }
@@ -86,8 +86,8 @@ void Game::render()
 
 void Game::initStates()
 {
-    states.push(std::make_unique<EditorState>(window, inputManager, rendererPool, states));
-    //    states.push(std::make_unique<MainGameState>(window, inputManager, rendererPool));
+    states.push(std::make_unique<MenuState>(window, inputManager, rendererPool, states));
+//    states.push(std::make_unique<EditorState>(window, inputManager, rendererPool, states));
 }
 
 }

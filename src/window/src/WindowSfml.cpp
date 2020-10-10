@@ -4,7 +4,9 @@
 
 namespace window
 {
-WindowSfml::WindowSfml(const utils::Vector2u& windowSize, const std::string& windowTitle)
+WindowSfml::WindowSfml(const utils::Vector2u& windowSize, const std::string& windowTitle,
+                       std::unique_ptr<WindowObservationHandler> observationHandlerInit)
+    : observationHandler{std::move(observationHandlerInit)}
 {
     window = std::make_unique<sf::RenderWindow>();
     window->create(sf::VideoMode(windowSize.x, windowSize.y), windowTitle);
@@ -24,6 +26,7 @@ void WindowSfml::display()
 
 void WindowSfml::update()
 {
+    // TODO: sf::Event in update param
     sf::Event event{};
 
     while (window->pollEvent(event))
@@ -49,6 +52,11 @@ void WindowSfml::setView(const sf::View& view)
     window->setView(view);
 }
 
+bool WindowSfml::pollEvent(sf::Event& event) const
+{
+    return window->pollEvent(event);
+}
+
 utils::Vector2f WindowSfml::getMousePosition() const
 {
     sf::Vector2i windowCoordinates = sf::Mouse::getPosition(*window);
@@ -56,30 +64,19 @@ utils::Vector2f WindowSfml::getMousePosition() const
     return worldCoordinates;
 }
 
-bool WindowSfml::pollEvent(sf::Event& event)
-{
-    return window->pollEvent(event);
-}
-
 void WindowSfml::registerObserver(WindowObserver* observer)
 {
-    observers.push_back(observer);
+    observationHandler->registerObserver(observer);
 }
 
 void WindowSfml::removeObserver(WindowObserver* observer)
 {
-    observers.erase(std::remove(observers.begin(), observers.end(), observer), observers.end());
+    observationHandler->removeObserver(observer);
 }
 
 void WindowSfml::notifyObservers()
 {
-    for (const auto& observer : observers)
-    {
-        if (observer)
-        {
-            observer->windowSizeChanged(window->getSize());
-        }
-    }
+    observationHandler->notifyObservers(window->getSize());
 }
 
 }

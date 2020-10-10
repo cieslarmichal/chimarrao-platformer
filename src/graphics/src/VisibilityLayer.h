@@ -1,6 +1,7 @@
 #pragma once
 
-namespace graphics {
+namespace graphics
+{
 enum class VisibilityLayer
 {
     First,

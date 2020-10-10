@@ -17,10 +17,13 @@ public:
     ~ClickableComponent();
 
     void loadDependentComponents() override;
+    void update(utils::DeltaTime) override;
     void handleInputStatus(const input::InputStatus&) override;
+    void disable() override;
 
 private:
     std::shared_ptr<input::InputManager> inputManager;
+    const input::InputStatus* inputStatus;
     std::shared_ptr<HitboxComponent> hitbox;
     std::function<void(void)> action;
     bool clicked;

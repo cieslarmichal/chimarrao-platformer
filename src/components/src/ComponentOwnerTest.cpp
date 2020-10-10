@@ -56,3 +56,26 @@ TEST_F(ComponentOwnerTest, getComponentWhenComponentCreated_shouldReturnValidCom
 
     ASSERT_EQ(addedAnimationComponent, animationComponentByGet);
 }
+
+TEST_F(ComponentOwnerTest, shouldDisableComponents)
+{
+    auto animationComponent = componentOwner.addComponent<AnimationComponent>(animator);
+    auto transformComponent = componentOwner.transform;
+
+    componentOwner.disable();
+
+    ASSERT_FALSE(animationComponent->isEnabled());
+    ASSERT_FALSE(transformComponent->isEnabled());
+}
+
+TEST_F(ComponentOwnerTest, shouldEnableComponents)
+{
+    auto animationComponent = componentOwner.addComponent<AnimationComponent>(animator);
+    auto transformComponent = componentOwner.transform;
+    componentOwner.disable();
+
+    componentOwner.enable();
+
+    ASSERT_TRUE(animationComponent->isEnabled());
+    ASSERT_TRUE(transformComponent->isEnabled());
+}

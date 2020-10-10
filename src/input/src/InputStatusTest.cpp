@@ -7,14 +7,6 @@ using namespace input;
 
 namespace
 {
-const auto up = InputKey::Up;
-const auto down = InputKey::Down;
-const auto left = InputKey::Left;
-const auto right = InputKey::Right;
-const auto space = InputKey::Space;
-const auto shift = InputKey::Shift;
-const auto enter = InputKey::Enter;
-const auto escape = InputKey::Escape;
 const utils::Vector2f position{10.2, 3.0};
 const utils::Vector2f zeroPosition{0.0, 0.0};
 }
@@ -25,40 +17,39 @@ public:
     InputStatus inputStatus;
 };
 
-TEST_F(InputStatusTest, initialInputStatus_inputKeysAndMousePositionShouldBeSetToZero)
+TEST_F(InputStatusTest, initialInputStatus_pressedKeysAndReleasedKeysAndMousePositionShouldBeSetToZero)
 {
-    ASSERT_EQ(inputStatus.getMaskStatus().getMask(), 0);
-    ASSERT_EQ(inputStatus.getMousePosition(), zeroPosition);
-}
+    for (const auto& key : allKeys)
+    {
+        ASSERT_FALSE(inputStatus.isKeyPressed(key));
+        ASSERT_FALSE(inputStatus.isKeyReleased(key));
+    }
 
-TEST_F(InputStatusTest, initialInputKeysStatus_shouldReturnUnpressedKeys)
-{
-    ASSERT_FALSE(inputStatus.isKeyPressed(up));
-    ASSERT_FALSE(inputStatus.isKeyPressed(down));
-    ASSERT_FALSE(inputStatus.isKeyPressed(left));
-    ASSERT_FALSE(inputStatus.isKeyPressed(right));
-    ASSERT_FALSE(inputStatus.isKeyPressed(space));
-    ASSERT_FALSE(inputStatus.isKeyPressed(shift));
-    ASSERT_FALSE(inputStatus.isKeyPressed(enter));
-    ASSERT_FALSE(inputStatus.isKeyPressed(escape));
+    ASSERT_EQ(inputStatus.getMousePosition(), zeroPosition);
 }
 
 TEST_F(InputStatusTest, shouldSetKeyPressed)
 {
-    inputStatus.setKeyPressed(up);
-
-    ASSERT_TRUE(inputStatus.isKeyPressed(up));
+    for (const auto& key : allKeys)
+    {
+        inputStatus.setKeyPressed(key);
+        ASSERT_TRUE(inputStatus.isKeyPressed(key));
+    }
 }
 
-TEST_F(InputStatusTest, shouldClearKeysStatus)
+TEST_F(InputStatusTest, shouldClearPressedKeys)
 {
-    inputStatus.setKeyPressed(up);
-    inputStatus.setKeyPressed(down);
+    for (const auto& key : allKeys)
+    {
+        inputStatus.setKeyPressed(key);
+    }
 
-    inputStatus.clearStatus();
+    inputStatus.clearPressedKeys();
 
-    ASSERT_FALSE(inputStatus.isKeyPressed(up));
-    ASSERT_FALSE(inputStatus.isKeyPressed(down));
+    for (const auto& key : allKeys)
+    {
+        ASSERT_FALSE(inputStatus.isKeyPressed(key));
+    }
 }
 
 TEST_F(InputStatusTest, shouldSetMousePosition)
@@ -66,4 +57,28 @@ TEST_F(InputStatusTest, shouldSetMousePosition)
     inputStatus.setMousePosition(position);
 
     ASSERT_EQ(inputStatus.getMousePosition(), position);
+}
+
+TEST_F(InputStatusTest, afterKeysPressed_shouldNotSetReleasedKey)
+{
+    inputStatus.setKeyPressed(InputKey::Up);
+    inputStatus.setKeyPressed(InputKey::MouseRight);
+
+    inputStatus.setReleasedKeys();
+
+    ASSERT_FALSE(inputStatus.isKeyReleased(InputKey::Up));
+    ASSERT_FALSE(inputStatus.isKeyReleased(InputKey::MouseRight));
+}
+
+TEST_F(InputStatusTest, afterKeysPressedAndCleared_shouldSetReleasedKey)
+{
+    inputStatus.setKeyPressed(InputKey::Up);
+    inputStatus.setKeyPressed(InputKey::MouseLeft);
+    inputStatus.setReleasedKeys();
+    inputStatus.clearPressedKeys();
+
+    inputStatus.setReleasedKeys();
+
+    ASSERT_TRUE(inputStatus.isKeyReleased(InputKey::Up));
+    ASSERT_TRUE(inputStatus.isKeyReleased(InputKey::MouseLeft));
 }

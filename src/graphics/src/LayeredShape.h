@@ -1,8 +1,10 @@
 #pragma once
+
 #include "RectangleShape.h"
 #include "VisibilityLayer.h"
 
-namespace graphics {
+namespace graphics
+{
 struct LayeredShape
 {
     VisibilityLayer layer;

@@ -5,11 +5,11 @@
 namespace components
 {
 
-GraphicsComponent::GraphicsComponent(ComponentOwner* owner,
+GraphicsComponent::GraphicsComponent(ComponentOwner* ownerInit,
                                      std::shared_ptr<graphics::RendererPool> rendererPoolInit,
-                                     const utils::Vector2f& size, const utils::Vector2f& position, const graphics::Color& color,
-                                     graphics::VisibilityLayer layer)
-    : Component{owner}, rendererPool{std::move(rendererPoolInit)}
+                                     const utils::Vector2f& size, const utils::Vector2f& position,
+                                     const graphics::Color& color, graphics::VisibilityLayer layer)
+    : Component{ownerInit}, rendererPool{std::move(rendererPoolInit)}, visibilityLayer{layer}
 {
     id = rendererPool->acquire(size, position, color, layer);
 }
@@ -17,8 +17,9 @@ GraphicsComponent::GraphicsComponent(ComponentOwner* owner,
 GraphicsComponent::GraphicsComponent(ComponentOwner* owner,
                                      std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                                      const utils::Vector2f& size, const utils::Vector2f& position,
-                                     const graphics::TexturePath& texturePath, graphics::VisibilityLayer layer)
-    : Component{owner}, rendererPool{std::move(rendererPoolInit)}
+                                     const graphics::TexturePath& texturePath,
+                                     graphics::VisibilityLayer layer)
+    : Component{owner}, rendererPool{std::move(rendererPoolInit)}, visibilityLayer{layer}
 {
     id = rendererPool->acquire(size, position, texturePath, layer);
 }
@@ -30,7 +31,10 @@ GraphicsComponent::~GraphicsComponent()
 
 void GraphicsComponent::lateUpdate(utils::DeltaTime deltaTime)
 {
-    rendererPool->setPosition(id, owner->transform->getPosition());
+    if (enabled)
+    {
+        rendererPool->setPosition(id, owner->transform->getPosition());
+    }
 }
 
 const graphics::GraphicsId& GraphicsComponent::getGraphicsId()
@@ -40,10 +44,23 @@ const graphics::GraphicsId& GraphicsComponent::getGraphicsId()
 
 void GraphicsComponent::setColor(const graphics::Color& color)
 {
-    // TODO: test
     rendererPool->setColor(id, color);
 }
-void GraphicsComponent::setVisibility(graphics::VisibilityLayer layer) {
-    rendererPool->setVisibility(id,layer);
+
+void GraphicsComponent::setVisibility(graphics::VisibilityLayer layer)
+{
+    rendererPool->setVisibility(id, layer);
+}
+
+void GraphicsComponent::enable()
+{
+    Component::enable();
+    setVisibility(visibilityLayer);
+}
+
+void GraphicsComponent::disable()
+{
+    Component::disable();
+    setVisibility(graphics::VisibilityLayer::Invisible);
 }
 }

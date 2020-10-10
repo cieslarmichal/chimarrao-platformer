@@ -20,8 +20,8 @@ public:
 private:
     void notifyObservers() override;
 
-    std::unique_ptr<InputObservationHandler> observerHandler;
-    InputStatus inputStatus;
+    std::unique_ptr<InputObservationHandler> observationHandler;
     std::shared_ptr<window::Window> window;
+    InputStatus inputStatus;
 };
 }
