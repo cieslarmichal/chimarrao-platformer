@@ -32,6 +32,6 @@ public:
 private:
     std::shared_ptr<graphics::RendererPool> rendererPool;
     graphics::GraphicsId id;
-    const graphics::VisibilityLayer visibilityLayer;
+    graphics::VisibilityLayer visibilityLayer;
 };
 }

@@ -1,6 +1,7 @@
 #include "EditorState.h"
 
 #include "ComponentOwner.h"
+#include "EditorMenuState.h"
 #include "GetProjectPath.h"
 #include "GraphicsComponent.h"
 #include "TileMap.h"
@@ -12,8 +13,13 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                          const std::shared_ptr<input::InputManager>& inputManagerInit,
                          const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                          std::stack<std::unique_ptr<State>>& states)
-    : State{windowInit, inputManagerInit, rendererPoolInit, states}
+    : State{windowInit, inputManagerInit, rendererPoolInit, states},
+      inputStatus{nullptr},
+      paused{false},
+      timeAfterStateCouldBePaused{0.5f}
 {
+    inputManager->registerObserver(this);
+
     background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
     background->addComponent<components::GraphicsComponent>(
         rendererPool, utils::Vector2f{80, 60}, utils::Vector2f{0, 0},
@@ -36,13 +42,18 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
             clickableTile->addComponent<components::HitboxComponent>(utils::Vector2f{5, 5});
             clickableTile->addComponent<components::ClickableComponent>(inputManager, [=]() {
                 tileMap->setTile({x, y}, 1);
-                graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
+                graphicsComponent->setVisibility(graphics::VisibilityLayer::Second);
             });
             clickableTileMap.push_back(std::move(clickableTile));
         }
     }
 
     initialize();
+}
+
+EditorState::~EditorState()
+{
+    inputManager->removeObserver(this);
 }
 
 void EditorState::initialize()
@@ -56,17 +67,29 @@ void EditorState::initialize()
 
 void EditorState::update(const utils::DeltaTime& dt)
 {
-    for (auto& tile : clickableTileMap)
+    if (timer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
+        inputStatus->isKeyPressed(input::InputKey::Escape))
     {
-        tile->update(dt);
+        pause();
+    }
+
+    if (not paused)
+    {
+        for (auto& tile : clickableTileMap)
+        {
+            tile->update(dt);
+        }
     }
 }
 
 void EditorState::lateUpdate(const utils::DeltaTime& dt)
 {
-    for (auto& tile : clickableTileMap)
+    if (not paused)
     {
-        tile->lateUpdate(dt);
+        for (auto& tile : clickableTileMap)
+        {
+            tile->lateUpdate(dt);
+        }
     }
 }
 
@@ -83,11 +106,36 @@ std::string EditorState::getName() const
 void EditorState::activate()
 {
     active = true;
+    paused = false;
+    for (auto& tile : clickableTileMap)
+    {
+        tile->enable();
+    }
+    timer.restart();
 }
 
 void EditorState::deactivate()
 {
     active = false;
+    timer.restart();
+}
+
+void EditorState::handleInputStatus(const input::InputStatus& inputStatusInit)
+{
+    inputStatus = &inputStatusInit;
+}
+
+void EditorState::pause()
+{
+    paused = true;
+
+    for (auto& tile : clickableTileMap)
+    {
+        tile->disable();
+        tile->getComponent<components::GraphicsComponent>()->enable();
+    }
+
+    states.push(std::make_unique<EditorMenuState>(window, inputManager, rendererPool, states));
 }
 
 }

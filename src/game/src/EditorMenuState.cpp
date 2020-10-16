@@ -1,4 +1,4 @@
-#include "PauseState.h"
+#include "EditorMenuState.h"
 
 #include "ClickableComponent.h"
 #include "GetProjectPath.h"
@@ -18,32 +18,34 @@ const auto buttonSize = utils::Vector2f{25, 5};
 const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/font.ttf";
 }
 
-PauseState::PauseState(const std::shared_ptr<window::Window>& windowInit,
-                       const std::shared_ptr<input::InputManager>& inputManagerInit,
-                       const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                       std::stack<std::unique_ptr<State>>& statesInit)
+EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowInit,
+                                 const std::shared_ptr<input::InputManager>& inputManagerInit,
+                                 const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
+                                 std::stack<std::unique_ptr<State>>& statesInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
       timeAfterLeaveStateIsPossible{0.5f},
-      shouldBackToGame{false},
+      shouldBackToEditor{false},
       shouldBackToMenu{false}
 {
     inputManager->registerObserver(this);
 
     createBackground();
-    createPauseTitle();
-    createBackToGameButton();
+    createEditorTitle();
+    createBackToEditorButton();
+    createNewMapButton();
+    createSaveMapButton();
     createMenuButton();
 
     initialize();
 }
 
-PauseState::~PauseState()
+EditorMenuState::~EditorMenuState()
 {
     inputManager->removeObserver(this);
 }
 
-void PauseState::initialize()
+void EditorMenuState::initialize()
 {
     for (auto& button : buttons)
     {
@@ -54,17 +56,17 @@ void PauseState::initialize()
     timer.start();
 }
 
-void PauseState::update(const utils::DeltaTime& deltaTime)
+void EditorMenuState::update(const utils::DeltaTime& deltaTime)
 {
     if (timer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
         inputStatus->isKeyPressed(input::InputKey::Escape))
     {
-        shouldBackToGame = true;
+        shouldBackToEditor = true;
     }
 
-    if (shouldBackToGame)
+    if (shouldBackToEditor)
     {
-        backToGame();
+        backToEditor();
         return;
     }
 
@@ -80,7 +82,7 @@ void PauseState::update(const utils::DeltaTime& deltaTime)
     }
 }
 
-void PauseState::lateUpdate(const utils::DeltaTime& deltaTime)
+void EditorMenuState::lateUpdate(const utils::DeltaTime& deltaTime)
 {
     for (auto& button : buttons)
     {
@@ -88,32 +90,32 @@ void PauseState::lateUpdate(const utils::DeltaTime& deltaTime)
     }
 }
 
-void PauseState::render()
+void EditorMenuState::render()
 {
     rendererPool->renderAll();
 }
 
-std::string PauseState::getName() const
+std::string EditorMenuState::getName() const
 {
-    return "Pause state";
+    return "Editor menu state";
 }
 
-void PauseState::activate()
+void EditorMenuState::activate()
 {
     active = true;
 }
 
-void PauseState::deactivate()
+void EditorMenuState::deactivate()
 {
     active = false;
 }
 
-void PauseState::handleInputStatus(const input::InputStatus& inputStatusInit)
+void EditorMenuState::handleInputStatus(const input::InputStatus& inputStatusInit)
 {
     inputStatus = &inputStatusInit;
 }
 
-void PauseState::backToGame()
+void EditorMenuState::backToEditor()
 {
     states.pop();
 
@@ -123,7 +125,7 @@ void PauseState::backToGame()
     }
 }
 
-void PauseState::backToMenu()
+void EditorMenuState::backToMenu()
 {
     while (not states.empty() && states.top()->getName() != "Menu state")
     {
@@ -136,41 +138,57 @@ void PauseState::backToMenu()
     }
 }
 
-void PauseState::createPauseTitle()
+void EditorMenuState::createEditorTitle()
 {
-    const auto textPausePosition = utils::Vector2f{35, 13};
+    const auto textPausePosition = utils::Vector2f{30, 11};
     title = std::make_unique<components::ComponentOwner>(textPausePosition);
-    title->addComponent<components::TextComponent>(rendererPool, textPausePosition, "Pause", fontPath, 40,
-                                                   graphics::Color::White, utils::Vector2f{0, 0});
+    title->addComponent<components::TextComponent>(rendererPool, textPausePosition, "Editor Menu", fontPath,
+                                                   40, graphics::Color::White, utils::Vector2f{0, 0});
 }
 
-void PauseState::createBackground()
+void EditorMenuState::createBackground()
 {
     const auto backgroundColor = graphics::Color{172};
     background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::GraphicsComponent>(rendererPool, utils::Vector2f{31, 32},
-                                                            utils::Vector2f{25, 10}, backgroundColor,
-                                                            graphics::VisibilityLayer::Background);
+    background->addComponent<components::GraphicsComponent>(rendererPool, utils::Vector2f{31, 43},
+                                                            utils::Vector2f{25, 8}, backgroundColor,
+                                                            graphics::VisibilityLayer::Second);
 }
 
-void PauseState::createBackToGameButton()
+void EditorMenuState::createBackToEditorButton()
 {
-    const auto backToGameButtonPosition = utils::Vector2f{28, 21};
+    const auto backToGameButtonPosition = utils::Vector2f{28, 19};
 
-    addButton(backToGameButtonPosition, "Back to game", utils::Vector2f{2, 0},
-              [this] { shouldBackToGame = true; });
+    addButton(backToGameButtonPosition, "Back to editor", utils::Vector2f{2, 0},
+              [this] { shouldBackToEditor = true; });
 }
 
-void PauseState::createMenuButton()
+void EditorMenuState::createNewMapButton()
 {
-    const auto backToMenuButtonPosition = utils::Vector2f{28, 30};
+    const auto backToMenuButtonPosition = utils::Vector2f{28, 27};
+
+    addButton(backToMenuButtonPosition, "New map", utils::Vector2f{5, 0},
+              [this] { std::cout << "new map\n"; });
+}
+
+void EditorMenuState::createSaveMapButton()
+{
+    const auto backToMenuButtonPosition = utils::Vector2f{28, 35};
+
+    addButton(backToMenuButtonPosition, "Save map", utils::Vector2f{5, 0},
+              [this] { std::cout << "save map\n"; });
+}
+
+void EditorMenuState::createMenuButton()
+{
+    const auto backToMenuButtonPosition = utils::Vector2f{28, 43};
 
     addButton(backToMenuButtonPosition, "Back to menu", utils::Vector2f{2, 0},
               [this] { shouldBackToMenu = true; });
 }
 
-void PauseState::addButton(const utils::Vector2f& position, const std::string& text,
-                           const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
+void EditorMenuState::addButton(const utils::Vector2f& position, const std::string& text,
+                                const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
 {
     auto button = std::make_unique<components::ComponentOwner>(position);
     auto graphicsComponent = button->addComponent<components::GraphicsComponent>(

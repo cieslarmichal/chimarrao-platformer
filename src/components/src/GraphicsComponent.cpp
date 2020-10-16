@@ -50,6 +50,7 @@ void GraphicsComponent::setColor(const graphics::Color& color)
 void GraphicsComponent::setVisibility(graphics::VisibilityLayer layer)
 {
     rendererPool->setVisibility(id, layer);
+    visibilityLayer = layer;
 }
 
 void GraphicsComponent::enable()
@@ -61,6 +62,6 @@ void GraphicsComponent::enable()
 void GraphicsComponent::disable()
 {
     Component::disable();
-    setVisibility(graphics::VisibilityLayer::Invisible);
+    rendererPool->setVisibility(id, graphics::VisibilityLayer::Invisible);
 }
 }

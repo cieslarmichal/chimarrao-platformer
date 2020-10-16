@@ -6,6 +6,7 @@ set(SOURCES
         src/EditorState.cpp
         src/PauseState.cpp
         src/TileMap.cpp
+        src/EditorMenuState.cpp
         )
 
 set(UT_SOURCES
@@ -14,6 +15,7 @@ set(UT_SOURCES
         src/MenuStateTest.cpp
         src/EditorStateTest.cpp
         src/PauseStateTest.cpp
+        src/EditorMenuStateTest.cpp
         )
 
 add_library(game ${SOURCES})

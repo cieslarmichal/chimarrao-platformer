@@ -62,20 +62,20 @@ TEST_F(PlayerAnimatorTest,
        givenAnimatorSettingsWithDifferentNameThanPlayer_shouldThrowInvalidAnimatorConfigFile)
 {
     ASSERT_THROW(PlayerAnimator(graphicsId1, rendererPool, animatorSettingsWithDifferentName),
-                 exceptions::InvalidAnimatorSettings);
+                 animations::exceptions::InvalidAnimatorSettings);
 }
 
 TEST_F(PlayerAnimatorTest,
        givenInitialAnimationTypeDifferentThanPlayersAnimationsType_shouldThrowAnimationTypeNotSupported)
 {
     ASSERT_THROW(PlayerAnimator(graphicsId1, rendererPool, animatorSettings, AnimationType::Jump),
-                 exceptions::AnimationTypeNotSupported);
+                 animations::exceptions::AnimationTypeNotSupported);
 }
 
 TEST_F(PlayerAnimatorTest, givenAnimatorSettingsWithEmptyAnimations_shouldThrowAnimationsFromSettingsNotFound)
 {
     ASSERT_THROW(PlayerAnimator(graphicsId1, rendererPool, animatorSettingsWithEmptyAnimationsSettings),
-                 exceptions::AnimationsFromSettingsNotFound);
+                 animations::exceptions::AnimationsFromSettingsNotFound);
 }
 
 TEST_F(PlayerAnimatorTest, getInitialAnimationType_shouldReturnIdle)
@@ -154,7 +154,7 @@ TEST_F(PlayerAnimatorTest,
 TEST_F(PlayerAnimatorTest, givenNotSupportedAnimationType_shouldThrowAnimationNotSupported)
 {
     ASSERT_THROW(playerAnimator.setAnimation(notSupportedAnimationType),
-                 exceptions::AnimationTypeNotSupported);
+                 animations::exceptions::AnimationTypeNotSupported);
 }
 
 TEST_F(PlayerAnimatorTest, givenSupportedAnimationType_shouldNotThrowAndChangeAnimationType)
@@ -166,7 +166,7 @@ TEST_F(PlayerAnimatorTest, givenSupportedAnimationType_shouldNotThrowAndChangeAn
 TEST_F(PlayerAnimatorTest, givenNotSupportedAnimationTypeAndDirection_shouldThrowAnimationNotSupported)
 {
     ASSERT_THROW(playerAnimator.setAnimation(notSupportedAnimationType, AnimationDirection::Right),
-                 exceptions::AnimationTypeNotSupported);
+                 animations::exceptions::AnimationTypeNotSupported);
 }
 
 TEST_F(PlayerAnimatorTest,
