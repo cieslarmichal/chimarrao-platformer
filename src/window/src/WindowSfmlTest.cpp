@@ -12,6 +12,7 @@ namespace
 const utils::Vector2u windowSize{800,600};
 const utils::Vector2u windowSizeChanged{1000,600};
 const std::string windowTitle{"window"};
+const sf::VideoMode videoMode{50, 100};
 }
 
 class WindowSfmlTest : public Test
@@ -43,4 +44,9 @@ TEST_F(WindowSfmlTest, shouldRemoveObserver)
     EXPECT_CALL(*observationHandler, removeObserver(observer1.get()));
 
     window.removeObserver(observer1.get());
+}
+
+TEST_F(WindowSfmlTest, setVideoMode_shouldNotThrow)
+{
+    ASSERT_NO_THROW(window.setVideoMode(videoMode));
 }

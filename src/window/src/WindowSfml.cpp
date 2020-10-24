@@ -1,17 +1,21 @@
 #include "WindowSfml.h"
 
 #include <SFML/Window/Event.hpp>
+#include <utility>
 
 namespace window
 {
-WindowSfml::WindowSfml(const utils::Vector2u& windowSize, const std::string& windowTitle,
+WindowSfml::WindowSfml(const utils::Vector2u& windowSize, std::string windowTitleInit,
                        std::unique_ptr<WindowObservationHandler> observationHandlerInit)
-    : observationHandler{std::move(observationHandlerInit)}
+    : observationHandler{std::move(observationHandlerInit)},
+      windowTitle{std::move(windowTitleInit)},
+      verticalSync{true},
+      framerateLimit{120}
 {
     window = std::make_unique<sf::RenderWindow>();
     window->create(sf::VideoMode(windowSize.x, windowSize.y), windowTitle);
-    window->setVerticalSyncEnabled(true);
-    window->setFramerateLimit(120);
+    window->setVerticalSyncEnabled(verticalSync);
+    window->setFramerateLimit(framerateLimit);
 }
 
 bool WindowSfml::isOpen() const
@@ -77,6 +81,25 @@ void WindowSfml::removeObserver(WindowObserver* observer)
 void WindowSfml::notifyObservers()
 {
     observationHandler->notifyObservers(window->getSize());
+}
+
+void WindowSfml::setVerticalSync(bool enabled)
+{
+    verticalSync = enabled;
+    window->setVerticalSyncEnabled(verticalSync);
+}
+
+void WindowSfml::setFramerateLimit(unsigned int frameLimit)
+{
+    framerateLimit = frameLimit;
+    window->setFramerateLimit(framerateLimit);
+}
+
+void WindowSfml::setVideoMode(const sf::VideoMode& videoMode)
+{
+    window.reset();
+    window = std::make_unique<sf::RenderWindow>();
+    window->create(videoMode, windowTitle);
 }
 
 }

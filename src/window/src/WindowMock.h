@@ -21,5 +21,8 @@ public:
     MOCK_METHOD(void, registerObserver, (WindowObserver*), (override));
     MOCK_METHOD(void, removeObserver, (WindowObserver*), (override));
     MOCK_METHOD(void, notifyObservers, (), (override));
+    MOCK_METHOD(void, setVerticalSync, (bool enabled), (override));
+    MOCK_METHOD(void, setFramerateLimit, (unsigned int frameLimit), (override));
+    MOCK_METHOD(void, setVideoMode, (const sf::VideoMode&), (override));
 };
 }

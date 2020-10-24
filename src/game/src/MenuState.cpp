@@ -16,22 +16,35 @@ namespace
 const auto buttonColor = graphics::Color(251, 190, 102);
 const auto buttonHoverColor = graphics::Color(205, 128, 66);
 const auto buttonSize = utils::Vector2f{23, 6};
+const auto iconSize = utils::Vector2f{4, 4};
 const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
+const auto iconPath = utils::getProjectPath("chimarrao-platformer") + "resources/yerba_item.png";
 }
 
 MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
-                             const std::shared_ptr<input::InputManager>& inputManagerInit,
-                             const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                             std::stack<std::unique_ptr<State>>& statesInit)
-    : State{windowInit, inputManagerInit, rendererPoolInit, statesInit}
+                     const std::shared_ptr<input::InputManager>& inputManagerInit,
+                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
+                     std::stack<std::unique_ptr<State>>& statesInit)
+    : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
+      inputStatus{nullptr},
+      currentButtonIndex{0},
+      timeAfterButtonCanBeSwitched{0.2}
 {
+    inputManager->registerObserver(this);
+
     createBackground();
     createPlayGameButton();
     createMapEditorButton();
     createSettingsButton();
     createExitButton();
+    createIcons();
 
     initialize();
+}
+
+MenuState::~MenuState()
+{
+    inputManager->removeObserver(this);
 }
 
 void MenuState::initialize()
@@ -41,10 +54,27 @@ void MenuState::initialize()
         button->loadDependentComponents();
         button->start();
     }
+
+    buttons[currentButtonIndex]->getComponent<components::GraphicsComponent>()->setColor(buttonHoverColor);
+    setIconVisible(currentButtonIndex);
 }
 
 void MenuState::update(const utils::DeltaTime& deltaTime)
 {
+    if (timer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
+    {
+        if (inputStatus->isKeyPressed(input::InputKey::Up))
+        {
+            changeSelectedButtonUp();
+            timer.restart();
+        }
+        else if (inputStatus->isKeyPressed(input::InputKey::Down))
+        {
+            changeSelectedButtonDown();
+            timer.restart();
+        }
+    }
+
     for (auto& button : buttons)
     {
         button->update(deltaTime);
@@ -89,6 +119,11 @@ void MenuState::deactivate()
     }
 }
 
+void MenuState::handleInputStatus(const input::InputStatus& inputStatusInit)
+{
+    inputStatus = &inputStatusInit;
+}
+
 void MenuState::createBackground()
 {
     background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
@@ -103,7 +138,6 @@ void MenuState::createPlayGameButton()
     const auto gameButtonPosition = utils::Vector2f{50, 12};
 
     const auto runGame = [&] {
-        std::cerr << "aaaa";
         states.top()->deactivate();
       states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
     };
@@ -140,8 +174,10 @@ void MenuState::createExitButton()
     const auto exitButtonPosition = utils::Vector2f{50, 42};
 
     const auto exit = [&] {
-        // TODO: add exit
-        std::cout << "Exit\n";
+        if (not states.empty())
+        {
+            states.pop();
+        }
     };
 
     addButton(exitButtonPosition, "Exit", utils::Vector2f{7, 1}, exit);
@@ -158,11 +194,106 @@ void MenuState::addButton(const utils::Vector2f& position, const std::string& te
     button->addComponent<components::HitboxComponent>(buttonSize);
     button->addComponent<components::ClickableComponent>(inputManager, std::move(clickAction));
 
-    const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };
-    const auto changeColorOnMouseOut = [=] { graphicsComponent->setColor(buttonColor); };
+    const auto buttonIndex = buttons.size();
+
+    const auto changeColorOnMouseOver = [=] {
+        unselectAllButtons();
+        changeSelectedButton(buttonIndex);
+        setIconVisible(buttonIndex);
+        graphicsComponent->setColor(buttonHoverColor);
+    };
+    const auto changeColorOnMouseOut = [=] {
+        graphicsComponent->setColor(buttonColor);
+        hideIcons();
+    };
     button->addComponent<components::MouseOverComponent>(inputManager, changeColorOnMouseOver,
                                                          changeColorOnMouseOut);
     buttons.push_back(std::move(button));
+}
+
+void MenuState::createIcons()
+{
+    const auto gameIconPosition = utils::Vector2f{73, 13};
+    const auto mapEditorIconPosition = utils::Vector2f{73, 23};
+    const auto settingsIconPosition = utils::Vector2f{73, 33};
+    const auto exitIconPosition = utils::Vector2f{73, 43};
+    const std::vector<utils::Vector2f> iconPositions{gameIconPosition, mapEditorIconPosition,
+                                                     settingsIconPosition, exitIconPosition};
+
+    for (const auto& iconPosition : iconPositions)
+    {
+        addIcon(iconPosition);
+    }
+}
+
+void MenuState::addIcon(const utils::Vector2f& position)
+{
+    auto icon = std::make_unique<components::ComponentOwner>(position);
+    icon->addComponent<components::GraphicsComponent>(rendererPool, iconSize, position, iconPath,
+                                                      graphics::VisibilityLayer::First);
+    icons.push_back(std::move(icon));
+}
+
+void MenuState::changeSelectedButtonUp()
+{
+    unselectAllButtons();
+
+    if (currentButtonIndex == 0)
+    {
+        currentButtonIndex = buttons.size() - 1;
+    }
+    else
+    {
+        currentButtonIndex--;
+    }
+    buttons[currentButtonIndex]->getComponent<components::GraphicsComponent>()->setColor(buttonHoverColor);
+    setIconVisible(currentButtonIndex);
+}
+
+void MenuState::changeSelectedButtonDown()
+{
+    unselectAllButtons();
+
+    if (currentButtonIndex == buttons.size() - 1)
+    {
+        currentButtonIndex = 0;
+    }
+    else
+    {
+        currentButtonIndex++;
+    }
+    buttons[currentButtonIndex]->getComponent<components::GraphicsComponent>()->setColor(buttonHoverColor);
+    setIconVisible(currentButtonIndex);
+}
+
+void MenuState::changeSelectedButton(unsigned int buttonIndex)
+{
+    currentButtonIndex = buttonIndex;
+    setIconVisible(currentButtonIndex);
+}
+
+void MenuState::unselectAllButtons()
+{
+    for (auto& button : buttons)
+    {
+        button->getComponent<components::GraphicsComponent>()->setColor(buttonColor);
+    }
+}
+
+void MenuState::hideIcons()
+{
+    for (auto& icon : icons)
+    {
+        icon->getComponent<components::GraphicsComponent>()->setVisibility(
+            graphics::VisibilityLayer::Invisible);
+    }
+}
+
+void MenuState::setIconVisible(unsigned int iconIndex)
+{
+    hideIcons();
+    icons[currentButtonIndex]->getComponent<components::GraphicsComponent>()->setVisibility(
+        graphics::VisibilityLayer::First);
 }
 
 }
