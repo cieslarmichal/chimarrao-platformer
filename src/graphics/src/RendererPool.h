@@ -32,6 +32,7 @@ public:
     virtual void setTexture(const GraphicsId&, const TexturePath&, const utils::Vector2f& scale = {1, 1}) = 0;
     virtual void setVisibility(const GraphicsId&, VisibilityLayer) = 0;
     virtual void setColor(const GraphicsId&, const Color&) = 0;
+    virtual void setOutline(const GraphicsId&, float thickness, const Color&) = 0;
     virtual void setRenderingSize(const utils::Vector2u&) = 0;
 };
 }

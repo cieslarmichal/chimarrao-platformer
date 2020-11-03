@@ -63,4 +63,7 @@ void GraphicsComponent::disable()
     Component::disable();
     setVisibility(graphics::VisibilityLayer::Invisible);
 }
+void GraphicsComponent::setOutline(float thickness, const sf::Color& color) {
+    rendererPool->setOutline(id, thickness, color);
+}
 }

@@ -26,5 +26,6 @@ public:
     MOCK_METHOD(void, setVisibility, (const GraphicsId&, VisibilityLayer));
     MOCK_METHOD(void, setColor, (const GraphicsId&, const Color&));
     MOCK_METHOD(void, setRenderingSize, (const utils::Vector2u&));
+    MOCK_METHOD(void, setOutline, (const GraphicsId&, float, const Color&));
 };
 }

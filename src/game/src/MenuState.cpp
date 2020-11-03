@@ -17,12 +17,13 @@ const auto buttonColor = graphics::Color(251, 190, 102);
 const auto buttonHoverColor = graphics::Color(205, 128, 66);
 const auto buttonSize = utils::Vector2f{23, 6};
 const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
+const auto backgroundPath = utils::getProjectPath("chimarrao-platformer") + "resources/BG/menu_background.jpg";
 }
 
 MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
-                             const std::shared_ptr<input::InputManager>& inputManagerInit,
-                             const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                             std::stack<std::unique_ptr<State>>& statesInit)
+                     const std::shared_ptr<input::InputManager>& inputManagerInit,
+                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
+                     std::stack<std::unique_ptr<State>>& statesInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit}
 {
     createBackground();
@@ -94,8 +95,7 @@ void MenuState::createBackground()
     background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
     background->addComponent<components::GraphicsComponent>(
         rendererPool, utils::Vector2f{80, 60}, utils::Vector2f{0, 0},
-        utils::getProjectPath("chimarrao-platformer") + "resources/BG/menu_background.jpg",
-        graphics::VisibilityLayer::Background);
+        backgroundPath, graphics::VisibilityLayer::Background);
 }
 
 void MenuState::createPlayGameButton()
@@ -103,9 +103,8 @@ void MenuState::createPlayGameButton()
     const auto gameButtonPosition = utils::Vector2f{50, 12};
 
     const auto runGame = [&] {
-        std::cerr << "aaaa";
         states.top()->deactivate();
-      states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
+        states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
     };
 
     addButton(gameButtonPosition, "Play", utils::Vector2f{7, 1}, runGame);
@@ -116,8 +115,8 @@ void MenuState::createMapEditorButton()
     const auto mapEditorButtonPosition = utils::Vector2f{50, 22};
 
     const auto runMapEditor = [&] {
-      states.top()->deactivate();
-      states.push(std::make_unique<EditorState>(window, inputManager, rendererPool, states));
+        states.top()->deactivate();
+        states.push(std::make_unique<EditorState>(window, inputManager, rendererPool, states));
     };
 
     addButton(mapEditorButtonPosition, "Map Editor", utils::Vector2f{1, 1}, runMapEditor);
@@ -148,7 +147,7 @@ void MenuState::createExitButton()
 }
 
 void MenuState::addButton(const utils::Vector2f& position, const std::string& text,
-                              const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
+                          const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
 {
     auto button = std::make_unique<components::ComponentOwner>(position);
     auto graphicsComponent = button->addComponent<components::GraphicsComponent>(
