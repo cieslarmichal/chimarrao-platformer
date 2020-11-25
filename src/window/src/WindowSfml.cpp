@@ -7,15 +7,18 @@ namespace window
 {
 WindowSfml::WindowSfml(const utils::Vector2u& windowSize, std::string windowTitleInit,
                        std::unique_ptr<WindowObservationHandler> observationHandlerInit)
-    : observationHandler{std::move(observationHandlerInit)},
-      windowTitle{std::move(windowTitleInit)},
-      verticalSync{true},
-      framerateLimit{120}
+    : observationHandler{std::move(observationHandlerInit)}, windowTitle{std::move(windowTitleInit)}
 {
+    windowSettings.displayMode = DisplayMode::Window;
+    windowSettings.resolution = Resolution{windowSize.x, windowSize.y};
+    windowSettings.vsync = true;
+    windowSettings.frameLimit = 120;
+
     window = std::make_unique<sf::RenderWindow>();
-    window->create(sf::VideoMode(windowSize.x, windowSize.y), windowTitle);
-    window->setVerticalSyncEnabled(verticalSync);
-    window->setFramerateLimit(framerateLimit);
+    window->create(sf::VideoMode(windowSettings.resolution.width, windowSettings.resolution.height),
+                   windowTitle);
+    window->setVerticalSyncEnabled(windowSettings.vsync);
+    window->setFramerateLimit(windowSettings.frameLimit);
 }
 
 bool WindowSfml::isOpen() const
@@ -83,23 +86,51 @@ void WindowSfml::notifyObservers()
     observationHandler->notifyObservers(window->getSize());
 }
 
+WindowSettings WindowSfml::getWindowSettings() const
+{
+    return windowSettings;
+}
+
+void WindowSfml::setDisplayMode(DisplayMode displayMode)
+{
+    windowSettings.displayMode = displayMode;
+    window.reset();
+    window = std::make_unique<sf::RenderWindow>();
+    window->create(sf::VideoMode(windowSettings.resolution.width, windowSettings.resolution.height),
+                   windowTitle, getSfmlStyleFromDisplayMode(windowSettings.displayMode));
+}
+
 void WindowSfml::setVerticalSync(bool enabled)
 {
-    verticalSync = enabled;
-    window->setVerticalSyncEnabled(verticalSync);
+    windowSettings.vsync = enabled;
+    window->setVerticalSyncEnabled(enabled);
 }
 
 void WindowSfml::setFramerateLimit(unsigned int frameLimit)
 {
-    framerateLimit = frameLimit;
-    window->setFramerateLimit(framerateLimit);
+    windowSettings.frameLimit = frameLimit;
+    window->setFramerateLimit(frameLimit);
 }
 
-void WindowSfml::setVideoMode(const sf::VideoMode& videoMode)
+void WindowSfml::setResolution(const Resolution& resolution)
 {
+    windowSettings.resolution = resolution;
     window.reset();
     window = std::make_unique<sf::RenderWindow>();
-    window->create(videoMode, windowTitle);
+    window->create(sf::VideoMode(resolution.width, resolution.height), windowTitle,
+                   getSfmlStyleFromDisplayMode(windowSettings.displayMode));
+}
+
+unsigned WindowSfml::getSfmlStyleFromDisplayMode(DisplayMode displayMode) const
+{
+    if (displayMode == DisplayMode::Window)
+    {
+        return sf::Style::Resize | sf::Style::Close;
+    }
+    else
+    {
+        return sf::Style::Fullscreen;
+    }
 }
 
 }

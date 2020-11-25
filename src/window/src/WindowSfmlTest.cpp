@@ -9,10 +9,28 @@ using namespace window;
 
 namespace
 {
-const utils::Vector2u windowSize{800,600};
-const utils::Vector2u windowSizeChanged{1000,600};
+const utils::Vector2u windowSize{800, 600};
+const utils::Vector2u windowSizeChanged{1000, 600};
 const std::string windowTitle{"window"};
-const sf::VideoMode videoMode{50, 100};
+const Resolution resolution{50, 100};
+const DisplayMode initialDisplayMode{DisplayMode::Window};
+const Resolution initialResolution{windowSize.x, windowSize.y};
+const bool initialVsync{true};
+const unsigned int initialFrameLimit{120};
+const DisplayMode changedDisplayMode{DisplayMode::Fullscreen};
+const Resolution changedResolution{windowSizeChanged.x, windowSizeChanged.y};
+const bool changedVsync{false};
+const unsigned int changedFrameLimit{60};
+const WindowSettings initialWindowSettings{initialDisplayMode, initialResolution, initialVsync,
+                                           initialFrameLimit};
+const WindowSettings windowSettingsWithDisplayModeChanged{changedDisplayMode, initialResolution, initialVsync,
+                                           initialFrameLimit};
+const WindowSettings windowSettingsWithResolutionChanged{initialDisplayMode, changedResolution, initialVsync,
+                                                          initialFrameLimit};
+const WindowSettings windowSettingsWithVsyncChanged{initialDisplayMode, initialResolution, changedVsync,
+                                                          initialFrameLimit};
+const WindowSettings windowSettingsWithFrameLimitChanged{initialDisplayMode, initialResolution, initialVsync,
+                                                         changedFrameLimit};
 }
 
 class WindowSfmlTest : public Test
@@ -46,7 +64,46 @@ TEST_F(WindowSfmlTest, shouldRemoveObserver)
     window.removeObserver(observer1.get());
 }
 
-TEST_F(WindowSfmlTest, setVideoMode_shouldNotThrow)
+TEST_F(WindowSfmlTest, getWindowSettings)
 {
-    ASSERT_NO_THROW(window.setVideoMode(videoMode));
+    const auto actualWindowSettings = window.getWindowSettings();
+
+    ASSERT_EQ(actualWindowSettings, initialWindowSettings);
 }
+
+TEST_F(WindowSfmlTest, setDisplayMode)
+{
+    window.setDisplayMode(changedDisplayMode);
+
+    const auto actualWindowSettings = window.getWindowSettings();
+
+    ASSERT_EQ(actualWindowSettings, windowSettingsWithDisplayModeChanged);
+}
+
+TEST_F(WindowSfmlTest, setResolution)
+{
+    window.setResolution(changedResolution);
+
+    const auto actualWindowSettings = window.getWindowSettings();
+
+    ASSERT_EQ(actualWindowSettings, windowSettingsWithResolutionChanged);
+}
+
+TEST_F(WindowSfmlTest, setVsync)
+{
+    window.setVerticalSync(changedVsync);
+
+    const auto actualWindowSettings = window.getWindowSettings();
+
+    ASSERT_EQ(actualWindowSettings, windowSettingsWithVsyncChanged);
+}
+
+TEST_F(WindowSfmlTest, setFramerateLimit)
+{
+    window.setFramerateLimit(changedFrameLimit);
+
+    const auto actualWindowSettings = window.getWindowSettings();
+
+    ASSERT_EQ(actualWindowSettings, windowSettingsWithFrameLimitChanged);
+}
+

@@ -1,10 +1,12 @@
 #pragma once
 
 #include "SFML/Graphics/RenderWindow.hpp"
+#include <SFML/Window/Event.hpp>
 
 #include "Vector.h"
 #include "Window.h"
 #include "WindowObservationHandler.h"
+#include "WindowSettings.h"
 
 namespace window
 {
@@ -21,18 +23,20 @@ public:
     void setView(const sf::View&) override;
     bool pollEvent(sf::Event& event) const override;
     utils::Vector2f getMousePosition() const override;
-    void registerObserver(WindowObserver*) override;
-    void removeObserver(WindowObserver*) override;
+    WindowSettings getWindowSettings() const override;
+    void setDisplayMode(DisplayMode) override;
     void setVerticalSync(bool enabled) override;
     void setFramerateLimit(unsigned int frameLimit) override;
-    void setVideoMode(const sf::VideoMode&) override;
+    void setResolution(const Resolution&) override;
+    void registerObserver(WindowObserver*) override;
+    void removeObserver(WindowObserver*) override;
 
 private:
     void notifyObservers() override;
+    unsigned getSfmlStyleFromDisplayMode(DisplayMode) const;
 
     const std::string windowTitle;
-    bool verticalSync;
-    unsigned int framerateLimit;
+    WindowSettings windowSettings;
     std::unique_ptr<WindowObservationHandler> observationHandler;
     std::unique_ptr<sf::RenderWindow> window;
 };
