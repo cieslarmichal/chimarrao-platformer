@@ -3,11 +3,15 @@ set(SOURCES
         src/WindowFactory.cpp
         src/DefaultWindowFactory.cpp
         src/DefaultWindowObservationHandler.cpp
+        src/SupportedResolutionsRetriever.cpp
+        src/SupportedFrameLimitsRetriever.cpp
         )
 
 set(UT_SOURCES
         src/WindowSfmlTest.cpp
         src/DefaultWindowObservationHandlerTest.cpp
+        src/SupportedResolutionsRetrieverTest.cpp
+        src/SupportedFrameLimitsRetrieverTest.cpp
         )
 
 add_library(window ${SOURCES})

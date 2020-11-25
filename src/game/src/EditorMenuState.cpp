@@ -15,7 +15,7 @@ const auto buttonColor = graphics::Color{65, 105, 200};
 const auto buttonHoverColor = graphics::Color(4, 8, 97);
 const auto textColor = graphics::Color(200, 200, 200);
 const auto buttonSize = utils::Vector2f{25, 5};
-const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/font.ttf";
+const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
 }
 
 EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowInit,
@@ -140,7 +140,7 @@ void EditorMenuState::backToMenu()
 
 void EditorMenuState::createEditorTitle()
 {
-    const auto textPausePosition = utils::Vector2f{30, 11};
+    const auto textPausePosition = utils::Vector2f{27.5, 11};
     title = std::make_unique<components::ComponentOwner>(textPausePosition);
     title->addComponent<components::TextComponent>(rendererPool, textPausePosition, "Editor Menu", fontPath,
                                                    40, graphics::Color::White, utils::Vector2f{0, 0});
@@ -159,7 +159,7 @@ void EditorMenuState::createBackToEditorButton()
 {
     const auto backToGameButtonPosition = utils::Vector2f{28, 19};
 
-    addButton(backToGameButtonPosition, "Back to editor", utils::Vector2f{2, 0},
+    addButton(backToGameButtonPosition, "Back to editor", utils::Vector2f{1.5, 0.75},
               [this] { shouldBackToEditor = true; });
 }
 
@@ -167,7 +167,7 @@ void EditorMenuState::createNewMapButton()
 {
     const auto backToMenuButtonPosition = utils::Vector2f{28, 27};
 
-    addButton(backToMenuButtonPosition, "New map", utils::Vector2f{5, 0},
+    addButton(backToMenuButtonPosition, "New map", utils::Vector2f{7, 0.75},
               [this] { std::cout << "new map\n"; });
 }
 
@@ -175,7 +175,7 @@ void EditorMenuState::createSaveMapButton()
 {
     const auto backToMenuButtonPosition = utils::Vector2f{28, 35};
 
-    addButton(backToMenuButtonPosition, "Save map", utils::Vector2f{5, 0},
+    addButton(backToMenuButtonPosition, "Save map", utils::Vector2f{6, 0.75},
               [this] { std::cout << "save map\n"; });
 }
 
@@ -183,7 +183,7 @@ void EditorMenuState::createMenuButton()
 {
     const auto backToMenuButtonPosition = utils::Vector2f{28, 43};
 
-    addButton(backToMenuButtonPosition, "Back to menu", utils::Vector2f{2, 0},
+    addButton(backToMenuButtonPosition, "Back to menu", utils::Vector2f{2.75, 0.75},
               [this] { shouldBackToMenu = true; });
 }
 
@@ -193,7 +193,7 @@ void EditorMenuState::addButton(const utils::Vector2f& position, const std::stri
     auto button = std::make_unique<components::ComponentOwner>(position);
     auto graphicsComponent = button->addComponent<components::GraphicsComponent>(
         rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, 37, textColor,
+    button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, 27, textColor,
                                                     textOffset);
     button->addComponent<components::HitboxComponent>(buttonSize);
     button->addComponent<components::ClickableComponent>(inputManager, std::move(clickAction));

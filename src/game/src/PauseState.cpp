@@ -15,7 +15,7 @@ const auto buttonColor = graphics::Color{65, 105, 200};
 const auto buttonHoverColor = graphics::Color(4, 8, 97);
 const auto textColor = graphics::Color(200, 200, 200);
 const auto buttonSize = utils::Vector2f{25, 5};
-const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/font.ttf";
+const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
 }
 
 PauseState::PauseState(const std::shared_ptr<window::Window>& windowInit,
@@ -157,7 +157,7 @@ void PauseState::createBackToGameButton()
 {
     const auto backToGameButtonPosition = utils::Vector2f{28, 21};
 
-    addButton(backToGameButtonPosition, "Back to game", utils::Vector2f{2, 0},
+    addButton(backToGameButtonPosition, "Back to game", utils::Vector2f{2, 0.5},
               [this] { shouldBackToGame = true; });
 }
 
@@ -165,7 +165,7 @@ void PauseState::createMenuButton()
 {
     const auto backToMenuButtonPosition = utils::Vector2f{28, 30};
 
-    addButton(backToMenuButtonPosition, "Back to menu", utils::Vector2f{2, 0},
+    addButton(backToMenuButtonPosition, "Back to menu", utils::Vector2f{2, 0.5},
               [this] { shouldBackToMenu = true; });
 }
 
@@ -175,7 +175,7 @@ void PauseState::addButton(const utils::Vector2f& position, const std::string& t
     auto button = std::make_unique<components::ComponentOwner>(position);
     auto graphicsComponent = button->addComponent<components::GraphicsComponent>(
         rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, 37, textColor,
+    button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, 30, textColor,
                                                     textOffset);
     button->addComponent<components::HitboxComponent>(buttonSize);
     button->addComponent<components::ClickableComponent>(inputManager, std::move(clickAction));

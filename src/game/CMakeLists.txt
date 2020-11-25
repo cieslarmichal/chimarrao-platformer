@@ -8,6 +8,7 @@ set(SOURCES
         src/TileMap.cpp
         src/EditorMenuState.cpp
         src/SettingsState.cpp
+        src/ControlsState.cpp
         )
 
 set(UT_SOURCES
@@ -18,6 +19,7 @@ set(UT_SOURCES
         src/PauseStateTest.cpp
         src/EditorMenuStateTest.cpp
         src/SettingsStateTest.cpp
+        src/ControlsStateTest.cpp
         )
 
 add_library(game ${SOURCES})

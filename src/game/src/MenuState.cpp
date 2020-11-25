@@ -8,17 +8,29 @@
 #include "HitboxComponent.h"
 #include "MouseOverComponent.h"
 #include "TextComponent.h"
+#include "SettingsState.h"
+#include "ControlsState.h"
 
 namespace game
 {
 namespace
 {
+const auto gameButtonPosition = utils::Vector2f{50, 7};
+const auto mapEditorButtonPosition = utils::Vector2f{50, 17};
+const auto controlsButtonPosition = utils::Vector2f{50, 27};
+const auto settingsButtonPosition = utils::Vector2f{50, 37};
+const auto exitButtonPosition = utils::Vector2f{50, 47};
+const std::vector<utils::Vector2f> buttonsPositions{gameButtonPosition, mapEditorButtonPosition,
+                                                    controlsButtonPosition, settingsButtonPosition,
+                                                    exitButtonPosition};
 const auto buttonColor = graphics::Color(251, 190, 102);
 const auto buttonHoverColor = graphics::Color(205, 128, 66);
 const auto buttonSize = utils::Vector2f{23, 6};
 const auto iconSize = utils::Vector2f{4, 4};
 const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
 const auto iconPath = utils::getProjectPath("chimarrao-platformer") + "resources/yerba_item.png";
+const auto backgroundPath =
+    utils::getProjectPath("chimarrao-platformer") + "resources/BG/menu_background.jpg";
 }
 
 MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
@@ -28,13 +40,14 @@ MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
       currentButtonIndex{0},
-      timeAfterButtonCanBeSwitched{0.2}
+      timeAfterButtonCanBeSwitched{0.1}
 {
     inputManager->registerObserver(this);
 
     createBackground();
     createPlayGameButton();
     createMapEditorButton();
+    createControlsButton();
     createSettingsButton();
     createExitButton();
     createIcons();
@@ -127,16 +140,13 @@ void MenuState::handleInputStatus(const input::InputStatus& inputStatusInit)
 void MenuState::createBackground()
 {
     background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::GraphicsComponent>(
-        rendererPool, utils::Vector2f{80, 60}, utils::Vector2f{0, 0},
-        utils::getProjectPath("chimarrao-platformer") + "resources/BG/menu_background.jpg",
-        graphics::VisibilityLayer::Background);
+    background->addComponent<components::GraphicsComponent>(rendererPool, utils::Vector2f{80, 60},
+                                                            utils::Vector2f{0, 0}, backgroundPath,
+                                                            graphics::VisibilityLayer::Background);
 }
 
 void MenuState::createPlayGameButton()
 {
-    const auto gameButtonPosition = utils::Vector2f{50, 12};
-
     const auto runGame = [&] {
         states.top()->deactivate();
       states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
@@ -147,23 +157,29 @@ void MenuState::createPlayGameButton()
 
 void MenuState::createMapEditorButton()
 {
-    const auto mapEditorButtonPosition = utils::Vector2f{50, 22};
-
     const auto runMapEditor = [&] {
-      states.top()->deactivate();
-      states.push(std::make_unique<EditorState>(window, inputManager, rendererPool, states));
+        states.top()->deactivate();
+        states.push(std::make_unique<EditorState>(window, inputManager, rendererPool, states));
     };
 
     addButton(mapEditorButtonPosition, "Map Editor", utils::Vector2f{1, 1}, runMapEditor);
 }
 
+void MenuState::createControlsButton()
+{
+    const auto runControls = [&] {
+//      states.top()->deactivate();
+//      states.push(std::make_unique<ControlsState>(window, inputManager, rendererPool, states));
+    };
+
+    addButton(controlsButtonPosition, "Controls", utils::Vector2f{3, 1}, runControls);
+}
+
 void MenuState::createSettingsButton()
 {
-    const auto settingsButtonPosition = utils::Vector2f{50, 32};
-
     const auto runSettings = [&] {
-        // TODO: add settings
-        std::cout << "Settings\n";
+      states.top()->deactivate();
+      states.push(std::make_unique<SettingsState>(window, inputManager, rendererPool, states));
     };
 
     addButton(settingsButtonPosition, "Settings", utils::Vector2f{3, 1}, runSettings);
@@ -171,8 +187,6 @@ void MenuState::createSettingsButton()
 
 void MenuState::createExitButton()
 {
-    const auto exitButtonPosition = utils::Vector2f{50, 42};
-
     const auto exit = [&] {
         if (not states.empty())
         {
@@ -213,15 +227,9 @@ void MenuState::addButton(const utils::Vector2f& position, const std::string& te
 
 void MenuState::createIcons()
 {
-    const auto gameIconPosition = utils::Vector2f{73, 13};
-    const auto mapEditorIconPosition = utils::Vector2f{73, 23};
-    const auto settingsIconPosition = utils::Vector2f{73, 33};
-    const auto exitIconPosition = utils::Vector2f{73, 43};
-    const std::vector<utils::Vector2f> iconPositions{gameIconPosition, mapEditorIconPosition,
-                                                     settingsIconPosition, exitIconPosition};
-
-    for (const auto& iconPosition : iconPositions)
+    for (const auto& buttonPosition : buttonsPositions)
     {
+        const auto iconPosition = utils::Vector2f{buttonPosition.x + buttonSize.x, buttonPosition.y + 1};
         addIcon(iconPosition);
     }
 }
@@ -280,6 +288,13 @@ void MenuState::unselectAllButtons()
     }
 }
 
+void MenuState::setIconVisible(unsigned int iconIndex)
+{
+    hideIcons();
+    icons[iconIndex]->getComponent<components::GraphicsComponent>()->setVisibility(
+        graphics::VisibilityLayer::First);
+}
+
 void MenuState::hideIcons()
 {
     for (auto& icon : icons)
@@ -287,13 +302,6 @@ void MenuState::hideIcons()
         icon->getComponent<components::GraphicsComponent>()->setVisibility(
             graphics::VisibilityLayer::Invisible);
     }
-}
-
-void MenuState::setIconVisible(unsigned int iconIndex)
-{
-    hideIcons();
-    icons[currentButtonIndex]->getComponent<components::GraphicsComponent>()->setVisibility(
-        graphics::VisibilityLayer::First);
 }
 
 }

@@ -30,6 +30,7 @@ private:
     void createBackground();
     void createPlayGameButton();
     void createMapEditorButton();
+    void createControlsButton();
     void createSettingsButton();
     void createExitButton();
     void addButton(const utils::Vector2f& position, const std::string& text,
@@ -40,8 +41,8 @@ private:
     void changeSelectedButtonDown();
     void changeSelectedButton(unsigned int buttonIndex);
     void unselectAllButtons();
-    void hideIcons();
     void setIconVisible(unsigned int iconIndex);
+    void hideIcons();
 
     const input::InputStatus* inputStatus;
     std::unique_ptr<components::ComponentOwner> background;
