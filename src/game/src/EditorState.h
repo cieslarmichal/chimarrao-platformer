@@ -28,12 +28,17 @@ public:
     void pause();
 
 private:
+    void unfreezeButtons();
+
     const input::InputStatus* inputStatus;
     bool paused;
-    utils::Timer timer;
+    utils::Timer pauseTimer;
     const float timeAfterStateCouldBePaused;
     std::unique_ptr<components::ComponentOwner> background;
     std::vector<std::unique_ptr<components::ComponentOwner>> clickableTileMap;
     std::unique_ptr<TileMap> tileMap;
+    bool buttonsActionsFrozen = true;
+    utils::Timer freezeClickableButtonsTimer;
+    const float timeAfterButtonsCanBeClicked;
 };
 }

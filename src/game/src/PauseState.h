@@ -26,6 +26,7 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
+    void unfreezeButtons();
     void backToGame();
     void backToMenu();
     void createPauseTitle();
@@ -43,5 +44,8 @@ private:
     std::unique_ptr<components::ComponentOwner> title;
     std::unique_ptr<components::ComponentOwner> background;
     std::vector<std::unique_ptr<components::ComponentOwner>> buttons;
+    bool buttonsActionsFrozen = true;
+    utils::Timer freezeClickableButtonsTimer;
+    const float timeAfterButtonsCanBeClicked;
 };
 }

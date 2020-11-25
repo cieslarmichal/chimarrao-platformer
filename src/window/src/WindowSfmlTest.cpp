@@ -31,6 +31,9 @@ const WindowSettings windowSettingsWithVsyncChanged{initialDisplayMode, initialR
                                                           initialFrameLimit};
 const WindowSettings windowSettingsWithFrameLimitChanged{initialDisplayMode, initialResolution, initialVsync,
                                                          changedFrameLimit};
+const std::vector<Resolution> expectedSupportedResolutions{{1920, 1080}, {1600, 900}, {1368, 768},
+                                                           {1280, 720},  {1024, 768}, {800, 600}};
+const std::vector<unsigned int> expectedSupportedFrameLimits{30, 60, 90, 120};
 }
 
 class WindowSfmlTest : public Test
@@ -105,5 +108,19 @@ TEST_F(WindowSfmlTest, setFramerateLimit)
     const auto actualWindowSettings = window.getWindowSettings();
 
     ASSERT_EQ(actualWindowSettings, windowSettingsWithFrameLimitChanged);
+}
+
+TEST_F(WindowSfmlTest, shouldRetrieveSupportedResolutions)
+{
+    const auto actualSupportedResolutions = window.getSupportedResolutions();
+
+    ASSERT_EQ(actualSupportedResolutions, expectedSupportedResolutions);
+}
+
+TEST_F(WindowSfmlTest, shouldRetrieveSupportedFrameLimits)
+{
+    const auto actualSupportedFrameLimits = window.getSupportedFrameLimits();
+
+    ASSERT_EQ(actualSupportedFrameLimits, expectedSupportedFrameLimits);
 }
 

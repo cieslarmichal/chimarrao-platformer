@@ -26,6 +26,7 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
+    void unfreezeButtons();
     void backToEditor();
     void backToMenu();
     void createEditorTitle();
@@ -38,12 +39,15 @@ private:
                    const utils::Vector2f& textOffset, std::function<void(void)> clickAction);
 
     const input::InputStatus* inputStatus;
-    utils::Timer timer;
+    utils::Timer possibleLeaveFromStateTimer;
     const float timeAfterLeaveStateIsPossible;
     bool shouldBackToEditor;
     bool shouldBackToMenu;
     std::unique_ptr<components::ComponentOwner> title;
     std::unique_ptr<components::ComponentOwner> background;
     std::vector<std::unique_ptr<components::ComponentOwner>> buttons;
+    bool buttonsActionsFrozen = true;
+    utils::Timer freezeClickableButtonsTimer;
+    const float timeAfterButtonsCanBeClicked;
 };
 }

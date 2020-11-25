@@ -3,6 +3,7 @@
 #include "ComponentOwner.h"
 #include "InputObserver.h"
 #include "State.h"
+#include "Timer.h"
 
 namespace game
 {
@@ -25,10 +26,14 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
+    void synchronizeWindowSettings();
+    void applyWindowSettingsChanges();
+    void unfreezeButtons();
     void backToMenu();
     void createBackground();
     void createSettingsTitle();
-    void createBackToGameButton();
+    void createBackToMenuButton();
+    void createApplyChangesButton();
     void createDisplayModeSection();
     void createResolutionSection();
     void createVsyncSection();
@@ -43,5 +48,13 @@ private:
     std::unique_ptr<components::ComponentOwner> background;
     std::vector<std::unique_ptr<components::ComponentOwner>> texts;
     std::vector<std::unique_ptr<components::ComponentOwner>> buttons;
+    window::WindowSettings selectedWindowsSettings;
+    std::vector<window::Resolution> supportedResolutions;
+    int selectedResolutionIndex = 0;
+    std::vector<unsigned int> supportedFrameLimits;
+    int selectedFrameLimitIndex = 0;
+    bool buttonsActionsFrozen = true;
+    utils::Timer freezeClickableButtonsTimer;
+    const float timeAfterButtonsCanBeClicked;
 };
 }

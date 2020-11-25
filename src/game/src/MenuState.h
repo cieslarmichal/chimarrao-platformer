@@ -27,6 +27,8 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
+    void handleButtonSwitching();
+    void unfreezeButtons();
     void createBackground();
     void createPlayGameButton();
     void createMapEditorButton();
@@ -49,7 +51,10 @@ private:
     std::vector<std::unique_ptr<components::ComponentOwner>> buttons;
     std::vector<std::unique_ptr<components::ComponentOwner>> icons;
     unsigned int currentButtonIndex;
-    utils::Timer timer;
+    utils::Timer switchButtonTimer;
     const float timeAfterButtonCanBeSwitched;
+    bool buttonsActionsFrozen = true;
+    utils::Timer freezeClickableButtonsTimer;
+    const float timeAfterButtonsCanBeClicked;
 };
 }

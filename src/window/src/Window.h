@@ -31,5 +31,7 @@ public:
     virtual void setVerticalSync(bool enabled) = 0;
     virtual void setFramerateLimit(unsigned int frameLimit) = 0;
     virtual void setResolution(const Resolution&) = 0;
+    virtual std::vector<Resolution> getSupportedResolutions() const = 0;
+    virtual std::vector<unsigned int> getSupportedFrameLimits() const = 0;
 };
 }

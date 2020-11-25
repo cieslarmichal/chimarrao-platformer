@@ -29,15 +29,24 @@ const auto fullscreenModeButtonPosition =
     utils::Vector2f{windowModeButtonPosition.x + displayModeButtonSize.x + 0.5f, windowModeButtonPosition.y};
 const auto resolutionSectionPosition = utils::Vector2f{38, 24};
 const auto resolutionTextFieldPosition = utils::Vector2f{
-    resolutionSectionPosition.x + 15.8f + displayModeButtonSize.x, resolutionSectionPosition.y + 0.8f};
+    resolutionSectionPosition.x + 18.50f + displayModeButtonSize.x, resolutionSectionPosition.y + 0.8f};
 const auto changeResolutionButtonSize = utils::Vector2f{2.5, 2};
 const auto resolutionDecreaseButtonPosition =
-    utils::Vector2f{resolutionTextFieldPosition.x - 3, resolutionSectionPosition.y + 1.15f};
+    utils::Vector2f{resolutionTextFieldPosition.x - 2.8f, resolutionSectionPosition.y + 1.15f};
 const auto resolutionIncreaseButtonPosition =
     utils::Vector2f{resolutionTextFieldPosition.x + 11.2f, resolutionSectionPosition.y + 1.15f};
 const auto vsyncSectionPosition = utils::Vector2f{38, 30};
+const auto vsyncButtonPosition = utils::Vector2f{vsyncSectionPosition.x + 31.0f, vsyncSectionPosition.y + 0.5f};
+const auto vsyncButtonSize = utils::Vector2f{3, 3};
 const auto frameLimitSectionPosition = utils::Vector2f{38, 36};
+const auto frameLimitTextFieldPosition = utils::Vector2f{
+    frameLimitSectionPosition.x + 22.5f + displayModeButtonSize.x, frameLimitSectionPosition.y + 0.8f};
+const auto frameLimitDecreaseButtonPosition =
+    utils::Vector2f{frameLimitTextFieldPosition.x - 4.0f, frameLimitSectionPosition.y + 1.15f};
+const auto frameLimitIncreaseButtonPosition =
+    utils::Vector2f{frameLimitTextFieldPosition.x + 4.5f, frameLimitSectionPosition.y + 1.15f};
 const auto backToMenuButtonPosition = utils::Vector2f{34.5, 48};
+const auto applyChangesButtonPosition = utils::Vector2f{55, 48};
 }
 
 SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
@@ -46,13 +55,15 @@ SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
                              std::stack<std::unique_ptr<State>>& statesInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       shouldBackToMenu{false},
-      inputStatus{nullptr}
+      inputStatus{nullptr},
+      timeAfterButtonsCanBeClicked{0.3f}
 {
     inputManager->registerObserver(this);
 
     createBackground();
     createSettingsTitle();
-    createBackToGameButton();
+    createBackToMenuButton();
+    createApplyChangesButton();
     createDisplayModeSection();
     createResolutionSection();
     createVsyncSection();
@@ -72,11 +83,20 @@ void SettingsState::initialize()
     {
         button->loadDependentComponents();
         button->start();
+        button->getComponent<components::ClickableComponent>()->disable();
     }
+
+    supportedResolutions = window->getSupportedResolutions();
+    supportedFrameLimits =  window->getSupportedFrameLimits();
 }
 
 void SettingsState::update(const utils::DeltaTime& deltaTime)
 {
+    if (buttonsActionsFrozen && freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
+    {
+        unfreezeButtons();
+    }
+
     if (shouldBackToMenu)
     {
         backToMenu();
@@ -132,6 +152,25 @@ void SettingsState::handleInputStatus(const input::InputStatus& inputStatusInit)
     inputStatus = &inputStatusInit;
 }
 
+void SettingsState::synchronizeWindowSettings()
+{
+    selectedWindowsSettings = window->getWindowSettings();
+}
+
+void SettingsState::applyWindowSettingsChanges()
+{
+
+}
+
+void SettingsState::unfreezeButtons()
+{
+    buttonsActionsFrozen = false;
+    for (auto& button : buttons)
+    {
+        button->getComponent<components::ClickableComponent>()->enable();
+    }
+}
+
 void SettingsState::backToMenu()
 {
     states.pop();
@@ -155,11 +194,18 @@ void SettingsState::createSettingsTitle()
     addText(settingsTitlePosition, "Settings", 37);
 }
 
-void SettingsState::createBackToGameButton()
+void SettingsState::createBackToMenuButton()
 {
-    const auto backToGameButtonSize = utils::Vector2f{13, 5};
-    addButton(backToMenuButtonPosition, backToGameButtonSize, "Done", sectionTextFontSize,
+    const auto backToMenuButtonSize = utils::Vector2f{13, 5};
+    addButton(backToMenuButtonPosition, backToMenuButtonSize, "Back", sectionTextFontSize,
               utils::Vector2f{2, 0}, [this] { shouldBackToMenu = true; });
+}
+
+void SettingsState::createApplyChangesButton()
+{
+    const auto applyChangesButtonSize = utils::Vector2f{13, 5};
+    addButton(applyChangesButtonPosition, applyChangesButtonSize, "Apply", sectionTextFontSize,
+              utils::Vector2f{1, 0}, [this] { shouldBackToMenu = true; });
 }
 
 void SettingsState::createDisplayModeSection()
@@ -184,11 +230,18 @@ void SettingsState::createResolutionSection()
 void SettingsState::createVsyncSection()
 {
     addText(vsyncSectionPosition, "Vsync:", 30);
+    addButton(vsyncButtonPosition, vsyncButtonSize, "", 20, utils::Vector2f{0.6, -0.3},
+              [this] { std::cerr << "vsync turn on/off"; });
 }
 
 void SettingsState::createFrameLimitSection()
 {
     addText(frameLimitSectionPosition, "Frame limit:", 30);
+    addText(frameLimitTextFieldPosition, "120", 20);
+    addButton(frameLimitDecreaseButtonPosition, changeResolutionButtonSize, "<", 20, utils::Vector2f{0.6, -0.3},
+              [this] { std::cerr << "decrease frame limit"; });
+    addButton(frameLimitIncreaseButtonPosition, changeResolutionButtonSize, ">", 20, utils::Vector2f{0.6, -0.3},
+              [this] { std::cerr << "increase frame limit"; });
 }
 
 void SettingsState::addButton(const utils::Vector2f& position, const utils::Vector2f& size,

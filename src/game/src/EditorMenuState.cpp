@@ -26,7 +26,8 @@ EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowIn
       inputStatus{nullptr},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditor{false},
-      shouldBackToMenu{false}
+      shouldBackToMenu{false},
+      timeAfterButtonsCanBeClicked{0.3f}
 {
     inputManager->registerObserver(this);
 
@@ -51,14 +52,20 @@ void EditorMenuState::initialize()
     {
         button->loadDependentComponents();
         button->start();
+        button->getComponent<components::ClickableComponent>()->disable();
     }
 
-    timer.start();
+    possibleLeaveFromStateTimer.start();
 }
 
 void EditorMenuState::update(const utils::DeltaTime& deltaTime)
 {
-    if (timer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
+    if (buttonsActionsFrozen && freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
+    {
+        unfreezeButtons();
+    }
+
+    if (possibleLeaveFromStateTimer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
         inputStatus->isKeyPressed(input::InputKey::Escape))
     {
         shouldBackToEditor = true;
@@ -113,6 +120,15 @@ void EditorMenuState::deactivate()
 void EditorMenuState::handleInputStatus(const input::InputStatus& inputStatusInit)
 {
     inputStatus = &inputStatusInit;
+}
+
+void EditorMenuState::unfreezeButtons()
+{
+    buttonsActionsFrozen = false;
+    for (auto& button : buttons)
+    {
+        button->getComponent<components::ClickableComponent>()->enable();
+    }
 }
 
 void EditorMenuState::backToEditor()

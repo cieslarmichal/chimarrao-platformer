@@ -26,7 +26,8 @@ PauseState::PauseState(const std::shared_ptr<window::Window>& windowInit,
       inputStatus{nullptr},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToGame{false},
-      shouldBackToMenu{false}
+      shouldBackToMenu{false},
+      timeAfterButtonsCanBeClicked{0.3f}
 {
     inputManager->registerObserver(this);
 
@@ -49,6 +50,7 @@ void PauseState::initialize()
     {
         button->loadDependentComponents();
         button->start();
+        button->getComponent<components::ClickableComponent>()->disable();
     }
 
     timer.start();
@@ -56,6 +58,11 @@ void PauseState::initialize()
 
 void PauseState::update(const utils::DeltaTime& deltaTime)
 {
+    if (buttonsActionsFrozen && freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
+    {
+        unfreezeButtons();
+    }
+
     if (timer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
         inputStatus->isKeyPressed(input::InputKey::Escape))
     {
@@ -111,6 +118,15 @@ void PauseState::deactivate()
 void PauseState::handleInputStatus(const input::InputStatus& inputStatusInit)
 {
     inputStatus = &inputStatusInit;
+}
+
+void PauseState::unfreezeButtons()
+{
+    buttonsActionsFrozen = false;
+    for (auto& button : buttons)
+    {
+        button->getComponent<components::ClickableComponent>()->enable();
+    }
 }
 
 void PauseState::backToGame()

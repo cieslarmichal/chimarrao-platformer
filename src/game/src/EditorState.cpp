@@ -16,7 +16,8 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
     : State{windowInit, inputManagerInit, rendererPoolInit, states},
       inputStatus{nullptr},
       paused{false},
-      timeAfterStateCouldBePaused{0.5f}
+      timeAfterStateCouldBePaused{0.5f},
+      timeAfterButtonsCanBeClicked{0.3f}
 {
     inputManager->registerObserver(this);
 
@@ -62,12 +63,18 @@ void EditorState::initialize()
     {
         tile->loadDependentComponents();
         tile->start();
+        tile->getComponent<components::ClickableComponent>()->disable();
     }
 }
 
 void EditorState::update(const utils::DeltaTime& dt)
 {
-    if (timer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
+    if (buttonsActionsFrozen && freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
+    {
+        unfreezeButtons();
+    }
+
+    if (pauseTimer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
         inputStatus->isKeyPressed(input::InputKey::Escape))
     {
         pause();
@@ -107,17 +114,20 @@ void EditorState::activate()
 {
     active = true;
     paused = false;
+    freezeClickableButtonsTimer.restart();
+    pauseTimer.restart();
+
     for (auto& tile : clickableTileMap)
     {
         tile->enable();
+        tile->getComponent<components::ClickableComponent>()->disable();
     }
-    timer.restart();
 }
 
 void EditorState::deactivate()
 {
     active = false;
-    timer.restart();
+    pauseTimer.restart();
 }
 
 void EditorState::handleInputStatus(const input::InputStatus& inputStatusInit)
@@ -128,6 +138,7 @@ void EditorState::handleInputStatus(const input::InputStatus& inputStatusInit)
 void EditorState::pause()
 {
     paused = true;
+    buttonsActionsFrozen = true;
 
     for (auto& tile : clickableTileMap)
     {
@@ -136,6 +147,16 @@ void EditorState::pause()
     }
 
     states.push(std::make_unique<EditorMenuState>(window, inputManager, rendererPool, states));
+}
+
+void EditorState::unfreezeButtons()
+{
+    std::cout<< "HEJA";
+    buttonsActionsFrozen = false;
+    for (auto& tile : clickableTileMap)
+    {
+        tile->getComponent<components::ClickableComponent>()->enable();
+    }
 }
 
 }

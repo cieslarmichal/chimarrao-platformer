@@ -2,6 +2,8 @@
 
 #include <SFML/Window/Event.hpp>
 #include <utility>
+#include "SupportedFrameLimitsRetriever.h"
+#include "SupportedResolutionsRetriever.h"
 
 namespace window
 {
@@ -131,6 +133,16 @@ unsigned WindowSfml::getSfmlStyleFromDisplayMode(DisplayMode displayMode) const
     {
         return sf::Style::Fullscreen;
     }
+}
+
+std::vector<Resolution> WindowSfml::getSupportedResolutions() const
+{
+    return SupportedResolutionsRetriever::retrieveSupportedResolutions();
+}
+
+std::vector<unsigned int> WindowSfml::getSupportedFrameLimits() const
+{
+    return SupportedFrameLimitsRetriever::retrieveSupportedFrameLimits();
 }
 
 }

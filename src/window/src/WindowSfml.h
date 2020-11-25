@@ -28,6 +28,8 @@ public:
     void setVerticalSync(bool enabled) override;
     void setFramerateLimit(unsigned int frameLimit) override;
     void setResolution(const Resolution&) override;
+    std::vector<Resolution> getSupportedResolutions() const override;
+    std::vector<unsigned int> getSupportedFrameLimits() const override;
     void registerObserver(WindowObserver*) override;
     void removeObserver(WindowObserver*) override;
 

@@ -40,7 +40,8 @@ MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
       currentButtonIndex{0},
-      timeAfterButtonCanBeSwitched{0.1}
+      timeAfterButtonCanBeSwitched{0.1},
+      timeAfterButtonsCanBeClicked{0.3}
 {
     inputManager->registerObserver(this);
 
@@ -66,6 +67,7 @@ void MenuState::initialize()
     {
         button->loadDependentComponents();
         button->start();
+        button->getComponent<components::ClickableComponent>()->disable();
     }
 
     buttons[currentButtonIndex]->getComponent<components::GraphicsComponent>()->setColor(buttonHoverColor);
@@ -74,18 +76,14 @@ void MenuState::initialize()
 
 void MenuState::update(const utils::DeltaTime& deltaTime)
 {
-    if (timer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
+    if (buttonsActionsFrozen && freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
     {
-        if (inputStatus->isKeyPressed(input::InputKey::Up))
-        {
-            changeSelectedButtonUp();
-            timer.restart();
-        }
-        else if (inputStatus->isKeyPressed(input::InputKey::Down))
-        {
-            changeSelectedButtonDown();
-            timer.restart();
-        }
+        unfreezeButtons();
+    }
+
+    if (switchButtonTimer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
+    {
+        handleButtonSwitching();
     }
 
     for (auto& button : buttons)
@@ -115,16 +113,18 @@ std::string MenuState::getName() const
 void MenuState::activate()
 {
     active = true;
-
+    freezeClickableButtonsTimer.restart();
     for (auto& button : buttons)
     {
         button->enable();
+        button->getComponent<components::ClickableComponent>()->disable();
     }
 }
 
 void MenuState::deactivate()
 {
     active = false;
+    buttonsActionsFrozen = true;
 
     for (auto& button : buttons)
     {
@@ -135,6 +135,29 @@ void MenuState::deactivate()
 void MenuState::handleInputStatus(const input::InputStatus& inputStatusInit)
 {
     inputStatus = &inputStatusInit;
+}
+
+void MenuState::handleButtonSwitching()
+{
+    if (inputStatus->isKeyPressed(input::InputKey::Up))
+    {
+        changeSelectedButtonUp();
+        switchButtonTimer.restart();
+    }
+    else if (inputStatus->isKeyPressed(input::InputKey::Down))
+    {
+        changeSelectedButtonDown();
+        switchButtonTimer.restart();
+    }
+}
+
+void MenuState::unfreezeButtons()
+{
+    buttonsActionsFrozen = false;
+    for (auto& button : buttons)
+    {
+        button->getComponent<components::ClickableComponent>()->enable();
+    }
 }
 
 void MenuState::createBackground()

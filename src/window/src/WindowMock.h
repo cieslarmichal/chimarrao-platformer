@@ -26,5 +26,7 @@ public:
     MOCK_METHOD(void, setVerticalSync, (bool enabled), (override));
     MOCK_METHOD(void, setFramerateLimit, (unsigned int frameLimit), (override));
     MOCK_METHOD(void, setResolution, (const Resolution&), (override));
+    MOCK_METHOD(std::vector<Resolution>, getSupportedResolutions, (), (const override));
+    MOCK_METHOD(std::vector<unsigned int>, getSupportedFrameLimits, (), (const override));
 };
 }
