@@ -211,10 +211,7 @@ void MenuState::createSettingsButton()
 void MenuState::createExitButton()
 {
     const auto exit = [&] {
-        if (not states.empty())
-        {
-            states.pop();
-        }
+        window->close();
     };
 
     addButton(exitButtonPosition, "Exit", utils::Vector2f{7, 1}, exit);
