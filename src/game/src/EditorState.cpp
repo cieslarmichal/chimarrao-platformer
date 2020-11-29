@@ -1,5 +1,7 @@
 #include "EditorState.h"
 
+#include <MouseOverComponent.h>
+
 #include "ComponentOwner.h"
 #include "EditorMenuState.h"
 #include "GetProjectPath.h"
@@ -8,6 +10,20 @@
 
 namespace game
 {
+namespace
+{
+const float rendererPoolSizeX = 80;
+const float rendererPoolSizeY = 60;
+const float tileSizeX = 4;
+const float tileSizeY = 4;
+const auto pathToBackground =
+    utils::getProjectPath("chimarrao-platformer") + "resources/BG/background_glacial_mountains.png";
+const auto pathToBrickTileTexture = utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png";
+const auto tilesTextureVector = std::vector<std::string>{
+    utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png",
+    utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/2.png"
+};
+}
 
 EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                          const std::shared_ptr<input::InputManager>& inputManagerInit,
@@ -21,31 +37,81 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
 {
     inputManager->registerObserver(this);
 
+    currentTileId = 0;
+    currentTilePath = tilesTextureVector[currentTileId];
     background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
     background->addComponent<components::GraphicsComponent>(
-        rendererPool, utils::Vector2f{80, 60}, utils::Vector2f{0, 0},
-        utils::getProjectPath("chimarrao-platformer") + "resources/BG/background_glacial_mountains.png",
-        graphics::VisibilityLayer::Background);
+        rendererPool, utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY}, utils::Vector2f{0, 0},
+        pathToBackground, graphics::VisibilityLayer::Background);
+    background->addComponent<components::HitboxComponent>(
+        utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY});
+    const auto changeBlockAction = [&]() {
+        std::cout << currentTilePath << std::endl;
+        currentTileId = currentTileId + 1 < tilesTextureVector.size() ? currentTileId + 1 : 0;
+        currentTilePath = tilesTextureVector[currentTileId];
+    };
+    background->addComponent<components::ClickableComponent>(
+        inputManager, std::vector<KeyAction>{{input::InputKey::MouseRight, changeBlockAction}});
 
-    tileMap = std::make_unique<TileMap>(utils::Vector2i(16, 12), utils::Vector2f(5, 5));
-
-    for (int y = 0; y < 12; ++y)
+    tileMap = std::make_unique<TileMap>(
+        utils::Vector2i(rendererPoolSizeX / tileSizeX, rendererPoolSizeY / tileSizeY),
+        utils::Vector2f(tileSizeX, tileSizeY));
+    for (int y = 0; y < rendererPoolSizeY / tileSizeY; ++y)
     {
-        for (int x = 0; x < 16; ++x)
+        for (int x = 0; x < rendererPoolSizeX / tileSizeX; ++x)
         {
-            auto clickableTile = std::make_unique<components::ComponentOwner>(
-                utils::Vector2f{static_cast<float>(x * 5), static_cast<float>(y * 5)});
+            auto clickableTile = std::make_shared<components::ComponentOwner>(
+                utils::Vector2f{static_cast<float>(x * tileSizeX), static_cast<float>(y * tileSizeY)});
             auto graphicsComponent = clickableTile->addComponent<components::GraphicsComponent>(
-                rendererPool, utils::Vector2f{5, 5},
-                utils::Vector2f{static_cast<float>(x * 5), static_cast<float>(y * 5)},
-                utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png",
-                graphics::VisibilityLayer::Invisible);
-            clickableTile->addComponent<components::HitboxComponent>(utils::Vector2f{5, 5});
-            clickableTile->addComponent<components::ClickableComponent>(inputManager, [=]() {
-                tileMap->setTile({x, y}, 1);
-                graphicsComponent->setVisibility(graphics::VisibilityLayer::Second);
-            });
-            clickableTileMap.push_back(std::move(clickableTile));
+                rendererPool, utils::Vector2f{tileSizeX, tileSizeY},
+                utils::Vector2f{static_cast<float>(x * tileSizeX), static_cast<float>(y * tileSizeY)},
+                pathToBrickTileTexture, graphics::VisibilityLayer::Invisible);
+            clickableTile->addComponent<components::HitboxComponent>(utils::Vector2f{tileSizeX, tileSizeY});
+            const auto actionOnClickBlock = [=]() {
+                if (tileMap->getTile({x, y}) == 0)
+                {
+                    tileMap->setTile({x, y}, 1);
+                    graphicsComponent->setColor(graphics::Color(255, 255, 255, 255));
+                    graphicsComponent->setOutline(0.0f, graphics::Color::Transparent);
+                    graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
+                    graphicsComponent->setOutline(0.2f, graphics::Color::Red);
+                }
+                else
+                {
+                    tileMap->setTile({x, y}, 0);
+                    graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
+                    graphicsComponent->setColor(graphics::Color(255, 255, 255, 64));
+                    graphicsComponent->setOutline(0.2f, graphics::Color::Green);
+                }
+            };
+            clickableTile->addComponent<components::ClickableComponent>(inputManager, actionOnClickBlock);
+            const auto actionOnMouseOverBlock = [=]() {
+                graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
+                if (tileMap->getTile({x, y}) == 0)
+                {
+                    graphicsComponent->setTexture(currentTilePath);
+                    graphicsComponent->setColor(graphics::Color(255, 255, 255, 64));
+                    graphicsComponent->setOutline(0.2f, graphics::Color::Green);
+                }
+                else
+                {
+                    graphicsComponent->setOutline(0.2f, graphics::Color::Red);
+                }
+            };
+            const auto actionOnMouseOut = [=]() {
+                if (tileMap->getTile({x, y}) == 0)
+                {
+                    graphicsComponent->setVisibility(graphics::VisibilityLayer::Invisible);
+                }
+                else
+                {
+                    graphicsComponent->setVisibility(graphics::VisibilityLayer::Second);
+                }
+                graphicsComponent->setOutline(0.0f, graphics::Color::Transparent);
+            };
+            clickableTile->addComponent<components::MouseOverComponent>(inputManager, actionOnMouseOverBlock,
+                                                                        actionOnMouseOut);
+            clickableTileMap.push_back(clickableTile);
         }
     }
 
@@ -59,6 +125,9 @@ EditorState::~EditorState()
 
 void EditorState::initialize()
 {
+    background->loadDependentComponents();
+    background->start();
+
     for (auto& tile : clickableTileMap)
     {
         tile->loadDependentComponents();
@@ -82,6 +151,7 @@ void EditorState::update(const utils::DeltaTime& dt)
 
     if (not paused)
     {
+        background->update(dt);
         for (auto& tile : clickableTileMap)
         {
             tile->update(dt);
@@ -93,6 +163,7 @@ void EditorState::lateUpdate(const utils::DeltaTime& dt)
 {
     if (not paused)
     {
+        background->lateUpdate(dt);
         for (auto& tile : clickableTileMap)
         {
             tile->lateUpdate(dt);
@@ -151,7 +222,6 @@ void EditorState::pause()
 
 void EditorState::unfreezeButtons()
 {
-    std::cout<< "HEJA";
     buttonsActionsFrozen = false;
     for (auto& tile : clickableTileMap)
     {

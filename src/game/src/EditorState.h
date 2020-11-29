@@ -34,8 +34,10 @@ private:
     bool paused;
     utils::Timer pauseTimer;
     const float timeAfterStateCouldBePaused;
+    int currentTileId;
+    std::string currentTilePath;
     std::unique_ptr<components::ComponentOwner> background;
-    std::vector<std::unique_ptr<components::ComponentOwner>> clickableTileMap;
+    std::vector<std::shared_ptr<components::ComponentOwner>> clickableTileMap;
     std::unique_ptr<TileMap> tileMap;
     bool buttonsActionsFrozen = true;
     utils::Timer freezeClickableButtonsTimer;

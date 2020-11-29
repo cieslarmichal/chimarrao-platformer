@@ -6,6 +6,7 @@
 #include "HitboxComponent.h"
 #include "InputManager.h"
 #include "InputObserver.h"
+#include "KeyAction.h"
 
 namespace components
 {
@@ -14,6 +15,8 @@ class ClickableComponent : public Component, public input::InputObserver
 public:
     ClickableComponent(ComponentOwner*, std::shared_ptr<input::InputManager>,
                        std::function<void(void)> action);
+    ClickableComponent(ComponentOwner*, std::shared_ptr<input::InputManager>,
+                       std::vector<KeyAction> keyActionVector);
     ~ClickableComponent();
 
     void loadDependentComponents() override;
@@ -26,7 +29,6 @@ private:
     std::shared_ptr<input::InputManager> inputManager;
     const input::InputStatus* inputStatus;
     std::shared_ptr<HitboxComponent> hitbox;
-    std::function<void(void)> action;
-    bool clicked;
+    std::vector<KeyAction> keyActionVector;
 };
 }

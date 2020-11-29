@@ -6,7 +6,7 @@ namespace game
 TileMap::TileMap(utils::Vector2i mapSizeInit, utils::Vector2f tileSizeInit)
     : mapSize(mapSizeInit), tileSize(tileSizeInit)
 {
-    //TODO: calculate map size
+    // TODO: calculate map size
     for (int x = 0; x < mapSize.y; x++)
     {
         nodes.emplace_back(mapSize.x, 0);

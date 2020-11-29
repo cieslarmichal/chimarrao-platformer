@@ -26,6 +26,8 @@ public:
     const graphics::GraphicsId& getGraphicsId();
     void setColor(const graphics::Color&);
     void setVisibility(graphics::VisibilityLayer);
+    void setOutline(float thickness, const sf::Color& color);
+    void setTexture(const std::string& texturePath);
     void enable() override;
     void disable() override;
 

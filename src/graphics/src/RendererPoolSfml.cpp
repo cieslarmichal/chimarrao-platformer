@@ -239,4 +239,20 @@ RendererPoolSfml::findLayeredTextPosition(const GraphicsId& graphicsIdToFind) co
                             return layeredText.text.getGraphicsId() == graphicsIdToFind;
                         });
 }
+void RendererPoolSfml::setOutline(const GraphicsId& id, float thickness, const Color& color) {
+    if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
+    {
+        auto& layeredShape = getLayeredShapeByPosition(layeredShapes, layeredShapeIter);
+        layeredShape.shape.setOutlineThickness(thickness);
+        layeredShape.shape.setOutlineColor(color);
+        return;
+    }
+
+    if (const auto layeredTextIter = findLayeredTextPosition(id); layeredTextIter != layeredTexts.end())
+    {
+        auto& layeredText = getLayeredTextByPosition(layeredTexts, layeredTextIter);
+        layeredText.text.setOutlineThickness(thickness);
+        layeredText.text.setOutlineColor(color);
+    }
+}
 }

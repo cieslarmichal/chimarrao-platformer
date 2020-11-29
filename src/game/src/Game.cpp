@@ -1,9 +1,10 @@
 #include "Game.h"
 
+#include <thread>
+#include <chrono>
+
 #include "DefaultInputManager.h"
 #include "DefaultInputObservationHandler.h"
-#include "EditorState.h"
-#include "GameState.h"
 #include "GraphicsFactory.h"
 #include "MenuState.h"
 #include "Vector.h"
@@ -32,6 +33,7 @@ void Game::run()
 {
     while (window->isOpen())
     {
+        std::this_thread::sleep_for(std::chrono::duration<double, std::nano>(1));
         processInput();
         update();
         lateUpdate();
@@ -54,7 +56,7 @@ void Game::update()
     }
     else
     {
-        std::cout << states.top()->getName() << std::endl;
+        //std::cout << states.top()->getName() << std::endl;
         states.top()->update(dt);
     }
 }

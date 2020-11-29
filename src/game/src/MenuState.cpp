@@ -172,7 +172,7 @@ void MenuState::createPlayGameButton()
 {
     const auto runGame = [&] {
         states.top()->deactivate();
-      states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
+        states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
     };
 
     addButton(gameButtonPosition, "Play", utils::Vector2f{7, 1}, runGame);
