@@ -66,4 +66,7 @@ void GraphicsComponent::disable()
 void GraphicsComponent::setOutline(float thickness, const sf::Color& color) {
     rendererPool->setOutline(id, thickness, color);
 }
+void GraphicsComponent::setTexture(const std::string& texturePath) {
+    rendererPool->setTexture(id, texturePath);
+}
 }

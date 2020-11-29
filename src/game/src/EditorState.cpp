@@ -16,6 +16,10 @@ float tileSizeX = 4, tileSizeY = 4;
 auto pathToBackground =
     utils::getProjectPath("chimarrao-platformer") + "resources/BG/background_glacial_mountains.png";
 auto pathToBrickTileTexture = utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png";
+auto tilesTextureVector = std::vector<std::string>{
+    utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png",
+    utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/2.png"
+};
 }
 
 EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
@@ -24,13 +28,19 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                          std::stack<std::unique_ptr<State>>& states)
     : State{windowInit, inputManagerInit, rendererPoolInit, states}
 {
+    currentTileId = 0;
+    currentTilePath = tilesTextureVector[currentTileId];
     background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
     background->addComponent<components::GraphicsComponent>(
         rendererPool, utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY}, utils::Vector2f{0, 0},
         pathToBackground, graphics::VisibilityLayer::Background);
     background->addComponent<components::HitboxComponent>(
         utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY});
-    const auto changeBlockAction = []() { std::cout << "zmiana klocka!\n"; };
+    const auto changeBlockAction = [&]() {
+        std::cout << currentTilePath << std::endl;
+        currentTileId = currentTileId + 1 < tilesTextureVector.size() ? currentTileId + 1 : 0;
+        currentTilePath = tilesTextureVector[currentTileId];
+    };
     background->addComponent<components::ClickableComponent>(
         inputManager, std::vector<KeyAction>{{input::InputKey::MouseRight, changeBlockAction}});
 
@@ -70,6 +80,7 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                 graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
                 if (tileMap->getTile({x, y}) == 0)
                 {
+                    graphicsComponent->setTexture(currentTilePath);
                     graphicsComponent->setColor(graphics::Color(255, 255, 255, 64));
                     graphicsComponent->setOutline(0.2f, graphics::Color::Green);
                 }

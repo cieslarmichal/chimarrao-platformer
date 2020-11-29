@@ -68,6 +68,8 @@ set(FIND_SFML_PATHS
         /Library/Frameworks
         /usr/local
         /usr
+        /usr/lib
+        /usr/lib64
         /sw
         /opt/local
         /opt/csw

@@ -22,6 +22,8 @@ public:
     void deactivate() override;
 
 private:
+    int currentTileId;
+    std::string currentTilePath;
     std::unique_ptr<components::ComponentOwner> background;
     std::vector<std::shared_ptr<components::ComponentOwner>> clickableTileMap;
     std::unique_ptr<TileMap> tileMap;
