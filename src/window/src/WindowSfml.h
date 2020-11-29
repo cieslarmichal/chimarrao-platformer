@@ -24,10 +24,10 @@ public:
     bool pollEvent(sf::Event& event) const override;
     utils::Vector2f getMousePosition() const override;
     WindowSettings getWindowSettings() const override;
-    void setDisplayMode(DisplayMode) override;
-    void setVerticalSync(bool enabled) override;
-    void setFramerateLimit(unsigned int frameLimit) override;
-    void setResolution(const Resolution&) override;
+    bool setDisplayMode(DisplayMode) override;
+    bool setVerticalSync(bool vsyncEnabled) override;
+    bool setFramerateLimit(unsigned int frameLimit) override;
+    bool setResolution(const Resolution&) override;
     std::vector<Resolution> getSupportedResolutions() const override;
     std::vector<unsigned int> getSupportedFrameLimits() const override;
     void registerObserver(WindowObserver*) override;

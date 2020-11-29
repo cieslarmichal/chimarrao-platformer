@@ -5,6 +5,8 @@
 
 #include "DefaultInputManager.h"
 #include "DefaultInputObservationHandler.h"
+#include "EditorState.h"
+#include "GameState.h"
 #include "GraphicsFactory.h"
 #include "MenuState.h"
 #include "Vector.h"
@@ -56,7 +58,7 @@ void Game::update()
     }
     else
     {
-        //std::cout << states.top()->getName() << std::endl;
+//        std::cout << states.top()->getName() << std::endl;
         states.top()->update(dt);
     }
 }

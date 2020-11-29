@@ -31,8 +31,8 @@ const WindowSettings windowSettingsWithVsyncChanged{initialDisplayMode, initialR
                                                           initialFrameLimit};
 const WindowSettings windowSettingsWithFrameLimitChanged{initialDisplayMode, initialResolution, initialVsync,
                                                          changedFrameLimit};
-const std::vector<Resolution> expectedSupportedResolutions{{1920, 1080}, {1600, 900}, {1368, 768},
-                                                           {1280, 720},  {1024, 768}, {800, 600}};
+const std::vector<Resolution> expectedSupportedResolutions{{800, 600},  {1024, 768}, {1280, 720},
+                                                           {1368, 768}, {1600, 900}, {1920, 1080}};
 const std::vector<unsigned int> expectedSupportedFrameLimits{30, 60, 90, 120};
 }
 
@@ -74,40 +74,68 @@ TEST_F(WindowSfmlTest, getWindowSettings)
     ASSERT_EQ(actualWindowSettings, initialWindowSettings);
 }
 
-TEST_F(WindowSfmlTest, setDisplayMode)
+TEST_F(WindowSfmlTest, givenSameDisplayMode_shouldNotSetDisplayMode)
 {
-    window.setDisplayMode(changedDisplayMode);
+    const auto result = window.setDisplayMode(initialDisplayMode);
+
+    ASSERT_FALSE(result);
+}
+
+TEST_F(WindowSfmlTest, givenDifferentDisplayMode_shouldSetDisplayMode)
+{
+    const auto result = window.setDisplayMode(changedDisplayMode);
 
     const auto actualWindowSettings = window.getWindowSettings();
-
     ASSERT_EQ(actualWindowSettings, windowSettingsWithDisplayModeChanged);
+    ASSERT_TRUE(result);
 }
 
-TEST_F(WindowSfmlTest, setResolution)
+TEST_F(WindowSfmlTest, givenSameResolution_shouldNotSetResolution)
 {
-    window.setResolution(changedResolution);
+    const auto result = window.setResolution(initialResolution);
+
+    ASSERT_FALSE(result);
+}
+
+TEST_F(WindowSfmlTest, givenDifferentResolution_shouldSetResolution)
+{
+    const auto result = window.setResolution(changedResolution);
 
     const auto actualWindowSettings = window.getWindowSettings();
-
     ASSERT_EQ(actualWindowSettings, windowSettingsWithResolutionChanged);
+    ASSERT_TRUE(result);
 }
 
-TEST_F(WindowSfmlTest, setVsync)
+TEST_F(WindowSfmlTest, givenSameVsync_shouldNotSetVsync)
 {
-    window.setVerticalSync(changedVsync);
+    const auto result = window.setVerticalSync(initialVsync);
+
+    ASSERT_FALSE(result);
+}
+
+TEST_F(WindowSfmlTest, givenDifferentVsync_shouldSetVsync)
+{
+    const auto result = window.setVerticalSync(changedVsync);
 
     const auto actualWindowSettings = window.getWindowSettings();
-
     ASSERT_EQ(actualWindowSettings, windowSettingsWithVsyncChanged);
+    ASSERT_TRUE(result);
 }
 
-TEST_F(WindowSfmlTest, setFramerateLimit)
+TEST_F(WindowSfmlTest, givenSameFrameLimit_shouldNotSetFrameLimit)
 {
-    window.setFramerateLimit(changedFrameLimit);
+    const auto result = window.setFramerateLimit(initialFrameLimit);
+
+    ASSERT_FALSE(result);
+}
+
+TEST_F(WindowSfmlTest, givenDifferentFrameLimit_shouldSetFramerateLimit)
+{
+    const auto result = window.setFramerateLimit(changedFrameLimit);
 
     const auto actualWindowSettings = window.getWindowSettings();
-
     ASSERT_EQ(actualWindowSettings, windowSettingsWithFrameLimitChanged);
+    ASSERT_TRUE(result);
 }
 
 TEST_F(WindowSfmlTest, shouldRetrieveSupportedResolutions)
@@ -123,4 +151,3 @@ TEST_F(WindowSfmlTest, shouldRetrieveSupportedFrameLimits)
 
     ASSERT_EQ(actualSupportedFrameLimits, expectedSupportedFrameLimits);
 }
-

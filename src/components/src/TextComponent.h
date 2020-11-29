@@ -21,6 +21,7 @@ public:
     void lateUpdate(utils::DeltaTime) override;
     const graphics::GraphicsId& getGraphicsId();
     void setColor(const graphics::Color&);
+    void setText(const std::string&);
     void enable() override;
     void disable() override;
 

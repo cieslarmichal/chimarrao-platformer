@@ -42,6 +42,11 @@ void TextComponent::setColor(const graphics::Color& color)
     rendererPool->setColor(id, color);
 }
 
+void TextComponent::setText(const std::string& text)
+{
+    rendererPool->setText(id, text);
+}
+
 void TextComponent::enable()
 {
     Component::enable();

@@ -17,7 +17,7 @@ class TextComponentTest : public Test
 public:
     void expectCreateTextComponent()
     {
-        EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath, characterSize, initialVisibility, color))
+        EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath, characterSize, initialVisibility, color1))
             .WillOnce(Return(graphicsId));
     }
 
@@ -29,13 +29,13 @@ public:
     std::shared_ptr<TextComponent> createTextComponent()
     {
         return std::make_shared<TextComponent>(&componentOwner, rendererPool, position1, text, fontPath,
-                                               characterSize, color);
+                                               characterSize, color1);
     }
 
     std::shared_ptr<TextComponent> createTextComponentWithOffset()
     {
         return std::make_shared<TextComponent>(&componentOwner, rendererPool, position1, text, fontPath,
-                                               characterSize, color, offset);
+                                               characterSize, color1, offset);
     }
 
     const utils::Vector2f offset{10, 10};
@@ -43,8 +43,10 @@ public:
     const utils::Vector2f position2{12, 2};
     const FontPath fontPath{"fontPath"};
     const std::string text{"text"};
+    const std::string updatedText{"wowow"};
     const unsigned characterSize{15};
-    const Color color{Color::Black};
+    const Color color1{Color::Black};
+    const Color color2{Color::White};
     const VisibilityLayer initialVisibility{VisibilityLayer::First};
     const VisibilityLayer invisible{VisibilityLayer::Invisible};
     const GraphicsId graphicsId{GraphicsIdGenerator::generateId()};
@@ -56,7 +58,7 @@ public:
 
 TEST_F(TextComponentTest, createTextComponent_shouldCreateGraphicsObject)
 {
-    EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath, characterSize, initialVisibility, color))
+    EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath, characterSize, initialVisibility, color1))
         .WillOnce(Return(graphicsId));
 
     const auto textComponent = createTextComponent();
@@ -139,5 +141,27 @@ TEST_F(TextComponentTest, enableDisabledComponent_shouldSetInitialVisibilityLaye
     textComponent->enable();
 
     EXPECT_TRUE(textComponent->isEnabled());
+    expectReleaseGraphicsId();
+}
+
+TEST_F(TextComponentTest, shouldSetColor)
+{
+    expectCreateTextComponent();
+    const auto textComponent = createTextComponent();
+
+    EXPECT_CALL(*rendererPool, setColor(textComponent->getGraphicsId(), color2));
+
+    textComponent->setColor(color2);
+    expectReleaseGraphicsId();
+}
+
+TEST_F(TextComponentTest, shouldSetText)
+{
+    expectCreateTextComponent();
+    const auto textComponent = createTextComponent();
+
+    EXPECT_CALL(*rendererPool, setText(textComponent->getGraphicsId(), updatedText));
+
+    textComponent->setText(updatedText);
     expectReleaseGraphicsId();
 }

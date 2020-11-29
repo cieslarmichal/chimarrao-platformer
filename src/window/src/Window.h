@@ -27,10 +27,10 @@ public:
     virtual bool pollEvent(sf::Event& event) const = 0;
     virtual utils::Vector2f getMousePosition() const = 0;
     virtual WindowSettings getWindowSettings() const = 0;
-    virtual void setDisplayMode(DisplayMode) = 0;
-    virtual void setVerticalSync(bool enabled) = 0;
-    virtual void setFramerateLimit(unsigned int frameLimit) = 0;
-    virtual void setResolution(const Resolution&) = 0;
+    virtual bool setDisplayMode(DisplayMode) = 0;
+    virtual bool setVerticalSync(bool vsyncEnabled) = 0;
+    virtual bool setFramerateLimit(unsigned int frameLimit) = 0;
+    virtual bool setResolution(const Resolution&) = 0;
     virtual std::vector<Resolution> getSupportedResolutions() const = 0;
     virtual std::vector<unsigned int> getSupportedFrameLimits() const = 0;
 };

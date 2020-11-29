@@ -29,6 +29,13 @@ private:
     void synchronizeWindowSettings();
     void applyWindowSettingsChanges();
     void unfreezeButtons();
+    void increaseResolution();
+    void decreaseResolution();
+    void increaseFrameLimit();
+    void decreaseFrameLimit();
+    void switchVsync();
+    void setWindowMode();
+    void setFullscreenMode();
     void backToMenu();
     void createBackground();
     void createSettingsTitle();
@@ -38,21 +45,26 @@ private:
     void createResolutionSection();
     void createVsyncSection();
     void createFrameLimitSection();
-    void addButton(const utils::Vector2f& position, const utils::Vector2f& size, const std::string& text,
+    unsigned int addButton(const utils::Vector2f& position, const utils::Vector2f& size, const std::string& text,
+                                        unsigned int fontSize, const utils::Vector2f& textOffset,
+                                        std::function<void(void)> clickAction);
+    unsigned int addButtonWithMouseOver(const utils::Vector2f& position, const utils::Vector2f& size, const std::string& text,
                    unsigned int fontSize, const utils::Vector2f& textOffset,
                    std::function<void(void)> clickAction);
-    void addText(const utils::Vector2f& position, const std::string& description, unsigned int fontSize);
+    unsigned int addText(const utils::Vector2f& position, const std::string& description, unsigned int fontSize);
 
     bool shouldBackToMenu;
     const input::InputStatus* inputStatus;
     std::unique_ptr<components::ComponentOwner> background;
     std::vector<std::unique_ptr<components::ComponentOwner>> texts;
+    unsigned int resolutionTextId, frameLimitTextId;
+    unsigned int windowModeButtonId, fullscreenModeButtonId, vsyncButtonId;
     std::vector<std::unique_ptr<components::ComponentOwner>> buttons;
     window::WindowSettings selectedWindowsSettings;
     std::vector<window::Resolution> supportedResolutions;
-    int selectedResolutionIndex = 0;
+    unsigned int selectedResolutionIndex = 0;
     std::vector<unsigned int> supportedFrameLimits;
-    int selectedFrameLimitIndex = 0;
+    unsigned int selectedFrameLimitIndex = 0;
     bool buttonsActionsFrozen = true;
     utils::Timer freezeClickableButtonsTimer;
     const float timeAfterButtonsCanBeClicked;

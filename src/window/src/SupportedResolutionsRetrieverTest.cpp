@@ -7,8 +7,8 @@ using namespace window;
 
 namespace
 {
-const std::vector<Resolution> expectedSupportedResolutions{{1920, 1080}, {1600, 900}, {1368, 768},
-                                                           {1280, 720},  {1024, 768}, {800, 600}};
+const std::vector<Resolution> expectedSupportedResolutions{{800, 600},  {1024, 768}, {1280, 720},
+                                                           {1368, 768}, {1600, 900}, {1920, 1080}};
 }
 
 TEST(SupportedResolutionsRetrieverTest, shouldRetrieveSupportedResolutions)

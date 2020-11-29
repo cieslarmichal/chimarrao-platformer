@@ -22,10 +22,10 @@ public:
     MOCK_METHOD(void, removeObserver, (WindowObserver*), (override));
     MOCK_METHOD(void, notifyObservers, (), (override));
     MOCK_METHOD(WindowSettings, getWindowSettings, (), (const override));
-    MOCK_METHOD(void, setDisplayMode, (DisplayMode), (override));
-    MOCK_METHOD(void, setVerticalSync, (bool enabled), (override));
-    MOCK_METHOD(void, setFramerateLimit, (unsigned int frameLimit), (override));
-    MOCK_METHOD(void, setResolution, (const Resolution&), (override));
+    MOCK_METHOD(bool, setDisplayMode, (DisplayMode), (override));
+    MOCK_METHOD(bool, setVerticalSync, (bool enabled), (override));
+    MOCK_METHOD(bool, setFramerateLimit, (unsigned int frameLimit), (override));
+    MOCK_METHOD(bool, setResolution, (const Resolution&), (override));
     MOCK_METHOD(std::vector<Resolution>, getSupportedResolutions, (), (const override));
     MOCK_METHOD(std::vector<unsigned int>, getSupportedFrameLimits, (), (const override));
 };

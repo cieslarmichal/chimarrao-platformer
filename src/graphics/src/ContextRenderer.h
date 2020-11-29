@@ -17,5 +17,6 @@ public:
     virtual void draw(const sf::Drawable&) = 0;
     virtual void setView() = 0;
     virtual void setViewSize(const utils::Vector2u& windowsSize) = 0;
+    virtual void synchronizeViewSize() = 0;
 };
 }

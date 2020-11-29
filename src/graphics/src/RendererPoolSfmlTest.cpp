@@ -381,8 +381,28 @@ TEST_F(RendererPoolSfmlTest, setTextureWithInvalidGraphicsId_shouldNotThrow)
     ASSERT_NO_THROW(rendererPool.setTexture(invalidId, validTexturePath));
 }
 
+TEST_F(RendererPoolSfmlTest, setTextWithInvalidGraphicsId_shouldNotThrow)
+{
+    ASSERT_NO_THROW(rendererPool.setText(invalidId, text));
+}
+
+TEST_F(RendererPoolSfmlTest, setTextWithValidGraphicsId_shouldNotThrow)
+{
+    EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
+    const auto textId = rendererPool.acquireText(position, text, validFontPath, characterSize);
+
+    ASSERT_NO_THROW(rendererPool.setText(textId, text));
+}
+
 // TODO: test setColor with validId
 TEST_F(RendererPoolSfmlTest, setColorWithInvalidGraphicsId_shouldNotThrow)
 {
     ASSERT_NO_THROW(rendererPool.setColor(invalidId, sf::Color::Red));
+}
+
+TEST_F(RendererPoolSfmlTest, synchronizeRenderingSize)
+{
+    EXPECT_CALL(*contextRenderer, synchronizeViewSize());
+
+    rendererPool.synchronizeRenderingSize();
 }
