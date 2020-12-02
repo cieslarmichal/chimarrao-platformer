@@ -191,8 +191,8 @@ void MenuState::createMapEditorButton()
 void MenuState::createControlsButton()
 {
     const auto runControls = [&] {
-//      states.top()->deactivate();
-//      states.push(std::make_unique<ControlsState>(window, inputManager, rendererPool, states));
+      states.top()->deactivate();
+      states.push(std::make_unique<ControlsState>(window, inputManager, rendererPool, states));
     };
 
     addButton(controlsButtonPosition, "Controls", utils::Vector2f{3, 1}, runControls);
