@@ -5,6 +5,7 @@
 #include "GraphicsComponent.h"
 #include "HitboxComponent.h"
 #include "MouseOverComponent.h"
+#include "SaveMapState.h"
 #include "TextComponent.h"
 
 namespace game
@@ -110,16 +111,46 @@ std::string EditorMenuState::getName() const
 void EditorMenuState::activate()
 {
     active = true;
+
+    for (auto& button : buttons)
+    {
+        button->enable();
+        if (auto clickableButton = button->getComponent<components::ClickableComponent>())
+        {
+            clickableButton->disable();
+        }
+    }
+
+    background->enable();
+    title->enable();
+
+    possibleLeaveFromStateTimer.restart();
 }
 
 void EditorMenuState::deactivate()
 {
     active = false;
+
+    hideGraphics();
+
+    buttonsActionsFrozen = true;
 }
 
 void EditorMenuState::handleInputStatus(const input::InputStatus& inputStatusInit)
 {
     inputStatus = &inputStatusInit;
+}
+
+void EditorMenuState::hideGraphics()
+{
+    for (auto& button : buttons)
+    {
+        button->disable();
+
+    }
+
+    background->disable();
+    title->disable();
 }
 
 void EditorMenuState::unfreezeButtons()
@@ -191,8 +222,14 @@ void EditorMenuState::createSaveMapButton()
 {
     const auto backToMenuButtonPosition = utils::Vector2f{28, 35};
 
-    addButton(backToMenuButtonPosition, "Save map", utils::Vector2f{6, 0.75},
-              [this] { std::cout << "save map\n"; });
+    auto runSaveMapState = [&] {
+        buttonsActionsFrozen = true;
+
+
+        states.top()->deactivate();
+        states.push(std::make_unique<SaveMapState>(window, inputManager, rendererPool, states));
+    };
+    addButton(backToMenuButtonPosition, "Save map", utils::Vector2f{6, 0.75}, runSaveMapState);
 }
 
 void EditorMenuState::createMenuButton()

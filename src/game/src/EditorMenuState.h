@@ -26,6 +26,7 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
+    void hideGraphics();
     void unfreezeButtons();
     void backToEditor();
     void backToMenu();
@@ -41,8 +42,7 @@ private:
     const input::InputStatus* inputStatus;
     utils::Timer possibleLeaveFromStateTimer;
     const float timeAfterLeaveStateIsPossible;
-    bool shouldBackToEditor;
-    bool shouldBackToMenu;
+    bool shouldBackToEditor, shouldBackToMenu;
     std::unique_ptr<components::ComponentOwner> title;
     std::unique_ptr<components::ComponentOwner> background;
     std::vector<std::unique_ptr<components::ComponentOwner>> buttons;

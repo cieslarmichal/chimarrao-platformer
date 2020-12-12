@@ -9,6 +9,7 @@ set(SOURCES
         src/EditorMenuState.cpp
         src/SettingsState.cpp
         src/ControlsState.cpp
+        src/SaveMapState.cpp
         )
 
 set(UT_SOURCES
@@ -20,6 +21,7 @@ set(UT_SOURCES
         src/EditorMenuStateTest.cpp
         src/SettingsStateTest.cpp
         src/ControlsStateTest.cpp
+        src/SaveMapStateTest.cpp
         )
 
 add_library(game ${SOURCES})

@@ -232,7 +232,6 @@ void ControlsState::addNonClickableButton(const utils::Vector2f& position, const
         rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
     button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, fontSize,
                                                     graphics::Color::Black, textOffset);
-
     buttons.push_back(std::move(button));
 }
 
