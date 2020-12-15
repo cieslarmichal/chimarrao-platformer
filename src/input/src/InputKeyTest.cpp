@@ -41,3 +41,11 @@ TEST_F(InputKeyTest, givenStringCorrespondingToInputKey_shouldReturnInputKey)
     ASSERT_EQ(toInputKey(inputKeyString2), inputKey2);
     ASSERT_EQ(toInputKey(inputKeyString3), inputKey3);
 }
+
+TEST_F(InputKeyTest, givenAllKeys_shouldReturnTheSameInputKeysAfterReadingStringAndToInputKeyOperation)
+{
+    for (const auto& key : allKeys)
+    {
+        ASSERT_EQ(toInputKey(toString(key)), key);
+    }
+}

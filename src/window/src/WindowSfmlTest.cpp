@@ -1,8 +1,9 @@
 #include "WindowSfml.h"
 
 #include "gtest/gtest.h"
-#include "WindowObserverMock.h"
+
 #include "WindowObservationHandlerMock.h"
+#include "WindowObserverMock.h"
 
 using namespace ::testing;
 using namespace window;
@@ -24,11 +25,11 @@ const unsigned int changedFrameLimit{60};
 const WindowSettings initialWindowSettings{initialDisplayMode, initialResolution, initialVsync,
                                            initialFrameLimit};
 const WindowSettings windowSettingsWithDisplayModeChanged{changedDisplayMode, initialResolution, initialVsync,
-                                           initialFrameLimit};
+                                                          initialFrameLimit};
 const WindowSettings windowSettingsWithResolutionChanged{initialDisplayMode, changedResolution, initialVsync,
-                                                          initialFrameLimit};
+                                                         initialFrameLimit};
 const WindowSettings windowSettingsWithVsyncChanged{initialDisplayMode, initialResolution, changedVsync,
-                                                          initialFrameLimit};
+                                                    initialFrameLimit};
 const WindowSettings windowSettingsWithFrameLimitChanged{initialDisplayMode, initialResolution, initialVsync,
                                                          changedFrameLimit};
 const std::vector<Resolution> expectedSupportedResolutions{{800, 600},  {1024, 768}, {1280, 720},
@@ -40,15 +41,15 @@ class WindowSfmlTest : public Test
 {
 public:
     std::shared_ptr<StrictMock<WindowObserverMock>> observer1 =
-    std::make_shared<StrictMock<WindowObserverMock>>();
+        std::make_shared<StrictMock<WindowObserverMock>>();
     std::unique_ptr<WindowObservationHandlerMock> observationHandlerInit =
         std::make_unique<StrictMock<WindowObservationHandlerMock>>();
     WindowObservationHandlerMock* observationHandler = observationHandlerInit.get();
     WindowSfml window{windowSize, windowTitle, std::move(observationHandlerInit)};
 };
 
-//TODO: uncomment this test
-//TEST_F(WindowSfmlTest, givenWindowChangeSizeEvent_shouldNotfiyObservers)
+// TODO: uncomment this test
+// TEST_F(WindowSfmlTest, givenWindowChangeSizeEvent_shouldNotfiyObservers)
 //{
 //    EXPECT_CALL(*observationHandler, notifyObservers(windowSizeChanged));
 //}

@@ -94,7 +94,7 @@ void RendererPoolSfml::renderAll()
 
     for (const auto& layeredShape : layeredShapes)
     {
-        if(layeredShape.layer != VisibilityLayer::Invisible)
+        if (layeredShape.layer != VisibilityLayer::Invisible)
         {
             contextRenderer->draw(layeredShape.shape);
         }
@@ -207,7 +207,8 @@ void RendererPoolSfml::setColor(const GraphicsId& id, const Color& color)
     }
 }
 
-void RendererPoolSfml::setOutline(const GraphicsId& id, float thickness, const Color& color) {
+void RendererPoolSfml::setOutline(const GraphicsId& id, float thickness, const Color& color)
+{
     if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
     {
         auto& layeredShape = getLayeredShapeByPosition(layeredShapes, layeredShapeIter);

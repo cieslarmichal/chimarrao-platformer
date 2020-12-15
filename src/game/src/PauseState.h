@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ComponentOwner.h"
-#include "State.h"
 #include "InputObserver.h"
+#include "State.h"
 #include "Timer.h"
 
 namespace game
@@ -10,10 +10,8 @@ namespace game
 class PauseState : public State, public input::InputObserver
 {
 public:
-    explicit PauseState(const std::shared_ptr<window::Window>&,
-                       const std::shared_ptr<input::InputManager>&,
-                       const std::shared_ptr<graphics::RendererPool>&,
-                       std::stack<std::unique_ptr<State>>&);
+    explicit PauseState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
+                        const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&);
     ~PauseState();
 
     void initialize();

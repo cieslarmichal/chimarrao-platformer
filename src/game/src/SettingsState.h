@@ -45,13 +45,15 @@ private:
     void createResolutionSection();
     void createVsyncSection();
     void createFrameLimitSection();
-    unsigned int addButton(const utils::Vector2f& position, const utils::Vector2f& size, const std::string& text,
-                                        unsigned int fontSize, const utils::Vector2f& textOffset,
+    unsigned int addButton(const utils::Vector2f& position, const utils::Vector2f& size,
+                           const std::string& text, unsigned int fontSize, const utils::Vector2f& textOffset,
+                           std::function<void(void)> clickAction);
+    unsigned int addButtonWithMouseOver(const utils::Vector2f& position, const utils::Vector2f& size,
+                                        const std::string& text, unsigned int fontSize,
+                                        const utils::Vector2f& textOffset,
                                         std::function<void(void)> clickAction);
-    unsigned int addButtonWithMouseOver(const utils::Vector2f& position, const utils::Vector2f& size, const std::string& text,
-                   unsigned int fontSize, const utils::Vector2f& textOffset,
-                   std::function<void(void)> clickAction);
-    unsigned int addText(const utils::Vector2f& position, const std::string& description, unsigned int fontSize);
+    unsigned int addText(const utils::Vector2f& position, const std::string& description,
+                         unsigned int fontSize);
 
     bool shouldBackToMenu;
     const input::InputStatus* inputStatus;

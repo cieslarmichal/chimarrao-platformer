@@ -61,7 +61,8 @@ void EditorMenuState::initialize()
 
 void EditorMenuState::update(const utils::DeltaTime& deltaTime)
 {
-    if (buttonsActionsFrozen && freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
+    if (buttonsActionsFrozen &&
+        freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
     {
         unfreezeButtons();
     }
@@ -146,7 +147,6 @@ void EditorMenuState::hideGraphics()
     for (auto& button : buttons)
     {
         button->disable();
-
     }
 
     background->disable();
@@ -224,7 +224,6 @@ void EditorMenuState::createSaveMapButton()
 
     auto runSaveMapState = [&] {
         buttonsActionsFrozen = true;
-
 
         states.top()->deactivate();
         states.push(std::make_unique<SaveMapState>(window, inputManager, rendererPool, states));

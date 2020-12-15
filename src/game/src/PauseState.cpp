@@ -58,7 +58,8 @@ void PauseState::initialize()
 
 void PauseState::update(const utils::DeltaTime& deltaTime)
 {
-    if (buttonsActionsFrozen && freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
+    if (buttonsActionsFrozen &&
+        freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
     {
         unfreezeButtons();
     }

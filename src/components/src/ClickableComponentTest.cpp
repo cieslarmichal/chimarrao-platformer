@@ -54,7 +54,8 @@ public:
         return inputStatus;
     }
 
-    InputStatus prepareInputStatus(InputKey inputKey1,InputKey inputKey2, const utils::Vector2f& mousePosition)
+    InputStatus prepareInputStatus(InputKey inputKey1, InputKey inputKey2,
+                                   const utils::Vector2f& mousePosition)
     {
         InputStatus inputStatus;
         inputStatus.setKeyPressed(inputKey1);
@@ -87,9 +88,10 @@ public:
     const utils::Vector2f positionOutsideTarget{27, 21};
     ComponentOwner componentOwner{position1};
     utils::DeltaTime deltaTime{1};
-    ClickableComponent clickableComponent{&componentOwner, inputManager, [this] { clickAction(actionVariable); }};
+    ClickableComponent clickableComponent{&componentOwner, inputManager,
+                                          [this] { clickAction(actionVariable); }};
     KeyAction keyAction1 = {input::InputKey::MouseLeft, [this] { clickAction(actionVariableLeft); }};
-    KeyAction keyAction1copy = {input::InputKey::MouseLeft, []{}};
+    KeyAction keyAction1copy = {input::InputKey::MouseLeft, [] {}};
     KeyAction keyAction2 = {input::InputKey::MouseRight, [this] { clickAction(actionVariableRight); }};
     std::vector<KeyAction> invalidKeyActionVector{keyAction1, keyAction1copy};
     std::vector<KeyAction> validKeyActionVector{keyAction1, keyAction2};
@@ -135,7 +137,6 @@ TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxRightMouseKeyClicke
     ASSERT_FALSE(actionPerformed(actionVariable));
 }
 
-
 TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxLeftMouseKeyClicked_shouldCallAction)
 {
     const auto mouseLeftInputStatus = prepareInputStatus(InputKey::MouseLeft, positionInsideTarget);
@@ -146,7 +147,8 @@ TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxLeftMouseKeyClicked
     ASSERT_TRUE(actionPerformed(actionVariable));
 }
 
-TEST_F(ClickableComponentTest, componentDisabled_givenMousePositionInsideHitboxLeftMouseKeyClicked_shouldNotCallAction)
+TEST_F(ClickableComponentTest,
+       componentDisabled_givenMousePositionInsideHitboxLeftMouseKeyClicked_shouldNotCallAction)
 {
     const auto mouseLeftInputStatus = prepareInputStatus(InputKey::MouseLeft, positionInsideTarget);
     clickableComponent.handleInputStatus(mouseLeftInputStatus);
@@ -157,13 +159,15 @@ TEST_F(ClickableComponentTest, componentDisabled_givenMousePositionInsideHitboxL
     ASSERT_FALSE(actionPerformed(actionVariable));
 }
 
-TEST_F(ClickableComponentTest, multipleKeyActionClicableComponentConstructor_givenMoreThanOneActionForOneKey_shouldThrowException)
+TEST_F(ClickableComponentTest,
+       multipleKeyActionClicableComponentConstructor_givenMoreThanOneActionForOneKey_shouldThrowException)
 {
     ASSERT_THROW(ClickableComponent(&componentOwner, inputManager, invalidKeyActionVector),
                  components::exceptions::ActionForKeyAlreadyExist);
 }
 
-TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxRightAndLeftMouseKeyClicked_shouldCallBothActionAtOneUpdate)
+TEST_F(ClickableComponentTest,
+       givenMousePositionInsideHitboxRightAndLeftMouseKeyClicked_shouldCallBothActionAtOneUpdate)
 {
     std::shared_ptr<StrictMock<input::InputManagerMock>> inputManager =
         std::make_shared<StrictMock<input::InputManagerMock>>();
@@ -174,7 +178,8 @@ TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxRightAndLeftMouseKe
     hitboxComponent->lateUpdate(deltaTime);
     auto clickableComponent = ClickableComponent(&localComponentOwner, inputManager, validKeyActionVector);
     clickableComponent.loadDependentComponents();
-    const auto mouseInputStatus = prepareInputStatus(InputKey::MouseLeft,InputKey::MouseRight, positionInsideTarget);
+    const auto mouseInputStatus =
+        prepareInputStatus(InputKey::MouseLeft, InputKey::MouseRight, positionInsideTarget);
     clickableComponent.handleInputStatus(mouseInputStatus);
 
     clickableComponent.update(deltaTime);
@@ -183,7 +188,8 @@ TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxRightAndLeftMouseKe
     ASSERT_TRUE(actionPerformed(actionVariableLeft));
 }
 
-TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxRightMouseKeyClicked_shouldCallOnlyRightClickAction)
+TEST_F(ClickableComponentTest,
+       givenMousePositionInsideHitboxRightMouseKeyClicked_shouldCallOnlyRightClickAction)
 {
     std::shared_ptr<StrictMock<input::InputManagerMock>> inputManager =
         std::make_shared<StrictMock<input::InputManagerMock>>();

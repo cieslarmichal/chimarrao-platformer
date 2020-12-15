@@ -15,7 +15,8 @@ class TextComponent : public Component
 public:
     TextComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>, const utils::Vector2f& position,
                   const std::string& text, const graphics::FontPath&, unsigned characterSize,
-                  const graphics::Color& = graphics::Color::Black, const utils::Vector2f& transformOffset = utils::Vector2f{0, 0});
+                  const graphics::Color& = graphics::Color::Black,
+                  const utils::Vector2f& transformOffset = utils::Vector2f{0, 0});
     ~TextComponent();
 
     void lateUpdate(utils::DeltaTime) override;

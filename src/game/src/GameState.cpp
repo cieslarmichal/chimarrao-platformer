@@ -6,9 +6,9 @@
 #include "GetProjectPath.h"
 #include "GraphicsComponent.h"
 #include "KeyboardMovementComponent.h"
+#include "PauseState.h"
 #include "PlayerAnimator.h"
 #include "TextComponent.h"
-#include "PauseState.h"
 
 namespace game
 {

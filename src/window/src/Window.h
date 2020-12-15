@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ObservableWindow.h"
-#include "Vector.h"
 #include "DisplayMode.h"
+#include "ObservableWindow.h"
 #include "Resolution.h"
+#include "Vector.h"
 #include "WindowSettings.h"
 
 namespace sf

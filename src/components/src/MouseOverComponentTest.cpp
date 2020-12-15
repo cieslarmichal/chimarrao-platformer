@@ -179,8 +179,7 @@ TEST_F(MouseOverComponentTest, givenMousePositionTwiceOverAndOut_shouldCallMouse
     ASSERT_TRUE(mouseWasOver(2));
 }
 
-TEST_F(MouseOverComponentTest,
-       componentDisabled_givenMousePositionInside_shouldNotCallAnyAction)
+TEST_F(MouseOverComponentTest, componentDisabled_givenMousePositionInside_shouldNotCallAnyAction)
 {
     const auto mouseInsideInput = prepareInputStatus(positionInsideTarget1);
     const auto mouseOutsideInput = prepareInputStatus(positionOutsideTarget1);

@@ -17,7 +17,8 @@ class TextComponentTest : public Test
 public:
     void expectCreateTextComponent()
     {
-        EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath, characterSize, initialVisibility, color1))
+        EXPECT_CALL(*rendererPool,
+                    acquireText(position1, text, fontPath, characterSize, initialVisibility, color1))
             .WillOnce(Return(graphicsId));
     }
 
@@ -58,7 +59,8 @@ public:
 
 TEST_F(TextComponentTest, createTextComponent_shouldCreateGraphicsObject)
 {
-    EXPECT_CALL(*rendererPool, acquireText(position1, text, fontPath, characterSize, initialVisibility, color1))
+    EXPECT_CALL(*rendererPool,
+                acquireText(position1, text, fontPath, characterSize, initialVisibility, color1))
         .WillOnce(Return(graphicsId));
 
     const auto textComponent = createTextComponent();
@@ -90,8 +92,7 @@ TEST_F(TextComponentTest,
     expectReleaseGraphicsId();
 }
 
-TEST_F(TextComponentTest,
-       componentDisabled_lateUpdate_shouldNotSynchronizePositionWithTransformComponent)
+TEST_F(TextComponentTest, componentDisabled_lateUpdate_shouldNotSynchronizePositionWithTransformComponent)
 {
     expectCreateTextComponent();
     const auto textComponent = createTextComponent();

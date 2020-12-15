@@ -1,7 +1,8 @@
 #include "Component.h"
-#include "ComponentOwner.h"
 
 #include "gtest/gtest.h"
+
+#include "ComponentOwner.h"
 
 using namespace ::testing;
 using namespace components;

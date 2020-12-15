@@ -37,7 +37,8 @@ const auto resolutionDecreaseButtonPosition =
 const auto resolutionIncreaseButtonPosition =
     utils::Vector2f{resolutionTextFieldPosition.x + 11.2f, resolutionSectionPosition.y + 1.15f};
 const auto vsyncSectionPosition = utils::Vector2f{38, 30};
-const auto vsyncButtonPosition = utils::Vector2f{vsyncSectionPosition.x + 31.0f, vsyncSectionPosition.y + 0.5f};
+const auto vsyncButtonPosition =
+    utils::Vector2f{vsyncSectionPosition.x + 31.0f, vsyncSectionPosition.y + 0.5f};
 const auto vsyncButtonSize = utils::Vector2f{3, 3};
 const auto frameLimitSectionPosition = utils::Vector2f{38, 36};
 const auto frameLimitTextFieldPosition = utils::Vector2f{
@@ -96,7 +97,8 @@ void SettingsState::initialize()
 
 void SettingsState::update(const utils::DeltaTime& deltaTime)
 {
-    if (buttonsActionsFrozen && freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
+    if (buttonsActionsFrozen &&
+        freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
     {
         unfreezeButtons();
     }
@@ -163,14 +165,14 @@ void SettingsState::synchronizeWindowSettings()
     selectedWindowsSettings = window->getWindowSettings();
 
     if (const auto currentResolutionIter = std::find(supportedResolutions.begin(), supportedResolutions.end(),
-                                               selectedWindowsSettings.resolution);
+                                                     selectedWindowsSettings.resolution);
         currentResolutionIter != supportedResolutions.cend())
     {
         selectedResolutionIndex = std::distance(supportedResolutions.begin(), currentResolutionIter);
     }
 
     if (const auto currentFrameLimitIter = std::find(supportedFrameLimits.begin(), supportedFrameLimits.end(),
-                                               selectedWindowsSettings.frameLimit);
+                                                     selectedWindowsSettings.frameLimit);
         currentFrameLimitIter != supportedFrameLimits.cend())
     {
         selectedFrameLimitIndex = std::distance(supportedFrameLimits.begin(), currentFrameLimitIter);
@@ -186,7 +188,8 @@ void SettingsState::applyWindowSettingsChanges()
 
     if (window->setResolution(selectedWindowsSettings.resolution))
     {
-        rendererPool->setRenderingSize({selectedWindowsSettings.resolution.height, selectedWindowsSettings.resolution.width});
+        rendererPool->setRenderingSize(
+            {selectedWindowsSettings.resolution.height, selectedWindowsSettings.resolution.width});
     }
 
     window->setVerticalSync(selectedWindowsSettings.vsync);
@@ -293,7 +296,8 @@ void SettingsState::setFullscreenMode()
     selectedWindowsSettings.displayMode = window::DisplayMode::Fullscreen;
 
     buttons[windowModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(buttonColor);
-    buttons[fullscreenModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(buttonHoverColor);
+    buttons[fullscreenModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(
+        buttonHoverColor);
 }
 
 void SettingsState::backToMenu()
@@ -323,60 +327,65 @@ void SettingsState::createBackToMenuButton()
 {
     const auto backToMenuButtonSize = utils::Vector2f{13, 5};
     addButtonWithMouseOver(backToMenuButtonPosition, backToMenuButtonSize, "Back", sectionTextFontSize,
-              utils::Vector2f{2, 0}, [this] { shouldBackToMenu = true; });
+                           utils::Vector2f{2, 0}, [this] { shouldBackToMenu = true; });
 }
 
 void SettingsState::createApplyChangesButton()
 {
     const auto applyChangesButtonSize = utils::Vector2f{13, 5};
     addButtonWithMouseOver(applyChangesButtonPosition, applyChangesButtonSize, "Apply", sectionTextFontSize,
-              utils::Vector2f{1, 0}, [this] { applyWindowSettingsChanges(); });
+                           utils::Vector2f{1, 0}, [this] { applyWindowSettingsChanges(); });
 }
 
 void SettingsState::createDisplayModeSection()
 {
     addText(displayModeSectionPosition, "Display mode:", 30);
-    windowModeButtonId = addButton(windowModeButtonPosition, displayModeButtonSize, "Window", displayModeFontSize,
-              utils::Vector2f{2, 0.9}, [this] { setWindowMode(); });
-    fullscreenModeButtonId = addButton(fullscreenModeButtonPosition, displayModeButtonSize, "Fullscreen", displayModeFontSize,
-              utils::Vector2f{0.5, 0.9}, [this] { setFullscreenMode(); });
+    windowModeButtonId = addButton(windowModeButtonPosition, displayModeButtonSize, "Window",
+                                   displayModeFontSize, utils::Vector2f{2, 0.9}, [this] { setWindowMode(); });
+    fullscreenModeButtonId =
+        addButton(fullscreenModeButtonPosition, displayModeButtonSize, "Fullscreen", displayModeFontSize,
+                  utils::Vector2f{0.5, 0.9}, [this] { setFullscreenMode(); });
 
     if (selectedWindowsSettings.displayMode == window::DisplayMode::Window)
     {
-        buttons[windowModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(buttonHoverColor);
+        buttons[windowModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(
+            buttonHoverColor);
     }
     else
     {
-        buttons[fullscreenModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(buttonHoverColor);
+        buttons[fullscreenModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(
+            buttonHoverColor);
     }
 }
 
 void SettingsState::createResolutionSection()
 {
     addText(resolutionSectionPosition, "Resolution:", 30);
-    resolutionTextId = addText(resolutionTextFieldPosition, toString(supportedResolutions[selectedResolutionIndex]), 20);
+    resolutionTextId =
+        addText(resolutionTextFieldPosition, toString(supportedResolutions[selectedResolutionIndex]), 20);
     addButtonWithMouseOver(resolutionDecreaseButtonPosition, changeResolutionButtonSize, "<", 20,
-              utils::Vector2f{0.6, -0.3}, [this] { decreaseResolution(); });
+                           utils::Vector2f{0.6, -0.3}, [this] { decreaseResolution(); });
     addButtonWithMouseOver(resolutionIncreaseButtonPosition, changeResolutionButtonSize, ">", 20,
-              utils::Vector2f{0.6, -0.3}, [this] { increaseResolution(); });
+                           utils::Vector2f{0.6, -0.3}, [this] { increaseResolution(); });
 }
 
 void SettingsState::createVsyncSection()
 {
     addText(vsyncSectionPosition, "Vsync:", 30);
-    const std::string vsyncText = selectedWindowsSettings.vsync? "X" : "";
-    vsyncButtonId = addButtonWithMouseOver(vsyncButtonPosition, vsyncButtonSize, vsyncText, 25, utils::Vector2f{0.8, 0.0},
-              [this] { switchVsync();});
+    const std::string vsyncText = selectedWindowsSettings.vsync ? "X" : "";
+    vsyncButtonId = addButtonWithMouseOver(vsyncButtonPosition, vsyncButtonSize, vsyncText, 25,
+                                           utils::Vector2f{0.8, 0.0}, [this] { switchVsync(); });
 }
 
 void SettingsState::createFrameLimitSection()
 {
     addText(frameLimitSectionPosition, "Frame limit:", 30);
-    frameLimitTextId = addText(frameLimitTextFieldPosition, std::to_string(supportedFrameLimits[selectedFrameLimitIndex]), 20);
+    frameLimitTextId = addText(frameLimitTextFieldPosition,
+                               std::to_string(supportedFrameLimits[selectedFrameLimitIndex]), 20);
     addButtonWithMouseOver(frameLimitDecreaseButtonPosition, changeResolutionButtonSize, "<", 20,
-              utils::Vector2f{0.6, -0.3}, [this] { decreaseFrameLimit(); });
+                           utils::Vector2f{0.6, -0.3}, [this] { decreaseFrameLimit(); });
     addButtonWithMouseOver(frameLimitIncreaseButtonPosition, changeResolutionButtonSize, ">", 20,
-              utils::Vector2f{0.6, -0.3}, [this] { increaseFrameLimit(); });
+                           utils::Vector2f{0.6, -0.3}, [this] { increaseFrameLimit(); });
 }
 
 unsigned int SettingsState::addButton(const utils::Vector2f& position, const utils::Vector2f& size,
@@ -397,9 +406,10 @@ unsigned int SettingsState::addButton(const utils::Vector2f& position, const uti
     return buttonId;
 }
 
-unsigned int SettingsState::addButtonWithMouseOver(const utils::Vector2f& position, const utils::Vector2f& size,
-                              const std::string& text, unsigned int fontSize,
-                              const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
+unsigned int SettingsState::addButtonWithMouseOver(const utils::Vector2f& position,
+                                                   const utils::Vector2f& size, const std::string& text,
+                                                   unsigned int fontSize, const utils::Vector2f& textOffset,
+                                                   std::function<void(void)> clickAction)
 {
     auto buttonId = buttons.size();
     auto button = std::make_unique<components::ComponentOwner>(position);

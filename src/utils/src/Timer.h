@@ -1,7 +1,7 @@
 #pragma once
 
-#include <chrono>
 #include <SFML/System/Clock.hpp>
+#include <chrono>
 
 #include "DeltaTime.h"
 

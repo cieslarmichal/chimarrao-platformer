@@ -1,15 +1,15 @@
 #include "MenuState.h"
 
 #include "ClickableComponent.h"
+#include "ControlsState.h"
 #include "EditorState.h"
 #include "GameState.h"
 #include "GetProjectPath.h"
 #include "GraphicsComponent.h"
 #include "HitboxComponent.h"
 #include "MouseOverComponent.h"
-#include "TextComponent.h"
 #include "SettingsState.h"
-#include "ControlsState.h"
+#include "TextComponent.h"
 
 namespace game
 {
@@ -76,7 +76,8 @@ void MenuState::initialize()
 
 void MenuState::update(const utils::DeltaTime& deltaTime)
 {
-    if (buttonsActionsFrozen && freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
+    if (buttonsActionsFrozen &&
+        freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
     {
         unfreezeButtons();
     }
@@ -191,8 +192,8 @@ void MenuState::createMapEditorButton()
 void MenuState::createControlsButton()
 {
     const auto runControls = [&] {
-      states.top()->deactivate();
-      states.push(std::make_unique<ControlsState>(window, inputManager, rendererPool, states));
+        states.top()->deactivate();
+        states.push(std::make_unique<ControlsState>(window, inputManager, rendererPool, states));
     };
 
     addButton(controlsButtonPosition, "Controls", utils::Vector2f{3, 1}, runControls);
@@ -201,8 +202,8 @@ void MenuState::createControlsButton()
 void MenuState::createSettingsButton()
 {
     const auto runSettings = [&] {
-      states.top()->deactivate();
-      states.push(std::make_unique<SettingsState>(window, inputManager, rendererPool, states));
+        states.top()->deactivate();
+        states.push(std::make_unique<SettingsState>(window, inputManager, rendererPool, states));
     };
 
     addButton(settingsButtonPosition, "Settings", utils::Vector2f{3, 1}, runSettings);
@@ -210,15 +211,13 @@ void MenuState::createSettingsButton()
 
 void MenuState::createExitButton()
 {
-    const auto exit = [&] {
-        window->close();
-    };
+    const auto exit = [&] { window->close(); };
 
     addButton(exitButtonPosition, "Exit", utils::Vector2f{7, 1}, exit);
 }
 
 void MenuState::addButton(const utils::Vector2f& position, const std::string& text,
-                              const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
+                          const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
 {
     auto button = std::make_unique<components::ComponentOwner>(position);
     auto graphicsComponent = button->addComponent<components::GraphicsComponent>(

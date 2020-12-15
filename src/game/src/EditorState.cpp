@@ -18,11 +18,11 @@ const float tileSizeX = 4;
 const float tileSizeY = 4;
 const auto pathToBackground =
     utils::getProjectPath("chimarrao-platformer") + "resources/BG/background_glacial_mountains.png";
-const auto pathToBrickTileTexture = utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png";
-const auto tilesTextureVector = std::vector<std::string>{
-    utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png",
-    utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/2.png"
-};
+const auto pathToBrickTileTexture =
+    utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png";
+const auto tilesTextureVector =
+    std::vector<std::string>{utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png",
+                             utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/2.png"};
 }
 
 EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
@@ -138,7 +138,8 @@ void EditorState::initialize()
 
 void EditorState::update(const utils::DeltaTime& dt)
 {
-    if (buttonsActionsFrozen && freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
+    if (buttonsActionsFrozen &&
+        freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
     {
         unfreezeButtons();
     }

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "SFML/Graphics/RenderWindow.hpp"
 #include <SFML/Window/Event.hpp>
+
+#include "SFML/Graphics/RenderWindow.hpp"
 
 #include "Vector.h"
 #include "Window.h"
@@ -13,7 +14,7 @@ namespace window
 class WindowSfml : public Window
 {
 public:
-    WindowSfml(const utils::Vector2u& windowSize, std::string  windowTitle,
+    WindowSfml(const utils::Vector2u& windowSize, std::string windowTitle,
                std::unique_ptr<WindowObservationHandler>);
 
     bool isOpen() const override;

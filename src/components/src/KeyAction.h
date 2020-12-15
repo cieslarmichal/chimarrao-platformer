@@ -2,7 +2,8 @@
 #include "InputKey.h"
 #include "functional"
 
-struct KeyAction {
+struct KeyAction
+{
     input::InputKey key;
     std::function<void(void)> action;
     bool clicked{false};

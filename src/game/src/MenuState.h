@@ -1,20 +1,18 @@
 #pragma once
 
 #include "ComponentOwner.h"
-#include "State.h"
-#include "Window.h"
 #include "InputObserver.h"
+#include "State.h"
 #include "Timer.h"
+#include "Window.h"
 
 namespace game
 {
 class MenuState : public State, public input::InputObserver
 {
 public:
-    explicit MenuState(const std::shared_ptr<window::Window>&,
-                           const std::shared_ptr<input::InputManager>&,
-                           const std::shared_ptr<graphics::RendererPool>&,
-                           std::stack<std::unique_ptr<State>>&);
+    explicit MenuState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
+                       const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&);
     ~MenuState();
 
     void initialize();

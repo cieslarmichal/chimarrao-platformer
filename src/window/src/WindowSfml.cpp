@@ -2,6 +2,7 @@
 
 #include <SFML/Window/Event.hpp>
 #include <utility>
+
 #include "SupportedFrameLimitsRetriever.h"
 #include "SupportedResolutionsRetriever.h"
 

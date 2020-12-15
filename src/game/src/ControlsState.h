@@ -33,11 +33,12 @@ private:
     void createBackToMenuButton();
     void createControlButtons();
     void createDescriptionsForControlButtons();
-    void addNonClickableButton(const utils::Vector2f& position, const utils::Vector2f& size, const std::string& text,
-                           unsigned int fontSize, const utils::Vector2f& textOffset);
-    void addButtonWithMouseOver(const utils::Vector2f& position, const utils::Vector2f& size, const std::string& text,
-                                        unsigned int fontSize, const utils::Vector2f& textOffset,
-                                        std::function<void(void)> clickAction);
+    void addNonClickableButton(const utils::Vector2f& position, const utils::Vector2f& size,
+                               const std::string& text, unsigned int fontSize,
+                               const utils::Vector2f& textOffset);
+    void addButtonWithMouseOver(const utils::Vector2f& position, const utils::Vector2f& size,
+                                const std::string& text, unsigned int fontSize,
+                                const utils::Vector2f& textOffset, std::function<void(void)> clickAction);
     void addText(const utils::Vector2f& position, const std::string& description, unsigned int fontSize);
 
     bool shouldBackToMenu;
