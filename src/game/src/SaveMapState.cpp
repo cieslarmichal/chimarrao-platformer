@@ -19,7 +19,7 @@ const auto buttonSize = utils::Vector2f{20, 3.5};
 const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
 const auto mapNamingTextDescriptionPosition = utils::Vector2f{24, 21};
 const auto mapNamingPromptPosition =
-    utils::Vector2f{mapNamingTextDescriptionPosition.x + 12.0f, mapNamingTextDescriptionPosition.y};
+    utils::Vector2f{mapNamingTextDescriptionPosition.x + 12.0f, mapNamingTextDescriptionPosition.y - 0.25f};
 const auto changeResolutionButtonSize = utils::Vector2f{2.5, 2};
 }
 
@@ -31,7 +31,9 @@ SaveMapState::SaveMapState(const std::shared_ptr<window::Window>& windowInit,
       inputStatus{nullptr},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditorMenu{false},
-      timeAfterButtonsCanBeClicked{0.3f}
+      timeAfterButtonsCanBeClicked{0.3f},
+      mapNameMaximumSize{15},
+      timeAfterNextLetterCanBeDeleted{0.08f}
 {
     inputManager->registerObserver(this);
 
@@ -61,7 +63,11 @@ void SaveMapState::initialize()
         }
     }
 
+    mapNameInputTextField->loadDependentComponents();
+    mapNameInputTextField->start();
+
     possibleLeaveFromStateTimer.start();
+    inputMapNameDeleteCharactersTimer.start();
 }
 
 void SaveMapState::update(const utils::DeltaTime& deltaTime)
@@ -79,10 +85,56 @@ void SaveMapState::update(const utils::DeltaTime& deltaTime)
         return;
     }
 
+    if (inputStatus->isKeyPressed(input::InputKey::MouseLeft))
+    {
+        if (auto mapNameInputFieldHitbox = mapNameInputTextField->getComponent<components::HitboxComponent>())
+        {
+            if (not mapNameInputFieldHitbox->intersects(inputStatus->getMousePosition()))
+            {
+                mapNameFieldClicked = false;
+                mapNameInputTextField->getComponent<components::GraphicsComponent>()->setColor(buttonColor);
+            }
+        }
+    }
+
+    if (mapNameFieldClicked)
+    {
+        for (const auto& alphanumericButtonKey : input::alphaNumericalButtons)
+        {
+            if (inputStatus->isKeyReleased(alphanumericButtonKey))
+            {
+                if (mapNameBuffer.size() < mapNameMaximumSize)
+                {
+                    mapNameBuffer += utils::getLowerCases(toString(alphanumericButtonKey));
+                    mapNameInputTextField->getComponent<components::TextComponent>()->setText(
+                        mapNameBuffer);
+                }
+            }
+        }
+
+        if (inputStatus->isKeyPressed(input::InputKey::Backspace))
+        {
+            if (inputMapNameDeleteCharactersTimer.getElapsedSeconds() > timeAfterNextLetterCanBeDeleted)
+            {
+                if (mapNameBuffer.size() > 0)
+                {
+                    utils::cutOffString(mapNameBuffer, mapNameBuffer.size() - 1, mapNameBuffer.size() - 1);
+                    mapNameInputTextField->getComponent<components::TextComponent>()->setText(
+                        mapNameBuffer);
+                }
+
+                inputMapNameDeleteCharactersTimer.restart();
+            }
+        }
+
+    }
+
     for (auto& button : buttons)
     {
         button->update(deltaTime);
     }
+
+    mapNameInputTextField->update(deltaTime);
 }
 
 void SaveMapState::lateUpdate(const utils::DeltaTime& deltaTime)
@@ -91,6 +143,8 @@ void SaveMapState::lateUpdate(const utils::DeltaTime& deltaTime)
     {
         button->lateUpdate(deltaTime);
     }
+
+    mapNameInputTextField->lateUpdate(deltaTime);
 }
 
 void SaveMapState::render()
@@ -179,8 +233,25 @@ void SaveMapState::createSaveButton()
 void SaveMapState::createMapNamingSection()
 {
     addText(mapNamingTextDescriptionPosition, "Map name:", 20, graphics::Color::White);
-    addButton(mapNamingPromptPosition, buttonSize, "", 20, utils::Vector2f{7, 0.75},
-              [this] { std::cout << "insert map name"; });
+    addMapNameInputField();
+}
+
+void SaveMapState::addMapNameInputField()
+{
+    mapNameInputTextField = std::make_unique<components::ComponentOwner>(mapNamingPromptPosition);
+    auto graphicsComponent = mapNameInputTextField->addComponent<components::GraphicsComponent>(
+        rendererPool, buttonSize, mapNamingPromptPosition, buttonColor, graphics::VisibilityLayer::First);
+    mapNameInputTextField->addComponent<components::TextComponent>(
+        rendererPool, buttonSize, "", fontPath, 20, graphics::Color::White, utils::Vector2f{0.75, 0.4});
+    mapNameInputTextField->addComponent<components::HitboxComponent>(buttonSize);
+
+    auto mapNameFieldClickedAction = [=] {
+        mapNameFieldClicked = true;
+        graphicsComponent->setColor(buttonHoverColor);
+    };
+
+    mapNameInputTextField->addComponent<components::ClickableComponent>(inputManager,
+                                                                        std::move(mapNameFieldClickedAction));
 }
 
 void SaveMapState::addButton(const utils::Vector2f& position, const utils::Vector2f& size,
@@ -199,18 +270,6 @@ void SaveMapState::addButton(const utils::Vector2f& position, const utils::Vecto
     const auto changeColorOnMouseOut = [=] { graphicsComponent->setColor(buttonColor); };
     button->addComponent<components::MouseOverComponent>(inputManager, changeColorOnMouseOver,
                                                          changeColorOnMouseOut);
-    buttons.push_back(std::move(button));
-}
-
-void SaveMapState::addNonClickableButton(const utils::Vector2f& position, const utils::Vector2f& size,
-                                         const std::string& text, unsigned int fontSize,
-                                         const utils::Vector2f& textOffset)
-{
-    auto button = std::make_unique<components::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::GraphicsComponent>(
-        rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, fontSize,
-                                                    graphics::Color::White, textOffset);
     buttons.push_back(std::move(button));
 }
 

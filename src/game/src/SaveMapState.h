@@ -33,12 +33,10 @@ private:
     void createCancelButton();
     void createSaveButton();
     void createMapNamingSection();
+    void addMapNameInputField();
     void addButton(const utils::Vector2f& position, const utils::Vector2f& size, const std::string& text,
                    unsigned int fontSize, const utils::Vector2f& textOffset,
                    std::function<void(void)> clickAction);
-    void addNonClickableButton(const utils::Vector2f& position, const utils::Vector2f& size,
-                               const std::string& text, unsigned int fontSize,
-                               const utils::Vector2f& textOffset);
     void addText(const utils::Vector2f& position, const std::string& description, unsigned int fontSize,
                  graphics::Color);
 
@@ -49,8 +47,14 @@ private:
     std::vector<std::unique_ptr<components::ComponentOwner>> texts;
     std::unique_ptr<components::ComponentOwner> background;
     std::vector<std::unique_ptr<components::ComponentOwner>> buttons;
+    std::unique_ptr<components::ComponentOwner> mapNameInputTextField;
     bool buttonsActionsFrozen = true;
     utils::Timer freezeClickableButtonsTimer;
     const float timeAfterButtonsCanBeClicked;
+    std::string mapNameBuffer;
+    bool mapNameFieldClicked;
+    unsigned int mapNameMaximumSize;
+    utils::Timer inputMapNameDeleteCharactersTimer;
+    const float timeAfterNextLetterCanBeDeleted;
 };
 }
