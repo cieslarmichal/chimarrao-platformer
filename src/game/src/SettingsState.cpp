@@ -1,12 +1,12 @@
 #include "SettingsState.h"
 
-#include "ClickableComponent.h"
 #include "GetProjectPath.h"
-#include "GraphicsComponent.h"
-#include "HitboxComponent.h"
-#include "MouseOverComponent.h"
 #include "StlOperators.h"
-#include "TextComponent.h"
+#include "core/ClickableComponent.h"
+#include "core/GraphicsComponent.h"
+#include "core/HitboxComponent.h"
+#include "core/MouseOverComponent.h"
+#include "core/TextComponent.h"
 
 namespace game
 {
@@ -91,7 +91,7 @@ void SettingsState::initialize()
     {
         button->loadDependentComponents();
         button->start();
-        button->getComponent<components::ClickableComponent>()->disable();
+        button->getComponent<components::core::ClickableComponent>()->disable();
     }
 }
 
@@ -201,7 +201,7 @@ void SettingsState::unfreezeButtons()
     buttonsActionsFrozen = false;
     for (auto& button : buttons)
     {
-        button->getComponent<components::ClickableComponent>()->enable();
+        button->getComponent<components::core::ClickableComponent>()->enable();
     }
 }
 
@@ -217,7 +217,7 @@ void SettingsState::increaseResolution()
     }
 
     selectedWindowsSettings.resolution = supportedResolutions[selectedResolutionIndex];
-    texts[resolutionTextId]->getComponent<components::TextComponent>()->setText(
+    texts[resolutionTextId]->getComponent<components::core::TextComponent>()->setText(
         toString(selectedWindowsSettings.resolution));
 }
 
@@ -233,7 +233,7 @@ void SettingsState::decreaseResolution()
     }
 
     selectedWindowsSettings.resolution = supportedResolutions[selectedResolutionIndex];
-    texts[resolutionTextId]->getComponent<components::TextComponent>()->setText(
+    texts[resolutionTextId]->getComponent<components::core::TextComponent>()->setText(
         toString(selectedWindowsSettings.resolution));
 }
 
@@ -249,7 +249,7 @@ void SettingsState::increaseFrameLimit()
     }
 
     selectedWindowsSettings.frameLimit = supportedFrameLimits[selectedFrameLimitIndex];
-    texts[frameLimitTextId]->getComponent<components::TextComponent>()->setText(
+    texts[frameLimitTextId]->getComponent<components::core::TextComponent>()->setText(
         std::to_string(selectedWindowsSettings.frameLimit));
 }
 
@@ -265,7 +265,7 @@ void SettingsState::decreaseFrameLimit()
     }
 
     selectedWindowsSettings.frameLimit = supportedFrameLimits[selectedFrameLimitIndex];
-    texts[frameLimitTextId]->getComponent<components::TextComponent>()->setText(
+    texts[frameLimitTextId]->getComponent<components::core::TextComponent>()->setText(
         std::to_string(selectedWindowsSettings.frameLimit));
 }
 
@@ -274,12 +274,12 @@ void SettingsState::switchVsync()
     if (selectedWindowsSettings.vsync)
     {
         selectedWindowsSettings.vsync = false;
-        buttons[vsyncButtonId]->getComponent<components::TextComponent>()->setText("");
+        buttons[vsyncButtonId]->getComponent<components::core::TextComponent>()->setText("");
     }
     else
     {
         selectedWindowsSettings.vsync = true;
-        buttons[vsyncButtonId]->getComponent<components::TextComponent>()->setText("X");
+        buttons[vsyncButtonId]->getComponent<components::core::TextComponent>()->setText("X");
     }
 }
 
@@ -287,16 +287,18 @@ void SettingsState::setWindowMode()
 {
     selectedWindowsSettings.displayMode = window::DisplayMode::Window;
 
-    buttons[windowModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(buttonHoverColor);
-    buttons[fullscreenModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(buttonColor);
+    buttons[windowModeButtonId]->getComponent<components::core::GraphicsComponent>()->setColor(
+        buttonHoverColor);
+    buttons[fullscreenModeButtonId]->getComponent<components::core::GraphicsComponent>()->setColor(
+        buttonColor);
 }
 
 void SettingsState::setFullscreenMode()
 {
     selectedWindowsSettings.displayMode = window::DisplayMode::Fullscreen;
 
-    buttons[windowModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(buttonColor);
-    buttons[fullscreenModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(
+    buttons[windowModeButtonId]->getComponent<components::core::GraphicsComponent>()->setColor(buttonColor);
+    buttons[fullscreenModeButtonId]->getComponent<components::core::GraphicsComponent>()->setColor(
         buttonHoverColor);
 }
 
@@ -312,10 +314,10 @@ void SettingsState::backToMenu()
 
 void SettingsState::createBackground()
 {
-    background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::GraphicsComponent>(rendererPool, utils::Vector2f{80, 60},
-                                                            utils::Vector2f{0, 0}, backgroundPath,
-                                                            graphics::VisibilityLayer::Background);
+    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
+    background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{80, 60},
+                                                                  utils::Vector2f{0, 0}, backgroundPath,
+                                                                  graphics::VisibilityLayer::Background);
 }
 
 void SettingsState::createSettingsTitle()
@@ -348,12 +350,12 @@ void SettingsState::createDisplayModeSection()
 
     if (selectedWindowsSettings.displayMode == window::DisplayMode::Window)
     {
-        buttons[windowModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(
+        buttons[windowModeButtonId]->getComponent<components::core::GraphicsComponent>()->setColor(
             buttonHoverColor);
     }
     else
     {
-        buttons[fullscreenModeButtonId]->getComponent<components::GraphicsComponent>()->setColor(
+        buttons[fullscreenModeButtonId]->getComponent<components::core::GraphicsComponent>()->setColor(
             buttonHoverColor);
     }
 }
@@ -394,13 +396,13 @@ unsigned int SettingsState::addButton(const utils::Vector2f& position, const uti
                                       std::function<void(void)> clickAction)
 {
     auto buttonId = buttons.size();
-    auto button = std::make_unique<components::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::GraphicsComponent>(
+    auto button = std::make_unique<components::core::ComponentOwner>(position);
+    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
         rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, fontSize,
-                                                    graphics::Color::Black, textOffset);
-    button->addComponent<components::HitboxComponent>(size);
-    button->addComponent<components::ClickableComponent>(inputManager, std::move(clickAction));
+    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
+                                                          graphics::Color::Black, textOffset);
+    button->addComponent<components::core::HitboxComponent>(size);
+    button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     buttons.push_back(std::move(button));
     return buttonId;
@@ -412,18 +414,18 @@ unsigned int SettingsState::addButtonWithMouseOver(const utils::Vector2f& positi
                                                    std::function<void(void)> clickAction)
 {
     auto buttonId = buttons.size();
-    auto button = std::make_unique<components::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::GraphicsComponent>(
+    auto button = std::make_unique<components::core::ComponentOwner>(position);
+    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
         rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, fontSize,
-                                                    graphics::Color::Black, textOffset);
-    button->addComponent<components::HitboxComponent>(size);
-    button->addComponent<components::ClickableComponent>(inputManager, std::move(clickAction));
+    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
+                                                          graphics::Color::Black, textOffset);
+    button->addComponent<components::core::HitboxComponent>(size);
+    button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };
     const auto changeColorOnMouseOut = [=] { graphicsComponent->setColor(buttonColor); };
-    button->addComponent<components::MouseOverComponent>(inputManager, changeColorOnMouseOver,
-                                                         changeColorOnMouseOut);
+    button->addComponent<components::core::MouseOverComponent>(inputManager, changeColorOnMouseOver,
+                                                               changeColorOnMouseOut);
     buttons.push_back(std::move(button));
     return buttonId;
 }
@@ -432,9 +434,9 @@ unsigned int SettingsState::addText(const utils::Vector2f& position, const std::
                                     unsigned int fontSize)
 {
     auto textId = texts.size();
-    auto text = std::make_unique<components::ComponentOwner>(position);
-    text->addComponent<components::TextComponent>(rendererPool, position, description, fontPath, fontSize,
-                                                  graphics::Color::Black);
+    auto text = std::make_unique<components::core::ComponentOwner>(position);
+    text->addComponent<components::core::TextComponent>(rendererPool, position, description, fontPath,
+                                                        fontSize, graphics::Color::Black);
     texts.push_back(std::move(text));
     return textId;
 }

@@ -2,11 +2,11 @@
 
 #include <vector>
 
-#include "ClickableComponent.h"
 #include "InputObserver.h"
 #include "State.h"
 #include "TileMap.h"
 #include "Timer.h"
+#include "core/ClickableComponent.h"
 
 namespace game
 {
@@ -36,8 +36,8 @@ private:
     const float timeAfterStateCouldBePaused;
     int currentTileId;
     std::string currentTilePath;
-    std::unique_ptr<components::ComponentOwner> background;
-    std::vector<std::shared_ptr<components::ComponentOwner>> clickableTileMap;
+    std::unique_ptr<components::core::ComponentOwner> background;
+    std::vector<std::shared_ptr<components::core::ComponentOwner>> clickableTileMap;
     std::unique_ptr<TileMap> tileMap;
     bool buttonsActionsFrozen = true;
     utils::Timer freezeClickableButtonsTimer;

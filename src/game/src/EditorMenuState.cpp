@@ -1,12 +1,12 @@
 #include "EditorMenuState.h"
 
-#include "ClickableComponent.h"
 #include "GetProjectPath.h"
-#include "GraphicsComponent.h"
-#include "HitboxComponent.h"
-#include "MouseOverComponent.h"
 #include "SaveMapState.h"
-#include "TextComponent.h"
+#include "core/ClickableComponent.h"
+#include "core/GraphicsComponent.h"
+#include "core/HitboxComponent.h"
+#include "core/MouseOverComponent.h"
+#include "core/TextComponent.h"
 
 namespace game
 {
@@ -35,6 +35,7 @@ EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowIn
     createBackground();
     createEditorTitle();
     createBackToEditorButton();
+    createLoadMapButton();
     createNewMapButton();
     createSaveMapButton();
     createMenuButton();
@@ -53,7 +54,7 @@ void EditorMenuState::initialize()
     {
         button->loadDependentComponents();
         button->start();
-        button->getComponent<components::ClickableComponent>()->disable();
+        button->getComponent<components::core::ClickableComponent>()->disable();
     }
 
     possibleLeaveFromStateTimer.start();
@@ -116,7 +117,7 @@ void EditorMenuState::activate()
     for (auto& button : buttons)
     {
         button->enable();
-        if (auto clickableButton = button->getComponent<components::ClickableComponent>())
+        if (auto clickableButton = button->getComponent<components::core::ClickableComponent>())
         {
             clickableButton->disable();
         }
@@ -158,7 +159,7 @@ void EditorMenuState::unfreezeButtons()
     buttonsActionsFrozen = false;
     for (auto& button : buttons)
     {
-        button->getComponent<components::ClickableComponent>()->enable();
+        button->getComponent<components::core::ClickableComponent>()->enable();
     }
 }
 
@@ -187,32 +188,41 @@ void EditorMenuState::backToMenu()
 
 void EditorMenuState::createEditorTitle()
 {
-    const auto textPausePosition = utils::Vector2f{27.5, 11};
-    title = std::make_unique<components::ComponentOwner>(textPausePosition);
-    title->addComponent<components::TextComponent>(rendererPool, textPausePosition, "Editor Menu", fontPath,
-                                                   40, graphics::Color::White, utils::Vector2f{0, 0});
+    const auto textPausePosition = utils::Vector2f{27.5, 7};
+    title = std::make_unique<components::core::ComponentOwner>(textPausePosition);
+    title->addComponent<components::core::TextComponent>(rendererPool, textPausePosition, "Editor Menu",
+                                                         fontPath, 40, graphics::Color::White,
+                                                         utils::Vector2f{0, 0});
 }
 
 void EditorMenuState::createBackground()
 {
     const auto backgroundColor = graphics::Color{172};
-    background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::GraphicsComponent>(rendererPool, utils::Vector2f{31, 43},
-                                                            utils::Vector2f{25, 8}, backgroundColor,
-                                                            graphics::VisibilityLayer::Second);
+    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
+    background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{31, 50},
+                                                                  utils::Vector2f{25, 5}, backgroundColor,
+                                                                  graphics::VisibilityLayer::Second);
 }
 
 void EditorMenuState::createBackToEditorButton()
 {
-    const auto backToGameButtonPosition = utils::Vector2f{28, 19};
+    const auto backToGameButtonPosition = utils::Vector2f{28, 15};
 
     addButton(backToGameButtonPosition, "Back to editor", utils::Vector2f{1.5, 0.75},
               [this] { shouldBackToEditor = true; });
 }
 
+void EditorMenuState::createLoadMapButton()
+{
+    const auto backToMenuButtonPosition = utils::Vector2f{28, 23};
+
+    addButton(backToMenuButtonPosition, "Load map", utils::Vector2f{7, 0.75},
+              [this] { std::cout << "load map\n"; });
+}
+
 void EditorMenuState::createNewMapButton()
 {
-    const auto backToMenuButtonPosition = utils::Vector2f{28, 27};
+    const auto backToMenuButtonPosition = utils::Vector2f{28, 31};
 
     addButton(backToMenuButtonPosition, "New map", utils::Vector2f{7, 0.75},
               [this] { std::cout << "new map\n"; });
@@ -220,7 +230,7 @@ void EditorMenuState::createNewMapButton()
 
 void EditorMenuState::createSaveMapButton()
 {
-    const auto backToMenuButtonPosition = utils::Vector2f{28, 35};
+    const auto backToMenuButtonPosition = utils::Vector2f{28, 39};
 
     auto runSaveMapState = [&] {
         buttonsActionsFrozen = true;
@@ -233,7 +243,7 @@ void EditorMenuState::createSaveMapButton()
 
 void EditorMenuState::createMenuButton()
 {
-    const auto backToMenuButtonPosition = utils::Vector2f{28, 43};
+    const auto backToMenuButtonPosition = utils::Vector2f{28, 47};
 
     addButton(backToMenuButtonPosition, "Back to menu", utils::Vector2f{2.75, 0.75},
               [this] { shouldBackToMenu = true; });
@@ -242,18 +252,18 @@ void EditorMenuState::createMenuButton()
 void EditorMenuState::addButton(const utils::Vector2f& position, const std::string& text,
                                 const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
 {
-    auto button = std::make_unique<components::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::GraphicsComponent>(
+    auto button = std::make_unique<components::core::ComponentOwner>(position);
+    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
         rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, 27, textColor,
-                                                    textOffset);
-    button->addComponent<components::HitboxComponent>(buttonSize);
-    button->addComponent<components::ClickableComponent>(inputManager, std::move(clickAction));
+    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, 27,
+                                                          textColor, textOffset);
+    button->addComponent<components::core::HitboxComponent>(buttonSize);
+    button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };
     const auto changeColorOnMouseOut = [=] { graphicsComponent->setColor(buttonColor); };
-    button->addComponent<components::MouseOverComponent>(inputManager, changeColorOnMouseOver,
-                                                         changeColorOnMouseOut);
+    button->addComponent<components::core::MouseOverComponent>(inputManager, changeColorOnMouseOver,
+                                                               changeColorOnMouseOut);
     buttons.push_back(std::move(button));
 }
 

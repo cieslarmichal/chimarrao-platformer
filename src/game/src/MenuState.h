@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ComponentOwner.h"
 #include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
 #include "Window.h"
+#include "core/ComponentOwner.h"
 
 namespace game
 {
@@ -45,9 +45,9 @@ private:
     void hideIcons();
 
     const input::InputStatus* inputStatus;
-    std::unique_ptr<components::ComponentOwner> background;
-    std::vector<std::unique_ptr<components::ComponentOwner>> buttons;
-    std::vector<std::unique_ptr<components::ComponentOwner>> icons;
+    std::unique_ptr<components::core::ComponentOwner> background;
+    std::vector<std::unique_ptr<components::core::ComponentOwner>> buttons;
+    std::vector<std::unique_ptr<components::core::ComponentOwner>> icons;
     unsigned int currentButtonIndex;
     utils::Timer switchButtonTimer;
     const float timeAfterButtonCanBeSwitched;

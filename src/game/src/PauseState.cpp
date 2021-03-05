@@ -1,11 +1,11 @@
 #include "PauseState.h"
 
-#include "ClickableComponent.h"
 #include "GetProjectPath.h"
-#include "GraphicsComponent.h"
-#include "HitboxComponent.h"
-#include "MouseOverComponent.h"
-#include "TextComponent.h"
+#include "core/ClickableComponent.h"
+#include "core/GraphicsComponent.h"
+#include "core/HitboxComponent.h"
+#include "core/MouseOverComponent.h"
+#include "core/TextComponent.h"
 
 namespace game
 {
@@ -50,7 +50,7 @@ void PauseState::initialize()
     {
         button->loadDependentComponents();
         button->start();
-        button->getComponent<components::ClickableComponent>()->disable();
+        button->getComponent<components::core::ClickableComponent>()->disable();
     }
 
     timer.start();
@@ -126,7 +126,7 @@ void PauseState::unfreezeButtons()
     buttonsActionsFrozen = false;
     for (auto& button : buttons)
     {
-        button->getComponent<components::ClickableComponent>()->enable();
+        button->getComponent<components::core::ClickableComponent>()->enable();
     }
 }
 
@@ -156,18 +156,18 @@ void PauseState::backToMenu()
 void PauseState::createPauseTitle()
 {
     const auto textPausePosition = utils::Vector2f{35, 13};
-    title = std::make_unique<components::ComponentOwner>(textPausePosition);
-    title->addComponent<components::TextComponent>(rendererPool, textPausePosition, "Pause", fontPath, 40,
-                                                   graphics::Color::White, utils::Vector2f{0, 0});
+    title = std::make_unique<components::core::ComponentOwner>(textPausePosition);
+    title->addComponent<components::core::TextComponent>(rendererPool, textPausePosition, "Pause", fontPath,
+                                                         40, graphics::Color::White, utils::Vector2f{0, 0});
 }
 
 void PauseState::createBackground()
 {
     const auto backgroundColor = graphics::Color{172};
-    background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::GraphicsComponent>(rendererPool, utils::Vector2f{31, 32},
-                                                            utils::Vector2f{25, 10}, backgroundColor,
-                                                            graphics::VisibilityLayer::Background);
+    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
+    background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{31, 32},
+                                                                  utils::Vector2f{25, 10}, backgroundColor,
+                                                                  graphics::VisibilityLayer::Background);
 }
 
 void PauseState::createBackToGameButton()
@@ -189,18 +189,18 @@ void PauseState::createMenuButton()
 void PauseState::addButton(const utils::Vector2f& position, const std::string& text,
                            const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
 {
-    auto button = std::make_unique<components::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::GraphicsComponent>(
+    auto button = std::make_unique<components::core::ComponentOwner>(position);
+    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
         rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, 30, textColor,
-                                                    textOffset);
-    button->addComponent<components::HitboxComponent>(buttonSize);
-    button->addComponent<components::ClickableComponent>(inputManager, std::move(clickAction));
+    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, 30,
+                                                          textColor, textOffset);
+    button->addComponent<components::core::HitboxComponent>(buttonSize);
+    button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };
     const auto changeColorOnMouseOut = [=] { graphicsComponent->setColor(buttonColor); };
-    button->addComponent<components::MouseOverComponent>(inputManager, changeColorOnMouseOver,
-                                                         changeColorOnMouseOut);
+    button->addComponent<components::core::MouseOverComponent>(inputManager, changeColorOnMouseOver,
+                                                               changeColorOnMouseOut);
     buttons.push_back(std::move(button));
 }
 

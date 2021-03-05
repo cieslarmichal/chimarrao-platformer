@@ -1,15 +1,15 @@
 #include "MenuState.h"
 
-#include "ClickableComponent.h"
 #include "ControlsState.h"
 #include "EditorState.h"
 #include "GameState.h"
 #include "GetProjectPath.h"
-#include "GraphicsComponent.h"
-#include "HitboxComponent.h"
-#include "MouseOverComponent.h"
 #include "SettingsState.h"
-#include "TextComponent.h"
+#include "core/ClickableComponent.h"
+#include "core/GraphicsComponent.h"
+#include "core/HitboxComponent.h"
+#include "core/MouseOverComponent.h"
+#include "core/TextComponent.h"
 
 namespace game
 {
@@ -67,10 +67,11 @@ void MenuState::initialize()
     {
         button->loadDependentComponents();
         button->start();
-        button->getComponent<components::ClickableComponent>()->disable();
+        button->getComponent<components::core::ClickableComponent>()->disable();
     }
 
-    buttons[currentButtonIndex]->getComponent<components::GraphicsComponent>()->setColor(buttonHoverColor);
+    buttons[currentButtonIndex]->getComponent<components::core::GraphicsComponent>()->setColor(
+        buttonHoverColor);
     setIconVisible(currentButtonIndex);
 }
 
@@ -118,7 +119,7 @@ void MenuState::activate()
     for (auto& button : buttons)
     {
         button->enable();
-        button->getComponent<components::ClickableComponent>()->disable();
+        button->getComponent<components::core::ClickableComponent>()->disable();
     }
 }
 
@@ -157,16 +158,16 @@ void MenuState::unfreezeButtons()
     buttonsActionsFrozen = false;
     for (auto& button : buttons)
     {
-        button->getComponent<components::ClickableComponent>()->enable();
+        button->getComponent<components::core::ClickableComponent>()->enable();
     }
 }
 
 void MenuState::createBackground()
 {
-    background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::GraphicsComponent>(rendererPool, utils::Vector2f{80, 60},
-                                                            utils::Vector2f{0, 0}, backgroundPath,
-                                                            graphics::VisibilityLayer::Background);
+    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
+    background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{80, 60},
+                                                                  utils::Vector2f{0, 0}, backgroundPath,
+                                                                  graphics::VisibilityLayer::Background);
 }
 
 void MenuState::createPlayGameButton()
@@ -219,13 +220,13 @@ void MenuState::createExitButton()
 void MenuState::addButton(const utils::Vector2f& position, const std::string& text,
                           const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
 {
-    auto button = std::make_unique<components::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::GraphicsComponent>(
+    auto button = std::make_unique<components::core::ComponentOwner>(position);
+    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
         rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, 35,
-                                                    graphics::Color::Black, textOffset);
-    button->addComponent<components::HitboxComponent>(buttonSize);
-    button->addComponent<components::ClickableComponent>(inputManager, std::move(clickAction));
+    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, 35,
+                                                          graphics::Color::Black, textOffset);
+    button->addComponent<components::core::HitboxComponent>(buttonSize);
+    button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     const auto buttonIndex = buttons.size();
 
@@ -239,8 +240,8 @@ void MenuState::addButton(const utils::Vector2f& position, const std::string& te
         graphicsComponent->setColor(buttonColor);
         hideIcons();
     };
-    button->addComponent<components::MouseOverComponent>(inputManager, changeColorOnMouseOver,
-                                                         changeColorOnMouseOut);
+    button->addComponent<components::core::MouseOverComponent>(inputManager, changeColorOnMouseOver,
+                                                               changeColorOnMouseOut);
     buttons.push_back(std::move(button));
 }
 
@@ -255,9 +256,9 @@ void MenuState::createIcons()
 
 void MenuState::addIcon(const utils::Vector2f& position)
 {
-    auto icon = std::make_unique<components::ComponentOwner>(position);
-    icon->addComponent<components::GraphicsComponent>(rendererPool, iconSize, position, iconPath,
-                                                      graphics::VisibilityLayer::First);
+    auto icon = std::make_unique<components::core::ComponentOwner>(position);
+    icon->addComponent<components::core::GraphicsComponent>(rendererPool, iconSize, position, iconPath,
+                                                            graphics::VisibilityLayer::First);
     icons.push_back(std::move(icon));
 }
 
@@ -273,7 +274,8 @@ void MenuState::changeSelectedButtonUp()
     {
         currentButtonIndex--;
     }
-    buttons[currentButtonIndex]->getComponent<components::GraphicsComponent>()->setColor(buttonHoverColor);
+    buttons[currentButtonIndex]->getComponent<components::core::GraphicsComponent>()->setColor(
+        buttonHoverColor);
     setIconVisible(currentButtonIndex);
 }
 
@@ -289,7 +291,8 @@ void MenuState::changeSelectedButtonDown()
     {
         currentButtonIndex++;
     }
-    buttons[currentButtonIndex]->getComponent<components::GraphicsComponent>()->setColor(buttonHoverColor);
+    buttons[currentButtonIndex]->getComponent<components::core::GraphicsComponent>()->setColor(
+        buttonHoverColor);
     setIconVisible(currentButtonIndex);
 }
 
@@ -303,14 +306,14 @@ void MenuState::unselectAllButtons()
 {
     for (auto& button : buttons)
     {
-        button->getComponent<components::GraphicsComponent>()->setColor(buttonColor);
+        button->getComponent<components::core::GraphicsComponent>()->setColor(buttonColor);
     }
 }
 
 void MenuState::setIconVisible(unsigned int iconIndex)
 {
     hideIcons();
-    icons[iconIndex]->getComponent<components::GraphicsComponent>()->setVisibility(
+    icons[iconIndex]->getComponent<components::core::GraphicsComponent>()->setVisibility(
         graphics::VisibilityLayer::First);
 }
 
@@ -318,7 +321,7 @@ void MenuState::hideIcons()
 {
     for (auto& icon : icons)
     {
-        icon->getComponent<components::GraphicsComponent>()->setVisibility(
+        icon->getComponent<components::core::GraphicsComponent>()->setVisibility(
             graphics::VisibilityLayer::Invisible);
     }
 }

@@ -1,12 +1,12 @@
 #include "ControlsState.h"
 
-#include "ClickableComponent.h"
 #include "GetProjectPath.h"
-#include "GraphicsComponent.h"
-#include "HitboxComponent.h"
-#include "MouseOverComponent.h"
 #include "StlOperators.h"
-#include "TextComponent.h"
+#include "core/ClickableComponent.h"
+#include "core/GraphicsComponent.h"
+#include "core/HitboxComponent.h"
+#include "core/MouseOverComponent.h"
+#include "core/TextComponent.h"
 
 namespace game
 {
@@ -79,7 +79,7 @@ void ControlsState::initialize()
     {
         button->loadDependentComponents();
         button->start();
-        if (auto clickableComponent = button->getComponent<components::ClickableComponent>())
+        if (auto clickableComponent = button->getComponent<components::core::ClickableComponent>())
         {
             clickableComponent->disable();
         }
@@ -154,7 +154,7 @@ void ControlsState::unfreezeButtons()
     buttonsActionsFrozen = false;
     for (auto& button : buttons)
     {
-        if (auto clickableComponent = button->getComponent<components::ClickableComponent>())
+        if (auto clickableComponent = button->getComponent<components::core::ClickableComponent>())
         {
             clickableComponent->enable();
         }
@@ -173,10 +173,10 @@ void ControlsState::backToMenu()
 
 void ControlsState::createBackground()
 {
-    background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::GraphicsComponent>(rendererPool, utils::Vector2f{80, 60},
-                                                            utils::Vector2f{0, 0}, backgroundPath,
-                                                            graphics::VisibilityLayer::Background);
+    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
+    background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{80, 60},
+                                                                  utils::Vector2f{0, 0}, backgroundPath,
+                                                                  graphics::VisibilityLayer::Background);
 }
 
 void ControlsState::createControlsTitle()
@@ -227,11 +227,11 @@ void ControlsState::addNonClickableButton(const utils::Vector2f& position, const
                                           const std::string& text, unsigned int fontSize,
                                           const utils::Vector2f& textOffset)
 {
-    auto button = std::make_unique<components::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::GraphicsComponent>(
+    auto button = std::make_unique<components::core::ComponentOwner>(position);
+    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
         rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, fontSize,
-                                                    graphics::Color::Black, textOffset);
+    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
+                                                          graphics::Color::Black, textOffset);
     buttons.push_back(std::move(button));
 }
 
@@ -240,27 +240,27 @@ void ControlsState::addButtonWithMouseOver(const utils::Vector2f& position, cons
                                            const utils::Vector2f& textOffset,
                                            std::function<void(void)> clickAction)
 {
-    auto button = std::make_unique<components::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::GraphicsComponent>(
+    auto button = std::make_unique<components::core::ComponentOwner>(position);
+    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
         rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::TextComponent>(rendererPool, position, text, fontPath, fontSize,
-                                                    graphics::Color::Black, textOffset);
-    button->addComponent<components::HitboxComponent>(size);
-    button->addComponent<components::ClickableComponent>(inputManager, std::move(clickAction));
+    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
+                                                          graphics::Color::Black, textOffset);
+    button->addComponent<components::core::HitboxComponent>(size);
+    button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };
     const auto changeColorOnMouseOut = [=] { graphicsComponent->setColor(buttonColor); };
-    button->addComponent<components::MouseOverComponent>(inputManager, changeColorOnMouseOver,
-                                                         changeColorOnMouseOut);
+    button->addComponent<components::core::MouseOverComponent>(inputManager, changeColorOnMouseOver,
+                                                               changeColorOnMouseOut);
     buttons.push_back(std::move(button));
 }
 
 void ControlsState::addText(const utils::Vector2f& position, const std::string& description,
                             unsigned int fontSize)
 {
-    auto text = std::make_unique<components::ComponentOwner>(position);
-    text->addComponent<components::TextComponent>(rendererPool, position, description, fontPath, fontSize,
-                                                  graphics::Color::Black);
+    auto text = std::make_unique<components::core::ComponentOwner>(position);
+    text->addComponent<components::core::TextComponent>(rendererPool, position, description, fontPath,
+                                                        fontSize, graphics::Color::Black);
     texts.push_back(std::move(text));
 }
 

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ComponentOwner.h"
 #include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
+#include "core/ComponentOwner.h"
 
 namespace game
 {
@@ -44,10 +44,10 @@ private:
     utils::Timer possibleLeaveFromStateTimer;
     const float timeAfterLeaveStateIsPossible;
     bool shouldBackToEditorMenu;
-    std::vector<std::unique_ptr<components::ComponentOwner>> texts;
-    std::unique_ptr<components::ComponentOwner> background;
-    std::vector<std::unique_ptr<components::ComponentOwner>> buttons;
-    std::unique_ptr<components::ComponentOwner> mapNameInputTextField;
+    std::vector<std::unique_ptr<components::core::ComponentOwner>> texts;
+    std::unique_ptr<components::core::ComponentOwner> background;
+    std::vector<std::unique_ptr<components::core::ComponentOwner>> buttons;
+    std::unique_ptr<components::core::ComponentOwner> mapNameInputTextField;
     bool buttonsActionsFrozen = true;
     utils::Timer freezeClickableButtonsTimer;
     const float timeAfterButtonsCanBeClicked;

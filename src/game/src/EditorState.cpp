@@ -1,12 +1,12 @@
 #include "EditorState.h"
 
-#include <MouseOverComponent.h>
+#include <core/MouseOverComponent.h>
 
-#include "ComponentOwner.h"
 #include "EditorMenuState.h"
 #include "GetProjectPath.h"
-#include "GraphicsComponent.h"
 #include "TileMap.h"
+#include "core/ComponentOwner.h"
+#include "core/GraphicsComponent.h"
 
 namespace game
 {
@@ -39,19 +39,20 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
 
     currentTileId = 0;
     currentTilePath = tilesTextureVector[currentTileId];
-    background = std::make_unique<components::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::GraphicsComponent>(
+    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
+    background->addComponent<components::core::GraphicsComponent>(
         rendererPool, utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY}, utils::Vector2f{0, 0},
         pathToBackground, graphics::VisibilityLayer::Background);
-    background->addComponent<components::HitboxComponent>(
+    background->addComponent<components::core::HitboxComponent>(
         utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY});
     const auto changeBlockAction = [&]() {
         std::cout << currentTilePath << std::endl;
         currentTileId = currentTileId + 1 < tilesTextureVector.size() ? currentTileId + 1 : 0;
         currentTilePath = tilesTextureVector[currentTileId];
     };
-    background->addComponent<components::ClickableComponent>(
-        inputManager, std::vector<KeyAction>{{input::InputKey::MouseRight, changeBlockAction}});
+    background->addComponent<components::core::ClickableComponent>(
+        inputManager,
+        std::vector<components::core::KeyAction>{{input::InputKey::MouseRight, changeBlockAction}});
 
     tileMap = std::make_unique<TileMap>(
         utils::Vector2i(rendererPoolSizeX / tileSizeX, rendererPoolSizeY / tileSizeY),
@@ -60,13 +61,14 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
     {
         for (int x = 0; x < rendererPoolSizeX / tileSizeX; ++x)
         {
-            auto clickableTile = std::make_shared<components::ComponentOwner>(
+            auto clickableTile = std::make_shared<components::core::ComponentOwner>(
                 utils::Vector2f{static_cast<float>(x * tileSizeX), static_cast<float>(y * tileSizeY)});
-            auto graphicsComponent = clickableTile->addComponent<components::GraphicsComponent>(
+            auto graphicsComponent = clickableTile->addComponent<components::core::GraphicsComponent>(
                 rendererPool, utils::Vector2f{tileSizeX, tileSizeY},
                 utils::Vector2f{static_cast<float>(x * tileSizeX), static_cast<float>(y * tileSizeY)},
                 pathToBrickTileTexture, graphics::VisibilityLayer::Invisible);
-            clickableTile->addComponent<components::HitboxComponent>(utils::Vector2f{tileSizeX, tileSizeY});
+            clickableTile->addComponent<components::core::HitboxComponent>(
+                utils::Vector2f{tileSizeX, tileSizeY});
             const auto actionOnClickBlock = [=]() {
                 if (tileMap->getTile({x, y}) == 0)
                 {
@@ -84,7 +86,8 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                     graphicsComponent->setOutline(0.2f, graphics::Color::Green);
                 }
             };
-            clickableTile->addComponent<components::ClickableComponent>(inputManager, actionOnClickBlock);
+            clickableTile->addComponent<components::core::ClickableComponent>(inputManager,
+                                                                              actionOnClickBlock);
             const auto actionOnMouseOverBlock = [=]() {
                 graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
                 if (tileMap->getTile({x, y}) == 0)
@@ -109,8 +112,8 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                 }
                 graphicsComponent->setOutline(0.0f, graphics::Color::Transparent);
             };
-            clickableTile->addComponent<components::MouseOverComponent>(inputManager, actionOnMouseOverBlock,
-                                                                        actionOnMouseOut);
+            clickableTile->addComponent<components::core::MouseOverComponent>(
+                inputManager, actionOnMouseOverBlock, actionOnMouseOut);
             clickableTileMap.push_back(clickableTile);
         }
     }
@@ -132,7 +135,7 @@ void EditorState::initialize()
     {
         tile->loadDependentComponents();
         tile->start();
-        tile->getComponent<components::ClickableComponent>()->disable();
+        tile->getComponent<components::core::ClickableComponent>()->disable();
     }
 }
 
@@ -192,7 +195,7 @@ void EditorState::activate()
     for (auto& tile : clickableTileMap)
     {
         tile->enable();
-        tile->getComponent<components::ClickableComponent>()->disable();
+        tile->getComponent<components::core::ClickableComponent>()->disable();
     }
 }
 
@@ -215,7 +218,7 @@ void EditorState::pause()
     for (auto& tile : clickableTileMap)
     {
         tile->disable();
-        tile->getComponent<components::GraphicsComponent>()->enable();
+        tile->getComponent<components::core::GraphicsComponent>()->enable();
     }
 
     states.push(std::make_unique<EditorMenuState>(window, inputManager, rendererPool, states));
@@ -226,7 +229,7 @@ void EditorState::unfreezeButtons()
     buttonsActionsFrozen = false;
     for (auto& tile : clickableTileMap)
     {
-        tile->getComponent<components::ClickableComponent>()->enable();
+        tile->getComponent<components::core::ClickableComponent>()->enable();
     }
 }
 
