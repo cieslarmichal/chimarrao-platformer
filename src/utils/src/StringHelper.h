@@ -14,7 +14,7 @@ void removeEmptyLines(std::vector<std::string>&);
 void trim(std::vector<std::string>&);
 void removeDuplicates(std::vector<std::string>&);
 std::string cutOffFromString(const std::string& line, size_t startIndexToCut, size_t endIndexToCut);
-void cutOffString(std::string& line, size_t startIndexToCut, size_t endIndexToCut);
+void cutOffString(std::string& line, size_t startIndexToCutIncluded, size_t endIndexToCutIncluded);
 std::string substring(const std::string& line, size_t startIndex, size_t endIndex);
 std::string getLowerCases(const std::string&);
 void trim(std::string&);

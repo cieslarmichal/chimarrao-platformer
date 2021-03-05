@@ -35,10 +35,12 @@ public:
     void setPosition(const GraphicsId&, const utils::Vector2f& position) override;
     boost::optional<utils::Vector2f> getPosition(const GraphicsId&) override;
     void setTexture(const GraphicsId&, const TexturePath&, const utils::Vector2f& scale = {1, 1}) override;
+    void setText(const GraphicsId&, const std::string& text) override;
     void setVisibility(const GraphicsId&, VisibilityLayer) override;
     void setColor(const GraphicsId&, const Color&) override;
     void setOutline(const GraphicsId&, float thickness, const Color&) override;
     void setRenderingSize(const utils::Vector2u& renderingSize) override;
+    void synchronizeRenderingSize() override;
 
 private:
     void cleanUnusedShapes();

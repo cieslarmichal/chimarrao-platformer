@@ -20,6 +20,7 @@ set(UT_SOURCES
         src/RectangleShapeTest.cpp
         src/RendererPoolSfmlTest.cpp
         src/TextTest.cpp
+        src/VisibilityLayerTest.cpp
         )
 
 add_library(graphics ${SOURCES})

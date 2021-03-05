@@ -1,17 +1,27 @@
 #include "WindowSfml.h"
 
 #include <SFML/Window/Event.hpp>
+#include <utility>
+
+#include "SupportedFrameLimitsRetriever.h"
+#include "SupportedResolutionsRetriever.h"
 
 namespace window
 {
-WindowSfml::WindowSfml(const utils::Vector2u& windowSize, const std::string& windowTitle,
+WindowSfml::WindowSfml(const utils::Vector2u& windowSize, std::string windowTitleInit,
                        std::unique_ptr<WindowObservationHandler> observationHandlerInit)
-    : observationHandler{std::move(observationHandlerInit)}
+    : observationHandler{std::move(observationHandlerInit)}, windowTitle{std::move(windowTitleInit)}
 {
+    windowSettings.displayMode = DisplayMode::Window;
+    windowSettings.resolution = Resolution{windowSize.x, windowSize.y};
+    windowSettings.vsync = true;
+    windowSettings.frameLimit = 120;
+
     window = std::make_unique<sf::RenderWindow>();
-    window->create(sf::VideoMode(windowSize.x, windowSize.y), windowTitle);
-    window->setVerticalSyncEnabled(true);
-    window->setFramerateLimit(120);
+    window->create(sf::VideoMode(windowSettings.resolution.width, windowSettings.resolution.height),
+                   windowTitle);
+    window->setVerticalSyncEnabled(windowSettings.vsync);
+    window->setFramerateLimit(windowSettings.frameLimit);
 }
 
 bool WindowSfml::isOpen() const
@@ -77,6 +87,83 @@ void WindowSfml::removeObserver(WindowObserver* observer)
 void WindowSfml::notifyObservers()
 {
     observationHandler->notifyObservers(window->getSize());
+}
+
+WindowSettings WindowSfml::getWindowSettings() const
+{
+    return windowSettings;
+}
+
+bool WindowSfml::setDisplayMode(DisplayMode displayMode)
+{
+    if (displayMode != windowSettings.displayMode)
+    {
+        windowSettings.displayMode = displayMode;
+        window.reset();
+        window = std::make_unique<sf::RenderWindow>();
+        window->create(sf::VideoMode(windowSettings.resolution.width, windowSettings.resolution.height),
+                       windowTitle, getSfmlStyleFromDisplayMode(windowSettings.displayMode));
+        return true;
+    }
+    return false;
+}
+
+bool WindowSfml::setVerticalSync(bool vsyncEnabled)
+{
+    if (vsyncEnabled != windowSettings.vsync)
+    {
+        windowSettings.vsync = vsyncEnabled;
+        window->setVerticalSyncEnabled(vsyncEnabled);
+        return true;
+    }
+    return false;
+}
+
+bool WindowSfml::setFramerateLimit(unsigned int frameLimit)
+{
+    if (frameLimit != windowSettings.frameLimit)
+    {
+        windowSettings.frameLimit = frameLimit;
+        window->setFramerateLimit(frameLimit);
+        return true;
+    }
+    return false;
+}
+
+bool WindowSfml::setResolution(const Resolution& resolution)
+{
+    if (resolution != windowSettings.resolution)
+    {
+        windowSettings.resolution = resolution;
+        window.reset();
+        window = std::make_unique<sf::RenderWindow>();
+        window->create(sf::VideoMode(resolution.width, resolution.height), windowTitle,
+                       getSfmlStyleFromDisplayMode(windowSettings.displayMode));
+        return true;
+    }
+    return false;
+}
+
+unsigned WindowSfml::getSfmlStyleFromDisplayMode(DisplayMode displayMode) const
+{
+    if (displayMode == DisplayMode::Window)
+    {
+        return sf::Style::Resize | sf::Style::Close;
+    }
+    else
+    {
+        return sf::Style::Fullscreen;
+    }
+}
+
+std::vector<Resolution> WindowSfml::getSupportedResolutions() const
+{
+    return SupportedResolutionsRetriever::retrieveSupportedResolutions();
+}
+
+std::vector<unsigned int> WindowSfml::getSupportedFrameLimits() const
+{
+    return SupportedFrameLimitsRetriever::retrieveSupportedFrameLimits();
 }
 
 }

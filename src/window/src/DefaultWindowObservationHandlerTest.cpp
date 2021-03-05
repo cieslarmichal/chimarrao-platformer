@@ -9,7 +9,7 @@ using namespace window;
 
 namespace
 {
-const utils::Vector2u windowSize{1000,600};
+const utils::Vector2u windowSize{1000, 600};
 }
 
 class DefaultInputObservationHandlerTest : public Test

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "ComponentOwner.h"
 #include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
+#include "core/ComponentOwner.h"
 
 namespace game
 {
@@ -29,7 +29,7 @@ private:
     bool paused;
     utils::Timer timer;
     const float timeAfterStateCouldBePaused;
-    std::shared_ptr<components::ComponentOwner> player;
-    std::shared_ptr<components::ComponentOwner> background;
+    std::shared_ptr<components::core::ComponentOwner> player;
+    std::shared_ptr<components::core::ComponentOwner> background;
 };
 }

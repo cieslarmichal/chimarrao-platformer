@@ -1,9 +1,10 @@
 #include "DefaultInputManager.h"
 
-#include "SFML/Window/Keyboard.hpp"
-#include "SFML/Window/Mouse.hpp"
+#include <SFML/Window/Keyboard.hpp>
+#include <SFML/Window/Mouse.hpp>
 
 #include "InputKey.h"
+#include "InputKeySfmlMapper.h"
 
 namespace input
 {
@@ -17,52 +18,20 @@ void DefaultInputManager::readInput()
 {
     inputStatus.clearPressedKeys();
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+    for (const auto& keyboardKey : keyboardButtons)
     {
-        inputStatus.setKeyPressed(InputKey::Up);
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
-    {
-        inputStatus.setKeyPressed(InputKey::Down);
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-    {
-        inputStatus.setKeyPressed(InputKey::Left);
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-    {
-        inputStatus.setKeyPressed(InputKey::Right);
+        if (sf::Keyboard::isKeyPressed(InputKeySfmlMapper::getKeyboardSfmlKey(keyboardKey)))
+        {
+            inputStatus.setKeyPressed(keyboardKey);
+        }
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+    for (const auto& mouseKey : mouseButtons)
     {
-        inputStatus.setKeyPressed(InputKey::Space);
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
-    {
-        inputStatus.setKeyPressed(InputKey::Shift);
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter))
-    {
-        inputStatus.setKeyPressed(InputKey::Enter);
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-    {
-        inputStatus.setKeyPressed(InputKey::Escape);
-    }
-
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-    {
-        inputStatus.setKeyPressed(InputKey::MouseLeft);
-    }
-
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Right))
-    {
-        inputStatus.setKeyPressed(InputKey::MouseRight);
+        if (sf::Mouse::isButtonPressed(InputKeySfmlMapper::getMouseSfmlKey(mouseKey)))
+        {
+            inputStatus.setKeyPressed(mouseKey);
+        }
     }
 
     inputStatus.setReleasedKeys();

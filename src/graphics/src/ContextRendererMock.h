@@ -14,5 +14,6 @@ public:
     MOCK_METHOD(void, draw, (const sf::Drawable&));
     MOCK_METHOD(void, setView, ());
     MOCK_METHOD(void, setViewSize, (const utils::Vector2u& windowsSize));
+    MOCK_METHOD(void, synchronizeViewSize, ());
 };
 }

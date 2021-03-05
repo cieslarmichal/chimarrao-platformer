@@ -43,6 +43,12 @@ void RenderTargetSfml::setView()
 void RenderTargetSfml::setViewSize(const utils::Vector2u& size)
 {
     windowSize = size;
+    initialize();
+}
+
+void RenderTargetSfml::synchronizeViewSize()
+{
+    initialize();
 }
 
 sf::Vector2u RenderTargetSfml::getSize() const

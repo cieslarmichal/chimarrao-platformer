@@ -7,7 +7,6 @@
 using namespace ::testing;
 using namespace input;
 
-
 class DefaultInputObservationHandlerTest : public Test
 {
 public:

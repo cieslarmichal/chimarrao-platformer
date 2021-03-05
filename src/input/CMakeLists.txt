@@ -2,6 +2,7 @@ set(SOURCES
         src/InputStatus.cpp
         src/DefaultInputManager.cpp
         src/DefaultInputObservationHandler.cpp
+        src/InputKeySfmlMapper.cpp
         )
 
 set(UT_SOURCES
@@ -9,6 +10,7 @@ set(UT_SOURCES
         src/InputStatusTest.cpp
         src/DefaultInputManagerTest.cpp
         src/DefaultInputObservationHandlerTest.cpp
+        src/InputKeySfmlMapperTest.cpp
         )
 
 add_library(input ${SOURCES})

@@ -22,6 +22,7 @@ public:
     void draw(const sf::Drawable&) override;
     void setView() override;
     void setViewSize(const utils::Vector2u& windowsSize) override;
+    void synchronizeViewSize() override;
     sf::Vector2u getSize() const override;
     bool setActive(bool active) override;
 

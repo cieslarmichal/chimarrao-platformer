@@ -94,7 +94,7 @@ void RendererPoolSfml::renderAll()
 
     for (const auto& layeredShape : layeredShapes)
     {
-        if(layeredShape.layer != VisibilityLayer::Invisible)
+        if (layeredShape.layer != VisibilityLayer::Invisible)
         {
             contextRenderer->draw(layeredShape.shape);
         }
@@ -161,6 +161,15 @@ void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path,
     }
 }
 
+void RendererPoolSfml::setText(const GraphicsId& id, const std::string& text)
+{
+    if (const auto layeredTextIter = findLayeredTextPosition(id); layeredTextIter != layeredTexts.end())
+    {
+        auto& layeredText = getLayeredTextByPosition(layeredTexts, layeredTextIter);
+        layeredText.text.setString(text);
+    }
+}
+
 void RendererPoolSfml::setVisibility(const GraphicsId& id, VisibilityLayer layer)
 {
     if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
@@ -198,9 +207,32 @@ void RendererPoolSfml::setColor(const GraphicsId& id, const Color& color)
     }
 }
 
+void RendererPoolSfml::setOutline(const GraphicsId& id, float thickness, const Color& color)
+{
+    if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
+    {
+        auto& layeredShape = getLayeredShapeByPosition(layeredShapes, layeredShapeIter);
+        layeredShape.shape.setOutlineThickness(thickness);
+        layeredShape.shape.setOutlineColor(color);
+        return;
+    }
+
+    if (const auto layeredTextIter = findLayeredTextPosition(id); layeredTextIter != layeredTexts.end())
+    {
+        auto& layeredText = getLayeredTextByPosition(layeredTexts, layeredTextIter);
+        layeredText.text.setOutlineThickness(thickness);
+        layeredText.text.setOutlineColor(color);
+    }
+}
+
 void RendererPoolSfml::setRenderingSize(const utils::Vector2u& renderingSize)
 {
     contextRenderer->setViewSize(renderingSize);
+}
+
+void RendererPoolSfml::synchronizeRenderingSize()
+{
+    contextRenderer->synchronizeViewSize();
 }
 
 void RendererPoolSfml::cleanUnusedShapes()
@@ -239,20 +271,5 @@ RendererPoolSfml::findLayeredTextPosition(const GraphicsId& graphicsIdToFind) co
                             return layeredText.text.getGraphicsId() == graphicsIdToFind;
                         });
 }
-void RendererPoolSfml::setOutline(const GraphicsId& id, float thickness, const Color& color) {
-    if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
-    {
-        auto& layeredShape = getLayeredShapeByPosition(layeredShapes, layeredShapeIter);
-        layeredShape.shape.setOutlineThickness(thickness);
-        layeredShape.shape.setOutlineColor(color);
-        return;
-    }
 
-    if (const auto layeredTextIter = findLayeredTextPosition(id); layeredTextIter != layeredTexts.end())
-    {
-        auto& layeredText = getLayeredTextByPosition(layeredTexts, layeredTextIter);
-        layeredText.text.setOutlineThickness(thickness);
-        layeredText.text.setOutlineColor(color);
-    }
-}
 }

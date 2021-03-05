@@ -1,19 +1,17 @@
 #pragma once
 
-#include "ComponentOwner.h"
-#include "State.h"
 #include "InputObserver.h"
+#include "State.h"
 #include "Timer.h"
+#include "core/ComponentOwner.h"
 
 namespace game
 {
 class PauseState : public State, public input::InputObserver
 {
 public:
-    explicit PauseState(const std::shared_ptr<window::Window>&,
-                       const std::shared_ptr<input::InputManager>&,
-                       const std::shared_ptr<graphics::RendererPool>&,
-                       std::stack<std::unique_ptr<State>>&);
+    explicit PauseState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
+                        const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&);
     ~PauseState();
 
     void initialize();
@@ -26,8 +24,10 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
+    void unfreezeButtons();
     void backToGame();
     void backToMenu();
+    void createPauseTitle();
     void createBackground();
     void createBackToGameButton();
     void createMenuButton();
@@ -39,7 +39,11 @@ private:
     const float timeAfterLeaveStateIsPossible;
     bool shouldBackToGame;
     bool shouldBackToMenu;
-    std::unique_ptr<components::ComponentOwner> background;
-    std::vector<std::unique_ptr<components::ComponentOwner>> buttons;
+    std::unique_ptr<components::core::ComponentOwner> title;
+    std::unique_ptr<components::core::ComponentOwner> background;
+    std::vector<std::unique_ptr<components::core::ComponentOwner>> buttons;
+    bool buttonsActionsFrozen = true;
+    utils::Timer freezeClickableButtonsTimer;
+    const float timeAfterButtonsCanBeClicked;
 };
 }

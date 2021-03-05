@@ -60,9 +60,9 @@ void removeDuplicates(std::vector<std::string>& lines)
     lines.erase(unique(lines.begin(), lines.end()), lines.end());
 }
 
-void cutOffString(std::string& line, size_t startIndexToCut, size_t endIndexToCut)
+void cutOffString(std::string& line, size_t startIndexToCutIncluded, size_t endIndexToCutIncluded)
 {
-    line = cutOffFromString(line, startIndexToCut, endIndexToCut);
+    line = cutOffFromString(line, startIndexToCutIncluded, endIndexToCutIncluded);
 }
 
 std::string substring(const std::string& line, size_t startIndex, size_t endIndex)
