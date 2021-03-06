@@ -4,7 +4,7 @@
 #include "StlOperators.h"
 #include "core/ClickableComponent.h"
 #include "core/GraphicsComponent.h"
-#include "core/HitboxComponent.h"
+#include "core/HitBoxComponent.h"
 #include "core/MouseOverComponent.h"
 #include "core/TextComponent.h"
 
@@ -57,11 +57,8 @@ SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
                              std::stack<std::unique_ptr<State>>& statesInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       shouldBackToMenu{false},
-      inputStatus{nullptr},
       timeAfterButtonsCanBeClicked{0.3f}
 {
-    inputManager->registerObserver(this);
-
     supportedResolutions = window->getSupportedResolutions();
     supportedFrameLimits = window->getSupportedFrameLimits();
     // TODO: throw if supported resolution or frameLimits == 0
@@ -80,17 +77,11 @@ SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
     initialize();
 }
 
-SettingsState::~SettingsState()
-{
-    inputManager->removeObserver(this);
-}
-
 void SettingsState::initialize()
 {
     for (auto& button : buttons)
     {
         button->loadDependentComponents();
-        button->start();
         button->getComponent<components::core::ClickableComponent>()->disable();
     }
 }
@@ -153,11 +144,6 @@ void SettingsState::deactivate()
     {
         button->disable();
     }
-}
-
-void SettingsState::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
 }
 
 void SettingsState::synchronizeWindowSettings()
@@ -401,7 +387,7 @@ unsigned int SettingsState::addButton(const utils::Vector2f& position, const uti
         rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
     button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
                                                           graphics::Color::Black, textOffset);
-    button->addComponent<components::core::HitboxComponent>(size);
+    button->addComponent<components::core::HitBoxComponent>(size);
     button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     buttons.push_back(std::move(button));
@@ -419,7 +405,7 @@ unsigned int SettingsState::addButtonWithMouseOver(const utils::Vector2f& positi
         rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
     button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
                                                           graphics::Color::Black, textOffset);
-    button->addComponent<components::core::HitboxComponent>(size);
+    button->addComponent<components::core::HitBoxComponent>(size);
     button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };

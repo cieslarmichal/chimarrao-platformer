@@ -7,7 +7,7 @@
 #include "SettingsState.h"
 #include "core/ClickableComponent.h"
 #include "core/GraphicsComponent.h"
-#include "core/HitboxComponent.h"
+#include "core/HitBoxComponent.h"
 #include "core/MouseOverComponent.h"
 #include "core/TextComponent.h"
 
@@ -66,7 +66,6 @@ void MenuState::initialize()
     for (auto& button : buttons)
     {
         button->loadDependentComponents();
-        button->start();
         button->getComponent<components::core::ClickableComponent>()->disable();
     }
 
@@ -144,13 +143,12 @@ void MenuState::handleButtonSwitching()
     if (inputStatus->isKeyPressed(input::InputKey::Up))
     {
         changeSelectedButtonUp();
-        switchButtonTimer.restart();
     }
     else if (inputStatus->isKeyPressed(input::InputKey::Down))
     {
         changeSelectedButtonDown();
-        switchButtonTimer.restart();
     }
+    switchButtonTimer.restart();
 }
 
 void MenuState::unfreezeButtons()
@@ -225,7 +223,7 @@ void MenuState::addButton(const utils::Vector2f& position, const std::string& te
         rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
     button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, 35,
                                                           graphics::Color::Black, textOffset);
-    button->addComponent<components::core::HitboxComponent>(buttonSize);
+    button->addComponent<components::core::HitBoxComponent>(buttonSize);
     button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     const auto buttonIndex = buttons.size();

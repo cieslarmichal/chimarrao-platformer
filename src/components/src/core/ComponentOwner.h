@@ -15,7 +15,6 @@ public:
     ComponentOwner(const utils::Vector2f& position);
 
     void loadDependentComponents();
-    void start();
     void update(utils::DeltaTime);
     void lateUpdate(utils::DeltaTime);
     void enable();

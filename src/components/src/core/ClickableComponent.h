@@ -3,7 +3,7 @@
 #include <functional>
 
 #include "Component.h"
-#include "HitboxComponent.h"
+#include "HitBoxComponent.h"
 #include "InputManager.h"
 #include "InputObserver.h"
 #include "KeyAction.h"
@@ -28,7 +28,7 @@ public:
 private:
     std::shared_ptr<input::InputManager> inputManager;
     const input::InputStatus* inputStatus;
-    std::shared_ptr<HitboxComponent> hitbox;
+    std::shared_ptr<HitBoxComponent> hitbox;
     std::vector<KeyAction> keyActionVector;
 };
 }

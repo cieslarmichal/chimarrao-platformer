@@ -3,7 +3,7 @@
 #include "GetProjectPath.h"
 #include "core/ClickableComponent.h"
 #include "core/GraphicsComponent.h"
-#include "core/HitboxComponent.h"
+#include "core/HitBoxComponent.h"
 #include "core/MouseOverComponent.h"
 #include "core/TextComponent.h"
 
@@ -56,7 +56,6 @@ void SaveMapState::initialize()
     for (auto& button : buttons)
     {
         button->loadDependentComponents();
-        button->start();
         if (auto clickable = button->getComponent<components::core::ClickableComponent>())
         {
             clickable->disable();
@@ -64,7 +63,6 @@ void SaveMapState::initialize()
     }
 
     mapNameInputTextField->loadDependentComponents();
-    mapNameInputTextField->start();
 
     possibleLeaveFromStateTimer.start();
     inputMapNameDeleteCharactersTimer.start();
@@ -87,10 +85,10 @@ void SaveMapState::update(const utils::DeltaTime& deltaTime)
 
     if (inputStatus->isKeyPressed(input::InputKey::MouseLeft))
     {
-        if (auto mapNameInputFieldHitbox =
-                mapNameInputTextField->getComponent<components::core::HitboxComponent>())
+        if (auto mapNameInputFieldHitBox =
+                mapNameInputTextField->getComponent<components::core::HitBoxComponent>())
         {
-            if (not mapNameInputFieldHitbox->intersects(inputStatus->getMousePosition()))
+            if (not mapNameInputFieldHitBox->intersects(inputStatus->getMousePosition()))
             {
                 mapNameFieldClicked = false;
                 mapNameInputTextField->getComponent<components::core::GraphicsComponent>()->setColor(
@@ -245,7 +243,7 @@ void SaveMapState::addMapNameInputField()
         rendererPool, buttonSize, mapNamingPromptPosition, buttonColor, graphics::VisibilityLayer::First);
     mapNameInputTextField->addComponent<components::core::TextComponent>(
         rendererPool, buttonSize, "", fontPath, 20, graphics::Color::White, utils::Vector2f{0.75, 0.4});
-    mapNameInputTextField->addComponent<components::core::HitboxComponent>(buttonSize);
+    mapNameInputTextField->addComponent<components::core::HitBoxComponent>(buttonSize);
 
     auto mapNameFieldClickedAction = [=] {
         mapNameFieldClicked = true;
@@ -265,7 +263,7 @@ void SaveMapState::addButton(const utils::Vector2f& position, const utils::Vecto
         rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
     button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
                                                           graphics::Color::White, textOffset);
-    button->addComponent<components::core::HitboxComponent>(size);
+    button->addComponent<components::core::HitBoxComponent>(size);
     button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };

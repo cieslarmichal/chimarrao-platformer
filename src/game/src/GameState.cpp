@@ -58,7 +58,6 @@ GameState::~GameState()
 void GameState::initialize()
 {
     player->loadDependentComponents();
-    player->start();
     timer.start();
 }
 

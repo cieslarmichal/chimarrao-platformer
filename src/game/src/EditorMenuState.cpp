@@ -4,7 +4,7 @@
 #include "SaveMapState.h"
 #include "core/ClickableComponent.h"
 #include "core/GraphicsComponent.h"
-#include "core/HitboxComponent.h"
+#include "core/HitBoxComponent.h"
 #include "core/MouseOverComponent.h"
 #include "core/TextComponent.h"
 
@@ -53,7 +53,6 @@ void EditorMenuState::initialize()
     for (auto& button : buttons)
     {
         button->loadDependentComponents();
-        button->start();
         button->getComponent<components::core::ClickableComponent>()->disable();
     }
 
@@ -257,7 +256,7 @@ void EditorMenuState::addButton(const utils::Vector2f& position, const std::stri
         rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
     button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, 27,
                                                           textColor, textOffset);
-    button->addComponent<components::core::HitboxComponent>(buttonSize);
+    button->addComponent<components::core::HitBoxComponent>(buttonSize);
     button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };

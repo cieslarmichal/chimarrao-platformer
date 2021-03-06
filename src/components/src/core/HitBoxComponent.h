@@ -7,10 +7,10 @@
 
 namespace components::core
 {
-class HitboxComponent : public Component
+class HitBoxComponent : public Component
 {
 public:
-    HitboxComponent(ComponentOwner*, const utils::Vector2f& size, const utils::Vector2f& offset = {0, 0});
+    HitBoxComponent(ComponentOwner*, const utils::Vector2f& size, const utils::Vector2f& offset = {0, 0});
 
     void lateUpdate(utils::DeltaTime) override;
     bool intersects(const utils::Vector2f& position) const;

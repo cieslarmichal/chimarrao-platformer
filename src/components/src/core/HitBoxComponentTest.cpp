@@ -1,4 +1,4 @@
-#include "HitboxComponent.h"
+#include "HitBoxComponent.h"
 
 #include "gtest/gtest.h"
 
@@ -8,7 +8,7 @@
 using namespace components::core;
 using namespace ::testing;
 
-class HitboxComponentTest : public Test
+class HitBoxComponentTest : public Test
 {
 public:
     const utils::Vector2f size{5, 5};
@@ -18,17 +18,17 @@ public:
     const utils::Vector2f positionOutsideTarget{27, 21};
     ComponentOwner componentOwner{position1};
     utils::DeltaTime deltaTime{1};
-    HitboxComponent hitboxComponent{&componentOwner, size, offset};
+    HitBoxComponent hitboxComponent{&componentOwner, size, offset};
 };
 
-TEST_F(HitboxComponentTest, givenPositionInsideTarget_shouldIntersect)
+TEST_F(HitBoxComponentTest, givenPositionInsideTarget_shouldIntersect)
 {
     hitboxComponent.lateUpdate(deltaTime);
 
     ASSERT_TRUE(hitboxComponent.intersects(positionInsideTarget));
 }
 
-TEST_F(HitboxComponentTest, givenPositionOutsideTarget_shouldNotIntersect)
+TEST_F(HitBoxComponentTest, givenPositionOutsideTarget_shouldNotIntersect)
 {
     hitboxComponent.lateUpdate(deltaTime);
 

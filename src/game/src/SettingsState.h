@@ -4,17 +4,17 @@
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
+#include "ui/UIManager.h"
 
 namespace game
 {
-class SettingsState : public State, public input::InputObserver
+class SettingsState : public State
 {
 public:
     explicit SettingsState(const std::shared_ptr<window::Window>&,
                            const std::shared_ptr<input::InputManager>&,
                            const std::shared_ptr<graphics::RendererPool>&,
                            std::stack<std::unique_ptr<State>>&);
-    ~SettingsState();
 
     void initialize();
     void update(const utils::DeltaTime&) override;
@@ -23,7 +23,6 @@ public:
     std::string getName() const override;
     void activate() override;
     void deactivate() override;
-    void handleInputStatus(const input::InputStatus&) override;
 
 private:
     void synchronizeWindowSettings();
@@ -56,7 +55,6 @@ private:
                          unsigned int fontSize);
 
     bool shouldBackToMenu;
-    const input::InputStatus* inputStatus;
     std::unique_ptr<components::core::ComponentOwner> background;
     std::vector<std::unique_ptr<components::core::ComponentOwner>> texts;
     unsigned int resolutionTextId, frameLimitTextId;

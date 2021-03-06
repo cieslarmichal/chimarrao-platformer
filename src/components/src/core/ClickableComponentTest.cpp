@@ -31,7 +31,7 @@ class ClickableComponentTest : public ClickableComponentTest_Base
 public:
     ClickableComponentTest()
     {
-        auto hitboxComponent = componentOwner.addComponent<HitboxComponent>(size, offset);
+        auto hitboxComponent = componentOwner.addComponent<HitBoxComponent>(size, offset);
         clickableComponent.loadDependentComponents();
         hitboxComponent->lateUpdate(deltaTime);
     }
@@ -174,7 +174,7 @@ TEST_F(ClickableComponentTest,
     EXPECT_CALL(*inputManager, registerObserver(_));
     EXPECT_CALL(*inputManager, removeObserver(_));
     ComponentOwner localComponentOwner{position1};
-    auto hitboxComponent = localComponentOwner.addComponent<HitboxComponent>(size, offset);
+    auto hitboxComponent = localComponentOwner.addComponent<HitBoxComponent>(size, offset);
     hitboxComponent->lateUpdate(deltaTime);
     auto clickableComponent = ClickableComponent(&localComponentOwner, inputManager, validKeyActionVector);
     clickableComponent.loadDependentComponents();
@@ -196,7 +196,7 @@ TEST_F(ClickableComponentTest,
     EXPECT_CALL(*inputManager, registerObserver(_));
     EXPECT_CALL(*inputManager, removeObserver(_));
     ComponentOwner localComponentOwner{position1};
-    auto hitboxComponent = localComponentOwner.addComponent<HitboxComponent>(size, offset);
+    auto hitboxComponent = localComponentOwner.addComponent<HitBoxComponent>(size, offset);
     hitboxComponent->lateUpdate(deltaTime);
     auto clickableComponent = ClickableComponent(&localComponentOwner, inputManager, validKeyActionVector);
     clickableComponent.loadDependentComponents();

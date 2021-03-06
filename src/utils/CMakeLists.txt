@@ -5,6 +5,7 @@ set(SOURCES
         src/StringHelper.cpp
         src/IncrementalFilePathsCreator.cpp
         src/RandomNumberMersenneTwisterGenerator.cpp
+        src/UniqueName.cpp
         )
 
 set(UT_SOURCES
@@ -14,6 +15,7 @@ set(UT_SOURCES
         src/StringHelperTest.cpp
         src/IncrementalFilePathsCreatorTest.cpp
         src/RandomNumberMersenneTwisterGeneratorTest.cpp
+        src/UniqueNameTest.cpp
         )
 
 add_library(utils ${SOURCES})

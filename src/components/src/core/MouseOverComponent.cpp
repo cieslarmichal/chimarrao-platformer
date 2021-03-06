@@ -27,10 +27,10 @@ MouseOverComponent::~MouseOverComponent()
 
 void MouseOverComponent::loadDependentComponents()
 {
-    hitbox = owner->getComponent<HitboxComponent>();
+    hitbox = owner->getComponent<HitBoxComponent>();
     if (not hitbox)
     {
-        throw exceptions::DependentComponentNotFound{"MouseOverComponent: Hitbox component not found"};
+        throw exceptions::DependentComponentNotFound{"MouseOverComponent: HitBox component not found"};
     }
 }
 

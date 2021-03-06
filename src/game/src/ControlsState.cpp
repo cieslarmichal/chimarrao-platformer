@@ -4,7 +4,7 @@
 #include "StlOperators.h"
 #include "core/ClickableComponent.h"
 #include "core/GraphicsComponent.h"
-#include "core/HitboxComponent.h"
+#include "core/HitBoxComponent.h"
 #include "core/MouseOverComponent.h"
 #include "core/TextComponent.h"
 
@@ -78,7 +78,6 @@ void ControlsState::initialize()
     for (auto& button : buttons)
     {
         button->loadDependentComponents();
-        button->start();
         if (auto clickableComponent = button->getComponent<components::core::ClickableComponent>())
         {
             clickableComponent->disable();
@@ -245,7 +244,7 @@ void ControlsState::addButtonWithMouseOver(const utils::Vector2f& position, cons
         rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
     button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
                                                           graphics::Color::Black, textOffset);
-    button->addComponent<components::core::HitboxComponent>(size);
+    button->addComponent<components::core::HitBoxComponent>(size);
     button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };

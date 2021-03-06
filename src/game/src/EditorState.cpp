@@ -43,7 +43,7 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
     background->addComponent<components::core::GraphicsComponent>(
         rendererPool, utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY}, utils::Vector2f{0, 0},
         pathToBackground, graphics::VisibilityLayer::Background);
-    background->addComponent<components::core::HitboxComponent>(
+    background->addComponent<components::core::HitBoxComponent>(
         utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY});
     const auto changeBlockAction = [&]() {
         std::cout << currentTilePath << std::endl;
@@ -67,7 +67,7 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                 rendererPool, utils::Vector2f{tileSizeX, tileSizeY},
                 utils::Vector2f{static_cast<float>(x * tileSizeX), static_cast<float>(y * tileSizeY)},
                 pathToBrickTileTexture, graphics::VisibilityLayer::Invisible);
-            clickableTile->addComponent<components::core::HitboxComponent>(
+            clickableTile->addComponent<components::core::HitBoxComponent>(
                 utils::Vector2f{tileSizeX, tileSizeY});
             const auto actionOnClickBlock = [=]() {
                 if (tileMap->getTile({x, y}) == 0)
@@ -129,12 +129,10 @@ EditorState::~EditorState()
 void EditorState::initialize()
 {
     background->loadDependentComponents();
-    background->start();
 
     for (auto& tile : clickableTileMap)
     {
         tile->loadDependentComponents();
-        tile->start();
         tile->getComponent<components::core::ClickableComponent>()->disable();
     }
 }

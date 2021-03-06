@@ -45,10 +45,10 @@ ClickableComponent::~ClickableComponent()
 
 void ClickableComponent::loadDependentComponents()
 {
-    hitbox = owner->getComponent<HitboxComponent>();
+    hitbox = owner->getComponent<HitBoxComponent>();
     if (not hitbox)
     {
-        throw exceptions::DependentComponentNotFound{"ClickableComponent: Hitbox component not found"};
+        throw exceptions::DependentComponentNotFound{"ClickableComponent: HitBox component not found"};
     }
 }
 

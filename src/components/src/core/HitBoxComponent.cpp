@@ -1,17 +1,17 @@
-#include "HitboxComponent.h"
+#include "HitBoxComponent.h"
 
 #include "ComponentOwner.h"
 
 namespace components::core
 {
 
-HitboxComponent::HitboxComponent(ComponentOwner* ownerInit, const utils::Vector2f& sizeInit,
+HitBoxComponent::HitBoxComponent(ComponentOwner* ownerInit, const utils::Vector2f& sizeInit,
                                  const utils::Vector2f& offsetInit)
     : Component(ownerInit), size{sizeInit}, offset{offsetInit}
 {
 }
 
-void HitboxComponent::lateUpdate(utils::DeltaTime)
+void HitBoxComponent::lateUpdate(utils::DeltaTime)
 {
     if (not enabled)
     {
@@ -20,7 +20,7 @@ void HitboxComponent::lateUpdate(utils::DeltaTime)
     originPosition = owner->transform->getPosition() + offset;
 }
 
-bool HitboxComponent::intersects(const utils::Vector2f& position) const
+bool HitBoxComponent::intersects(const utils::Vector2f& position) const
 {
     if (not enabled)
     {

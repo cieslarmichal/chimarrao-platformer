@@ -3,7 +3,7 @@
 #include "GetProjectPath.h"
 #include "core/ClickableComponent.h"
 #include "core/GraphicsComponent.h"
-#include "core/HitboxComponent.h"
+#include "core/HitBoxComponent.h"
 #include "core/MouseOverComponent.h"
 #include "core/TextComponent.h"
 
@@ -49,7 +49,6 @@ void PauseState::initialize()
     for (auto& button : buttons)
     {
         button->loadDependentComponents();
-        button->start();
         button->getComponent<components::core::ClickableComponent>()->disable();
     }
 
@@ -194,7 +193,7 @@ void PauseState::addButton(const utils::Vector2f& position, const std::string& t
         rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
     button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, 30,
                                                           textColor, textOffset);
-    button->addComponent<components::core::HitboxComponent>(buttonSize);
+    button->addComponent<components::core::HitBoxComponent>(buttonSize);
     button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
 
     const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };

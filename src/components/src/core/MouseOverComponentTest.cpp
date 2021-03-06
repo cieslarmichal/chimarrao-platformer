@@ -28,7 +28,7 @@ class MouseOverComponentTest : public MouseOverComponentTest_Base
 public:
     MouseOverComponentTest()
     {
-        auto hitboxComponent = componentOwner.addComponent<HitboxComponent>(size, offset);
+        auto hitboxComponent = componentOwner.addComponent<HitBoxComponent>(size, offset);
         mouseOverComponent.loadDependentComponents();
         hitboxComponent->lateUpdate(deltaTime);
     }
