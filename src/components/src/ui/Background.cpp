@@ -42,7 +42,6 @@ Background::Background(const std::shared_ptr<graphics::RendererPool>& rendererPo
 
 void Background::update(utils::DeltaTime)
 {
-    throw 4;
 }
 
 std::string Background::getName() const

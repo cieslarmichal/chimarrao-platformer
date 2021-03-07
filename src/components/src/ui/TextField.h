@@ -25,9 +25,10 @@ public:
     void deactivate() override;
     void handleInputStatus(const input::InputStatus&) override;
     void setColor(graphics::Color);
-    void setText(const std::string&);
 
 private:
+    void setText(const std::string&);
+
     std::shared_ptr<input::InputManager> inputManager;
     const input::InputStatus* inputStatus;
     std::string name;

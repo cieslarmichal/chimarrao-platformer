@@ -21,6 +21,7 @@ public:
     std::string getName() const override;
     void activate() override;
     void deactivate() override;
+    void setColor(graphics::Color);
     void setChecked(bool checked);
 
 private:

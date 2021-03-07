@@ -11,11 +11,10 @@ enum class UIComponentType
     TextField
 };
 
-enum class UIComponentTypeWithText
+enum class UIComponentTypeWithLabel
 {
     Button,
-    Label,
-    TextField
+    Label
 };
 
 enum class UIComponentTypeWithCheck

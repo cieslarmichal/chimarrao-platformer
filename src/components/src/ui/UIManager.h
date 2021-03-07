@@ -12,7 +12,7 @@ public:
     virtual ~UIManager() = default;
 
     virtual void setColor(UIComponentType, const std::string& componentName, graphics::Color) = 0;
-    virtual void setText(UIComponentTypeWithText, const std::string& componentName,
+    virtual void setText(UIComponentTypeWithLabel, const std::string& componentName,
                          const std::string& text) = 0;
     virtual void setChecked(UIComponentTypeWithCheck, const std::string& componentName, bool checked) = 0;
 };

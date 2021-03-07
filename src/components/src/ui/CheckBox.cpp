@@ -78,6 +78,11 @@ void CheckBox::deactivate()
     checkBoxClickActionFrozen = true;
 }
 
+void CheckBox::setColor(graphics::Color color)
+{
+    coreComponentsOwner->getComponent<components::core::GraphicsComponent>()->setColor(color);
+}
+
 void CheckBox::setChecked(bool checked)
 {
     const auto text = checked ? "X" : "";

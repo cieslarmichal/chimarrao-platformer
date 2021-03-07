@@ -43,4 +43,9 @@ void Label::setText(const std::string& text)
 {
     coreComponentsOwner->getComponent<components::core::TextComponent>()->setText(text);
 }
+
+void Label::setColor(graphics::Color color)
+{
+    coreComponentsOwner->getComponent<components::core::TextComponent>()->setColor(color);
+}
 }

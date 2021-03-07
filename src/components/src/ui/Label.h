@@ -20,6 +20,7 @@ public:
     void activate() override;
     void deactivate() override;
     void setText(const std::string&);
+    void setColor(graphics::Color);
 
 private:
     std::string name;
