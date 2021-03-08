@@ -20,17 +20,17 @@ Button::Button(const std::shared_ptr<input::InputManager>& inputManager,
         throw exceptions::UIComponentConfigNotFound{"Button config not found"};
     }
 
-    name = buttonConfig->uniqueName->getName();
+    name = buttonConfig->uniqueName.getName();
     coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(buttonConfig->position);
     coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
-        rendererPool, buttonConfig->size, buttonConfig->position, buttonConfig->color,
+        rendererPool, buttonConfig->size, buttonConfig->position, buttonConfig->buttonColor,
         graphics::VisibilityLayer::First);
     coreComponentsOwner->addComponent<components::core::TextComponent>(
         rendererPool, buttonConfig->position, buttonConfig->text, buttonConfig->fontPath,
-        buttonConfig->fontSize, buttonConfig->color, buttonConfig->textOffset);
+        buttonConfig->fontSize, buttonConfig->textColor, buttonConfig->textOffset);
     coreComponentsOwner->addComponent<components::core::HitBoxComponent>(buttonConfig->size);
     coreComponentsOwner->addComponent<components::core::ClickableComponent>(
-        inputManager, std::move(buttonConfig->clickAction));
+        inputManager, buttonConfig->clickAction);
 
     if (buttonConfig->mouseOverActions)
     {

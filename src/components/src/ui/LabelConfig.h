@@ -10,11 +10,22 @@ namespace components::ui
 {
 struct LabelConfig
 {
-    std::unique_ptr<utils::UniqueName> uniqueName;
-    utils::Vector2f position;
-    graphics::Color color;
-    std::string text;
-    unsigned int fontSize;
-    std::string fontPath;
+    LabelConfig(const std::string& uniqueNameInit, utils::Vector2f positionInit, graphics::Color colorInit,
+                const std::string& textInit, unsigned int fontSizeInit, const std::string& fontPathInit)
+        : uniqueName{uniqueNameInit},
+          position{positionInit},
+          color{colorInit},
+          text{textInit},
+          fontSize{fontSizeInit},
+          fontPath{fontPathInit}
+    {
+    }
+
+    const utils::UniqueName uniqueName;
+    const utils::Vector2f position;
+    const graphics::Color color;
+    const std::string text;
+    const unsigned int fontSize;
+    const std::string fontPath;
 };
 }

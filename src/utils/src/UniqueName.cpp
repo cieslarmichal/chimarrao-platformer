@@ -16,6 +16,11 @@ UniqueName::UniqueName(std::string nameInit) : name{std::move(nameInit)}
     uniqueNames.insert(name);
 }
 
+UniqueName::~UniqueName()
+{
+    uniqueNames.erase(name);
+}
+
 std::string UniqueName::getName() const
 {
     return name;

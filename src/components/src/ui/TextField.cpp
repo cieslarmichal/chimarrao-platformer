@@ -25,7 +25,7 @@ TextField::TextField(const std::shared_ptr<input::InputManager>& inputManager,
         throw exceptions::UIComponentConfigNotFound{"TextField config not found"};
     }
 
-    name = textFieldConfig->uniqueName->getName();
+    name = textFieldConfig->uniqueName.getName();
     coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(textFieldConfig->position);
     coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
         rendererPool, textFieldConfig->size, textFieldConfig->position, textFieldConfig->color,

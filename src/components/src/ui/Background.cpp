@@ -20,7 +20,7 @@ Background::Background(const std::shared_ptr<graphics::RendererPool>& rendererPo
         throw exceptions::InvalidUIComponentConfig{"No background filling found"};
     }
 
-    name = backgroundConfig->uniqueName->getName();
+    name = backgroundConfig->uniqueName.getName();
 
     coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(backgroundConfig->position);
 

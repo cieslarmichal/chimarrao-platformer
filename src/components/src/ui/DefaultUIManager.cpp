@@ -22,6 +22,33 @@ static auto& tryToGetComponentByName(std::vector<T>& uiComponents, const std::st
 
     throw exceptions::UIComponentNotFound{"Component with name: " + nameToFind + " not found"};
 }
+
+template <typename T>
+void updateComponents(std::vector<T>& uiComponents, utils::DeltaTime deltaTime)
+{
+    for (auto & uiComponent : uiComponents)
+    {
+        uiComponent->update(deltaTime);
+    }
+}
+
+template <typename T>
+void activateComponents(std::vector<T>& uiComponents)
+{
+    for (auto & uiComponent : uiComponents)
+    {
+        uiComponent->activate();
+    }
+}
+
+template <typename T>
+void deactivateComponents(std::vector<T>& uiComponents)
+{
+    for (auto & uiComponent : uiComponents)
+    {
+        uiComponent->deactivate();
+    }
+}
 }
 
 DefaultUIManager::DefaultUIManager(const std::shared_ptr<input::InputManager>& inputManager,
@@ -40,6 +67,33 @@ DefaultUIManager::DefaultUIManager(const std::shared_ptr<input::InputManager>& i
     }
 
     createUIComponents(std::move(uiConfig));
+}
+
+void DefaultUIManager::update(utils::DeltaTime deltaTime)
+{
+    background->update(deltaTime);
+    updateComponents(buttons, deltaTime);
+    updateComponents(checkBoxes, deltaTime);
+    updateComponents(labels, deltaTime);
+    updateComponents(textFields, deltaTime);
+}
+
+void DefaultUIManager::activate()
+{
+    background->activate();
+    activateComponents(buttons);
+    activateComponents(checkBoxes);
+    activateComponents(labels);
+    activateComponents(textFields);
+}
+
+void DefaultUIManager::deactivate()
+{
+    background->deactivate();
+    deactivateComponents(buttons);
+    deactivateComponents(checkBoxes);
+    deactivateComponents(labels);
+    deactivateComponents(textFields);
 }
 
 void DefaultUIManager::setColor(UIComponentType componentType, const std::string& componentName,

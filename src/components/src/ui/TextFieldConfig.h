@@ -11,15 +11,33 @@ namespace components::ui
 {
 struct TextFieldConfig
 {
-    std::unique_ptr<utils::UniqueName> uniqueName;
-    utils::Vector2f position;
-    utils::Vector2f size;
-    graphics::Color color;
-    std::string text;
-    unsigned int fontSize;
-    std::string fontPath;
-    utils::Vector2f textOffset;
-    std::function<void(void)> clickInFieldAction;
-    std::function<void(std::string)> clickOutsideFieldAction;
+    TextFieldConfig(const std::string& uniqueNameInit, utils::Vector2f positionInit, utils::Vector2f sizeInit,
+                    graphics::Color colorInit, const std::string& textInit, unsigned int fontSizeInit,
+                    const std::string& fontPathInit, utils::Vector2f textOffsetInit,
+                    std::function<void(void)> clickInFieldActionInit,
+                    std::function<void(std::string)> clickOutsideFieldActionInit)
+        : uniqueName{uniqueNameInit},
+          position{positionInit},
+          size{sizeInit},
+          color{colorInit},
+          text{textInit},
+          fontSize{fontSizeInit},
+          fontPath{fontPathInit},
+          textOffset{textOffsetInit},
+          clickInFieldAction{std::move(clickInFieldActionInit)},
+          clickOutsideFieldAction{std::move(clickOutsideFieldActionInit)}
+    {
+    }
+
+    const utils::UniqueName uniqueName;
+    const utils::Vector2f position;
+    const utils::Vector2f size;
+    const graphics::Color color;
+    const std::string text;
+    const unsigned int fontSize;
+    const std::string fontPath;
+    const utils::Vector2f textOffset;
+    const std::function<void(void)> clickInFieldAction;
+    const std::function<void(std::string)> clickOutsideFieldAction;
 };
 }

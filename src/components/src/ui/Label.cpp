@@ -13,7 +13,7 @@ Label::Label(const std::shared_ptr<graphics::RendererPool>& rendererPool,
         throw exceptions::UIComponentConfigNotFound{"Label config not found"};
     }
 
-    name = labelConfig->uniqueName->getName();
+    name = labelConfig->uniqueName.getName();
     coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(labelConfig->position);
     coreComponentsOwner->addComponent<components::core::TextComponent>(
         rendererPool, labelConfig->position, labelConfig->text, labelConfig->fontPath, labelConfig->fontSize,

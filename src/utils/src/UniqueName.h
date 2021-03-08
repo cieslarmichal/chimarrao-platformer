@@ -9,6 +9,7 @@ class UniqueName
 {
 public:
     UniqueName(std::string);
+    ~UniqueName();
 
     UniqueName(const UniqueName&) = delete;
     UniqueName& operator=(const UniqueName&) = delete;

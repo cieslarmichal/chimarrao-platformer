@@ -2,11 +2,7 @@
 
 #include "GetProjectPath.h"
 #include "StlOperators.h"
-#include "core/ClickableComponent.h"
-#include "core/GraphicsComponent.h"
-#include "core/HitBoxComponent.h"
-#include "core/MouseOverComponent.h"
-#include "core/TextComponent.h"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -19,7 +15,7 @@ const auto sectionTextFontSize{37};
 const auto displayModeFontSize{12};
 const auto displayModeButtonSize = utils::Vector2f{8, 3};
 const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
-const auto backgroundPath =
+const std::string backgroundPath =
     utils::getProjectPath("chimarrao-platformer") + "resources/BG/menu_background.jpg";
 
 const auto settingsTitlePosition = utils::Vector2f{32, 6};
@@ -51,13 +47,15 @@ const auto backToMenuButtonPosition = utils::Vector2f{34.5, 48};
 const auto applyChangesButtonPosition = utils::Vector2f{55, 48};
 }
 
+// TODO: pass uiManager in constructor
 SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<input::InputManager>& inputManagerInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                              std::stack<std::unique_ptr<State>>& statesInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       shouldBackToMenu{false},
-      timeAfterButtonsCanBeClicked{0.3f}
+      uiManager{std::make_unique<components::ui::DefaultUIManager>(inputManagerInit, rendererPoolInit,
+                                                                   createSettingsUIConfig())}
 {
     supportedResolutions = window->getSupportedResolutions();
     supportedFrameLimits = window->getSupportedFrameLimits();
@@ -65,54 +63,37 @@ SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
 
     synchronizeWindowSettings();
 
-    createBackground();
-    createSettingsTitle();
-    createBackToMenuButton();
-    createApplyChangesButton();
-    createDisplayModeSection();
-    createResolutionSection();
-    createVsyncSection();
-    createFrameLimitSection();
-
-    initialize();
-}
-
-void SettingsState::initialize()
-{
-    for (auto& button : buttons)
+    if (selectedWindowsSettings.displayMode == window::DisplayMode::Window)
     {
-        button->loadDependentComponents();
-        button->getComponent<components::core::ClickableComponent>()->disable();
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsWindowModeButton",
+                            buttonHoverColor);
     }
+    else
+    {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsFullscreenModeButton",
+                            buttonHoverColor);
+    }
+
+    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsResolutionValueLabel",
+                       toString(selectedWindowsSettings.resolution));
+    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsFrameLimitValueLabel",
+                       std::to_string(selectedWindowsSettings.frameLimit));
+    uiManager->setChecked(components::ui::UIComponentTypeWithCheck::CheckBox, "settingsVsyncCheckBox",
+                          selectedWindowsSettings.vsync);
 }
 
 void SettingsState::update(const utils::DeltaTime& deltaTime)
 {
-    if (buttonsActionsFrozen &&
-        freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
-    {
-        unfreezeButtons();
-    }
-
     if (shouldBackToMenu)
     {
         backToMenu();
         return;
     }
 
-    for (auto& button : buttons)
-    {
-        button->update(deltaTime);
-    }
+    uiManager->update(deltaTime);
 }
 
-void SettingsState::lateUpdate(const utils::DeltaTime& deltaTime)
-{
-    for (auto& button : buttons)
-    {
-        button->lateUpdate(deltaTime);
-    }
-}
+void SettingsState::lateUpdate(const utils::DeltaTime&) {}
 
 void SettingsState::render()
 {
@@ -130,20 +111,14 @@ void SettingsState::activate()
 
     synchronizeWindowSettings();
 
-    for (auto& button : buttons)
-    {
-        button->enable();
-    }
+    uiManager->activate();
 }
 
 void SettingsState::deactivate()
 {
     active = false;
 
-    for (auto& button : buttons)
-    {
-        button->disable();
-    }
+    uiManager->deactivate();
 }
 
 void SettingsState::synchronizeWindowSettings()
@@ -182,14 +157,6 @@ void SettingsState::applyWindowSettingsChanges()
     window->setFramerateLimit(selectedWindowsSettings.frameLimit);
 }
 
-void SettingsState::unfreezeButtons()
-{
-    buttonsActionsFrozen = false;
-    for (auto& button : buttons)
-    {
-        button->getComponent<components::core::ClickableComponent>()->enable();
-    }
-}
 
 void SettingsState::increaseResolution()
 {
@@ -203,8 +170,8 @@ void SettingsState::increaseResolution()
     }
 
     selectedWindowsSettings.resolution = supportedResolutions[selectedResolutionIndex];
-    texts[resolutionTextId]->getComponent<components::core::TextComponent>()->setText(
-        toString(selectedWindowsSettings.resolution));
+    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsResolutionValueLabel",
+                       toString(selectedWindowsSettings.resolution));
 }
 
 void SettingsState::decreaseResolution()
@@ -219,8 +186,8 @@ void SettingsState::decreaseResolution()
     }
 
     selectedWindowsSettings.resolution = supportedResolutions[selectedResolutionIndex];
-    texts[resolutionTextId]->getComponent<components::core::TextComponent>()->setText(
-        toString(selectedWindowsSettings.resolution));
+    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsResolutionValueLabel",
+                       toString(selectedWindowsSettings.resolution));
 }
 
 void SettingsState::increaseFrameLimit()
@@ -235,8 +202,8 @@ void SettingsState::increaseFrameLimit()
     }
 
     selectedWindowsSettings.frameLimit = supportedFrameLimits[selectedFrameLimitIndex];
-    texts[frameLimitTextId]->getComponent<components::core::TextComponent>()->setText(
-        std::to_string(selectedWindowsSettings.frameLimit));
+    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsFrameLimitValueLabel",
+                       std::to_string(selectedWindowsSettings.frameLimit));
 }
 
 void SettingsState::decreaseFrameLimit()
@@ -251,8 +218,8 @@ void SettingsState::decreaseFrameLimit()
     }
 
     selectedWindowsSettings.frameLimit = supportedFrameLimits[selectedFrameLimitIndex];
-    texts[frameLimitTextId]->getComponent<components::core::TextComponent>()->setText(
-        std::to_string(selectedWindowsSettings.frameLimit));
+    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsFrameLimitValueLabel",
+                       std::to_string(selectedWindowsSettings.frameLimit));
 }
 
 void SettingsState::switchVsync()
@@ -260,32 +227,31 @@ void SettingsState::switchVsync()
     if (selectedWindowsSettings.vsync)
     {
         selectedWindowsSettings.vsync = false;
-        buttons[vsyncButtonId]->getComponent<components::core::TextComponent>()->setText("");
+        uiManager->setChecked(components::ui::UIComponentTypeWithCheck::CheckBox, "settingsVsyncCheckBox",
+                              false);
     }
     else
     {
         selectedWindowsSettings.vsync = true;
-        buttons[vsyncButtonId]->getComponent<components::core::TextComponent>()->setText("X");
+        uiManager->setChecked(components::ui::UIComponentTypeWithCheck::CheckBox, "settingsVsyncCheckBox",
+                              true);
     }
 }
 
 void SettingsState::setWindowMode()
 {
     selectedWindowsSettings.displayMode = window::DisplayMode::Window;
-
-    buttons[windowModeButtonId]->getComponent<components::core::GraphicsComponent>()->setColor(
-        buttonHoverColor);
-    buttons[fullscreenModeButtonId]->getComponent<components::core::GraphicsComponent>()->setColor(
-        buttonColor);
+    uiManager->setColor(components::ui::UIComponentType::Button, "settingsWindowModeButton",
+                        buttonHoverColor);
+    uiManager->setColor(components::ui::UIComponentType::Button, "settingsFullscreenModeButton", buttonColor);
 }
 
 void SettingsState::setFullscreenMode()
 {
     selectedWindowsSettings.displayMode = window::DisplayMode::Fullscreen;
-
-    buttons[windowModeButtonId]->getComponent<components::core::GraphicsComponent>()->setColor(buttonColor);
-    buttons[fullscreenModeButtonId]->getComponent<components::core::GraphicsComponent>()->setColor(
-        buttonHoverColor);
+    uiManager->setColor(components::ui::UIComponentType::Button, "settingsWindowModeButton", buttonColor);
+    uiManager->setColor(components::ui::UIComponentType::Button, "settingsFullscreenModeButton",
+                        buttonHoverColor);
 }
 
 void SettingsState::backToMenu()
@@ -298,133 +264,209 @@ void SettingsState::backToMenu()
     }
 }
 
-void SettingsState::createBackground()
+std::unique_ptr<components::ui::UIConfig> SettingsState::createSettingsUIConfig()
 {
-    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{80, 60},
-                                                                  utils::Vector2f{0, 0}, backgroundPath,
-                                                                  graphics::VisibilityLayer::Background);
-}
+    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
+    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
+    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
+    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
 
-void SettingsState::createSettingsTitle()
-{
-    addText(settingsTitlePosition, "Settings", 37);
-}
+    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
+        "settingsBackground", utils::Vector2f{0, 0}, utils::Vector2f{80, 60}, backgroundPath);
 
-void SettingsState::createBackToMenuButton()
-{
+    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "settingsTitleLabel", settingsTitlePosition, graphics::Color::Black, "Settings", 37, fontPath);
+    labelsConfig.emplace_back(std::move(titleLabelConfig));
+
     const auto backToMenuButtonSize = utils::Vector2f{13, 5};
-    addButtonWithMouseOver(backToMenuButtonPosition, backToMenuButtonSize, "Back", sectionTextFontSize,
-                           utils::Vector2f{2, 0}, [this] { shouldBackToMenu = true; });
-}
+    const auto backToMenuButtonOnMouseOver = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsBackToMenuButton",
+                            buttonHoverColor);
+    };
+    const auto backToMenuButtonOnMouseOut = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsBackToMenuButton", buttonColor);
+    };
+    auto backToMenuButtonMouseOverActions =
+        components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
+    auto backToMenuClickAction = [this] { shouldBackToMenu = true; };
+    auto backToMenuButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "settingsBackToMenuButton", backToMenuButtonPosition, backToMenuButtonSize, buttonColor, "Back",
+        graphics::Color::Black, sectionTextFontSize, fontPath, utils::Vector2f{2, 0}, backToMenuClickAction,
+        backToMenuButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(backToMenuButtonConfig));
 
-void SettingsState::createApplyChangesButton()
-{
+    /////////////////////////////////////////////////////////////////////////////////////////////////
+
     const auto applyChangesButtonSize = utils::Vector2f{13, 5};
-    addButtonWithMouseOver(applyChangesButtonPosition, applyChangesButtonSize, "Apply", sectionTextFontSize,
-                           utils::Vector2f{1, 0}, [this] { applyWindowSettingsChanges(); });
-}
+    const auto applyChangesButtonOnMouseOver = [=] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsApplyChangesButton",
+                            buttonHoverColor);
+    };
+    const auto applyChangesButtonOnMouseOut = [=] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsApplyChangesButton",
+                            buttonColor);
+    };
+    auto applyChangesButtonMouseOverActions =
+        components::ui::MouseOverActions{applyChangesButtonOnMouseOver, applyChangesButtonOnMouseOut};
+    auto applyChangesClickAction = [this] { applyWindowSettingsChanges(); };
+    auto applyChangesButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "settingsApplyChangesButton", applyChangesButtonPosition, applyChangesButtonSize, buttonColor,
+        "Apply", graphics::Color::Black, sectionTextFontSize, fontPath, utils::Vector2f{1, 0},
+        applyChangesClickAction, applyChangesButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(applyChangesButtonConfig));
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void SettingsState::createDisplayModeSection()
-{
-    addText(displayModeSectionPosition, "Display mode:", 30);
-    windowModeButtonId = addButton(windowModeButtonPosition, displayModeButtonSize, "Window",
-                                   displayModeFontSize, utils::Vector2f{2, 0.9}, [this] { setWindowMode(); });
-    fullscreenModeButtonId =
-        addButton(fullscreenModeButtonPosition, displayModeButtonSize, "Fullscreen", displayModeFontSize,
-                  utils::Vector2f{0.5, 0.9}, [this] { setFullscreenMode(); });
+    auto displayModeLabelConfig =
+        std::make_unique<components::ui::LabelConfig>("settingsDisplayModeLabel", displayModeSectionPosition,
+                                                      graphics::Color::Black, "Display mode:", 30, fontPath);
+    labelsConfig.emplace_back(std::move(displayModeLabelConfig));
 
-    if (selectedWindowsSettings.displayMode == window::DisplayMode::Window)
-    {
-        buttons[windowModeButtonId]->getComponent<components::core::GraphicsComponent>()->setColor(
-            buttonHoverColor);
-    }
-    else
-    {
-        buttons[fullscreenModeButtonId]->getComponent<components::core::GraphicsComponent>()->setColor(
-            buttonHoverColor);
-    }
-}
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    auto windowModeClickAction = [this] { setWindowMode(); };
+    auto windowModeButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "settingsWindowModeButton", windowModeButtonPosition, displayModeButtonSize, buttonColor, "Window",
+        graphics::Color::Black, displayModeFontSize, fontPath, utils::Vector2f{2, 0.9}, windowModeClickAction);
+    buttonsConfig.emplace_back(std::move(windowModeButtonConfig));
 
-void SettingsState::createResolutionSection()
-{
-    addText(resolutionSectionPosition, "Resolution:", 30);
-    resolutionTextId =
-        addText(resolutionTextFieldPosition, toString(supportedResolutions[selectedResolutionIndex]), 20);
-    addButtonWithMouseOver(resolutionDecreaseButtonPosition, changeResolutionButtonSize, "<", 20,
-                           utils::Vector2f{0.6, -0.3}, [this] { decreaseResolution(); });
-    addButtonWithMouseOver(resolutionIncreaseButtonPosition, changeResolutionButtonSize, ">", 20,
-                           utils::Vector2f{0.6, -0.3}, [this] { increaseResolution(); });
-}
+    ////////////////////////////////////////////////////////////////////
 
-void SettingsState::createVsyncSection()
-{
-    addText(vsyncSectionPosition, "Vsync:", 30);
-    const std::string vsyncText = selectedWindowsSettings.vsync ? "X" : "";
-    vsyncButtonId = addButtonWithMouseOver(vsyncButtonPosition, vsyncButtonSize, vsyncText, 25,
-                                           utils::Vector2f{0.8, 0.0}, [this] { switchVsync(); });
-}
+    auto fullscreenModeClickAction = [this] { setFullscreenMode(); };
+    auto fullscreenModeButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "settingsFullscreenModeButton", fullscreenModeButtonPosition, displayModeButtonSize, buttonColor,
+        "Fullscreen", graphics::Color::Black, displayModeFontSize, fontPath, utils::Vector2f{0.5, 0.9},
+        fullscreenModeClickAction);
+    buttonsConfig.emplace_back(std::move(fullscreenModeButtonConfig));
 
-void SettingsState::createFrameLimitSection()
-{
-    addText(frameLimitSectionPosition, "Frame limit:", 30);
-    frameLimitTextId = addText(frameLimitTextFieldPosition,
-                               std::to_string(supportedFrameLimits[selectedFrameLimitIndex]), 20);
-    addButtonWithMouseOver(frameLimitDecreaseButtonPosition, changeResolutionButtonSize, "<", 20,
-                           utils::Vector2f{0.6, -0.3}, [this] { decreaseFrameLimit(); });
-    addButtonWithMouseOver(frameLimitIncreaseButtonPosition, changeResolutionButtonSize, ">", 20,
-                           utils::Vector2f{0.6, -0.3}, [this] { increaseFrameLimit(); });
-}
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned int SettingsState::addButton(const utils::Vector2f& position, const utils::Vector2f& size,
-                                      const std::string& text, unsigned int fontSize,
-                                      const utils::Vector2f& textOffset,
-                                      std::function<void(void)> clickAction)
-{
-    auto buttonId = buttons.size();
-    auto button = std::make_unique<components::core::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
-        rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
-                                                          graphics::Color::Black, textOffset);
-    button->addComponent<components::core::HitBoxComponent>(size);
-    button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
+    auto resolutionLabelConfig =
+        std::make_unique<components::ui::LabelConfig>("settingsResolutionLabel", resolutionSectionPosition,
+                                                      graphics::Color::Black, "Resolution:", 30, fontPath);
+    labelsConfig.emplace_back(std::move(resolutionLabelConfig));
 
-    buttons.push_back(std::move(button));
-    return buttonId;
-}
+    //////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned int SettingsState::addButtonWithMouseOver(const utils::Vector2f& position,
-                                                   const utils::Vector2f& size, const std::string& text,
-                                                   unsigned int fontSize, const utils::Vector2f& textOffset,
-                                                   std::function<void(void)> clickAction)
-{
-    auto buttonId = buttons.size();
-    auto button = std::make_unique<components::core::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
-        rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
-                                                          graphics::Color::Black, textOffset);
-    button->addComponent<components::core::HitBoxComponent>(size);
-    button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
+    auto resolutionValueLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "settingsResolutionValueLabel", resolutionTextFieldPosition, graphics::Color::Black, "", 20,
+        fontPath);
+    labelsConfig.emplace_back(std::move(resolutionValueLabelConfig));
 
-    const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };
-    const auto changeColorOnMouseOut = [=] { graphicsComponent->setColor(buttonColor); };
-    button->addComponent<components::core::MouseOverComponent>(inputManager, changeColorOnMouseOver,
-                                                               changeColorOnMouseOut);
-    buttons.push_back(std::move(button));
-    return buttonId;
-}
+    //////////////////////////////////////////////////////////////////////////////////////////////
 
-unsigned int SettingsState::addText(const utils::Vector2f& position, const std::string& description,
-                                    unsigned int fontSize)
-{
-    auto textId = texts.size();
-    auto text = std::make_unique<components::core::ComponentOwner>(position);
-    text->addComponent<components::core::TextComponent>(rendererPool, position, description, fontPath,
-                                                        fontSize, graphics::Color::Black);
-    texts.push_back(std::move(text));
-    return textId;
+    const auto resolutionDecreaseButtonOnMouseOver = [=] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsResolutionDecreaseButton",
+                            buttonHoverColor);
+    };
+    const auto resolutionDecreaseButtonOnMouseOut = [=] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsResolutionDecreaseButton",
+                            buttonColor);
+    };
+    auto resolutionDecreaseButtonMouseOverActions = components::ui::MouseOverActions{
+        resolutionDecreaseButtonOnMouseOver, resolutionDecreaseButtonOnMouseOut};
+    auto resolutionDecreaseButtonClickAction = [this] { decreaseResolution(); };
+    auto resolutionDecreaseButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "settingsResolutionDecreaseButton", resolutionDecreaseButtonPosition, changeResolutionButtonSize,
+        buttonColor, "<", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6, -0.3},
+        resolutionDecreaseButtonClickAction, resolutionDecreaseButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(resolutionDecreaseButtonConfig));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    const auto resolutionIncreaseButtonOnMouseOver = [=] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsResolutionIncreaseButton",
+                            buttonHoverColor);
+    };
+    const auto resolutionIncreaseButtonOnMouseOut = [=] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsResolutionIncreaseButton",
+                            buttonColor);
+    };
+    auto resolutionIncreaseButtonMouseOverActions = components::ui::MouseOverActions{
+        resolutionIncreaseButtonOnMouseOver, resolutionIncreaseButtonOnMouseOut};
+    auto resolutionIncreaseButtonClickAction = [this] { increaseResolution(); };
+    auto resolutionIncreaseButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "settingsResolutionIncreaseButton", resolutionIncreaseButtonPosition, changeResolutionButtonSize,
+        buttonColor, ">", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6, -0.3},
+        resolutionIncreaseButtonClickAction, resolutionIncreaseButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(resolutionIncreaseButtonConfig));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    auto vsyncLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "settingsVsyncLabel", vsyncSectionPosition, graphics::Color::Black, "Vsync:", 30, fontPath);
+    labelsConfig.emplace_back(std::move(vsyncLabelConfig));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    const auto vsyncCheckBoxOnMouseOver = [=] {
+        uiManager->setColor(components::ui::UIComponentType::CheckBox, "settingsVsyncCheckBox",
+                            buttonHoverColor);
+    };
+    const auto vsyncCheckBoxOnMouseOut = [=] {
+        uiManager->setColor(components::ui::UIComponentType::CheckBox, "settingsVsyncCheckBox", buttonColor);
+    };
+    auto vsyncCheckBoxMouseOverActions =
+        components::ui::MouseOverActions{vsyncCheckBoxOnMouseOver, vsyncCheckBoxOnMouseOut};
+    auto vsyncCheckBoxClickAction = [this] { switchVsync(); };
+    auto vsyncCheckBoxConfig = std::make_unique<components::ui::CheckBoxConfig>(
+        "settingsVsyncCheckBox", vsyncButtonPosition, vsyncButtonSize, buttonColor, false, 25, fontPath,
+        utils::Vector2f{0.8, 0.0}, vsyncCheckBoxClickAction, vsyncCheckBoxMouseOverActions);
+    checkBoxesConfig.emplace_back(std::move(vsyncCheckBoxConfig));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    auto frameLimitLabelConfig =
+        std::make_unique<components::ui::LabelConfig>("settingsFrameLimitLabel", frameLimitSectionPosition,
+                                                      graphics::Color::Black, "Frame limit:", 30, fontPath);
+    labelsConfig.emplace_back(std::move(frameLimitLabelConfig));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    auto frameLimitValueLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "settingsFrameLimitValueLabel", frameLimitTextFieldPosition, graphics::Color::Black, "", 20,
+        fontPath);
+    labelsConfig.emplace_back(std::move(frameLimitValueLabelConfig));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    const auto frameLimitDecreaseButtonOnMouseOver = [=] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsFrameLimitDecreaseButton",
+                            buttonHoverColor);
+    };
+    const auto frameLimitDecreaseButtonOnMouseOut = [=] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsFrameLimitDecreaseButton",
+                            buttonColor);
+    };
+    auto frameLimitDecreaseButtonMouseOverActions = components::ui::MouseOverActions{
+        frameLimitDecreaseButtonOnMouseOver, frameLimitDecreaseButtonOnMouseOut};
+    auto frameLimitDecreaseButtonClickAction = [this] { decreaseFrameLimit(); };
+    auto frameLimitDecreaseButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "settingsFrameLimitDecreaseButton", frameLimitDecreaseButtonPosition, changeResolutionButtonSize,
+        buttonColor, "<", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6, -0.3},
+        frameLimitDecreaseButtonClickAction, frameLimitDecreaseButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(frameLimitDecreaseButtonConfig));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    const auto frameLimitIncreaseButtonOnMouseOver = [=] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsFrameLimitIncreaseButton",
+                            buttonHoverColor);
+    };
+    const auto frameLimitIncreaseButtonOnMouseOut = [=] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsFrameLimitIncreaseButton",
+                            buttonColor);
+    };
+    auto frameLimitIncreaseButtonMouseOverActions = components::ui::MouseOverActions{
+        frameLimitIncreaseButtonOnMouseOver, frameLimitIncreaseButtonOnMouseOut};
+    auto frameLimitIncreaseButtonClickAction = [this] { increaseFrameLimit(); };
+    auto frameLimitIncreaseButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "settingsFrameLimitIncreaseButton", frameLimitIncreaseButtonPosition, changeResolutionButtonSize,
+        buttonColor, ">", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6, -0.3},
+        frameLimitIncreaseButtonClickAction, frameLimitIncreaseButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(frameLimitIncreaseButtonConfig));
+
+    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
+                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
+                                                      std::move(textFieldsConfig));
 }
 
 }
