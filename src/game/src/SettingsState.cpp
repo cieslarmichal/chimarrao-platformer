@@ -53,10 +53,12 @@ SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                              std::stack<std::unique_ptr<State>>& statesInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
-      shouldBackToMenu{false},
+      shouldBackToMenu{false}, inputStatus{nullptr},
       uiManager{std::make_unique<components::ui::DefaultUIManager>(inputManagerInit, rendererPoolInit,
                                                                    createSettingsUIConfig())}
 {
+    inputManager->registerObserver(this);
+
     supportedResolutions = window->getSupportedResolutions();
     supportedFrameLimits = window->getSupportedFrameLimits();
     // TODO: throw if supported resolution or frameLimits == 0
@@ -80,6 +82,11 @@ SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
                        std::to_string(selectedWindowsSettings.frameLimit));
     uiManager->setChecked(components::ui::UIComponentTypeWithCheck::CheckBox, "settingsVsyncCheckBox",
                           selectedWindowsSettings.vsync);
+}
+
+SettingsState::~SettingsState()
+{
+    inputManager->removeObserver(this);
 }
 
 void SettingsState::update(const utils::DeltaTime& deltaTime)
@@ -108,17 +115,19 @@ std::string SettingsState::getName() const
 void SettingsState::activate()
 {
     active = true;
-
     synchronizeWindowSettings();
-
     uiManager->activate();
 }
 
 void SettingsState::deactivate()
 {
     active = false;
-
     uiManager->deactivate();
+}
+
+void SettingsState::handleInputStatus(const input::InputStatus& inputStatusInit)
+{
+    inputStatus = &inputStatusInit;
 }
 
 void SettingsState::synchronizeWindowSettings()

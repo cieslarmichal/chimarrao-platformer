@@ -29,8 +29,12 @@ Button::Button(const std::shared_ptr<input::InputManager>& inputManager,
         rendererPool, buttonConfig->position, buttonConfig->text, buttonConfig->fontPath,
         buttonConfig->fontSize, buttonConfig->textColor, buttonConfig->textOffset);
     coreComponentsOwner->addComponent<components::core::HitBoxComponent>(buttonConfig->size);
-    coreComponentsOwner->addComponent<components::core::ClickableComponent>(
-        inputManager, buttonConfig->clickAction);
+
+    if (buttonConfig->clickAction)
+    {
+        coreComponentsOwner->addComponent<components::core::ClickableComponent>(inputManager,
+                                                                                *buttonConfig->clickAction);
+    }
 
     if (buttonConfig->mouseOverActions)
     {
@@ -40,7 +44,11 @@ Button::Button(const std::shared_ptr<input::InputManager>& inputManager,
     }
 
     coreComponentsOwner->loadDependentComponents();
-    coreComponentsOwner->getComponent<components::core::ClickableComponent>()->disable();
+
+    if (auto clickableComponent = coreComponentsOwner->getComponent<components::core::ClickableComponent>())
+    {
+        clickableComponent->disable();
+    }
 
     freezeClickableButtonTimer.start();
 }
@@ -51,7 +59,11 @@ void Button::update(utils::DeltaTime deltaTime)
         freezeClickableButtonTimer.getElapsedSeconds() > timeAfterButtonCanBeClicked)
     {
         buttonClickActionFrozen = false;
-        coreComponentsOwner->getComponent<components::core::ClickableComponent>()->enable();
+        if (auto clickableComponent =
+                coreComponentsOwner->getComponent<components::core::ClickableComponent>())
+        {
+            clickableComponent->enable();
+        }
     }
 
     coreComponentsOwner->update(deltaTime);
@@ -66,7 +78,10 @@ std::string Button::getName() const
 void Button::activate()
 {
     coreComponentsOwner->enable();
-    coreComponentsOwner->getComponent<components::core::ClickableComponent>()->disable();
+    if (auto clickableComponent = coreComponentsOwner->getComponent<components::core::ClickableComponent>())
+    {
+        clickableComponent->enable();
+    }
     freezeClickableButtonTimer.restart();
     buttonClickActionFrozen = true;
 }

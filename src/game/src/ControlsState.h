@@ -4,6 +4,8 @@
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
+#include "ui/UIConfig.h"
+#include "ui/UIManager.h"
 
 namespace game
 {
@@ -16,7 +18,6 @@ public:
                            std::stack<std::unique_ptr<State>>&);
     ~ControlsState();
 
-    void initialize();
     void update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
@@ -26,28 +27,11 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
-    void unfreezeButtons();
     void backToMenu();
-    void createBackground();
-    void createControlsTitle();
-    void createBackToMenuButton();
-    void createControlButtons();
-    void createDescriptionsForControlButtons();
-    void addNonClickableButton(const utils::Vector2f& position, const utils::Vector2f& size,
-                               const std::string& text, unsigned int fontSize,
-                               const utils::Vector2f& textOffset);
-    void addButtonWithMouseOver(const utils::Vector2f& position, const utils::Vector2f& size,
-                                const std::string& text, unsigned int fontSize,
-                                const utils::Vector2f& textOffset, std::function<void(void)> clickAction);
-    void addText(const utils::Vector2f& position, const std::string& description, unsigned int fontSize);
+    std::unique_ptr<components::ui::UIConfig> createSettingsUIConfig();
 
     bool shouldBackToMenu;
     const input::InputStatus* inputStatus;
-    std::unique_ptr<components::core::ComponentOwner> background;
-    std::vector<std::unique_ptr<components::core::ComponentOwner>> texts;
-    std::vector<std::unique_ptr<components::core::ComponentOwner>> buttons;
-    bool buttonsActionsFrozen = true;
-    utils::Timer freezeClickableButtonsTimer;
-    const float timeAfterButtonsCanBeClicked;
+    std::unique_ptr<components::ui::UIManager> uiManager;
 };
 }

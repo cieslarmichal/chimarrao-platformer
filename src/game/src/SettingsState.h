@@ -9,21 +9,22 @@
 
 namespace game
 {
-class SettingsState : public State
+class SettingsState : public State, public input::InputObserver
 {
 public:
     explicit SettingsState(const std::shared_ptr<window::Window>&,
                            const std::shared_ptr<input::InputManager>&,
                            const std::shared_ptr<graphics::RendererPool>&,
                            std::stack<std::unique_ptr<State>>&);
+    ~SettingsState();
 
-    void initialize();
     void update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;
     void activate() override;
     void deactivate() override;
+    void handleInputStatus(const input::InputStatus&) override;
 
 private:
     void synchronizeWindowSettings();
@@ -44,6 +45,7 @@ private:
     unsigned int selectedResolutionIndex = 0;
     std::vector<unsigned int> supportedFrameLimits;
     unsigned int selectedFrameLimitIndex = 0;
+    const input::InputStatus* inputStatus;
     std::unique_ptr<components::ui::UIManager> uiManager;
 };
 }

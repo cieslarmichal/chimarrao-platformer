@@ -2,11 +2,7 @@
 
 #include "GetProjectPath.h"
 #include "StlOperators.h"
-#include "core/ClickableComponent.h"
-#include "core/GraphicsComponent.h"
-#include "core/HitBoxComponent.h"
-#include "core/MouseOverComponent.h"
-#include "core/TextComponent.h"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -55,17 +51,10 @@ ControlsState::ControlsState(const std::shared_ptr<window::Window>& windowInit,
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       shouldBackToMenu{false},
       inputStatus{nullptr},
-      timeAfterButtonsCanBeClicked{0.3f}
+      uiManager{std::make_unique<components::ui::DefaultUIManager>(inputManagerInit, rendererPoolInit,
+                                                                   createSettingsUIConfig())}
 {
     inputManager->registerObserver(this);
-
-    createBackground();
-    createControlsTitle();
-    createBackToMenuButton();
-    createControlButtons();
-    createDescriptionsForControlButtons();
-
-    initialize();
 }
 
 ControlsState::~ControlsState()
@@ -73,44 +62,19 @@ ControlsState::~ControlsState()
     inputManager->removeObserver(this);
 }
 
-void ControlsState::initialize()
-{
-    for (auto& button : buttons)
-    {
-        button->loadDependentComponents();
-        if (auto clickableComponent = button->getComponent<components::core::ClickableComponent>())
-        {
-            clickableComponent->disable();
-        }
-    }
-}
-
 void ControlsState::update(const utils::DeltaTime& deltaTime)
 {
-    if (buttonsActionsFrozen &&
-        freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
-    {
-        unfreezeButtons();
-    }
-
     if (shouldBackToMenu)
     {
         backToMenu();
         return;
     }
 
-    for (auto& button : buttons)
-    {
-        button->update(deltaTime);
-    }
+    uiManager->update(deltaTime);
 }
 
 void ControlsState::lateUpdate(const utils::DeltaTime& deltaTime)
 {
-    for (auto& button : buttons)
-    {
-        button->lateUpdate(deltaTime);
-    }
 }
 
 void ControlsState::render()
@@ -126,38 +90,18 @@ std::string ControlsState::getName() const
 void ControlsState::activate()
 {
     active = true;
-
-    for (auto& button : buttons)
-    {
-        button->enable();
-    }
+    uiManager->activate();
 }
 
 void ControlsState::deactivate()
 {
     active = false;
-
-    for (auto& button : buttons)
-    {
-        button->disable();
-    }
+    uiManager->deactivate();
 }
 
 void ControlsState::handleInputStatus(const input::InputStatus& inputStatusInit)
 {
     inputStatus = &inputStatusInit;
-}
-
-void ControlsState::unfreezeButtons()
-{
-    buttonsActionsFrozen = false;
-    for (auto& button : buttons)
-    {
-        if (auto clickableComponent = button->getComponent<components::core::ClickableComponent>())
-        {
-            clickableComponent->enable();
-        }
-    }
 }
 
 void ControlsState::backToMenu()
@@ -170,97 +114,120 @@ void ControlsState::backToMenu()
     }
 }
 
-void ControlsState::createBackground()
+std::unique_ptr<components::ui::UIConfig> ControlsState::createSettingsUIConfig()
 {
-    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{80, 60},
-                                                                  utils::Vector2f{0, 0}, backgroundPath,
-                                                                  graphics::VisibilityLayer::Background);
-}
+    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
+    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
+    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
+    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
 
-void ControlsState::createControlsTitle()
-{
-    addText(controlsTitlePosition, "Controls", 37);
-}
+    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
+        "controlsBackground", utils::Vector2f{0, 0}, utils::Vector2f{80, 60}, backgroundPath);
 
-void ControlsState::createControlButtons()
-{
-    addNonClickableButton(upButtonPosition, controlButtonSize, "^", controlButtonFontSize,
-                          utils::Vector2f{3.5, 0.7});
-    addNonClickableButton(downButtonPosition, controlButtonSize, "v", controlButtonFontSize,
-                          utils::Vector2f{3.5, 0.1});
-    addNonClickableButton(rightButtonPosition, controlButtonSize, "->", controlButtonFontSize,
-                          utils::Vector2f{3, 0.2});
-    addNonClickableButton(leftButtonPosition, controlButtonSize, "<-", controlButtonFontSize,
-                          utils::Vector2f{3, 0.2});
-    addNonClickableButton(spaceButtonPosition, controlButtonSize, "Space", controlButtonFontSize,
-                          utils::Vector2f{1.0, 0.2});
-    addNonClickableButton(shiftButtonPosition, controlButtonSize, "Shift", controlButtonFontSize,
-                          utils::Vector2f{1.0, 0.2});
-    addNonClickableButton(ctrlButtonPosition, controlButtonSize, "Ctrl", controlButtonFontSize,
-                          utils::Vector2f{1.7, 0.2});
-    addNonClickableButton(eButtonPosition, controlButtonSize, "E", controlButtonFontSize,
-                          utils::Vector2f{3.5, 0.2});
-}
+    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "controlsTitleLabel", controlsTitlePosition, graphics::Color::Black, "Controls", 37, fontPath);
+    labelsConfig.emplace_back(std::move(titleLabelConfig));
 
-void ControlsState::createDescriptionsForControlButtons()
-{
-    addText(upDescriptionPosition, "Jump", controlButtonFontSize);
-    addText(downDescriptionPosition, "Squat", controlButtonFontSize);
-    addText(rightDescriptionPosition, "Move right", controlButtonFontSize);
-    addText(leftDescriptionPosition, "Move left", controlButtonFontSize);
-    addText(spaceDescriptionPosition, "Attack", controlButtonFontSize);
-    addText(shiftDescriptionPosition, "Speed up", controlButtonFontSize);
-    addText(ctrlDescriptionPosition, "Not defined", controlButtonFontSize);
-    addText(eDescriptionPosition, "Pick item", controlButtonFontSize);
-}
-
-void ControlsState::createBackToMenuButton()
-{
     const auto backToMenuButtonSize = utils::Vector2f{13, 5};
-    addButtonWithMouseOver(backToMenuButtonPosition, backToMenuButtonSize, "Back", 37, utils::Vector2f{2, 0},
-                           [this] { shouldBackToMenu = true; });
-}
+    const auto backToMenuButtonOnMouseOver = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "controlsBackToMenuButton",
+                            buttonHoverColor);
+    };
+    const auto backToMenuButtonOnMouseOut = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "controlsBackToMenuButton", buttonColor);
+    };
+    auto backToMenuButtonMouseOverActions =
+        components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
+    auto backToMenuClickAction = [this] { shouldBackToMenu = true; };
+    auto backToMenuButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "controlsBackToMenuButton", backToMenuButtonPosition, backToMenuButtonSize, buttonColor, "Back",
+        graphics::Color::Black, 37, fontPath, utils::Vector2f{2, 0}, backToMenuClickAction,
+        backToMenuButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(backToMenuButtonConfig));
 
-void ControlsState::addNonClickableButton(const utils::Vector2f& position, const utils::Vector2f& size,
-                                          const std::string& text, unsigned int fontSize,
-                                          const utils::Vector2f& textOffset)
-{
-    auto button = std::make_unique<components::core::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
-        rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
-                                                          graphics::Color::Black, textOffset);
-    buttons.push_back(std::move(button));
-}
+    auto upButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "controlsUpButton", upButtonPosition, controlButtonSize, buttonColor, "^", graphics::Color::Black,
+        controlButtonFontSize, fontPath, utils::Vector2f{3.5, 0.7});
+    buttonsConfig.emplace_back(std::move(upButtonConfig));
 
-void ControlsState::addButtonWithMouseOver(const utils::Vector2f& position, const utils::Vector2f& size,
-                                           const std::string& text, unsigned int fontSize,
-                                           const utils::Vector2f& textOffset,
-                                           std::function<void(void)> clickAction)
-{
-    auto button = std::make_unique<components::core::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
-        rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
-                                                          graphics::Color::Black, textOffset);
-    button->addComponent<components::core::HitBoxComponent>(size);
-    button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
+    auto downButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "controlsDownButton", downButtonPosition, controlButtonSize, buttonColor, "v", graphics::Color::Black,
+        controlButtonFontSize, fontPath, utils::Vector2f{3.5, 0.1});
+    buttonsConfig.emplace_back(std::move(downButtonConfig));
 
-    const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };
-    const auto changeColorOnMouseOut = [=] { graphicsComponent->setColor(buttonColor); };
-    button->addComponent<components::core::MouseOverComponent>(inputManager, changeColorOnMouseOver,
-                                                               changeColorOnMouseOut);
-    buttons.push_back(std::move(button));
-}
+    auto rightButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "controlsRightButton", rightButtonPosition, controlButtonSize, buttonColor, "->",
+        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{3, 0.2});
+    buttonsConfig.emplace_back(std::move(rightButtonConfig));
 
-void ControlsState::addText(const utils::Vector2f& position, const std::string& description,
-                            unsigned int fontSize)
-{
-    auto text = std::make_unique<components::core::ComponentOwner>(position);
-    text->addComponent<components::core::TextComponent>(rendererPool, position, description, fontPath,
-                                                        fontSize, graphics::Color::Black);
-    texts.push_back(std::move(text));
+    auto leftButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "controlsLeftButton", leftButtonPosition, controlButtonSize, buttonColor, "<-",
+        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{3, 0.2});
+    buttonsConfig.emplace_back(std::move(leftButtonConfig));
+
+    auto spaceButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "controlsSpaceButton", spaceButtonPosition, controlButtonSize, buttonColor, "Space",
+        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{1.0, 0.2});
+    buttonsConfig.emplace_back(std::move(spaceButtonConfig));
+
+    auto shiftButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "controlsShiftButton", shiftButtonPosition, controlButtonSize, buttonColor, "Shift",
+        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{1.0, 0.2});
+    buttonsConfig.emplace_back(std::move(shiftButtonConfig));
+
+    auto ctrlButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "controlsCtrlButton", ctrlButtonPosition, controlButtonSize, buttonColor, "Ctrl",
+        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{1.7, 0.2});
+    buttonsConfig.emplace_back(std::move(ctrlButtonConfig));
+
+    auto eButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "controlsEButton", eButtonPosition, controlButtonSize, buttonColor, "E", graphics::Color::Black,
+        controlButtonFontSize, fontPath, utils::Vector2f{3.5, 0.2});
+    buttonsConfig.emplace_back(std::move(eButtonConfig));
+
+    auto upDescriptionLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "controlsUpDescriptionLabel", upDescriptionPosition, graphics::Color::Black, "Jump",
+        controlButtonFontSize, fontPath);
+    labelsConfig.emplace_back(std::move(upDescriptionLabelConfig));
+
+    auto downDescriptionLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "controlsDownDescriptionLabel", downDescriptionPosition, graphics::Color::Black, "Squat",
+        controlButtonFontSize, fontPath);
+    labelsConfig.emplace_back(std::move(downDescriptionLabelConfig));
+
+    auto rightDescriptionLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "controlsRightDescriptionLabel", rightDescriptionPosition, graphics::Color::Black, "Move right",
+        controlButtonFontSize, fontPath);
+    labelsConfig.emplace_back(std::move(rightDescriptionLabelConfig));
+
+    auto leftDescriptionLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "controlsLeftDescriptionLabel", leftDescriptionPosition, graphics::Color::Black, "Move left",
+        controlButtonFontSize, fontPath);
+    labelsConfig.emplace_back(std::move(leftDescriptionLabelConfig));
+
+    auto spaceDescriptionLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "controlsSpaceDescriptionLabel", spaceDescriptionPosition, graphics::Color::Black, "Attack",
+        controlButtonFontSize, fontPath);
+    labelsConfig.emplace_back(std::move(spaceDescriptionLabelConfig));
+
+    auto shiftDescriptionLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "controlsShiftDescriptionLabel", shiftDescriptionPosition, graphics::Color::Black, "Speed up",
+        controlButtonFontSize, fontPath);
+    labelsConfig.emplace_back(std::move(shiftDescriptionLabelConfig));
+
+    auto ctrlDescriptionLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "controlsCtrlDescriptionLabel", ctrlDescriptionPosition, graphics::Color::Black, "Not defined",
+        controlButtonFontSize, fontPath);
+    labelsConfig.emplace_back(std::move(ctrlDescriptionLabelConfig));
+
+    auto eDescriptionLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "controlsEDescriptionLabel", eDescriptionPosition, graphics::Color::Black, "Pick item",
+        controlButtonFontSize, fontPath);
+    labelsConfig.emplace_back(std::move(eDescriptionLabelConfig));
+
+    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
+                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
+                                                      std::move(textFieldsConfig));
 }
 
 }
