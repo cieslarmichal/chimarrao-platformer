@@ -281,7 +281,8 @@ std::unique_ptr<components::ui::UIConfig> SettingsState::createSettingsUIConfig(
     std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
 
     auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
-        "settingsBackground", utils::Vector2f{0, 0}, utils::Vector2f{80, 60}, backgroundPath);
+        "settingsBackground", utils::Vector2f{0, 0}, utils::Vector2f{80, 60},
+        graphics::VisibilityLayer::Background, backgroundPath);
 
     auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
         "settingsTitleLabel", settingsTitlePosition, graphics::Color::Black, "Settings", 37, fontPath);

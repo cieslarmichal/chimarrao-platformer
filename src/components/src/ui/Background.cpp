@@ -28,13 +28,13 @@ Background::Background(const std::shared_ptr<graphics::RendererPool>& rendererPo
     {
         coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
             rendererPool, backgroundConfig->size, backgroundConfig->position, *backgroundConfig->texturePath,
-            graphics::VisibilityLayer::Background);
+            backgroundConfig->visibilityLayer);
     }
     else
     {
         coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
             rendererPool, backgroundConfig->size, backgroundConfig->position, *backgroundConfig->color,
-            graphics::VisibilityLayer::Background);
+            backgroundConfig->visibilityLayer);
     }
 
     coreComponentsOwner->loadDependentComponents();

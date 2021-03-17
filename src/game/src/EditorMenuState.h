@@ -4,6 +4,8 @@
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
+#include "ui/UIConfig.h"
+#include "ui/UIManager.h"
 
 namespace game
 {
@@ -16,7 +18,6 @@ public:
                              std::stack<std::unique_ptr<State>>&);
     ~EditorMenuState();
 
-    void initialize();
     void update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
@@ -26,29 +27,17 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
-    void hideGraphics();
-    void unfreezeButtons();
     void backToEditor();
     void backToMenu();
-    void createEditorTitle();
-    void createBackground();
-    void createBackToEditorButton();
-    void createLoadMapButton();
-    void createNewMapButton();
-    void createSaveMapButton();
-    void createMenuButton();
-    void addButton(const utils::Vector2f& position, const std::string& text,
-                   const utils::Vector2f& textOffset, std::function<void(void)> clickAction);
+    void hideGraphics();
+    std::unique_ptr<components::ui::UIConfig> createSettingsUIConfig();
+
 
     const input::InputStatus* inputStatus;
     utils::Timer possibleLeaveFromStateTimer;
     const float timeAfterLeaveStateIsPossible;
-    bool shouldBackToEditor, shouldBackToMenu;
-    std::unique_ptr<components::core::ComponentOwner> title;
-    std::unique_ptr<components::core::ComponentOwner> background;
-    std::vector<std::unique_ptr<components::core::ComponentOwner>> buttons;
-    bool buttonsActionsFrozen = true;
-    utils::Timer freezeClickableButtonsTimer;
-    const float timeAfterButtonsCanBeClicked;
+    bool shouldBackToEditor;
+    bool shouldBackToMenu;
+    std::unique_ptr<components::ui::UIManager> uiManager;
 };
 }

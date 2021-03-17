@@ -2,11 +2,8 @@
 
 #include "GetProjectPath.h"
 #include "SaveMapState.h"
-#include "core/ClickableComponent.h"
-#include "core/GraphicsComponent.h"
-#include "core/HitBoxComponent.h"
-#include "core/MouseOverComponent.h"
-#include "core/TextComponent.h"
+#include "ui/DefaultUIManager.h"
+
 
 namespace game
 {
@@ -28,19 +25,11 @@ EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowIn
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditor{false},
       shouldBackToMenu{false},
-      timeAfterButtonsCanBeClicked{0.3f}
+      uiManager{std::make_unique<components::ui::DefaultUIManager>(inputManagerInit, rendererPoolInit,
+                                                                   createSettingsUIConfig())}
 {
     inputManager->registerObserver(this);
-
-    createBackground();
-    createEditorTitle();
-    createBackToEditorButton();
-    createLoadMapButton();
-    createNewMapButton();
-    createSaveMapButton();
-    createMenuButton();
-
-    initialize();
+    possibleLeaveFromStateTimer.start();
 }
 
 EditorMenuState::~EditorMenuState()
@@ -48,25 +37,8 @@ EditorMenuState::~EditorMenuState()
     inputManager->removeObserver(this);
 }
 
-void EditorMenuState::initialize()
-{
-    for (auto& button : buttons)
-    {
-        button->loadDependentComponents();
-        button->getComponent<components::core::ClickableComponent>()->disable();
-    }
-
-    possibleLeaveFromStateTimer.start();
-}
-
 void EditorMenuState::update(const utils::DeltaTime& deltaTime)
 {
-    if (buttonsActionsFrozen &&
-        freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
-    {
-        unfreezeButtons();
-    }
-
     if (possibleLeaveFromStateTimer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
         inputStatus->isKeyPressed(input::InputKey::Escape))
     {
@@ -85,18 +57,11 @@ void EditorMenuState::update(const utils::DeltaTime& deltaTime)
         return;
     }
 
-    for (auto& button : buttons)
-    {
-        button->update(deltaTime);
-    }
+    uiManager->update(deltaTime);
 }
 
 void EditorMenuState::lateUpdate(const utils::DeltaTime& deltaTime)
 {
-    for (auto& button : buttons)
-    {
-        button->lateUpdate(deltaTime);
-    }
 }
 
 void EditorMenuState::render()
@@ -112,29 +77,15 @@ std::string EditorMenuState::getName() const
 void EditorMenuState::activate()
 {
     active = true;
-
-    for (auto& button : buttons)
-    {
-        button->enable();
-        if (auto clickableButton = button->getComponent<components::core::ClickableComponent>())
-        {
-            clickableButton->disable();
-        }
-    }
-
-    background->enable();
-    title->enable();
-
+    uiManager->activate();
     possibleLeaveFromStateTimer.restart();
 }
 
 void EditorMenuState::deactivate()
 {
     active = false;
-
-    hideGraphics();
-
-    buttonsActionsFrozen = true;
+    uiManager->deactivate();
+//    hideGraphics();
 }
 
 void EditorMenuState::handleInputStatus(const input::InputStatus& inputStatusInit)
@@ -144,23 +95,15 @@ void EditorMenuState::handleInputStatus(const input::InputStatus& inputStatusIni
 
 void EditorMenuState::hideGraphics()
 {
-    for (auto& button : buttons)
-    {
-        button->disable();
-    }
-
-    background->disable();
-    title->disable();
+//    for (auto& button : buttons)
+//    {
+//        button->disable();
+//    }
+//
+//    background->disable();
+//    title->disable();
 }
 
-void EditorMenuState::unfreezeButtons()
-{
-    buttonsActionsFrozen = false;
-    for (auto& button : buttons)
-    {
-        button->getComponent<components::core::ClickableComponent>()->enable();
-    }
-}
 
 void EditorMenuState::backToEditor()
 {
@@ -185,85 +128,113 @@ void EditorMenuState::backToMenu()
     }
 }
 
-void EditorMenuState::createEditorTitle()
+std::unique_ptr<components::ui::UIConfig> EditorMenuState::createSettingsUIConfig()
 {
-    const auto textPausePosition = utils::Vector2f{27.5, 7};
-    title = std::make_unique<components::core::ComponentOwner>(textPausePosition);
-    title->addComponent<components::core::TextComponent>(rendererPool, textPausePosition, "Editor Menu",
-                                                         fontPath, 40, graphics::Color::White,
-                                                         utils::Vector2f{0, 0});
-}
+    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
+    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
+    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
+    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
 
-void EditorMenuState::createBackground()
-{
     const auto backgroundColor = graphics::Color{172};
-    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{31, 50},
-                                                                  utils::Vector2f{25, 5}, backgroundColor,
-                                                                  graphics::VisibilityLayer::Second);
-}
+    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
+        "editorMenuBackground", utils::Vector2f{25, 5}, utils::Vector2f{31, 50},
+        graphics::VisibilityLayer::Second, backgroundColor);
 
-void EditorMenuState::createBackToEditorButton()
-{
-    const auto backToGameButtonPosition = utils::Vector2f{28, 15};
+    const auto editorMenuTitlePosition = utils::Vector2f{27.5, 7};
+    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "editorMenuTitleLabel", editorMenuTitlePosition, graphics::Color::White, "Editor Menu", 40, fontPath);
+    labelsConfig.emplace_back(std::move(titleLabelConfig));
 
-    addButton(backToGameButtonPosition, "Back to editor", utils::Vector2f{1.5, 0.75},
-              [this] { shouldBackToEditor = true; });
-}
+    const auto backToEditorButtonPosition = utils::Vector2f{28, 15};
+    const auto backToEditorButtonOnMouseOver = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "editorMenuBackToEditorButton",
+                            buttonHoverColor);
+    };
+    const auto backToEditorButtonOnMouseOut = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "editorMenuBackToEditorButton",
+                            buttonColor);
+    };
+    auto backToEditorButtonMouseOverActions =
+        components::ui::MouseOverActions{backToEditorButtonOnMouseOver, backToEditorButtonOnMouseOut};
+    auto backToEditorClickAction = [this] { shouldBackToEditor = true; };
+    auto backToEditorButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "editorMenuBackToEditorButton", backToEditorButtonPosition, buttonSize, buttonColor,
+        "Back to editor", textColor, 27, fontPath, utils::Vector2f{1.5, 0.75}, backToEditorClickAction,
+        backToEditorButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(backToEditorButtonConfig));
 
-void EditorMenuState::createLoadMapButton()
-{
-    const auto backToMenuButtonPosition = utils::Vector2f{28, 23};
+    const auto loadMapButtonPosition = utils::Vector2f{28, 23};
+    const auto loadMapButtonOnMouseOver = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "editorMenuLoadMapButton",
+                            buttonHoverColor);
+    };
+    const auto loadMapButtonOnMouseOut = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "editorMenuLoadMapButton", buttonColor);
+    };
+    auto loadMapButtonMouseOverActions =
+        components::ui::MouseOverActions{loadMapButtonOnMouseOver, loadMapButtonOnMouseOut};
+    auto loadMapClickAction = [this] { std::cout << "load map\n"; };
+    auto loadMapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "editorMenuLoadMapButton", loadMapButtonPosition, buttonSize, buttonColor, "Load map", textColor, 27,
+        fontPath, utils::Vector2f{7, 0.75}, loadMapClickAction, loadMapButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(loadMapButtonConfig));
 
-    addButton(backToMenuButtonPosition, "Load map", utils::Vector2f{7, 0.75},
-              [this] { std::cout << "load map\n"; });
-}
+    const auto newMapButtonPosition = utils::Vector2f{28, 31};
+    const auto newMapButtonOnMouseOver = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "editorMenuNewMapButton",
+                            buttonHoverColor);
+    };
+    const auto newMapButtonOnMouseOut = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "editorMenuNewMapButton", buttonColor);
+    };
+    auto newMapButtonMouseOverActions =
+        components::ui::MouseOverActions{newMapButtonOnMouseOver, newMapButtonOnMouseOut};
+    auto newMapClickAction = [this] { std::cout << "new map\n"; };
+    auto newMapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "editorMenuNewMapButton", newMapButtonPosition, buttonSize, buttonColor, "New map", textColor, 27,
+        fontPath, utils::Vector2f{7, 0.75}, newMapClickAction, newMapButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(newMapButtonConfig));
 
-void EditorMenuState::createNewMapButton()
-{
-    const auto backToMenuButtonPosition = utils::Vector2f{28, 31};
-
-    addButton(backToMenuButtonPosition, "New map", utils::Vector2f{7, 0.75},
-              [this] { std::cout << "new map\n"; });
-}
-
-void EditorMenuState::createSaveMapButton()
-{
-    const auto backToMenuButtonPosition = utils::Vector2f{28, 39};
-
-    auto runSaveMapState = [&] {
-        buttonsActionsFrozen = true;
-
+    const auto saveMapButtonPosition = utils::Vector2f{28, 39};
+    const auto saveMapButtonOnMouseOver = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "editorMenuSaveMapButton",
+                            buttonHoverColor);
+    };
+    const auto saveMapButtonOnMouseOut = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "editorMenuSaveMapButton", buttonColor);
+    };
+    auto saveMapButtonMouseOverActions =
+        components::ui::MouseOverActions{saveMapButtonOnMouseOver, saveMapButtonOnMouseOut};
+    auto saveMapClickAction = [this] {
         states.top()->deactivate();
         states.push(std::make_unique<SaveMapState>(window, inputManager, rendererPool, states));
     };
-    addButton(backToMenuButtonPosition, "Save map", utils::Vector2f{6, 0.75}, runSaveMapState);
-}
+    auto saveMapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "editorMenuSaveMapButton", saveMapButtonPosition, buttonSize, buttonColor, "Save map", textColor, 27,
+        fontPath, utils::Vector2f{6, 0.75}, saveMapClickAction, saveMapButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(saveMapButtonConfig));
 
-void EditorMenuState::createMenuButton()
-{
     const auto backToMenuButtonPosition = utils::Vector2f{28, 47};
+    const auto backToMenuButtonOnMouseOver = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "editorMenuBackToMenuButton",
+                            buttonHoverColor);
+    };
+    const auto backToMenuButtonOnMouseOut = [&] {
+        uiManager->setColor(components::ui::UIComponentType::Button, "editorMenuBackToMenuButton",
+                            buttonColor);
+    };
+    auto backToMenuButtonMouseOverActions =
+        components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
+    auto backToMenuClickAction = [this] { shouldBackToMenu = true; };
+    auto backToMenuButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "editorMenuBackToMenuButton", backToMenuButtonPosition, buttonSize, buttonColor, "Back to menu",
+        textColor, 27, fontPath, utils::Vector2f{2.75, 0.75}, backToMenuClickAction,
+        backToMenuButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(backToMenuButtonConfig));
 
-    addButton(backToMenuButtonPosition, "Back to menu", utils::Vector2f{2.75, 0.75},
-              [this] { shouldBackToMenu = true; });
-}
-
-void EditorMenuState::addButton(const utils::Vector2f& position, const std::string& text,
-                                const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
-{
-    auto button = std::make_unique<components::core::ComponentOwner>(position);
-    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
-        rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, 27,
-                                                          textColor, textOffset);
-    button->addComponent<components::core::HitBoxComponent>(buttonSize);
-    button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
-
-    const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };
-    const auto changeColorOnMouseOut = [=] { graphicsComponent->setColor(buttonColor); };
-    button->addComponent<components::core::MouseOverComponent>(inputManager, changeColorOnMouseOver,
-                                                               changeColorOnMouseOut);
-    buttons.push_back(std::move(button));
+    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
+                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
+                                                      std::move(textFieldsConfig));
 }
 
 }
