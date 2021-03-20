@@ -107,21 +107,16 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
         }
     }
 
-    initialize();
-}
-
-EditorState::~EditorState()
-{
-    inputManager->removeObserver(this);
-}
-
-void EditorState::initialize()
-{
     for (auto& tile : clickableTileMap)
     {
         tile->loadDependentComponents();
         tile->getComponent<components::core::ClickableComponent>()->disable();
     }
+}
+
+EditorState::~EditorState()
+{
+    inputManager->removeObserver(this);
 }
 
 void EditorState::update(const utils::DeltaTime& deltaTime)

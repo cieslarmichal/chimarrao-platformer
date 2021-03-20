@@ -19,7 +19,6 @@ public:
                          const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&);
     ~EditorState();
 
-    void initialize();
     void update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
