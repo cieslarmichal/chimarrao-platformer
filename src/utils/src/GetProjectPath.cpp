@@ -1,9 +1,8 @@
 #include "GetProjectPath.h"
 
-#include <stdexcept>
-
 #include "GetExecutablePath.h"
 #include "StringHelper.h"
+#include "exceptions/FileNotFound.h"
 
 namespace utils
 {
@@ -18,7 +17,7 @@ std::string getProjectPath(const std::string& projectName)
     const auto projectNamePosition = currentPath.find(projectName);
     if (projectNamePosition == std::string::npos)
     {
-        throw std::runtime_error{fileNotFoundMessage + currentPath};
+        throw exceptions::FileNotFound{fileNotFoundMessage + currentPath};
     }
 
     auto projectPath = utils::substring(currentPath, 0, projectNamePosition + projectName.length() + 1);

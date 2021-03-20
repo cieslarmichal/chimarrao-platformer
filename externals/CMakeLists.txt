@@ -1,3 +1,7 @@
+if (WIN32)
+    set(BOOST_ROOT C:\\libraries\\boost)
+endif ()
+
 find_package(Boost REQUIRED)
 
 set(JSON_BuildTests OFF CACHE INTERNAL "")
