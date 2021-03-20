@@ -5,11 +5,10 @@
 #include "GameState.h"
 #include "GetProjectPath.h"
 #include "SettingsState.h"
-#include "core/ClickableComponent.h"
 #include "core/GraphicsComponent.h"
 #include "core/HitBoxComponent.h"
 #include "core/MouseOverComponent.h"
-#include "core/TextComponent.h"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -41,19 +40,16 @@ MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
       inputStatus{nullptr},
       currentButtonIndex{0},
       timeAfterButtonCanBeSwitched{0.1},
-      timeAfterButtonsCanBeClicked{0.3}
+      buttonNames{"menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton",
+                  "menuExitButton"},
+      uiManager{std::make_unique<components::ui::DefaultUIManager>(inputManagerInit, rendererPoolInit,
+                                                                   createSettingsUIConfig())}
 {
     inputManager->registerObserver(this);
-
-    createBackground();
-    createPlayGameButton();
-    createMapEditorButton();
-    createControlsButton();
-    createSettingsButton();
-    createExitButton();
     createIcons();
-
-    initialize();
+    uiManager->setColor(components::ui::UIComponentType::Button, buttonNames.at(currentButtonIndex),
+                        buttonHoverColor);
+    setIconVisible(currentButtonIndex);
 }
 
 MenuState::~MenuState()
@@ -61,44 +57,18 @@ MenuState::~MenuState()
     inputManager->removeObserver(this);
 }
 
-void MenuState::initialize()
-{
-    for (auto& button : buttons)
-    {
-        button->loadDependentComponents();
-        button->getComponent<components::core::ClickableComponent>()->disable();
-    }
-
-    buttons[currentButtonIndex]->getComponent<components::core::GraphicsComponent>()->setColor(
-        buttonHoverColor);
-    setIconVisible(currentButtonIndex);
-}
-
 void MenuState::update(const utils::DeltaTime& deltaTime)
 {
-    if (buttonsActionsFrozen &&
-        freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
-    {
-        unfreezeButtons();
-    }
-
     if (switchButtonTimer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
     {
         handleButtonSwitching();
     }
 
-    for (auto& button : buttons)
-    {
-        button->update(deltaTime);
-    }
+    uiManager->update(deltaTime);
 }
 
 void MenuState::lateUpdate(const utils::DeltaTime& deltaTime)
 {
-    for (auto& button : buttons)
-    {
-        button->lateUpdate(deltaTime);
-    }
 }
 
 void MenuState::render()
@@ -114,23 +84,13 @@ std::string MenuState::getName() const
 void MenuState::activate()
 {
     active = true;
-    freezeClickableButtonsTimer.restart();
-    for (auto& button : buttons)
-    {
-        button->enable();
-        button->getComponent<components::core::ClickableComponent>()->disable();
-    }
+    uiManager->activate();
 }
 
 void MenuState::deactivate()
 {
     active = false;
-    buttonsActionsFrozen = true;
-
-    for (auto& button : buttons)
-    {
-        button->disable();
-    }
+    uiManager->deactivate();
 }
 
 void MenuState::handleInputStatus(const input::InputStatus& inputStatusInit)
@@ -149,98 +109,6 @@ void MenuState::handleButtonSwitching()
         changeSelectedButtonDown();
     }
     switchButtonTimer.restart();
-}
-
-void MenuState::unfreezeButtons()
-{
-    buttonsActionsFrozen = false;
-    for (auto& button : buttons)
-    {
-        button->getComponent<components::core::ClickableComponent>()->enable();
-    }
-}
-
-void MenuState::createBackground()
-{
-    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0}, "menuBackground");
-    background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{80, 60},
-                                                                  utils::Vector2f{0, 0}, backgroundPath,
-                                                                  graphics::VisibilityLayer::Background);
-}
-
-void MenuState::createPlayGameButton()
-{
-    const auto runGame = [&] {
-        states.top()->deactivate();
-        states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
-    };
-
-    addButton(gameButtonPosition, "Play", utils::Vector2f{7, 1}, runGame);
-}
-
-void MenuState::createMapEditorButton()
-{
-    const auto runMapEditor = [&] {
-        states.top()->deactivate();
-        states.push(std::make_unique<EditorState>(window, inputManager, rendererPool, states));
-    };
-
-    addButton(mapEditorButtonPosition, "Map Editor", utils::Vector2f{1, 1}, runMapEditor);
-}
-
-void MenuState::createControlsButton()
-{
-    const auto runControls = [&] {
-        states.top()->deactivate();
-        states.push(std::make_unique<ControlsState>(window, inputManager, rendererPool, states));
-    };
-
-    addButton(controlsButtonPosition, "Controls", utils::Vector2f{3, 1}, runControls);
-}
-
-void MenuState::createSettingsButton()
-{
-    const auto runSettings = [&] {
-        states.top()->deactivate();
-        states.push(std::make_unique<SettingsState>(window, inputManager, rendererPool, states));
-    };
-
-    addButton(settingsButtonPosition, "Settings", utils::Vector2f{3, 1}, runSettings);
-}
-
-void MenuState::createExitButton()
-{
-    const auto exit = [&] { window->close(); };
-
-    addButton(exitButtonPosition, "Exit", utils::Vector2f{7, 1}, exit);
-}
-
-void MenuState::addButton(const utils::Vector2f& position, const std::string& text,
-                          const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
-{
-    auto button = std::make_unique<components::core::ComponentOwner>(position, text);
-    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
-        rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, 35,
-                                                          graphics::Color::Black, textOffset);
-    button->addComponent<components::core::HitBoxComponent>(buttonSize);
-    button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
-
-    const auto buttonIndex = buttons.size();
-
-    const auto changeColorOnMouseOver = [=] {
-        unselectAllButtons();
-        changeSelectedButton(buttonIndex);
-        setIconVisible(buttonIndex);
-        graphicsComponent->setColor(buttonHoverColor);
-    };
-    const auto changeColorOnMouseOut = [=] {
-        graphicsComponent->setColor(buttonColor);
-        hideIcons();
-    };
-    button->addComponent<components::core::MouseOverComponent>(inputManager, changeColorOnMouseOver,
-                                                               changeColorOnMouseOut);
-    buttons.push_back(std::move(button));
 }
 
 void MenuState::createIcons()
@@ -267,14 +135,14 @@ void MenuState::changeSelectedButtonUp()
 
     if (currentButtonIndex == 0)
     {
-        currentButtonIndex = buttons.size() - 1;
+        currentButtonIndex = buttonNames.size() - 1;
     }
     else
     {
         currentButtonIndex--;
     }
-    buttons[currentButtonIndex]->getComponent<components::core::GraphicsComponent>()->setColor(
-        buttonHoverColor);
+    uiManager->setColor(components::ui::UIComponentType::Button, buttonNames.at(currentButtonIndex),
+                        buttonHoverColor);
     setIconVisible(currentButtonIndex);
 }
 
@@ -282,7 +150,7 @@ void MenuState::changeSelectedButtonDown()
 {
     unselectAllButtons();
 
-    if (currentButtonIndex == buttons.size() - 1)
+    if (currentButtonIndex == buttonNames.size() - 1)
     {
         currentButtonIndex = 0;
     }
@@ -290,8 +158,8 @@ void MenuState::changeSelectedButtonDown()
     {
         currentButtonIndex++;
     }
-    buttons[currentButtonIndex]->getComponent<components::core::GraphicsComponent>()->setColor(
-        buttonHoverColor);
+    uiManager->setColor(components::ui::UIComponentType::Button, buttonNames.at(currentButtonIndex),
+                        buttonHoverColor);
     setIconVisible(currentButtonIndex);
 }
 
@@ -303,10 +171,11 @@ void MenuState::changeSelectedButton(unsigned int buttonIndex)
 
 void MenuState::unselectAllButtons()
 {
-    for (auto& button : buttons)
-    {
-        button->getComponent<components::core::GraphicsComponent>()->setColor(buttonColor);
-    }
+    uiManager->setColor(components::ui::UIComponentType::Button, "menuPlayButton", buttonColor);
+    uiManager->setColor(components::ui::UIComponentType::Button, "menuMapEditorButton", buttonColor);
+    uiManager->setColor(components::ui::UIComponentType::Button, "menuControlsButton", buttonColor);
+    uiManager->setColor(components::ui::UIComponentType::Button, "menuSettingsButton", buttonColor);
+    uiManager->setColor(components::ui::UIComponentType::Button, "menuExitButton", buttonColor);
 }
 
 void MenuState::setIconVisible(unsigned int iconIndex)
@@ -323,6 +192,137 @@ void MenuState::hideIcons()
         icon->getComponent<components::core::GraphicsComponent>()->setVisibility(
             graphics::VisibilityLayer::Invisible);
     }
+}
+
+std::unique_ptr<components::ui::UIConfig> MenuState::createSettingsUIConfig()
+{
+    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
+    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
+    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
+    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
+
+    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
+        "menuBackground", utils::Vector2f{0, 0}, utils::Vector2f{80, 60},
+        graphics::VisibilityLayer::Background, backgroundPath);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    const auto playButtonOnMouseOver = [=] {
+        unselectAllButtons();
+        changeSelectedButton(0);
+        uiManager->setColor(components::ui::UIComponentType::Button, "menuPlayButton", buttonHoverColor);
+    };
+    const auto playButtonOnMouseOut = [=] {
+        unselectAllButtons();
+        hideIcons();
+        uiManager->setColor(components::ui::UIComponentType::Button, "menuPlayButton", buttonColor);
+    };
+    auto playButtonMouseOverActions =
+        components::ui::MouseOverActions{playButtonOnMouseOver, playButtonOnMouseOut};
+    const auto runGame = [&] {
+        states.top()->deactivate();
+        states.push(std::make_unique<GameState>(window, inputManager, rendererPool, states));
+    };
+    auto playButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "menuPlayButton", gameButtonPosition, buttonSize, buttonColor, "Play", graphics::Color::Black, 35,
+        fontPath, utils::Vector2f{7, 1}, runGame, playButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(playButtonConfig));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    const auto mapEditorButtonOnMouseOver = [=] {
+        unselectAllButtons();
+        changeSelectedButton(1);
+        uiManager->setColor(components::ui::UIComponentType::Button, "menuMapEditorButton", buttonHoverColor);
+    };
+    const auto mapEditorButtonOnMouseOut = [=] {
+        unselectAllButtons();
+        hideIcons();
+        uiManager->setColor(components::ui::UIComponentType::Button, "menuMapEditorButton", buttonColor);
+    };
+    auto mapEditorButtonMouseOverActions =
+        components::ui::MouseOverActions{mapEditorButtonOnMouseOver, mapEditorButtonOnMouseOut};
+    const auto runMapEditor = [&] {
+        states.top()->deactivate();
+        states.push(std::make_unique<EditorState>(window, inputManager, rendererPool, states));
+    };
+    auto mapEditorButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "menuMapEditorButton", mapEditorButtonPosition, buttonSize, buttonColor, "Map Editor",
+        graphics::Color::Black, 35, fontPath, utils::Vector2f{1, 1}, runMapEditor,
+        mapEditorButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(mapEditorButtonConfig));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    const auto controlsButtonOnMouseOver = [=] {
+        unselectAllButtons();
+        changeSelectedButton(2);
+        uiManager->setColor(components::ui::UIComponentType::Button, "menuControlsButton", buttonHoverColor);
+    };
+    const auto controlsButtonOnMouseOut = [=] {
+        unselectAllButtons();
+        hideIcons();
+        uiManager->setColor(components::ui::UIComponentType::Button, "menuControlsButton", buttonColor);
+    };
+    auto controlsButtonMouseOverActions =
+        components::ui::MouseOverActions{controlsButtonOnMouseOver, controlsButtonOnMouseOut};
+    const auto runControls = [&] {
+        states.top()->deactivate();
+        states.push(std::make_unique<ControlsState>(window, inputManager, rendererPool, states));
+    };
+    auto controlsButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "menuControlsButton", controlsButtonPosition, buttonSize, buttonColor, "Controls",
+        graphics::Color::Black, 35, fontPath, utils::Vector2f{3, 1}, runControls,
+        controlsButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(controlsButtonConfig));
+
+    /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    const auto settingsButtonOnMouseOver = [=] {
+        unselectAllButtons();
+        changeSelectedButton(3);
+        uiManager->setColor(components::ui::UIComponentType::Button, "menuSettingsButton", buttonHoverColor);
+    };
+    const auto settingsButtonOnMouseOut = [=] {
+        unselectAllButtons();
+        hideIcons();
+        uiManager->setColor(components::ui::UIComponentType::Button, "menuSettingsButton", buttonColor);
+    };
+    auto settingsButtonMouseOverActions =
+        components::ui::MouseOverActions{settingsButtonOnMouseOver, settingsButtonOnMouseOut};
+    const auto runSettings = [&] {
+        states.top()->deactivate();
+        states.push(std::make_unique<SettingsState>(window, inputManager, rendererPool, states));
+    };
+    auto settingsButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "menuSettingsButton", settingsButtonPosition, buttonSize, buttonColor, "Settings",
+        graphics::Color::Black, 35, fontPath, utils::Vector2f{3, 1}, runSettings,
+        settingsButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(settingsButtonConfig));
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+
+    const auto exitButtonOnMouseOver = [=] {
+        unselectAllButtons();
+        changeSelectedButton(4);
+        uiManager->setColor(components::ui::UIComponentType::Button, "menuExitButton", buttonHoverColor);
+    };
+    const auto exitButtonOnMouseOut = [=] {
+        unselectAllButtons();
+        hideIcons();
+        uiManager->setColor(components::ui::UIComponentType::Button, "menuExitButton", buttonColor);
+    };
+    auto exitButtonMouseOverActions =
+        components::ui::MouseOverActions{exitButtonOnMouseOver, exitButtonOnMouseOut};
+    const auto exit = [&] { window->close(); };
+    auto exitButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "menuExitButton", exitButtonPosition, buttonSize, buttonColor, "Exit", graphics::Color::Black, 35,
+        fontPath, utils::Vector2f{7, 1}, exit, exitButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(exitButtonConfig));
+
+    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
+                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
+                                                      std::move(textFieldsConfig));
 }
 
 }
