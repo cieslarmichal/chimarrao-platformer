@@ -10,9 +10,12 @@ namespace game
 {
 class PauseState : public State, public input::InputObserver
 {
+    friend class PauseStateUIConfigBuilder;
+
 public:
     explicit PauseState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
-                        const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&);
+                        const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&,
+                        std::unique_ptr<components::ui::UIManager>);
     ~PauseState();
 
     void update(const utils::DeltaTime&) override;
@@ -26,7 +29,6 @@ public:
 private:
     void backToGame();
     void backToMenu();
-    std::unique_ptr<components::ui::UIConfig> createSettingsUIConfig();
 
     const input::InputStatus* inputStatus;
     utils::Timer timer;

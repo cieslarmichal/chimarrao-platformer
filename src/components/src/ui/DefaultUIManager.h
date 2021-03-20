@@ -17,8 +17,9 @@ class DefaultUIManager : public UIManager
 {
 public:
     DefaultUIManager(const std::shared_ptr<input::InputManager>&,
-                     const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<UIConfig>);
+                     const std::shared_ptr<graphics::RendererPool>&);
 
+    void createUI(std::unique_ptr<UIConfig>) override;
     void update(utils::DeltaTime) override;
     void activate() override;
     void deactivate() override;

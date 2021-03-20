@@ -10,6 +10,14 @@ set(SOURCES
         src/SettingsState.cpp
         src/ControlsState.cpp
         src/SaveMapState.cpp
+        src/ControlsStateUIConfigBuilder.cpp
+        src/EditorMenuStateUIConfigBuilder.cpp
+        src/EditorStateUIConfigBuilder.cpp
+        src/GameStateUIConfigBuilder.cpp
+        src/MenuStateUIConfigBuilder.cpp
+        src/PauseStateUIConfigBuilder.cpp
+        src/SaveMapStateUIConfigBuilder.cpp
+        src/SettingsStateUIConfigBuilder.cpp
         )
 
 set(UT_SOURCES

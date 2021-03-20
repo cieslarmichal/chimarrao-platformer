@@ -12,11 +12,16 @@
 
 namespace game
 {
+class EditorStateUIConfigBuilder;
+
 class EditorState : public State, public input::InputObserver
 {
 public:
+    friend class EditorStateUIConfigBuilder;
+
     explicit EditorState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
-                         const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&);
+                         const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&,
+                         std::unique_ptr<components::ui::UIManager>);
     ~EditorState();
 
     void update(const utils::DeltaTime&) override;
@@ -30,7 +35,6 @@ public:
 
 private:
     void unfreezeButtons();
-    std::unique_ptr<components::ui::UIConfig> createSettingsUIConfig();
 
     const input::InputStatus* inputStatus;
     bool paused;

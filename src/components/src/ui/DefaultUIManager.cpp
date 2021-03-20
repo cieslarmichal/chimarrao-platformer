@@ -52,9 +52,12 @@ void deactivateComponents(std::vector<T>& uiComponents)
 }
 
 DefaultUIManager::DefaultUIManager(const std::shared_ptr<input::InputManager>& inputManager,
-                                   const std::shared_ptr<graphics::RendererPool>& rendererPool,
-                                   std::unique_ptr<UIConfig> uiConfig)
+                                   const std::shared_ptr<graphics::RendererPool>& rendererPool)
     : uiComponentFactory{std::make_unique<UIComponentFactory>(inputManager, rendererPool)}
+{
+}
+
+void DefaultUIManager::createUI(std::unique_ptr<UIConfig> uiConfig)
 {
     if (not uiConfig)
     {

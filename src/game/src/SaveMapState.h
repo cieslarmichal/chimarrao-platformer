@@ -9,12 +9,16 @@
 
 namespace game
 {
+class SaveMapStateUIConfigBuilder;
+
 class SaveMapState : public State, public input::InputObserver
 {
+    friend class SaveMapStateUIConfigBuilder;
+
 public:
     explicit SaveMapState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
                           const std::shared_ptr<graphics::RendererPool>&,
-                          std::stack<std::unique_ptr<State>>&);
+                          std::stack<std::unique_ptr<State>>&, std::unique_ptr<components::ui::UIManager>);
     ~SaveMapState();
 
     void update(const utils::DeltaTime&) override;
@@ -28,7 +32,6 @@ public:
 private:
     void saveMap();
     void backToEditorMenu();
-    std::unique_ptr<components::ui::UIConfig> createSettingsUIConfig();
 
     const input::InputStatus* inputStatus;
     utils::Timer possibleLeaveFromStateTimer;

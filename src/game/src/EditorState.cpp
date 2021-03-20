@@ -1,6 +1,7 @@
 #include "EditorState.h"
 
 #include "EditorMenuState.h"
+#include "EditorStateUIConfigBuilder.h"
 #include "GetProjectPath.h"
 #include "TileMap.h"
 #include "core/ComponentOwner.h"
@@ -24,20 +25,20 @@ const auto tilesTextureVector =
     std::vector<std::string>{utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png",
                              utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/2.png"};
 }
-
 EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                          const std::shared_ptr<input::InputManager>& inputManagerInit,
                          const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                         std::stack<std::unique_ptr<State>>& states)
+                         std::stack<std::unique_ptr<State>>& states,
+                         std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, states},
       inputStatus{nullptr},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
       timeAfterButtonsCanBeClicked{0.3f},
-      uiManager{std::make_unique<components::ui::DefaultUIManager>(inputManagerInit, rendererPoolInit,
-                                                                   createSettingsUIConfig())}
+      uiManager{std::move(uiManagerInit)}
 {
     inputManager->registerObserver(this);
+    uiManager->createUI(EditorStateUIConfigBuilder::createEditorUIConfig(this));
 
     currentTileId = 0;
     currentTilePath = tilesTextureVector[currentTileId];
@@ -202,7 +203,9 @@ void EditorState::pause()
         tile->getComponent<components::core::GraphicsComponent>()->enable();
     }
 
-    states.push(std::make_unique<EditorMenuState>(window, inputManager, rendererPool, states));
+    states.push(std::make_unique<EditorMenuState>(
+        window, inputManager, rendererPool, states,
+        std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool)));
 }
 
 void EditorState::unfreezeButtons()
@@ -212,30 +215,6 @@ void EditorState::unfreezeButtons()
     {
         tile->getComponent<components::core::ClickableComponent>()->enable();
     }
-}
-
-std::unique_ptr<components::ui::UIConfig> EditorState::createSettingsUIConfig()
-{
-    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
-    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
-    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
-    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
-
-    const auto changeBlockAction = [&]() {
-        std::cout << currentTilePath << std::endl;
-        currentTileId = currentTileId + 1 < tilesTextureVector.size() ? currentTileId + 1 : 0;
-        currentTilePath = tilesTextureVector[currentTileId];
-    };
-    const auto keyActions = std::vector<components::core::KeyAction>{
-        components::core::KeyAction{input::InputKey::MouseRight, changeBlockAction}};
-
-    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
-        "editorBackground", utils::Vector2f{0, 0}, utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY},
-        graphics::VisibilityLayer::Background, pathToBackground, keyActions);
-
-    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
-                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
-                                                      std::move(textFieldsConfig));
 }
 
 }

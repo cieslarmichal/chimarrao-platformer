@@ -11,6 +11,7 @@
 #include "MenuState.h"
 #include "Vector.h"
 #include "WindowFactory.h"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -90,8 +91,9 @@ void Game::render()
 
 void Game::initStates()
 {
-    states.push(std::make_unique<MenuState>(window, inputManager, rendererPool, states));
-    //    states.push(std::make_unique<EditorState>(window, inputManager, rendererPool, states));
+    states.push(std::make_unique<MenuState>(
+        window, inputManager, rendererPool, states,
+        std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool)));
 }
 
 }

@@ -2,6 +2,7 @@
 
 #include "AnimatorSettingsYamlReader.h"
 #include "DefaultAnimatorSettingsRepository.h"
+#include "GameStateUIConfigBuilder.h"
 #include "GetProjectPath.h"
 #include "PauseState.h"
 #include "PlayerAnimator.h"
@@ -13,24 +14,20 @@
 
 namespace game
 {
-namespace
-{
-const std::string pathToBackground =
-    utils::getProjectPath("chimarrao-platformer") + "resources/BG/background_glacial_mountains.png";
-}
 
 GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<input::InputManager>& inputManagerInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                     std::stack<std::unique_ptr<State>>& statesInit)
+                     std::stack<std::unique_ptr<State>>& statesInit,
+                     std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
-      uiManager{std::make_unique<components::ui::DefaultUIManager>(inputManagerInit, rendererPoolInit,
-                                                                   createSettingsUIConfig())}
+      uiManager{std::move(uiManagerInit)}
 {
     inputManager->registerObserver(this);
+    uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
     animations::DefaultAnimatorSettingsRepository settingsRepository{
         std::make_unique<animations::AnimatorSettingsYamlReader>()};
@@ -120,23 +117,9 @@ void GameState::pause()
     player->getComponent<components::core::GraphicsComponent>()->enable();
     player->getComponent<components::core::TextComponent>()->enable();
 
-    states.push(std::make_unique<PauseState>(window, inputManager, rendererPool, states));
-}
-
-std::unique_ptr<components::ui::UIConfig> GameState::createSettingsUIConfig()
-{
-    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
-    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
-    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
-    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
-
-    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
-        "gameBackground", utils::Vector2f{0, 0}, utils::Vector2f{80, 60},
-        graphics::VisibilityLayer::Background, pathToBackground);
-
-    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
-                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
-                                                      std::move(textFieldsConfig));
+    states.push(std::make_unique<PauseState>(
+        window, inputManager, rendererPool, states,
+        std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool)));
 }
 
 }

@@ -4,7 +4,6 @@
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
-#include "ui/UIConfig.h"
 #include "ui/UIManager.h"
 
 namespace game
@@ -13,7 +12,8 @@ class GameState : public State, public input::InputObserver
 {
 public:
     explicit GameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
-                       const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&);
+                       const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&,
+                       std::unique_ptr<components::ui::UIManager>);
     ~GameState();
 
     void update(const utils::DeltaTime&) override;
@@ -26,8 +26,6 @@ public:
     void pause();
 
 private:
-    std::unique_ptr<components::ui::UIConfig> createSettingsUIConfig();
-
     const input::InputStatus* inputStatus;
     bool paused;
     utils::Timer timer;

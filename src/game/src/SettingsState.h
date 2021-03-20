@@ -9,13 +9,17 @@
 
 namespace game
 {
+class SettingsStateUIConfigBuilder;
+
 class SettingsState : public State, public input::InputObserver
 {
+    friend class SettingsStateUIConfigBuilder;
+
 public:
     explicit SettingsState(const std::shared_ptr<window::Window>&,
                            const std::shared_ptr<input::InputManager>&,
                            const std::shared_ptr<graphics::RendererPool>&,
-                           std::stack<std::unique_ptr<State>>&);
+                           std::stack<std::unique_ptr<State>>&, std::unique_ptr<components::ui::UIManager>);
     ~SettingsState();
 
     void update(const utils::DeltaTime&) override;
@@ -37,7 +41,6 @@ private:
     void setWindowMode();
     void setFullscreenMode();
     void backToMenu();
-    std::unique_ptr<components::ui::UIConfig> createSettingsUIConfig();
 
     bool shouldBackToMenu;
     window::WindowSettings selectedWindowsSettings;

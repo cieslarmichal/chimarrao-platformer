@@ -9,13 +9,18 @@
 
 namespace game
 {
+class EditorMenuStateUIConfigBuilder;
+
 class EditorMenuState : public State, public input::InputObserver
 {
 public:
+    friend class EditorMenuStateUIConfigBuilder;
+
     explicit EditorMenuState(const std::shared_ptr<window::Window>&,
                              const std::shared_ptr<input::InputManager>&,
                              const std::shared_ptr<graphics::RendererPool>&,
-                             std::stack<std::unique_ptr<State>>&);
+                             std::stack<std::unique_ptr<State>>&,
+                             std::unique_ptr<components::ui::UIManager>);
     ~EditorMenuState();
 
     void update(const utils::DeltaTime&) override;
@@ -29,7 +34,6 @@ public:
 private:
     void backToEditor();
     void backToMenu();
-    std::unique_ptr<components::ui::UIConfig> createSettingsUIConfig();
 
     const input::InputStatus* inputStatus;
     utils::Timer possibleLeaveFromStateTimer;

@@ -3,6 +3,7 @@
 #include <string>
 
 #include "UIComponentTypes.h"
+#include "UIConfig.h"
 
 namespace components::ui
 {
@@ -11,6 +12,7 @@ class UIManager
 public:
     virtual ~UIManager() = default;
 
+    virtual void createUI(std::unique_ptr<UIConfig>) = 0;
     virtual void update(utils::DeltaTime) = 0;
     virtual void activate() = 0;
     virtual void deactivate() = 0;

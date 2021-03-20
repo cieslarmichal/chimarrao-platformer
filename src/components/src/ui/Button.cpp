@@ -80,7 +80,7 @@ void Button::activate()
     coreComponentsOwner->enable();
     if (auto clickableComponent = coreComponentsOwner->getComponent<components::core::ClickableComponent>())
     {
-        clickableComponent->enable();
+        clickableComponent->disable();
     }
     freezeClickableButtonTimer.restart();
     buttonClickActionFrozen = true;

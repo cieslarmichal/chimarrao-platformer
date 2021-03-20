@@ -10,11 +10,16 @@
 
 namespace game
 {
+class MenuStateUIConfigBuilder;
+
 class MenuState : public State, public input::InputObserver
 {
 public:
+    friend class MenuStateUIConfigBuilder;
+
     explicit MenuState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
-                       const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&);
+                       const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&,
+                       std::unique_ptr<components::ui::UIManager>);
     ~MenuState();
 
     void update(const utils::DeltaTime&) override;
@@ -35,7 +40,6 @@ private:
     void unselectAllButtons();
     void setIconVisible(unsigned int iconIndex);
     void hideIcons();
-    std::unique_ptr<components::ui::UIConfig> createSettingsUIConfig();
 
     const input::InputStatus* inputStatus;
     std::vector<std::unique_ptr<components::core::ComponentOwner>> icons;
