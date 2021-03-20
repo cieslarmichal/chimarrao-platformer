@@ -1,11 +1,7 @@
 #include "PauseState.h"
 
 #include "GetProjectPath.h"
-#include "core/ClickableComponent.h"
-#include "core/GraphicsComponent.h"
-#include "core/HitBoxComponent.h"
-#include "core/MouseOverComponent.h"
-#include "core/TextComponent.h"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -27,16 +23,11 @@ PauseState::PauseState(const std::shared_ptr<window::Window>& windowInit,
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToGame{false},
       shouldBackToMenu{false},
-      timeAfterButtonsCanBeClicked{0.3f}
+      uiManager{std::make_unique<components::ui::DefaultUIManager>(inputManagerInit, rendererPoolInit,
+                                                                   createSettingsUIConfig())}
 {
     inputManager->registerObserver(this);
-
-    createBackground();
-    createPauseTitle();
-    createBackToGameButton();
-    createMenuButton();
-
-    initialize();
+    timer.start();
 }
 
 PauseState::~PauseState()
@@ -44,25 +35,8 @@ PauseState::~PauseState()
     inputManager->removeObserver(this);
 }
 
-void PauseState::initialize()
-{
-    for (auto& button : buttons)
-    {
-        button->loadDependentComponents();
-        button->getComponent<components::core::ClickableComponent>()->disable();
-    }
-
-    timer.start();
-}
-
 void PauseState::update(const utils::DeltaTime& deltaTime)
 {
-    if (buttonsActionsFrozen &&
-        freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
-    {
-        unfreezeButtons();
-    }
-
     if (timer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
         inputStatus->isKeyPressed(input::InputKey::Escape))
     {
@@ -80,19 +54,11 @@ void PauseState::update(const utils::DeltaTime& deltaTime)
         backToMenu();
         return;
     }
-
-    for (auto& button : buttons)
-    {
-        button->update(deltaTime);
-    }
+    uiManager->update(deltaTime);
 }
 
 void PauseState::lateUpdate(const utils::DeltaTime& deltaTime)
 {
-    for (auto& button : buttons)
-    {
-        button->lateUpdate(deltaTime);
-    }
 }
 
 void PauseState::render()
@@ -120,15 +86,6 @@ void PauseState::handleInputStatus(const input::InputStatus& inputStatusInit)
     inputStatus = &inputStatusInit;
 }
 
-void PauseState::unfreezeButtons()
-{
-    buttonsActionsFrozen = false;
-    for (auto& button : buttons)
-    {
-        button->getComponent<components::core::ClickableComponent>()->enable();
-    }
-}
-
 void PauseState::backToGame()
 {
     states.pop();
@@ -152,55 +109,66 @@ void PauseState::backToMenu()
     }
 }
 
-void PauseState::createPauseTitle()
+std::unique_ptr<components::ui::UIConfig> PauseState::createSettingsUIConfig()
 {
+    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
+    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
+    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
+    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
+
+
+    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
+        "pauseBackground", utils::Vector2f{25, 10}, utils::Vector2f{31, 32},
+        graphics::VisibilityLayer::Background, graphics::Color{172});
+
     const auto textPausePosition = utils::Vector2f{35, 13};
-    title = std::make_unique<components::core::ComponentOwner>(textPausePosition, "pauseTitle");
-    title->addComponent<components::core::TextComponent>(rendererPool, textPausePosition, "Pause", fontPath,
-                                                         40, graphics::Color::White, utils::Vector2f{0, 0});
-}
+    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "pauseTitleLabel", textPausePosition, graphics::Color::White, "Pause", 40, fontPath);
+    labelsConfig.emplace_back(std::move(titleLabelConfig));
 
-void PauseState::createBackground()
-{
-    const auto backgroundColor = graphics::Color{172};
-    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0}, "pauseBackground");
-    background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{31, 32},
-                                                                  utils::Vector2f{25, 10}, backgroundColor,
-                                                                  graphics::VisibilityLayer::Background);
-}
+///////////////////////////////////////////////////////////////////////////////////////////////
 
-void PauseState::createBackToGameButton()
-{
     const auto backToGameButtonPosition = utils::Vector2f{28, 21};
 
-    addButton(backToGameButtonPosition, "Back to game", utils::Vector2f{2, 0.5},
-              [this] { shouldBackToGame = true; });
-}
+    const auto backToGameButtonOnMouseOver = [&] {
+      uiManager->setColor(components::ui::UIComponentType::Button, "pauseBackToGameButton",
+                          buttonHoverColor);
+    };
+    const auto backToGameButtonOnMouseOut = [&] {
+      uiManager->setColor(components::ui::UIComponentType::Button, "pauseBackToGameButton", buttonColor);
+    };
+    auto backToGameButtonMouseOverActions =
+        components::ui::MouseOverActions{backToGameButtonOnMouseOver, backToGameButtonOnMouseOut};
+    auto backToGameClickAction = [this] { shouldBackToGame = true; };
+    auto backToGameButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "pauseBackToGameButton", backToGameButtonPosition, buttonSize, buttonColor, "Back to game",
+        textColor, 30, fontPath, utils::Vector2f{2, 0.5}, backToGameClickAction,
+        backToGameButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(backToGameButtonConfig));
 
-void PauseState::createMenuButton()
-{
+//////////////////////////////////////////////////////////////////////////////////////////////
+
     const auto backToMenuButtonPosition = utils::Vector2f{28, 30};
 
-    addButton(backToMenuButtonPosition, "Back to menu", utils::Vector2f{2, 0.5},
-              [this] { shouldBackToMenu = true; });
-}
+    const auto backToMenuButtonOnMouseOver = [&] {
+      uiManager->setColor(components::ui::UIComponentType::Button, "pauseBackToMenuButton",
+                          buttonHoverColor);
+    };
+    const auto backToMenuButtonOnMouseOut = [&] {
+      uiManager->setColor(components::ui::UIComponentType::Button, "pauseBackToMenuButton", buttonColor);
+    };
+    auto backToMenuButtonMouseOverActions =
+        components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
+    auto backToMenuClickAction = [this] { shouldBackToMenu = true; };
+    auto backToMenuButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "pauseBackToMenuButton", backToMenuButtonPosition, buttonSize, buttonColor, "Back to menu",
+        textColor, 30, fontPath, utils::Vector2f{2, 0.5}, backToMenuClickAction,
+        backToMenuButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(backToMenuButtonConfig));
 
-void PauseState::addButton(const utils::Vector2f& position, const std::string& text,
-                           const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
-{
-    auto button = std::make_unique<components::core::ComponentOwner>(position, text);
-    auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
-        rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
-    button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, 30,
-                                                          textColor, textOffset);
-    button->addComponent<components::core::HitBoxComponent>(buttonSize);
-    button->addComponent<components::core::ClickableComponent>(inputManager, std::move(clickAction));
-
-    const auto changeColorOnMouseOver = [=] { graphicsComponent->setColor(buttonHoverColor); };
-    const auto changeColorOnMouseOut = [=] { graphicsComponent->setColor(buttonColor); };
-    button->addComponent<components::core::MouseOverComponent>(inputManager, changeColorOnMouseOver,
-                                                               changeColorOnMouseOut);
-    buttons.push_back(std::move(button));
+    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
+                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
+                                                      std::move(textFieldsConfig));
 }
 
 }
