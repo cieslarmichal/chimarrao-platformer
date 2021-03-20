@@ -208,7 +208,7 @@ void SaveMapState::createMapPropertiesTitle()
 void SaveMapState::createBackground()
 {
     const auto backgroundColor = graphics::Color{172};
-    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
+    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0}, "saveMapBackground");
     background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{40, 37},
                                                                   utils::Vector2f{20, 8}, backgroundColor,
                                                                   graphics::VisibilityLayer::Second);
@@ -238,7 +238,7 @@ void SaveMapState::createMapNamingSection()
 
 void SaveMapState::addMapNameInputField()
 {
-    mapNameInputTextField = std::make_unique<components::core::ComponentOwner>(mapNamingPromptPosition);
+    mapNameInputTextField = std::make_unique<components::core::ComponentOwner>(mapNamingPromptPosition, "saveMapMapNameInputText");
     auto graphicsComponent = mapNameInputTextField->addComponent<components::core::GraphicsComponent>(
         rendererPool, buttonSize, mapNamingPromptPosition, buttonColor, graphics::VisibilityLayer::First);
     mapNameInputTextField->addComponent<components::core::TextComponent>(
@@ -258,7 +258,7 @@ void SaveMapState::addButton(const utils::Vector2f& position, const utils::Vecto
                              const std::string& text, unsigned int fontSize,
                              const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
 {
-    auto button = std::make_unique<components::core::ComponentOwner>(position);
+    auto button = std::make_unique<components::core::ComponentOwner>(position, text);
     auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
         rendererPool, size, position, buttonColor, graphics::VisibilityLayer::First);
     button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, fontSize,
@@ -276,7 +276,7 @@ void SaveMapState::addButton(const utils::Vector2f& position, const utils::Vecto
 void SaveMapState::addText(const utils::Vector2f& position, const std::string& description,
                            unsigned int fontSize, graphics::Color color)
 {
-    auto text = std::make_unique<components::core::ComponentOwner>(position);
+    auto text = std::make_unique<components::core::ComponentOwner>(position, description);
     text->addComponent<components::core::TextComponent>(rendererPool, position, description, fontPath,
                                                         fontSize, color);
     texts.push_back(std::move(text));

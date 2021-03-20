@@ -29,7 +29,7 @@ struct TextFieldConfig
     {
     }
 
-    const utils::UniqueName uniqueName;
+    const std::string uniqueName;
     const utils::Vector2f position;
     const utils::Vector2f size;
     const graphics::Color color;

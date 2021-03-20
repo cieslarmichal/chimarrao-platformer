@@ -1,6 +1,6 @@
 #include "ClickableComponent.h"
 
-#include <set>
+#include <unordered_set>
 #include <utility>
 
 #include "ComponentOwner.h"
@@ -14,17 +14,19 @@ ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
                                        std::function<void(void)> actionInit)
     : Component(ownerInit), inputManager{std::move(inputManagerInit)}, inputStatus{nullptr}
 {
-    keyActionVector.push_back({input::InputKey::MouseLeft, std::move(actionInit)});
+    keyActions.push_back({input::InputKey::MouseLeft, std::move(actionInit)});
     inputManager->registerObserver(this);
 }
 
 ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
                                        std::shared_ptr<input::InputManager> inputManagerInit,
-                                       std::vector<KeyAction> keyActionVectorInit)
+                                       const std::vector<KeyAction>& keyActionVectorInit)
     : Component(ownerInit), inputManager{std::move(inputManagerInit)}, inputStatus{nullptr}
 {
-    std::set<input::InputKey> inputKeys;
-    for (auto& keyAction : keyActionVectorInit)
+    inputManager->registerObserver(this);
+
+    std::unordered_set<input::InputKey> inputKeys;
+    for (const auto& keyAction : keyActionVectorInit)
     {
         if (inputKeys.count(keyAction.key))
         {
@@ -32,10 +34,13 @@ ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
                 "ClickableComponent: Two or more action for the same key"};
         }
         inputKeys.insert(keyAction.key);
-        keyActionVector.push_back(std::move(keyAction));
+        keyActions.push_back(keyAction);
     }
 
-    inputManager->registerObserver(this);
+    for (auto &keyAction : keyActions)
+    {
+        std::cerr<< keyAction.key<< std::endl;
+    }
 }
 
 ClickableComponent::~ClickableComponent()
@@ -59,13 +64,12 @@ void ClickableComponent::update(utils::DeltaTime)
         return;
     }
 
-    for (auto& keyAction : keyActionVector)
+    for (auto& keyAction : keyActions)
     {
         if (not keyAction.clicked && inputStatus->isKeyReleased(keyAction.key) &&
             hitbox->intersects(inputStatus->getMousePosition()))
         {
             keyAction.action();
-            // clicked = true;
         }
     }
 }
@@ -79,7 +83,7 @@ void ClickableComponent::enable()
 {
     // TODO: test
     Component::enable();
-    for (auto& keyAction : keyActionVector)
+    for (auto& keyAction : keyActions)
     {
         keyAction.clicked = false;
     }
@@ -88,7 +92,7 @@ void ClickableComponent::enable()
 void ClickableComponent::disable()
 {
     Component::disable();
-    for (auto& keyAction : keyActionVector)
+    for (auto& keyAction : keyActions)
     {
         keyAction.clicked = false;
     }

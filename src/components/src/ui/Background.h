@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "BackgroundConfig.h"
+#include "InputManager.h"
 #include "RendererPool.h"
 #include "UIComponent.h"
 #include "core/ComponentOwner.h"
@@ -12,7 +13,8 @@ namespace components::ui
 class Background : public UIComponent
 {
 public:
-    Background(const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<BackgroundConfig>);
+    Background(const std::shared_ptr<input::InputManager>&, const std::shared_ptr<graphics::RendererPool>&,
+               std::unique_ptr<BackgroundConfig>);
 
     void update(utils::DeltaTime) override;
     std::string getName() const override;

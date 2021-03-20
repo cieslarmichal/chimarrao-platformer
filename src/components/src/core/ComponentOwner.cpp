@@ -2,7 +2,8 @@
 
 namespace components::core
 {
-ComponentOwner::ComponentOwner(const utils::Vector2f& position)
+ComponentOwner::ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit)
+    : uniqueName{uniqueNameInit}
 {
     transform = addComponent<TransformComponent>(position);
 }
@@ -45,6 +46,11 @@ void ComponentOwner::disable()
     {
         components[i]->disable();
     }
+}
+
+std::string ComponentOwner::getName() const
+{
+    return uniqueName.getName();
 }
 
 }

@@ -7,6 +7,8 @@
 #include "TileMap.h"
 #include "Timer.h"
 #include "core/ClickableComponent.h"
+#include "ui/UIConfig.h"
+#include "ui/UIManager.h"
 
 namespace game
 {
@@ -29,6 +31,7 @@ public:
 
 private:
     void unfreezeButtons();
+    std::unique_ptr<components::ui::UIConfig> createSettingsUIConfig();
 
     const input::InputStatus* inputStatus;
     bool paused;
@@ -36,11 +39,11 @@ private:
     const float timeAfterStateCouldBePaused;
     int currentTileId;
     std::string currentTilePath;
-    std::unique_ptr<components::core::ComponentOwner> background;
     std::vector<std::shared_ptr<components::core::ComponentOwner>> clickableTileMap;
     std::unique_ptr<TileMap> tileMap;
     bool buttonsActionsFrozen = true;
     utils::Timer freezeClickableButtonsTimer;
     const float timeAfterButtonsCanBeClicked;
+    std::unique_ptr<components::ui::UIManager> uiManager;
 };
 }

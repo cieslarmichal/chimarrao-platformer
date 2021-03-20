@@ -60,7 +60,7 @@ public:
     const float movementSpeed{10.0};
     utils::DeltaTime deltaTime{3};
     const utils::Vector2f position{0.0, 11.0};
-    ComponentOwner componentOwner{position};
+    ComponentOwner componentOwner{position, "keyboardMovementComponentTest"};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
 
     KeyboardMovementComponent keyboardMovementComponent{&componentOwner, inputManager};

@@ -162,7 +162,7 @@ void MenuState::unfreezeButtons()
 
 void MenuState::createBackground()
 {
-    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
+    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0}, "menuBackground");
     background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{80, 60},
                                                                   utils::Vector2f{0, 0}, backgroundPath,
                                                                   graphics::VisibilityLayer::Background);
@@ -218,7 +218,7 @@ void MenuState::createExitButton()
 void MenuState::addButton(const utils::Vector2f& position, const std::string& text,
                           const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
 {
-    auto button = std::make_unique<components::core::ComponentOwner>(position);
+    auto button = std::make_unique<components::core::ComponentOwner>(position, text);
     auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
         rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
     button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, 35,
@@ -254,7 +254,8 @@ void MenuState::createIcons()
 
 void MenuState::addIcon(const utils::Vector2f& position)
 {
-    auto icon = std::make_unique<components::core::ComponentOwner>(position);
+    auto icon = std::make_unique<components::core::ComponentOwner>(
+        position, "icon" + std::to_string(position.x) + std::to_string(position.y));
     icon->addComponent<components::core::GraphicsComponent>(rendererPool, iconSize, position, iconPath,
                                                             graphics::VisibilityLayer::First);
     icons.push_back(std::move(icon));

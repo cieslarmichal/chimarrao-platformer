@@ -21,7 +21,7 @@ struct LabelConfig
     {
     }
 
-    const utils::UniqueName uniqueName;
+    const std::string uniqueName;
     const utils::Vector2f position;
     const graphics::Color color;
     const std::string text;

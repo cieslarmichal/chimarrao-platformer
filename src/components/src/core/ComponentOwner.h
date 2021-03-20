@@ -6,19 +6,22 @@
 #include "Component.h"
 #include "DeltaTime.h"
 #include "TransformComponent.h"
+#include "UniqueName.h"
 
 namespace components::core
 {
 class ComponentOwner
 {
 public:
-    ComponentOwner(const utils::Vector2f& position);
+    ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit);
 
     void loadDependentComponents();
     void update(utils::DeltaTime);
     void lateUpdate(utils::DeltaTime);
     void enable();
     void disable();
+    // TODO: add test for getName
+    std::string getName() const;
 
     template <typename T, typename... Args>
     std::shared_ptr<T> addComponent(Args... args)
@@ -59,5 +62,8 @@ public:
 
 protected:
     std::vector<std::shared_ptr<Component>> components;
+
+private:
+    utils::UniqueName uniqueName;
 };
 }

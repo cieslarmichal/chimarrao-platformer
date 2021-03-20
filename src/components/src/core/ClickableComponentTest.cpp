@@ -1,6 +1,6 @@
 #include "ClickableComponent.h"
 
-#include <exceptions/ActionForKeyAlreadyExists.h>
+#include "exceptions/ActionForKeyAlreadyExists.h"
 
 #include "gtest/gtest.h"
 
@@ -86,7 +86,7 @@ public:
     const utils::Vector2f position1{20, 20};
     const utils::Vector2f positionInsideTarget{21, 21};
     const utils::Vector2f positionOutsideTarget{27, 21};
-    ComponentOwner componentOwner{position1};
+    ComponentOwner componentOwner{position1, "clickableComponentOwnerTest"};
     utils::DeltaTime deltaTime{1};
     ClickableComponent clickableComponent{&componentOwner, inputManager,
                                           [this] { clickAction(actionVariable); }};
@@ -163,7 +163,7 @@ TEST_F(ClickableComponentTest,
        multipleKeyActionClicableComponentConstructor_givenMoreThanOneActionForOneKey_shouldThrowException)
 {
     ASSERT_THROW(ClickableComponent(&componentOwner, inputManager, invalidKeyActionVector),
-                 components::exceptions::ActionForKeyAlreadyExists);
+                 components::core::exceptions::ActionForKeyAlreadyExists);
 }
 
 TEST_F(ClickableComponentTest,
@@ -173,7 +173,7 @@ TEST_F(ClickableComponentTest,
         std::make_shared<StrictMock<input::InputManagerMock>>();
     EXPECT_CALL(*inputManager, registerObserver(_));
     EXPECT_CALL(*inputManager, removeObserver(_));
-    ComponentOwner localComponentOwner{position1};
+    ComponentOwner localComponentOwner{position1, "clickableComponentOwner1"};
     auto hitboxComponent = localComponentOwner.addComponent<HitBoxComponent>(size, offset);
     hitboxComponent->lateUpdate(deltaTime);
     auto clickableComponent = ClickableComponent(&localComponentOwner, inputManager, validKeyActionVector);
@@ -195,7 +195,7 @@ TEST_F(ClickableComponentTest,
         std::make_shared<StrictMock<input::InputManagerMock>>();
     EXPECT_CALL(*inputManager, registerObserver(_));
     EXPECT_CALL(*inputManager, removeObserver(_));
-    ComponentOwner localComponentOwner{position1};
+    ComponentOwner localComponentOwner{position1, "clickableComponentOwner2"};
     auto hitboxComponent = localComponentOwner.addComponent<HitBoxComponent>(size, offset);
     hitboxComponent->lateUpdate(deltaTime);
     auto clickableComponent = ClickableComponent(&localComponentOwner, inputManager, validKeyActionVector);

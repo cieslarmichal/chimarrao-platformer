@@ -1,12 +1,12 @@
 #include "EditorState.h"
 
-#include <core/MouseOverComponent.h>
-
 #include "EditorMenuState.h"
 #include "GetProjectPath.h"
 #include "TileMap.h"
 #include "core/ComponentOwner.h"
 #include "core/GraphicsComponent.h"
+#include "core/MouseOverComponent.h"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -33,26 +33,14 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
       inputStatus{nullptr},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
-      timeAfterButtonsCanBeClicked{0.3f}
+      timeAfterButtonsCanBeClicked{0.3f},
+      uiManager{std::make_unique<components::ui::DefaultUIManager>(inputManagerInit, rendererPoolInit,
+                                                                   createSettingsUIConfig())}
 {
     inputManager->registerObserver(this);
 
     currentTileId = 0;
     currentTilePath = tilesTextureVector[currentTileId];
-    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY}, utils::Vector2f{0, 0},
-        pathToBackground, graphics::VisibilityLayer::Background);
-    background->addComponent<components::core::HitBoxComponent>(
-        utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY});
-    const auto changeBlockAction = [&]() {
-        std::cout << currentTilePath << std::endl;
-        currentTileId = currentTileId + 1 < tilesTextureVector.size() ? currentTileId + 1 : 0;
-        currentTilePath = tilesTextureVector[currentTileId];
-    };
-    background->addComponent<components::core::ClickableComponent>(
-        inputManager,
-        std::vector<components::core::KeyAction>{{input::InputKey::MouseRight, changeBlockAction}});
 
     tileMap = std::make_unique<TileMap>(
         utils::Vector2i(rendererPoolSizeX / tileSizeX, rendererPoolSizeY / tileSizeY),
@@ -62,7 +50,8 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
         for (int x = 0; x < rendererPoolSizeX / tileSizeX; ++x)
         {
             auto clickableTile = std::make_shared<components::core::ComponentOwner>(
-                utils::Vector2f{static_cast<float>(x * tileSizeX), static_cast<float>(y * tileSizeY)});
+                utils::Vector2f{static_cast<float>(x * tileSizeX), static_cast<float>(y * tileSizeY)},
+                "tile" + std::to_string(x) + std::to_string(y) +std::to_string(x));
             auto graphicsComponent = clickableTile->addComponent<components::core::GraphicsComponent>(
                 rendererPool, utils::Vector2f{tileSizeX, tileSizeY},
                 utils::Vector2f{static_cast<float>(x * tileSizeX), static_cast<float>(y * tileSizeY)},
@@ -114,7 +103,7 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
             };
             clickableTile->addComponent<components::core::MouseOverComponent>(
                 inputManager, actionOnMouseOverBlock, actionOnMouseOut);
-            clickableTileMap.push_back(clickableTile);
+            clickableTileMap.emplace_back(clickableTile);
         }
     }
 
@@ -128,8 +117,6 @@ EditorState::~EditorState()
 
 void EditorState::initialize()
 {
-    background->loadDependentComponents();
-
     for (auto& tile : clickableTileMap)
     {
         tile->loadDependentComponents();
@@ -137,7 +124,7 @@ void EditorState::initialize()
     }
 }
 
-void EditorState::update(const utils::DeltaTime& dt)
+void EditorState::update(const utils::DeltaTime& deltaTime)
 {
     if (buttonsActionsFrozen &&
         freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
@@ -153,11 +140,11 @@ void EditorState::update(const utils::DeltaTime& dt)
 
     if (not paused)
     {
-        background->update(dt);
         for (auto& tile : clickableTileMap)
         {
-            tile->update(dt);
+            tile->update(deltaTime);
         }
+        uiManager->update(deltaTime);
     }
 }
 
@@ -165,7 +152,6 @@ void EditorState::lateUpdate(const utils::DeltaTime& dt)
 {
     if (not paused)
     {
-        background->lateUpdate(dt);
         for (auto& tile : clickableTileMap)
         {
             tile->lateUpdate(dt);
@@ -195,12 +181,14 @@ void EditorState::activate()
         tile->enable();
         tile->getComponent<components::core::ClickableComponent>()->disable();
     }
+    uiManager->activate();
 }
 
 void EditorState::deactivate()
 {
     active = false;
     pauseTimer.restart();
+    uiManager->deactivate();
 }
 
 void EditorState::handleInputStatus(const input::InputStatus& inputStatusInit)
@@ -229,6 +217,30 @@ void EditorState::unfreezeButtons()
     {
         tile->getComponent<components::core::ClickableComponent>()->enable();
     }
+}
+
+std::unique_ptr<components::ui::UIConfig> EditorState::createSettingsUIConfig()
+{
+    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
+    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
+    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
+    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
+
+    const auto changeBlockAction = [&]() {
+        std::cout << currentTilePath << std::endl;
+        currentTileId = currentTileId + 1 < tilesTextureVector.size() ? currentTileId + 1 : 0;
+        currentTilePath = tilesTextureVector[currentTileId];
+    };
+    const auto keyActions = std::vector<components::core::KeyAction>{
+        components::core::KeyAction{input::InputKey::MouseRight, changeBlockAction}};
+
+    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
+        "editorBackground", utils::Vector2f{0, 0}, utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY},
+        graphics::VisibilityLayer::Background, pathToBackground, keyActions);
+
+    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
+                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
+                                                      std::move(textFieldsConfig));
 }
 
 }

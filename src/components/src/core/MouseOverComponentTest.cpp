@@ -79,7 +79,7 @@ public:
     const utils::Vector2f positionInsideTarget2{23, 24};
     const utils::Vector2f positionOutsideTarget1{27, 21};
     const utils::Vector2f positionOutsideTarget2{27, 23};
-    ComponentOwner componentOwner{position1};
+    ComponentOwner componentOwner{position1, "mouseOverComponentTest"};
     utils::DeltaTime deltaTime{1};
     MouseOverComponent mouseOverComponent{&componentOwner, inputManager, [this] { mouseOverAction(); },
                                           [this] { mouseOutAction(); }};

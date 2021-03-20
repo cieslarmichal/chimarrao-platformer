@@ -155,7 +155,7 @@ void PauseState::backToMenu()
 void PauseState::createPauseTitle()
 {
     const auto textPausePosition = utils::Vector2f{35, 13};
-    title = std::make_unique<components::core::ComponentOwner>(textPausePosition);
+    title = std::make_unique<components::core::ComponentOwner>(textPausePosition, "pauseTitle");
     title->addComponent<components::core::TextComponent>(rendererPool, textPausePosition, "Pause", fontPath,
                                                          40, graphics::Color::White, utils::Vector2f{0, 0});
 }
@@ -163,7 +163,7 @@ void PauseState::createPauseTitle()
 void PauseState::createBackground()
 {
     const auto backgroundColor = graphics::Color{172};
-    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
+    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0}, "pauseBackground");
     background->addComponent<components::core::GraphicsComponent>(rendererPool, utils::Vector2f{31, 32},
                                                                   utils::Vector2f{25, 10}, backgroundColor,
                                                                   graphics::VisibilityLayer::Background);
@@ -188,7 +188,7 @@ void PauseState::createMenuButton()
 void PauseState::addButton(const utils::Vector2f& position, const std::string& text,
                            const utils::Vector2f& textOffset, std::function<void(void)> clickAction)
 {
-    auto button = std::make_unique<components::core::ComponentOwner>(position);
+    auto button = std::make_unique<components::core::ComponentOwner>(position, text);
     auto graphicsComponent = button->addComponent<components::core::GraphicsComponent>(
         rendererPool, buttonSize, position, buttonColor, graphics::VisibilityLayer::First);
     button->addComponent<components::core::TextComponent>(rendererPool, position, text, fontPath, 30,

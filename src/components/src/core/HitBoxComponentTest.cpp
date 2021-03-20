@@ -16,7 +16,7 @@ public:
     const utils::Vector2f position1{20, 20};
     const utils::Vector2f positionInsideTarget{21, 21};
     const utils::Vector2f positionOutsideTarget{27, 21};
-    ComponentOwner componentOwner{position1};
+    ComponentOwner componentOwner{position1, "hitBoxComponentTest"};
     utils::DeltaTime deltaTime{1};
     HitBoxComponent hitboxComponent{&componentOwner, size, offset};
 };

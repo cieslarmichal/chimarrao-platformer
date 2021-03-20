@@ -13,7 +13,7 @@ UIComponentFactory::UIComponentFactory(std::shared_ptr<input::InputManager> inpu
 std::unique_ptr<Background>
 UIComponentFactory::createBackground(std::unique_ptr<BackgroundConfig> backgroundConfig) const
 {
-    return std::make_unique<Background>(rendererPool, std::move(backgroundConfig));
+    return std::make_unique<Background>(inputManager, rendererPool, std::move(backgroundConfig));
 }
 
 std::unique_ptr<Button> UIComponentFactory::createButton(std::unique_ptr<ButtonConfig> buttonConfig) const

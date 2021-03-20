@@ -48,7 +48,7 @@ public:
     const GraphicsId graphicsId = GraphicsIdGenerator::generateId();
     std::shared_ptr<StrictMock<RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<RendererPoolMock>>();
-    ComponentOwner componentOwner{position1};
+    ComponentOwner componentOwner{position1, "graphicsComponentTest"};
     utils::DeltaTime deltaTime{1};
     graphics::TexturePath texturePath{"/path/to/texture"};
 };

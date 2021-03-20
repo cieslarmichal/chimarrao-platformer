@@ -20,8 +20,8 @@ Button::Button(const std::shared_ptr<input::InputManager>& inputManager,
         throw exceptions::UIComponentConfigNotFound{"Button config not found"};
     }
 
-    name = buttonConfig->uniqueName.getName();
-    coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(buttonConfig->position);
+    name = buttonConfig->uniqueName;
+    coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(buttonConfig->position, name);
     coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
         rendererPool, buttonConfig->size, buttonConfig->position, buttonConfig->buttonColor,
         graphics::VisibilityLayer::First);

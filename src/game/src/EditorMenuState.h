@@ -29,9 +29,7 @@ public:
 private:
     void backToEditor();
     void backToMenu();
-    void hideGraphics();
     std::unique_ptr<components::ui::UIConfig> createSettingsUIConfig();
-
 
     const input::InputStatus* inputStatus;
     utils::Timer possibleLeaveFromStateTimer;

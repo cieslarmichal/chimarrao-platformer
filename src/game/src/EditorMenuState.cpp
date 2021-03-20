@@ -85,25 +85,12 @@ void EditorMenuState::deactivate()
 {
     active = false;
     uiManager->deactivate();
-//    hideGraphics();
 }
 
 void EditorMenuState::handleInputStatus(const input::InputStatus& inputStatusInit)
 {
     inputStatus = &inputStatusInit;
 }
-
-void EditorMenuState::hideGraphics()
-{
-//    for (auto& button : buttons)
-//    {
-//        button->disable();
-//    }
-//
-//    background->disable();
-//    title->disable();
-}
-
 
 void EditorMenuState::backToEditor()
 {

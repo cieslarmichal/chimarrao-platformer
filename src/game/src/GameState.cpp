@@ -27,7 +27,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     animations::DefaultAnimatorSettingsRepository settingsRepository{
         std::make_unique<animations::AnimatorSettingsYamlReader>()};
 
-    player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10});
+    player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10}, "player");
     auto graphicsComponent = player->addComponent<components::core::GraphicsComponent>(
         rendererPool, utils::Vector2f{7, 7}, utils::Vector2f{10, 10}, graphics::Color::Red,
         graphics::VisibilityLayer::Second);
@@ -42,7 +42,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
         utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf", 13,
         graphics::Color::Black, utils::Vector2f{1.5, -1.5});
 
-    background = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{0, 0});
+    background = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{0, 0}, "gameBackground");
     background->addComponent<components::core::GraphicsComponent>(
         rendererPool, utils::Vector2f{80, 60}, utils::Vector2f{0, 0},
         utils::getProjectPath("chimarrao-platformer") + "resources/BG/background_glacial_mountains.png",

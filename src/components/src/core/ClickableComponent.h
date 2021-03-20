@@ -16,7 +16,7 @@ public:
     ClickableComponent(ComponentOwner*, std::shared_ptr<input::InputManager>,
                        std::function<void(void)> action);
     ClickableComponent(ComponentOwner*, std::shared_ptr<input::InputManager>,
-                       std::vector<KeyAction> keyActionVector);
+                       const std::vector<KeyAction>& keyActionVector);
     ~ClickableComponent();
 
     void loadDependentComponents() override;
@@ -29,6 +29,6 @@ private:
     std::shared_ptr<input::InputManager> inputManager;
     const input::InputStatus* inputStatus;
     std::shared_ptr<HitBoxComponent> hitbox;
-    std::vector<KeyAction> keyActionVector;
+    std::vector<KeyAction> keyActions;
 };
 }

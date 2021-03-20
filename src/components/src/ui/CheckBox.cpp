@@ -20,8 +20,8 @@ CheckBox::CheckBox(const std::shared_ptr<input::InputManager>& inputManager,
         throw exceptions::UIComponentConfigNotFound{"CheckBox config not found"};
     }
 
-    name = checkBoxConfig->uniqueName.getName();
-    coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(checkBoxConfig->position);
+    name = checkBoxConfig->uniqueName;
+    coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(checkBoxConfig->position, name);
     coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
         rendererPool, checkBoxConfig->size, checkBoxConfig->position, checkBoxConfig->color,
         graphics::VisibilityLayer::First);
@@ -30,8 +30,8 @@ CheckBox::CheckBox(const std::shared_ptr<input::InputManager>& inputManager,
         rendererPool, checkBoxConfig->position, text, checkBoxConfig->fontPath, checkBoxConfig->fontSize,
         graphics::Color::Black, checkBoxConfig->textOffset);
     coreComponentsOwner->addComponent<components::core::HitBoxComponent>(checkBoxConfig->size);
-    coreComponentsOwner->addComponent<components::core::ClickableComponent>(
-        inputManager, checkBoxConfig->clickAction);
+    coreComponentsOwner->addComponent<components::core::ClickableComponent>(inputManager,
+                                                                            checkBoxConfig->clickAction);
 
     if (checkBoxConfig->mouseOverActions)
     {
