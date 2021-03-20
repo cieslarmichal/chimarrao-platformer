@@ -38,6 +38,7 @@ private:
     const unsigned int inputBufferMaximumSize;
     utils::Timer deleteCharactersTimer;
     const float timeAfterNextLetterCanBeDeleted;
+    std::function<void()> clickInsideFieldAction;
     std::function<void(std::string)> clickOutsideFieldAction;
 };
 }

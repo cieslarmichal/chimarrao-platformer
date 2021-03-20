@@ -74,11 +74,13 @@ std::string PauseState::getName() const
 void PauseState::activate()
 {
     active = true;
+    uiManager->activate();
 }
 
 void PauseState::deactivate()
 {
     active = false;
+    uiManager->deactivate();
 }
 
 void PauseState::handleInputStatus(const input::InputStatus& inputStatusInit)

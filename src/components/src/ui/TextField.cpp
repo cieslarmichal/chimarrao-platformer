@@ -35,12 +35,13 @@ TextField::TextField(const std::shared_ptr<input::InputManager>& inputManager,
         graphics::Color::White, textFieldConfig->textOffset);
     coreComponentsOwner->addComponent<components::core::HitBoxComponent>(textFieldConfig->size);
 
-    auto textFieldClickedAction = [&] {
-        textFieldClicked = true;
-        textFieldConfig->clickInFieldAction();
-    };
-
+    clickInsideFieldAction = textFieldConfig->clickInFieldAction;
     clickOutsideFieldAction = textFieldConfig->clickOutsideFieldAction;
+
+    auto textFieldClickedAction = [&] {
+      textFieldClicked = true;
+      clickInsideFieldAction();
+    };
 
     coreComponentsOwner->addComponent<components::core::ClickableComponent>(
         inputManager, std::move(textFieldClickedAction));

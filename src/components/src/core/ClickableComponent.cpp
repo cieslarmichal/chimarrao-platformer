@@ -36,11 +36,6 @@ ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
         inputKeys.insert(keyAction.key);
         keyActions.push_back(keyAction);
     }
-
-    for (auto &keyAction : keyActions)
-    {
-        std::cerr<< keyAction.key<< std::endl;
-    }
 }
 
 ClickableComponent::~ClickableComponent()
