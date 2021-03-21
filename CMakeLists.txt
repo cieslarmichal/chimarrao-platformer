@@ -8,6 +8,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(SFML_MINIMAL_VERSION 2.5.1)
 set(FLAGS -std=c++17 -Wall -g3 -fno-omit-frame-pointer -Wextra -Werror)
 
+set(GMOCK_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/externals/googletest/googlemock/include")
+set(GTEST_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/externals/googletest/googletest/include")
+set(JSON_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/externals/json/include")
+
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
 find_package(SFML ${SFML_MINIMAL_VERSION} COMPONENTS system graphics window REQUIRED)
 

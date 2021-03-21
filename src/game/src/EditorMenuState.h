@@ -1,5 +1,7 @@
 #pragma once
 
+#include <editor/TileMap.h>
+
 #include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
@@ -13,7 +15,8 @@ public:
     explicit EditorMenuState(const std::shared_ptr<window::Window>&,
                              const std::shared_ptr<input::InputManager>&,
                              const std::shared_ptr<graphics::RendererPool>&,
-                             std::stack<std::unique_ptr<State>>&);
+                             std::stack<std::unique_ptr<State>>&,
+                             TileMap&);
     ~EditorMenuState();
 
     void initialize();
@@ -50,5 +53,6 @@ private:
     bool buttonsActionsFrozen = true;
     utils::Timer freezeClickableButtonsTimer;
     const float timeAfterButtonsCanBeClicked;
+    TileMap& tileMap;
 };
 }

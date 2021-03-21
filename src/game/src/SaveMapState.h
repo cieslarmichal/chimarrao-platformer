@@ -1,5 +1,7 @@
 #pragma once
 
+#include <editor/TileMap.h>
+
 #include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
@@ -12,7 +14,7 @@ class SaveMapState : public State, public input::InputObserver
 public:
     explicit SaveMapState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
                           const std::shared_ptr<graphics::RendererPool>&,
-                          std::stack<std::unique_ptr<State>>&);
+                          std::stack<std::unique_ptr<State>>&, TileMap&);
     ~SaveMapState();
 
     void initialize();
@@ -56,5 +58,6 @@ private:
     unsigned int mapNameMaximumSize;
     utils::Timer inputMapNameDeleteCharactersTimer;
     const float timeAfterNextLetterCanBeDeleted;
+    TileMap& tileMap;
 };
 }

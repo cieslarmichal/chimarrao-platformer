@@ -26,14 +26,16 @@ const auto changeResolutionButtonSize = utils::Vector2f{2.5, 2};
 SaveMapState::SaveMapState(const std::shared_ptr<window::Window>& windowInit,
                            const std::shared_ptr<input::InputManager>& inputManagerInit,
                            const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                           std::stack<std::unique_ptr<State>>& statesInit)
+                           std::stack<std::unique_ptr<State>>& statesInit,
+                           TileMap& tileMap)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditorMenu{false},
       timeAfterButtonsCanBeClicked{0.3f},
       mapNameMaximumSize{15},
-      timeAfterNextLetterCanBeDeleted{0.08f}
+      timeAfterNextLetterCanBeDeleted{0.08f},
+      tileMap{tileMap}
 {
     inputManager->registerObserver(this);
 
@@ -179,6 +181,10 @@ void SaveMapState::handleInputStatus(const input::InputStatus& inputStatusInit)
 void SaveMapState::saveMap()
 {
     // TODO: implement
+    tileMap.setName(mapNameBuffer);
+    //tileMap.saveToFile();
+    std::cout<<tileMap.getName()<<std::endl;
+    std::cout<<tileMap.getPath()<<std::endl;
     shouldBackToEditorMenu = true;
 }
 

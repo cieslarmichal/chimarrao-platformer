@@ -1,12 +1,13 @@
 #pragma once
 
+#include <editor/LayoutTile.h>
 #include <vector>
 
 #include "InputObserver.h"
 #include "State.h"
-#include "TileMap.h"
 #include "Timer.h"
 #include "core/ClickableComponent.h"
+#include "editor/TileMap.h"
 
 namespace game
 {
@@ -33,11 +34,15 @@ private:
     const input::InputStatus* inputStatus;
     bool paused;
     utils::Timer pauseTimer;
+    utils::Timer moveTimer;
     const float timeAfterStateCouldBePaused;
+    const float timeBetweenTileMoves;
     int currentTileId;
     std::string currentTilePath;
     std::unique_ptr<components::core::ComponentOwner> background;
     std::vector<std::shared_ptr<components::core::ComponentOwner>> clickableTileMap;
+    std::shared_ptr<TileType> currentTileType;
+    std::vector<LayoutTile> layoutTileMap;
     std::unique_ptr<TileMap> tileMap;
     bool buttonsActionsFrozen = true;
     utils::Timer freezeClickableButtonsTimer;

@@ -22,13 +22,15 @@ const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources
 EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowInit,
                                  const std::shared_ptr<input::InputManager>& inputManagerInit,
                                  const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                                 std::stack<std::unique_ptr<State>>& statesInit)
+                                 std::stack<std::unique_ptr<State>>& statesInit,
+                                 TileMap& tileMap)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditor{false},
       shouldBackToMenu{false},
-      timeAfterButtonsCanBeClicked{0.3f}
+      timeAfterButtonsCanBeClicked{0.3f},
+      tileMap{tileMap}
 {
     inputManager->registerObserver(this);
 
@@ -236,7 +238,7 @@ void EditorMenuState::createSaveMapButton()
         buttonsActionsFrozen = true;
 
         states.top()->deactivate();
-        states.push(std::make_unique<SaveMapState>(window, inputManager, rendererPool, states));
+        states.push(std::make_unique<SaveMapState>(window, inputManager, rendererPool, states, tileMap));
     };
     addButton(backToMenuButtonPosition, "Save map", utils::Vector2f{6, 0.75}, runSaveMapState);
 }
