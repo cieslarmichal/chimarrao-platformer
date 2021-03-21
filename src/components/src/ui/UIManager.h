@@ -2,6 +2,7 @@
 
 #include <string>
 
+#include "DeltaTime.h"
 #include "UIComponentTypes.h"
 #include "UIConfig.h"
 

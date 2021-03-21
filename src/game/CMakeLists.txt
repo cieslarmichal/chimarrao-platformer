@@ -30,6 +30,14 @@ set(UT_SOURCES
         src/SettingsStateTest.cpp
         src/ControlsStateTest.cpp
         src/SaveMapStateTest.cpp
+        src/ControlsStateUIConfigBuilderTest.cpp
+        src/EditorMenuStateUIConfigBuilderTest.cpp
+        src/EditorStateUIConfigBuilderTest.cpp
+        src/GameStateUIConfigBuilderTest.cpp
+        src/MenuStateUIConfigBuilderTest.cpp
+        src/PauseStateUIConfigBuilderTest.cpp
+        src/SaveMapStateUIConfigBuilderTest.cpp
+        src/SettingsStateUIConfigBuilderTest.cpp
         )
 
 add_library(game ${SOURCES})

@@ -162,6 +162,7 @@ TEST_F(ClickableComponentTest,
 TEST_F(ClickableComponentTest,
        multipleKeyActionClicableComponentConstructor_givenMoreThanOneActionForOneKey_shouldThrowException)
 {
+    EXPECT_CALL(*inputManager, registerObserver(_));
     ASSERT_THROW(ClickableComponent(&componentOwner, inputManager, invalidKeyActionVector),
                  components::core::exceptions::ActionForKeyAlreadyExists);
 }
