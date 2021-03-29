@@ -6,6 +6,7 @@ set(SOURCES
         src/IncrementalFilePathsCreator.cpp
         src/RandomNumberMersenneTwisterGenerator.cpp
         src/UniqueName.cpp
+        src/exceptions/FileNotFound.h
         )
 
 set(UT_SOURCES
@@ -19,7 +20,7 @@ set(UT_SOURCES
         )
 
 add_library(utils ${SOURCES})
-target_include_directories(utils PUBLIC src)
+target_include_directories(utils PUBLIC src ${SFML_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
 target_link_libraries(utils PUBLIC ${SFML_LIBRARIES})
 
 add_executable(utilsUT ${UT_SOURCES})

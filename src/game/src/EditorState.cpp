@@ -3,11 +3,11 @@
 #include "EditorMenuState.h"
 #include "EditorStateUIConfigBuilder.h"
 #include "GetProjectPath.h"
-#include "TileMap.h"
 #include "core/ComponentOwner.h"
 #include "core/GraphicsComponent.h"
 #include "core/MouseOverComponent.h"
 #include "ui/DefaultUIManager.h"
+#include "editor/TileMap.h"
 
 namespace game
 {
@@ -24,6 +24,7 @@ const auto pathToBrickTileTexture =
 const auto tilesTextureVector =
     std::vector<std::string>{utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png",
                              utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/2.png"};
+
 }
 EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                          const std::shared_ptr<input::InputManager>& inputManagerInit,
@@ -35,84 +36,36 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
       timeAfterButtonsCanBeClicked{0.3f},
-      uiManager{std::move(uiManagerInit)}
+      uiManager{std::move(uiManagerInit)},
+      timeBetweenTileMoves{0.025f},
+      currentTileType{std::make_shared<TileType>(defaultTileType)}
 {
     inputManager->registerObserver(this);
     uiManager->createUI(EditorStateUIConfigBuilder::createEditorUIConfig(this));
 
     currentTileId = 0;
     currentTilePath = tilesTextureVector[currentTileId];
+    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
+    background->addComponent<components::core::GraphicsComponent>(
+        rendererPool, utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY}, utils::Vector2f{0, 0},
+        pathToBackground, graphics::VisibilityLayer::Background);
 
     tileMap = std::make_unique<TileMap>(
-        utils::Vector2i(rendererPoolSizeX / tileSizeX, rendererPoolSizeY / tileSizeY),
+        utils::Vector2i(rendererPoolSizeX / tileSizeX * 2, rendererPoolSizeY / tileSizeY),
         utils::Vector2f(tileSizeX, tileSizeY));
     for (int y = 0; y < rendererPoolSizeY / tileSizeY; ++y)
     {
-        for (int x = 0; x < rendererPoolSizeX / tileSizeX; ++x)
+        for (int x = 0; x < rendererPoolSizeX / tileSizeX * 2; ++x)
         {
-            auto clickableTile = std::make_shared<components::core::ComponentOwner>(
-                utils::Vector2f{static_cast<float>(x * tileSizeX), static_cast<float>(y * tileSizeY)},
-                "tile" + std::to_string(x) + std::to_string(y) +std::to_string(x));
-            auto graphicsComponent = clickableTile->addComponent<components::core::GraphicsComponent>(
-                rendererPool, utils::Vector2f{tileSizeX, tileSizeY},
-                utils::Vector2f{static_cast<float>(x * tileSizeX), static_cast<float>(y * tileSizeY)},
-                pathToBrickTileTexture, graphics::VisibilityLayer::Invisible);
-            clickableTile->addComponent<components::core::HitBoxComponent>(
-                utils::Vector2f{tileSizeX, tileSizeY});
-            const auto actionOnClickBlock = [=]() {
-                if (tileMap->getTile({x, y}) == 0)
-                {
-                    tileMap->setTile({x, y}, 1);
-                    graphicsComponent->setColor(graphics::Color(255, 255, 255, 255));
-                    graphicsComponent->setOutline(0.0f, graphics::Color::Transparent);
-                    graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
-                    graphicsComponent->setOutline(0.2f, graphics::Color::Red);
-                }
-                else
-                {
-                    tileMap->setTile({x, y}, 0);
-                    graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
-                    graphicsComponent->setColor(graphics::Color(255, 255, 255, 64));
-                    graphicsComponent->setOutline(0.2f, graphics::Color::Green);
-                }
-            };
-            clickableTile->addComponent<components::core::ClickableComponent>(inputManager,
-                                                                              actionOnClickBlock);
-            const auto actionOnMouseOverBlock = [=]() {
-                graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
-                if (tileMap->getTile({x, y}) == 0)
-                {
-                    graphicsComponent->setTexture(currentTilePath);
-                    graphicsComponent->setColor(graphics::Color(255, 255, 255, 64));
-                    graphicsComponent->setOutline(0.2f, graphics::Color::Green);
-                }
-                else
-                {
-                    graphicsComponent->setOutline(0.2f, graphics::Color::Red);
-                }
-            };
-            const auto actionOnMouseOut = [=]() {
-                if (tileMap->getTile({x, y}) == 0)
-                {
-                    graphicsComponent->setVisibility(graphics::VisibilityLayer::Invisible);
-                }
-                else
-                {
-                    graphicsComponent->setVisibility(graphics::VisibilityLayer::Second);
-                }
-                graphicsComponent->setOutline(0.0f, graphics::Color::Transparent);
-            };
-            clickableTile->addComponent<components::core::MouseOverComponent>(
-                inputManager, actionOnMouseOverBlock, actionOnMouseOut);
-            clickableTileMap.emplace_back(clickableTile);
+            layoutTileMap.emplace_back(LayoutTile{inputManager, rendererPool, utils::Vector2i{x, y},
+                                                  utils::Vector2f{tileSizeX, tileSizeY}, currentTileType,
+                                                  *tileMap});
         }
     }
 
-    for (auto& tile : clickableTileMap)
-    {
-        tile->loadDependentComponents();
-        tile->getComponent<components::core::ClickableComponent>()->disable();
-    }
+    background->loadDependentComponents();
+    background->start();
+    moveTimer.start();
 }
 
 EditorState::~EditorState()
@@ -122,32 +75,50 @@ EditorState::~EditorState()
 
 void EditorState::update(const utils::DeltaTime& deltaTime)
 {
-    if (buttonsActionsFrozen &&
-        freezeClickableButtonsTimer.getElapsedSeconds() > timeAfterButtonsCanBeClicked)
-    {
-        unfreezeButtons();
-    }
-
     if (pauseTimer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
         inputStatus->isKeyPressed(input::InputKey::Escape))
     {
         pause();
     }
 
+    if (moveTimer.getElapsedSeconds() > timeBetweenTileMoves &&
+        inputStatus->isKeyPressed(input::InputKey::Left) && layoutTileMap.front().getPosition().x < 0)
+    {
+        moveTimer.restart();
+        for (auto& layoutTile : layoutTileMap)
+        {
+            layoutTile.moveTile({.3, 0});
+        }
+    }
+    else if (moveTimer.getElapsedSeconds() > timeBetweenTileMoves &&
+             inputStatus->isKeyPressed(input::InputKey::Right) &&
+             layoutTileMap.back().getPosition().x + tileSizeX > rendererPoolSizeX)
+    {
+        moveTimer.restart();
+        for (auto& layoutTile : layoutTileMap)
+        {
+            layoutTile.moveTile({-.3, 0});
+        }
+    }
+
     if (not paused)
     {
+        background->update(deltaTime);
+        for (auto& layoutTile : layoutTileMap)
         for (auto& tile : clickableTileMap)
         {
+            layoutTile.update(deltaTime);
             tile->update(deltaTime);
         }
         uiManager->update(deltaTime);
     }
 }
 
-void EditorState::lateUpdate(const utils::DeltaTime& dt)
+void EditorState::lateUpdate(const utils::DeltaTime& deltaTime)
 {
     if (not paused)
     {
+        background->lateUpdate(deltaTime);
         for (auto& tile : clickableTileMap)
         {
             tile->lateUpdate(dt);
@@ -172,10 +143,9 @@ void EditorState::activate()
     freezeClickableButtonsTimer.restart();
     pauseTimer.restart();
 
-    for (auto& tile : clickableTileMap)
+    for (auto& layoutTile : layoutTileMap)
     {
-        tile->enable();
-        tile->getComponent<components::core::ClickableComponent>()->disable();
+        layoutTile.activate();
     }
     uiManager->activate();
 }
@@ -184,6 +154,10 @@ void EditorState::deactivate()
 {
     active = false;
     pauseTimer.restart();
+    for (auto& layoutTile : layoutTileMap)
+    {
+        layoutTile.deactivate();
+    }
     uiManager->deactivate();
 }
 
@@ -197,24 +171,15 @@ void EditorState::pause()
     paused = true;
     buttonsActionsFrozen = true;
 
-    for (auto& tile : clickableTileMap)
+    for (auto& layoutTile : layoutTileMap)
     {
-        tile->disable();
-        tile->getComponent<components::core::GraphicsComponent>()->enable();
+        layoutTile.pause();
     }
 
     states.push(std::make_unique<EditorMenuState>(
         window, inputManager, rendererPool, states,
-        std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool)));
-}
+        std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool), *tileMap)));
 
-void EditorState::unfreezeButtons()
-{
-    buttonsActionsFrozen = false;
-    for (auto& tile : clickableTileMap)
-    {
-        tile->getComponent<components::core::ClickableComponent>()->enable();
-    }
 }
 
 }

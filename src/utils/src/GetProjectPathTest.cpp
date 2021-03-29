@@ -3,25 +3,31 @@
 #include "boost/algorithm/string/predicate.hpp"
 #include "gtest/gtest.h"
 
+#include "exceptions/FileNotFound.h"
+
 using namespace ::testing;
 using namespace utils;
 
-class GetProjectPathTest : public Test
+namespace
 {
-public:
-    const std::string validProjectName{"chimarrao-platformer"};
-    const std::string validPathEnd{"chimarrao-platformer/"};
-    const std::string invalidProjectName{"nasjxanxjqq"};
-};
+#ifdef _WIN32
+const std::string validPathEnd{"chimarrao-platformer\\"};
+#else
+const std::string validPathEnd{"chimarrao-platformer/"};
+#endif
 
-TEST_F(GetProjectPathTest, givenValidProjectName_shouldReturnProjectPath)
+const std::string validProjectName{"chimarrao-platformer"};
+const std::string invalidProjectName{"invalid-project-path"};
+}
+
+TEST(GetProjectPathTest, givenValidProjectName_shouldReturnProjectPath)
 {
     const auto actualProjectPath = getProjectPath(validProjectName);
 
     ASSERT_TRUE(boost::algorithm::ends_with(actualProjectPath, validPathEnd));
 }
 
-TEST_F(GetProjectPathTest, givenInvalidProjectName_shouldThrowFileNotFound)
+TEST(GetProjectPathTest, givenInvalidProjectName_shouldThrowFileNotFound)
 {
-    ASSERT_THROW(getProjectPath(invalidProjectName), std::runtime_error);
+    ASSERT_THROW(getProjectPath(invalidProjectName), exceptions::FileNotFound);
 }

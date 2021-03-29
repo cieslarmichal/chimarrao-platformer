@@ -5,11 +5,13 @@ set(SOURCES
         src/MenuState.cpp
         src/EditorState.cpp
         src/PauseState.cpp
-        src/TileMap.cpp
+        src/editor/TileMap.cpp
         src/EditorMenuState.cpp
         src/SettingsState.cpp
         src/ControlsState.cpp
         src/SaveMapState.cpp
+        src/editor/LayoutTile.cpp
+        src/editor/TileMapSerializerJson.cpp
         src/ControlsStateUIConfigBuilder.cpp
         src/EditorMenuStateUIConfigBuilder.cpp
         src/EditorStateUIConfigBuilder.cpp
@@ -41,7 +43,7 @@ set(UT_SOURCES
         )
 
 add_library(game ${SOURCES})
-target_include_directories(game PUBLIC src)
+target_include_directories(game PUBLIC src ${JSON_INCLUDE_DIR})
 target_link_libraries(game PUBLIC utils graphics input components)
 
 add_executable(gameUT ${UT_SOURCES})

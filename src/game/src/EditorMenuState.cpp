@@ -12,12 +12,15 @@ EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowIn
                                  const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                                  std::stack<std::unique_ptr<State>>& statesInit,
                                  std::unique_ptr<components::ui::UIManager> uiManagerInit)
+                                 std::stack<std::unique_ptr<State>>& statesInit,
+                                 TileMap& tileMap)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditor{false},
       shouldBackToMenu{false},
-      uiManager{std::move(uiManagerInit)}
+      uiManager{std::move(uiManagerInit)},
+      tileMap{tileMap}
 {
     inputManager->registerObserver(this);
     uiManager->createUI(EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(this));

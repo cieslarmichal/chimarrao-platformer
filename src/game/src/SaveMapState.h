@@ -1,5 +1,7 @@
 #pragma once
 
+#include <editor/TileMap.h>
+
 #include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
@@ -19,6 +21,7 @@ public:
     explicit SaveMapState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
                           const std::shared_ptr<graphics::RendererPool>&,
                           std::stack<std::unique_ptr<State>>&, std::unique_ptr<components::ui::UIManager>);
+                          std::stack<std::unique_ptr<State>>&, TileMap&);
     ~SaveMapState();
 
     void update(const utils::DeltaTime&) override;
@@ -39,5 +42,6 @@ private:
     bool shouldBackToEditorMenu;
     std::string currentMapName;
     std::unique_ptr<components::ui::UIManager> uiManager;
+    TileMap& tileMap;
 };
 }

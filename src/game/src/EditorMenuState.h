@@ -1,5 +1,7 @@
 #pragma once
 
+#include "editor/TileMap.h"
+
 #include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
@@ -20,7 +22,8 @@ public:
                              const std::shared_ptr<input::InputManager>&,
                              const std::shared_ptr<graphics::RendererPool>&,
                              std::stack<std::unique_ptr<State>>&,
-                             std::unique_ptr<components::ui::UIManager>);
+                             std::unique_ptr<components::ui::UIManager>,
+                             TileMap&);
     ~EditorMenuState();
 
     void update(const utils::DeltaTime&) override;
@@ -41,5 +44,6 @@ private:
     bool shouldBackToEditor;
     bool shouldBackToMenu;
     std::unique_ptr<components::ui::UIManager> uiManager;
+    TileMap& tileMap;
 };
 }

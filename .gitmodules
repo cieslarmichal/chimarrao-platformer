@@ -7,3 +7,6 @@
 [submodule "yaml-cpp"]
 	path = externals/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp.git
+[submodule "nfd"]
+	path = externals/nfd
+	url = https://github.com/btzy/nativefiledialog-extended
