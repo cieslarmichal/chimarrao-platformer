@@ -9,17 +9,13 @@ SaveMapState::SaveMapState(const std::shared_ptr<window::Window>& windowInit,
                            const std::shared_ptr<input::InputManager>& inputManagerInit,
                            const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                            std::stack<std::unique_ptr<State>>& statesInit,
-                           std::unique_ptr<components::ui::UIManager> uiManagerInit)
-                           std::stack<std::unique_ptr<State>>& statesInit,
+                           std::unique_ptr<components::ui::UIManager> uiManagerInit,
                            TileMap& tileMap)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditorMenu{false},
-      uiManager{std::move(uiManagerInit)}
-      timeAfterButtonsCanBeClicked{0.3f},
-      mapNameMaximumSize{15},
-      timeAfterNextLetterCanBeDeleted{0.08f},
+      uiManager{std::move(uiManagerInit)},
       tileMap{tileMap}
 {
     inputManager->registerObserver(this);
@@ -80,8 +76,7 @@ void SaveMapState::handleInputStatus(const input::InputStatus& inputStatusInit)
 
 void SaveMapState::saveMap()
 {
-    // TODO: implement
-    tileMap.setName(mapNameBuffer);
+    tileMap.setName(currentMapName);
     //tileMap.saveToFile();
     std::cout<<tileMap.getName()<<std::endl;
     std::cout<<tileMap.getPath()<<std::endl;

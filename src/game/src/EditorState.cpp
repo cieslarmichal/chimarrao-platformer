@@ -45,11 +45,6 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
 
     currentTileId = 0;
     currentTilePath = tilesTextureVector[currentTileId];
-    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY}, utils::Vector2f{0, 0},
-        pathToBackground, graphics::VisibilityLayer::Background);
-
     tileMap = std::make_unique<TileMap>(
         utils::Vector2i(rendererPoolSizeX / tileSizeX * 2, rendererPoolSizeY / tileSizeY),
         utils::Vector2f(tileSizeX, tileSizeY));
@@ -63,8 +58,6 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
         }
     }
 
-    background->loadDependentComponents();
-    background->start();
     moveTimer.start();
 }
 
@@ -103,12 +96,9 @@ void EditorState::update(const utils::DeltaTime& deltaTime)
 
     if (not paused)
     {
-        background->update(deltaTime);
         for (auto& layoutTile : layoutTileMap)
-        for (auto& tile : clickableTileMap)
         {
             layoutTile.update(deltaTime);
-            tile->update(deltaTime);
         }
         uiManager->update(deltaTime);
     }
@@ -118,10 +108,9 @@ void EditorState::lateUpdate(const utils::DeltaTime& deltaTime)
 {
     if (not paused)
     {
-        background->lateUpdate(deltaTime);
         for (auto& tile : clickableTileMap)
         {
-            tile->lateUpdate(dt);
+            tile->lateUpdate(deltaTime);
         }
     }
 }
@@ -178,7 +167,7 @@ void EditorState::pause()
 
     states.push(std::make_unique<EditorMenuState>(
         window, inputManager, rendererPool, states,
-        std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool), *tileMap)));
+        std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool), *tileMap));
 
 }
 
