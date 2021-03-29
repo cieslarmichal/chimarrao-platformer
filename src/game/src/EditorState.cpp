@@ -1,11 +1,12 @@
 #include "EditorState.h"
 
-#include <core/MouseOverComponent.h>
-
 #include "EditorMenuState.h"
+#include "EditorStateUIConfigBuilder.h"
 #include "GetProjectPath.h"
 #include "core/ComponentOwner.h"
 #include "core/GraphicsComponent.h"
+#include "core/MouseOverComponent.h"
+#include "ui/DefaultUIManager.h"
 #include "editor/TileMap.h"
 
 namespace game
@@ -25,28 +26,25 @@ const auto tilesTextureVector =
                              utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/2.png"};
 
 }
-
 EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                          const std::shared_ptr<input::InputManager>& inputManagerInit,
                          const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                         std::stack<std::unique_ptr<State>>& states)
+                         std::stack<std::unique_ptr<State>>& states,
+                         std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, states},
       inputStatus{nullptr},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
       timeAfterButtonsCanBeClicked{0.3f},
+      uiManager{std::move(uiManagerInit)},
       timeBetweenTileMoves{0.025f},
       currentTileType{std::make_shared<TileType>(defaultTileType)}
 {
     inputManager->registerObserver(this);
+    uiManager->createUI(EditorStateUIConfigBuilder::createEditorUIConfig(this));
 
     currentTileId = 0;
     currentTilePath = tilesTextureVector[currentTileId];
-    background = std::make_unique<components::core::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY}, utils::Vector2f{0, 0},
-        pathToBackground, graphics::VisibilityLayer::Background);
-
     tileMap = std::make_unique<TileMap>(
         utils::Vector2i(rendererPoolSizeX / tileSizeX * 2, rendererPoolSizeY / tileSizeY),
         utils::Vector2f(tileSizeX, tileSizeY));
@@ -60,8 +58,6 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
         }
     }
 
-    background->loadDependentComponents();
-    background->start();
     moveTimer.start();
 }
 
@@ -100,11 +96,11 @@ void EditorState::update(const utils::DeltaTime& deltaTime)
 
     if (not paused)
     {
-        background->update(deltaTime);
         for (auto& layoutTile : layoutTileMap)
         {
             layoutTile.update(deltaTime);
         }
+        uiManager->update(deltaTime);
     }
 }
 
@@ -112,7 +108,10 @@ void EditorState::lateUpdate(const utils::DeltaTime& deltaTime)
 {
     if (not paused)
     {
-        background->lateUpdate(deltaTime);
+        for (auto& tile : clickableTileMap)
+        {
+            tile->lateUpdate(deltaTime);
+        }
     }
 }
 
@@ -137,6 +136,7 @@ void EditorState::activate()
     {
         layoutTile.activate();
     }
+    uiManager->activate();
 }
 
 void EditorState::deactivate()
@@ -147,6 +147,7 @@ void EditorState::deactivate()
     {
         layoutTile.deactivate();
     }
+    uiManager->deactivate();
 }
 
 void EditorState::handleInputStatus(const input::InputStatus& inputStatusInit)
@@ -164,7 +165,10 @@ void EditorState::pause()
         layoutTile.pause();
     }
 
-    states.push(std::make_unique<EditorMenuState>(window, inputManager, rendererPool, states, *tileMap));
+    states.push(std::make_unique<EditorMenuState>(
+        window, inputManager, rendererPool, states,
+        std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool), *tileMap));
+
 }
 
 }

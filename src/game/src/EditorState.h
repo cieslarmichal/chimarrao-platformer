@@ -1,6 +1,6 @@
 #pragma once
 
-#include <editor/LayoutTile.h>
+#include "editor/LayoutTile.h"
 #include <vector>
 
 #include "InputObserver.h"
@@ -8,17 +8,23 @@
 #include "Timer.h"
 #include "core/ClickableComponent.h"
 #include "editor/TileMap.h"
+#include "ui/UIConfig.h"
+#include "ui/UIManager.h"
 
 namespace game
 {
+class EditorStateUIConfigBuilder;
+
 class EditorState : public State, public input::InputObserver
 {
 public:
+    friend class EditorStateUIConfigBuilder;
+
     explicit EditorState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
-                         const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&);
+                         const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&,
+                         std::unique_ptr<components::ui::UIManager>);
     ~EditorState();
 
-    void initialize();
     void update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
@@ -39,7 +45,6 @@ private:
     const float timeBetweenTileMoves;
     int currentTileId;
     std::string currentTilePath;
-    std::unique_ptr<components::core::ComponentOwner> background;
     std::vector<std::shared_ptr<components::core::ComponentOwner>> clickableTileMap;
     std::shared_ptr<TileType> currentTileType;
     std::vector<LayoutTile> layoutTileMap;
@@ -47,5 +52,6 @@ private:
     bool buttonsActionsFrozen = true;
     utils::Timer freezeClickableButtonsTimer;
     const float timeAfterButtonsCanBeClicked;
+    std::unique_ptr<components::ui::UIManager> uiManager;
 };
 }

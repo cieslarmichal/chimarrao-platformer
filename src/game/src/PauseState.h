@@ -3,18 +3,21 @@
 #include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
-#include "core/ComponentOwner.h"
+#include "ui/UIConfig.h"
+#include "ui/UIManager.h"
 
 namespace game
 {
 class PauseState : public State, public input::InputObserver
 {
+    friend class PauseStateUIConfigBuilder;
+
 public:
     explicit PauseState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
-                        const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&);
+                        const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&,
+                        std::unique_ptr<components::ui::UIManager>);
     ~PauseState();
 
-    void initialize();
     void update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
@@ -24,26 +27,14 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
-    void unfreezeButtons();
     void backToGame();
     void backToMenu();
-    void createPauseTitle();
-    void createBackground();
-    void createBackToGameButton();
-    void createMenuButton();
-    void addButton(const utils::Vector2f& position, const std::string& text,
-                   const utils::Vector2f& textOffset, std::function<void(void)> clickAction);
 
     const input::InputStatus* inputStatus;
     utils::Timer timer;
     const float timeAfterLeaveStateIsPossible;
     bool shouldBackToGame;
     bool shouldBackToMenu;
-    std::unique_ptr<components::core::ComponentOwner> title;
-    std::unique_ptr<components::core::ComponentOwner> background;
-    std::vector<std::unique_ptr<components::core::ComponentOwner>> buttons;
-    bool buttonsActionsFrozen = true;
-    utils::Timer freezeClickableButtonsTimer;
-    const float timeAfterButtonsCanBeClicked;
+    std::unique_ptr<components::ui::UIManager> uiManager;
 };
 }

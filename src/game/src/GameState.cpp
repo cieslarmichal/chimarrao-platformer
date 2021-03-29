@@ -2,6 +2,7 @@
 
 #include "AnimatorSettingsYamlReader.h"
 #include "DefaultAnimatorSettingsRepository.h"
+#include "GameStateUIConfigBuilder.h"
 #include "GetProjectPath.h"
 #include "PauseState.h"
 #include "PlayerAnimator.h"
@@ -9,6 +10,7 @@
 #include "core/GraphicsComponent.h"
 #include "core/KeyboardMovementComponent.h"
 #include "core/TextComponent.h"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -16,18 +18,21 @@ namespace game
 GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<input::InputManager>& inputManagerInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                     std::stack<std::unique_ptr<State>>& statesInit)
+                     std::stack<std::unique_ptr<State>>& statesInit,
+                     std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
       paused{false},
-      timeAfterStateCouldBePaused{0.5f}
+      timeAfterStateCouldBePaused{0.5f},
+      uiManager{std::move(uiManagerInit)}
 {
     inputManager->registerObserver(this);
+    uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
     animations::DefaultAnimatorSettingsRepository settingsRepository{
         std::make_unique<animations::AnimatorSettingsYamlReader>()};
 
-    player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10});
+    player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10}, "player");
     auto graphicsComponent = player->addComponent<components::core::GraphicsComponent>(
         rendererPool, utils::Vector2f{7, 7}, utils::Vector2f{10, 10}, graphics::Color::Red,
         graphics::VisibilityLayer::Second);
@@ -42,24 +47,13 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
         utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf", 13,
         graphics::Color::Black, utils::Vector2f{1.5, -1.5});
 
-    background = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{0, 0});
-    background->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{80, 60}, utils::Vector2f{0, 0},
-        utils::getProjectPath("chimarrao-platformer") + "resources/BG/background_glacial_mountains.png",
-        graphics::VisibilityLayer::Background);
-    initialize();
+    player->loadDependentComponents();
+    timer.start();
 }
 
 GameState::~GameState()
 {
     inputManager->removeObserver(this);
-}
-
-void GameState::initialize()
-{
-    player->loadDependentComponents();
-    player->start();
-    timer.start();
 }
 
 void GameState::update(const utils::DeltaTime& deltaTime)
@@ -73,6 +67,7 @@ void GameState::update(const utils::DeltaTime& deltaTime)
     if (not paused)
     {
         player->update(deltaTime);
+        uiManager->update(deltaTime);
     }
 }
 
@@ -100,12 +95,14 @@ void GameState::activate()
     paused = false;
     player->enable();
     timer.restart();
+    uiManager->activate();
 }
 
 void GameState::deactivate()
 {
     active = false;
     timer.restart();
+    uiManager->deactivate();
 }
 
 void GameState::handleInputStatus(const input::InputStatus& inputStatusInit)
@@ -120,7 +117,9 @@ void GameState::pause()
     player->getComponent<components::core::GraphicsComponent>()->enable();
     player->getComponent<components::core::TextComponent>()->enable();
 
-    states.push(std::make_unique<PauseState>(window, inputManager, rendererPool, states));
+    states.push(std::make_unique<PauseState>(
+        window, inputManager, rendererPool, states,
+        std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool)));
 }
 
 }

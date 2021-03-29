@@ -7,7 +7,7 @@ namespace game
 LayoutTile::LayoutTile(const std::shared_ptr<input::InputManager>& inputManager,
                        const std::shared_ptr<graphics::RendererPool>& rendererPool,
                        const utils::Vector2i& position, const utils::Vector2f& size,
-                       std::shared_ptr<TileType> currentTileType, TileMap& tileMap)
+                       const std::shared_ptr<TileType>& currentTileType, TileMap& tileMap)
     : size(size),
       position(position),
       currentTileType(currentTileType),
@@ -15,11 +15,12 @@ LayoutTile::LayoutTile(const std::shared_ptr<input::InputManager>& inputManager,
       timeAfterTileCanBeClicked{0.25f}
 {
     componentOwner = std::make_shared<components::core::ComponentOwner>(
-        utils::Vector2f{static_cast<float>(position.x * size.x), static_cast<float>(position.y * size.y)});
+        utils::Vector2f{static_cast<float>(position.x * size.x), static_cast<float>(position.y * size.y)},
+        std::to_string(position.x) + std::to_string(position.y) + std::to_string(position.y));
     const auto& graphicsComponent = componentOwner->addComponent<components::core::GraphicsComponent>(
         rendererPool, size, utils::Vector2f{position.x * size.x, position.y * size.y},
         tileTypeToPathTexture(*currentTileType), graphics::VisibilityLayer::Invisible);
-    componentOwner->addComponent<components::core::HitboxComponent>(size);
+    componentOwner->addComponent<components::core::HitBoxComponent>(size);
     const auto onRightMouseButtonClickActionLambda = [=,&tileMap] {
       *currentTileType = getNextTileType(*currentTileType);
       if (!tileMap.getTile(position)->type)
@@ -77,7 +78,7 @@ LayoutTile::LayoutTile(const std::shared_ptr<input::InputManager>& inputManager,
     componentOwner->addComponent<components::core::MouseOverComponent>(
         inputManager, onMouseOverActionLambda, onMouseOutActionLambda);
     componentOwner->loadDependentComponents();
-    componentOwner->start();
+    componentOwner->enable();
     freezeClickableTileTimer.start();
     activate();
 }

@@ -16,7 +16,7 @@ public:
     const utils::Vector2f initialPosition{0.0, 11.0};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
 
-    ComponentOwner componentOwner{initialPosition};
+    ComponentOwner componentOwner{initialPosition, "componentOwnerTest"};
 };
 
 TEST_F(ComponentOwnerTest, initialPosition_shouldBeSetFromConstructor)

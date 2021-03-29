@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 
-namespace components::exceptions
+namespace components::core::exceptions
 {
 struct DependentComponentNotFound : std::runtime_error
 {

@@ -2,9 +2,8 @@
 
 namespace utils
 {
-Timer::Timer()
+Timer::Timer() : elapsed{clock.getElapsedTime()}
 {
-    elapsed = clock.getElapsedTime();
 }
 
 void Timer::start()

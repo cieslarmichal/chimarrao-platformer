@@ -11,7 +11,7 @@ class ComponentTest : public Test
 {
 public:
     const utils::Vector2f initialPosition{0.0, 11.0};
-    ComponentOwner componentOwner{initialPosition};
+    ComponentOwner componentOwner{initialPosition, "componentTest"};
     Component component{&componentOwner};
 };
 

@@ -18,7 +18,7 @@ public:
     const utils::Vector2f position{0.0, 11.0};
     const AnimationType animationType{AnimationType::Jump};
     const AnimationDirection animationDirection{AnimationDirection::Left};
-    ComponentOwner componentOwner{position};
+    ComponentOwner componentOwner{position, "animationComponentTest"};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
 
     AnimationComponent animationComponent{&componentOwner, animator};

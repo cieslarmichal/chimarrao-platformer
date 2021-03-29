@@ -17,7 +17,7 @@ public:
     const utils::Vector2f position3{x, y};
     const utils::Vector2f sumPosition1{1.0, 12.0};
     const utils::Vector2f sumPosition2{12.0, 12.0};
-    ComponentOwner componentOwner{position1};
+    ComponentOwner componentOwner{position1, "transformComponentTest"};
     TransformComponent transformComponent{&componentOwner, position1};
 };
 

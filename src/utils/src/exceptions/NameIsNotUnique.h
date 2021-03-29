@@ -2,9 +2,9 @@
 
 #include <stdexcept>
 
-namespace components::exceptions
+namespace utils::exceptions
 {
-struct ActionForKeyAlreadyExists : std::runtime_error
+struct NameIsNotUnique : std::runtime_error
 {
     using std::runtime_error::runtime_error;
 };

@@ -4,6 +4,7 @@
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
+#include "ui/UIManager.h"
 
 namespace game
 {
@@ -11,10 +12,10 @@ class GameState : public State, public input::InputObserver
 {
 public:
     explicit GameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
-                       const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&);
+                       const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&,
+                       std::unique_ptr<components::ui::UIManager>);
     ~GameState();
 
-    void initialize();
     void update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
@@ -30,6 +31,6 @@ private:
     utils::Timer timer;
     const float timeAfterStateCouldBePaused;
     std::shared_ptr<components::core::ComponentOwner> player;
-    std::shared_ptr<components::core::ComponentOwner> background;
+    std::unique_ptr<components::ui::UIManager> uiManager;
 };
 }

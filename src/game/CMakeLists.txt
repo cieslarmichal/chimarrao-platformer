@@ -10,7 +10,17 @@ set(SOURCES
         src/SettingsState.cpp
         src/ControlsState.cpp
         src/SaveMapState.cpp
-        src/editor/Tile.h src/editor/LayoutTile.h src/editor/TileType.h src/editor/LayoutTile.cpp src/editor/TexturePathForTileNotFound.h src/editor/TileMapSerializerJson.h src/editor/TileMapSerializerJson.cpp)
+        src/editor/LayoutTile.cpp
+        src/editor/TileMapSerializerJson.cpp
+        src/ControlsStateUIConfigBuilder.cpp
+        src/EditorMenuStateUIConfigBuilder.cpp
+        src/EditorStateUIConfigBuilder.cpp
+        src/GameStateUIConfigBuilder.cpp
+        src/MenuStateUIConfigBuilder.cpp
+        src/PauseStateUIConfigBuilder.cpp
+        src/SaveMapStateUIConfigBuilder.cpp
+        src/SettingsStateUIConfigBuilder.cpp
+        )
 
 set(UT_SOURCES
         src/GameTest.cpp
@@ -22,6 +32,14 @@ set(UT_SOURCES
         src/SettingsStateTest.cpp
         src/ControlsStateTest.cpp
         src/SaveMapStateTest.cpp
+        src/ControlsStateUIConfigBuilderTest.cpp
+        src/EditorMenuStateUIConfigBuilderTest.cpp
+        src/EditorStateUIConfigBuilderTest.cpp
+        src/GameStateUIConfigBuilderTest.cpp
+        src/MenuStateUIConfigBuilderTest.cpp
+        src/PauseStateUIConfigBuilderTest.cpp
+        src/SaveMapStateUIConfigBuilderTest.cpp
+        src/SettingsStateUIConfigBuilderTest.cpp
         )
 
 add_library(game ${SOURCES})

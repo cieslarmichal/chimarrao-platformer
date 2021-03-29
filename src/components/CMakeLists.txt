@@ -6,8 +6,15 @@ set(SOURCES
         src/core/AnimationComponent.cpp
         src/core/TextComponent.cpp
         src/core/ClickableComponent.cpp
-        src/core/HitboxComponent.cpp
+        src/core/HitBoxComponent.cpp
         src/core/MouseOverComponent.cpp
+        src/ui/Background.cpp
+        src/ui/Button.cpp
+        src/ui/CheckBox.cpp
+        src/ui/Label.cpp
+        src/ui/TextField.cpp
+        src/ui/DefaultUIManager.cpp
+        src/ui/UIComponentFactory.cpp
         )
 
 set(UT_SOURCES
@@ -19,7 +26,7 @@ set(UT_SOURCES
         src/core/AnimationComponentTest.cpp
         src/core/TextComponentTest.cpp
         src/core/ClickableComponentTest.cpp
-        src/core/HitboxComponentTest.cpp
+        src/core/HitBoxComponentTest.cpp
         src/core/MouseOverComponentTest.cpp
         )
 
