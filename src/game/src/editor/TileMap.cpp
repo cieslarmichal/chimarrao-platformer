@@ -2,19 +2,16 @@
 
 #include "GetProjectPath.h"
 
-#include "nlohmann/json.hpp"
-
 namespace game
 {
 
-TileMap::TileMap(utils::Vector2i mapSizeInit, utils::Vector2f tileSizeInit)
-    : mapSize(mapSizeInit), tileSize(tileSizeInit)
+TileMap::TileMap(std::string name, utils::Vector2i mapSizeInit)
+    : tileMapInfo{name,mapSizeInit}
 {
-    // TODO: calculate map size
-    for (int y = 0; y < mapSize.y; y++)
+    for (int y = 0; y < tileMapInfo.mapSize.y; y++)
     {
-        tiles.emplace_back(mapSize.x, nullptr);
-        for (auto& tile : tiles[y])
+        tileMapInfo.tiles.emplace_back(tileMapInfo.mapSize.x, nullptr);
+        for (auto& tile : tileMapInfo.tiles[y])
         {
             tile = std::make_shared<Tile>();
         }
@@ -23,36 +20,29 @@ TileMap::TileMap(utils::Vector2i mapSizeInit, utils::Vector2f tileSizeInit)
 
 void TileMap::saveToFile() {
 
-    for (int y = 0; y < mapSize.y; y++)
-    {
-        for (int x = 0; x < mapSize.x; x++)
-        {
-
-        }
-    }
 }
 
 std::shared_ptr<Tile>& TileMap::getTile(utils::Vector2i position)
 {
-    return tiles[position.y][position.x];
+    return tileMapInfo.tiles[position.y][position.x];
 }
 
 void TileMap::setTile(utils::Vector2i position, TileType value)
 {
-    tiles[position.y][position.x]->type = value;
+    tileMapInfo.tiles[position.y][position.x]->type = value;
 }
 void TileMap::setName(const std::string& nameInit)
 {
-    name = nameInit;
+    tileMapInfo.name = nameInit;
 }
 
 const std::string& TileMap::getName() const
 {
-    return name;
+    return tileMapInfo.name;
 }
 
 std::string TileMap::getPath() const
 {
-    return utils::getProjectPath("chimarrao-platformer") + "maps/" + name + ".chm";
+    return utils::getProjectPath("chimarrao-platformer") + "maps/" + tileMapInfo.name + ".chm";
 }
 }

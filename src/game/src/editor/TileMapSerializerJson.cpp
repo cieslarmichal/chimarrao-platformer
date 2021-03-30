@@ -9,21 +9,25 @@ TileMapSerializerJson::TileMapSerializerJson() {
 
 }
 
-std::string TileMapSerializerJson::serialize(const std::vector<std::vector<Tile>>& vector)
+std::string TileMapSerializerJson::serialize(const TileMapInfo& tileMapInfo)
 {
     nlohmann::json json = nlohmann::json().object();
-//    for (int y = 0; y < vector.size(); y++)
+//    json["info"]["name"] = tileMapInfo.name;
+//    json["info"]["mapSize"]["x"] = tileMapInfo.mapSize.x;
+//    json["info"]["mapSize"]["y"] = tileMapInfo.mapSize.y;
+//    for (int y = 0; y < tileMapInfo.tiles.size(); y++)
 //    {
-//        for (int x = 0; x < vector[y].size(); x++)
+//        for (int x = 0; x < tileMapInfo.tiles[y].size(); x++)
 //        {
-//            json[x][y] = tileTypeToInt[vector[y][x].type];
+//            json["data"]["tiles"][x][y] = tileTypeToInt[tileMapInfo.tiles[y][x]->type];
 //        }
 //    }
-    return json.dump();
+//    return json.dump();
+        return "";
 }
 
-std::vector<std::vector<Tile>> TileMapSerializerJson::deserialize(const std::string& string) const
+TileMapInfo TileMapSerializerJson::deserialize(const std::string& string) const
 {
-    return std::vector<std::vector<Tile>>();
+    return TileMapInfo{};
 }
 }
