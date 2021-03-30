@@ -5,50 +5,51 @@
 namespace animations
 {
 
-Animation::Animation(std::vector<graphics::TexturePath> consecutiveTexturePathsInit,
+Animation::Animation(std::vector<graphics::TextureRect> consecutiveTextureRectsInit,
                      float timeBetweenTexturesInit)
-    : consecutiveTexturePaths{std::move(consecutiveTexturePathsInit)},
+    : consecutiveTextureRects{std::move(consecutiveTextureRectsInit)},
       timeBetweenTextures{timeBetweenTexturesInit}
 {
-    if (consecutiveTexturePaths.empty())
+    if (consecutiveTextureRects.empty())
     {
-        throw exceptions::TexturesNotInitialized{"Textures not initialized"};
+        throw exceptions::TexturesNotInitialized{"Textures rects not initialized"};
     }
     reset();
 }
 
-TextureChanged Animation::update(const utils::DeltaTime& deltaTime)
+TextureRectChanged Animation::update(const utils::DeltaTime& deltaTime)
 {
     timeUntilNextTexture -= deltaTime.count();
     if (timeUntilNextTexture <= 0)
     {
-        moveToNextTexture();
+        moveToNextTextureRect();
         timeUntilNextTexture = timeBetweenTextures;
         return true;
     }
     return false;
 }
 
-const graphics::TexturePath& Animation::getCurrentTexturePath() const
+const graphics::TextureRect& Animation::getCurrentTextureRect() const
 {
-    return *currentTextureIter;
+    return *currentTextureRectIter;
 }
 
-void Animation::moveToNextTexture()
+void Animation::moveToNextTextureRect()
 {
-    if (currentTextureIter == consecutiveTexturePaths.end() - 1)
+    if (currentTextureRectIter == consecutiveTextureRects.end() - 1)
     {
-        currentTextureIter = consecutiveTexturePaths.begin();
+        currentTextureRectIter = consecutiveTextureRects.begin();
     }
     else
     {
-        currentTextureIter++;
+        currentTextureRectIter++;
     }
 }
+
 void Animation::reset()
 {
     timeUntilNextTexture = timeBetweenTextures;
-    currentTextureIter = consecutiveTexturePaths.begin();
+    currentTextureRectIter = consecutiveTextureRects.begin();
 }
 
 }

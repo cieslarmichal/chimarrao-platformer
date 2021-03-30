@@ -2,13 +2,13 @@
 
 #include "SFML/Graphics/Texture.hpp"
 
-#include "TexturePath.h"
+#include "TextureRect.h"
 
 namespace graphics
 {
 class TextureLoader
 {
 public:
-    static void load(sf::Texture&, const TexturePath&);
+    static void load(sf::Texture&, const TextureRect&);
 };
 }

@@ -38,7 +38,9 @@ public:
 class EditorMenuStateTest : public EditorMenuStateTest_Base
 {
 public:
-    EditorMenuState editorMenuState{window, inputManager, rendererPool, states, std::move(uiManagerInit)};
+    TileMap tileMap{{0, 0}, {0, 0}};
+    EditorMenuState editorMenuState{window, inputManager, rendererPool, states, std::move(uiManagerInit),
+                                    tileMap};
 };
 
 TEST_F(EditorMenuStateTest, xxx)

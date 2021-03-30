@@ -61,7 +61,7 @@ GraphicsId RendererPoolSfml::acquire(const utils::Vector2f& size, const utils::V
                                      const TexturePath& path, VisibilityLayer layer)
 {
     const auto id = acquire(size, position, Color::White, layer);
-    setTexture(id, path);
+    setTexture(id, TextureRect{path, std::nullopt});
     return id;
 }
 
@@ -142,12 +142,13 @@ boost::optional<utils::Vector2f> RendererPoolSfml::getPosition(const GraphicsId&
     return boost::none;
 }
 
-void RendererPoolSfml::setTexture(const GraphicsId& id, const TexturePath& path, const utils::Vector2f& scale)
+void RendererPoolSfml::setTexture(const GraphicsId& id, const TextureRect& textureRect,
+                                  const utils::Vector2f& scale)
 {
     if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
     {
         auto& layeredShape = getLayeredShapeByPosition(layeredShapes, layeredShapeIter);
-        const sf::Texture& texture = textureStorage->getTexture(path);
+        const sf::Texture& texture = textureStorage->getTexture(textureRect);
         layeredShape.shape.setTexture(&texture);
         layeredShape.shape.setScale(scale);
         if (scale.x < 0)

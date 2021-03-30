@@ -31,20 +31,34 @@ const std::string configWithEmptyAnimators{testDirectory + "configWithEmptyAnima
 const std::string configWithoutAnimatorsField{testDirectory + "configWithoutAnimatorsField.yaml"};
 const std::string validPathWithOneAnimator{testDirectory + "validConfigWithOneAnimator.yaml"};
 const std::string validPathWithTwoAnimators{testDirectory + "validConfigWithTwoAnimators.yaml"};
+const std::string validPathWithSingleFileAnimator{testDirectory + "validConfigWithSingleFileAnimator.yaml"};
+const std::string validPathWithSingleFileAnimatorWithMissingFields{
+    testDirectory + "validConfigWithSingleFileAnimatorWithMissingFields.yaml"};
 
-const AnimationSettings playerAnimationSettings1{"idle", "resources/Player/Idle/idle-with-weapon-1.png", 6,
-                                                 0.3};
-const AnimationSettings playerAnimationSettings2{"walk", "resources/Player/Walk/walk-with-weapon-1.png", 11,
-                                                 0.7};
-const AnimationsSettings playerAnimationsSettings{playerAnimationSettings1, playerAnimationSettings2};
-const AnimationSettings enemyAnimationSettings1{"idle", "resources/Enemy/Idle/idle-with-weapon-1.png", 3,
-                                                0.4};
-const AnimationSettings enemyAnimationSettings2{"walk", "resources/Enemy/Walk/walk-with-weapon-1.png", 2,
-                                                0.8};
-const AnimationsSettings enemyAnimationsSettings{enemyAnimationSettings1, enemyAnimationSettings2};
-const AnimatorsSettings animatorsSettings1{{"player", playerAnimationsSettings}};
-const AnimatorsSettings animatorsSettings2{{"player", playerAnimationsSettings},
-                                           {"enemy", enemyAnimationsSettings}};
+const MultipleFilesAnimationSettings playerMultipleFilesAnimationSettings1{
+    "idle", "resources/Player/Idle/idle-with-weapon-1.png", 6, 0.3};
+const MultipleFilesAnimationSettings playerMultipleFilesAnimationSettings2{
+    "walk", "resources/Player/Walk/walk-with-weapon-1.png", 11, 0.7};
+const std::vector<MultipleFilesAnimationSettings> playerMultipleFilesAnimationsSettings{
+    playerMultipleFilesAnimationSettings1, playerMultipleFilesAnimationSettings2};
+const MultipleFilesAnimationSettings enemyMultipleFilesAnimationSettings1{
+    "idle", "resources/Enemy/Idle/idle-with-weapon-1.png", 3, 0.4};
+const MultipleFilesAnimationSettings enemyMultipleFilesAnimationSettings2{
+    "walk", "resources/Enemy/Walk/walk-with-weapon-1.png", 2, 0.8};
+const std::vector<MultipleFilesAnimationSettings> enemyMultipleFilesAnimationsSettings{
+    enemyMultipleFilesAnimationSettings1, enemyMultipleFilesAnimationSettings2};
+const AnimatorsSettings animatorsSettings1{{}, {{"player", playerMultipleFilesAnimationsSettings}}};
+const AnimatorsSettings animatorsSettings2{
+    {}, {{"player", playerMultipleFilesAnimationsSettings}, {"enemy", enemyMultipleFilesAnimationsSettings}}};
+const SingleFileAnimationSettings bunnySingleFileAnimationSettings{"idle",
+                                                                   "resources/bunny-hop-spritesheet.png",
+                                                                   utils::Vector2u{192, 128},
+                                                                   utils::IntRect{48, 85, 48, 43},
+                                                                   1,
+                                                                   0.1};
+const std::vector<SingleFileAnimationSettings> bunnySingleFileAnimationsSettings{
+    bunnySingleFileAnimationSettings};
+const AnimatorsSettings bunnyAnimatorsSettings{{{"bunny", bunnySingleFileAnimationsSettings}}, {}};
 }
 
 class AnimatorSettingsYamlReaderTest : public Test
@@ -77,7 +91,8 @@ TEST_F(AnimatorSettingsYamlReaderTest, givenConfigFileWithEmptyAnimators_shouldR
     const auto actualAnimatorsSettings =
         animatorsSettingsReader.readAnimatorsSettings(configWithEmptyAnimators);
 
-    ASSERT_TRUE(actualAnimatorsSettings.empty());
+    ASSERT_TRUE(actualAnimatorsSettings.singleFileAnimatorsSettings.empty());
+    ASSERT_TRUE(actualAnimatorsSettings.multipleFilesAnimatorSettings.empty());
 }
 
 TEST_F(AnimatorSettingsYamlReaderTest,
@@ -139,4 +154,19 @@ TEST_F(AnimatorSettingsYamlReaderTest, givenValidConfigWithTwoAnimators_shouldRe
         animatorsSettingsReader.readAnimatorsSettings(validPathWithTwoAnimators);
 
     ASSERT_EQ(actualAnimatorsSettings, animatorsSettings2);
+}
+
+TEST_F(AnimatorSettingsYamlReaderTest, givenValidConfigWithSingleFileAnimator_shouldReturnAnimatorsSettings)
+{
+    const auto actualAnimatorsSettings =
+        animatorsSettingsReader.readAnimatorsSettings(validPathWithSingleFileAnimator);
+
+    ASSERT_EQ(actualAnimatorsSettings, bunnyAnimatorsSettings);
+}
+
+TEST_F(AnimatorSettingsYamlReaderTest, givenValidConfigWithSingleFileAnimatorWithMissingFields_shouldThrowInvalidAnimatorsConfigFile)
+{
+    ASSERT_THROW(animatorsSettingsReader.readAnimatorsSettings(
+        validPathWithSingleFileAnimatorWithMissingFields),
+                 exceptions::InvalidAnimatorsConfigFile);
 }

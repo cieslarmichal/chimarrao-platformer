@@ -4,26 +4,26 @@
 #include <vector>
 
 #include "DeltaTime.h"
-#include "TexturePath.h"
+#include "TextureRect.h"
 
 namespace animations
 {
-using TextureChanged = bool;
+using TextureRectChanged = bool;
 
 class Animation
 {
 public:
-    explicit Animation(std::vector<graphics::TexturePath> consecutiveTexturePaths, float timeBetweenTextures);
+    explicit Animation(std::vector<graphics::TextureRect> consecutiveTextureRects, float timeBetweenTextures);
 
-    TextureChanged update(const utils::DeltaTime&);
+    TextureRectChanged update(const utils::DeltaTime&);
     void reset();
-    [[nodiscard]] const graphics::TexturePath& getCurrentTexturePath() const;
+    [[nodiscard]] const graphics::TextureRect& getCurrentTextureRect() const;
 
 private:
-    void moveToNextTexture();
+    void moveToNextTextureRect();
 
-    std::vector<graphics::TexturePath> consecutiveTexturePaths;
-    std::vector<graphics::TexturePath>::iterator currentTextureIter;
+    std::vector<graphics::TextureRect> consecutiveTextureRects;
+    std::vector<graphics::TextureRect>::iterator currentTextureRectIter;
     float timeBetweenTextures;
     float timeUntilNextTexture;
 };

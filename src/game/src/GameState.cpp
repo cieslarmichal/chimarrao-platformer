@@ -11,6 +11,7 @@
 #include "core/KeyboardMovementComponent.h"
 #include "core/TextComponent.h"
 #include "ui/DefaultUIManager.h"
+#include "BunnyAnimator.h"
 
 namespace game
 {
@@ -38,10 +39,10 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
         graphics::VisibilityLayer::Second);
     auto graphicsId = graphicsComponent->getGraphicsId();
     player->addComponent<components::core::KeyboardMovementComponent>(inputManager);
-    auto playerAnimatorSettings = settingsRepository.getAnimatorSettings("player");
-    auto playerAnimator =
-        std::make_shared<animations::PlayerAnimator>(graphicsId, rendererPool, *playerAnimatorSettings);
-    player->addComponent<components::core::AnimationComponent>(playerAnimator);
+    auto bunnyAnimatorSettings = settingsRepository.getSingleFileAnimatorSettings("bunny");
+    auto bunnyAnimator =
+        std::make_shared<animations::BunnyAnimator>(graphicsId, rendererPool, *bunnyAnimatorSettings);
+    player->addComponent<components::core::AnimationComponent>(bunnyAnimator);
     player->addComponent<components::core::TextComponent>(
         rendererPool, utils::Vector2f{10, 10}, "hello",
         utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf", 13,

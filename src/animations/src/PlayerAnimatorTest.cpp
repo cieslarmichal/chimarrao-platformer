@@ -24,27 +24,28 @@ public:
 
     void expectAnimatorsSettingFirstTextureWithCreation()
     {
-        EXPECT_CALL(*rendererPool, setTexture(graphicsId1, firstIdleTexturePath, scaleRightDirection));
-        EXPECT_CALL(*rendererPool, setTexture(graphicsId2, firstIdleTexturePath, scaleRightDirection));
+        EXPECT_CALL(*rendererPool, setTexture(graphicsId1, firstIdleTextureRect, scaleRightDirection));
+        EXPECT_CALL(*rendererPool, setTexture(graphicsId2, firstIdleTextureRect, scaleRightDirection));
     }
 
     const GraphicsId graphicsId1{GraphicsIdGenerator::generateId()};
     const GraphicsId graphicsId2{GraphicsIdGenerator::generateId()};
-    const AnimationsSettings emptyAnimationsSettings{};
+    const std::vector<MultipleFilesAnimationSettings> emptyAnimationsSettings{};
     const utils::DeltaTime timeNotExceedingTimeBetweenTextures{1.0};
     const utils::DeltaTime timeExceedingTimeBetweenTextures{2.5};
     const utils::Vector2f scaleRightDirection{1.0, 1.0};
     const utils::Vector2f scaleLeftDirection{-1.0, 1.0};
-    const AnimationsSettings animationsSettings{{"idle", "idle/x1.txt", 3, 1.2},
-                                                {"walk", "walk/123.txt", 2, 2.0}};
+    const std::vector<MultipleFilesAnimationSettings> animationsSettings{{"idle", "idle/x1.txt", 3, 1.2},
+                                                                         {"walk", "walk/123.txt", 2, 2.0}};
     const std::string projectPath{utils::getProjectPath("chimarrao-platformer")};
-    const TexturePath firstIdleTexturePath{projectPath + "idle/x1.txt"};
-    const TexturePath secondIdleTexturePath{projectPath + "idle/x2.txt"};
-    const TexturePath firstWalkTexturePath{projectPath + "walk/123.txt"};
-    const TexturePath secondWalkTexturePath{projectPath + "walk/124.txt"};
-    const AnimatorSettings animatorSettingsWithDifferentName{"diffName", animationsSettings};
-    const AnimatorSettings animatorSettingsWithEmptyAnimationsSettings{"player", emptyAnimationsSettings};
-    const AnimatorSettings animatorSettings{"player", animationsSettings};
+    const TextureRect firstIdleTextureRect{projectPath + "idle/x1.txt"};
+    const TextureRect secondIdleTextureRect{projectPath + "idle/x2.txt"};
+    const TextureRect firstWalkTextureRect{projectPath + "walk/123.txt"};
+    const TextureRect secondWalkTextureRect{projectPath + "walk/124.txt"};
+    const MultipleFilesAnimatorSettings animatorSettingsWithDifferentName{"diffName", animationsSettings};
+    const MultipleFilesAnimatorSettings animatorSettingsWithEmptyAnimationsSettings{"player",
+                                                                                    emptyAnimationsSettings};
+    const MultipleFilesAnimatorSettings animatorSettings{"player", animationsSettings};
     const AnimationType notSupportedAnimationType{AnimationType::Jump};
     const AnimationType supportedAnimationType{AnimationType::Walk};
     std::shared_ptr<RendererPoolMock> rendererPool = std::make_shared<StrictMock<RendererPoolMock>>();
@@ -111,7 +112,7 @@ TEST_F(PlayerAnimatorTest, givenTimeNotExceedingTimeBetweenTextures_shouldNotUpd
 
 TEST_F(PlayerAnimatorTest, givenTimeExceedingTimeBetweenTextures_shouldUpdateAnimation)
 {
-    EXPECT_CALL(*rendererPool, setTexture(graphicsId1, secondIdleTexturePath, scaleRightDirection));
+    EXPECT_CALL(*rendererPool, setTexture(graphicsId1, secondIdleTextureRect, scaleRightDirection));
 
     const auto animationChanged = playerAnimator.update(timeExceedingTimeBetweenTextures);
 
@@ -121,7 +122,7 @@ TEST_F(PlayerAnimatorTest, givenTimeExceedingTimeBetweenTextures_shouldUpdateAni
 TEST_F(PlayerAnimatorTest,
        givenTimeExceedingTimeBetweenTexturesWithLeftDirectedAnimation_shouldUpdateAnimation)
 {
-    EXPECT_CALL(*rendererPool, setTexture(graphicsId2, secondIdleTexturePath, scaleLeftDirection));
+    EXPECT_CALL(*rendererPool, setTexture(graphicsId2, secondIdleTextureRect, scaleLeftDirection));
 
     const auto animationChanged =
         playerAnimatorWithLeftInitialDirection.update(timeExceedingTimeBetweenTextures);
@@ -133,7 +134,7 @@ TEST_F(PlayerAnimatorTest,
        givenTimeNotExceedingTimeBetweenTextures_andGivenAnimationTypeSet_shouldUpdateAnimation)
 {
     playerAnimator.setAnimation(AnimationType::Walk);
-    EXPECT_CALL(*rendererPool, setTexture(graphicsId1, firstWalkTexturePath, scaleRightDirection));
+    EXPECT_CALL(*rendererPool, setTexture(graphicsId1, firstWalkTextureRect, scaleRightDirection));
 
     const auto animationChanged = playerAnimator.update(timeNotExceedingTimeBetweenTextures);
 
@@ -144,7 +145,7 @@ TEST_F(PlayerAnimatorTest,
        givenTimeNotExceedingTimeBetweenTextures_andGivenAnimationDirectionSet_shouldUpdateAnimation)
 {
     playerAnimator.setAnimationDirection(AnimationDirection::Left);
-    EXPECT_CALL(*rendererPool, setTexture(graphicsId1, firstIdleTexturePath, scaleLeftDirection));
+    EXPECT_CALL(*rendererPool, setTexture(graphicsId1, firstIdleTextureRect, scaleLeftDirection));
 
     const auto animationChanged = playerAnimator.update(timeNotExceedingTimeBetweenTextures);
 

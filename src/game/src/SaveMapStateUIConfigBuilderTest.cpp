@@ -33,7 +33,8 @@ public:
     std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
         std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
     components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
-    SaveMapState saveMapState{window, inputManager, rendererPool, states, std::move(uiManagerInit)};
+    TileMap tileMap{{0, 0}, {0, 0}};
+    SaveMapState saveMapState{window, inputManager, rendererPool, states, std::move(uiManagerInit), tileMap};
 };
 
 TEST_F(SaveMapStateUIConfigBuilderTest, createSaveMapUI)
