@@ -71,7 +71,6 @@ void AnimationsFromSettingsLoader::loadAnimationsFromSingleFileAnimationsSetting
                     " is not inside texture picture:" + toString(animationSettings.textureSize)};
             }
 
-            std::cerr << i << " " << rect << std::endl;
             textureRects.push_back(graphics::TextureRect{
                 utils::getProjectPath("chimarrao-platformer") + animationSettings.texturePath, rect});
         }

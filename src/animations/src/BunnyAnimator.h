@@ -16,8 +16,9 @@ namespace animations
 class BunnyAnimator : public Animator
 {
 public:
-    BunnyAnimator(graphics::GraphicsId, std::shared_ptr<graphics::RendererPool>, const SingleFileAnimatorSettings&,
-                   AnimationType = AnimationType::Idle, AnimationDirection = AnimationDirection::Right);
+    BunnyAnimator(graphics::GraphicsId, std::shared_ptr<graphics::RendererPool>,
+                  const SingleFileAnimatorSettings&, AnimationType = AnimationType::Walk,
+                  AnimationDirection = AnimationDirection::Right);
 
     AnimationChanged update(const utils::DeltaTime&) override;
     void setAnimation(AnimationType) override;

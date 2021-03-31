@@ -32,4 +32,4 @@ singleFileAnimators:
         startXPosition: 0
         startYPosition: 32
         numberOfTextures: 4
-        timeBetweenTexturesInSeconds: 0.11
+        timeBetweenTexturesInSeconds: 0.1

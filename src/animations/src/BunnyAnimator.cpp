@@ -2,6 +2,7 @@
 
 #include "AnimationsFromSettingsLoader.h"
 #include "GetProjectPath.h"
+#include "StlOperators.h"
 #include "exceptions/AnimationTypeNotSupported.h"
 #include "exceptions/InvalidAnimatorSettings.h"
 

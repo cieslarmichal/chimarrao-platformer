@@ -35,7 +35,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
 
     player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10}, "player");
     auto graphicsComponent = player->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{7, 7}, utils::Vector2f{10, 10}, graphics::Color::Red,
+        rendererPool, utils::Vector2f{7, 7}, utils::Vector2f{10, 10}, graphics::Color::Magenta,
         graphics::VisibilityLayer::Second);
     auto graphicsId = graphicsComponent->getGraphicsId();
     player->addComponent<components::core::KeyboardMovementComponent>(inputManager);
@@ -43,10 +43,6 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     auto bunnyAnimator =
         std::make_shared<animations::BunnyAnimator>(graphicsId, rendererPool, *bunnyAnimatorSettings);
     player->addComponent<components::core::AnimationComponent>(bunnyAnimator);
-    player->addComponent<components::core::TextComponent>(
-        rendererPool, utils::Vector2f{10, 10}, "hello",
-        utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf", 13,
-        graphics::Color::Black, utils::Vector2f{1.5, -1.5});
 
     player->loadDependentComponents();
     timer.start();
@@ -116,7 +112,6 @@ void GameState::pause()
     paused = true;
     player->disable();
     player->getComponent<components::core::GraphicsComponent>()->enable();
-    player->getComponent<components::core::TextComponent>()->enable();
 
     states.push(std::make_unique<PauseState>(
         window, inputManager, rendererPool, states,
