@@ -1,4 +1,4 @@
-animators:
+multipleFilesAnimators:
   - animations:
       - type: idle
         firstTexturePath: resources/Player/Idle/idle-with-weapon-1.png

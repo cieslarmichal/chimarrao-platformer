@@ -1,22 +1,23 @@
-#include "PlayerAnimator.h"
+#include "BunnyAnimator.h"
 
 #include "AnimationsFromSettingsLoader.h"
 #include "GetProjectPath.h"
+#include "StlOperators.h"
 #include "exceptions/AnimationTypeNotSupported.h"
 #include "exceptions/InvalidAnimatorSettings.h"
 
 namespace animations
 {
 
-PlayerAnimator::PlayerAnimator(graphics::GraphicsId graphicsIdInit,
+BunnyAnimator::BunnyAnimator(graphics::GraphicsId graphicsIdInit,
                                std::shared_ptr<graphics::RendererPool> rendererPoolInit,
-                               const MultipleFilesAnimatorSettings& animatorSettings, AnimationType animationTypeInit,
+                               const SingleFileAnimatorSettings& animatorSettings, AnimationType animationTypeInit,
                                AnimationDirection animationDirectionInit)
     : graphicsId{graphicsIdInit},
       rendererPool{std::move(rendererPoolInit)},
       currentAnimationType{animationTypeInit},
       currentAnimationDirection{animationDirectionInit},
-      animatorName{"player"},
+      animatorName{"bunny"},
       newAnimationTypeIsSet{false},
       newAnimationDirectionIsSet{false}
 {
@@ -37,15 +38,15 @@ PlayerAnimator::PlayerAnimator(graphics::GraphicsId graphicsIdInit,
     rendererPool->setTexture(graphicsId, animations.at(currentAnimationType).getCurrentTextureRect());
 }
 
-AnimationChanged PlayerAnimator::update(const utils::DeltaTime& deltaTime)
+AnimationChanged BunnyAnimator::update(const utils::DeltaTime& deltaTime)
 {
     const auto textureChanged = animations.at(currentAnimationType).update(deltaTime);
 
     if (animationChanged(textureChanged))
     {
         const utils::Vector2f scale = (currentAnimationDirection == AnimationDirection::Left) ?
-                                          utils::Vector2f(-1.0f, 1.0f) :
-                                          utils::Vector2f(1.0f, 1.0f);
+                                      utils::Vector2f(-1.0f, 1.0f) :
+                                      utils::Vector2f(1.0f, 1.0f);
         rendererPool->setTexture(graphicsId, animations.at(currentAnimationType).getCurrentTextureRect(),
                                  scale);
         newAnimationTypeIsSet = false;
@@ -55,12 +56,12 @@ AnimationChanged PlayerAnimator::update(const utils::DeltaTime& deltaTime)
     return false;
 }
 
-void PlayerAnimator::setAnimation(AnimationType animationType)
+void BunnyAnimator::setAnimation(AnimationType animationType)
 {
     setAnimation(animationType, currentAnimationDirection);
 }
 
-void PlayerAnimator::setAnimation(AnimationType animationType, AnimationDirection animationDirection)
+void BunnyAnimator::setAnimation(AnimationType animationType, AnimationDirection animationDirection)
 {
     if (not containsAnimation(animationType))
     {
@@ -83,7 +84,7 @@ void PlayerAnimator::setAnimation(AnimationType animationType, AnimationDirectio
     }
 }
 
-void PlayerAnimator::setAnimationDirection(AnimationDirection animationDirection)
+void BunnyAnimator::setAnimationDirection(AnimationDirection animationDirection)
 {
     if (currentAnimationDirection != animationDirection)
     {
@@ -93,27 +94,27 @@ void PlayerAnimator::setAnimationDirection(AnimationDirection animationDirection
     }
 }
 
-AnimationType PlayerAnimator::getAnimationType() const
+AnimationType BunnyAnimator::getAnimationType() const
 {
     return currentAnimationType;
 }
 
-AnimationDirection PlayerAnimator::getAnimationDirection() const
+AnimationDirection BunnyAnimator::getAnimationDirection() const
 {
     return currentAnimationDirection;
 }
 
-void PlayerAnimator::initializeAnimations(const std::vector<MultipleFilesAnimationSettings>& animationsSettings)
+void BunnyAnimator::initializeAnimations(const std::vector<SingleFileAnimationSettings>& animationsSettings)
 {
-    AnimationsFromSettingsLoader::loadAnimationsFromMultipleFilesAnimationsSettings(animations, animationsSettings);
+    AnimationsFromSettingsLoader::loadAnimationsFromSingleFileAnimationsSettings(animations, animationsSettings);
 }
 
-bool PlayerAnimator::containsAnimation(const AnimationType& animationType) const
+bool BunnyAnimator::containsAnimation(const AnimationType& animationType) const
 {
     return animations.count(animationType);
 }
 
-bool PlayerAnimator::animationChanged(TextureRectChanged textureChanged) const
+bool BunnyAnimator::animationChanged(TextureRectChanged textureChanged) const
 {
     return textureChanged || newAnimationTypeIsSet || newAnimationDirectionIsSet;
 }

@@ -59,7 +59,6 @@ void Game::update()
     }
     else
     {
-        //        std::cout << states.top()->getName() << std::endl;
         states.top()->update(dt);
     }
 }

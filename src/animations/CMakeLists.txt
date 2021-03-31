@@ -1,19 +1,21 @@
 set(SOURCES
         src/Animation.cpp
-        src/PlayerAnimator.cpp
         src/AnimatorSettingsYamlReader.cpp
         src/AnimationsFromSettingsLoader.cpp
         src/DefaultAnimatorSettingsRepository.cpp
+        src/PlayerAnimator.cpp
+        src/BunnyAnimator.cpp
         )
 
 set(UT_SOURCES
         src/AnimationTest.cpp
-        src/PlayerAnimatorTest.cpp
         src/AnimatorSettingsYamlReaderTest.cpp
         src/AnimationTypeTest.cpp
         src/AnimationDirectionTest.cpp
         src/AnimationsFromSettingsLoaderTest.cpp
         src/DefaultAnimatorSettingsRepositoryTest.cpp
+        src/PlayerAnimatorTest.cpp
+        src/BunnyAnimatorTest.cpp
         )
 
 add_library(animations ${SOURCES})

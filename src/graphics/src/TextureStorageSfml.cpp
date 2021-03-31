@@ -8,32 +8,33 @@
 
 namespace graphics
 {
-const sf::Texture& TextureStorageSfml::getTexture(const TexturePath& path)
+
+const sf::Texture& TextureStorageSfml::getTexture(const TextureRect& textureRect)
 {
-    if (not textureInStorage(path))
+    if (not textureInStorage(textureRect))
     {
-        loadTexture(path);
+        loadTexture(textureRect);
     }
-    return *textures.at(path);
+    return *textures.at(textureRect);
 }
 
-void TextureStorageSfml::loadTexture(const TexturePath& path)
+void TextureStorageSfml::loadTexture(const TextureRect& textureRect)
 {
     auto texture = std::make_unique<sf::Texture>();
     try
     {
-        TextureLoader::load(*texture, path);
+        TextureLoader::load(*texture, textureRect);
     }
     catch (const exceptions::CannotAccessTextureFile& e)
     {
         std::cerr << e.what() << std::endl;
         throw exceptions::TextureNotAvailable{e.what()};
     }
-    textures[path] = std::move(texture);
+    textures[textureRect] = std::move(texture);
 }
 
-bool TextureStorageSfml::textureInStorage(const TexturePath& path)
+bool TextureStorageSfml::textureInStorage(const TextureRect& textureRect)
 {
-    return textures.count(path) == 1;
+    return textures.count(textureRect) == 1;
 }
 }

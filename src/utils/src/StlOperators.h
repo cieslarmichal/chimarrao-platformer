@@ -6,6 +6,7 @@
 #include <map>
 #include <set>
 #include <sstream>
+#include <unordered_map>
 #include <vector>
 
 template <typename Iterator>
@@ -25,7 +26,6 @@ std::ostream& printRange(std::ostream& os, Iterator begin, Iterator end)
 
 namespace std
 {
-
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const std::vector<T>& v)
 {
@@ -34,6 +34,22 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& v)
 
 template <typename T, typename S>
 std::ostream& operator<<(std::ostream& os, const std::map<T, S>& m)
+{
+    os << "{";
+    if (not m.empty())
+    {
+        os << "[" << m.begin()->first << "->" << m.begin()->second << "]";
+        for (auto it = std::next(m.begin()); it != m.end(); ++it)
+        {
+            os << ", "
+               << "[" << it->first << "->" << it->second << "]";
+        }
+    }
+    return os << "}";
+}
+
+template <typename T, typename S>
+std::ostream& operator<<(std::ostream& os, const std::unordered_map<T, S>& m)
 {
     os << "{";
     if (not m.empty())

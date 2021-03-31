@@ -17,8 +17,9 @@ public:
     const std::string existingAnimatorName{"existingAnimatorName"};
     const std::string nonExistingAnimatorName{"nonExistingAnimatorName"};
     const AnimatorsSettings emptyAnimatorsSettings{};
-    const AnimatorSettings animatorSettings{existingAnimatorName, {}};
-    const AnimatorsSettings animatorsSettings{{animatorSettings}};
+    const SingleFileAnimatorSettings singleFileAnimatorSettings{existingAnimatorName, {}};
+    const MultipleFilesAnimatorSettings multipleFilesAnimatorSettings{existingAnimatorName, {}};
+    const AnimatorsSettings animatorsSettings{{singleFileAnimatorSettings}, {multipleFilesAnimatorSettings}};
     std::unique_ptr<StrictMock<AnimatorSettingsReaderMock>> settingsReaderInit =
         std::make_unique<StrictMock<AnimatorSettingsReaderMock>>();
     StrictMock<AnimatorSettingsReaderMock>* settingsReader = settingsReaderInit.get();
@@ -37,9 +38,9 @@ TEST_F(DefaultAnimatorSettingsRepositoryTest, givenNonExistingAnimatorName_shoul
     EXPECT_CALL(*settingsReader, readAnimatorsSettings(settingsPath)).WillOnce(Return(animatorsSettings));
     DefaultAnimatorSettingsRepository settingsRepository{std::move(settingsReaderInit)};
 
-    const auto actualAnimatorSettings = settingsRepository.getAnimatorSettings(existingAnimatorName);
+    const auto actualAnimatorSettings = settingsRepository.getMultipleFileAnimatorSettings(existingAnimatorName);
 
-    ASSERT_EQ(*actualAnimatorSettings, animatorSettings);
+    ASSERT_EQ(*actualAnimatorSettings, multipleFilesAnimatorSettings);
 }
 
 TEST_F(DefaultAnimatorSettingsRepositoryTest, givenExistingAnimatorName_shouldReturnAnimatorSettings)
@@ -47,7 +48,7 @@ TEST_F(DefaultAnimatorSettingsRepositoryTest, givenExistingAnimatorName_shouldRe
     EXPECT_CALL(*settingsReader, readAnimatorsSettings(settingsPath)).WillOnce(Return(animatorsSettings));
     DefaultAnimatorSettingsRepository settingsRepository{std::move(settingsReaderInit)};
 
-    const auto actualAnimatorSettings = settingsRepository.getAnimatorSettings(nonExistingAnimatorName);
+    const auto actualAnimatorSettings = settingsRepository.getMultipleFileAnimatorSettings(nonExistingAnimatorName);
 
     ASSERT_EQ(actualAnimatorSettings, boost::none);
 }

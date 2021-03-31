@@ -4,30 +4,29 @@
 #include <string>
 #include <vector>
 
-#include "AnimationSettings.h"
+#include "MultipleFilesAnimationSettings.h"
 #include "StlOperators.h"
 
 namespace animations
 {
-struct AnimatorSettings
+struct MultipleFilesAnimatorSettings
 {
     std::string animatorName;
-    std::vector<AnimationSettings> animationsSettings;
+    std::vector<MultipleFilesAnimationSettings> animationsSettings;
 };
 
-inline bool operator==(const AnimatorSettings& lhs, const AnimatorSettings& rhs)
+inline bool operator==(const MultipleFilesAnimatorSettings& lhs, const MultipleFilesAnimatorSettings& rhs)
 {
-    auto tieStruct = [](const AnimatorSettings& settings) {
+    auto tieStruct = [](const MultipleFilesAnimatorSettings& settings) {
         return std::tie(settings.animatorName, settings.animationsSettings);
     };
     return tieStruct(lhs) == tieStruct(rhs);
 }
 
-inline std::ostream& operator<<(std::ostream& os, const AnimatorSettings& animatorSettings)
+inline std::ostream& operator<<(std::ostream& os, const MultipleFilesAnimatorSettings& animatorSettings)
 {
     return os << "animatorName: " << animatorSettings.animatorName
               << " animationsSettings: " << animatorSettings.animationsSettings;
 }
 
-using AnimatorsSettings = std::vector<AnimatorSettings>;
 }

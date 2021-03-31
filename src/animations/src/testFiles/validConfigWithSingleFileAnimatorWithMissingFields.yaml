@@ -1,0 +1,12 @@
+singleFileAnimators:
+  - name: bunny
+    animations:
+      - type: idle
+        texturePath: resources/bunny-hop-spritesheet.png
+        textureWidthInPixels: 192
+        textureHeightInPixels: 128
+        rectToCutWidthInPixels: 48
+        startXPosition: 48
+        startYPosition: 85
+        numberOfTextures: 1
+        timeBetweenTexturesInSeconds: 0.1

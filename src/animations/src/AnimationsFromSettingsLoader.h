@@ -3,15 +3,18 @@
 #include <unordered_map>
 
 #include "Animation.h"
-#include "AnimationSettings.h"
 #include "AnimationType.h"
+#include "MultipleFilesAnimationSettings.h"
+#include "SingleFileAnimationSettings.h"
 
 namespace animations
 {
 class AnimationsFromSettingsLoader
 {
 public:
-    static void loadAnimationsFromSettings(std::unordered_map<AnimationType, Animation>&,
-                                           const AnimationsSettings&);
+    static void loadAnimationsFromMultipleFilesAnimationsSettings(std::unordered_map<AnimationType, Animation>&,
+                                           const std::vector<MultipleFilesAnimationSettings>&);
+    static void loadAnimationsFromSingleFileAnimationsSettings(std::unordered_map<AnimationType, Animation>&,
+                                           const std::vector<SingleFileAnimationSettings>&);
 };
 }

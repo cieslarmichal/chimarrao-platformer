@@ -24,6 +24,9 @@ const Color color{Color::Black};
 const TexturePath validTexturePath{"validTexturePath"};
 const TexturePath validTexturePath2{"validTexturePath2"};
 const TexturePath invalidTexturePath{"invalidTexturePath"};
+const TextureRect validTextureRect{validTexturePath, std::nullopt};
+const TextureRect validTextureRect2{validTexturePath2, std::nullopt};
+const TextureRect invalidTextureRect{invalidTexturePath, std::nullopt};
 const FontPath validFontPath{"validFontPath"};
 const FontPath invalidFontPath{"invalidFontPath"};
 const std::string text{"text"};
@@ -70,7 +73,7 @@ TEST_F(RendererPoolSfmlTest, acquireShapeWithColor_positionShouldMatch)
 
 TEST_F(RendererPoolSfmlTest, acquireShapeWithTexture_textureNotAvailable_shouldThrowTextureNotAvailable)
 {
-    EXPECT_CALL(*textureStorage, getTexture(invalidTexturePath))
+    EXPECT_CALL(*textureStorage, getTexture(invalidTextureRect))
         .WillOnce(Throw(exceptions::TextureNotAvailable{""}));
 
     ASSERT_THROW(rendererPool.acquire(size1, position, invalidTexturePath), exceptions::TextureNotAvailable);
@@ -78,7 +81,7 @@ TEST_F(RendererPoolSfmlTest, acquireShapeWithTexture_textureNotAvailable_shouldT
 
 TEST_F(RendererPoolSfmlTest, acquireShapeWithTexture_textureAvailable_positionShouldMatch)
 {
-    EXPECT_CALL(*textureStorage, getTexture(validTexturePath)).WillOnce(ReturnRef(texture));
+    EXPECT_CALL(*textureStorage, getTexture(validTextureRect)).WillOnce(ReturnRef(texture));
 
     const auto shapeId = rendererPool.acquire(size1, position, validTexturePath);
 
@@ -362,23 +365,23 @@ TEST_F(RendererPoolSfmlTest, releasedText_shouldNotBeRendered)
 TEST_F(RendererPoolSfmlTest, setTextureWithValidTexturePath_shouldNoThrow)
 {
     const auto shapeId = rendererPool.acquire(size1, position, color);
-    EXPECT_CALL(*textureStorage, getTexture(validTexturePath2)).WillOnce(ReturnRef(texture));
+    EXPECT_CALL(*textureStorage, getTexture(validTextureRect2)).WillOnce(ReturnRef(texture));
 
-    ASSERT_NO_THROW(rendererPool.setTexture(shapeId, validTexturePath2));
+    ASSERT_NO_THROW(rendererPool.setTexture(shapeId, validTextureRect2));
 }
 
 TEST_F(RendererPoolSfmlTest, setTextureWithInvalidTexturePath_shouldThrowTextureNotAvailable)
 {
     const auto shapeId = rendererPool.acquire(size1, position, color);
-    EXPECT_CALL(*textureStorage, getTexture(invalidTexturePath))
+    EXPECT_CALL(*textureStorage, getTexture(invalidTextureRect))
         .WillOnce(Throw(exceptions::TextureNotAvailable{""}));
 
-    ASSERT_THROW(rendererPool.setTexture(shapeId, invalidTexturePath), exceptions::TextureNotAvailable);
+    ASSERT_THROW(rendererPool.setTexture(shapeId, invalidTextureRect), exceptions::TextureNotAvailable);
 }
 
 TEST_F(RendererPoolSfmlTest, setTextureWithInvalidGraphicsId_shouldNotThrow)
 {
-    ASSERT_NO_THROW(rendererPool.setTexture(invalidId, validTexturePath));
+    ASSERT_NO_THROW(rendererPool.setTexture(invalidId, validTextureRect));
 }
 
 TEST_F(RendererPoolSfmlTest, setTextWithInvalidGraphicsId_shouldNotThrow)
