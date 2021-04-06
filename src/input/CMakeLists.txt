@@ -13,10 +13,10 @@ set(UT_SOURCES
         src/InputKeySfmlMapperTest.cpp
         )
 
-add_library(input ${SOURCES})
+add_library(input SHARED ${SOURCES})
 target_link_libraries(input PUBLIC utils window)
 target_include_directories(input PUBLIC src)
 
 add_executable(inputUT ${UT_SOURCES})
-target_link_libraries(inputUT PUBLIC gtest_main gmock input)
+target_link_libraries(inputUT PUBLIC gmock_main gtest input)
 add_test(inputUT inputUT --gtest_color=yes)

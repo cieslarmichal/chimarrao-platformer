@@ -19,10 +19,12 @@ set(UT_SOURCES
         src/UniqueNameTest.cpp
         )
 
-add_library(utils ${SOURCES})
+add_library(utils SHARED ${SOURCES})
 target_include_directories(utils PUBLIC src ${SFML_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
 target_link_libraries(utils PUBLIC ${SFML_LIBRARIES})
+target_compile_options(utils PUBLIC ${FLAGS})
 
 add_executable(utilsUT ${UT_SOURCES})
-target_link_libraries(utilsUT PUBLIC gtest_main gmock utils)
+target_link_libraries(utilsUT PUBLIC gmock_main gtest  utils)
+target_compile_options(utilsUT PUBLIC ${FLAGS})
 add_test(utilsUT utilsUT --gtest_color=yes)

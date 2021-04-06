@@ -9,7 +9,7 @@ namespace input
 {
 
 InputStatus::InputStatus()
-    : numberOfKeys{allKeys.size()},
+    : numberOfKeys{static_cast<unsigned long>(allKeys.size())},
       pressedKeys(numberOfKeys, false),
       pressedKeysHistory(numberOfKeys, false),
       releasedKeys(numberOfKeys, false)
