@@ -1,4 +1,4 @@
-animators:
+multipleFilesAnimators:
   - name: player
     animations:
       - type: idle
@@ -20,3 +20,4 @@ animators:
         firstTexturePath: resources/Enemy/Walk/walk-with-weapon-1.png
         numberOfTextures: 2
         timeBetweenTexturesInSeconds: 0.8
+

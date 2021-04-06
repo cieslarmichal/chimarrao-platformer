@@ -4,11 +4,23 @@
 
 namespace graphics
 {
-void graphics::TextureLoader::load(sf::Texture& texture, const TexturePath& path)
+void graphics::TextureLoader::load(sf::Texture& texture, const TextureRect& textureRect)
 {
-    if (not texture.loadFromFile(path))
+    if (textureRect.rectToCutTexture)
     {
-        throw exceptions::CannotAccessTextureFile("Cannot load texture: " + path);
+        if (texture.loadFromFile(textureRect.texturePath, *textureRect.rectToCutTexture))
+        {
+            return;
+        }
     }
+    else
+    {
+        if (texture.loadFromFile(textureRect.texturePath))
+        {
+            return;
+        }
+    }
+
+    throw exceptions::CannotAccessTextureFile("Cannot load texture rect: " + toString(textureRect));
 }
 }

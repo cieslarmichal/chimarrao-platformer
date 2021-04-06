@@ -18,6 +18,5 @@ const std::string utilsExecutableName{"utilsUT"};
 TEST(GetExecutablePathTest, shouldReturnAbsolutePathToProject)
 {
     const auto actualPath = getExecutablePath();
-    std::cerr << actualPath;
     ASSERT_TRUE(boost::algorithm::ends_with(actualPath, utilsExecutableName));
 }

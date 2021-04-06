@@ -12,21 +12,38 @@ DefaultAnimatorSettingsRepository::DefaultAnimatorSettingsRepository(
     std::unique_ptr<AnimatorSettingsReader> reader)
     : animatorSettingsReader{std::move(reader)}
 {
-    const auto animatorsSettingsAsVector =
+    const auto animatorsSettings =
         animatorSettingsReader->readAnimatorsSettings(animatorSettingsFilePath);
-    settings.reserve(animatorsSettingsAsVector.size());
+    singleFileAnimatorSettings.reserve(animatorsSettings.singleFileAnimatorsSettings.size());
+    multipleFilesAnimatorSettings.reserve(animatorsSettings.multipleFilesAnimatorSettings.size());
 
-    for (const auto& animatorSettings : animatorsSettingsAsVector)
+    for (const auto& animatorSettings : animatorsSettings.multipleFilesAnimatorSettings)
     {
-        settings[animatorSettings.animatorName] = animatorSettings;
+        multipleFilesAnimatorSettings[animatorSettings.animatorName] = animatorSettings;
+    }
+
+    for (const auto& animatorSettings : animatorsSettings.singleFileAnimatorsSettings)
+    {
+        singleFileAnimatorSettings[animatorSettings.animatorName] = animatorSettings;
     }
 }
 
-boost::optional<AnimatorSettings>
-DefaultAnimatorSettingsRepository::getAnimatorSettings(const std::string& animatorName) const
+boost::optional<SingleFileAnimatorSettings>
+DefaultAnimatorSettingsRepository::getSingleFileAnimatorSettings(const std::string& animatorName) const
 {
-    const auto& animatorSettingsIter = settings.find(animatorName);
-    if (animatorSettingsIter != settings.cend())
+    const auto& animatorSettingsIter = singleFileAnimatorSettings.find(animatorName);
+    if (animatorSettingsIter != singleFileAnimatorSettings.cend())
+    {
+        return animatorSettingsIter->second;
+    }
+    return boost::none;
+}
+
+boost::optional<MultipleFilesAnimatorSettings>
+DefaultAnimatorSettingsRepository::getMultipleFileAnimatorSettings(const std::string& animatorName) const
+{
+    const auto& animatorSettingsIter = multipleFilesAnimatorSettings.find(animatorName);
+    if (animatorSettingsIter != multipleFilesAnimatorSettings.cend())
     {
         return animatorSettingsIter->second;
     }

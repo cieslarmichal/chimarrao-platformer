@@ -1,4 +1,4 @@
-animators:
+multipleFilesAnimators:
   - name: player
     animations:
       - type: idle

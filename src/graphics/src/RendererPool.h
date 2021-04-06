@@ -6,9 +6,10 @@
 #include "Color.h"
 #include "FontPath.h"
 #include "GraphicsId.h"
-#include "TexturePath.h"
+#include "TextureRect.h"
 #include "Vector.h"
 #include "VisibilityLayer.h"
+#include "TexturePath.h"
 
 namespace graphics
 {
@@ -29,7 +30,7 @@ public:
     virtual void setPosition(const GraphicsId&, const utils::Vector2f& position) = 0;
     virtual boost::optional<utils::Vector2f> getPosition(const GraphicsId&) = 0;
     // TODO: remove scale
-    virtual void setTexture(const GraphicsId&, const TexturePath&, const utils::Vector2f& scale = {1, 1}) = 0;
+    virtual void setTexture(const GraphicsId&, const TextureRect&, const utils::Vector2f& scale = {1, 1}) = 0;
     virtual void setText(const GraphicsId&, const std::string& text) = 0;
     virtual void setVisibility(const GraphicsId&, VisibilityLayer) = 0;
     virtual void setColor(const GraphicsId&, const Color&) = 0;

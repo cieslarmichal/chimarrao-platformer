@@ -34,7 +34,7 @@ public:
     void renderAll() override;
     void setPosition(const GraphicsId&, const utils::Vector2f& position) override;
     boost::optional<utils::Vector2f> getPosition(const GraphicsId&) override;
-    void setTexture(const GraphicsId&, const TexturePath&, const utils::Vector2f& scale = {1, 1}) override;
+    void setTexture(const GraphicsId&, const TextureRect&, const utils::Vector2f& scale = {1, 1}) override;
     void setText(const GraphicsId&, const std::string& text) override;
     void setVisibility(const GraphicsId&, VisibilityLayer) override;
     void setColor(const GraphicsId&, const Color&) override;
