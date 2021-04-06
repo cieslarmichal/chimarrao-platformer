@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "Tile.h"
+#include "TileMapInfo.h"
 
 namespace game
 {
@@ -12,7 +12,7 @@ class TileMapSerializer
 public:
     virtual ~TileMapSerializer() = default;
 
-    virtual std::string serialize(const std::vector<std::vector<Tile>>&) = 0;
-    virtual std::vector<std::vector<Tile>> deserialize(const std::string&) const = 0;
+    virtual std::string serialize(const TileMapInfo&) = 0;
+    virtual TileMapInfo deserialize(const std::string&) const = 0;
 };
 }

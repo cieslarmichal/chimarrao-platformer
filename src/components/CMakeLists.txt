@@ -30,10 +30,10 @@ set(UT_SOURCES
         src/core/MouseOverComponentTest.cpp
         )
 
-add_library(components ${SOURCES})
+add_library(components SHARED ${SOURCES})
 target_link_libraries(components PUBLIC utils graphics animations input)
 target_include_directories(components PUBLIC src)
 
 add_executable(componentsUT ${UT_SOURCES})
-target_link_libraries(componentsUT PUBLIC gtest_main gmock components)
+target_link_libraries(componentsUT PUBLIC gmock_main gtest components)
 add_test(componentsUT componentsUT --gtest_color=yes)

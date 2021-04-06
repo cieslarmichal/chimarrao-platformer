@@ -38,7 +38,7 @@ public:
 class SaveMapStateTest : public SaveMapStateTest_Base
 {
 public:
-    TileMap tileMap{{0, 0}, {0, 0}};
+    TileMap tileMap {"",{0,0}};
     SaveMapState saveMapState{window, inputManager, rendererPool, states, std::move(uiManagerInit), tileMap};
 };
 

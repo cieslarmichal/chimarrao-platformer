@@ -37,7 +37,7 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
       timeAfterStateCouldBePaused{0.5f},
       timeAfterButtonsCanBeClicked{0.3f},
       uiManager{std::move(uiManagerInit)},
-      timeBetweenTileMoves{0.025f},
+      timeBetweenTileMoves{0.005f},
       currentTileType{std::make_shared<TileType>(defaultTileType)}
 {
     inputManager->registerObserver(this);
@@ -45,9 +45,8 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
 
     currentTileId = 0;
     currentTilePath = tilesTextureVector[currentTileId];
-    tileMap = std::make_unique<TileMap>(
-        utils::Vector2i(rendererPoolSizeX / tileSizeX * 2, rendererPoolSizeY / tileSizeY),
-        utils::Vector2f(tileSizeX, tileSizeY));
+    tileMap = std::make_unique<TileMap>("",
+        utils::Vector2i(rendererPoolSizeX / tileSizeX * 2, rendererPoolSizeY / tileSizeY));
     for (int y = 0; y < rendererPoolSizeY / tileSizeY; ++y)
     {
         for (int x = 0; x < rendererPoolSizeX / tileSizeX * 2; ++x)

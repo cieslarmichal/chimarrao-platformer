@@ -18,10 +18,10 @@ set(UT_SOURCES
         src/BunnyAnimatorTest.cpp
         )
 
-add_library(animations ${SOURCES})
+add_library(animations SHARED ${SOURCES})
 target_link_libraries(animations PUBLIC utils graphics ${SFML_LIBRARIES} yaml-cpp)
 target_include_directories(animations PUBLIC src)
 
 add_executable(animationsUT ${UT_SOURCES})
-target_link_libraries(animationsUT PUBLIC gtest_main gmock utils graphics yaml-cpp animations)
+target_link_libraries(animationsUT PUBLIC gmock_main gtest utils graphics yaml-cpp animations)
 add_test(animationsUT animationsUT --gtest_color=yes)

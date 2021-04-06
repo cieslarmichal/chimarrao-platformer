@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Tile.h"
 #include "TileMapSerializer.h"
 
 namespace game{
@@ -7,10 +8,13 @@ class TileMapSerializerJson : public TileMapSerializer
 {
 public:
     TileMapSerializerJson();
-    std::string serialize(const std::vector<std::vector<Tile>>& vector) override;
-    std::vector<std::vector<Tile>> deserialize(const std::string& string) const override;
+    std::string serialize(const TileMapInfo& tileMapInfo) override;
+    TileMapInfo deserialize(const std::string& string) const override;
 
 private:
-    std::unordered_map<TileType,int> tileTypeToInt;
+    std::unordered_map<std::optional<TileType>,int> tileTypeToInt
+        {
+            {std::nullopt,0}
+        };
 };
 }
