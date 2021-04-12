@@ -24,12 +24,12 @@ inline std::string toString(DisplayMode displayMode)
 
 inline DisplayMode toDisplayMode(const std::string& displayModeAsString)
 {
-    const auto displayModeLowerString = utils::getLowerCases(displayModeAsString);
+    const auto displayModeLowerString = utils::StringHelper::getLowerCases(displayModeAsString);
 
-    std::unordered_map<std::string, DisplayMode> stringToVisibilityLayer{
-        {"window", DisplayMode::Window}, {"fullscreen", DisplayMode::Fullscreen}};
+    std::unordered_map<std::string, DisplayMode> stringToDisplayMode{{"window", DisplayMode::Window},
+                                                                     {"fullscreen", DisplayMode::Fullscreen}};
 
-    return stringToVisibilityLayer.at(displayModeLowerString);
+    return stringToDisplayMode.at(displayModeLowerString);
 }
 
 inline std::ostream& operator<<(std::ostream& os, DisplayMode displayMode)

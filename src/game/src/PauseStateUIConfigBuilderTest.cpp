@@ -6,9 +6,9 @@
 #include "RendererPoolMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
-#include "StlOperators.h"
 
 #include "PauseState.h"
+#include "StlOperators.h"
 
 using namespace game;
 using namespace components::ui;
@@ -18,10 +18,7 @@ namespace
 {
 const std::vector<std::string> expectedLabelNames{"pauseTitleLabel"};
 
-const std::vector<std::string> expectedButtonNames{
-    "pauseBackToGameButton",
-    "pauseBackToMenuButton"
-};
+const std::vector<std::string> expectedButtonNames{"pauseBackToGameButton", "pauseBackToMenuButton"};
 }
 class PauseStateUIConfigBuilderTest : public Test
 {
@@ -43,11 +40,13 @@ TEST_F(PauseStateUIConfigBuilderTest, createPauseUI)
     const auto pauseUI = PauseStateUIConfigBuilder::createPauseUIConfig(&pauseState);
 
     std::vector<std::string> actualLabelNames;
-    std::transform(pauseUI->labelsConfig.begin(), pauseUI->labelsConfig.end(), std::back_inserter(actualLabelNames),
+    std::transform(pauseUI->labelsConfig.begin(), pauseUI->labelsConfig.end(),
+                   std::back_inserter(actualLabelNames),
                    [](const auto& labelConfig) { return labelConfig->uniqueName; });
 
     std::vector<std::string> actualButtonsNames;
-    std::transform(pauseUI->buttonsConfig.begin(), pauseUI->buttonsConfig.end(), std::back_inserter(actualButtonsNames),
+    std::transform(pauseUI->buttonsConfig.begin(), pauseUI->buttonsConfig.end(),
+                   std::back_inserter(actualButtonsNames),
                    [](const auto& buttonConfig) { return buttonConfig->uniqueName; });
 
     ASSERT_EQ(pauseUI->backgroundConfig->uniqueName, "pauseBackground");

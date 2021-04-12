@@ -17,25 +17,15 @@ using namespace ::testing;
 namespace
 {
 const std::vector<std::string> expectedLabelNames{
-    "settingsTitleLabel",
-    "settingsDisplayModeLabel",
-    "settingsResolutionLabel",
-    "settingsResolutionValueLabel",
-    "settingsVsyncLabel",
-    "settingsFrameLimitLabel",
-    "settingsFrameLimitValueLabel"
-};
+    "settingsTitleLabel",           "settingsDisplayModeLabel", "settingsResolutionLabel",
+    "settingsResolutionValueLabel", "settingsVsyncLabel",       "settingsFrameLimitLabel",
+    "settingsFrameLimitValueLabel"};
 
 const std::vector<std::string> expectedButtonNames{
-    "settingsBackToMenuButton",
-    "settingsApplyChangesButton",
-    "settingsWindowModeButton",
-    "settingsFullscreenModeButton",
-    "settingsResolutionDecreaseButton",
-    "settingsResolutionIncreaseButton",
-    "settingsFrameLimitDecreaseButton",
-    "settingsFrameLimitIncreaseButton"
-};
+    "settingsBackToMenuButton",         "settingsApplyChangesButton",
+    "settingsWindowModeButton",         "settingsFullscreenModeButton",
+    "settingsResolutionDecreaseButton", "settingsResolutionIncreaseButton",
+    "settingsFrameLimitDecreaseButton", "settingsFrameLimitIncreaseButton"};
 const std::vector<std::string> expectedCheckBoxesNames{"settingsVsyncCheckBox"};
 }
 class SettingsStateUIConfigBuilderTest : public Test

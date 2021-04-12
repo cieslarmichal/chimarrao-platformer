@@ -39,7 +39,7 @@ inline std::string toString(VisibilityLayer visibilityLayer)
 
 inline VisibilityLayer toVisibilityLayer(const std::string& visibilityLayerAsString)
 {
-    const auto visibilityLayerLowerString = utils::getLowerCases(visibilityLayerAsString);
+    const auto visibilityLayerLowerString = utils::StringHelper::getLowerCases(visibilityLayerAsString);
 
     std::unordered_map<std::string, VisibilityLayer> stringToVisibilityLayer{
         {"first", VisibilityLayer::First},

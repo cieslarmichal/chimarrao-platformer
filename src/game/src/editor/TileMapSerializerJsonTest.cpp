@@ -20,7 +20,8 @@ public:
     const std::string validTileMapInfoJson = "";
 };
 
-TEST_F(TileMapSerializerJsonTest, giveTileMapInfo_shouldReturnSerializedTileMapInfo) {
+TEST_F(TileMapSerializerJsonTest, giveTileMapInfo_shouldReturnSerializedTileMapInfo)
+{
     auto serializedTileMapInfo = serializer.serialize(validTileMapInfo);
 
     EXPECT_EQ(validTileMapInfoJson, serializedTileMapInfo);

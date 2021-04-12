@@ -1,9 +1,9 @@
 #include "SettingsState.h"
 
 #include "GetProjectPath.h"
+#include "SettingsStateUIConfigBuilder.h"
 #include "StlOperators.h"
 #include "ui/DefaultUIManager.h"
-#include "SettingsStateUIConfigBuilder.h"
 
 namespace game
 {
@@ -17,9 +17,11 @@ const auto buttonHoverColor = graphics::Color(205, 128, 66);
 SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<input::InputManager>& inputManagerInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                             std::stack<std::unique_ptr<State>>& statesInit, std::unique_ptr<components::ui::UIManager> uiManagerInit)
+                             std::stack<std::unique_ptr<State>>& statesInit,
+                             std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
-      shouldBackToMenu{false}, inputStatus{nullptr},
+      shouldBackToMenu{false},
+      inputStatus{nullptr},
       uiManager{std::move(uiManagerInit)}
 {
     inputManager->registerObserver(this);
@@ -55,15 +57,15 @@ SettingsState::~SettingsState()
     inputManager->removeObserver(this);
 }
 
-void SettingsState::update(const utils::DeltaTime& deltaTime)
+NextState SettingsState::update(const utils::DeltaTime& deltaTime)
 {
     if (shouldBackToMenu)
     {
-        backToMenu();
-        return;
+        return NextState::Menu;
     }
 
     uiManager->update(deltaTime);
+    return NextState::Same;
 }
 
 void SettingsState::lateUpdate(const utils::DeltaTime&) {}
@@ -131,7 +133,6 @@ void SettingsState::applyWindowSettingsChanges()
     window->setVerticalSync(selectedWindowsSettings.vsync);
     window->setFramerateLimit(selectedWindowsSettings.frameLimit);
 }
-
 
 void SettingsState::increaseResolution()
 {
@@ -227,16 +228,6 @@ void SettingsState::setFullscreenMode()
     uiManager->setColor(components::ui::UIComponentType::Button, "settingsWindowModeButton", buttonColor);
     uiManager->setColor(components::ui::UIComponentType::Button, "settingsFullscreenModeButton",
                         buttonHoverColor);
-}
-
-void SettingsState::backToMenu()
-{
-    states.pop();
-
-    if (not states.empty())
-    {
-        states.top()->activate();
-    }
 }
 
 }

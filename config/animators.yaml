@@ -17,19 +17,19 @@ singleFileAnimators:
         texturePath: resources/bunny-hop-spritesheet.png
         textureWidthInPixels: 192
         textureHeightInPixels: 128
-        rectToCutWidthInPixels: 40
-        rectToCutHeightInPixels: 32
         startXPosition: 40
         startYPosition: 64
+        rectToCutWidthInPixels: 40
+        rectToCutHeightInPixels: 32
         numberOfTextures: 1
         timeBetweenTexturesInSeconds: 0.14
       - type: walk
         texturePath: resources/bunny-hop-spritesheet.png
         textureWidthInPixels: 192
         textureHeightInPixels: 128
-        rectToCutWidthInPixels: 48
-        rectToCutHeightInPixels: 32
         startXPosition: 0
         startYPosition: 32
+        rectToCutWidthInPixels: 48
+        rectToCutHeightInPixels: 32
         numberOfTextures: 4
         timeBetweenTexturesInSeconds: 0.1

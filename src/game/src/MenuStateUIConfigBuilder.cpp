@@ -43,13 +43,15 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const auto playButtonOnMouseOver = [=] {
+    const auto playButtonOnMouseOver = [=]
+    {
         menuState->unselectAllButtons();
         menuState->changeSelectedButton(0);
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuPlayButton",
                                        buttonHoverColor);
     };
-    const auto playButtonOnMouseOut = [=] {
+    const auto playButtonOnMouseOut = [=]
+    {
         menuState->unselectAllButtons();
         menuState->hideIcons();
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuPlayButton",
@@ -57,7 +59,8 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
     };
     auto playButtonMouseOverActions =
         components::ui::MouseOverActions{playButtonOnMouseOver, playButtonOnMouseOut};
-    const auto runGame = [=] {
+    const auto runGame = [=]
+    {
         menuState->states.top()->deactivate();
         menuState->states.push(std::make_unique<GameState>(
             menuState->window, menuState->inputManager, menuState->rendererPool, menuState->states,
@@ -71,13 +74,15 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const auto mapEditorButtonOnMouseOver = [=] {
+    const auto mapEditorButtonOnMouseOver = [=]
+    {
         menuState->unselectAllButtons();
         menuState->changeSelectedButton(1);
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuMapEditorButton",
                                        buttonHoverColor);
     };
-    const auto mapEditorButtonOnMouseOut = [=] {
+    const auto mapEditorButtonOnMouseOut = [=]
+    {
         menuState->unselectAllButtons();
         menuState->hideIcons();
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuMapEditorButton",
@@ -85,7 +90,8 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
     };
     auto mapEditorButtonMouseOverActions =
         components::ui::MouseOverActions{mapEditorButtonOnMouseOver, mapEditorButtonOnMouseOut};
-    const auto runMapEditor = [=] {
+    const auto runMapEditor = [=]
+    {
         menuState->states.top()->deactivate();
         menuState->states.push(std::make_unique<EditorState>(
             menuState->window, menuState->inputManager, menuState->rendererPool, menuState->states,
@@ -100,13 +106,15 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const auto controlsButtonOnMouseOver = [=] {
+    const auto controlsButtonOnMouseOver = [=]
+    {
         menuState->unselectAllButtons();
         menuState->changeSelectedButton(2);
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuControlsButton",
                                        buttonHoverColor);
     };
-    const auto controlsButtonOnMouseOut = [=] {
+    const auto controlsButtonOnMouseOut = [=]
+    {
         menuState->unselectAllButtons();
         menuState->hideIcons();
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuControlsButton",
@@ -114,7 +122,8 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
     };
     auto controlsButtonMouseOverActions =
         components::ui::MouseOverActions{controlsButtonOnMouseOver, controlsButtonOnMouseOut};
-    const auto runControls = [=] {
+    const auto runControls = [=]
+    {
         menuState->states.top()->deactivate();
         menuState->states.push(std::make_unique<ControlsState>(
             menuState->window, menuState->inputManager, menuState->rendererPool, menuState->states,
@@ -129,13 +138,15 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const auto settingsButtonOnMouseOver = [=] {
+    const auto settingsButtonOnMouseOver = [=]
+    {
         menuState->unselectAllButtons();
         menuState->changeSelectedButton(3);
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuSettingsButton",
                                        buttonHoverColor);
     };
-    const auto settingsButtonOnMouseOut = [=] {
+    const auto settingsButtonOnMouseOut = [=]
+    {
         menuState->unselectAllButtons();
         menuState->hideIcons();
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuSettingsButton",
@@ -143,7 +154,8 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
     };
     auto settingsButtonMouseOverActions =
         components::ui::MouseOverActions{settingsButtonOnMouseOver, settingsButtonOnMouseOut};
-    const auto runSettings = [=] {
+    const auto runSettings = [=]
+    {
         menuState->states.top()->deactivate();
         menuState->states.push(std::make_unique<SettingsState>(
             menuState->window, menuState->inputManager, menuState->rendererPool, menuState->states,
@@ -158,13 +170,15 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const auto exitButtonOnMouseOver = [=] {
+    const auto exitButtonOnMouseOver = [=]
+    {
         menuState->unselectAllButtons();
         menuState->changeSelectedButton(4);
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuExitButton",
                                        buttonHoverColor);
     };
-    const auto exitButtonOnMouseOut = [=] {
+    const auto exitButtonOnMouseOut = [=]
+    {
         menuState->unselectAllButtons();
         menuState->hideIcons();
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuExitButton",
@@ -172,6 +186,7 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
     };
     auto exitButtonMouseOverActions =
         components::ui::MouseOverActions{exitButtonOnMouseOver, exitButtonOnMouseOut};
+    // TODO: to check this window->close if ok, if it isn't set bool variable in menu class to exit game
     const auto exit = [=] { menuState->window->close(); };
     auto exitButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuExitButton", exitButtonPosition, buttonSize, buttonColor, "Exit", graphics::Color::Black, 35,

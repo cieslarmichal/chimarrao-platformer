@@ -4,10 +4,11 @@
 
 #include "Vector.h"
 #include "Window.h"
+#include "WindowApi.h"
 
 namespace window
 {
-class WindowFactory
+class WINDOW_API WindowFactory
 {
 public:
     virtual ~WindowFactory() = default;

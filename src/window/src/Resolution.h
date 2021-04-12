@@ -14,9 +14,8 @@ struct Resolution
 
 inline bool operator==(const Resolution& lhs, const Resolution& rhs)
 {
-    auto tieStruct = [](const Resolution& resolution) {
-        return std::tie(resolution.width, resolution.height);
-    };
+    auto tieStruct = [](const Resolution& resolution)
+    { return std::tie(resolution.width, resolution.height); };
     return tieStruct(lhs) == tieStruct(rhs);
 }
 

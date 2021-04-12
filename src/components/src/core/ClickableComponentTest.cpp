@@ -1,13 +1,12 @@
 #include "ClickableComponent.h"
 
-#include "exceptions/ActionForKeyAlreadyExists.h"
-
 #include "gtest/gtest.h"
 
 #include "InputManagerMock.h"
 
 #include "ComponentOwner.h"
 #include "InputKey.h"
+#include "exceptions/ActionForKeyAlreadyExists.h"
 
 using namespace components::core;
 using namespace ::testing;

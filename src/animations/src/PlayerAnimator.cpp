@@ -3,15 +3,16 @@
 #include "AnimationsFromSettingsLoader.h"
 #include "GetProjectPath.h"
 #include "exceptions/AnimationTypeNotSupported.h"
+#include "exceptions/AnimatorSettingsNotFound.h"
 #include "exceptions/InvalidAnimatorSettings.h"
 
 namespace animations
 {
 
-PlayerAnimator::PlayerAnimator(graphics::GraphicsId graphicsIdInit,
-                               std::shared_ptr<graphics::RendererPool> rendererPoolInit,
-                               const MultipleFilesAnimatorSettings& animatorSettings, AnimationType animationTypeInit,
-                               AnimationDirection animationDirectionInit)
+PlayerAnimator::PlayerAnimator(
+    graphics::GraphicsId graphicsIdInit, std::shared_ptr<graphics::RendererPool> rendererPoolInit,
+    const std::shared_ptr<AnimatorSettingsRepository>& animatorSettingsRepositoryInit,
+    AnimationType animationTypeInit, AnimationDirection animationDirectionInit)
     : graphicsId{graphicsIdInit},
       rendererPool{std::move(rendererPoolInit)},
       currentAnimationType{animationTypeInit},
@@ -20,13 +21,20 @@ PlayerAnimator::PlayerAnimator(graphics::GraphicsId graphicsIdInit,
       newAnimationTypeIsSet{false},
       newAnimationDirectionIsSet{false}
 {
-    if (animatorSettings.animatorName != animatorName)
+    auto animatorSettings = animatorSettingsRepositoryInit->getMultipleFileAnimatorSettings(animatorName);
+
+    if (not animatorSettings)
     {
-        throw exceptions::InvalidAnimatorSettings{"Invalid settings for " + animatorName + ": " +
-                                                  animatorSettings.animatorName};
+        throw exceptions::AnimatorSettingsNotFound{"Animator settings for " + animatorName + " not found"};
     }
 
-    initializeAnimations(animatorSettings.animationsSettings);
+    if (animatorSettings->animatorName != animatorName)
+    {
+        throw exceptions::InvalidAnimatorSettings{"Invalid settings for " + animatorName + ": " +
+                                                  animatorSettings->animatorName};
+    }
+
+    initializeAnimations(animatorSettings->animationsSettings);
 
     if (not containsAnimation(currentAnimationType))
     {
@@ -103,9 +111,11 @@ AnimationDirection PlayerAnimator::getAnimationDirection() const
     return currentAnimationDirection;
 }
 
-void PlayerAnimator::initializeAnimations(const std::vector<MultipleFilesAnimationSettings>& animationsSettings)
+void PlayerAnimator::initializeAnimations(
+    const std::vector<MultipleFilesAnimationSettings>& animationsSettings)
 {
-    AnimationsFromSettingsLoader::loadAnimationsFromMultipleFilesAnimationsSettings(animations, animationsSettings);
+    AnimationsFromSettingsLoader::loadAnimationsFromMultipleFilesAnimationsSettings(animations,
+                                                                                    animationsSettings);
 }
 
 bool PlayerAnimator::containsAnimation(const AnimationType& animationType) const

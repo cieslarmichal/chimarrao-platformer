@@ -3,19 +3,26 @@
 #include <string>
 #include <vector>
 
+#include "UtilsApi.h"
+
 namespace utils
 {
-const std::string endOfLine{"\n"};
+class UTILS_API StringHelper
+{
+public:
+    static std::string join(const std::vector<std::string>& contentWithLines,
+                            const std::string& joinWith = "\n");
+    static std::vector<std::string> split(const std::string& content, const std::string& splitBy = "\n");
+    static std::vector<std::string> getNonEmptyLines(const std::vector<std::string>&);
+    static void removeEmptyLines(std::vector<std::string>&);
+    static void trim(std::vector<std::string>&);
+    static void removeDuplicates(std::vector<std::string>&);
+    static std::string cutOffFromString(const std::string& line, size_t startIndexToCut,
+                                        size_t endIndexToCut);
+    static void cutOffString(std::string& line, size_t startIndexToCutIncluded, size_t endIndexToCutIncluded);
+    static std::string substring(const std::string& line, size_t startIndex, size_t endIndex);
+    static std::string getLowerCases(const std::string&);
+    static void trim(std::string&);
+};
 
-std::string join(const std::vector<std::string>& contentWithLines, const std::string& joinWith = endOfLine);
-std::vector<std::string> split(const std::string& content, const std::string& splitBy = endOfLine);
-std::vector<std::string> getNonEmptyLines(const std::vector<std::string>&);
-void removeEmptyLines(std::vector<std::string>&);
-void trim(std::vector<std::string>&);
-void removeDuplicates(std::vector<std::string>&);
-std::string cutOffFromString(const std::string& line, size_t startIndexToCut, size_t endIndexToCut);
-void cutOffString(std::string& line, size_t startIndexToCutIncluded, size_t endIndexToCutIncluded);
-std::string substring(const std::string& line, size_t startIndex, size_t endIndex);
-std::string getLowerCases(const std::string&);
-void trim(std::string&);
 }

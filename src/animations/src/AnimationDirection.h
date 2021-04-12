@@ -32,7 +32,7 @@ inline std::string toString(AnimationDirection animationDirection)
 
 inline AnimationDirection toAnimationDirection(const std::string& animationDirectionAsString)
 {
-    const auto animationDirectionLowerString = utils::getLowerCases(animationDirectionAsString);
+    const auto animationDirectionLowerString = utils::StringHelper::getLowerCases(animationDirectionAsString);
 
     std::unordered_map<std::string, AnimationDirection> stringToAnimationDirection{
         {"right", AnimationDirection::Right}, {"left", AnimationDirection::Left}};

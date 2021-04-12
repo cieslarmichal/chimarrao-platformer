@@ -42,7 +42,7 @@ set(UT_SOURCES
         src/SettingsStateUIConfigBuilderTest.cpp
         src/editor/TileMapSerializerJsonTest.cpp)
 
-add_library(game SHARED ${SOURCES})
+add_library(game ${SOURCES})
 target_include_directories(game PUBLIC src ${JSON_INCLUDE_DIR})
 target_link_libraries(game PUBLIC utils graphics input components)
 

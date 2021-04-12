@@ -39,11 +39,13 @@ EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(EditorMenuState* editor
     labelsConfig.emplace_back(std::move(titleLabelConfig));
 
     const auto backToEditorButtonPosition = utils::Vector2f{28, 15};
-    const auto backToEditorButtonOnMouseOver = [=] {
+    const auto backToEditorButtonOnMouseOver = [=]
+    {
         editorMenuState->uiManager->setColor(components::ui::UIComponentType::Button,
                                              "editorMenuBackToEditorButton", buttonHoverColor);
     };
-    const auto backToEditorButtonOnMouseOut = [=] {
+    const auto backToEditorButtonOnMouseOut = [=]
+    {
         editorMenuState->uiManager->setColor(components::ui::UIComponentType::Button,
                                              "editorMenuBackToEditorButton", buttonColor);
     };
@@ -57,11 +59,13 @@ EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(EditorMenuState* editor
     buttonsConfig.emplace_back(std::move(backToEditorButtonConfig));
 
     const auto loadMapButtonPosition = utils::Vector2f{28, 23};
-    const auto loadMapButtonOnMouseOver = [=] {
+    const auto loadMapButtonOnMouseOver = [=]
+    {
         editorMenuState->uiManager->setColor(components::ui::UIComponentType::Button,
                                              "editorMenuLoadMapButton", buttonHoverColor);
     };
-    const auto loadMapButtonOnMouseOut = [=] {
+    const auto loadMapButtonOnMouseOut = [=]
+    {
         editorMenuState->uiManager->setColor(components::ui::UIComponentType::Button,
                                              "editorMenuLoadMapButton", buttonColor);
     };
@@ -74,11 +78,13 @@ EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(EditorMenuState* editor
     buttonsConfig.emplace_back(std::move(loadMapButtonConfig));
 
     const auto newMapButtonPosition = utils::Vector2f{28, 31};
-    const auto newMapButtonOnMouseOver = [=] {
+    const auto newMapButtonOnMouseOver = [=]
+    {
         editorMenuState->uiManager->setColor(components::ui::UIComponentType::Button,
                                              "editorMenuNewMapButton", buttonHoverColor);
     };
-    const auto newMapButtonOnMouseOut = [=] {
+    const auto newMapButtonOnMouseOut = [=]
+    {
         editorMenuState->uiManager->setColor(components::ui::UIComponentType::Button,
                                              "editorMenuNewMapButton", buttonColor);
     };
@@ -91,17 +97,20 @@ EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(EditorMenuState* editor
     buttonsConfig.emplace_back(std::move(newMapButtonConfig));
 
     const auto saveMapButtonPosition = utils::Vector2f{28, 39};
-    const auto saveMapButtonOnMouseOver = [=] {
+    const auto saveMapButtonOnMouseOver = [=]
+    {
         editorMenuState->uiManager->setColor(components::ui::UIComponentType::Button,
                                              "editorMenuSaveMapButton", buttonHoverColor);
     };
-    const auto saveMapButtonOnMouseOut = [=] {
+    const auto saveMapButtonOnMouseOut = [=]
+    {
         editorMenuState->uiManager->setColor(components::ui::UIComponentType::Button,
                                              "editorMenuSaveMapButton", buttonColor);
     };
     auto saveMapButtonMouseOverActions =
         components::ui::MouseOverActions{saveMapButtonOnMouseOver, saveMapButtonOnMouseOut};
-    auto saveMapClickAction = [=] {
+    auto saveMapClickAction = [=]
+    {
         editorMenuState->states.top()->deactivate();
         editorMenuState->states.push(
             std::make_unique<SaveMapState>(editorMenuState->window, editorMenuState->inputManager,
@@ -116,11 +125,13 @@ EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(EditorMenuState* editor
     buttonsConfig.emplace_back(std::move(saveMapButtonConfig));
 
     const auto backToMenuButtonPosition = utils::Vector2f{28, 47};
-    const auto backToMenuButtonOnMouseOver = [=] {
+    const auto backToMenuButtonOnMouseOver = [=]
+    {
         editorMenuState->uiManager->setColor(components::ui::UIComponentType::Button,
                                              "editorMenuBackToMenuButton", buttonHoverColor);
     };
-    const auto backToMenuButtonOnMouseOut = [=] {
+    const auto backToMenuButtonOnMouseOut = [=]
+    {
         editorMenuState->uiManager->setColor(components::ui::UIComponentType::Button,
                                              "editorMenuBackToMenuButton", buttonColor);
     };

@@ -6,9 +6,9 @@
 #include "RendererPoolMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
-#include "StlOperators.h"
 
 #include "EditorMenuState.h"
+#include "StlOperators.h"
 
 using namespace game;
 using namespace components::ui;
@@ -18,13 +18,9 @@ namespace
 {
 const std::vector<std::string> expectedLabelNames{"editorMenuTitleLabel"};
 
-const std::vector<std::string> expectedButtonNames{
-    "editorMenuBackToEditorButton",
-    "editorMenuLoadMapButton",
-    "editorMenuNewMapButton",
-    "editorMenuSaveMapButton",
-    "editorMenuBackToMenuButton"
-};
+const std::vector<std::string> expectedButtonNames{"editorMenuBackToEditorButton", "editorMenuLoadMapButton",
+                                                   "editorMenuNewMapButton", "editorMenuSaveMapButton",
+                                                   "editorMenuBackToMenuButton"};
 }
 class EditorMenuStateUIConfigBuilderTest : public Test
 {
@@ -38,8 +34,9 @@ public:
     std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
         std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
     components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
-    TileMap tileMap {"",{0,0}};
-    EditorMenuState editorMenuState{window, inputManager, rendererPool, states, std::move(uiManagerInit),tileMap};
+    TileMap tileMap{"", {0, 0}};
+    EditorMenuState editorMenuState{window, inputManager, rendererPool, states, std::move(uiManagerInit),
+                                    tileMap};
 };
 
 TEST_F(EditorMenuStateUIConfigBuilderTest, createEditorMenuUI)
@@ -47,11 +44,13 @@ TEST_F(EditorMenuStateUIConfigBuilderTest, createEditorMenuUI)
     const auto editorMenuUI = EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(&editorMenuState);
 
     std::vector<std::string> actualLabelNames;
-    std::transform(editorMenuUI->labelsConfig.begin(), editorMenuUI->labelsConfig.end(), std::back_inserter(actualLabelNames),
+    std::transform(editorMenuUI->labelsConfig.begin(), editorMenuUI->labelsConfig.end(),
+                   std::back_inserter(actualLabelNames),
                    [](const auto& labelConfig) { return labelConfig->uniqueName; });
 
     std::vector<std::string> actualButtonsNames;
-    std::transform(editorMenuUI->buttonsConfig.begin(), editorMenuUI->buttonsConfig.end(), std::back_inserter(actualButtonsNames),
+    std::transform(editorMenuUI->buttonsConfig.begin(), editorMenuUI->buttonsConfig.end(),
+                   std::back_inserter(actualButtonsNames),
                    [](const auto& buttonConfig) { return buttonConfig->uniqueName; });
 
     ASSERT_EQ(editorMenuUI->backgroundConfig->uniqueName, "editorMenuBackground");

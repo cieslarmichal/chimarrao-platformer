@@ -1,7 +1,8 @@
 #pragma once
 
-#include "TileType.h"
 #include <optional>
+
+#include "TileType.h"
 
 namespace game
 {

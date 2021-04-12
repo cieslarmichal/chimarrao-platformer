@@ -1,13 +1,12 @@
 #pragma once
 
-#include <editor/TileMap.h>
-
 #include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
+#include "editor/TileMap.h"
+#include "ui/DefaultUIManager.h"
 #include "ui/UIConfig.h"
 #include "ui/UIManager.h"
-#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -23,7 +22,7 @@ public:
                           std::unique_ptr<components::ui::UIManager>, TileMap&);
     ~SaveMapState();
 
-    void update(const utils::DeltaTime&) override;
+    NextState update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;
@@ -33,7 +32,6 @@ public:
 
 private:
     void saveMap();
-    void backToEditorMenu();
 
     const input::InputStatus* inputStatus;
     utils::Timer possibleLeaveFromStateTimer;

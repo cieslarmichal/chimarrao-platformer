@@ -1,12 +1,12 @@
 #pragma once
 
-#include "editor/LayoutTile.h"
 #include <vector>
 
 #include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
 #include "core/ClickableComponent.h"
+#include "editor/LayoutTile.h"
 #include "editor/TileMap.h"
 #include "ui/UIConfig.h"
 #include "ui/UIManager.h"
@@ -25,7 +25,7 @@ public:
                          std::unique_ptr<components::ui::UIManager>);
     ~EditorState();
 
-    void update(const utils::DeltaTime&) override;
+    NextState update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;
@@ -35,8 +35,6 @@ public:
     void pause();
 
 private:
-    void unfreezeButtons();
-
     const input::InputStatus* inputStatus;
     bool paused;
     utils::Timer pauseTimer;

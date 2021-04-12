@@ -15,7 +15,8 @@ struct WindowSettings
 
 inline bool operator==(const WindowSettings& lhs, const WindowSettings& rhs)
 {
-    auto tieStruct = [](const WindowSettings& windowSettings) {
+    auto tieStruct = [](const WindowSettings& windowSettings)
+    {
         return std::tie(windowSettings.displayMode, windowSettings.resolution, windowSettings.vsync,
                         windowSettings.frameLimit);
     };

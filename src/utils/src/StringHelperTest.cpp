@@ -42,84 +42,85 @@ public:
 
 TEST_F(StringHelperTest, givenEmptyString_shouldVectorWithOneEmptyElement)
 {
-    const auto actualVec = split(emptyStr);
+    const auto actualVec = StringHelper::split(emptyStr);
 
     ASSERT_EQ(actualVec, vecWithOneEmptyElement);
 }
 
 TEST_F(StringHelperTest, givenString_shouldSplitToVectorOfStringsByNewLines)
 {
-    const auto actualVec = split(str);
+    const auto actualVec = StringHelper::split(str);
 
     ASSERT_EQ(actualVec, strVec);
 }
 
 TEST_F(StringHelperTest, givenEmptyVector_shouldReturnEmptyString)
 {
-    const auto actualStr = join(emptyVec);
+    const auto actualStr = StringHelper::join(emptyVec);
 
     ASSERT_EQ(actualStr, emptyStr);
 }
 
 TEST_F(StringHelperTest, givenVectorOfStrings_shouldJoinElementsToString)
 {
-    const auto actualStr = join(strVec);
+    const auto actualStr = StringHelper::join(strVec);
 
     ASSERT_EQ(actualStr, str);
 }
 
 TEST_F(StringHelperTest, givenString_shouldReturnCutFromStartIndexToEndIndex)
 {
-    const auto actualCut = cutOffFromString(stringBeforeCut, startCutIndex, endCutIndex);
+    const auto actualCut = StringHelper::cutOffFromString(stringBeforeCut, startCutIndex, endCutIndex);
 
     ASSERT_EQ(actualCut, stringAfterCut);
 }
 
 TEST_F(StringHelperTest, givenString_shouldCutFromStringFromStartIndexToEndIndex)
 {
-    cutOffString(stringBeforeCut, startCutIndex, endCutIndex);
+    StringHelper::cutOffString(stringBeforeCut, startCutIndex, endCutIndex);
 
     ASSERT_EQ(stringBeforeCut, stringAfterCut);
 }
 
 TEST_F(StringHelperTest, givenString_shouldReturnSubstringByStartAndEndIndex)
 {
-    const auto actualSubstring = substring(stringBeforeCut, startSubstringIndex, endSubstringIndex);
+    const auto actualSubstring =
+        StringHelper::substring(stringBeforeCut, startSubstringIndex, endSubstringIndex);
 
     ASSERT_EQ(actualSubstring, strSubstring);
 }
 
 TEST_F(StringHelperTest, givenString_shouldLowerAllCharacters)
 {
-    const auto actualStringWithLowerCases = getLowerCases(stringWithUpperCases);
+    const auto actualStringWithLowerCases = StringHelper::getLowerCases(stringWithUpperCases);
 
     ASSERT_EQ(actualStringWithLowerCases, stringWithoutUpperCases);
 }
 
 TEST_F(StringHelperTest, givenVectorWithEmptyLines_shouldReturnEmptyVector)
 {
-    const auto actualNonEmptyLines = getNonEmptyLines(vecWithEmptyElements);
+    const auto actualNonEmptyLines = StringHelper::getNonEmptyLines(vecWithEmptyElements);
 
     ASSERT_TRUE(actualNonEmptyLines.empty());
 }
 
 TEST_F(StringHelperTest, givenVector_shouldReturnVectorWithoutEmptyStrings)
 {
-    const auto actualNonEmptyLines = getNonEmptyLines(vecWithSomeEmptyElements);
+    const auto actualNonEmptyLines = StringHelper::getNonEmptyLines(vecWithSomeEmptyElements);
 
     ASSERT_EQ(actualNonEmptyLines, vecWithoutEmptyElements);
 }
 
 TEST_F(StringHelperTest, givenVectorWithEmptyLines_shouldRemoveEmptyLines)
 {
-    removeEmptyLines(vecWithSomeEmptyElements);
+    StringHelper::removeEmptyLines(vecWithSomeEmptyElements);
 
     ASSERT_EQ(vecWithSomeEmptyElements, vecWithoutEmptyElements);
 }
 
 TEST_F(StringHelperTest, givenVectorWithDuplicates_shouldRemoveDuplicates)
 {
-    removeDuplicates(vecWithDuplicates);
+    StringHelper::removeDuplicates(vecWithDuplicates);
 
     ASSERT_TRUE(compareVectors(vecWithDuplicates, vecWithoutDuplicates));
 }
@@ -127,21 +128,21 @@ TEST_F(StringHelperTest, givenVectorWithDuplicates_shouldRemoveDuplicates)
 TEST_F(StringHelperTest, givenVectorWithoutEmptyLines_shouldNotRemoveLines)
 {
     const auto amountOfElementsBefore = vecWithoutEmptyElements.size();
-    removeEmptyLines(vecWithoutEmptyElements);
+    StringHelper::removeEmptyLines(vecWithoutEmptyElements);
 
     ASSERT_EQ(vecWithoutEmptyElements.size(), amountOfElementsBefore);
 }
 
 TEST_F(StringHelperTest, shouldTrimString)
 {
-    trim(stringToTrim);
+    StringHelper::trim(stringToTrim);
 
     ASSERT_EQ(stringToTrim, stringAfterTrim);
 }
 
 TEST_F(StringHelperTest, shouldTrimStrings)
 {
-    trim(stringsToTrim);
+    StringHelper::trim(stringsToTrim);
 
     ASSERT_EQ(stringsToTrim, stringsAfterTrim);
 }

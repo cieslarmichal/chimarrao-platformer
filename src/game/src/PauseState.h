@@ -18,7 +18,7 @@ public:
                         std::unique_ptr<components::ui::UIManager>);
     ~PauseState();
 
-    void update(const utils::DeltaTime&) override;
+    NextState update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;
@@ -27,9 +27,6 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
-    void backToGame();
-    void backToMenu();
-
     const input::InputStatus* inputStatus;
     utils::Timer timer;
     const float timeAfterLeaveStateIsPossible;

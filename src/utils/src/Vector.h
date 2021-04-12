@@ -1,8 +1,8 @@
 #pragma once
 
-#include <iostream>
-
 #include <SFML/System/Vector2.hpp>
+#include <iostream>
+#include <string>
 
 namespace utils
 {

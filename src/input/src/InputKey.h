@@ -62,27 +62,27 @@ enum class InputKey
 };
 
 const std::vector<InputKey> allKeys{
-    InputKey::Up,      InputKey::Down,    InputKey::Left,    InputKey::Right,     InputKey::Space,
-    InputKey::Shift,   InputKey::Enter,   InputKey::Escape, InputKey::Backspace, InputKey::MouseLeft, InputKey::MouseRight,
-    InputKey::Number0, InputKey::Number1, InputKey::Number2, InputKey::Number3,   InputKey::Number4,
-    InputKey::Number5, InputKey::Number6, InputKey::Number7, InputKey::Number8,   InputKey::Number9,
-    InputKey::Q,       InputKey::W,       InputKey::E,       InputKey::R,         InputKey::T,
-    InputKey::Y,       InputKey::U,       InputKey::I,       InputKey::O,         InputKey::P,
-    InputKey::A,       InputKey::S,       InputKey::D,       InputKey::F,         InputKey::G,
-    InputKey::H,       InputKey::J,       InputKey::K,       InputKey::L,         InputKey::Z,
-    InputKey::X,       InputKey::C,       InputKey::V,       InputKey::B,         InputKey::N,
-    InputKey::M};
+    InputKey::Up,         InputKey::Down,    InputKey::Left,    InputKey::Right,     InputKey::Space,
+    InputKey::Shift,      InputKey::Enter,   InputKey::Escape,  InputKey::Backspace, InputKey::MouseLeft,
+    InputKey::MouseRight, InputKey::Number0, InputKey::Number1, InputKey::Number2,   InputKey::Number3,
+    InputKey::Number4,    InputKey::Number5, InputKey::Number6, InputKey::Number7,   InputKey::Number8,
+    InputKey::Number9,    InputKey::Q,       InputKey::W,       InputKey::E,         InputKey::R,
+    InputKey::T,          InputKey::Y,       InputKey::U,       InputKey::I,         InputKey::O,
+    InputKey::P,          InputKey::A,       InputKey::S,       InputKey::D,         InputKey::F,
+    InputKey::G,          InputKey::H,       InputKey::J,       InputKey::K,         InputKey::L,
+    InputKey::Z,          InputKey::X,       InputKey::C,       InputKey::V,         InputKey::B,
+    InputKey::N,          InputKey::M};
 
 const std::vector<InputKey> keyboardButtons{
-    InputKey::Up,      InputKey::Down,    InputKey::Left,    InputKey::Right,   InputKey::Space,
-    InputKey::Shift,   InputKey::Enter,   InputKey::Escape,  InputKey::Backspace, InputKey::Number0, InputKey::Number1,
-    InputKey::Number2, InputKey::Number3, InputKey::Number4, InputKey::Number5, InputKey::Number6,
-    InputKey::Number7, InputKey::Number8, InputKey::Number9, InputKey::Q,       InputKey::W,
-    InputKey::E,       InputKey::R,       InputKey::T,       InputKey::Y,       InputKey::U,
-    InputKey::I,       InputKey::O,       InputKey::P,       InputKey::A,       InputKey::S,
-    InputKey::D,       InputKey::F,       InputKey::G,       InputKey::H,       InputKey::J,
-    InputKey::K,       InputKey::L,       InputKey::Z,       InputKey::X,       InputKey::C,
-    InputKey::V,       InputKey::B,       InputKey::N,       InputKey::M};
+    InputKey::Up,      InputKey::Down,    InputKey::Left,    InputKey::Right,     InputKey::Space,
+    InputKey::Shift,   InputKey::Enter,   InputKey::Escape,  InputKey::Backspace, InputKey::Number0,
+    InputKey::Number1, InputKey::Number2, InputKey::Number3, InputKey::Number4,   InputKey::Number5,
+    InputKey::Number6, InputKey::Number7, InputKey::Number8, InputKey::Number9,   InputKey::Q,
+    InputKey::W,       InputKey::E,       InputKey::R,       InputKey::T,         InputKey::Y,
+    InputKey::U,       InputKey::I,       InputKey::O,       InputKey::P,         InputKey::A,
+    InputKey::S,       InputKey::D,       InputKey::F,       InputKey::G,         InputKey::H,
+    InputKey::J,       InputKey::K,       InputKey::L,       InputKey::Z,         InputKey::X,
+    InputKey::C,       InputKey::V,       InputKey::B,       InputKey::N,         InputKey::M};
 
 const std::vector<InputKey> alphaNumericalButtons{
     InputKey::Number0, InputKey::Number1, InputKey::Number2, InputKey::Number3, InputKey::Number4,
@@ -158,7 +158,7 @@ inline std::string toString(InputKey inputKey)
 
 inline InputKey toInputKey(const std::string& inputKeyAsString)
 {
-    const auto inputKeyLowerString = utils::getLowerCases(inputKeyAsString);
+    const auto inputKeyLowerString = utils::StringHelper::getLowerCases(inputKeyAsString);
 
     std::unordered_map<std::string, InputKey> stringToInputKey{{"up", InputKey::Up},
                                                                {"down", InputKey::Down},

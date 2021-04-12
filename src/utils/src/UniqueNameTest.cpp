@@ -1,6 +1,7 @@
 #include "UniqueName.h"
 
 #include "gtest/gtest.h"
+
 #include "exceptions/NameIsNotUnique.h"
 
 using namespace utils;

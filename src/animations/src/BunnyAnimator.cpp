@@ -2,17 +2,17 @@
 
 #include "AnimationsFromSettingsLoader.h"
 #include "GetProjectPath.h"
-#include "StlOperators.h"
 #include "exceptions/AnimationTypeNotSupported.h"
+#include "exceptions/AnimatorSettingsNotFound.h"
 #include "exceptions/InvalidAnimatorSettings.h"
 
 namespace animations
 {
 
-BunnyAnimator::BunnyAnimator(graphics::GraphicsId graphicsIdInit,
-                               std::shared_ptr<graphics::RendererPool> rendererPoolInit,
-                               const SingleFileAnimatorSettings& animatorSettings, AnimationType animationTypeInit,
-                               AnimationDirection animationDirectionInit)
+BunnyAnimator::BunnyAnimator(
+    graphics::GraphicsId graphicsIdInit, std::shared_ptr<graphics::RendererPool> rendererPoolInit,
+    const std::shared_ptr<AnimatorSettingsRepository>& animatorSettingsRepositoryInit,
+    AnimationType animationTypeInit, AnimationDirection animationDirectionInit)
     : graphicsId{graphicsIdInit},
       rendererPool{std::move(rendererPoolInit)},
       currentAnimationType{animationTypeInit},
@@ -21,13 +21,20 @@ BunnyAnimator::BunnyAnimator(graphics::GraphicsId graphicsIdInit,
       newAnimationTypeIsSet{false},
       newAnimationDirectionIsSet{false}
 {
-    if (animatorSettings.animatorName != animatorName)
+    auto animatorSettings = animatorSettingsRepositoryInit->getSingleFileAnimatorSettings(animatorName);
+
+    if (not animatorSettings)
     {
-        throw exceptions::InvalidAnimatorSettings{"Invalid settings for " + animatorName + ": " +
-                                                  animatorSettings.animatorName};
+        throw exceptions::AnimatorSettingsNotFound{"Animator settings for " + animatorName + " not found"};
     }
 
-    initializeAnimations(animatorSettings.animationsSettings);
+    if (animatorSettings->animatorName != animatorName)
+    {
+        throw exceptions::InvalidAnimatorSettings{"Invalid settings for " + animatorName + ": " +
+                                                  animatorSettings->animatorName};
+    }
+
+    initializeAnimations(animatorSettings->animationsSettings);
 
     if (not containsAnimation(currentAnimationType))
     {
@@ -45,8 +52,8 @@ AnimationChanged BunnyAnimator::update(const utils::DeltaTime& deltaTime)
     if (animationChanged(textureChanged))
     {
         const utils::Vector2f scale = (currentAnimationDirection == AnimationDirection::Left) ?
-                                      utils::Vector2f(-1.0f, 1.0f) :
-                                      utils::Vector2f(1.0f, 1.0f);
+                                          utils::Vector2f(-1.0f, 1.0f) :
+                                          utils::Vector2f(1.0f, 1.0f);
         rendererPool->setTexture(graphicsId, animations.at(currentAnimationType).getCurrentTextureRect(),
                                  scale);
         newAnimationTypeIsSet = false;
@@ -106,7 +113,8 @@ AnimationDirection BunnyAnimator::getAnimationDirection() const
 
 void BunnyAnimator::initializeAnimations(const std::vector<SingleFileAnimationSettings>& animationsSettings)
 {
-    AnimationsFromSettingsLoader::loadAnimationsFromSingleFileAnimationsSettings(animations, animationsSettings);
+    AnimationsFromSettingsLoader::loadAnimationsFromSingleFileAnimationsSettings(animations,
+                                                                                 animationsSettings);
 }
 
 bool BunnyAnimator::containsAnimation(const AnimationType& animationType) const

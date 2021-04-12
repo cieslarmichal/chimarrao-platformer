@@ -7,9 +7,10 @@
 #include "AnimationDirection.h"
 #include "AnimationType.h"
 #include "Animator.h"
+#include "AnimatorSettingsRepository.h"
 #include "GraphicsId.h"
-#include "SingleFileAnimatorSettings.h"
 #include "RendererPool.h"
+#include "SingleFileAnimatorSettings.h"
 
 namespace animations
 {
@@ -17,7 +18,7 @@ class BunnyAnimator : public Animator
 {
 public:
     BunnyAnimator(graphics::GraphicsId, std::shared_ptr<graphics::RendererPool>,
-                  const SingleFileAnimatorSettings&, AnimationType = AnimationType::Walk,
+                  const std::shared_ptr<AnimatorSettingsRepository>&, AnimationType = AnimationType::Walk,
                   AnimationDirection = AnimationDirection::Right);
 
     AnimationChanged update(const utils::DeltaTime&) override;

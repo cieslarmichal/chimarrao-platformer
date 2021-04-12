@@ -7,6 +7,7 @@
 #include "AnimationDirection.h"
 #include "AnimationType.h"
 #include "Animator.h"
+#include "AnimatorSettingsRepository.h"
 #include "GraphicsId.h"
 #include "MultipleFilesAnimatorSettings.h"
 #include "RendererPool.h"
@@ -16,8 +17,9 @@ namespace animations
 class PlayerAnimator : public Animator
 {
 public:
-    PlayerAnimator(graphics::GraphicsId, std::shared_ptr<graphics::RendererPool>, const MultipleFilesAnimatorSettings&,
-                   AnimationType = AnimationType::Idle, AnimationDirection = AnimationDirection::Right);
+    PlayerAnimator(graphics::GraphicsId, std::shared_ptr<graphics::RendererPool>,
+                   const std::shared_ptr<AnimatorSettingsRepository>&, AnimationType = AnimationType::Idle,
+                   AnimationDirection = AnimationDirection::Right);
 
     AnimationChanged update(const utils::DeltaTime&) override;
     void setAnimation(AnimationType) override;

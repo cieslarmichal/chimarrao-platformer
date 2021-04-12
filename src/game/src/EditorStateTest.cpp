@@ -6,6 +6,7 @@
 #include "RendererPoolMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
+
 #include "StlOperators.h"
 
 using namespace game;
@@ -26,7 +27,8 @@ public:
 
     std::shared_ptr<StrictMock<input::InputManagerMock>> inputManager =
         std::make_shared<StrictMock<input::InputManagerMock>>();
-    std::shared_ptr<StrictMock<window::WindowMock>> window = std::make_shared<StrictMock<window::WindowMock>>();
+    std::shared_ptr<StrictMock<window::WindowMock>> window =
+        std::make_shared<StrictMock<window::WindowMock>>();
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
     std::stack<std::unique_ptr<State>> states;
@@ -41,6 +43,4 @@ public:
     EditorState editorState{window, inputManager, rendererPool, states, std::move(uiManagerInit)};
 };
 
-TEST_F(EditorStateTest, xxx)
-{
-}
+TEST_F(EditorStateTest, xxx) {}

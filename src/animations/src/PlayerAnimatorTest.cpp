@@ -2,12 +2,14 @@
 
 #include "gtest/gtest.h"
 
+#include "AnimatorSettingsRepositoryMock.h"
 #include "RendererPoolMock.h"
 
 #include "GetProjectPath.h"
 #include "GraphicsIdGenerator.h"
 #include "exceptions/AnimationTypeNotSupported.h"
 #include "exceptions/AnimationsFromSettingsNotFound.h"
+#include "exceptions/AnimatorSettingsNotFound.h"
 #include "exceptions/InvalidAnimatorSettings.h"
 
 using namespace graphics;
@@ -20,6 +22,9 @@ public:
     PlayerAnimatorTest_Base()
     {
         expectAnimatorsSettingFirstTextureWithCreation();
+
+        EXPECT_CALL(*animatorSettingsRepo, getMultipleFileAnimatorSettings("player"))
+            .WillRepeatedly(Return(animatorSettings));
     }
 
     void expectAnimatorsSettingFirstTextureWithCreation()
@@ -41,7 +46,6 @@ public:
     const TextureRect firstIdleTextureRect{projectPath + "idle/x1.txt"};
     const TextureRect secondIdleTextureRect{projectPath + "idle/x2.txt"};
     const TextureRect firstWalkTextureRect{projectPath + "walk/123.txt"};
-    const TextureRect secondWalkTextureRect{projectPath + "walk/124.txt"};
     const MultipleFilesAnimatorSettings animatorSettingsWithDifferentName{"diffName", animationsSettings};
     const MultipleFilesAnimatorSettings animatorSettingsWithEmptyAnimationsSettings{"player",
                                                                                     emptyAnimationsSettings};
@@ -49,33 +53,53 @@ public:
     const AnimationType notSupportedAnimationType{AnimationType::Jump};
     const AnimationType supportedAnimationType{AnimationType::Walk};
     std::shared_ptr<RendererPoolMock> rendererPool = std::make_shared<StrictMock<RendererPoolMock>>();
+    std::shared_ptr<StrictMock<AnimatorSettingsRepositoryMock>> animatorSettingsRepo =
+        std::make_shared<StrictMock<AnimatorSettingsRepositoryMock>>();
 };
 
 class PlayerAnimatorTest : public PlayerAnimatorTest_Base
 {
 public:
-    PlayerAnimator playerAnimator{graphicsId1, rendererPool, animatorSettings, AnimationType::Idle};
-    PlayerAnimator playerAnimatorWithLeftInitialDirection{graphicsId2, rendererPool, animatorSettings,
+    PlayerAnimator playerAnimator{graphicsId1, rendererPool, animatorSettingsRepo, AnimationType::Idle};
+    PlayerAnimator playerAnimatorWithLeftInitialDirection{graphicsId2, rendererPool, animatorSettingsRepo,
                                                           AnimationType::Idle, AnimationDirection::Left};
 };
+
+TEST_F(PlayerAnimatorTest, givenNoneAnimatorSettings_shouldThrowInvalidAnimatorSettingsNotFound)
+{
+    EXPECT_CALL(*animatorSettingsRepo, getMultipleFileAnimatorSettings("player"))
+        .WillOnce(Return(boost::none));
+
+    ASSERT_THROW(PlayerAnimator(graphicsId1, rendererPool, animatorSettingsRepo),
+                 animations::exceptions::AnimatorSettingsNotFound);
+}
 
 TEST_F(PlayerAnimatorTest,
        givenAnimatorSettingsWithDifferentNameThanPlayer_shouldThrowInvalidAnimatorConfigFile)
 {
-    ASSERT_THROW(PlayerAnimator(graphicsId1, rendererPool, animatorSettingsWithDifferentName),
+    EXPECT_CALL(*animatorSettingsRepo, getMultipleFileAnimatorSettings("player"))
+        .WillOnce(Return(animatorSettingsWithDifferentName));
+
+    ASSERT_THROW(PlayerAnimator(graphicsId1, rendererPool, animatorSettingsRepo),
                  animations::exceptions::InvalidAnimatorSettings);
 }
 
 TEST_F(PlayerAnimatorTest,
        givenInitialAnimationTypeDifferentThanPlayersAnimationsType_shouldThrowAnimationTypeNotSupported)
 {
-    ASSERT_THROW(PlayerAnimator(graphicsId1, rendererPool, animatorSettings, AnimationType::Jump),
+    EXPECT_CALL(*animatorSettingsRepo, getMultipleFileAnimatorSettings("player"))
+        .WillOnce(Return(animatorSettings));
+
+    ASSERT_THROW(PlayerAnimator(graphicsId1, rendererPool, animatorSettingsRepo, AnimationType::Jump),
                  animations::exceptions::AnimationTypeNotSupported);
 }
 
 TEST_F(PlayerAnimatorTest, givenAnimatorSettingsWithEmptyAnimations_shouldThrowAnimationsFromSettingsNotFound)
 {
-    ASSERT_THROW(PlayerAnimator(graphicsId1, rendererPool, animatorSettingsWithEmptyAnimationsSettings),
+    EXPECT_CALL(*animatorSettingsRepo, getMultipleFileAnimatorSettings("player"))
+        .WillOnce(Return(animatorSettingsWithEmptyAnimationsSettings));
+
+    ASSERT_THROW(PlayerAnimator(graphicsId1, rendererPool, animatorSettingsRepo),
                  animations::exceptions::AnimationsFromSettingsNotFound);
 }
 

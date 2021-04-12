@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.15)
 
 project(chimarrao-platformer CXX)
 
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+
 add_subdirectory(externals)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -10,7 +14,6 @@ if(MSVC)
   set(FLAGS -std:c++17 /W4 /permissive-)
 else()
   set(FLAGS -std=c++17 -Wall -g3 -fno-omit-frame-pointer -Wextra -Werror)
-#  set(CMAKE_CXX_FLAGS_DEBUG "/MD")
 endif()
 set(GMOCK_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/externals/googletest/googlemock/include")
 set(GTEST_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/externals/googletest/googletest/include")

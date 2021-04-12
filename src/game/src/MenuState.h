@@ -22,7 +22,7 @@ public:
                        std::unique_ptr<components::ui::UIManager>);
     ~MenuState();
 
-    void update(const utils::DeltaTime&) override;
+    NextState update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;

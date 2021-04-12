@@ -48,8 +48,8 @@ const auto backToMenuButtonPosition = utils::Vector2f{34.5, 48};
 const auto applyChangesButtonPosition = utils::Vector2f{55, 48};
 }
 
-
-std::unique_ptr<components::ui::UIConfig> SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsState)
+std::unique_ptr<components::ui::UIConfig>
+SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsState)
 {
     std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
     std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
@@ -65,12 +65,15 @@ std::unique_ptr<components::ui::UIConfig> SettingsStateUIConfigBuilder::createSe
     labelsConfig.emplace_back(std::move(titleLabelConfig));
 
     const auto backToMenuButtonSize = utils::Vector2f{13, 5};
-    const auto backToMenuButtonOnMouseOver = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::Button, "settingsBackToMenuButton",
-                          buttonHoverColor);
+    const auto backToMenuButtonOnMouseOver = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "settingsBackToMenuButton", buttonHoverColor);
     };
-    const auto backToMenuButtonOnMouseOut = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::Button, "settingsBackToMenuButton", buttonColor);
+    const auto backToMenuButtonOnMouseOut = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "settingsBackToMenuButton", buttonColor);
     };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
@@ -84,13 +87,15 @@ std::unique_ptr<components::ui::UIConfig> SettingsStateUIConfigBuilder::createSe
     /////////////////////////////////////////////////////////////////////////////////////////////////
 
     const auto applyChangesButtonSize = utils::Vector2f{13, 5};
-    const auto applyChangesButtonOnMouseOver = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::Button, "settingsApplyChangesButton",
-                          buttonHoverColor);
+    const auto applyChangesButtonOnMouseOver = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "settingsApplyChangesButton", buttonHoverColor);
     };
-    const auto applyChangesButtonOnMouseOut = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::Button, "settingsApplyChangesButton",
-                          buttonColor);
+    const auto applyChangesButtonOnMouseOut = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "settingsApplyChangesButton", buttonColor);
     };
     auto applyChangesButtonMouseOverActions =
         components::ui::MouseOverActions{applyChangesButtonOnMouseOver, applyChangesButtonOnMouseOut};
@@ -111,7 +116,8 @@ std::unique_ptr<components::ui::UIConfig> SettingsStateUIConfigBuilder::createSe
     auto windowModeClickAction = [=] { settingsState->setWindowMode(); };
     auto windowModeButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsWindowModeButton", windowModeButtonPosition, displayModeButtonSize, buttonColor, "Window",
-        graphics::Color::Black, displayModeFontSize, fontPath, utils::Vector2f{2, 0.9}, windowModeClickAction);
+        graphics::Color::Black, displayModeFontSize, fontPath, utils::Vector2f{2, 0.9},
+        windowModeClickAction);
     buttonsConfig.emplace_back(std::move(windowModeButtonConfig));
 
     ////////////////////////////////////////////////////////////////////
@@ -139,13 +145,15 @@ std::unique_ptr<components::ui::UIConfig> SettingsStateUIConfigBuilder::createSe
 
     //////////////////////////////////////////////////////////////////////////////////////////////
 
-    const auto resolutionDecreaseButtonOnMouseOver = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::Button, "settingsResolutionDecreaseButton",
-                          buttonHoverColor);
+    const auto resolutionDecreaseButtonOnMouseOver = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "settingsResolutionDecreaseButton", buttonHoverColor);
     };
-    const auto resolutionDecreaseButtonOnMouseOut = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::Button, "settingsResolutionDecreaseButton",
-                          buttonColor);
+    const auto resolutionDecreaseButtonOnMouseOut = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "settingsResolutionDecreaseButton", buttonColor);
     };
     auto resolutionDecreaseButtonMouseOverActions = components::ui::MouseOverActions{
         resolutionDecreaseButtonOnMouseOver, resolutionDecreaseButtonOnMouseOut};
@@ -158,13 +166,15 @@ std::unique_ptr<components::ui::UIConfig> SettingsStateUIConfigBuilder::createSe
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const auto resolutionIncreaseButtonOnMouseOver = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::Button, "settingsResolutionIncreaseButton",
-                          buttonHoverColor);
+    const auto resolutionIncreaseButtonOnMouseOver = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "settingsResolutionIncreaseButton", buttonHoverColor);
     };
-    const auto resolutionIncreaseButtonOnMouseOut = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::Button, "settingsResolutionIncreaseButton",
-                          buttonColor);
+    const auto resolutionIncreaseButtonOnMouseOut = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "settingsResolutionIncreaseButton", buttonColor);
     };
     auto resolutionIncreaseButtonMouseOverActions = components::ui::MouseOverActions{
         resolutionIncreaseButtonOnMouseOver, resolutionIncreaseButtonOnMouseOut};
@@ -183,12 +193,15 @@ std::unique_ptr<components::ui::UIConfig> SettingsStateUIConfigBuilder::createSe
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const auto vsyncCheckBoxOnMouseOver = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::CheckBox, "settingsVsyncCheckBox",
-                          buttonHoverColor);
+    const auto vsyncCheckBoxOnMouseOver = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::CheckBox, "settingsVsyncCheckBox",
+                                           buttonHoverColor);
     };
-    const auto vsyncCheckBoxOnMouseOut = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::CheckBox, "settingsVsyncCheckBox", buttonColor);
+    const auto vsyncCheckBoxOnMouseOut = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::CheckBox, "settingsVsyncCheckBox",
+                                           buttonColor);
     };
     auto vsyncCheckBoxMouseOverActions =
         components::ui::MouseOverActions{vsyncCheckBoxOnMouseOver, vsyncCheckBoxOnMouseOut};
@@ -214,13 +227,15 @@ std::unique_ptr<components::ui::UIConfig> SettingsStateUIConfigBuilder::createSe
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const auto frameLimitDecreaseButtonOnMouseOver = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::Button, "settingsFrameLimitDecreaseButton",
-                          buttonHoverColor);
+    const auto frameLimitDecreaseButtonOnMouseOver = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "settingsFrameLimitDecreaseButton", buttonHoverColor);
     };
-    const auto frameLimitDecreaseButtonOnMouseOut = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::Button, "settingsFrameLimitDecreaseButton",
-                          buttonColor);
+    const auto frameLimitDecreaseButtonOnMouseOut = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "settingsFrameLimitDecreaseButton", buttonColor);
     };
     auto frameLimitDecreaseButtonMouseOverActions = components::ui::MouseOverActions{
         frameLimitDecreaseButtonOnMouseOver, frameLimitDecreaseButtonOnMouseOut};
@@ -233,13 +248,15 @@ std::unique_ptr<components::ui::UIConfig> SettingsStateUIConfigBuilder::createSe
 
     /////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    const auto frameLimitIncreaseButtonOnMouseOver = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::Button, "settingsFrameLimitIncreaseButton",
-                          buttonHoverColor);
+    const auto frameLimitIncreaseButtonOnMouseOver = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "settingsFrameLimitIncreaseButton", buttonHoverColor);
     };
-    const auto frameLimitIncreaseButtonOnMouseOut = [=] {
-      settingsState->uiManager->setColor(components::ui::UIComponentType::Button, "settingsFrameLimitIncreaseButton",
-                          buttonColor);
+    const auto frameLimitIncreaseButtonOnMouseOut = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "settingsFrameLimitIncreaseButton", buttonColor);
     };
     auto frameLimitIncreaseButtonMouseOverActions = components::ui::MouseOverActions{
         frameLimitIncreaseButtonOnMouseOver, frameLimitIncreaseButtonOnMouseOut};

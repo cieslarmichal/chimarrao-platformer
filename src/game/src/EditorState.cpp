@@ -6,8 +6,8 @@
 #include "core/ComponentOwner.h"
 #include "core/GraphicsComponent.h"
 #include "core/MouseOverComponent.h"
-#include "ui/DefaultUIManager.h"
 #include "editor/TileMap.h"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -45,8 +45,8 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
 
     currentTileId = 0;
     currentTilePath = tilesTextureVector[currentTileId];
-    tileMap = std::make_unique<TileMap>("",
-        utils::Vector2i(rendererPoolSizeX / tileSizeX * 2, rendererPoolSizeY / tileSizeY));
+    tileMap = std::make_unique<TileMap>(
+        "", utils::Vector2i(rendererPoolSizeX / tileSizeX * 2, rendererPoolSizeY / tileSizeY));
     for (int y = 0; y < rendererPoolSizeY / tileSizeY; ++y)
     {
         for (int x = 0; x < rendererPoolSizeX / tileSizeX * 2; ++x)
@@ -65,7 +65,7 @@ EditorState::~EditorState()
     inputManager->removeObserver(this);
 }
 
-void EditorState::update(const utils::DeltaTime& deltaTime)
+NextState EditorState::update(const utils::DeltaTime& deltaTime)
 {
     if (pauseTimer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
         inputStatus->isKeyPressed(input::InputKey::Escape))
@@ -101,6 +101,8 @@ void EditorState::update(const utils::DeltaTime& deltaTime)
         }
         uiManager->update(deltaTime);
     }
+
+    return NextState::Same;
 }
 
 void EditorState::lateUpdate(const utils::DeltaTime& deltaTime)
@@ -167,7 +169,6 @@ void EditorState::pause()
     states.push(std::make_unique<EditorMenuState>(
         window, inputManager, rendererPool, states,
         std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool), *tileMap));
-
 }
 
 }

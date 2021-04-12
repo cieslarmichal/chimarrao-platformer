@@ -3,13 +3,15 @@
 #include <boost/optional.hpp>
 
 #include "FilePath.h"
+#include "UtilsApi.h"
 
 namespace utils
 {
 class IncrementalFilePathsCreator
 {
 public:
-    static FilePaths createFilePaths(const FilePath& fullPathToFirstFile, unsigned numberOfIncrementalFiles);
+    static UTILS_API FilePaths createFilePaths(const FilePath& fullPathToFirstFile,
+                                               unsigned numberOfIncrementalFiles);
 
 private:
     static boost::optional<std::string> extractDirectory(const FilePath&);

@@ -3,9 +3,11 @@
 #include <string>
 #include <unordered_set>
 
+#include "UtilsApi.h"
+
 namespace utils
 {
-class UniqueName
+class UTILS_API UniqueName
 {
 public:
     UniqueName(std::string);

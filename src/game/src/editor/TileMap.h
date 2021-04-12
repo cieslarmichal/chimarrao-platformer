@@ -5,8 +5,8 @@
 #include <vector>
 
 #include "Tile.h"
-#include "TileType.h"
 #include "TileMapInfo.h"
+#include "TileType.h"
 
 namespace game
 {

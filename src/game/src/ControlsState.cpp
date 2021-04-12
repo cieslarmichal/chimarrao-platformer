@@ -1,7 +1,7 @@
 #include "ControlsState.h"
 
-#include "ui/DefaultUIManager.h"
 #include "ControlsStateUIConfigBuilder.h"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -25,20 +25,18 @@ ControlsState::~ControlsState()
     inputManager->removeObserver(this);
 }
 
-void ControlsState::update(const utils::DeltaTime& deltaTime)
+NextState ControlsState::update(const utils::DeltaTime& deltaTime)
 {
     if (shouldBackToMenu)
     {
-        backToMenu();
-        return;
+        return NextState::Menu;
     }
 
     uiManager->update(deltaTime);
+    return NextState::Same;
 }
 
-void ControlsState::lateUpdate(const utils::DeltaTime& deltaTime)
-{
-}
+void ControlsState::lateUpdate(const utils::DeltaTime& deltaTime) {}
 
 void ControlsState::render()
 {
@@ -65,16 +63,6 @@ void ControlsState::deactivate()
 void ControlsState::handleInputStatus(const input::InputStatus& inputStatusInit)
 {
     inputStatus = &inputStatusInit;
-}
-
-void ControlsState::backToMenu()
-{
-    states.pop();
-
-    if (not states.empty())
-    {
-        states.top()->activate();
-    }
 }
 
 }

@@ -8,7 +8,8 @@ namespace animations
 Animation::Animation(std::vector<graphics::TextureRect> consecutiveTextureRectsInit,
                      float timeBetweenTexturesInit)
     : consecutiveTextureRects{std::move(consecutiveTextureRectsInit)},
-      timeBetweenTextures{timeBetweenTexturesInit}
+      timeBetweenTextures{timeBetweenTexturesInit},
+      timeUntilNextTexture{timeBetweenTextures}
 {
     if (consecutiveTextureRects.empty())
     {

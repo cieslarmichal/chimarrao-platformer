@@ -4,10 +4,11 @@
 #include <chrono>
 
 #include "DeltaTime.h"
+#include "UtilsApi.h"
 
 namespace utils
 {
-class Timer
+class UTILS_API Timer
 {
 public:
     Timer();

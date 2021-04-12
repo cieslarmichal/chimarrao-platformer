@@ -1,7 +1,7 @@
 #include "GameStateUIConfigBuilder.h"
 
-#include "GetProjectPath.h"
 #include "GameState.h"
+#include "GetProjectPath.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game

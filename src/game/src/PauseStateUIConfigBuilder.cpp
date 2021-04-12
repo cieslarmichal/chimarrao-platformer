@@ -37,11 +37,13 @@ PauseStateUIConfigBuilder::createPauseUIConfig(PauseState* pauseState)
 
     const auto backToGameButtonPosition = utils::Vector2f{28, 21};
 
-    const auto backToGameButtonOnMouseOver = [=] {
+    const auto backToGameButtonOnMouseOver = [=]
+    {
         pauseState->uiManager->setColor(components::ui::UIComponentType::Button, "pauseBackToGameButton",
                                         buttonHoverColor);
     };
-    const auto backToGameButtonOnMouseOut = [=] {
+    const auto backToGameButtonOnMouseOut = [=]
+    {
         pauseState->uiManager->setColor(components::ui::UIComponentType::Button, "pauseBackToGameButton",
                                         buttonColor);
     };
@@ -57,11 +59,13 @@ PauseStateUIConfigBuilder::createPauseUIConfig(PauseState* pauseState)
 
     const auto backToMenuButtonPosition = utils::Vector2f{28, 30};
 
-    const auto backToMenuButtonOnMouseOver = [=] {
+    const auto backToMenuButtonOnMouseOver = [=]
+    {
         pauseState->uiManager->setColor(components::ui::UIComponentType::Button, "pauseBackToMenuButton",
                                         buttonHoverColor);
     };
-    const auto backToMenuButtonOnMouseOut = [=] {
+    const auto backToMenuButtonOnMouseOut = [=]
+    {
         pauseState->uiManager->setColor(components::ui::UIComponentType::Button, "pauseBackToMenuButton",
                                         buttonColor);
     };

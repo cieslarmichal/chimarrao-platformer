@@ -18,11 +18,10 @@ public:
     explicit ControlsState(const std::shared_ptr<window::Window>&,
                            const std::shared_ptr<input::InputManager>&,
                            const std::shared_ptr<graphics::RendererPool>&,
-                           std::stack<std::unique_ptr<State>>&,
-                           std::unique_ptr<components::ui::UIManager>);
+                           std::stack<std::unique_ptr<State>>&, std::unique_ptr<components::ui::UIManager>);
     ~ControlsState();
 
-    void update(const utils::DeltaTime&) override;
+    NextState update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;
@@ -31,8 +30,6 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
-    void backToMenu();
-
     bool shouldBackToMenu;
     const input::InputStatus* inputStatus;
     std::unique_ptr<components::ui::UIManager> uiManager;

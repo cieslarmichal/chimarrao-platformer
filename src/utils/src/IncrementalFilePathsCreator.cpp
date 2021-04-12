@@ -49,7 +49,7 @@ boost::optional<std::string> IncrementalFilePathsCreator::extractDirectory(const
     const auto fileNameSeparatorIndex = filePath.rfind(fileNameSeparator);
     if (fileNameSeparatorIndex != std::string::npos)
     {
-        return utils::substring(filePath, 0, fileNameSeparatorIndex + 1);
+        return utils::StringHelper::substring(filePath, 0, fileNameSeparatorIndex + 1);
     }
     return boost::none;
 }
@@ -59,7 +59,7 @@ boost::optional<std::string> IncrementalFilePathsCreator::extractFileName(const 
     const auto fileNameSeparatorIndex = filePath.rfind(fileNameSeparator);
     if (fileNameSeparatorIndex != std::string::npos && fileNameSeparatorIndex + 1 < filePath.size())
     {
-        return utils::substring(filePath, fileNameSeparatorIndex + 1, filePath.size());
+        return utils::StringHelper::substring(filePath, fileNameSeparatorIndex + 1, filePath.size());
     }
     return boost::none;
 }

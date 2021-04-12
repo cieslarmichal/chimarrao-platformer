@@ -20,7 +20,6 @@ public:
     const AnimationDirection animationDirection{AnimationDirection::Left};
     ComponentOwner componentOwner{position, "animationComponentTest"};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
-
     AnimationComponent animationComponent{&componentOwner, animator};
 };
 

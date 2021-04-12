@@ -1,5 +1,6 @@
 #pragma once
 
+#include "InputApi.h"
 #include "InputObserver.h"
 
 namespace input

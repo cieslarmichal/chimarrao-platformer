@@ -1,11 +1,10 @@
 #pragma once
 
-#include "editor/TileMap.h"
-
 #include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
+#include "editor/TileMap.h"
 #include "ui/UIConfig.h"
 #include "ui/UIManager.h"
 
@@ -21,12 +20,11 @@ public:
     explicit EditorMenuState(const std::shared_ptr<window::Window>&,
                              const std::shared_ptr<input::InputManager>&,
                              const std::shared_ptr<graphics::RendererPool>&,
-                             std::stack<std::unique_ptr<State>>&,
-                             std::unique_ptr<components::ui::UIManager>,
+                             std::stack<std::unique_ptr<State>>&, std::unique_ptr<components::ui::UIManager>,
                              TileMap&);
     ~EditorMenuState();
 
-    void update(const utils::DeltaTime&) override;
+    NextState update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;
@@ -35,9 +33,6 @@ public:
     void handleInputStatus(const input::InputStatus&) override;
 
 private:
-    void backToEditor();
-    void backToMenu();
-
     const input::InputStatus* inputStatus;
     utils::Timer possibleLeaveFromStateTimer;
     const float timeAfterLeaveStateIsPossible;

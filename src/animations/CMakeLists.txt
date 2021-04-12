@@ -5,6 +5,8 @@ set(SOURCES
         src/DefaultAnimatorSettingsRepository.cpp
         src/PlayerAnimator.cpp
         src/BunnyAnimator.cpp
+        src/DefaultAnimatorFactory.cpp
+        src/AnimatorFactory.cpp
         )
 
 set(UT_SOURCES
@@ -19,9 +21,9 @@ set(UT_SOURCES
         )
 
 add_library(animations SHARED ${SOURCES})
-target_link_libraries(animations PUBLIC utils graphics ${SFML_LIBRARIES} yaml-cpp)
+target_link_libraries(animations PUBLIC utils graphics yaml-cpp)
 target_include_directories(animations PUBLIC src)
 
-add_executable(animationsUT ${UT_SOURCES})
-target_link_libraries(animationsUT PUBLIC gmock_main gtest utils graphics yaml-cpp animations)
+add_executable(animationsUT ${UT_SOURCES} ${SOURCES})
+target_link_libraries(animationsUT PUBLIC gmock_main gtest utils graphics yaml-cpp)
 add_test(animationsUT animationsUT --gtest_color=yes)

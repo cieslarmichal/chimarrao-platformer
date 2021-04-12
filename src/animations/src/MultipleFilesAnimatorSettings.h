@@ -17,9 +17,8 @@ struct MultipleFilesAnimatorSettings
 
 inline bool operator==(const MultipleFilesAnimatorSettings& lhs, const MultipleFilesAnimatorSettings& rhs)
 {
-    auto tieStruct = [](const MultipleFilesAnimatorSettings& settings) {
-        return std::tie(settings.animatorName, settings.animationsSettings);
-    };
+    auto tieStruct = [](const MultipleFilesAnimatorSettings& settings)
+    { return std::tie(settings.animatorName, settings.animationsSettings); };
     return tieStruct(lhs) == tieStruct(rhs);
 }
 

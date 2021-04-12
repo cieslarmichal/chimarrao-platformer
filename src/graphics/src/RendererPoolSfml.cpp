@@ -238,19 +238,17 @@ void RendererPoolSfml::synchronizeRenderingSize()
 
 void RendererPoolSfml::cleanUnusedShapes()
 {
-    layeredShapes.erase(std::remove_if(layeredShapes.begin(), layeredShapes.end(),
-                                       [&](const LayeredShape& layeredShape) {
-                                           return graphicsObjectsToRemove.count(
-                                               layeredShape.shape.getGraphicsId());
-                                       }),
-                        layeredShapes.end());
+    layeredShapes.erase(
+        std::remove_if(layeredShapes.begin(), layeredShapes.end(),
+                       [&](const LayeredShape& layeredShape)
+                       { return graphicsObjectsToRemove.count(layeredShape.shape.getGraphicsId()); }),
+        layeredShapes.end());
 
-    layeredTexts.erase(std::remove_if(layeredTexts.begin(), layeredTexts.end(),
-                                      [&](const LayeredText& layeredText) {
-                                          return graphicsObjectsToRemove.count(
-                                              layeredText.text.getGraphicsId());
-                                      }),
-                       layeredTexts.end());
+    layeredTexts.erase(
+        std::remove_if(layeredTexts.begin(), layeredTexts.end(),
+                       [&](const LayeredText& layeredText)
+                       { return graphicsObjectsToRemove.count(layeredText.text.getGraphicsId()); }),
+        layeredTexts.end());
 
     graphicsObjectsToRemove.clear();
 }
@@ -259,18 +257,16 @@ std::vector<LayeredShape>::const_iterator
 RendererPoolSfml::findLayeredShapePosition(const GraphicsId& graphicsIdToFind) const
 {
     return std::find_if(layeredShapes.begin(), layeredShapes.end(),
-                        [&graphicsIdToFind](const LayeredShape& layeredShape) {
-                            return layeredShape.shape.getGraphicsId() == graphicsIdToFind;
-                        });
+                        [&graphicsIdToFind](const LayeredShape& layeredShape)
+                        { return layeredShape.shape.getGraphicsId() == graphicsIdToFind; });
 }
 
 std::vector<LayeredText>::const_iterator
 RendererPoolSfml::findLayeredTextPosition(const GraphicsId& graphicsIdToFind) const
 {
     return std::find_if(layeredTexts.begin(), layeredTexts.end(),
-                        [&graphicsIdToFind](const LayeredText& layeredText) {
-                            return layeredText.text.getGraphicsId() == graphicsIdToFind;
-                        });
+                        [&graphicsIdToFind](const LayeredText& layeredText)
+                        { return layeredText.text.getGraphicsId() == graphicsIdToFind; });
 }
 
 }

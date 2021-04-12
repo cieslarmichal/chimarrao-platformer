@@ -6,10 +6,10 @@
 #include "Color.h"
 #include "FontPath.h"
 #include "GraphicsId.h"
+#include "TexturePath.h"
 #include "TextureRect.h"
 #include "Vector.h"
 #include "VisibilityLayer.h"
-#include "TexturePath.h"
 
 namespace graphics
 {

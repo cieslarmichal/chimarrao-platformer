@@ -3,7 +3,8 @@
 #include "Tile.h"
 #include "TileMapSerializer.h"
 
-namespace game{
+namespace game
+{
 class TileMapSerializerJson : public TileMapSerializer
 {
 public:
@@ -12,9 +13,6 @@ public:
     TileMapInfo deserialize(const std::string& string) const override;
 
 private:
-    std::unordered_map<std::optional<TileType>,int> tileTypeToInt
-        {
-            {std::nullopt,0}
-        };
+    std::unordered_map<std::optional<TileType>, int> tileTypeToInt{{std::nullopt, 0}};
 };
 }

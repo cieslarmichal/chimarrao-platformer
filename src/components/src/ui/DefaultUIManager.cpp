@@ -26,7 +26,7 @@ static auto& tryToGetComponentByName(std::vector<T>& uiComponents, const std::st
 template <typename T>
 void updateComponents(std::vector<T>& uiComponents, utils::DeltaTime deltaTime)
 {
-    for (auto & uiComponent : uiComponents)
+    for (auto& uiComponent : uiComponents)
     {
         uiComponent->update(deltaTime);
     }
@@ -35,7 +35,7 @@ void updateComponents(std::vector<T>& uiComponents, utils::DeltaTime deltaTime)
 template <typename T>
 void activateComponents(std::vector<T>& uiComponents)
 {
-    for (auto & uiComponent : uiComponents)
+    for (auto& uiComponent : uiComponents)
     {
         uiComponent->activate();
     }
@@ -44,7 +44,7 @@ void activateComponents(std::vector<T>& uiComponents)
 template <typename T>
 void deactivateComponents(std::vector<T>& uiComponents)
 {
-    for (auto & uiComponent : uiComponents)
+    for (auto& uiComponent : uiComponents)
     {
         uiComponent->deactivate();
     }

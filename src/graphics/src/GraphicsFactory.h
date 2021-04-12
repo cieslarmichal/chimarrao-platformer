@@ -2,12 +2,13 @@
 
 #include <memory>
 
+#include "GraphicsApi.h"
 #include "RendererPool.h"
 #include "Window.h"
 
 namespace graphics
 {
-class GraphicsFactory
+class GRAPHICS_API GraphicsFactory
 {
 public:
     virtual ~GraphicsFactory() = default;

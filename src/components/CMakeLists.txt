@@ -30,7 +30,7 @@ set(UT_SOURCES
         src/core/MouseOverComponentTest.cpp
         )
 
-add_library(components SHARED ${SOURCES})
+add_library(components ${SOURCES})
 target_link_libraries(components PUBLIC utils graphics animations input)
 target_include_directories(components PUBLIC src)
 

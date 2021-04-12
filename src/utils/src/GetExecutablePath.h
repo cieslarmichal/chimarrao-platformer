@@ -2,7 +2,9 @@
 
 #include <string>
 
+#include "UtilsApi.h"
+
 namespace utils
 {
-std::string getExecutablePath();
+UTILS_API std::string getExecutablePath();
 }

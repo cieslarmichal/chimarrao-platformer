@@ -1,7 +1,7 @@
 #pragma once
 
-#include "FilePath.h"
 #include "AnimatorsSettings.h"
+#include "FilePath.h"
 
 namespace animations
 {

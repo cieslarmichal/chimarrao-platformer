@@ -65,12 +65,15 @@ ControlsStateUIConfigBuilder::createControlsUIConfig(ControlsState* controlsStat
     labelsConfig.emplace_back(std::move(titleLabelConfig));
 
     const auto backToMenuButtonSize = utils::Vector2f{13, 5};
-    const auto backToMenuButtonOnMouseOver = [=] {
-      controlsState->uiManager->setColor(components::ui::UIComponentType::Button, "controlsBackToMenuButton",
-                          buttonHoverColor);
+    const auto backToMenuButtonOnMouseOver = [=]
+    {
+        controlsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "controlsBackToMenuButton", buttonHoverColor);
     };
-    const auto backToMenuButtonOnMouseOut = [=] {
-      controlsState->uiManager->setColor(components::ui::UIComponentType::Button, "controlsBackToMenuButton", buttonColor);
+    const auto backToMenuButtonOnMouseOut = [=]
+    {
+        controlsState->uiManager->setColor(components::ui::UIComponentType::Button,
+                                           "controlsBackToMenuButton", buttonColor);
     };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};

@@ -11,8 +11,7 @@ EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowIn
                                  const std::shared_ptr<input::InputManager>& inputManagerInit,
                                  const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                                  std::stack<std::unique_ptr<State>>& statesInit,
-                                 std::unique_ptr<components::ui::UIManager> uiManagerInit,
-                                 TileMap& tileMap)
+                                 std::unique_ptr<components::ui::UIManager> uiManagerInit, TileMap& tileMap)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
       timeAfterLeaveStateIsPossible{0.5f},
@@ -31,7 +30,7 @@ EditorMenuState::~EditorMenuState()
     inputManager->removeObserver(this);
 }
 
-void EditorMenuState::update(const utils::DeltaTime& deltaTime)
+NextState EditorMenuState::update(const utils::DeltaTime& deltaTime)
 {
     if (possibleLeaveFromStateTimer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
         inputStatus->isKeyPressed(input::InputKey::Escape))
@@ -41,22 +40,19 @@ void EditorMenuState::update(const utils::DeltaTime& deltaTime)
 
     if (shouldBackToEditor)
     {
-        backToEditor();
-        return;
+        return NextState::Previous;
     }
 
     if (shouldBackToMenu)
     {
-        backToMenu();
-        return;
+        return NextState::Menu;
     }
 
     uiManager->update(deltaTime);
+    return NextState::Same;
 }
 
-void EditorMenuState::lateUpdate(const utils::DeltaTime& deltaTime)
-{
-}
+void EditorMenuState::lateUpdate(const utils::DeltaTime& deltaTime) {}
 
 void EditorMenuState::render()
 {
@@ -84,29 +80,6 @@ void EditorMenuState::deactivate()
 void EditorMenuState::handleInputStatus(const input::InputStatus& inputStatusInit)
 {
     inputStatus = &inputStatusInit;
-}
-
-void EditorMenuState::backToEditor()
-{
-    states.pop();
-
-    if (not states.empty())
-    {
-        states.top()->activate();
-    }
-}
-
-void EditorMenuState::backToMenu()
-{
-    while (not states.empty() && states.top()->getName() != "Menu state")
-    {
-        states.pop();
-    }
-
-    if (not states.empty())
-    {
-        states.top()->activate();
-    }
 }
 
 }

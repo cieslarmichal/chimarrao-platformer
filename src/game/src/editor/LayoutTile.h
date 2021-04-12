@@ -18,8 +18,8 @@ class LayoutTile
 {
 public:
     LayoutTile(const std::shared_ptr<input::InputManager>&, const std::shared_ptr<graphics::RendererPool>&,
-               const utils::Vector2i& position, const utils::Vector2f& size, const std::shared_ptr<TileType>& currentTileType,
-               TileMap& tileMap);
+               const utils::Vector2i& position, const utils::Vector2f& size,
+               const std::shared_ptr<TileType>& currentTileType, TileMap& tileMap);
 
     void update(const utils::DeltaTime&);
     void activate();

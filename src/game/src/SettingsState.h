@@ -4,8 +4,8 @@
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
-#include "ui/UIManager.h"
 #include "ui/UIConfig.h"
+#include "ui/UIManager.h"
 
 namespace game
 {
@@ -22,7 +22,7 @@ public:
                            std::stack<std::unique_ptr<State>>&, std::unique_ptr<components::ui::UIManager>);
     ~SettingsState();
 
-    void update(const utils::DeltaTime&) override;
+    NextState update(const utils::DeltaTime&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;
@@ -40,7 +40,6 @@ private:
     void switchVsync();
     void setWindowMode();
     void setFullscreenMode();
-    void backToMenu();
 
     bool shouldBackToMenu;
     window::WindowSettings selectedWindowsSettings;

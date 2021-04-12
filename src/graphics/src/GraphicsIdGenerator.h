@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GraphicsApi.h"
 #include "GraphicsId.h"
 
 namespace graphics
@@ -7,6 +8,6 @@ namespace graphics
 class GraphicsIdGenerator
 {
 public:
-    static GraphicsId generateId();
+    static GRAPHICS_API GraphicsId generateId();
 };
 }

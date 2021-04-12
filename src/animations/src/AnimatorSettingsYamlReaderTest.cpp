@@ -164,9 +164,10 @@ TEST_F(AnimatorSettingsYamlReaderTest, givenValidConfigWithSingleFileAnimator_sh
     ASSERT_EQ(actualAnimatorsSettings, bunnyAnimatorsSettings);
 }
 
-TEST_F(AnimatorSettingsYamlReaderTest, givenValidConfigWithSingleFileAnimatorWithMissingFields_shouldThrowInvalidAnimatorsConfigFile)
+TEST_F(AnimatorSettingsYamlReaderTest,
+       givenValidConfigWithSingleFileAnimatorWithMissingFields_shouldThrowInvalidAnimatorsConfigFile)
 {
-    ASSERT_THROW(animatorsSettingsReader.readAnimatorsSettings(
-        validPathWithSingleFileAnimatorWithMissingFields),
-                 exceptions::InvalidAnimatorsConfigFile);
+    ASSERT_THROW(
+        animatorsSettingsReader.readAnimatorsSettings(validPathWithSingleFileAnimatorWithMissingFields),
+        exceptions::InvalidAnimatorsConfigFile);
 }

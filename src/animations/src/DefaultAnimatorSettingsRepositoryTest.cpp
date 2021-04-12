@@ -38,7 +38,8 @@ TEST_F(DefaultAnimatorSettingsRepositoryTest, givenNonExistingAnimatorName_shoul
     EXPECT_CALL(*settingsReader, readAnimatorsSettings(settingsPath)).WillOnce(Return(animatorsSettings));
     DefaultAnimatorSettingsRepository settingsRepository{std::move(settingsReaderInit)};
 
-    const auto actualAnimatorSettings = settingsRepository.getMultipleFileAnimatorSettings(existingAnimatorName);
+    const auto actualAnimatorSettings =
+        settingsRepository.getMultipleFileAnimatorSettings(existingAnimatorName);
 
     ASSERT_EQ(*actualAnimatorSettings, multipleFilesAnimatorSettings);
 }
@@ -48,7 +49,8 @@ TEST_F(DefaultAnimatorSettingsRepositoryTest, givenExistingAnimatorName_shouldRe
     EXPECT_CALL(*settingsReader, readAnimatorsSettings(settingsPath)).WillOnce(Return(animatorsSettings));
     DefaultAnimatorSettingsRepository settingsRepository{std::move(settingsReaderInit)};
 
-    const auto actualAnimatorSettings = settingsRepository.getMultipleFileAnimatorSettings(nonExistingAnimatorName);
+    const auto actualAnimatorSettings =
+        settingsRepository.getMultipleFileAnimatorSettings(nonExistingAnimatorName);
 
     ASSERT_EQ(actualAnimatorSettings, boost::none);
 }

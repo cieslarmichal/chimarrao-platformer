@@ -43,13 +43,13 @@ SaveMapStateUIConfigBuilder::createSaveMapUIConfig(SaveMapState* saveMapState)
     labelsConfig.emplace_back(std::move(mapNameLabelConfig));
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-    auto mapNameTextFieldClickInsideAction = [=] {
+    auto mapNameTextFieldClickInsideAction = [=]
+    {
         saveMapState->uiManager->setColor(components::ui::UIComponentType::TextField, "saveMapNameTextField",
                                           buttonHoverColor);
     };
-    auto mapNameTextFieldClickOutsideAction = [=](std::string inputBuffer) {
-        saveMapState->currentMapName = std::move(inputBuffer);
-    };
+    auto mapNameTextFieldClickOutsideAction = [=](std::string inputBuffer)
+    { saveMapState->currentMapName = std::move(inputBuffer); };
     auto mapNameTextFieldConfig = std::make_unique<components::ui::TextFieldConfig>(
         "saveMapNameTextField", mapNamingPromptPosition, buttonSize, buttonColor, "", 20, fontPath,
         utils::Vector2f{0.75, 0.4}, mapNameTextFieldClickInsideAction, mapNameTextFieldClickOutsideAction);
@@ -58,11 +58,13 @@ SaveMapStateUIConfigBuilder::createSaveMapUIConfig(SaveMapState* saveMapState)
     /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const auto cancelButtonPosition = utils::Vector2f{29, 37};
-    const auto cancelButtonOnMouseOver = [=] {
+    const auto cancelButtonOnMouseOver = [=]
+    {
         saveMapState->uiManager->setColor(components::ui::UIComponentType::Button, "saveMapCancelButton",
                                           buttonHoverColor);
     };
-    const auto cancelButtonOnMouseOut = [=] {
+    const auto cancelButtonOnMouseOut = [=]
+    {
         saveMapState->uiManager->setColor(components::ui::UIComponentType::Button, "saveMapCancelButton",
                                           buttonColor);
     };
@@ -77,11 +79,13 @@ SaveMapStateUIConfigBuilder::createSaveMapUIConfig(SaveMapState* saveMapState)
     //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const auto saveButtonPosition = utils::Vector2f{43, 37};
-    const auto saveButtonOnMouseOver = [=] {
+    const auto saveButtonOnMouseOver = [=]
+    {
         saveMapState->uiManager->setColor(components::ui::UIComponentType::Button, "saveMapSaveButton",
                                           buttonHoverColor);
     };
-    const auto saveButtonOnMouseOut = [=] {
+    const auto saveButtonOnMouseOut = [=]
+    {
         saveMapState->uiManager->setColor(components::ui::UIComponentType::Button, "saveMapSaveButton",
                                           buttonColor);
     };

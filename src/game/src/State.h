@@ -6,6 +6,7 @@
 
 #include "DeltaTime.h"
 #include "InputManager.h"
+#include "NextState.h"
 #include "RendererPool.h"
 #include "Window.h"
 #include "WindowObserver.h"
@@ -24,7 +25,7 @@ public:
                    std::shared_ptr<graphics::RendererPool>, std::stack<std::unique_ptr<State>>&);
     virtual ~State();
 
-    virtual void update(const utils::DeltaTime&) = 0;
+    virtual NextState update(const utils::DeltaTime&) = 0;
     virtual void lateUpdate(const utils::DeltaTime&) = 0;
     virtual void render() = 0;
     virtual std::string getName() const = 0;

@@ -1,10 +1,11 @@
 #pragma once
 
+#include "InputApi.h"
 #include "ObservableInput.h"
 
 namespace input
 {
-class InputManager : public ObservableInput
+class INPUT_API InputManager : public ObservableInput
 {
 public:
     virtual ~InputManager() = default;

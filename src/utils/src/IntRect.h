@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics/Rect.hpp>
 #include <iostream>
+#include <string>
 
 namespace utils
 {

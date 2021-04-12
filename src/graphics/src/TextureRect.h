@@ -15,9 +15,8 @@ struct TextureRect
 
 inline bool operator==(const TextureRect& lhs, const TextureRect& rhs)
 {
-    const auto tieStruct = [](const TextureRect& textureRect) {
-        return std::tie(textureRect.texturePath, textureRect.rectToCutTexture);
-    };
+    const auto tieStruct = [](const TextureRect& textureRect)
+    { return std::tie(textureRect.texturePath, textureRect.rectToCutTexture); };
     return tieStruct(lhs) == tieStruct(rhs);
 }
 

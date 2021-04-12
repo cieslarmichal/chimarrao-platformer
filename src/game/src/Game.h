@@ -25,6 +25,8 @@ private:
     void lateUpdate();
     void render();
     void initStates();
+    void backToThePreviousState();
+    void backToTheMenuState();
 
     utils::Timer timer;
     utils::DeltaTime dt;

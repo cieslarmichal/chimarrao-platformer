@@ -2,11 +2,13 @@
 
 #include <boost/optional.hpp>
 
+#include "AnimationsApi.h"
 #include "MultipleFilesAnimatorSettings.h"
+#include "SingleFileAnimatorSettings.h"
 
 namespace animations
 {
-class AnimatorSettingsRepository
+class ANIMATIONS_API AnimatorSettingsRepository
 {
 public:
     virtual ~AnimatorSettingsRepository() = default;

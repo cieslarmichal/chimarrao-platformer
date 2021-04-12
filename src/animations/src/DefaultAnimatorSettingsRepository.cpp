@@ -12,8 +12,7 @@ DefaultAnimatorSettingsRepository::DefaultAnimatorSettingsRepository(
     std::unique_ptr<AnimatorSettingsReader> reader)
     : animatorSettingsReader{std::move(reader)}
 {
-    const auto animatorsSettings =
-        animatorSettingsReader->readAnimatorsSettings(animatorSettingsFilePath);
+    const auto animatorsSettings = animatorSettingsReader->readAnimatorsSettings(animatorSettingsFilePath);
     singleFileAnimatorSettings.reserve(animatorsSettings.singleFileAnimatorsSettings.size());
     multipleFilesAnimatorSettings.reserve(animatorsSettings.multipleFilesAnimatorSettings.size());
 

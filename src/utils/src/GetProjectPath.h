@@ -2,7 +2,9 @@
 
 #include <string>
 
+#include "UtilsApi.h"
+
 namespace utils
 {
-std::string getProjectPath(const std::string&);
+UTILS_API std::string getProjectPath(const std::string&);
 }

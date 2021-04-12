@@ -24,7 +24,8 @@ Background::Background(const std::shared_ptr<input::InputManager>& inputManager,
     }
 
     name = backgroundConfig->uniqueName;
-    coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(backgroundConfig->position, name);
+    coreComponentsOwner =
+        std::make_unique<components::core::ComponentOwner>(backgroundConfig->position, name);
 
     if (backgroundConfig->texturePath)
     {

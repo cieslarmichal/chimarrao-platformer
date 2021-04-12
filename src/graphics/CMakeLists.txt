@@ -24,9 +24,9 @@ set(UT_SOURCES
         )
 
 add_library(graphics SHARED ${SOURCES})
-target_link_libraries(graphics PUBLIC ${SFML_LIBRARIES} utils window)
+target_link_libraries(graphics PUBLIC utils window)
 target_include_directories(graphics PUBLIC src)
 
-add_executable(graphicsUT ${UT_SOURCES})
-target_link_libraries(graphicsUT PUBLIC gmock_main gtest graphics)
+add_executable(graphicsUT ${UT_SOURCES} ${SOURCES})
+target_link_libraries(graphicsUT PUBLIC gmock_main gtest utils window)
 add_test(graphicsUT graphicsUT --gtest_color=yes)

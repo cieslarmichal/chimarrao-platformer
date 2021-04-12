@@ -1,17 +1,13 @@
 #include "GameState.h"
 
-#include "AnimatorSettingsYamlReader.h"
-#include "DefaultAnimatorSettingsRepository.h"
+#include "AnimatorFactory.h"
 #include "GameStateUIConfigBuilder.h"
-#include "GetProjectPath.h"
 #include "PauseState.h"
 #include "PlayerAnimator.h"
 #include "core/AnimationComponent.h"
 #include "core/GraphicsComponent.h"
 #include "core/KeyboardMovementComponent.h"
-#include "core/TextComponent.h"
 #include "ui/DefaultUIManager.h"
-#include "BunnyAnimator.h"
 
 namespace game
 {
@@ -30,18 +26,14 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     inputManager->registerObserver(this);
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
-    animations::DefaultAnimatorSettingsRepository settingsRepository{
-        std::make_unique<animations::AnimatorSettingsYamlReader>()};
-
     player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10}, "player");
     auto graphicsComponent = player->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{7, 7}, utils::Vector2f{10, 10}, graphics::Color::Magenta,
+        rendererPool, utils::Vector2f{5, 5}, utils::Vector2f{10, 10}, graphics::Color{128, 91, 50},
         graphics::VisibilityLayer::Second);
     auto graphicsId = graphicsComponent->getGraphicsId();
     player->addComponent<components::core::KeyboardMovementComponent>(inputManager);
-    auto bunnyAnimatorSettings = settingsRepository.getSingleFileAnimatorSettings("bunny");
-    auto bunnyAnimator =
-        std::make_shared<animations::BunnyAnimator>(graphicsId, rendererPool, *bunnyAnimatorSettings);
+    auto animatorsFactory = animations::AnimatorFactory::createAnimatorFactory(rendererPool);
+    std::shared_ptr<animations::Animator> bunnyAnimator = animatorsFactory->createBunnyAnimator(graphicsId);
     player->addComponent<components::core::AnimationComponent>(bunnyAnimator);
 
     player->loadDependentComponents();
@@ -53,7 +45,7 @@ GameState::~GameState()
     inputManager->removeObserver(this);
 }
 
-void GameState::update(const utils::DeltaTime& deltaTime)
+NextState GameState::update(const utils::DeltaTime& deltaTime)
 {
     if (timer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
         inputStatus->isKeyPressed(input::InputKey::Escape))
@@ -66,6 +58,8 @@ void GameState::update(const utils::DeltaTime& deltaTime)
         player->update(deltaTime);
         uiManager->update(deltaTime);
     }
+
+    return NextState::Same;
 }
 
 void GameState::lateUpdate(const utils::DeltaTime& deltaTime)

@@ -15,9 +15,9 @@ set(UT_SOURCES
         )
 
 add_library(window SHARED ${SOURCES})
-target_link_libraries(window PUBLIC ${SFML_LIBRARIES} utils)
+target_link_libraries(window PUBLIC utils)
 target_include_directories(window PUBLIC src)
 
-add_executable(windowUT ${UT_SOURCES})
-target_link_libraries(windowUT PUBLIC gmock_main gtest window)
+add_executable(windowUT ${UT_SOURCES} ${SOURCES})
+target_link_libraries(windowUT PUBLIC gmock_main gtest utils)
 add_test(windowUT windowUT --gtest_color=yes)

@@ -1,8 +1,8 @@
 #include "PauseState.h"
 
 #include "GetProjectPath.h"
-#include "ui/DefaultUIManager.h"
 #include "PauseStateUIConfigBuilder.h"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -10,7 +10,8 @@ namespace game
 PauseState::PauseState(const std::shared_ptr<window::Window>& windowInit,
                        const std::shared_ptr<input::InputManager>& inputManagerInit,
                        const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                       std::stack<std::unique_ptr<State>>& statesInit, std::unique_ptr<components::ui::UIManager> uiManagerInit)
+                       std::stack<std::unique_ptr<State>>& statesInit,
+                       std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
       timeAfterLeaveStateIsPossible{0.5f},
@@ -28,7 +29,7 @@ PauseState::~PauseState()
     inputManager->removeObserver(this);
 }
 
-void PauseState::update(const utils::DeltaTime& deltaTime)
+NextState PauseState::update(const utils::DeltaTime& deltaTime)
 {
     if (timer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
         inputStatus->isKeyPressed(input::InputKey::Escape))
@@ -38,21 +39,19 @@ void PauseState::update(const utils::DeltaTime& deltaTime)
 
     if (shouldBackToGame)
     {
-        backToGame();
-        return;
+        return NextState::Previous;
     }
 
     if (shouldBackToMenu)
     {
-        backToMenu();
-        return;
+        return NextState::Menu;
     }
+
     uiManager->update(deltaTime);
+    return NextState::Same;
 }
 
-void PauseState::lateUpdate(const utils::DeltaTime& deltaTime)
-{
-}
+void PauseState::lateUpdate(const utils::DeltaTime& deltaTime) {}
 
 void PauseState::render()
 {
@@ -79,29 +78,6 @@ void PauseState::deactivate()
 void PauseState::handleInputStatus(const input::InputStatus& inputStatusInit)
 {
     inputStatus = &inputStatusInit;
-}
-
-void PauseState::backToGame()
-{
-    states.pop();
-
-    if (not states.empty())
-    {
-        states.top()->activate();
-    }
-}
-
-void PauseState::backToMenu()
-{
-    while (not states.empty() && states.top()->getName() != "Menu state")
-    {
-        states.pop();
-    }
-
-    if (not states.empty())
-    {
-        states.top()->activate();
-    }
 }
 
 }

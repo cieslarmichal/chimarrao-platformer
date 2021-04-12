@@ -32,7 +32,7 @@ inline std::string toString(AnimationType animationType)
 
 inline AnimationType toAnimationType(const std::string& animationTypeAsString)
 {
-    const auto animationTypeLowerString = utils::getLowerCases(animationTypeAsString);
+    const auto animationTypeLowerString = utils::StringHelper::getLowerCases(animationTypeAsString);
 
     std::unordered_map<std::string, AnimationType> stringToAnimationType{
         {"idle", AnimationType::Idle}, {"walk", AnimationType::Walk}, {"jump", AnimationType::Jump}};

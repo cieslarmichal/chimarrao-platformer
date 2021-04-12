@@ -4,9 +4,9 @@
 #include <string>
 #include <tuple>
 
+#include "IntRect.h"
 #include "TexturePath.h"
 #include "Vector.h"
-#include "IntRect.h"
 
 namespace animations
 {
@@ -22,7 +22,8 @@ struct SingleFileAnimationSettings
 
 inline bool operator==(const SingleFileAnimationSettings& lhs, const SingleFileAnimationSettings& rhs)
 {
-    auto tieStruct = [](const SingleFileAnimationSettings& settings) {
+    auto tieStruct = [](const SingleFileAnimationSettings& settings)
+    {
         return std::tie(settings.animationType, settings.texturePath, settings.textureSize,
                         settings.textureRect, settings.numberOfTextures,
                         settings.timeBetweenTexturesInSeconds);

@@ -38,9 +38,10 @@ TextField::TextField(const std::shared_ptr<input::InputManager>& inputManager,
     clickInsideFieldAction = textFieldConfig->clickInFieldAction;
     clickOutsideFieldAction = textFieldConfig->clickOutsideFieldAction;
 
-    auto textFieldClickedAction = [&] {
-      textFieldClicked = true;
-      clickInsideFieldAction();
+    auto textFieldClickedAction = [&]
+    {
+        textFieldClicked = true;
+        clickInsideFieldAction();
     };
 
     coreComponentsOwner->addComponent<components::core::ClickableComponent>(
@@ -77,7 +78,7 @@ void TextField::update(utils::DeltaTime deltaTime)
             {
                 if (inputBuffer.size() < inputBufferMaximumSize)
                 {
-                    inputBuffer += utils::getLowerCases(toString(alphanumericButtonKey));
+                    inputBuffer += utils::StringHelper::getLowerCases(toString(alphanumericButtonKey));
                     setText(inputBuffer);
                 }
             }
@@ -89,7 +90,8 @@ void TextField::update(utils::DeltaTime deltaTime)
             {
                 if (not inputBuffer.empty())
                 {
-                    utils::cutOffString(inputBuffer, inputBuffer.size() - 1, inputBuffer.size() - 1);
+                    utils::StringHelper::cutOffString(inputBuffer, inputBuffer.size() - 1,
+                                                      inputBuffer.size() - 1);
                     setText(inputBuffer);
                 }
 

@@ -2,11 +2,11 @@
 
 #include "ControlsState.h"
 #include "GetProjectPath.h"
+#include "MenuStateUIConfigBuilder.h"
 #include "core/GraphicsComponent.h"
 #include "core/HitBoxComponent.h"
 #include "core/MouseOverComponent.h"
 #include "ui/DefaultUIManager.h"
-#include "MenuStateUIConfigBuilder.h"
 
 namespace game
 {
@@ -30,7 +30,8 @@ const auto iconPath = utils::getProjectPath("chimarrao-platformer") + "resources
 MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<input::InputManager>& inputManagerInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                     std::stack<std::unique_ptr<State>>& statesInit, std::unique_ptr<components::ui::UIManager> uiManagerInit)
+                     std::stack<std::unique_ptr<State>>& statesInit,
+                     std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
       inputStatus{nullptr},
       currentButtonIndex{0},
@@ -53,7 +54,7 @@ MenuState::~MenuState()
     inputManager->removeObserver(this);
 }
 
-void MenuState::update(const utils::DeltaTime& deltaTime)
+NextState MenuState::update(const utils::DeltaTime& deltaTime)
 {
     if (switchButtonTimer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
     {
@@ -61,11 +62,11 @@ void MenuState::update(const utils::DeltaTime& deltaTime)
     }
 
     uiManager->update(deltaTime);
+
+    return NextState::Same;
 }
 
-void MenuState::lateUpdate(const utils::DeltaTime& deltaTime)
-{
-}
+void MenuState::lateUpdate(const utils::DeltaTime& deltaTime) {}
 
 void MenuState::render()
 {

@@ -6,9 +6,9 @@
 #include "RendererPoolMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
-#include "StlOperators.h"
 
 #include "MenuState.h"
+#include "StlOperators.h"
 
 using namespace game;
 using namespace components::ui;
@@ -17,12 +17,7 @@ using namespace ::testing;
 namespace
 {
 const std::vector<std::string> expectedButtonNames{
-    "menuPlayButton",
-    "menuMapEditorButton",
-    "menuControlsButton",
-    "menuSettingsButton",
-    "menuExitButton"
-};
+    "menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton", "menuExitButton"};
 }
 class MenuStateUIConfigBuilderTest : public Test
 {
@@ -44,7 +39,8 @@ TEST_F(MenuStateUIConfigBuilderTest, createMenuUI)
     const auto menuUI = MenuStateUIConfigBuilder::createMenuUIConfig(&menuState);
 
     std::vector<std::string> actualButtonsNames;
-    std::transform(menuUI->buttonsConfig.begin(), menuUI->buttonsConfig.end(), std::back_inserter(actualButtonsNames),
+    std::transform(menuUI->buttonsConfig.begin(), menuUI->buttonsConfig.end(),
+                   std::back_inserter(actualButtonsNames),
                    [](const auto& buttonConfig) { return buttonConfig->uniqueName; });
 
     ASSERT_EQ(menuUI->backgroundConfig->uniqueName, "menuBackground");

@@ -24,7 +24,8 @@ target_include_directories(utils PUBLIC src ${SFML_INCLUDE_DIR} ${Boost_INCLUDE_
 target_link_libraries(utils PUBLIC ${SFML_LIBRARIES})
 target_compile_options(utils PUBLIC ${FLAGS})
 
-add_executable(utilsUT ${UT_SOURCES})
-target_link_libraries(utilsUT PUBLIC gmock_main gtest  utils)
+add_executable(utilsUT ${UT_SOURCES} ${SOURCES})
+target_include_directories(utilsUT PUBLIC ${SFML_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
+target_link_libraries(utilsUT PUBLIC gmock_main gtest ${SFML_LIBRARIES})
 target_compile_options(utilsUT PUBLIC ${FLAGS})
 add_test(utilsUT utilsUT --gtest_color=yes)

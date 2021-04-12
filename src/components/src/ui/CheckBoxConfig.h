@@ -14,9 +14,9 @@ namespace components::ui
 struct CheckBoxConfig
 {
     CheckBoxConfig(const std::string& uniqueNameInit, utils::Vector2f positionInit, utils::Vector2f sizeInit,
-                 graphics::Color colorInit, bool checkedInit, unsigned int fontSizeInit,
-                 const std::string& fontPathInit, utils::Vector2f textOffsetInit,
-                 std::function<void(void)> clickActionInit, const MouseOverActions& mouseOverActionsInit)
+                   graphics::Color colorInit, bool checkedInit, unsigned int fontSizeInit,
+                   const std::string& fontPathInit, utils::Vector2f textOffsetInit,
+                   std::function<void(void)> clickActionInit, const MouseOverActions& mouseOverActionsInit)
         : uniqueName{uniqueNameInit},
           position{positionInit},
           size{sizeInit},

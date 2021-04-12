@@ -6,9 +6,9 @@
 #include "RendererPoolMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
-#include "StlOperators.h"
 
 #include "ControlsState.h"
+#include "StlOperators.h"
 
 using namespace game;
 using namespace components::ui;
@@ -27,16 +27,9 @@ const std::vector<std::string> expectedLabelNames{"controlsTitleLabel",
                                                   "controlsEDescriptionLabel"};
 
 const std::vector<std::string> expectedButtonNames{
-    "controlsBackToMenuButton",
-    "controlsUpButton",
-    "controlsDownButton",
-    "controlsRightButton",
-    "controlsLeftButton",
-    "controlsSpaceButton",
-    "controlsShiftButton",
-    "controlsCtrlButton",
-    "controlsEButton"
-};
+    "controlsBackToMenuButton", "controlsUpButton",   "controlsDownButton",
+    "controlsRightButton",      "controlsLeftButton", "controlsSpaceButton",
+    "controlsShiftButton",      "controlsCtrlButton", "controlsEButton"};
 }
 
 class ControlsStateUIConfigBuilderTest : public Test
@@ -59,11 +52,13 @@ TEST_F(ControlsStateUIConfigBuilderTest, createControlsUI)
     const auto controlsUI = ControlsStateUIConfigBuilder::createControlsUIConfig(&controlsState);
 
     std::vector<std::string> actualLabelNames;
-    std::transform(controlsUI->labelsConfig.begin(), controlsUI->labelsConfig.end(), std::back_inserter(actualLabelNames),
+    std::transform(controlsUI->labelsConfig.begin(), controlsUI->labelsConfig.end(),
+                   std::back_inserter(actualLabelNames),
                    [](const auto& labelConfig) { return labelConfig->uniqueName; });
 
     std::vector<std::string> actualButtonsNames;
-    std::transform(controlsUI->buttonsConfig.begin(), controlsUI->buttonsConfig.end(), std::back_inserter(actualButtonsNames),
+    std::transform(controlsUI->buttonsConfig.begin(), controlsUI->buttonsConfig.end(),
+                   std::back_inserter(actualButtonsNames),
                    [](const auto& buttonConfig) { return buttonConfig->uniqueName; });
 
     ASSERT_EQ(controlsUI->backgroundConfig->uniqueName, "controlsBackground");

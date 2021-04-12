@@ -5,8 +5,7 @@
 namespace game
 {
 
-TileMap::TileMap(std::string name, utils::Vector2i mapSizeInit)
-    : tileMapInfo{name,mapSizeInit}
+TileMap::TileMap(std::string name, utils::Vector2i mapSizeInit) : tileMapInfo{name, mapSizeInit}
 {
     for (int y = 0; y < tileMapInfo.mapSize.y; y++)
     {
@@ -18,9 +17,7 @@ TileMap::TileMap(std::string name, utils::Vector2i mapSizeInit)
     }
 }
 
-void TileMap::saveToFile() {
-
-}
+void TileMap::saveToFile() {}
 
 std::shared_ptr<Tile>& TileMap::getTile(utils::Vector2i position)
 {

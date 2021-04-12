@@ -3,6 +3,7 @@
 #include <ostream>
 #include <vector>
 
+#include "InputApi.h"
 #include "InputKey.h"
 #include "Vector.h"
 
@@ -11,15 +12,15 @@ namespace input
 class InputStatus
 {
 public:
-    InputStatus();
+    INPUT_API InputStatus();
 
-    bool isKeyPressed(InputKey) const;
-    void setKeyPressed(InputKey);
-    bool isKeyReleased(InputKey) const;
-    void setReleasedKeys();
-    void setMousePosition(const utils::Vector2f&);
-    utils::Vector2f getMousePosition() const;
-    void clearPressedKeys();
+    INPUT_API bool isKeyPressed(InputKey) const;
+    INPUT_API void setKeyPressed(InputKey);
+    INPUT_API bool isKeyReleased(InputKey) const;
+    INPUT_API void setReleasedKeys();
+    INPUT_API void setMousePosition(const utils::Vector2f&);
+    INPUT_API utils::Vector2f getMousePosition() const;
+    INPUT_API void clearPressedKeys();
 
 private:
     const unsigned long numberOfKeys;

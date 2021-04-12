@@ -22,16 +22,19 @@ const auto tilesTextureVector =
                              utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/2.png"};
 }
 
-std::unique_ptr<components::ui::UIConfig> EditorStateUIConfigBuilder::createEditorUIConfig(EditorState* editorState)
+std::unique_ptr<components::ui::UIConfig>
+EditorStateUIConfigBuilder::createEditorUIConfig(EditorState* editorState)
 {
     std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
     std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
     std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
     std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
 
-    const auto changeBlockAction = [=]() {
-      editorState->currentTileId = editorState->currentTileId + 1 < tilesTextureVector.size() ? editorState->currentTileId + 1 : 0;
-      editorState->currentTilePath = tilesTextureVector[editorState->currentTileId];
+    const auto changeBlockAction = [=]()
+    {
+        editorState->currentTileId =
+            editorState->currentTileId + 1 < tilesTextureVector.size() ? editorState->currentTileId + 1 : 0;
+        editorState->currentTilePath = tilesTextureVector[editorState->currentTileId];
     };
     const auto keyActions = std::vector<components::core::KeyAction>{
         components::core::KeyAction{input::InputKey::MouseRight, changeBlockAction}};
