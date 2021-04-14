@@ -5,6 +5,8 @@
 #include "WindowObservationHandlerMock.h"
 #include "WindowObserverMock.h"
 
+#include "SupportedResolutionsRetriever.h"
+
 using namespace ::testing;
 using namespace window;
 
@@ -18,23 +20,24 @@ const DisplayMode initialDisplayMode{DisplayMode::Window};
 const Resolution initialResolution{windowSize.x, windowSize.y};
 const bool initialVsync{true};
 const unsigned int initialFrameLimit{120};
-const DisplayMode changedDisplayMode{DisplayMode::Fullscreen};
+const DisplayMode fullscreen{DisplayMode::Fullscreen};
 const Resolution changedResolution{windowSizeChanged.x, windowSizeChanged.y};
 const bool changedVsync{false};
 const unsigned int changedFrameLimit{60};
 const WindowSettings initialWindowSettings{initialDisplayMode, initialResolution, initialVsync,
                                            initialFrameLimit};
-const WindowSettings windowSettingsWithDisplayModeChanged{changedDisplayMode, initialResolution, initialVsync,
-                                                          initialFrameLimit};
+WindowSettings windowSettingsWithDisplayModeFullscreenChanged{fullscreen, initialResolution, initialVsync,
+                                                              initialFrameLimit};
 const WindowSettings windowSettingsWithResolutionChanged{initialDisplayMode, changedResolution, initialVsync,
                                                          initialFrameLimit};
 const WindowSettings windowSettingsWithVsyncChanged{initialDisplayMode, initialResolution, changedVsync,
                                                     initialFrameLimit};
 const WindowSettings windowSettingsWithFrameLimitChanged{initialDisplayMode, initialResolution, initialVsync,
                                                          changedFrameLimit};
-const std::vector<Resolution> expectedSupportedResolutions{{800, 600},  {1024, 768}, {1280, 720},
-                                                           {1368, 768}, {1600, 900}, {1920, 1080}};
+const std::set<Resolution> commonResolutions{{640, 480},   {800, 600},   {1280, 720},
+                                             {1920, 1080}, {1920, 1440}, {3840, 2160}};
 const std::vector<unsigned int> expectedSupportedFrameLimits{30, 60, 90, 120};
+
 }
 
 class WindowSfmlTest : public Test
@@ -47,12 +50,6 @@ public:
     WindowObservationHandlerMock* observationHandler = observationHandlerInit.get();
     WindowSfml window{windowSize, windowTitle, std::move(observationHandlerInit)};
 };
-
-// TODO: uncomment this test
-// TEST_F(WindowSfmlTest, givenWindowChangeSizeEvent_shouldNotfiyObservers)
-//{
-//    EXPECT_CALL(*observationHandler, notifyObservers(windowSizeChanged));
-//}
 
 TEST_F(WindowSfmlTest, shouldRegisterObserver)
 {
@@ -82,24 +79,31 @@ TEST_F(WindowSfmlTest, givenSameDisplayMode_shouldNotSetDisplayMode)
     ASSERT_FALSE(result);
 }
 
-TEST_F(WindowSfmlTest, givenDifferentDisplayMode_shouldSetDisplayMode)
+TEST_F(WindowSfmlTest, givenFullscreenDisplayMode_shouldSetDisplayModeAndSetHighestResolution)
 {
-    const auto result = window.setDisplayMode(changedDisplayMode);
+    auto highestResolution = SupportedResolutionsRetriever::retrieveHighestResolution();
+    const utils::Vector2u windowSizeWithHighestResolution{highestResolution.width, highestResolution.height};
+    EXPECT_CALL(*observationHandler, notifyObservers(windowSizeWithHighestResolution));
+
+    const auto result = window.setDisplayMode(fullscreen);
 
     const auto actualWindowSettings = window.getWindowSettings();
-    ASSERT_EQ(actualWindowSettings, windowSettingsWithDisplayModeChanged);
+    windowSettingsWithDisplayModeFullscreenChanged.resolution = highestResolution;
+    ASSERT_EQ(actualWindowSettings, windowSettingsWithDisplayModeFullscreenChanged);
     ASSERT_TRUE(result);
 }
 
 TEST_F(WindowSfmlTest, givenSameResolution_shouldNotSetResolution)
 {
-    const auto result = window.setResolution(initialResolution);
+    const auto result = window.setResolution(window.getWindowSettings().resolution);
 
     ASSERT_FALSE(result);
 }
 
 TEST_F(WindowSfmlTest, givenDifferentResolution_shouldSetResolution)
 {
+    const utils::Vector2u windowSizeWithChangedResolution{changedResolution.width, changedResolution.height};
+    EXPECT_CALL(*observationHandler, notifyObservers(windowSizeWithChangedResolution));
     const auto result = window.setResolution(changedResolution);
 
     const auto actualWindowSettings = window.getWindowSettings();
@@ -142,8 +146,11 @@ TEST_F(WindowSfmlTest, givenDifferentFrameLimit_shouldSetFramerateLimit)
 TEST_F(WindowSfmlTest, shouldRetrieveSupportedResolutions)
 {
     const auto actualSupportedResolutions = window.getSupportedResolutions();
-
-    ASSERT_EQ(actualSupportedResolutions, expectedSupportedResolutions);
+    
+    ASSERT_TRUE(std::is_sorted(actualSupportedResolutions.begin(), actualSupportedResolutions.end()));
+    ASSERT_TRUE(std::all_of(actualSupportedResolutions.begin(), actualSupportedResolutions.end(),
+                            [&](const auto& actualResolution)
+                            { return commonResolutions.contains(actualResolution); }));
 }
 
 TEST_F(WindowSfmlTest, shouldRetrieveSupportedFrameLimits)
