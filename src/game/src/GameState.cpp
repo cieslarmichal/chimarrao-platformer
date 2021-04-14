@@ -15,9 +15,10 @@ namespace game
 GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<input::InputManager>& inputManagerInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
+                     const std::shared_ptr<utils::FileAccess>& fileAccessInit,
                      std::stack<std::unique_ptr<State>>& statesInit,
                      std::unique_ptr<components::ui::UIManager> uiManagerInit)
-    : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
+    : State{windowInit, inputManagerInit, rendererPoolInit, fileAccessInit, statesInit},
       inputStatus{nullptr},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
@@ -108,7 +109,7 @@ void GameState::pause()
     player->getComponent<components::core::GraphicsComponent>()->enable();
 
     states.push(std::make_unique<PauseState>(
-        window, inputManager, rendererPool, states,
+        window, inputManager, rendererPool, fileAccess, states,
         std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool)));
 }
 

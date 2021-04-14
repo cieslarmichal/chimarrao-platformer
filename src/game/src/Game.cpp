@@ -6,6 +6,7 @@
 #include "EditorState.h"
 #include "GraphicsFactory.h"
 #include "InputManagerFactory.h"
+#include "FileAccessFactory.h"
 #include "MenuState.h"
 #include "Vector.h"
 #include "WindowFactory.h"
@@ -18,6 +19,7 @@ Game::Game() : dt{0}
     auto graphicsFactory = graphics::GraphicsFactory::createGraphicsFactory();
     auto windowFactory = window::WindowFactory::createWindowFactory();
     auto inputManagerFactory = input::InputManagerFactory::createInputManagerFactory();
+    auto fileAccessFactory = utils::FileAccessFactory::createFileAccessFactory();
 
     auto windowSize = utils::Vector2u{800, 600};
     window = windowFactory->createWindow(windowSize, "chimarrao-platformer");
@@ -26,6 +28,7 @@ Game::Game() : dt{0}
 
     rendererPool = graphicsFactory->createRendererPool(window, windowSize, mapSize);
     inputManager = inputManagerFactory->createInputManager(window);
+    fileAccess = fileAccessFactory->createDefaultFileAccess();
     timer.start();
     initStates();
 }
@@ -99,7 +102,7 @@ void Game::render()
 void Game::initStates()
 {
     states.push(std::make_unique<MenuState>(
-        window, inputManager, rendererPool, states,
+        window, inputManager, rendererPool, fileAccess, states,
         std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool)));
 }
 

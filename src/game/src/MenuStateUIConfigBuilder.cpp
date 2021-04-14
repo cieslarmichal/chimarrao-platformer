@@ -63,7 +63,7 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
     {
         menuState->states.top()->deactivate();
         menuState->states.push(std::make_unique<GameState>(
-            menuState->window, menuState->inputManager, menuState->rendererPool, menuState->states,
+            menuState->window, menuState->inputManager, menuState->rendererPool, menuState->fileAccess, menuState->states,
             std::make_unique<components::ui::DefaultUIManager>(menuState->inputManager,
                                                                menuState->rendererPool)));
     };
@@ -94,7 +94,7 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
     {
         menuState->states.top()->deactivate();
         menuState->states.push(std::make_unique<EditorState>(
-            menuState->window, menuState->inputManager, menuState->rendererPool, menuState->states,
+            menuState->window, menuState->inputManager, menuState->rendererPool, menuState->fileAccess, menuState->states,
             std::make_unique<components::ui::DefaultUIManager>(menuState->inputManager,
                                                                menuState->rendererPool)));
     };
@@ -126,7 +126,7 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
     {
         menuState->states.top()->deactivate();
         menuState->states.push(std::make_unique<ControlsState>(
-            menuState->window, menuState->inputManager, menuState->rendererPool, menuState->states,
+            menuState->window, menuState->inputManager, menuState->rendererPool, menuState->fileAccess, menuState->states,
             std::make_unique<components::ui::DefaultUIManager>(menuState->inputManager,
                                                                menuState->rendererPool)));
     };
@@ -158,7 +158,7 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
     {
         menuState->states.top()->deactivate();
         menuState->states.push(std::make_unique<SettingsState>(
-            menuState->window, menuState->inputManager, menuState->rendererPool, menuState->states,
+            menuState->window, menuState->inputManager, menuState->rendererPool, menuState->fileAccess, menuState->states,
             std::make_unique<components::ui::DefaultUIManager>(menuState->inputManager,
                                                                menuState->rendererPool)));
     };

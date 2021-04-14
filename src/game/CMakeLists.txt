@@ -43,7 +43,7 @@ set(UT_SOURCES
         src/editor/TileMapSerializerJsonTest.cpp)
 
 add_library(game ${SOURCES})
-target_include_directories(game PUBLIC src ${JSON_INCLUDE_DIR})
+target_include_directories(game PUBLIC src ${JSON_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
 target_link_libraries(game PUBLIC utils graphics input components)
 
 add_executable(gameUT ${UT_SOURCES})

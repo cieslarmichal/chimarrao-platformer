@@ -18,6 +18,7 @@ public:
     explicit ControlsState(const std::shared_ptr<window::Window>&,
                            const std::shared_ptr<input::InputManager>&,
                            const std::shared_ptr<graphics::RendererPool>&,
+                           const std::shared_ptr<utils::FileAccess>&,
                            std::stack<std::unique_ptr<State>>&, std::unique_ptr<components::ui::UIManager>);
     ~ControlsState();
 

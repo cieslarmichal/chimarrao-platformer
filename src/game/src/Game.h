@@ -32,6 +32,7 @@ private:
     utils::DeltaTime dt;
     std::shared_ptr<window::Window> window;
     std::shared_ptr<graphics::RendererPool> rendererPool;
+    std::shared_ptr<utils::FileAccess> fileAccess;
     std::shared_ptr<input::InputManager> inputManager;
     std::stack<std::unique_ptr<State>> states;
 };

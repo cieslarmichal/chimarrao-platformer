@@ -114,7 +114,7 @@ EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(EditorMenuState* editor
         editorMenuState->states.top()->deactivate();
         editorMenuState->states.push(
             std::make_unique<SaveMapState>(editorMenuState->window, editorMenuState->inputManager,
-                                           editorMenuState->rendererPool, editorMenuState->states,
+                                           editorMenuState->rendererPool, editorMenuState->fileAccess, editorMenuState->states,
                                            std::make_unique<components::ui::DefaultUIManager>(
                                                editorMenuState->inputManager, editorMenuState->rendererPool),
                                            editorMenuState->tileMap));
