@@ -69,8 +69,8 @@ bool WindowSfml::pollEvent(sf::Event& event) const
 
 utils::Vector2f WindowSfml::getMousePosition() const
 {
-    sf::Vector2i windowCoordinates = sf::Mouse::getPosition(*window);
-    sf::Vector2f worldCoordinates = window->mapPixelToCoords(windowCoordinates);
+    const sf::Vector2i windowCoordinates = sf::Mouse::getPosition(*window);
+    const sf::Vector2f worldCoordinates = window->mapPixelToCoords(windowCoordinates);
     return worldCoordinates;
 }
 
@@ -101,8 +101,24 @@ bool WindowSfml::setDisplayMode(DisplayMode displayMode)
         windowSettings.displayMode = displayMode;
         window.reset();
         window = std::make_unique<sf::RenderWindow>();
-        window->create(sf::VideoMode(windowSettings.resolution.width, windowSettings.resolution.height),
-                       windowTitle, getSfmlStyleFromDisplayMode(windowSettings.displayMode));
+
+        if (displayMode == DisplayMode::Fullscreen)
+        {
+            const auto highestAvailableResolution =
+                SupportedResolutionsRetriever::retrieveHighestResolution();
+            windowSettings.resolution = highestAvailableResolution;
+            window->create(sf::VideoMode(highestAvailableResolution.width, highestAvailableResolution.height),
+                           windowTitle, sf::Style::None);
+        }
+        else
+        {
+            window->create(sf::VideoMode(windowSettings.resolution.width, windowSettings.resolution.height),
+                           windowTitle, getSfmlStyleFromDisplayMode(windowSettings.displayMode));
+        }
+
+//        window->setSize({window->getSize() + utils::Vector2u {1,1}});
+//        window->setSize({window->getSize() - utils::Vector2u {1,1}});
+        notifyObservers();
         return true;
     }
     return false;
@@ -139,6 +155,9 @@ bool WindowSfml::setResolution(const Resolution& resolution)
         window = std::make_unique<sf::RenderWindow>();
         window->create(sf::VideoMode(resolution.width, resolution.height), windowTitle,
                        getSfmlStyleFromDisplayMode(windowSettings.displayMode));
+        window->setSize({window->getSize() + utils::Vector2u {1,1}});
+        window->setSize({window->getSize() - utils::Vector2u {1,1}});
+        notifyObservers();
         return true;
     }
     return false;

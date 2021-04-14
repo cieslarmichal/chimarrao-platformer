@@ -33,6 +33,7 @@ public:
 private:
     void synchronizeWindowSettings();
     void applyWindowSettingsChanges();
+    void refreshWindowSettingsUI();
     void increaseResolution();
     void decreaseResolution();
     void increaseFrameLimit();

@@ -2,7 +2,6 @@
 
 #include "GetProjectPath.h"
 #include "SettingsStateUIConfigBuilder.h"
-#include "StlOperators.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
@@ -13,7 +12,6 @@ const auto buttonColor = graphics::Color(251, 190, 102);
 const auto buttonHoverColor = graphics::Color(205, 128, 66);
 }
 
-// TODO: pass uiManager in constructor
 SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<input::InputManager>& inputManagerInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
@@ -32,24 +30,7 @@ SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
     // TODO: throw if supported resolution or frameLimits == 0
 
     synchronizeWindowSettings();
-
-    if (selectedWindowsSettings.displayMode == window::DisplayMode::Window)
-    {
-        uiManager->setColor(components::ui::UIComponentType::Button, "settingsWindowModeButton",
-                            buttonHoverColor);
-    }
-    else
-    {
-        uiManager->setColor(components::ui::UIComponentType::Button, "settingsFullscreenModeButton",
-                            buttonHoverColor);
-    }
-
-    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsResolutionValueLabel",
-                       toString(selectedWindowsSettings.resolution));
-    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsFrameLimitValueLabel",
-                       std::to_string(selectedWindowsSettings.frameLimit));
-    uiManager->setChecked(components::ui::UIComponentTypeWithCheck::CheckBox, "settingsVsyncCheckBox",
-                          selectedWindowsSettings.vsync);
+    refreshWindowSettingsUI();
 }
 
 SettingsState::~SettingsState()
@@ -124,15 +105,43 @@ void SettingsState::applyWindowSettingsChanges()
         rendererPool->synchronizeRenderingSize();
     }
 
-    if (window->setResolution(selectedWindowsSettings.resolution))
+    if (selectedWindowsSettings.displayMode != window::DisplayMode::Fullscreen)
     {
-        rendererPool->setRenderingSize(
-            {selectedWindowsSettings.resolution.height, selectedWindowsSettings.resolution.width});
+        if (window->setResolution(selectedWindowsSettings.resolution))
+        {
+            rendererPool->setRenderingSize(
+                {selectedWindowsSettings.resolution.height, selectedWindowsSettings.resolution.width});
+        }
     }
 
     window->setVerticalSync(selectedWindowsSettings.vsync);
     window->setFramerateLimit(selectedWindowsSettings.frameLimit);
+
+    synchronizeWindowSettings();
+    refreshWindowSettingsUI();
 }
+
+void SettingsState::refreshWindowSettingsUI()
+{
+    if (selectedWindowsSettings.displayMode == window::DisplayMode::Window)
+    {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsWindowModeButton",
+                            buttonHoverColor);
+    }
+    else
+    {
+        uiManager->setColor(components::ui::UIComponentType::Button, "settingsFullscreenModeButton",
+                            buttonHoverColor);
+    }
+
+    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsResolutionValueLabel",
+                       toString(selectedWindowsSettings.resolution));
+    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsFrameLimitValueLabel",
+                       std::to_string(selectedWindowsSettings.frameLimit));
+    uiManager->setChecked(components::ui::UIComponentTypeWithCheck::CheckBox, "settingsVsyncCheckBox",
+                          selectedWindowsSettings.vsync);
+}
+
 
 void SettingsState::increaseResolution()
 {

@@ -24,6 +24,11 @@ inline bool operator!=(const Resolution& lhs, const Resolution& rhs)
     return !(lhs == rhs);
 }
 
+inline bool operator<(const Resolution& lhs, const Resolution& rhs)
+{
+    return lhs.width < rhs.width && lhs.height < rhs.height;
+}
+
 inline std::string toString(const Resolution& resolution)
 {
     return std::to_string(resolution.width) + "x" + std::to_string(resolution.height);

@@ -1,6 +1,8 @@
 #pragma once
 
 #include <memory>
+#include "SettingsState.h"
+
 
 namespace components::ui
 {
