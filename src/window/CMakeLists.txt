@@ -20,4 +20,4 @@ target_include_directories(window PUBLIC src)
 
 add_executable(windowUT ${UT_SOURCES} ${SOURCES})
 target_link_libraries(windowUT PUBLIC gmock_main gtest utils)
-add_test(windowUT windowUT --gtest_color=yes)
+add_test(NAME windowUT COMMAND windowUT WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

@@ -26,4 +26,5 @@ target_include_directories(animations PUBLIC src)
 
 add_executable(animationsUT ${UT_SOURCES} ${SOURCES})
 target_link_libraries(animationsUT PUBLIC gmock_main gtest utils graphics yaml-cpp)
-add_test(animationsUT animationsUT --gtest_color=yes)
+add_test(NAME animationsUT COMMAND animationsUT WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+

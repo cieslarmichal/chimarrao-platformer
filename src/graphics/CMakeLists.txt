@@ -29,4 +29,5 @@ target_include_directories(graphics PUBLIC src)
 
 add_executable(graphicsUT ${UT_SOURCES} ${SOURCES})
 target_link_libraries(graphicsUT PUBLIC gmock_main gtest utils window)
-add_test(graphicsUT graphicsUT --gtest_color=yes)
+add_test(NAME graphicsUT COMMAND graphicsUT WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+

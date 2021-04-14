@@ -36,4 +36,5 @@ target_include_directories(components PUBLIC src)
 
 add_executable(componentsUT ${UT_SOURCES})
 target_link_libraries(componentsUT PUBLIC gmock_main gtest components)
-add_test(componentsUT componentsUT --gtest_color=yes)
+add_test(NAME componentsUT COMMAND componentsUT WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+

@@ -48,4 +48,5 @@ target_link_libraries(game PUBLIC utils graphics input components)
 
 add_executable(gameUT ${UT_SOURCES})
 target_link_libraries(gameUT PUBLIC gtest_main gmock game)
-add_test(gameUT gameUT --gtest_color=yes)
+add_test(NAME gameUT COMMAND gameUT WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
+
