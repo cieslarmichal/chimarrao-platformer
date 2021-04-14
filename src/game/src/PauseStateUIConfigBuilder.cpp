@@ -1,8 +1,8 @@
 #include "PauseStateUIConfigBuilder.h"
 
+#include "CommonUIConfigElements.h"
 #include "GetProjectPath.h"
 #include "PauseState.h"
-#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -13,30 +13,31 @@ const auto buttonColor = graphics::Color{65, 105, 200};
 const auto buttonHoverColor = graphics::Color(4, 8, 97);
 const auto textColor = graphics::Color(200, 200, 200);
 const auto buttonSize = utils::Vector2f{25, 5};
-const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
 }
 
 std::unique_ptr<components::ui::UIConfig>
 PauseStateUIConfigBuilder::createPauseUIConfig(PauseState* pauseState)
 {
-    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
-    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
-    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
-    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
+    return std::make_unique<components::ui::UIConfig>(
+        createBackgroundConfig(pauseState), std::move(createButtonConfigs(pauseState)),
+        createCheckBoxConfigs(pauseState), createLabelConfigs(pauseState),
+        createTextFieldConfigs(pauseState));
+}
 
-    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
+std::unique_ptr<components::ui::BackgroundConfig>
+PauseStateUIConfigBuilder::createBackgroundConfig(PauseState*)
+{
+    return std::make_unique<components::ui::BackgroundConfig>(
         "pauseBackground", utils::Vector2f{25, 10}, utils::Vector2f{31, 32},
         graphics::VisibilityLayer::Background, graphics::Color{172});
+}
 
-    const auto textPausePosition = utils::Vector2f{35, 13};
-    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
-        "pauseTitleLabel", textPausePosition, graphics::Color::White, "Pause", 40, fontPath);
-    labelsConfig.emplace_back(std::move(titleLabelConfig));
-
-    ///////////////////////////////////////////////////////////////////////////////////////////////
+std::vector<std::unique_ptr<components::ui::ButtonConfig>>
+PauseStateUIConfigBuilder::createButtonConfigs(PauseState* pauseState)
+{
+    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
 
     const auto backToGameButtonPosition = utils::Vector2f{28, 21};
-
     const auto backToGameButtonOnMouseOver = [=]
     {
         pauseState->uiManager->setColor(components::ui::UIComponentType::Button, "pauseBackToGameButton",
@@ -55,10 +56,7 @@ PauseStateUIConfigBuilder::createPauseUIConfig(PauseState* pauseState)
         30, fontPath, utils::Vector2f{2, 0.5}, backToGameClickAction, backToGameButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(backToGameButtonConfig));
 
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
     const auto backToMenuButtonPosition = utils::Vector2f{28, 30};
-
     const auto backToMenuButtonOnMouseOver = [=]
     {
         pauseState->uiManager->setColor(components::ui::UIComponentType::Button, "pauseBackToMenuButton",
@@ -77,8 +75,31 @@ PauseStateUIConfigBuilder::createPauseUIConfig(PauseState* pauseState)
         30, fontPath, utils::Vector2f{2, 0.5}, backToMenuClickAction, backToMenuButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(backToMenuButtonConfig));
 
-    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
-                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
-                                                      std::move(textFieldsConfig));
+    return buttonsConfig;
+}
+
+std::vector<std::unique_ptr<components::ui::CheckBoxConfig>>
+PauseStateUIConfigBuilder::createCheckBoxConfigs(PauseState*)
+{
+    return {};
+}
+
+std::vector<std::unique_ptr<components::ui::LabelConfig>>
+PauseStateUIConfigBuilder::createLabelConfigs(PauseState*)
+{
+    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
+
+    const auto textPausePosition = utils::Vector2f{35, 13};
+    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "pauseTitleLabel", textPausePosition, graphics::Color::White, "Pause", 40, fontPath);
+    labelsConfig.emplace_back(std::move(titleLabelConfig));
+
+    return labelsConfig;
+}
+
+std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
+PauseStateUIConfigBuilder::createTextFieldConfigs(PauseState*)
+{
+    return {};
 }
 }

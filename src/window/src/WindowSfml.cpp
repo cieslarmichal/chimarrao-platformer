@@ -116,8 +116,8 @@ bool WindowSfml::setDisplayMode(DisplayMode displayMode)
                            windowTitle, getSfmlStyleFromDisplayMode(windowSettings.displayMode));
         }
 
-//        window->setSize({window->getSize() + utils::Vector2u {1,1}});
-//        window->setSize({window->getSize() - utils::Vector2u {1,1}});
+        //        window->setSize({window->getSize() + utils::Vector2u {1,1}});
+        //        window->setSize({window->getSize() - utils::Vector2u {1,1}});
         notifyObservers();
         return true;
     }
@@ -155,8 +155,8 @@ bool WindowSfml::setResolution(const Resolution& resolution)
         window = std::make_unique<sf::RenderWindow>();
         window->create(sf::VideoMode(resolution.width, resolution.height), windowTitle,
                        getSfmlStyleFromDisplayMode(windowSettings.displayMode));
-        window->setSize({window->getSize() + utils::Vector2u {1,1}});
-        window->setSize({window->getSize() - utils::Vector2u {1,1}});
+        window->setSize({window->getSize() + utils::Vector2u{1, 1}});
+        window->setSize({window->getSize() - utils::Vector2u{1, 1}});
         notifyObservers();
         return true;
     }

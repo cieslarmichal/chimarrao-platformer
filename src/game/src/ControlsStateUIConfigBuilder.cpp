@@ -1,24 +1,19 @@
 #include "ControlsStateUIConfigBuilder.h"
 
 #include "Color.h"
+#include "CommonUIConfigElements.h"
 #include "ControlsState.h"
 #include "GetProjectPath.h"
 #include "Vector.h"
-#include "ui/UIConfig.h"
-#include "ui/UIManager.h"
 
 namespace game
 {
-
 namespace
 {
 const auto buttonColor = graphics::Color(251, 190, 102);
 const auto buttonHoverColor = graphics::Color(205, 128, 66);
 const auto controlButtonFontSize{20};
 const auto controlButtonSize = utils::Vector2f{8, 3};
-const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
-const auto backgroundPath =
-    utils::getProjectPath("chimarrao-platformer") + "resources/BG/menu_background.jpg";
 const auto controlsTitlePosition = utils::Vector2f{32, 6};
 const auto backToMenuButtonPosition = utils::Vector2f{34.5, 48};
 const auto upButtonPosition = utils::Vector2f{23, 16};
@@ -51,18 +46,24 @@ const auto eDescriptionPosition =
 std::unique_ptr<components::ui::UIConfig>
 ControlsStateUIConfigBuilder::createControlsUIConfig(ControlsState* controlsState)
 {
-    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
-    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
-    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
-    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
+    return std::make_unique<components::ui::UIConfig>(
+        createBackgroundConfig(controlsState), std::move(createButtonConfigs(controlsState)),
+        createCheckBoxConfigs(controlsState), createLabelConfigs(controlsState),
+        createTextFieldConfigs(controlsState));
+}
 
-    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
+std::unique_ptr<components::ui::BackgroundConfig>
+ControlsStateUIConfigBuilder::createBackgroundConfig(ControlsState*)
+{
+    return std::make_unique<components::ui::BackgroundConfig>(
         "controlsBackground", utils::Vector2f{0, 0}, utils::Vector2f{80, 60},
-        graphics::VisibilityLayer::Background, backgroundPath);
+        graphics::VisibilityLayer::Background, menuBackgroundPath);
+}
 
-    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
-        "controlsTitleLabel", controlsTitlePosition, graphics::Color::Black, "Controls", 37, fontPath);
-    labelsConfig.emplace_back(std::move(titleLabelConfig));
+std::vector<std::unique_ptr<components::ui::ButtonConfig>>
+ControlsStateUIConfigBuilder::createButtonConfigs(ControlsState* controlsState)
+{
+    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
 
     const auto backToMenuButtonSize = utils::Vector2f{13, 5};
     const auto backToMenuButtonOnMouseOver = [=]
@@ -124,6 +125,24 @@ ControlsStateUIConfigBuilder::createControlsUIConfig(ControlsState* controlsStat
         controlButtonFontSize, fontPath, utils::Vector2f{3.5, 0.2});
     buttonsConfig.emplace_back(std::move(eButtonConfig));
 
+    return buttonsConfig;
+}
+
+std::vector<std::unique_ptr<components::ui::CheckBoxConfig>>
+ControlsStateUIConfigBuilder::createCheckBoxConfigs(ControlsState*)
+{
+    return {};
+}
+
+std::vector<std::unique_ptr<components::ui::LabelConfig>>
+ControlsStateUIConfigBuilder::createLabelConfigs(ControlsState*)
+{
+    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
+
+    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "controlsTitleLabel", controlsTitlePosition, graphics::Color::Black, "Controls", 37, fontPath);
+    labelsConfig.emplace_back(std::move(titleLabelConfig));
+
     auto upDescriptionLabelConfig = std::make_unique<components::ui::LabelConfig>(
         "controlsUpDescriptionLabel", upDescriptionPosition, graphics::Color::Black, "Jump",
         controlButtonFontSize, fontPath);
@@ -164,8 +183,12 @@ ControlsStateUIConfigBuilder::createControlsUIConfig(ControlsState* controlsStat
         controlButtonFontSize, fontPath);
     labelsConfig.emplace_back(std::move(eDescriptionLabelConfig));
 
-    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
-                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
-                                                      std::move(textFieldsConfig));
+    return labelsConfig;
+}
+
+std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
+ControlsStateUIConfigBuilder::createTextFieldConfigs(ControlsState*)
+{
+    return {};
 }
 }

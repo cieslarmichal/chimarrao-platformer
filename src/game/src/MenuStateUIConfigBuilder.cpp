@@ -1,5 +1,6 @@
 #include "MenuStateUIConfigBuilder.h"
 
+#include "CommonUIConfigElements.h"
 #include "ControlsState.h"
 #include "EditorState.h"
 #include "GameState.h"
@@ -24,24 +25,26 @@ const auto buttonColor = graphics::Color(251, 190, 102);
 const auto buttonHoverColor = graphics::Color(205, 128, 66);
 const auto buttonSize = utils::Vector2f{23, 6};
 const auto iconSize = utils::Vector2f{4, 4};
-const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
-const auto iconPath = utils::getProjectPath("chimarrao-platformer") + "resources/yerba_item.png";
-const auto backgroundPath =
-    utils::getProjectPath("chimarrao-platformer") + "resources/BG/menu_background.jpg";
 }
 
 std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUIConfig(MenuState* menuState)
 {
-    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
-    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
-    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
-    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
+    return std::make_unique<components::ui::UIConfig>(
+        createBackgroundConfig(menuState), std::move(createButtonConfigs(menuState)),
+        createCheckBoxConfigs(menuState), createLabelConfigs(menuState), createTextFieldConfigs(menuState));
+}
 
-    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
+std::unique_ptr<components::ui::BackgroundConfig> MenuStateUIConfigBuilder::createBackgroundConfig(MenuState*)
+{
+    return std::make_unique<components::ui::BackgroundConfig>(
         "menuBackground", utils::Vector2f{0, 0}, utils::Vector2f{80, 60},
-        graphics::VisibilityLayer::Background, backgroundPath);
+        graphics::VisibilityLayer::Background, menuBackgroundPath);
+}
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
+std::vector<std::unique_ptr<components::ui::ButtonConfig>>
+MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
+{
+    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
 
     const auto playButtonOnMouseOver = [=]
     {
@@ -71,8 +74,6 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
         "menuPlayButton", gameButtonPosition, buttonSize, buttonColor, "Play", graphics::Color::Black, 35,
         fontPath, utils::Vector2f{7, 1}, runGame, playButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(playButtonConfig));
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const auto mapEditorButtonOnMouseOver = [=]
     {
@@ -104,8 +105,6 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
         mapEditorButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(mapEditorButtonConfig));
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-
     const auto controlsButtonOnMouseOver = [=]
     {
         menuState->unselectAllButtons();
@@ -135,8 +134,6 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
         graphics::Color::Black, 35, fontPath, utils::Vector2f{3, 1}, runControls,
         controlsButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(controlsButtonConfig));
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const auto settingsButtonOnMouseOver = [=]
     {
@@ -168,8 +165,6 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
         settingsButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(settingsButtonConfig));
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-
     const auto exitButtonOnMouseOver = [=]
     {
         menuState->unselectAllButtons();
@@ -193,8 +188,24 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
         fontPath, utils::Vector2f{7, 1}, exit, exitButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(exitButtonConfig));
 
-    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
-                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
-                                                      std::move(textFieldsConfig));
+    return buttonsConfig;
+}
+
+std::vector<std::unique_ptr<components::ui::CheckBoxConfig>>
+MenuStateUIConfigBuilder::createCheckBoxConfigs(MenuState*)
+{
+    return {};
+}
+
+std::vector<std::unique_ptr<components::ui::LabelConfig>>
+MenuStateUIConfigBuilder::createLabelConfigs(MenuState*)
+{
+    return {};
+}
+
+std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
+MenuStateUIConfigBuilder::createTextFieldConfigs(MenuState*)
+{
+    return {};
 }
 }

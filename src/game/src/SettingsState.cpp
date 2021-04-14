@@ -142,7 +142,6 @@ void SettingsState::refreshWindowSettingsUI()
                           selectedWindowsSettings.vsync);
 }
 
-
 void SettingsState::increaseResolution()
 {
     if (selectedResolutionIndex == supportedResolutions.size() - 1)

@@ -1,12 +1,11 @@
 #include "SettingsStateUIConfigBuilder.h"
 
+#include "CommonUIConfigElements.h"
 #include "GetProjectPath.h"
-#include "SettingsState.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
 {
-
 namespace
 {
 const auto buttonColor = graphics::Color(251, 190, 102);
@@ -15,10 +14,6 @@ const auto buttonSize = utils::Vector2f{25, 5};
 const auto sectionTextFontSize{37};
 const auto displayModeFontSize{12};
 const auto displayModeButtonSize = utils::Vector2f{8, 3};
-const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
-const std::string backgroundPath =
-    utils::getProjectPath("chimarrao-platformer") + "resources/BG/menu_background.jpg";
-
 const auto settingsTitlePosition = utils::Vector2f{32, 6};
 const auto displayModeSectionPosition = utils::Vector2f{38, 18};
 const auto windowModeButtonPosition = utils::Vector2f{
@@ -51,18 +46,24 @@ const auto applyChangesButtonPosition = utils::Vector2f{55, 48};
 std::unique_ptr<components::ui::UIConfig>
 SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsState)
 {
-    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
-    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
-    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
-    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
+    return std::make_unique<components::ui::UIConfig>(
+        createBackgroundConfig(settingsState), std::move(createButtonConfigs(settingsState)),
+        createCheckBoxConfigs(settingsState), createLabelConfigs(settingsState),
+        createTextFieldConfigs(settingsState));
+}
 
-    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
+std::unique_ptr<components::ui::BackgroundConfig>
+SettingsStateUIConfigBuilder::createBackgroundConfig(SettingsState*)
+{
+    return std::make_unique<components::ui::BackgroundConfig>(
         "settingsBackground", utils::Vector2f{0, 0}, utils::Vector2f{80, 60},
-        graphics::VisibilityLayer::Background, backgroundPath);
+        graphics::VisibilityLayer::Background, menuBackgroundPath);
+}
 
-    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
-        "settingsTitleLabel", settingsTitlePosition, graphics::Color::Black, "Settings", 37, fontPath);
-    labelsConfig.emplace_back(std::move(titleLabelConfig));
+std::vector<std::unique_ptr<components::ui::ButtonConfig>>
+SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
+{
+    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
 
     const auto backToMenuButtonSize = utils::Vector2f{13, 5};
     const auto backToMenuButtonOnMouseOver = [=]
@@ -84,8 +85,6 @@ SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsStat
         backToMenuButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(backToMenuButtonConfig));
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////
-
     const auto applyChangesButtonSize = utils::Vector2f{13, 5};
     const auto applyChangesButtonOnMouseOver = [=]
     {
@@ -105,14 +104,7 @@ SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsStat
         "Apply", graphics::Color::Black, sectionTextFontSize, fontPath, utils::Vector2f{1, 0},
         applyChangesClickAction, applyChangesButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(applyChangesButtonConfig));
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    auto displayModeLabelConfig =
-        std::make_unique<components::ui::LabelConfig>("settingsDisplayModeLabel", displayModeSectionPosition,
-                                                      graphics::Color::Black, "Display mode:", 30, fontPath);
-    labelsConfig.emplace_back(std::move(displayModeLabelConfig));
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
     auto windowModeClickAction = [=] { settingsState->setWindowMode(); };
     auto windowModeButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsWindowModeButton", windowModeButtonPosition, displayModeButtonSize, buttonColor, "Window",
@@ -120,30 +112,12 @@ SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsStat
         windowModeClickAction);
     buttonsConfig.emplace_back(std::move(windowModeButtonConfig));
 
-    ////////////////////////////////////////////////////////////////////
-
     auto fullscreenModeClickAction = [=] { settingsState->setFullscreenMode(); };
     auto fullscreenModeButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsFullscreenModeButton", fullscreenModeButtonPosition, displayModeButtonSize, buttonColor,
         "Fullscreen", graphics::Color::Black, displayModeFontSize, fontPath, utils::Vector2f{0.5, 0.9},
         fullscreenModeClickAction);
     buttonsConfig.emplace_back(std::move(fullscreenModeButtonConfig));
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    auto resolutionLabelConfig =
-        std::make_unique<components::ui::LabelConfig>("settingsResolutionLabel", resolutionSectionPosition,
-                                                      graphics::Color::Black, "Resolution:", 30, fontPath);
-    labelsConfig.emplace_back(std::move(resolutionLabelConfig));
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
-
-    auto resolutionValueLabelConfig = std::make_unique<components::ui::LabelConfig>(
-        "settingsResolutionValueLabel", resolutionTextFieldPosition, graphics::Color::Black, "", 20,
-        fontPath);
-    labelsConfig.emplace_back(std::move(resolutionValueLabelConfig));
-
-    //////////////////////////////////////////////////////////////////////////////////////////////
 
     const auto resolutionDecreaseButtonOnMouseOver = [=]
     {
@@ -164,8 +138,6 @@ SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsStat
         resolutionDecreaseButtonClickAction, resolutionDecreaseButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(resolutionDecreaseButtonConfig));
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-
     const auto resolutionIncreaseButtonOnMouseOver = [=]
     {
         settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
@@ -184,48 +156,6 @@ SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsStat
         buttonColor, ">", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6, -0.3},
         resolutionIncreaseButtonClickAction, resolutionIncreaseButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(resolutionIncreaseButtonConfig));
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    auto vsyncLabelConfig = std::make_unique<components::ui::LabelConfig>(
-        "settingsVsyncLabel", vsyncSectionPosition, graphics::Color::Black, "Vsync:", 30, fontPath);
-    labelsConfig.emplace_back(std::move(vsyncLabelConfig));
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    const auto vsyncCheckBoxOnMouseOver = [=]
-    {
-        settingsState->uiManager->setColor(components::ui::UIComponentType::CheckBox, "settingsVsyncCheckBox",
-                                           buttonHoverColor);
-    };
-    const auto vsyncCheckBoxOnMouseOut = [=]
-    {
-        settingsState->uiManager->setColor(components::ui::UIComponentType::CheckBox, "settingsVsyncCheckBox",
-                                           buttonColor);
-    };
-    auto vsyncCheckBoxMouseOverActions =
-        components::ui::MouseOverActions{vsyncCheckBoxOnMouseOver, vsyncCheckBoxOnMouseOut};
-    auto vsyncCheckBoxClickAction = [=] { settingsState->switchVsync(); };
-    auto vsyncCheckBoxConfig = std::make_unique<components::ui::CheckBoxConfig>(
-        "settingsVsyncCheckBox", vsyncButtonPosition, vsyncButtonSize, buttonColor, false, 25, fontPath,
-        utils::Vector2f{0.8, 0.0}, vsyncCheckBoxClickAction, vsyncCheckBoxMouseOverActions);
-    checkBoxesConfig.emplace_back(std::move(vsyncCheckBoxConfig));
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    auto frameLimitLabelConfig =
-        std::make_unique<components::ui::LabelConfig>("settingsFrameLimitLabel", frameLimitSectionPosition,
-                                                      graphics::Color::Black, "Frame limit:", 30, fontPath);
-    labelsConfig.emplace_back(std::move(frameLimitLabelConfig));
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    auto frameLimitValueLabelConfig = std::make_unique<components::ui::LabelConfig>(
-        "settingsFrameLimitValueLabel", frameLimitTextFieldPosition, graphics::Color::Black, "", 20,
-        fontPath);
-    labelsConfig.emplace_back(std::move(frameLimitValueLabelConfig));
-
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
 
     const auto frameLimitDecreaseButtonOnMouseOver = [=]
     {
@@ -246,8 +176,6 @@ SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsStat
         frameLimitDecreaseButtonClickAction, frameLimitDecreaseButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(frameLimitDecreaseButtonConfig));
 
-    /////////////////////////////////////////////////////////////////////////////////////////////////////
-
     const auto frameLimitIncreaseButtonOnMouseOver = [=]
     {
         settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
@@ -267,8 +195,79 @@ SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsStat
         frameLimitIncreaseButtonClickAction, frameLimitIncreaseButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(frameLimitIncreaseButtonConfig));
 
-    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
-                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
-                                                      std::move(textFieldsConfig));
+    return buttonsConfig;
+}
+
+std::vector<std::unique_ptr<components::ui::CheckBoxConfig>>
+SettingsStateUIConfigBuilder::createCheckBoxConfigs(SettingsState* settingsState)
+{
+    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
+
+    const auto vsyncCheckBoxOnMouseOver = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::CheckBox, "settingsVsyncCheckBox",
+                                           buttonHoverColor);
+    };
+    const auto vsyncCheckBoxOnMouseOut = [=]
+    {
+        settingsState->uiManager->setColor(components::ui::UIComponentType::CheckBox, "settingsVsyncCheckBox",
+                                           buttonColor);
+    };
+    auto vsyncCheckBoxMouseOverActions =
+        components::ui::MouseOverActions{vsyncCheckBoxOnMouseOver, vsyncCheckBoxOnMouseOut};
+    auto vsyncCheckBoxClickAction = [=] { settingsState->switchVsync(); };
+    auto vsyncCheckBoxConfig = std::make_unique<components::ui::CheckBoxConfig>(
+        "settingsVsyncCheckBox", vsyncButtonPosition, vsyncButtonSize, buttonColor, false, 25, fontPath,
+        utils::Vector2f{0.8, 0.0}, vsyncCheckBoxClickAction, vsyncCheckBoxMouseOverActions);
+    checkBoxesConfig.emplace_back(std::move(vsyncCheckBoxConfig));
+
+    return checkBoxesConfig;
+}
+
+std::vector<std::unique_ptr<components::ui::LabelConfig>>
+SettingsStateUIConfigBuilder::createLabelConfigs(SettingsState*)
+{
+    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
+
+    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "settingsTitleLabel", settingsTitlePosition, graphics::Color::Black, "Settings", 37, fontPath);
+    labelsConfig.emplace_back(std::move(titleLabelConfig));
+
+    auto displayModeLabelConfig =
+        std::make_unique<components::ui::LabelConfig>("settingsDisplayModeLabel", displayModeSectionPosition,
+                                                      graphics::Color::Black, "Display mode:", 30, fontPath);
+    labelsConfig.emplace_back(std::move(displayModeLabelConfig));
+
+    auto resolutionLabelConfig =
+        std::make_unique<components::ui::LabelConfig>("settingsResolutionLabel", resolutionSectionPosition,
+                                                      graphics::Color::Black, "Resolution:", 30, fontPath);
+    labelsConfig.emplace_back(std::move(resolutionLabelConfig));
+
+    auto resolutionValueLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "settingsResolutionValueLabel", resolutionTextFieldPosition, graphics::Color::Black, "", 20,
+        fontPath);
+    labelsConfig.emplace_back(std::move(resolutionValueLabelConfig));
+
+    auto vsyncLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "settingsVsyncLabel", vsyncSectionPosition, graphics::Color::Black, "Vsync:", 30, fontPath);
+    labelsConfig.emplace_back(std::move(vsyncLabelConfig));
+
+    auto frameLimitLabelConfig =
+        std::make_unique<components::ui::LabelConfig>("settingsFrameLimitLabel", frameLimitSectionPosition,
+                                                      graphics::Color::Black, "Frame limit:", 30, fontPath);
+    labelsConfig.emplace_back(std::move(frameLimitLabelConfig));
+
+    auto frameLimitValueLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "settingsFrameLimitValueLabel", frameLimitTextFieldPosition, graphics::Color::Black, "", 20,
+        fontPath);
+    labelsConfig.emplace_back(std::move(frameLimitValueLabelConfig));
+
+    return labelsConfig;
+}
+
+std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
+SettingsStateUIConfigBuilder::createTextFieldConfigs(SettingsState*)
+{
+    return {};
 }
 }

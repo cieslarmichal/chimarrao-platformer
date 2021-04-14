@@ -1,13 +1,11 @@
 #include "EditorMenuStateUIConfigBuilder.h"
 
 #include "Color.h"
+#include "CommonUIConfigElements.h"
 #include "EditorMenuState.h"
 #include "GetProjectPath.h"
 #include "SaveMapState.h"
 #include "Vector.h"
-#include "ui/DefaultUIManager.h"
-#include "ui/UIConfig.h"
-#include "ui/UIManager.h"
 
 namespace game
 {
@@ -17,26 +15,30 @@ const auto buttonColor = graphics::Color{65, 105, 200};
 const auto buttonHoverColor = graphics::Color(4, 8, 97);
 const auto textColor = graphics::Color(200, 200, 200);
 const auto buttonSize = utils::Vector2f{25, 5};
-const auto fontPath = utils::getProjectPath("chimarrao-platformer") + "resources/fonts/VeraMono.ttf";
 }
 
 std::unique_ptr<components::ui::UIConfig>
 EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(EditorMenuState* editorMenuState)
 {
-    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
-    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
-    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
-    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> textFieldsConfig;
+    return std::make_unique<components::ui::UIConfig>(
+        createBackgroundConfig(editorMenuState), std::move(createButtonConfigs(editorMenuState)),
+        createCheckBoxConfigs(editorMenuState), createLabelConfigs(editorMenuState),
+        createTextFieldConfigs(editorMenuState));
+}
 
+std::unique_ptr<components::ui::BackgroundConfig>
+EditorMenuStateUIConfigBuilder::createBackgroundConfig(EditorMenuState*)
+{
     const auto backgroundColor = graphics::Color{172};
-    auto backgroundConfig = std::make_unique<components::ui::BackgroundConfig>(
+    return std::make_unique<components::ui::BackgroundConfig>(
         "editorMenuBackground", utils::Vector2f{25, 5}, utils::Vector2f{31, 50},
         graphics::VisibilityLayer::Second, backgroundColor);
+}
 
-    const auto editorMenuTitlePosition = utils::Vector2f{27.5, 7};
-    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
-        "editorMenuTitleLabel", editorMenuTitlePosition, graphics::Color::White, "Editor Menu", 40, fontPath);
-    labelsConfig.emplace_back(std::move(titleLabelConfig));
+std::vector<std::unique_ptr<components::ui::ButtonConfig>>
+EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuState)
+{
+    std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
 
     const auto backToEditorButtonPosition = utils::Vector2f{28, 15};
     const auto backToEditorButtonOnMouseOver = [=]
@@ -144,8 +146,31 @@ EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(EditorMenuState* editor
         backToMenuButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(backToMenuButtonConfig));
 
-    return std::make_unique<components::ui::UIConfig>(std::move(backgroundConfig), std::move(buttonsConfig),
-                                                      std::move(checkBoxesConfig), std::move(labelsConfig),
-                                                      std::move(textFieldsConfig));
+    return buttonsConfig;
+}
+
+std::vector<std::unique_ptr<components::ui::CheckBoxConfig>>
+EditorMenuStateUIConfigBuilder::createCheckBoxConfigs(EditorMenuState*)
+{
+    return {};
+}
+
+std::vector<std::unique_ptr<components::ui::LabelConfig>>
+EditorMenuStateUIConfigBuilder::createLabelConfigs(EditorMenuState*)
+{
+    std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
+
+    const auto editorMenuTitlePosition = utils::Vector2f{27.5, 7};
+    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "editorMenuTitleLabel", editorMenuTitlePosition, graphics::Color::White, "Editor Menu", 40, fontPath);
+    labelsConfig.emplace_back(std::move(titleLabelConfig));
+
+    return labelsConfig;
+}
+
+std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
+EditorMenuStateUIConfigBuilder::createTextFieldConfigs(EditorMenuState*)
+{
+    return {};
 }
 }
