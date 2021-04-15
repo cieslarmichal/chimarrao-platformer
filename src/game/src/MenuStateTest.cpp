@@ -1,5 +1,7 @@
 #include "MenuState.h"
 
+#include <FileAccessMock.h>
+
 #include "gtest/gtest.h"
 
 #include "InputManagerMock.h"
@@ -31,6 +33,8 @@ public:
         std::make_shared<StrictMock<window::WindowMock>>();
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
+        std::make_shared<StrictMock<utils::FileAccessMock>>();
     std::stack<std::unique_ptr<State>> states;
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
@@ -40,7 +44,7 @@ public:
 class MenuStateTest : public MenuStateTest_Base
 {
 public:
-    MenuState menuState{window, inputManager, rendererPool, states, std::move(uiManagerInit)};
+    MenuState menuState{window, inputManager, rendererPool, fileAccess, states, std::move(uiManagerInit)};
 };
 
 TEST_F(MenuStateTest, xxx) {}

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <FileAccess.h>
 #include <memory>
 #include <stack>
 #include <vector>
@@ -22,7 +23,7 @@ class State : public window::WindowObserver
 {
 public:
     explicit State(std::shared_ptr<window::Window>, std::shared_ptr<input::InputManager>,
-                   std::shared_ptr<graphics::RendererPool>, std::stack<std::unique_ptr<State>>&);
+                   std::shared_ptr<graphics::RendererPool>, std::shared_ptr<utils::FileAccess>, std::stack<std::unique_ptr<State>>&);
     virtual ~State();
 
     virtual NextState update(const utils::DeltaTime&) = 0;
@@ -37,6 +38,7 @@ protected:
     std::shared_ptr<window::Window> window;
     std::shared_ptr<input::InputManager> inputManager;
     std::shared_ptr<graphics::RendererPool> rendererPool;
+    std::shared_ptr<utils::FileAccess> fileAccess;
     std::stack<std::unique_ptr<State>>& states;
     bool active;
 };

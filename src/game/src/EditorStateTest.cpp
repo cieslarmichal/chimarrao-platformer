@@ -1,5 +1,7 @@
 #include "EditorState.h"
 
+#include <FileAccessMock.h>
+
 #include "gtest/gtest.h"
 
 #include "InputManagerMock.h"
@@ -31,6 +33,8 @@ public:
         std::make_shared<StrictMock<window::WindowMock>>();
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
+        std::make_shared<StrictMock<utils::FileAccessMock>>();
     std::stack<std::unique_ptr<State>> states;
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
@@ -40,7 +44,7 @@ public:
 class EditorStateTest : public EditorStateTest_Base
 {
 public:
-    EditorState editorState{window, inputManager, rendererPool, states, std::move(uiManagerInit)};
+    EditorState editorState{window, inputManager, rendererPool, fileAccess, states, std::move(uiManagerInit)};
 };
 
 TEST_F(EditorStateTest, xxx) {}
