@@ -7,55 +7,41 @@ namespace components::core
 {
 
 MouseOverComponent::MouseOverComponent(ComponentOwner* ownerInit,
-                                       std::shared_ptr<input::InputManager> inputManagerInit,
                                        std::function<void(void)> mouseOverActionInit,
                                        std::function<void(void)> mouseOutActionInit)
     : Component(ownerInit),
-      inputManager{std::move(inputManagerInit)},
-      inputStatus{nullptr},
       mouseOverAction{std::move(mouseOverActionInit)},
       mouseOutAction{std::move(mouseOutActionInit)},
       mouseOver{false}
 {
-    inputManager->registerObserver(this);
-}
-
-MouseOverComponent::~MouseOverComponent()
-{
-    inputManager->removeObserver(this);
 }
 
 void MouseOverComponent::loadDependentComponents()
 {
-    hitbox = owner->getComponent<HitBoxComponent>();
-    if (not hitbox)
+    hitBox = owner->getComponent<HitBoxComponent>();
+    if (not hitBox)
     {
         throw exceptions::DependentComponentNotFound{"MouseOverComponent: HitBox component not found"};
     }
 }
 
-void MouseOverComponent::update(utils::DeltaTime)
+void MouseOverComponent::update(utils::DeltaTime, const input::Input& input)
 {
     if (not enabled)
     {
         return;
     }
 
-    if (not mouseOver && hitbox->intersects(inputStatus->getMousePosition()))
+    if (not mouseOver && hitBox->intersects(input.getMousePosition()))
     {
         mouseOverAction();
         mouseOver = true;
     }
-    else if (mouseOver && not hitbox->intersects(inputStatus->getMousePosition()))
+    else if (mouseOver && not hitBox->intersects(input.getMousePosition()))
     {
         mouseOutAction();
         mouseOver = false;
     }
-}
-
-void MouseOverComponent::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
 }
 
 void MouseOverComponent::enable()

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
 #include "ui/UIConfig.h"
@@ -8,26 +7,23 @@
 
 namespace game
 {
-class PauseState : public State, public input::InputObserver
+class PauseState : public State
 {
     friend class PauseStateUIConfigBuilder;
 
 public:
-    explicit PauseState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
+    explicit PauseState(const std::shared_ptr<window::Window>&,
                         const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&,
                         std::unique_ptr<components::ui::UIManager>);
-    ~PauseState();
 
-    NextState update(const utils::DeltaTime&) override;
+    NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;
     void activate() override;
     void deactivate() override;
-    void handleInputStatus(const input::InputStatus&) override;
 
 private:
-    const input::InputStatus* inputStatus;
     utils::Timer timer;
     const float timeAfterLeaveStateIsPossible;
     bool shouldBackToGame;

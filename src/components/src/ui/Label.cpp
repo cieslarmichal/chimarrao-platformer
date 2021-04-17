@@ -22,7 +22,7 @@ Label::Label(const std::shared_ptr<graphics::RendererPool>& rendererPool,
     coreComponentsOwner->loadDependentComponents();
 }
 
-void Label::update(utils::DeltaTime) {}
+void Label::update(utils::DeltaTime, const input::Input&) {}
 
 std::string Label::getName() const
 {

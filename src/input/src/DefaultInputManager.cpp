@@ -8,21 +8,21 @@
 
 namespace input
 {
-DefaultInputManager::DefaultInputManager(std::unique_ptr<InputObservationHandler> handler,
+DefaultInputManager::DefaultInputManager(std::unique_ptr<Input> inputInit,
                                          std::shared_ptr<window::Window> windowInit)
-    : observationHandler{std::move(handler)}, window{std::move(windowInit)}
+    : input{std::move(inputInit)}, window{std::move(windowInit)}
 {
 }
 
-void DefaultInputManager::readInput()
+const Input& DefaultInputManager::readInput()
 {
-    inputStatus.clearPressedKeys();
+    input->clearPressedKeys();
 
     for (const auto& keyboardKey : keyboardButtons)
     {
         if (sf::Keyboard::isKeyPressed(InputKeySfmlMapper::getKeyboardSfmlKey(keyboardKey)))
         {
-            inputStatus.setKeyPressed(keyboardKey);
+            input->setKeyPressed(keyboardKey);
         }
     }
 
@@ -30,28 +30,13 @@ void DefaultInputManager::readInput()
     {
         if (sf::Mouse::isButtonPressed(InputKeySfmlMapper::getMouseSfmlKey(mouseKey)))
         {
-            inputStatus.setKeyPressed(mouseKey);
+            input->setKeyPressed(mouseKey);
         }
     }
 
-    inputStatus.setReleasedKeys();
-    inputStatus.setMousePosition(window->getMousePosition());
-    notifyObservers();
-}
+    input->setReleasedKeys();
+    input->setMousePosition(window->getMousePosition());
 
-void DefaultInputManager::registerObserver(InputObserver* observer)
-{
-    observationHandler->registerObserver(observer);
+    return *input;
 }
-
-void DefaultInputManager::removeObserver(InputObserver* observer)
-{
-    observationHandler->removeObserver(observer);
-}
-
-void DefaultInputManager::notifyObservers()
-{
-    observationHandler->notifyObservers(inputStatus);
-}
-
 }

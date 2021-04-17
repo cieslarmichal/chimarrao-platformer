@@ -45,8 +45,10 @@ set(UT_SOURCES
 add_library(game ${SOURCES})
 target_include_directories(game PUBLIC src ${JSON_INCLUDE_DIR})
 target_link_libraries(game PUBLIC utils graphics input components)
+target_compile_options(game PUBLIC ${FLAGS})
 
 add_executable(gameUT ${UT_SOURCES})
 target_link_libraries(gameUT PUBLIC gtest_main gmock game)
+target_compile_options(gameUT PUBLIC ${FLAGS})
 add_test(NAME gameUT COMMAND gameUT WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 

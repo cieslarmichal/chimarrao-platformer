@@ -30,7 +30,7 @@ GraphicsComponent::~GraphicsComponent()
     rendererPool->release(id);
 }
 
-void GraphicsComponent::lateUpdate(utils::DeltaTime deltaTime)
+void GraphicsComponent::lateUpdate(utils::DeltaTime)
 {
     if (enabled)
     {

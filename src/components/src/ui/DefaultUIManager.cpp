@@ -24,11 +24,11 @@ static auto& tryToGetComponentByName(std::vector<T>& uiComponents, const std::st
 }
 
 template <typename T>
-void updateComponents(std::vector<T>& uiComponents, utils::DeltaTime deltaTime)
+void updateComponents(std::vector<T>& uiComponents, utils::DeltaTime deltaTime, const input::Input& input)
 {
     for (auto& uiComponent : uiComponents)
     {
-        uiComponent->update(deltaTime);
+        uiComponent->update(deltaTime, input);
     }
 }
 
@@ -51,9 +51,8 @@ void deactivateComponents(std::vector<T>& uiComponents)
 }
 }
 
-DefaultUIManager::DefaultUIManager(const std::shared_ptr<input::InputManager>& inputManager,
-                                   const std::shared_ptr<graphics::RendererPool>& rendererPool)
-    : uiComponentFactory{std::make_unique<UIComponentFactory>(inputManager, rendererPool)}
+DefaultUIManager::DefaultUIManager(const std::shared_ptr<graphics::RendererPool>& rendererPool)
+    : uiComponentFactory{std::make_unique<UIComponentFactory>(rendererPool)}
 {
 }
 
@@ -72,13 +71,13 @@ void DefaultUIManager::createUI(std::unique_ptr<UIConfig> uiConfig)
     createUIComponents(std::move(uiConfig));
 }
 
-void DefaultUIManager::update(utils::DeltaTime deltaTime)
+void DefaultUIManager::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
-    background->update(deltaTime);
-    updateComponents(buttons, deltaTime);
-    updateComponents(checkBoxes, deltaTime);
-    updateComponents(labels, deltaTime);
-    updateComponents(textFields, deltaTime);
+    background->update(deltaTime, input);
+    updateComponents(buttons, deltaTime, input);
+    updateComponents(checkBoxes, deltaTime, input);
+    updateComponents(labels, deltaTime, input);
+    updateComponents(textFields, deltaTime, input);
 }
 
 void DefaultUIManager::activate()

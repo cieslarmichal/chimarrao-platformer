@@ -8,31 +8,23 @@ namespace game
 {
 
 PauseState::PauseState(const std::shared_ptr<window::Window>& windowInit,
-                       const std::shared_ptr<input::InputManager>& inputManagerInit,
                        const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                        std::stack<std::unique_ptr<State>>& statesInit,
                        std::unique_ptr<components::ui::UIManager> uiManagerInit)
-    : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
-      inputStatus{nullptr},
+    : State{windowInit, rendererPoolInit, statesInit},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToGame{false},
       shouldBackToMenu{false},
       uiManager{std::move(uiManagerInit)}
 {
-    inputManager->registerObserver(this);
     uiManager->createUI(PauseStateUIConfigBuilder::createPauseUIConfig(this));
     timer.start();
 }
 
-PauseState::~PauseState()
-{
-    inputManager->removeObserver(this);
-}
-
-NextState PauseState::update(const utils::DeltaTime& deltaTime)
+NextState PauseState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
     if (timer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
-        inputStatus->isKeyPressed(input::InputKey::Escape))
+        input.isKeyPressed(input::InputKey::Escape))
     {
         shouldBackToGame = true;
     }
@@ -47,11 +39,11 @@ NextState PauseState::update(const utils::DeltaTime& deltaTime)
         return NextState::Menu;
     }
 
-    uiManager->update(deltaTime);
+    uiManager->update(deltaTime, input);
     return NextState::Same;
 }
 
-void PauseState::lateUpdate(const utils::DeltaTime& deltaTime) {}
+void PauseState::lateUpdate(const utils::DeltaTime&) {}
 
 void PauseState::render()
 {
@@ -73,11 +65,6 @@ void PauseState::deactivate()
 {
     active = false;
     uiManager->deactivate();
-}
-
-void PauseState::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
 }
 
 }

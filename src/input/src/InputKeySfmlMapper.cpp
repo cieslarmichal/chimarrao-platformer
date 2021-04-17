@@ -61,7 +61,7 @@ sf::Keyboard::Key InputKeySfmlMapper::getKeyboardSfmlKey(InputKey inputKey)
     {
         return keyboardKeys.at(inputKey);
     }
-    catch (const std::out_of_range& e)
+    catch (const std::out_of_range&)
     {
         throw exceptions::InputKeyNotFound{toString(inputKey) + " is not a keyboard key"};
     }
@@ -73,7 +73,7 @@ sf::Mouse::Button InputKeySfmlMapper::getMouseSfmlKey(InputKey inputKey)
     {
         return mouseKeys.at(inputKey);
     }
-    catch (const std::out_of_range& e)
+    catch (const std::out_of_range&)
     {
         throw exceptions::InputKeyNotFound{toString(inputKey) + " is not a mouse key"};
     }

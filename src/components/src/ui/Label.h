@@ -15,7 +15,7 @@ class Label : public UIComponent
 public:
     Label(const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<LabelConfig>);
 
-    void update(utils::DeltaTime) override;
+    void update(utils::DeltaTime, const input::Input&) override;
     std::string getName() const override;
     void activate() override;
     void deactivate() override;

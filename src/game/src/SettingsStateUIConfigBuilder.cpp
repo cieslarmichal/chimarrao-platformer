@@ -10,37 +10,37 @@ namespace
 {
 const auto buttonColor = graphics::Color(251, 190, 102);
 const auto buttonHoverColor = graphics::Color(205, 128, 66);
-const auto buttonSize = utils::Vector2f{25, 5};
+const auto buttonSize = utils::Vector2f{25.f, 5.f};
 const auto sectionTextFontSize{37};
 const auto displayModeFontSize{12};
-const auto displayModeButtonSize = utils::Vector2f{8, 3};
-const auto settingsTitlePosition = utils::Vector2f{32, 6};
-const auto displayModeSectionPosition = utils::Vector2f{38, 18};
+const auto displayModeButtonSize = utils::Vector2f{8.f, 3.f};
+const auto settingsTitlePosition = utils::Vector2f{32.f, 6.f};
+const auto displayModeSectionPosition = utils::Vector2f{38.f, 18.f};
 const auto windowModeButtonPosition = utils::Vector2f{
     displayModeSectionPosition.x + 15.8f + displayModeButtonSize.x, displayModeSectionPosition.y + 0.5f};
 const auto fullscreenModeButtonPosition =
     utils::Vector2f{windowModeButtonPosition.x + displayModeButtonSize.x + 0.5f, windowModeButtonPosition.y};
-const auto resolutionSectionPosition = utils::Vector2f{38, 24};
+const auto resolutionSectionPosition = utils::Vector2f{38.f, 24.f};
 const auto resolutionTextFieldPosition = utils::Vector2f{
-    resolutionSectionPosition.x + 18.50f + displayModeButtonSize.x, resolutionSectionPosition.y + 0.8f};
-const auto changeResolutionButtonSize = utils::Vector2f{2.5, 2};
+    resolutionSectionPosition.x + 18.5f + displayModeButtonSize.x, resolutionSectionPosition.y + 0.8f};
+const auto changeResolutionButtonSize = utils::Vector2f{2.5f, 2.f};
 const auto resolutionDecreaseButtonPosition =
     utils::Vector2f{resolutionTextFieldPosition.x - 2.8f, resolutionSectionPosition.y + 1.15f};
 const auto resolutionIncreaseButtonPosition =
     utils::Vector2f{resolutionTextFieldPosition.x + 11.2f, resolutionSectionPosition.y + 1.15f};
-const auto vsyncSectionPosition = utils::Vector2f{38, 30};
+const auto vsyncSectionPosition = utils::Vector2f{38.f, 30.f};
 const auto vsyncButtonPosition =
     utils::Vector2f{vsyncSectionPosition.x + 31.0f, vsyncSectionPosition.y + 0.5f};
-const auto vsyncButtonSize = utils::Vector2f{3, 3};
-const auto frameLimitSectionPosition = utils::Vector2f{38, 36};
+const auto vsyncButtonSize = utils::Vector2f{3.f, 3.f};
+const auto frameLimitSectionPosition = utils::Vector2f{38.f, 36.f};
 const auto frameLimitTextFieldPosition = utils::Vector2f{
     frameLimitSectionPosition.x + 22.5f + displayModeButtonSize.x, frameLimitSectionPosition.y + 0.8f};
 const auto frameLimitDecreaseButtonPosition =
     utils::Vector2f{frameLimitTextFieldPosition.x - 4.0f, frameLimitSectionPosition.y + 1.15f};
 const auto frameLimitIncreaseButtonPosition =
     utils::Vector2f{frameLimitTextFieldPosition.x + 4.5f, frameLimitSectionPosition.y + 1.15f};
-const auto backToMenuButtonPosition = utils::Vector2f{34.5, 48};
-const auto applyChangesButtonPosition = utils::Vector2f{55, 48};
+const auto backToMenuButtonPosition = utils::Vector2f{34.5f, 48.f};
+const auto applyChangesButtonPosition = utils::Vector2f{55.f, 48.f};
 }
 
 std::unique_ptr<components::ui::UIConfig>
@@ -56,7 +56,7 @@ std::unique_ptr<components::ui::BackgroundConfig>
 SettingsStateUIConfigBuilder::createBackgroundConfig(SettingsState*)
 {
     return std::make_unique<components::ui::BackgroundConfig>(
-        "settingsBackground", utils::Vector2f{0, 0}, utils::Vector2f{80, 60},
+        "settingsBackground", utils::Vector2f{0.f, 0.f}, utils::Vector2f{80.f, 60.f},
         graphics::VisibilityLayer::Background, menuBackgroundPath);
 }
 
@@ -65,7 +65,7 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
 {
     std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
 
-    const auto backToMenuButtonSize = utils::Vector2f{13, 5};
+    const auto backToMenuButtonSize = utils::Vector2f{13.f, 5.f};
     const auto backToMenuButtonOnMouseOver = [=]
     {
         settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
@@ -81,11 +81,11 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
     auto backToMenuClickAction = [=] { settingsState->shouldBackToMenu = true; };
     auto backToMenuButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsBackToMenuButton", backToMenuButtonPosition, backToMenuButtonSize, buttonColor, "Back",
-        graphics::Color::Black, sectionTextFontSize, fontPath, utils::Vector2f{2, 0}, backToMenuClickAction,
-        backToMenuButtonMouseOverActions);
+        graphics::Color::Black, sectionTextFontSize, fontPath, utils::Vector2f{2.f, 0.f},
+        backToMenuClickAction, backToMenuButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(backToMenuButtonConfig));
 
-    const auto applyChangesButtonSize = utils::Vector2f{13, 5};
+    const auto applyChangesButtonSize = utils::Vector2f{1.3f, 5.f};
     const auto applyChangesButtonOnMouseOver = [=]
     {
         settingsState->uiManager->setColor(components::ui::UIComponentType::Button,
@@ -101,21 +101,21 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
     auto applyChangesClickAction = [=] { settingsState->applyWindowSettingsChanges(); };
     auto applyChangesButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsApplyChangesButton", applyChangesButtonPosition, applyChangesButtonSize, buttonColor,
-        "Apply", graphics::Color::Black, sectionTextFontSize, fontPath, utils::Vector2f{1, 0},
+        "Apply", graphics::Color::Black, sectionTextFontSize, fontPath, utils::Vector2f{1.f, 0.f},
         applyChangesClickAction, applyChangesButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(applyChangesButtonConfig));
 
     auto windowModeClickAction = [=] { settingsState->setWindowMode(); };
     auto windowModeButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsWindowModeButton", windowModeButtonPosition, displayModeButtonSize, buttonColor, "Window",
-        graphics::Color::Black, displayModeFontSize, fontPath, utils::Vector2f{2, 0.9},
+        graphics::Color::Black, displayModeFontSize, fontPath, utils::Vector2f{2.f, 0.9f},
         windowModeClickAction);
     buttonsConfig.emplace_back(std::move(windowModeButtonConfig));
 
     auto fullscreenModeClickAction = [=] { settingsState->setFullscreenMode(); };
     auto fullscreenModeButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsFullscreenModeButton", fullscreenModeButtonPosition, displayModeButtonSize, buttonColor,
-        "Fullscreen", graphics::Color::Black, displayModeFontSize, fontPath, utils::Vector2f{0.5, 0.9},
+        "Fullscreen", graphics::Color::Black, displayModeFontSize, fontPath, utils::Vector2f{0.5f, 0.9f},
         fullscreenModeClickAction);
     buttonsConfig.emplace_back(std::move(fullscreenModeButtonConfig));
 
@@ -134,7 +134,7 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
     auto resolutionDecreaseButtonClickAction = [=] { settingsState->decreaseResolution(); };
     auto resolutionDecreaseButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsResolutionDecreaseButton", resolutionDecreaseButtonPosition, changeResolutionButtonSize,
-        buttonColor, "<", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6, -0.3},
+        buttonColor, "<", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6f, -0.3f},
         resolutionDecreaseButtonClickAction, resolutionDecreaseButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(resolutionDecreaseButtonConfig));
 
@@ -153,7 +153,7 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
     auto resolutionIncreaseButtonClickAction = [=] { settingsState->increaseResolution(); };
     auto resolutionIncreaseButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsResolutionIncreaseButton", resolutionIncreaseButtonPosition, changeResolutionButtonSize,
-        buttonColor, ">", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6, -0.3},
+        buttonColor, ">", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6f, -0.3f},
         resolutionIncreaseButtonClickAction, resolutionIncreaseButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(resolutionIncreaseButtonConfig));
 
@@ -172,7 +172,7 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
     auto frameLimitDecreaseButtonClickAction = [=] { settingsState->decreaseFrameLimit(); };
     auto frameLimitDecreaseButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsFrameLimitDecreaseButton", frameLimitDecreaseButtonPosition, changeResolutionButtonSize,
-        buttonColor, "<", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6, -0.3},
+        buttonColor, "<", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6f, -0.3f},
         frameLimitDecreaseButtonClickAction, frameLimitDecreaseButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(frameLimitDecreaseButtonConfig));
 
@@ -191,7 +191,7 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
     auto frameLimitIncreaseButtonClickAction = [=] { settingsState->increaseFrameLimit(); };
     auto frameLimitIncreaseButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsFrameLimitIncreaseButton", frameLimitIncreaseButtonPosition, changeResolutionButtonSize,
-        buttonColor, ">", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6, -0.3},
+        buttonColor, ">", graphics::Color::Black, 20, fontPath, utils::Vector2f{0.6f, -0.3f},
         frameLimitIncreaseButtonClickAction, frameLimitIncreaseButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(frameLimitIncreaseButtonConfig));
 
@@ -218,7 +218,7 @@ SettingsStateUIConfigBuilder::createCheckBoxConfigs(SettingsState* settingsState
     auto vsyncCheckBoxClickAction = [=] { settingsState->switchVsync(); };
     auto vsyncCheckBoxConfig = std::make_unique<components::ui::CheckBoxConfig>(
         "settingsVsyncCheckBox", vsyncButtonPosition, vsyncButtonSize, buttonColor, false, 25, fontPath,
-        utils::Vector2f{0.8, 0.0}, vsyncCheckBoxClickAction, vsyncCheckBoxMouseOverActions);
+        utils::Vector2f{0.8f, 0.0f}, vsyncCheckBoxClickAction, vsyncCheckBoxMouseOverActions);
     checkBoxesConfig.emplace_back(std::move(vsyncCheckBoxConfig));
 
     return checkBoxesConfig;

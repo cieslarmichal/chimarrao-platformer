@@ -7,16 +7,16 @@
 
 namespace utils
 {
-class UTILS_API UniqueName
+class UniqueName
 {
 public:
-    UniqueName(std::string);
-    ~UniqueName();
+    UTILS_API UniqueName(std::string);
+    UTILS_API ~UniqueName();
 
     UniqueName(const UniqueName&) = delete;
     UniqueName& operator=(const UniqueName&) = delete;
 
-    std::string getName() const;
+    UTILS_API std::string getName() const;
 
 private:
     std::string name;

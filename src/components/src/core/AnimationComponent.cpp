@@ -8,7 +8,7 @@ AnimationComponent::AnimationComponent(ComponentOwner* ownerInit,
 {
 }
 
-void AnimationComponent::update(utils::DeltaTime deltaTime)
+void AnimationComponent::update(utils::DeltaTime deltaTime, const input::Input&)
 {
     animator->update(deltaTime);
 }

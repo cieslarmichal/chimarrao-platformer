@@ -2,7 +2,6 @@
 
 #include "gtest/gtest.h"
 
-#include "InputManagerMock.h"
 #include "RendererPoolMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
@@ -17,7 +16,6 @@ using namespace ::testing;
 namespace
 {
 const std::vector<std::string> expectedLabelNames{"saveMapTitleLabel", "saveMapMapNameLabel"};
-
 const std::vector<std::string> expectedButtonNames{"saveMapCancelButton", "saveMapSaveButton"};
 const std::vector<std::string> expectedTextFieldsNames{"saveMapNameTextField"};
 }
@@ -25,8 +23,6 @@ class SaveMapStateUIConfigBuilderTest : public Test
 {
 public:
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
-    std::shared_ptr<NiceMock<input::InputManagerMock>> inputManager =
-        std::make_shared<NiceMock<input::InputManagerMock>>();
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
     std::stack<std::unique_ptr<State>> states;
@@ -34,7 +30,7 @@ public:
         std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
     components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
     TileMap tileMap{"", {0, 0}};
-    SaveMapState saveMapState{window, inputManager, rendererPool, states, std::move(uiManagerInit), tileMap};
+    SaveMapState saveMapState{window, rendererPool, states, std::move(uiManagerInit), tileMap};
 };
 
 TEST_F(SaveMapStateUIConfigBuilderTest, createSaveMapUI)

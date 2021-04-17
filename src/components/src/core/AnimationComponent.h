@@ -10,7 +10,7 @@ class AnimationComponent : public Component
 public:
     AnimationComponent(ComponentOwner*, std::shared_ptr<animations::Animator>);
 
-    void update(utils::DeltaTime) override;
+    void update(utils::DeltaTime, const input::Input&) override;
     void setAnimation(animations::AnimationType);
     void setAnimation(animations::AnimationType, animations::AnimationDirection);
     void setAnimationDirection(animations::AnimationDirection);

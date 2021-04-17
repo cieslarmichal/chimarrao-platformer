@@ -15,21 +15,7 @@ static auto& getLayeredShapeByPosition(std::vector<LayeredShape>& shapes,
     return shapes.at(distance);
 }
 
-static auto& getLayeredShapeByPosition(const std::vector<LayeredShape>& shapes,
-                                       std::vector<LayeredShape>::const_iterator position)
-{
-    const auto distance = std::vector<LayeredShape>::size_type(std::distance(shapes.cbegin(), position));
-    return shapes.at(distance);
-}
-
 static auto& getLayeredTextByPosition(std::vector<LayeredText>& layeredTexts,
-                                      std::vector<LayeredText>::const_iterator position)
-{
-    const auto distance = std::vector<LayeredText>::size_type(std::distance(layeredTexts.cbegin(), position));
-    return layeredTexts.at(distance);
-}
-
-static auto& getLayeredTextByPosition(const std::vector<LayeredText>& layeredTexts,
                                       std::vector<LayeredText>::const_iterator position)
 {
     const auto distance = std::vector<LayeredText>::size_type(std::distance(layeredTexts.cbegin(), position));

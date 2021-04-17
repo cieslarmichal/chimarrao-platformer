@@ -20,7 +20,6 @@ public:
     void run();
 
 private:
-    void processInput();
     void update();
     void lateUpdate();
     void render();

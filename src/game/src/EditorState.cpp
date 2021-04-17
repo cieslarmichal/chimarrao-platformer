@@ -3,36 +3,26 @@
 #include "EditorMenuState.h"
 #include "EditorStateUIConfigBuilder.h"
 #include "GetProjectPath.h"
-#include "core/ComponentOwner.h"
-#include "core/GraphicsComponent.h"
-#include "core/MouseOverComponent.h"
-#include "editor/TileMap.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
 {
 namespace
 {
-const float rendererPoolSizeX = 80;
-const float rendererPoolSizeY = 60;
-const float tileSizeX = 4;
-const float tileSizeY = 4;
-const auto pathToBackground =
-    utils::getProjectPath("chimarrao-platformer") + "resources/BG/background_glacial_mountains.png";
-const auto pathToBrickTileTexture =
-    utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png";
+const int rendererPoolSizeX = 80;
+const int rendererPoolSizeY = 60;
+const int tileSizeX = 4;
+const int tileSizeY = 4;
 const auto tilesTextureVector =
     std::vector<std::string>{utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png",
                              utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/2.png"};
 
 }
 EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
-                         const std::shared_ptr<input::InputManager>& inputManagerInit,
                          const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                          std::stack<std::unique_ptr<State>>& states,
                          std::unique_ptr<components::ui::UIManager> uiManagerInit)
-    : State{windowInit, inputManagerInit, rendererPoolInit, states},
-      inputStatus{nullptr},
+    : State{windowInit, rendererPoolInit, states},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
       timeAfterButtonsCanBeClicked{0.3f},
@@ -40,7 +30,6 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
       timeBetweenTileMoves{0.005f},
       currentTileType{std::make_shared<TileType>(defaultTileType)}
 {
-    inputManager->registerObserver(this);
     uiManager->createUI(EditorStateUIConfigBuilder::createEditorUIConfig(this));
 
     currentTileId = 0;
@@ -51,7 +40,7 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
     {
         for (int x = 0; x < rendererPoolSizeX / tileSizeX * 2; ++x)
         {
-            layoutTileMap.emplace_back(LayoutTile{inputManager, rendererPool, utils::Vector2i{x, y},
+            layoutTileMap.emplace_back(LayoutTile{rendererPool, utils::Vector2i{x, y},
                                                   utils::Vector2f{tileSizeX, tileSizeY}, currentTileType,
                                                   *tileMap});
         }
@@ -60,36 +49,31 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
     moveTimer.start();
 }
 
-EditorState::~EditorState()
-{
-    inputManager->removeObserver(this);
-}
-
-NextState EditorState::update(const utils::DeltaTime& deltaTime)
+NextState EditorState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
     if (pauseTimer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
-        inputStatus->isKeyPressed(input::InputKey::Escape))
+        input.isKeyPressed(input::InputKey::Escape))
     {
         pause();
     }
 
-    if (moveTimer.getElapsedSeconds() > timeBetweenTileMoves &&
-        inputStatus->isKeyPressed(input::InputKey::Left) && layoutTileMap.front().getPosition().x < 0)
+    if (moveTimer.getElapsedSeconds() > timeBetweenTileMoves && input.isKeyPressed(input::InputKey::Left) &&
+        layoutTileMap.front().getPosition().x < 0)
     {
         moveTimer.restart();
         for (auto& layoutTile : layoutTileMap)
         {
-            layoutTile.moveTile({.3, 0});
+            layoutTile.moveTile({.3f, 0.f});
         }
     }
     else if (moveTimer.getElapsedSeconds() > timeBetweenTileMoves &&
-             inputStatus->isKeyPressed(input::InputKey::Right) &&
+             input.isKeyPressed(input::InputKey::Right) &&
              layoutTileMap.back().getPosition().x + tileSizeX > rendererPoolSizeX)
     {
         moveTimer.restart();
         for (auto& layoutTile : layoutTileMap)
         {
-            layoutTile.moveTile({-.3, 0});
+            layoutTile.moveTile({-0.3f, 0.f});
         }
     }
 
@@ -97,9 +81,9 @@ NextState EditorState::update(const utils::DeltaTime& deltaTime)
     {
         for (auto& layoutTile : layoutTileMap)
         {
-            layoutTile.update(deltaTime);
+            layoutTile.update(deltaTime, input);
         }
-        uiManager->update(deltaTime);
+        uiManager->update(deltaTime, input);
     }
 
     return NextState::Same;
@@ -151,11 +135,6 @@ void EditorState::deactivate()
     uiManager->deactivate();
 }
 
-void EditorState::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
-}
-
 void EditorState::pause()
 {
     paused = true;
@@ -167,8 +146,8 @@ void EditorState::pause()
     }
 
     states.push(std::make_unique<EditorMenuState>(
-        window, inputManager, rendererPool, states,
-        std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool), *tileMap));
+        window, rendererPool, states, std::make_unique<components::ui::DefaultUIManager>(rendererPool),
+        *tileMap));
 }
 
 }

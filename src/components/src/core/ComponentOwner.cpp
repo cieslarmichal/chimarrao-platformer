@@ -10,23 +10,23 @@ ComponentOwner::ComponentOwner(const utils::Vector2f& position, const std::strin
 
 void ComponentOwner::loadDependentComponents()
 {
-    for (int i = components.size() - 1; i >= 0; i--)
+    for (int i = static_cast<int>(components.size() - 1); i >= 0; i--)
     {
         components[i]->loadDependentComponents();
     }
 }
 
-void ComponentOwner::update(utils::DeltaTime deltaTime)
+void ComponentOwner::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
-    for (int i = components.size() - 1; i >= 0; i--)
+    for (int i = static_cast<int>(components.size() - 1); i >= 0; i--)
     {
-        components[i]->update(deltaTime);
+        components[i]->update(deltaTime, input);
     }
 }
 
 void ComponentOwner::lateUpdate(utils::DeltaTime deltaTime)
 {
-    for (int i = components.size() - 1; i >= 0; i--)
+    for (int i = static_cast<int>(components.size() - 1); i >= 0; i--)
     {
         components[i]->lateUpdate(deltaTime);
     }
@@ -34,7 +34,7 @@ void ComponentOwner::lateUpdate(utils::DeltaTime deltaTime)
 
 void ComponentOwner::enable()
 {
-    for (int i = components.size() - 1; i >= 0; i--)
+    for (int i = static_cast<int>(components.size() - 1); i >= 0; i--)
     {
         components[i]->enable();
     }
@@ -42,7 +42,7 @@ void ComponentOwner::enable()
 
 void ComponentOwner::disable()
 {
-    for (int i = components.size() - 1; i >= 0; i--)
+    for (int i = static_cast<int>(components.size() - 1); i >= 0; i--)
     {
         components[i]->disable();
     }

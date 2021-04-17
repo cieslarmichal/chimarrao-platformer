@@ -10,7 +10,7 @@ class UIManagerMock : public UIManager
 {
 public:
     MOCK_METHOD(void, createUI, (std::unique_ptr<UIConfig>), (override));
-    MOCK_METHOD(void, update, (utils::DeltaTime), (override));
+    MOCK_METHOD(void, update, (utils::DeltaTime, const input::Input&), (override));
     MOCK_METHOD(void, activate, (), (override));
     MOCK_METHOD(void, deactivate, (), (override));
     MOCK_METHOD(void, setColor, (UIComponentType, const std::string& componentName, graphics::Color),

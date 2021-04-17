@@ -29,7 +29,7 @@ const TextureRect validTextureRect2{validTexturePath2, std::nullopt};
 const TextureRect invalidTextureRect{invalidTexturePath, std::nullopt};
 const FontPath validFontPath{"validFontPath"};
 const FontPath invalidFontPath{"invalidFontPath"};
-const std::string text{"text"};
+const std::string exampleText{"text"};
 const unsigned characterSize = 15;
 const auto invalidId = GraphicsIdGenerator::generateId();
 }
@@ -93,7 +93,7 @@ TEST_F(RendererPoolSfmlTest, acquireText_fontNotAvailable_shouldThrowFontNotAvai
 {
     EXPECT_CALL(*fontStorage, getFont(invalidFontPath)).WillOnce(Throw(exceptions::FontNotAvailable{""}));
 
-    ASSERT_THROW(rendererPool.acquireText(position, text, invalidFontPath, characterSize),
+    ASSERT_THROW(rendererPool.acquireText(position, exampleText, invalidFontPath, characterSize),
                  exceptions::FontNotAvailable);
 }
 
@@ -101,7 +101,7 @@ TEST_F(RendererPoolSfmlTest, acquireText_fontAvailable_positionShouldMatch)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
 
-    const auto textId = rendererPool.acquireText(position, text, validFontPath, characterSize);
+    const auto textId = rendererPool.acquireText(position, exampleText, validFontPath, characterSize);
 
     const auto actualTextPosition = rendererPool.getPosition(textId);
     ASSERT_EQ(actualTextPosition, position);
@@ -131,7 +131,7 @@ TEST_F(RendererPoolSfmlTest, setPositionWithShape)
 TEST_F(RendererPoolSfmlTest, setPositionWithText)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
-    const auto textId = rendererPool.acquireText(position, text, validFontPath, characterSize);
+    const auto textId = rendererPool.acquireText(position, exampleText, validFontPath, characterSize);
 
     rendererPool.setPosition(textId, newPosition);
 
@@ -151,7 +151,7 @@ TEST_F(RendererPoolSfmlTest, renderShape)
 TEST_F(RendererPoolSfmlTest, renderText)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
-    rendererPool.acquireText(position, text, validFontPath, characterSize);
+    rendererPool.acquireText(position, exampleText, validFontPath, characterSize);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
     EXPECT_CALL(*contextRenderer, draw(_));
@@ -162,7 +162,7 @@ TEST_F(RendererPoolSfmlTest, renderText)
 TEST_F(RendererPoolSfmlTest, renderShapesAndTexts)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
-    rendererPool.acquireText(position, text, validFontPath, characterSize);
+    rendererPool.acquireText(position, exampleText, validFontPath, characterSize);
     rendererPool.acquire(size1, position, color);
     rendererPool.acquire(size1, position, color);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
@@ -252,13 +252,13 @@ TEST_F(RendererPoolSfmlTest, renderTextsInLayers)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillRepeatedly(ReturnRef(font));
     const auto firstLayerGraphicsId =
-        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::First);
+        rendererPool.acquireText(position, exampleText, validFontPath, characterSize, VisibilityLayer::First);
     const auto thirdLayerGraphicsId =
-        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Third);
-    const auto backgroundGraphicsId =
-        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Background);
-    const auto secondLayerGraphicsId =
-        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Second);
+        rendererPool.acquireText(position, exampleText, validFontPath, characterSize, VisibilityLayer::Third);
+    const auto backgroundGraphicsId = rendererPool.acquireText(position, exampleText, validFontPath,
+                                                               characterSize, VisibilityLayer::Background);
+    const auto secondLayerGraphicsId = rendererPool.acquireText(position, exampleText, validFontPath,
+                                                                characterSize, VisibilityLayer::Second);
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
@@ -276,11 +276,11 @@ TEST_F(RendererPoolSfmlTest, setTextVisibility_shouldChangeOrderOfTexts)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillRepeatedly(ReturnRef(font));
     const auto firstLayerGraphicsId =
-        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::First);
-    const auto secondLayerGraphicsId =
-        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Second);
-    const auto backgroundGraphicsId =
-        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Background);
+        rendererPool.acquireText(position, exampleText, validFontPath, characterSize, VisibilityLayer::First);
+    const auto secondLayerGraphicsId = rendererPool.acquireText(position, exampleText, validFontPath,
+                                                                characterSize, VisibilityLayer::Second);
+    const auto backgroundGraphicsId = rendererPool.acquireText(position, exampleText, validFontPath,
+                                                               characterSize, VisibilityLayer::Background);
 
     rendererPool.setVisibility(firstLayerGraphicsId, VisibilityLayer::Third);
 
@@ -298,9 +298,9 @@ TEST_F(RendererPoolSfmlTest, setVisibilityLayerToInvisibility_shuldNotRenderThis
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillRepeatedly(ReturnRef(font));
     const auto firstLayerGraphicsId =
-        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::First);
-    const auto backgroundGraphicsId =
-        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Background);
+        rendererPool.acquireText(position, exampleText, validFontPath, characterSize, VisibilityLayer::First);
+    const auto backgroundGraphicsId = rendererPool.acquireText(position, exampleText, validFontPath,
+                                                               characterSize, VisibilityLayer::Background);
 
     rendererPool.setVisibility(firstLayerGraphicsId, VisibilityLayer::Invisible);
 
@@ -316,9 +316,9 @@ TEST_F(RendererPoolSfmlTest, shapesShouldBeRenderedBeforeTexts)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillRepeatedly(ReturnRef(font));
     const auto firstLayerTextGraphicsId =
-        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::First);
-    const auto backgroundTextGraphicsId =
-        rendererPool.acquireText(position, text, validFontPath, characterSize, VisibilityLayer::Background);
+        rendererPool.acquireText(position, exampleText, validFontPath, characterSize, VisibilityLayer::First);
+    const auto backgroundTextGraphicsId = rendererPool.acquireText(
+        position, exampleText, validFontPath, characterSize, VisibilityLayer::Background);
     const auto secondLayerShapeGraphicsId =
         rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::Second);
     const auto backgroundShapeGraphicsId =
@@ -354,7 +354,7 @@ TEST_F(RendererPoolSfmlTest, releasedShape_shouldNotBeRendered)
 TEST_F(RendererPoolSfmlTest, releasedText_shouldNotBeRendered)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
-    const auto id = rendererPool.acquireText(position, text, validFontPath, characterSize);
+    const auto id = rendererPool.acquireText(position, exampleText, validFontPath, characterSize);
     rendererPool.release(id);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
@@ -386,15 +386,15 @@ TEST_F(RendererPoolSfmlTest, setTextureWithInvalidGraphicsId_shouldNotThrow)
 
 TEST_F(RendererPoolSfmlTest, setTextWithInvalidGraphicsId_shouldNotThrow)
 {
-    ASSERT_NO_THROW(rendererPool.setText(invalidId, text));
+    ASSERT_NO_THROW(rendererPool.setText(invalidId, exampleText));
 }
 
 TEST_F(RendererPoolSfmlTest, setTextWithValidGraphicsId_shouldNotThrow)
 {
     EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
-    const auto textId = rendererPool.acquireText(position, text, validFontPath, characterSize);
+    const auto textId = rendererPool.acquireText(position, exampleText, validFontPath, characterSize);
 
-    ASSERT_NO_THROW(rendererPool.setText(textId, text));
+    ASSERT_NO_THROW(rendererPool.setText(textId, exampleText));
 }
 
 // TODO: test setColor with validId

@@ -4,14 +4,13 @@
 
 namespace game
 {
-LayoutTile::LayoutTile(const std::shared_ptr<input::InputManager>& inputManager,
-                       const std::shared_ptr<graphics::RendererPool>& rendererPool,
-                       const utils::Vector2i& position, const utils::Vector2f& size,
-                       const std::shared_ptr<TileType>& currentTileType, TileMap& tileMap)
-    : size(size),
-      position(position),
-      currentTileType(currentTileType),
-      tileMap(tileMap),
+LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPool,
+                       const utils::Vector2i& positionInit, const utils::Vector2f& sizeInit,
+                       const std::shared_ptr<TileType>& currentTileTypeInit, TileMap& tileMapInit)
+    : size(sizeInit),
+      position(positionInit),
+      currentTileType(currentTileTypeInit),
+      tileMap(tileMapInit),
       timeAfterTileCanBeClicked{0.25f}
 {
     componentOwner = std::make_shared<components::core::ComponentOwner>(
@@ -21,7 +20,7 @@ LayoutTile::LayoutTile(const std::shared_ptr<input::InputManager>& inputManager,
         rendererPool, size, utils::Vector2f{position.x * size.x, position.y * size.y},
         tileTypeToPathTexture(*currentTileType), graphics::VisibilityLayer::Invisible);
     componentOwner->addComponent<components::core::HitBoxComponent>(size);
-    const auto onRightMouseButtonClickActionLambda = [=, &tileMap]
+    const auto onRightMouseButtonClickActionLambda = [=, &tileMapInit]
     {
         *currentTileType = getNextTileType(*currentTileType);
         if (!tileMap.getTile(position)->type)
@@ -29,7 +28,7 @@ LayoutTile::LayoutTile(const std::shared_ptr<input::InputManager>& inputManager,
             graphicsComponent->setTexture(tileTypeToPathTexture(*currentTileType));
         }
     };
-    const auto onLeftMouseButtonClickActionLambda = [=, &tileMap]
+    const auto onLeftMouseButtonClickActionLambda = [=, &tileMapInit]
     {
         if (!tileMap.getTile(position)->type)
         {
@@ -49,10 +48,10 @@ LayoutTile::LayoutTile(const std::shared_ptr<input::InputManager>& inputManager,
         }
     };
     componentOwner->addComponent<components::core::ClickableComponent>(
-        inputManager, std::vector<components::core::KeyAction>{
-                          {input::InputKey::MouseRight, onRightMouseButtonClickActionLambda},
-                          {input::InputKey::MouseLeft, onLeftMouseButtonClickActionLambda}});
-    const auto onMouseOverActionLambda = [=, &tileMap]
+        std::vector<components::core::KeyAction>{
+            {input::InputKey::MouseRight, onRightMouseButtonClickActionLambda},
+            {input::InputKey::MouseLeft, onLeftMouseButtonClickActionLambda}});
+    const auto onMouseOverActionLambda = [=, &tileMapInit]
     {
         graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
         if (!tileMap.getTile(position)->type)
@@ -66,7 +65,7 @@ LayoutTile::LayoutTile(const std::shared_ptr<input::InputManager>& inputManager,
             graphicsComponent->setOutline(0.2f, graphics::Color::Red);
         }
     };
-    const auto onMouseOutActionLambda = [=, &tileMap]
+    const auto onMouseOutActionLambda = [=, &tileMapInit]
     {
         if (!tileMap.getTile(position)->type)
         {
@@ -78,7 +77,7 @@ LayoutTile::LayoutTile(const std::shared_ptr<input::InputManager>& inputManager,
         }
         graphicsComponent->setOutline(0.0f, graphics::Color::Transparent);
     };
-    componentOwner->addComponent<components::core::MouseOverComponent>(inputManager, onMouseOverActionLambda,
+    componentOwner->addComponent<components::core::MouseOverComponent>(onMouseOverActionLambda,
                                                                        onMouseOutActionLambda);
     componentOwner->loadDependentComponents();
     componentOwner->enable();
@@ -114,7 +113,7 @@ void LayoutTile::onMouseOutAction()
     }
 }
 
-void LayoutTile::update(const utils::DeltaTime& deltaTime)
+void LayoutTile::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
     if (auto clickableComponent = componentOwner->getComponent<components::core::ClickableComponent>())
     {
@@ -124,7 +123,7 @@ void LayoutTile::update(const utils::DeltaTime& deltaTime)
             clickableComponent->enable();
         }
     }
-    componentOwner->update(deltaTime);
+    componentOwner->update(deltaTime, input);
     componentOwner->lateUpdate(deltaTime);
 }
 
@@ -151,14 +150,17 @@ void LayoutTile::pause()
         graphicsComponent->enable();
     }
 }
+
 void LayoutTile::moveTile(utils::Vector2f move)
 {
     componentOwner->transform->addPosition(move);
 }
+
 const utils::Vector2f& LayoutTile::getPosition() const
 {
     return componentOwner->transform->getPosition();
 }
+
 const bool LayoutTile::isActive() const
 {
     return componentOwner->transform->isEnabled();

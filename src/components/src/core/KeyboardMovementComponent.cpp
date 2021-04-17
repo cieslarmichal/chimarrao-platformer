@@ -7,19 +7,9 @@
 namespace components::core
 {
 
-KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* ownerInit,
-                                                     std::shared_ptr<input::InputManager> inputManagerInit)
-    : Component{ownerInit},
-      inputManager{std::move(inputManagerInit)},
-      inputStatus{nullptr},
-      movementSpeed{10.f}
+KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* ownerInit)
+    : Component{ownerInit}, movementSpeed{10.f}
 {
-    inputManager->registerObserver(this);
-}
-
-KeyboardMovementComponent::~KeyboardMovementComponent()
-{
-    inputManager->removeObserver(this);
 }
 
 void KeyboardMovementComponent::loadDependentComponents()
@@ -32,7 +22,7 @@ void KeyboardMovementComponent::loadDependentComponents()
     }
 }
 
-void KeyboardMovementComponent::update(utils::DeltaTime deltaTime)
+void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
     if (not enabled)
     {
@@ -40,23 +30,23 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime)
     }
 
     currentMovementSpeed.x = 0;
-    if (inputStatus->isKeyPressed(input::InputKey::Left))
+    if (input.isKeyPressed(input::InputKey::Left))
     {
         currentMovementSpeed.x = -movementSpeed;
         animation->setAnimationDirection(animations::AnimationDirection::Left);
     }
-    else if (inputStatus->isKeyPressed(input::InputKey::Right))
+    else if (input.isKeyPressed(input::InputKey::Right))
     {
         currentMovementSpeed.x = movementSpeed;
         animation->setAnimationDirection(animations::AnimationDirection::Right);
     }
 
     currentMovementSpeed.y = 0;
-    if (inputStatus->isKeyPressed(input::InputKey::Up))
+    if (input.isKeyPressed(input::InputKey::Up))
     {
         currentMovementSpeed.y = -movementSpeed;
     }
-    else if (inputStatus->isKeyPressed(input::InputKey::Down))
+    else if (input.isKeyPressed(input::InputKey::Down))
     {
         currentMovementSpeed.y = movementSpeed;
     }
@@ -73,11 +63,6 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime)
     float xFrameMove = currentMovementSpeed.x * deltaTime.count();
     float yFrameMove = currentMovementSpeed.y * deltaTime.count();
     owner->transform->addPosition(xFrameMove, yFrameMove);
-}
-
-void KeyboardMovementComponent::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
 }
 
 void KeyboardMovementComponent::setMovementSpeed(float speed)

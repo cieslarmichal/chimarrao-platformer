@@ -16,11 +16,10 @@ namespace components::ui
 class DefaultUIManager : public UIManager
 {
 public:
-    DefaultUIManager(const std::shared_ptr<input::InputManager>&,
-                     const std::shared_ptr<graphics::RendererPool>&);
+    DefaultUIManager(const std::shared_ptr<graphics::RendererPool>&);
 
     void createUI(std::unique_ptr<UIConfig>) override;
-    void update(utils::DeltaTime) override;
+    void update(utils::DeltaTime, const input::Input&) override;
     void activate() override;
     void deactivate() override;
     void setColor(UIComponentType, const std::string& componentName, graphics::Color) override;

@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 
-#include "InputManagerMock.h"
+#include "InputMock.h"
 
 #include "ComponentOwner.h"
 
@@ -10,34 +10,14 @@ using namespace input;
 using namespace components::core;
 using namespace ::testing;
 
-class MouseOverComponentTest_Base : public Test
+class MouseOverComponentTest : public Test
 {
 public:
-    MouseOverComponentTest_Base()
+    void prepareMouseOverComponent(MouseOverComponent& mouseOverComponent)
     {
-        EXPECT_CALL(*inputManager, registerObserver(_));
-        EXPECT_CALL(*inputManager, removeObserver(_));
-    }
-
-    std::shared_ptr<StrictMock<InputManagerMock>> inputManager =
-        std::make_shared<StrictMock<InputManagerMock>>();
-};
-
-class MouseOverComponentTest : public MouseOverComponentTest_Base
-{
-public:
-    MouseOverComponentTest()
-    {
-        auto hitboxComponent = componentOwner.addComponent<HitBoxComponent>(size, offset);
+        auto hitBoxComponent = componentOwner.addComponent<HitBoxComponent>(size, offset);
         mouseOverComponent.loadDependentComponents();
-        hitboxComponent->lateUpdate(deltaTime);
-    }
-
-    InputStatus prepareInputStatus(const utils::Vector2f& mousePosition)
-    {
-        InputStatus inputStatus;
-        inputStatus.setMousePosition(mousePosition);
-        return inputStatus;
+        hitBoxComponent->lateUpdate(deltaTime);
     }
 
     void mouseOverAction()
@@ -81,15 +61,18 @@ public:
     const utils::Vector2f positionOutsideTarget2{27, 23};
     ComponentOwner componentOwner{position1, "mouseOverComponentTest"};
     utils::DeltaTime deltaTime{1};
-    MouseOverComponent mouseOverComponent{&componentOwner, inputManager, [this] { mouseOverAction(); },
-                                          [this] { mouseOutAction(); }};
+    std::unique_ptr<StrictMock<input::InputMock>> inputInit{std::make_unique<StrictMock<input::InputMock>>()};
+    StrictMock<input::InputMock>* input{inputInit.get()};
 };
 
 TEST_F(MouseOverComponentTest, givenMousePositionOutsideHitbox_shouldNotCallAnyAction)
 {
-    const auto mouseOutsideInput = prepareInputStatus(positionOutsideTarget1);
+    MouseOverComponent mouseOverComponent{&componentOwner, [this] { mouseOverAction(); },
+                                          [this] { mouseOutAction(); }};
+    prepareMouseOverComponent(mouseOverComponent);
+    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionOutsideTarget1));
 
-    mouseOverComponent.handleInputStatus(mouseOutsideInput);
+    mouseOverComponent.update(deltaTime, *input);
 
     ASSERT_FALSE(mouseWasOut());
     ASSERT_FALSE(mouseWasOver());
@@ -97,10 +80,12 @@ TEST_F(MouseOverComponentTest, givenMousePositionOutsideHitbox_shouldNotCallAnyA
 
 TEST_F(MouseOverComponentTest, givenMousePositionInsideHitbox_shouldCallMouseOverAction)
 {
-    const auto mouseInsideInput = prepareInputStatus(positionInsideTarget1);
-    mouseOverComponent.handleInputStatus(mouseInsideInput);
+    MouseOverComponent mouseOverComponent{&componentOwner, [this] { mouseOverAction(); },
+                                          [this] { mouseOutAction(); }};
+    prepareMouseOverComponent(mouseOverComponent);
+    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget1));
 
-    mouseOverComponent.update(deltaTime);
+    mouseOverComponent.update(deltaTime, *input);
 
     ASSERT_FALSE(mouseWasOut());
     ASSERT_TRUE(mouseWasOver(1));
@@ -109,14 +94,15 @@ TEST_F(MouseOverComponentTest, givenMousePositionInsideHitbox_shouldCallMouseOve
 TEST_F(MouseOverComponentTest,
        givenMousePositionInsideAndThenOutsideHitbox_shouldCallMouseOverActionAndMouseOverAction)
 {
-    const auto mouseInsideInput = prepareInputStatus(positionInsideTarget1);
-    const auto mouseOutsideInput = prepareInputStatus(positionOutsideTarget1);
+    MouseOverComponent mouseOverComponent{&componentOwner, [this] { mouseOverAction(); },
+                                          [this] { mouseOutAction(); }};
+    prepareMouseOverComponent(mouseOverComponent);
 
-    mouseOverComponent.handleInputStatus(mouseInsideInput);
-    mouseOverComponent.update(deltaTime);
+    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget1));
+    mouseOverComponent.update(deltaTime, *input);
 
-    mouseOverComponent.handleInputStatus(mouseOutsideInput);
-    mouseOverComponent.update(deltaTime);
+    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionOutsideTarget1));
+    mouseOverComponent.update(deltaTime, *input);
 
     ASSERT_TRUE(mouseWasOut(1));
     ASSERT_TRUE(mouseWasOver(1));
@@ -124,14 +110,15 @@ TEST_F(MouseOverComponentTest,
 
 TEST_F(MouseOverComponentTest, givenMousePositionInsideHitboxTwice_shouldCallMouseOverActionOnce)
 {
-    const auto mouseInsideInput1 = prepareInputStatus(positionInsideTarget1);
-    const auto mouseInsideInput2 = prepareInputStatus(positionInsideTarget2);
+    MouseOverComponent mouseOverComponent{&componentOwner, [this] { mouseOverAction(); },
+                                          [this] { mouseOutAction(); }};
+    prepareMouseOverComponent(mouseOverComponent);
 
-    mouseOverComponent.handleInputStatus(mouseInsideInput1);
-    mouseOverComponent.update(deltaTime);
+    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget1));
+    mouseOverComponent.update(deltaTime, *input);
 
-    mouseOverComponent.handleInputStatus(mouseInsideInput2);
-    mouseOverComponent.update(deltaTime);
+    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget2));
+    mouseOverComponent.update(deltaTime, *input);
 
     ASSERT_FALSE(mouseWasOut());
     ASSERT_TRUE(mouseWasOver(1));
@@ -139,18 +126,17 @@ TEST_F(MouseOverComponentTest, givenMousePositionInsideHitboxTwice_shouldCallMou
 
 TEST_F(MouseOverComponentTest, givenMousePositionInsideHitboxOutAndAgainInside_shouldCallMouseOverActionTwice)
 {
-    const auto mouseInsideInput1 = prepareInputStatus(positionInsideTarget1);
-    const auto mouseOutsideInput = prepareInputStatus(positionOutsideTarget1);
-    const auto mouseInsideInput2 = prepareInputStatus(positionInsideTarget2);
+    MouseOverComponent mouseOverComponent{&componentOwner, [this] { mouseOverAction(); },
+                                          [this] { mouseOutAction(); }};
+    prepareMouseOverComponent(mouseOverComponent);
 
-    mouseOverComponent.handleInputStatus(mouseInsideInput1);
-    mouseOverComponent.update(deltaTime);
-
-    mouseOverComponent.handleInputStatus(mouseOutsideInput);
-    mouseOverComponent.update(deltaTime);
-
-    mouseOverComponent.handleInputStatus(mouseInsideInput2);
-    mouseOverComponent.update(deltaTime);
+    EXPECT_CALL(*input, getMousePosition())
+        .WillOnce(Return(positionInsideTarget1))
+        .WillOnce(Return(positionOutsideTarget1))
+        .WillOnce(Return(positionInsideTarget2));
+    mouseOverComponent.update(deltaTime, *input);
+    mouseOverComponent.update(deltaTime, *input);
+    mouseOverComponent.update(deltaTime, *input);
 
     ASSERT_TRUE(mouseWasOut(1));
     ASSERT_TRUE(mouseWasOver(2));
@@ -158,22 +144,20 @@ TEST_F(MouseOverComponentTest, givenMousePositionInsideHitboxOutAndAgainInside_s
 
 TEST_F(MouseOverComponentTest, givenMousePositionTwiceOverAndOut_shouldCallMouseOverAndOutTwice)
 {
-    const auto mouseInsideInput1 = prepareInputStatus(positionInsideTarget1);
-    const auto mouseOutsideInput1 = prepareInputStatus(positionOutsideTarget1);
-    const auto mouseInsideInput2 = prepareInputStatus(positionInsideTarget2);
-    const auto mouseOutsideInput2 = prepareInputStatus(positionOutsideTarget2);
+    MouseOverComponent mouseOverComponent{&componentOwner, [this] { mouseOverAction(); },
+                                          [this] { mouseOutAction(); }};
+    prepareMouseOverComponent(mouseOverComponent);
 
-    mouseOverComponent.handleInputStatus(mouseInsideInput1);
-    mouseOverComponent.update(deltaTime);
+    EXPECT_CALL(*input, getMousePosition())
+        .WillOnce(Return(positionInsideTarget1))
+        .WillOnce(Return(positionOutsideTarget1))
+        .WillOnce(Return(positionInsideTarget2))
+        .WillOnce(Return(positionOutsideTarget2));
 
-    mouseOverComponent.handleInputStatus(mouseOutsideInput1);
-    mouseOverComponent.update(deltaTime);
-
-    mouseOverComponent.handleInputStatus(mouseInsideInput2);
-    mouseOverComponent.update(deltaTime);
-
-    mouseOverComponent.handleInputStatus(mouseOutsideInput2);
-    mouseOverComponent.update(deltaTime);
+    mouseOverComponent.update(deltaTime, *input);
+    mouseOverComponent.update(deltaTime, *input);
+    mouseOverComponent.update(deltaTime, *input);
+    mouseOverComponent.update(deltaTime, *input);
 
     ASSERT_TRUE(mouseWasOut(2));
     ASSERT_TRUE(mouseWasOver(2));
@@ -181,12 +165,12 @@ TEST_F(MouseOverComponentTest, givenMousePositionTwiceOverAndOut_shouldCallMouse
 
 TEST_F(MouseOverComponentTest, componentDisabled_givenMousePositionInside_shouldNotCallAnyAction)
 {
-    const auto mouseInsideInput = prepareInputStatus(positionInsideTarget1);
-    const auto mouseOutsideInput = prepareInputStatus(positionOutsideTarget1);
+    MouseOverComponent mouseOverComponent{&componentOwner, [this] { mouseOverAction(); },
+                                          [this] { mouseOutAction(); }};
+    prepareMouseOverComponent(mouseOverComponent);
     mouseOverComponent.disable();
 
-    mouseOverComponent.handleInputStatus(mouseInsideInput);
-    mouseOverComponent.update(deltaTime);
+    mouseOverComponent.update(deltaTime, *input);
 
     ASSERT_FALSE(mouseWasOut());
     ASSERT_FALSE(mouseWasOver());
@@ -195,10 +179,12 @@ TEST_F(MouseOverComponentTest, componentDisabled_givenMousePositionInside_should
 TEST_F(MouseOverComponentTest,
        givenMousePositionInsideHitbox_thenComponentDisabled_shouldCallOverActionAndOutAction)
 {
-    const auto mouseInsideInput = prepareInputStatus(positionInsideTarget1);
-    const auto mouseOutsideInput = prepareInputStatus(positionOutsideTarget1);
-    mouseOverComponent.handleInputStatus(mouseInsideInput);
-    mouseOverComponent.update(deltaTime);
+    MouseOverComponent mouseOverComponent{&componentOwner, [this] { mouseOverAction(); },
+                                          [this] { mouseOutAction(); }};
+    prepareMouseOverComponent(mouseOverComponent);
+
+    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget1));
+    mouseOverComponent.update(deltaTime, *input);
 
     mouseOverComponent.disable();
 

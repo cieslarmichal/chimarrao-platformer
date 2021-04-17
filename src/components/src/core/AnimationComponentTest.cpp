@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
+#include "InputMock.h"
 
 #include "ComponentOwner.h"
 #include "DeltaTime.h"
@@ -20,6 +21,8 @@ public:
     const AnimationDirection animationDirection{AnimationDirection::Left};
     ComponentOwner componentOwner{position, "animationComponentTest"};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
+    std::unique_ptr<StrictMock<input::InputMock>> inputInit{std::make_unique<StrictMock<input::InputMock>>()};
+    StrictMock<input::InputMock>* input{inputInit.get()};
     AnimationComponent animationComponent{&componentOwner, animator};
 };
 
@@ -27,7 +30,7 @@ TEST_F(AnimationComponentTest, update)
 {
     EXPECT_CALL(*animator, update(deltaTime));
 
-    animationComponent.update(deltaTime);
+    animationComponent.update(deltaTime, *input);
 }
 
 TEST_F(AnimationComponentTest, setAnimationByAnimationType)

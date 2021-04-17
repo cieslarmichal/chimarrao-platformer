@@ -13,17 +13,17 @@ namespace
 const auto buttonColor = graphics::Color(251, 190, 102);
 const auto buttonHoverColor = graphics::Color(205, 128, 66);
 const auto controlButtonFontSize{20};
-const auto controlButtonSize = utils::Vector2f{8, 3};
-const auto controlsTitlePosition = utils::Vector2f{32, 6};
-const auto backToMenuButtonPosition = utils::Vector2f{34.5, 48};
-const auto upButtonPosition = utils::Vector2f{23, 16};
-const auto downButtonPosition = utils::Vector2f{23, 22};
-const auto rightButtonPosition = utils::Vector2f{23, 28};
-const auto leftButtonPosition = utils::Vector2f{23, 34};
-const auto spaceButtonPosition = utils::Vector2f{52, 16};
-const auto shiftButtonPosition = utils::Vector2f{52, 22};
-const auto ctrlButtonPosition = utils::Vector2f{52, 28};
-const auto eButtonPosition = utils::Vector2f{52, 34};
+const auto controlButtonSize = utils::Vector2f{8.f, 3.f};
+const auto controlsTitlePosition = utils::Vector2f{32.f, 6.f};
+const auto backToMenuButtonPosition = utils::Vector2f{34.5f, 48.f};
+const auto upButtonPosition = utils::Vector2f{23.f, 16.f};
+const auto downButtonPosition = utils::Vector2f{23.f, 22.f};
+const auto rightButtonPosition = utils::Vector2f{23.f, 28.f};
+const auto leftButtonPosition = utils::Vector2f{23.f, 34.f};
+const auto spaceButtonPosition = utils::Vector2f{52.f, 16.f};
+const auto shiftButtonPosition = utils::Vector2f{52.f, 22.f};
+const auto ctrlButtonPosition = utils::Vector2f{52.f, 28.f};
+const auto eButtonPosition = utils::Vector2f{52.f, 34.f};
 const unsigned int descriptionOffset = 2;
 const auto upDescriptionPosition =
     utils::Vector2f{upButtonPosition.x + controlButtonSize.x + descriptionOffset, upButtonPosition.y};
@@ -56,7 +56,7 @@ std::unique_ptr<components::ui::BackgroundConfig>
 ControlsStateUIConfigBuilder::createBackgroundConfig(ControlsState*)
 {
     return std::make_unique<components::ui::BackgroundConfig>(
-        "controlsBackground", utils::Vector2f{0, 0}, utils::Vector2f{80, 60},
+        "controlsBackground", utils::Vector2f{0.f, 0.f}, utils::Vector2f{80.f, 60.f},
         graphics::VisibilityLayer::Background, menuBackgroundPath);
 }
 
@@ -65,7 +65,7 @@ ControlsStateUIConfigBuilder::createButtonConfigs(ControlsState* controlsState)
 {
     std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
 
-    const auto backToMenuButtonSize = utils::Vector2f{13, 5};
+    const auto backToMenuButtonSize = utils::Vector2f{13.f, 5.f};
     const auto backToMenuButtonOnMouseOver = [=]
     {
         controlsState->uiManager->setColor(components::ui::UIComponentType::Button,
@@ -81,48 +81,48 @@ ControlsStateUIConfigBuilder::createButtonConfigs(ControlsState* controlsState)
     auto backToMenuClickAction = [=] { controlsState->shouldBackToMenu = true; };
     auto backToMenuButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "controlsBackToMenuButton", backToMenuButtonPosition, backToMenuButtonSize, buttonColor, "Back",
-        graphics::Color::Black, 37, fontPath, utils::Vector2f{2, 0}, backToMenuClickAction,
+        graphics::Color::Black, 37, fontPath, utils::Vector2f{2.0f, 0.0f}, backToMenuClickAction,
         backToMenuButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(backToMenuButtonConfig));
 
     auto upButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "controlsUpButton", upButtonPosition, controlButtonSize, buttonColor, "^", graphics::Color::Black,
-        controlButtonFontSize, fontPath, utils::Vector2f{3.5, 0.7});
+        controlButtonFontSize, fontPath, utils::Vector2f{3.5f, 0.7f});
     buttonsConfig.emplace_back(std::move(upButtonConfig));
 
     auto downButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "controlsDownButton", downButtonPosition, controlButtonSize, buttonColor, "v", graphics::Color::Black,
-        controlButtonFontSize, fontPath, utils::Vector2f{3.5, 0.1});
+        controlButtonFontSize, fontPath, utils::Vector2f{3.5f, 0.1f});
     buttonsConfig.emplace_back(std::move(downButtonConfig));
 
     auto rightButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "controlsRightButton", rightButtonPosition, controlButtonSize, buttonColor, "->",
-        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{3, 0.2});
+        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{3.0f, 0.2f});
     buttonsConfig.emplace_back(std::move(rightButtonConfig));
 
     auto leftButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "controlsLeftButton", leftButtonPosition, controlButtonSize, buttonColor, "<-",
-        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{3, 0.2});
+        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{3.0f, 0.2f});
     buttonsConfig.emplace_back(std::move(leftButtonConfig));
 
     auto spaceButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "controlsSpaceButton", spaceButtonPosition, controlButtonSize, buttonColor, "Space",
-        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{1.0, 0.2});
+        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{1.0f, 0.2f});
     buttonsConfig.emplace_back(std::move(spaceButtonConfig));
 
     auto shiftButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "controlsShiftButton", shiftButtonPosition, controlButtonSize, buttonColor, "Shift",
-        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{1.0, 0.2});
+        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{1.0f, 0.2f});
     buttonsConfig.emplace_back(std::move(shiftButtonConfig));
 
     auto ctrlButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "controlsCtrlButton", ctrlButtonPosition, controlButtonSize, buttonColor, "Ctrl",
-        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{1.7, 0.2});
+        graphics::Color::Black, controlButtonFontSize, fontPath, utils::Vector2f{1.7f, 0.2f});
     buttonsConfig.emplace_back(std::move(ctrlButtonConfig));
 
     auto eButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "controlsEButton", eButtonPosition, controlButtonSize, buttonColor, "E", graphics::Color::Black,
-        controlButtonFontSize, fontPath, utils::Vector2f{3.5, 0.2});
+        controlButtonFontSize, fontPath, utils::Vector2f{3.5f, 0.2f});
     buttonsConfig.emplace_back(std::move(eButtonConfig));
 
     return buttonsConfig;

@@ -13,16 +13,13 @@ const auto buttonHoverColor = graphics::Color(205, 128, 66);
 }
 
 SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
-                             const std::shared_ptr<input::InputManager>& inputManagerInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                              std::stack<std::unique_ptr<State>>& statesInit,
                              std::unique_ptr<components::ui::UIManager> uiManagerInit)
-    : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
+    : State{windowInit, rendererPoolInit, statesInit},
       shouldBackToMenu{false},
-      inputStatus{nullptr},
       uiManager{std::move(uiManagerInit)}
 {
-    inputManager->registerObserver(this);
     uiManager->createUI(SettingsStateUIConfigBuilder::createSettingsUIConfig(this));
 
     supportedResolutions = window->getSupportedResolutions();
@@ -33,19 +30,14 @@ SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
     refreshWindowSettingsUI();
 }
 
-SettingsState::~SettingsState()
-{
-    inputManager->removeObserver(this);
-}
-
-NextState SettingsState::update(const utils::DeltaTime& deltaTime)
+NextState SettingsState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
     if (shouldBackToMenu)
     {
         return NextState::Menu;
     }
 
-    uiManager->update(deltaTime);
+    uiManager->update(deltaTime, input);
     return NextState::Same;
 }
 
@@ -74,11 +66,6 @@ void SettingsState::deactivate()
     uiManager->deactivate();
 }
 
-void SettingsState::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
-}
-
 void SettingsState::synchronizeWindowSettings()
 {
     selectedWindowsSettings = window->getWindowSettings();
@@ -87,14 +74,16 @@ void SettingsState::synchronizeWindowSettings()
                                                      selectedWindowsSettings.resolution);
         currentResolutionIter != supportedResolutions.cend())
     {
-        selectedResolutionIndex = std::distance(supportedResolutions.begin(), currentResolutionIter);
+        selectedResolutionIndex =
+            static_cast<unsigned int>(std::distance(supportedResolutions.begin(), currentResolutionIter));
     }
 
     if (const auto currentFrameLimitIter = std::find(supportedFrameLimits.begin(), supportedFrameLimits.end(),
                                                      selectedWindowsSettings.frameLimit);
         currentFrameLimitIter != supportedFrameLimits.cend())
     {
-        selectedFrameLimitIndex = std::distance(supportedFrameLimits.begin(), currentFrameLimitIter);
+        selectedFrameLimitIndex =
+            static_cast<unsigned int>(std::distance(supportedFrameLimits.begin(), currentFrameLimitIter));
     }
 }
 
@@ -162,7 +151,7 @@ void SettingsState::decreaseResolution()
 {
     if (selectedResolutionIndex == 0)
     {
-        selectedResolutionIndex = supportedResolutions.size() - 1;
+        selectedResolutionIndex = static_cast<unsigned int>(supportedResolutions.size() - 1);
     }
     else
     {
@@ -194,7 +183,7 @@ void SettingsState::decreaseFrameLimit()
 {
     if (selectedFrameLimitIndex == 0)
     {
-        selectedFrameLimitIndex = supportedFrameLimits.size() - 1;
+        selectedFrameLimitIndex = static_cast<unsigned int>(supportedFrameLimits.size() - 1);
     }
     else
     {

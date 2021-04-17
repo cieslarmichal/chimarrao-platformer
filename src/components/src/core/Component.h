@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "DeltaTime.h"
+#include "Input.h"
 
 namespace components::core
 {
@@ -14,7 +15,7 @@ public:
     Component(ComponentOwner* ownerInit) : owner{ownerInit} {}
 
     virtual void loadDependentComponents() {}
-    virtual void update(utils::DeltaTime) {}
+    virtual void update(utils::DeltaTime, const input::Input&) {}
     virtual void lateUpdate(utils::DeltaTime) {}
     virtual void enable()
     {

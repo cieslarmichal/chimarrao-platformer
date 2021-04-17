@@ -1,42 +1,33 @@
 #include "ControlsState.h"
 
 #include "ControlsStateUIConfigBuilder.h"
-#include "ui/DefaultUIManager.h"
 
 namespace game
 {
 
 ControlsState::ControlsState(const std::shared_ptr<window::Window>& windowInit,
-                             const std::shared_ptr<input::InputManager>& inputManagerInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                              std::stack<std::unique_ptr<State>>& statesInit,
                              std::unique_ptr<components::ui::UIManager> uiManagerInit)
-    : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
+    : State{windowInit, rendererPoolInit, statesInit},
       shouldBackToMenu{false},
-      inputStatus{nullptr},
       uiManager{std::move(uiManagerInit)}
 {
-    inputManager->registerObserver(this);
     uiManager->createUI(ControlsStateUIConfigBuilder::createControlsUIConfig(this));
 }
 
-ControlsState::~ControlsState()
-{
-    inputManager->removeObserver(this);
-}
-
-NextState ControlsState::update(const utils::DeltaTime& deltaTime)
+NextState ControlsState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
     if (shouldBackToMenu)
     {
         return NextState::Menu;
     }
 
-    uiManager->update(deltaTime);
+    uiManager->update(deltaTime, input);
     return NextState::Same;
 }
 
-void ControlsState::lateUpdate(const utils::DeltaTime& deltaTime) {}
+void ControlsState::lateUpdate(const utils::DeltaTime&) {}
 
 void ControlsState::render()
 {
@@ -58,11 +49,6 @@ void ControlsState::deactivate()
 {
     active = false;
     uiManager->deactivate();
-}
-
-void ControlsState::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
 }
 
 }

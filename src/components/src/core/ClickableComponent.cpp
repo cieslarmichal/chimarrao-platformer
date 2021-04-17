@@ -9,22 +9,16 @@
 
 namespace components::core
 {
-ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
-                                       std::shared_ptr<input::InputManager> inputManagerInit,
-                                       std::function<void(void)> actionInit)
-    : Component(ownerInit), inputManager{std::move(inputManagerInit)}, inputStatus{nullptr}
+ClickableComponent::ClickableComponent(ComponentOwner* ownerInit, std::function<void(void)> actionInit)
+    : Component(ownerInit)
 {
     keyActions.push_back({input::InputKey::MouseLeft, std::move(actionInit)});
-    inputManager->registerObserver(this);
 }
 
 ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
-                                       std::shared_ptr<input::InputManager> inputManagerInit,
                                        const std::vector<KeyAction>& keyActionVectorInit)
-    : Component(ownerInit), inputManager{std::move(inputManagerInit)}, inputStatus{nullptr}
+    : Component(ownerInit)
 {
-    inputManager->registerObserver(this);
-
     std::unordered_set<input::InputKey> inputKeys;
     for (const auto& keyAction : keyActionVectorInit)
     {
@@ -38,21 +32,16 @@ ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
     }
 }
 
-ClickableComponent::~ClickableComponent()
-{
-    inputManager->removeObserver(this);
-}
-
 void ClickableComponent::loadDependentComponents()
 {
-    hitbox = owner->getComponent<HitBoxComponent>();
-    if (not hitbox)
+    hitBox = owner->getComponent<HitBoxComponent>();
+    if (not hitBox)
     {
         throw exceptions::DependentComponentNotFound{"ClickableComponent: HitBox component not found"};
     }
 }
 
-void ClickableComponent::update(utils::DeltaTime)
+void ClickableComponent::update(utils::DeltaTime, const input::Input& input)
 {
     if (not enabled)
     {
@@ -61,17 +50,12 @@ void ClickableComponent::update(utils::DeltaTime)
 
     for (auto& keyAction : keyActions)
     {
-        if (not keyAction.clicked && inputStatus->isKeyReleased(keyAction.key) &&
-            hitbox->intersects(inputStatus->getMousePosition()))
+        if (not keyAction.clicked && input.isKeyReleased(keyAction.key) &&
+            hitBox->intersects(input.getMousePosition()))
         {
             keyAction.action();
         }
     }
-}
-
-void ClickableComponent::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
 }
 
 void ClickableComponent::enable()

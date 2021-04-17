@@ -10,16 +10,10 @@
 namespace components::ui
 {
 
-TextField::TextField(const std::shared_ptr<input::InputManager>& inputManager,
-                     const std::shared_ptr<graphics::RendererPool>& rendererPool,
+TextField::TextField(const std::shared_ptr<graphics::RendererPool>& rendererPool,
                      std::unique_ptr<TextFieldConfig> textFieldConfig)
-    : inputManager{inputManager},
-      inputStatus{nullptr},
-      inputBufferMaximumSize{15},
-      timeAfterNextLetterCanBeDeleted{0.08f}
+    : inputBufferMaximumSize{15}, timeAfterNextLetterCanBeDeleted{0.08f}
 {
-    inputManager->registerObserver(this);
-
     if (not textFieldConfig)
     {
         throw exceptions::UIComponentConfigNotFound{"TextField config not found"};
@@ -45,24 +39,19 @@ TextField::TextField(const std::shared_ptr<input::InputManager>& inputManager,
     };
 
     coreComponentsOwner->addComponent<components::core::ClickableComponent>(
-        inputManager, std::move(textFieldClickedAction));
+        std::move(textFieldClickedAction));
 
     coreComponentsOwner->loadDependentComponents();
     deleteCharactersTimer.start();
 }
 
-TextField::~TextField()
+void TextField::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
-    inputManager->removeObserver(this);
-}
-
-void TextField::update(utils::DeltaTime deltaTime)
-{
-    if (inputStatus->isKeyPressed(input::InputKey::MouseLeft))
+    if (input.isKeyPressed(input::InputKey::MouseLeft))
     {
         if (auto textFieldHitBox = coreComponentsOwner->getComponent<components::core::HitBoxComponent>())
         {
-            if (not textFieldHitBox->intersects(inputStatus->getMousePosition()))
+            if (not textFieldHitBox->intersects(input.getMousePosition()))
             {
                 textFieldClicked = false;
                 clickOutsideFieldAction(inputBuffer);
@@ -74,7 +63,7 @@ void TextField::update(utils::DeltaTime deltaTime)
     {
         for (const auto& alphanumericButtonKey : input::alphaNumericalButtons)
         {
-            if (inputStatus->isKeyReleased(alphanumericButtonKey))
+            if (input.isKeyReleased(alphanumericButtonKey))
             {
                 if (inputBuffer.size() < inputBufferMaximumSize)
                 {
@@ -84,7 +73,7 @@ void TextField::update(utils::DeltaTime deltaTime)
             }
         }
 
-        if (inputStatus->isKeyPressed(input::InputKey::Backspace))
+        if (input.isKeyPressed(input::InputKey::Backspace))
         {
             if (deleteCharactersTimer.getElapsedSeconds() > timeAfterNextLetterCanBeDeleted)
             {
@@ -100,7 +89,7 @@ void TextField::update(utils::DeltaTime deltaTime)
         }
     }
 
-    coreComponentsOwner->update(deltaTime);
+    coreComponentsOwner->update(deltaTime, input);
     coreComponentsOwner->lateUpdate(deltaTime);
 }
 
@@ -120,11 +109,6 @@ void TextField::deactivate()
 {
     textFieldClicked = false;
     coreComponentsOwner->disable();
-}
-
-void TextField::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
 }
 
 void TextField::setColor(graphics::Color color)

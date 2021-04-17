@@ -10,8 +10,7 @@
 namespace components::ui
 {
 
-CheckBox::CheckBox(const std::shared_ptr<input::InputManager>& inputManager,
-                   const std::shared_ptr<graphics::RendererPool>& rendererPool,
+CheckBox::CheckBox(const std::shared_ptr<graphics::RendererPool>& rendererPool,
                    std::unique_ptr<CheckBoxConfig> checkBoxConfig)
     : timeAfterCheckBoxCanBeClicked{0.25f}
 {
@@ -30,13 +29,12 @@ CheckBox::CheckBox(const std::shared_ptr<input::InputManager>& inputManager,
         rendererPool, checkBoxConfig->position, text, checkBoxConfig->fontPath, checkBoxConfig->fontSize,
         graphics::Color::Black, checkBoxConfig->textOffset);
     coreComponentsOwner->addComponent<components::core::HitBoxComponent>(checkBoxConfig->size);
-    coreComponentsOwner->addComponent<components::core::ClickableComponent>(inputManager,
-                                                                            checkBoxConfig->clickAction);
+    coreComponentsOwner->addComponent<components::core::ClickableComponent>(checkBoxConfig->clickAction);
 
     if (checkBoxConfig->mouseOverActions)
     {
         coreComponentsOwner->addComponent<components::core::MouseOverComponent>(
-            inputManager, checkBoxConfig->mouseOverActions->mouseOverAction,
+            checkBoxConfig->mouseOverActions->mouseOverAction,
             checkBoxConfig->mouseOverActions->mouseOutAction);
     }
 
@@ -46,7 +44,7 @@ CheckBox::CheckBox(const std::shared_ptr<input::InputManager>& inputManager,
     freezeClickableCheckBoxTimer.start();
 }
 
-void CheckBox::update(utils::DeltaTime deltaTime)
+void CheckBox::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
     if (checkBoxClickActionFrozen &&
         freezeClickableCheckBoxTimer.getElapsedSeconds() > timeAfterCheckBoxCanBeClicked)
@@ -55,7 +53,7 @@ void CheckBox::update(utils::DeltaTime deltaTime)
         coreComponentsOwner->getComponent<components::core::ClickableComponent>()->enable();
     }
 
-    coreComponentsOwner->update(deltaTime);
+    coreComponentsOwner->update(deltaTime, input);
     coreComponentsOwner->lateUpdate(deltaTime);
 }
 

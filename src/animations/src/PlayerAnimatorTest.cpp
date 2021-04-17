@@ -38,10 +38,10 @@ public:
     const std::vector<MultipleFilesAnimationSettings> emptyAnimationsSettings{};
     const utils::DeltaTime timeNotExceedingTimeBetweenTextures{1.0};
     const utils::DeltaTime timeExceedingTimeBetweenTextures{2.5};
-    const utils::Vector2f scaleRightDirection{1.0, 1.0};
-    const utils::Vector2f scaleLeftDirection{-1.0, 1.0};
-    const std::vector<MultipleFilesAnimationSettings> animationsSettings{{"idle", "idle/x1.txt", 3, 1.2},
-                                                                         {"walk", "walk/123.txt", 2, 2.0}};
+    const utils::Vector2f scaleRightDirection{1.0f, 1.0f};
+    const utils::Vector2f scaleLeftDirection{-1.0f, 1.0f};
+    const std::vector<MultipleFilesAnimationSettings> animationsSettings{{"idle", "idle/x1.txt", 3, 1.2f},
+                                                                         {"walk", "walk/123.txt", 2, 2.0f}};
     const std::string projectPath{utils::getProjectPath("chimarrao-platformer")};
     const TextureRect firstIdleTextureRect{projectPath + "idle/x1.txt"};
     const TextureRect secondIdleTextureRect{projectPath + "idle/x2.txt"};

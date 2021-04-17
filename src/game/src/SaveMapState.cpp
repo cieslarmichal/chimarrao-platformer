@@ -6,41 +6,33 @@ namespace game
 {
 
 SaveMapState::SaveMapState(const std::shared_ptr<window::Window>& windowInit,
-                           const std::shared_ptr<input::InputManager>& inputManagerInit,
                            const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                            std::stack<std::unique_ptr<State>>& statesInit,
                            std::unique_ptr<components::ui::UIManager> uiManagerInit, TileMap& tileMap)
-    : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
-      inputStatus{nullptr},
+    : State{windowInit, rendererPoolInit, statesInit},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditorMenu{false},
       uiManager{std::move(uiManagerInit)},
       tileMap{tileMap}
 {
-    inputManager->registerObserver(this);
     uiManager->createUI(SaveMapStateUIConfigBuilder::createSaveMapUIConfig(this));
 
     possibleLeaveFromStateTimer.start();
 }
 
-SaveMapState::~SaveMapState()
-{
-    inputManager->removeObserver(this);
-}
-
-NextState SaveMapState::update(const utils::DeltaTime& deltaTime)
+NextState SaveMapState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
     if (possibleLeaveFromStateTimer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
-        (inputStatus->isKeyPressed(input::InputKey::Escape) || shouldBackToEditorMenu))
+        (input.isKeyPressed(input::InputKey::Escape) || shouldBackToEditorMenu))
     {
         return NextState::Previous;
     }
 
-    uiManager->update(deltaTime);
+    uiManager->update(deltaTime, input);
     return NextState::Same;
 }
 
-void SaveMapState::lateUpdate(const utils::DeltaTime& deltaTime) {}
+void SaveMapState::lateUpdate(const utils::DeltaTime&) {}
 
 void SaveMapState::render()
 {
@@ -64,11 +56,6 @@ void SaveMapState::deactivate()
 {
     active = false;
     uiManager->deactivate();
-}
-
-void SaveMapState::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
 }
 
 void SaveMapState::saveMap()

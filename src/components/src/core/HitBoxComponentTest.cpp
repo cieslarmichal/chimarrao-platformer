@@ -18,19 +18,19 @@ public:
     const utils::Vector2f positionOutsideTarget{27, 21};
     ComponentOwner componentOwner{position1, "hitBoxComponentTest"};
     utils::DeltaTime deltaTime{1};
-    HitBoxComponent hitboxComponent{&componentOwner, size, offset};
+    HitBoxComponent hitBoxComponent{&componentOwner, size, offset};
 };
 
 TEST_F(HitBoxComponentTest, givenPositionInsideTarget_shouldIntersect)
 {
-    hitboxComponent.lateUpdate(deltaTime);
+    hitBoxComponent.lateUpdate(deltaTime);
 
-    ASSERT_TRUE(hitboxComponent.intersects(positionInsideTarget));
+    ASSERT_TRUE(hitBoxComponent.intersects(positionInsideTarget));
 }
 
 TEST_F(HitBoxComponentTest, givenPositionOutsideTarget_shouldNotIntersect)
 {
-    hitboxComponent.lateUpdate(deltaTime);
+    hitBoxComponent.lateUpdate(deltaTime);
 
-    ASSERT_FALSE(hitboxComponent.intersects(positionOutsideTarget));
+    ASSERT_FALSE(hitBoxComponent.intersects(positionOutsideTarget));
 }

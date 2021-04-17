@@ -3,7 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
-#include "InputManagerMock.h"
+#include "InputMock.h"
 
 #include "AnimationComponent.h"
 #include "ComponentOwner.h"
@@ -14,20 +14,7 @@ using namespace input;
 using namespace components::core;
 using namespace animations;
 
-class KeyboardMovementComponentTest_Base : public Test
-{
-public:
-    KeyboardMovementComponentTest_Base()
-    {
-        EXPECT_CALL(*inputManager, registerObserver(_));
-        EXPECT_CALL(*inputManager, removeObserver(_));
-    }
-
-    std::shared_ptr<StrictMock<InputManagerMock>> inputManager =
-        std::make_shared<StrictMock<InputManagerMock>>();
-};
-
-class KeyboardMovementComponentTest : public KeyboardMovementComponentTest_Base
+class KeyboardMovementComponentTest : public Test
 {
 public:
     KeyboardMovementComponentTest()
@@ -36,65 +23,51 @@ public:
         keyboardMovementComponent.loadDependentComponents();
     }
 
-    InputStatus prepareInputStatus(InputKey inputKey)
-    {
-        InputStatus inputStatus;
-        inputStatus.setKeyPressed(inputKey);
-        return inputStatus;
-    }
-
-    void expectRightKeyPressed(const InputStatus& inputStatus)
-    {
-        EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Right));
-        EXPECT_CALL(*animator, setAnimation(AnimationType::Walk));
-        keyboardMovementComponent.handleInputStatus(inputStatus);
-    }
-
-    void expectLeftKeyPressed(const InputStatus& inputStatus)
-    {
-        EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Left));
-        EXPECT_CALL(*animator, setAnimation(AnimationType::Walk));
-        keyboardMovementComponent.handleInputStatus(inputStatus);
-    }
-
     const float movementSpeed{10.0};
     utils::DeltaTime deltaTime{3};
     const utils::Vector2f position{0.0, 11.0};
     ComponentOwner componentOwner{position, "keyboardMovementComponentTest"};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
+    std::unique_ptr<StrictMock<input::InputMock>> inputInit{std::make_unique<StrictMock<input::InputMock>>()};
+    StrictMock<input::InputMock>* input{inputInit.get()};
 
-    KeyboardMovementComponent keyboardMovementComponent{&componentOwner, inputManager};
+    KeyboardMovementComponent keyboardMovementComponent{&componentOwner};
 };
 
 TEST_F(KeyboardMovementComponentTest, givenInputStatusWithNoKeyPressed_shouldSetAnimationTypeToIdle)
 {
-    const auto noKeyInputStatus = InputStatus{};
-    keyboardMovementComponent.handleInputStatus(noKeyInputStatus);
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(false));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
     EXPECT_CALL(*animator, setAnimation(AnimationType::Idle));
 
-    keyboardMovementComponent.update(deltaTime);
+    keyboardMovementComponent.update(deltaTime, *input);
 }
 
 TEST_F(KeyboardMovementComponentTest,
        givenInputStatusWithRightKeyPressed_shouldSetAnimationDirectionToRightAndSetAnimationTypeToWalk)
 {
-    InputStatus rightKeyInputStatus = prepareInputStatus(InputKey::Right);
-    keyboardMovementComponent.handleInputStatus(rightKeyInputStatus);
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(true));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
     EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Right));
     EXPECT_CALL(*animator, setAnimation(AnimationType::Walk));
 
-    keyboardMovementComponent.update(deltaTime);
+    keyboardMovementComponent.update(deltaTime, *input);
 }
 
 TEST_F(KeyboardMovementComponentTest,
        givenInputStatusWithLeftKeyPressed_shouldSetAnimationDirectionToLeftAndSetAnimationTypeToWalk)
 {
-    const auto leftKeyInputStatus = prepareInputStatus(InputKey::Left);
-    keyboardMovementComponent.handleInputStatus(leftKeyInputStatus);
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(true));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
     EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Left));
     EXPECT_CALL(*animator, setAnimation(AnimationType::Walk));
 
-    keyboardMovementComponent.update(deltaTime);
+    keyboardMovementComponent.update(deltaTime, *input);
 }
 
 TEST_F(KeyboardMovementComponentTest, setMovementSpeed)
@@ -107,11 +80,15 @@ TEST_F(KeyboardMovementComponentTest, setMovementSpeed)
 TEST_F(KeyboardMovementComponentTest,
        givenRightKeyPressed_update_shouldAddPositionChangeFromInputToTransformComponent)
 {
-    InputStatus rightKeyInputStatus = prepareInputStatus(InputKey::Right);
-    expectRightKeyPressed(rightKeyInputStatus);
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(true));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
+    EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Right));
+    EXPECT_CALL(*animator, setAnimation(AnimationType::Walk));
     const auto positionBeforeUpdate = componentOwner.transform->getPosition();
 
-    keyboardMovementComponent.update(deltaTime);
+    keyboardMovementComponent.update(deltaTime, *input);
 
     const auto positionChangeToRight = deltaTime.count() * keyboardMovementComponent.getMovementSpeed();
     const auto expectedPositionAfterUpdate =
@@ -123,11 +100,14 @@ TEST_F(KeyboardMovementComponentTest,
 TEST_F(KeyboardMovementComponentTest,
        givenLeftKeyPressed_update_shouldAddPositionChangeFromInputToTransformComponent)
 {
-    const auto leftKeyInputStatus = prepareInputStatus(InputKey::Left);
-    expectLeftKeyPressed(leftKeyInputStatus);
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(true));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
+    EXPECT_CALL(*input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
+    EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Left));
+    EXPECT_CALL(*animator, setAnimation(AnimationType::Walk));
     const auto positionBeforeUpdate = componentOwner.transform->getPosition();
 
-    keyboardMovementComponent.update(deltaTime);
+    keyboardMovementComponent.update(deltaTime, *input);
 
     const auto positionChangeToLeft = -deltaTime.count() * keyboardMovementComponent.getMovementSpeed();
     const auto expectedPositionAfterUpdate =

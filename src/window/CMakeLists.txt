@@ -17,7 +17,9 @@ set(UT_SOURCES
 add_library(window SHARED ${SOURCES})
 target_link_libraries(window PUBLIC utils)
 target_include_directories(window PUBLIC src)
+target_compile_options(window PUBLIC ${FLAGS})
 
 add_executable(windowUT ${UT_SOURCES} ${SOURCES})
 target_link_libraries(windowUT PUBLIC gmock_main gtest utils)
+target_compile_options(windowUT PUBLIC ${FLAGS})
 add_test(NAME windowUT COMMAND windowUT WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})

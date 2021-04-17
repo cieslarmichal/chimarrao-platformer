@@ -4,31 +4,23 @@
 
 #include "Component.h"
 #include "HitBoxComponent.h"
-#include "InputManager.h"
-#include "InputObserver.h"
 #include "KeyAction.h"
 
 namespace components::core
 {
-class ClickableComponent : public Component, public input::InputObserver
+class ClickableComponent : public Component
 {
 public:
-    ClickableComponent(ComponentOwner*, std::shared_ptr<input::InputManager>,
-                       std::function<void(void)> action);
-    ClickableComponent(ComponentOwner*, std::shared_ptr<input::InputManager>,
-                       const std::vector<KeyAction>& keyActionVector);
-    ~ClickableComponent();
+    ClickableComponent(ComponentOwner*, std::function<void(void)> action);
+    ClickableComponent(ComponentOwner*, const std::vector<KeyAction>& keyActionVector);
 
     void loadDependentComponents() override;
-    void update(utils::DeltaTime) override;
-    void handleInputStatus(const input::InputStatus&) override;
+    void update(utils::DeltaTime, const input::Input&) override;
     void enable() override;
     void disable() override;
 
 private:
-    std::shared_ptr<input::InputManager> inputManager;
-    const input::InputStatus* inputStatus;
-    std::shared_ptr<HitBoxComponent> hitbox;
+    std::shared_ptr<HitBoxComponent> hitBox;
     std::vector<KeyAction> keyActions;
 };
 }

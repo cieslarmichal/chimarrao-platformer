@@ -8,32 +8,24 @@ namespace game
 {
 
 EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowInit,
-                                 const std::shared_ptr<input::InputManager>& inputManagerInit,
                                  const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                                  std::stack<std::unique_ptr<State>>& statesInit,
                                  std::unique_ptr<components::ui::UIManager> uiManagerInit, TileMap& tileMap)
-    : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
-      inputStatus{nullptr},
+    : State{windowInit, rendererPoolInit, statesInit},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditor{false},
       shouldBackToMenu{false},
       uiManager{std::move(uiManagerInit)},
       tileMap{tileMap}
 {
-    inputManager->registerObserver(this);
     uiManager->createUI(EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(this));
     possibleLeaveFromStateTimer.start();
 }
 
-EditorMenuState::~EditorMenuState()
-{
-    inputManager->removeObserver(this);
-}
-
-NextState EditorMenuState::update(const utils::DeltaTime& deltaTime)
+NextState EditorMenuState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
     if (possibleLeaveFromStateTimer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
-        inputStatus->isKeyPressed(input::InputKey::Escape))
+        input.isKeyPressed(input::InputKey::Escape))
     {
         shouldBackToEditor = true;
     }
@@ -48,11 +40,11 @@ NextState EditorMenuState::update(const utils::DeltaTime& deltaTime)
         return NextState::Menu;
     }
 
-    uiManager->update(deltaTime);
+    uiManager->update(deltaTime, input);
     return NextState::Same;
 }
 
-void EditorMenuState::lateUpdate(const utils::DeltaTime& deltaTime) {}
+void EditorMenuState::lateUpdate(const utils::DeltaTime&) {}
 
 void EditorMenuState::render()
 {
@@ -75,11 +67,6 @@ void EditorMenuState::deactivate()
 {
     active = false;
     uiManager->deactivate();
-}
-
-void EditorMenuState::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
 }
 
 }

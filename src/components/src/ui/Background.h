@@ -13,10 +13,9 @@ namespace components::ui
 class Background : public UIComponent
 {
 public:
-    Background(const std::shared_ptr<input::InputManager>&, const std::shared_ptr<graphics::RendererPool>&,
-               std::unique_ptr<BackgroundConfig>);
+    Background(const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<BackgroundConfig>);
 
-    void update(utils::DeltaTime) override;
+    void update(utils::DeltaTime, const input::Input&) override;
     std::string getName() const override;
     void activate() override;
     void deactivate() override;

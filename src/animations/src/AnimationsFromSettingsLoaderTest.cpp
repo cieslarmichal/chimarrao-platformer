@@ -17,8 +17,8 @@ public:
     std::unordered_map<AnimationType, Animation> animations;
     const std::vector<MultipleFilesAnimationSettings> emptyAnimationsSettings{};
     const std::string projectPath{utils::getProjectPath("chimarrao-platformer")};
-    const std::vector<MultipleFilesAnimationSettings> animationsSettings{{"idle", "dev/x1.txt", 3, 0.4},
-                                                                         {"walk", "elo/123.txt", 2, 0.7}};
+    const std::vector<MultipleFilesAnimationSettings> animationsSettings{{"idle", "dev/x1.txt", 3, 0.4f},
+                                                                         {"walk", "elo/123.txt", 2, 0.7f}};
 };
 
 TEST_F(AnimationsFromSettingsLoaderTest, givenEmptyAnimationsSettings_shouldThrowAnimationsNotFound)

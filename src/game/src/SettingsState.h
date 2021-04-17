@@ -1,6 +1,5 @@
 #pragma once
 
-#include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
@@ -11,24 +10,21 @@ namespace game
 {
 class SettingsStateUIConfigBuilder;
 
-class SettingsState : public State, public input::InputObserver
+class SettingsState : public State
 {
     friend class SettingsStateUIConfigBuilder;
 
 public:
     explicit SettingsState(const std::shared_ptr<window::Window>&,
-                           const std::shared_ptr<input::InputManager>&,
                            const std::shared_ptr<graphics::RendererPool>&,
                            std::stack<std::unique_ptr<State>>&, std::unique_ptr<components::ui::UIManager>);
-    ~SettingsState();
 
-    NextState update(const utils::DeltaTime&) override;
+    NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;
     void activate() override;
     void deactivate() override;
-    void handleInputStatus(const input::InputStatus&) override;
 
 private:
     void synchronizeWindowSettings();
@@ -48,7 +44,6 @@ private:
     unsigned int selectedResolutionIndex = 0;
     std::vector<unsigned int> supportedFrameLimits;
     unsigned int selectedFrameLimitIndex = 0;
-    const input::InputStatus* inputStatus;
     std::unique_ptr<components::ui::UIManager> uiManager;
 };
 }

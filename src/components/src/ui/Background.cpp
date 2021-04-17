@@ -9,8 +9,7 @@
 namespace components::ui
 {
 
-Background::Background(const std::shared_ptr<input::InputManager>& inputManager,
-                       const std::shared_ptr<graphics::RendererPool>& rendererPool,
+Background::Background(const std::shared_ptr<graphics::RendererPool>& rendererPool,
                        std::unique_ptr<BackgroundConfig> backgroundConfig)
 {
     if (not backgroundConfig)
@@ -43,16 +42,15 @@ Background::Background(const std::shared_ptr<input::InputManager>& inputManager,
     if (not backgroundConfig->keyActions.empty())
     {
         coreComponentsOwner->addComponent<components::core::HitBoxComponent>(backgroundConfig->size);
-        coreComponentsOwner->addComponent<components::core::ClickableComponent>(inputManager,
-                                                                                backgroundConfig->keyActions);
+        coreComponentsOwner->addComponent<components::core::ClickableComponent>(backgroundConfig->keyActions);
     }
 
     coreComponentsOwner->loadDependentComponents();
 }
 
-void Background::update(utils::DeltaTime deltaTime)
+void Background::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
-    coreComponentsOwner->update(deltaTime);
+    coreComponentsOwner->update(deltaTime, input);
     coreComponentsOwner->lateUpdate(deltaTime);
 }
 

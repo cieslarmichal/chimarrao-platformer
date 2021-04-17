@@ -63,8 +63,8 @@ void AnimationsFromSettingsLoader::loadAnimationsFromSingleFileAnimationsSetting
                                              static_cast<int>(animationSettings.textureRect.width),
                                              static_cast<int>(animationSettings.textureRect.height)};
 
-            if ((rect.left < 0 or rect.left > animationSettings.textureSize.x) and
-                (rect.width < 0 or rect.height > animationSettings.textureSize.y))
+            if ((rect.left < 0 or rect.left > static_cast<int>(animationSettings.textureSize.x)) and
+                (rect.width < 0 or rect.height > static_cast<int>(animationSettings.textureSize.y)))
             {
                 throw exceptions::InvalidAnimatorSettings{
                     "Texture rect: " + toString(rect) +

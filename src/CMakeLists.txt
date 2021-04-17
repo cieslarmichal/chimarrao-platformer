@@ -6,10 +6,10 @@ add_subdirectory(components)
 add_subdirectory(game)
 add_subdirectory(window)
 
-if(MSVC)
+if (MSVC)
     add_executable(chimarrao-platformer WIN32 Main.cpp)
-else()
+else ()
     add_executable(chimarrao-platformer Main.cpp)
-endif()
+endif ()
 
 target_link_libraries(chimarrao-platformer PUBLIC game)

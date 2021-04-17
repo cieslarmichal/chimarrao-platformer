@@ -3,7 +3,6 @@
 #include <chrono>
 #include <thread>
 
-#include "EditorState.h"
 #include "GraphicsFactory.h"
 #include "InputManagerFactory.h"
 #include "MenuState.h"
@@ -35,16 +34,10 @@ void Game::run()
     while (window->isOpen())
     {
         std::this_thread::sleep_for(std::chrono::duration<double, std::nano>(1));
-        processInput();
         update();
         lateUpdate();
         render();
     }
-}
-
-void Game::processInput()
-{
-    inputManager->readInput();
 }
 
 void Game::update()
@@ -57,7 +50,8 @@ void Game::update()
     }
     else
     {
-        auto nextState = states.top()->update(dt);
+        const auto& input = inputManager->readInput();
+        auto nextState = states.top()->update(dt, input);
 
         if (nextState == NextState::Previous)
         {
@@ -99,8 +93,7 @@ void Game::render()
 void Game::initStates()
 {
     states.push(std::make_unique<MenuState>(
-        window, inputManager, rendererPool, states,
-        std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool)));
+        window, rendererPool, states, std::make_unique<components::ui::DefaultUIManager>(rendererPool)));
 }
 
 void Game::backToThePreviousState()

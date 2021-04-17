@@ -36,15 +36,15 @@ const std::string validPathWithSingleFileAnimatorWithMissingFields{
     testDirectory + "validConfigWithSingleFileAnimatorWithMissingFields.yaml"};
 
 const MultipleFilesAnimationSettings playerMultipleFilesAnimationSettings1{
-    "idle", "resources/Player/Idle/idle-with-weapon-1.png", 6, 0.3};
+    "idle", "resources/Player/Idle/idle-with-weapon-1.png", 6, 0.3f};
 const MultipleFilesAnimationSettings playerMultipleFilesAnimationSettings2{
-    "walk", "resources/Player/Walk/walk-with-weapon-1.png", 11, 0.7};
+    "walk", "resources/Player/Walk/walk-with-weapon-1.png", 11, 0.7f};
 const std::vector<MultipleFilesAnimationSettings> playerMultipleFilesAnimationsSettings{
     playerMultipleFilesAnimationSettings1, playerMultipleFilesAnimationSettings2};
 const MultipleFilesAnimationSettings enemyMultipleFilesAnimationSettings1{
-    "idle", "resources/Enemy/Idle/idle-with-weapon-1.png", 3, 0.4};
+    "idle", "resources/Enemy/Idle/idle-with-weapon-1.png", 3, 0.4f};
 const MultipleFilesAnimationSettings enemyMultipleFilesAnimationSettings2{
-    "walk", "resources/Enemy/Walk/walk-with-weapon-1.png", 2, 0.8};
+    "walk", "resources/Enemy/Walk/walk-with-weapon-1.png", 2, 0.8f};
 const std::vector<MultipleFilesAnimationSettings> enemyMultipleFilesAnimationsSettings{
     enemyMultipleFilesAnimationSettings1, enemyMultipleFilesAnimationSettings2};
 const AnimatorsSettings animatorsSettings1{{}, {{"player", playerMultipleFilesAnimationsSettings}}};
@@ -52,10 +52,10 @@ const AnimatorsSettings animatorsSettings2{
     {}, {{"player", playerMultipleFilesAnimationsSettings}, {"enemy", enemyMultipleFilesAnimationsSettings}}};
 const SingleFileAnimationSettings bunnySingleFileAnimationSettings{"idle",
                                                                    "resources/bunny-hop-spritesheet.png",
-                                                                   utils::Vector2u{192, 128},
+                                                                   utils::Vector2u{192u, 128u},
                                                                    utils::IntRect{48, 85, 48, 43},
                                                                    1,
-                                                                   0.1};
+                                                                   0.1f};
 const std::vector<SingleFileAnimationSettings> bunnySingleFileAnimationsSettings{
     bunnySingleFileAnimationSettings};
 const AnimatorsSettings bunnyAnimatorsSettings{{{"bunny", bunnySingleFileAnimationsSettings}}, {}};

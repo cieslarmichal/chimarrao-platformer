@@ -1,7 +1,5 @@
 #pragma once
 
-#include "SFML/Graphics/Rect.hpp"
-
 #include "Component.h"
 #include "Vector.h"
 

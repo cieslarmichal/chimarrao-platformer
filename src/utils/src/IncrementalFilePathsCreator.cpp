@@ -31,7 +31,7 @@ FilePaths IncrementalFilePathsCreator::createFilePaths(const FilePath& fullPathT
     if (auto numberFromFileName = extractNumberFromFileName(*fileName))
     {
         FilePaths filePaths;
-        for (int i = 0; i < numberOfIncrementalFiles; i++)
+        for (unsigned int i = 0; i < numberOfIncrementalFiles; i++)
         {
             auto currentFileNameNumber = *numberFromFileName + i;
             auto currentFileName = *fileName;
@@ -81,14 +81,14 @@ boost::optional<int> IncrementalFilePathsCreator::extractNumberFromFileName(cons
                 std::stringstream tempStream{std::string(filePath.cbegin() + i, filePath.cend())};
                 tempStream >> number;
                 numberAsString = std::to_string(number);
-                i += numberAsString.size();
+                i += static_cast<int>(numberAsString.size());
                 continue;
             }
         }
         i++;
     }
 
-    int numberPosition = filePath.find(numberAsString);
+    int numberPosition = static_cast<int>(filePath.find(numberAsString));
     if (numberCounter != 1 || numberPosition == std::string::npos)
     {
         return boost::none;

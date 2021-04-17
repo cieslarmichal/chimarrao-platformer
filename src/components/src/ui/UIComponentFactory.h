@@ -16,7 +16,7 @@ namespace components::ui
 class UIComponentFactory
 {
 public:
-    UIComponentFactory(std::shared_ptr<input::InputManager>, std::shared_ptr<graphics::RendererPool>);
+    UIComponentFactory(std::shared_ptr<graphics::RendererPool>);
 
     std::unique_ptr<Background> createBackground(std::unique_ptr<BackgroundConfig>) const;
     std::unique_ptr<Button> createButton(std::unique_ptr<ButtonConfig>) const;
@@ -25,7 +25,6 @@ public:
     std::unique_ptr<TextField> createTextField(std::unique_ptr<TextFieldConfig>) const;
 
 private:
-    std::shared_ptr<input::InputManager> inputManager;
     std::shared_ptr<graphics::RendererPool> rendererPool;
 };
 }

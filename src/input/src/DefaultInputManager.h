@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "InputManager.h"
-#include "InputObservationHandler.h"
 #include "Window.h"
 
 namespace input
@@ -11,17 +10,12 @@ namespace input
 class DefaultInputManager : public InputManager
 {
 public:
-    explicit DefaultInputManager(std::unique_ptr<InputObservationHandler>, std::shared_ptr<window::Window>);
+    explicit DefaultInputManager(std::unique_ptr<Input>, std::shared_ptr<window::Window>);
 
-    void readInput() override;
-    void registerObserver(InputObserver*) override;
-    void removeObserver(InputObserver*) override;
+    const Input& readInput() override;
 
 private:
-    void notifyObservers() override;
-
-    std::unique_ptr<InputObservationHandler> observationHandler;
+    std::unique_ptr<Input> input;
     std::shared_ptr<window::Window> window;
-    InputStatus inputStatus;
 };
 }

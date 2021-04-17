@@ -1,15 +1,15 @@
 #pragma once
 
+#include "Input.h"
 #include "InputApi.h"
-#include "ObservableInput.h"
 
 namespace input
 {
-class INPUT_API InputManager : public ObservableInput
+class INPUT_API InputManager
 {
 public:
     virtual ~InputManager() = default;
 
-    virtual void readInput() = 0;
+    virtual const Input& readInput() = 0;
 };
 }

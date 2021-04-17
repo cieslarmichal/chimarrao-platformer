@@ -56,7 +56,7 @@ sf::Vector2u RenderTargetSfml::getSize() const
     return windowSize;
 }
 
-bool RenderTargetSfml::setActive(bool active)
+bool RenderTargetSfml::setActive(bool)
 {
     return true;
 }
@@ -72,10 +72,10 @@ sf::View getLetterboxView(sf::View view, unsigned windowWidth, unsigned windowHe
 
     float windowRatio = boost::numeric_cast<float>(windowWidth) / boost::numeric_cast<float>(windowHeight);
     float viewRatio = view.getSize().x / view.getSize().y;
-    float sizeX = 1;
-    float sizeY = 1;
-    float posX = 0;
-    float posY = 0;
+    float sizeX = 1.f;
+    float sizeY = 1.f;
+    float posX = 0.f;
+    float posY = 0.f;
 
     bool horizontalSpacing = true;
     if (windowRatio < viewRatio)

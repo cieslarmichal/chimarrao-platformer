@@ -3,7 +3,6 @@
 #include <memory>
 
 #include "InputManager.h"
-#include "InputObserver.h"
 #include "RendererPool.h"
 #include "TextFieldConfig.h"
 #include "Timer.h"
@@ -12,25 +11,20 @@
 
 namespace components::ui
 {
-class TextField : public UIComponent, public input::InputObserver
+class TextField : public UIComponent
 {
 public:
-    TextField(const std::shared_ptr<input::InputManager>&, const std::shared_ptr<graphics::RendererPool>&,
-              std::unique_ptr<TextFieldConfig>);
-    ~TextField();
+    TextField(const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<TextFieldConfig>);
 
-    void update(utils::DeltaTime) override;
+    void update(utils::DeltaTime, const input::Input&) override;
     std::string getName() const override;
     void activate() override;
     void deactivate() override;
-    void handleInputStatus(const input::InputStatus&) override;
     void setColor(graphics::Color);
 
 private:
     void setText(const std::string&);
 
-    std::shared_ptr<input::InputManager> inputManager;
-    const input::InputStatus* inputStatus;
     std::string name;
     std::unique_ptr<components::core::ComponentOwner> coreComponentsOwner;
     std::string inputBuffer;

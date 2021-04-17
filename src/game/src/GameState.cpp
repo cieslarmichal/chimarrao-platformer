@@ -13,17 +13,14 @@ namespace game
 {
 
 GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
-                     const std::shared_ptr<input::InputManager>& inputManagerInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                      std::stack<std::unique_ptr<State>>& statesInit,
                      std::unique_ptr<components::ui::UIManager> uiManagerInit)
-    : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
-      inputStatus{nullptr},
+    : State{windowInit, rendererPoolInit, statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
       uiManager{std::move(uiManagerInit)}
 {
-    inputManager->registerObserver(this);
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
     player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10}, "player");
@@ -31,7 +28,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
         rendererPool, utils::Vector2f{5, 5}, utils::Vector2f{10, 10}, graphics::Color{128, 91, 50},
         graphics::VisibilityLayer::Second);
     auto graphicsId = graphicsComponent->getGraphicsId();
-    player->addComponent<components::core::KeyboardMovementComponent>(inputManager);
+    player->addComponent<components::core::KeyboardMovementComponent>();
     auto animatorsFactory = animations::AnimatorFactory::createAnimatorFactory(rendererPool);
     std::shared_ptr<animations::Animator> bunnyAnimator = animatorsFactory->createBunnyAnimator(graphicsId);
     player->addComponent<components::core::AnimationComponent>(bunnyAnimator);
@@ -40,23 +37,18 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     timer.start();
 }
 
-GameState::~GameState()
-{
-    inputManager->removeObserver(this);
-}
-
-NextState GameState::update(const utils::DeltaTime& deltaTime)
+NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
     if (timer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
-        inputStatus->isKeyPressed(input::InputKey::Escape))
+        input.isKeyPressed(input::InputKey::Escape))
     {
         pause();
     }
 
     if (not paused)
     {
-        player->update(deltaTime);
-        uiManager->update(deltaTime);
+        player->update(deltaTime, input);
+        uiManager->update(deltaTime, input);
     }
 
     return NextState::Same;
@@ -96,11 +88,6 @@ void GameState::deactivate()
     uiManager->deactivate();
 }
 
-void GameState::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
-}
-
 void GameState::pause()
 {
     paused = true;
@@ -108,8 +95,7 @@ void GameState::pause()
     player->getComponent<components::core::GraphicsComponent>()->enable();
 
     states.push(std::make_unique<PauseState>(
-        window, inputManager, rendererPool, states,
-        std::make_unique<components::ui::DefaultUIManager>(inputManager, rendererPool)));
+        window, rendererPool, states, std::make_unique<components::ui::DefaultUIManager>(rendererPool)));
 }
 
 }

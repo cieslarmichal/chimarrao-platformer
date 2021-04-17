@@ -7,7 +7,7 @@ namespace game
 
 TileMapSerializerJson::TileMapSerializerJson() {}
 
-std::string TileMapSerializerJson::serialize(const TileMapInfo& tileMapInfo)
+std::string TileMapSerializerJson::serialize(const TileMapInfo&)
 {
     nlohmann::json json = nlohmann::json().object();
     //    json["info"]["name"] = tileMapInfo.name;
@@ -24,7 +24,7 @@ std::string TileMapSerializerJson::serialize(const TileMapInfo& tileMapInfo)
     return "";
 }
 
-TileMapInfo TileMapSerializerJson::deserialize(const std::string& string) const
+TileMapInfo TileMapSerializerJson::deserialize(const std::string&) const
 {
     return TileMapInfo{};
 }

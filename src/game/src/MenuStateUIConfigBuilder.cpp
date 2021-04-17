@@ -66,9 +66,8 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     {
         menuState->states.top()->deactivate();
         menuState->states.push(std::make_unique<GameState>(
-            menuState->window, menuState->inputManager, menuState->rendererPool, menuState->states,
-            std::make_unique<components::ui::DefaultUIManager>(menuState->inputManager,
-                                                               menuState->rendererPool)));
+            menuState->window, menuState->rendererPool, menuState->states,
+            std::make_unique<components::ui::DefaultUIManager>(menuState->rendererPool)));
     };
     auto playButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuPlayButton", gameButtonPosition, buttonSize, buttonColor, "Play", graphics::Color::Black, 35,
@@ -95,9 +94,8 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     {
         menuState->states.top()->deactivate();
         menuState->states.push(std::make_unique<EditorState>(
-            menuState->window, menuState->inputManager, menuState->rendererPool, menuState->states,
-            std::make_unique<components::ui::DefaultUIManager>(menuState->inputManager,
-                                                               menuState->rendererPool)));
+            menuState->window, menuState->rendererPool, menuState->states,
+            std::make_unique<components::ui::DefaultUIManager>(menuState->rendererPool)));
     };
     auto mapEditorButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuMapEditorButton", mapEditorButtonPosition, buttonSize, buttonColor, "Map Editor",
@@ -125,9 +123,8 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     {
         menuState->states.top()->deactivate();
         menuState->states.push(std::make_unique<ControlsState>(
-            menuState->window, menuState->inputManager, menuState->rendererPool, menuState->states,
-            std::make_unique<components::ui::DefaultUIManager>(menuState->inputManager,
-                                                               menuState->rendererPool)));
+            menuState->window, menuState->rendererPool, menuState->states,
+            std::make_unique<components::ui::DefaultUIManager>(menuState->rendererPool)));
     };
     auto controlsButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuControlsButton", controlsButtonPosition, buttonSize, buttonColor, "Controls",
@@ -155,9 +152,8 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     {
         menuState->states.top()->deactivate();
         menuState->states.push(std::make_unique<SettingsState>(
-            menuState->window, menuState->inputManager, menuState->rendererPool, menuState->states,
-            std::make_unique<components::ui::DefaultUIManager>(menuState->inputManager,
-                                                               menuState->rendererPool)));
+            menuState->window, menuState->rendererPool, menuState->states,
+            std::make_unique<components::ui::DefaultUIManager>(menuState->rendererPool)));
     };
     auto settingsButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuSettingsButton", settingsButtonPosition, buttonSize, buttonColor, "Settings",

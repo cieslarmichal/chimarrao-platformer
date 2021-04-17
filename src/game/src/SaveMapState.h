@@ -1,6 +1,5 @@
 #pragma once
 
-#include "InputObserver.h"
 #include "State.h"
 #include "Timer.h"
 #include "editor/TileMap.h"
@@ -12,28 +11,25 @@ namespace game
 {
 class SaveMapStateUIConfigBuilder;
 
-class SaveMapState : public State, public input::InputObserver
+class SaveMapState : public State
 {
     friend class SaveMapStateUIConfigBuilder;
 
 public:
-    explicit SaveMapState(const std::shared_ptr<window::Window>&, const std::shared_ptr<input::InputManager>&,
+    explicit SaveMapState(const std::shared_ptr<window::Window>&,
                           const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&,
                           std::unique_ptr<components::ui::UIManager>, TileMap&);
-    ~SaveMapState();
 
-    NextState update(const utils::DeltaTime&) override;
+    NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
     std::string getName() const override;
     void activate() override;
     void deactivate() override;
-    void handleInputStatus(const input::InputStatus&) override;
 
 private:
     void saveMap();
 
-    const input::InputStatus* inputStatus;
     utils::Timer possibleLeaveFromStateTimer;
     const float timeAfterLeaveStateIsPossible;
     bool shouldBackToEditorMenu;

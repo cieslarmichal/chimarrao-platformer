@@ -1,6 +1,6 @@
-#include "Game.h"
-
 #include <Windows.h>
+
+#include "Game.h"
 
 int main()
 {
@@ -10,10 +10,8 @@ int main()
 }
 
 #ifdef _WIN32
-int APIENTRY WinMain(HINSTANCE hInstance,
-HINSTANCE hPrevInstance,
-    LPSTR lpCmdLine, int nCmdShow)
+int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
-return main();
+    return main();
 }
 #endif

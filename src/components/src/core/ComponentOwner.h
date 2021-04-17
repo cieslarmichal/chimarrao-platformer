@@ -5,6 +5,7 @@
 
 #include "Component.h"
 #include "DeltaTime.h"
+#include "Input.h"
 #include "TransformComponent.h"
 #include "UniqueName.h"
 
@@ -16,7 +17,7 @@ public:
     ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit);
 
     void loadDependentComponents();
-    void update(utils::DeltaTime);
+    void update(utils::DeltaTime, const input::Input&);
     void lateUpdate(utils::DeltaTime);
     void enable();
     void disable();

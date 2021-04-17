@@ -3,6 +3,7 @@
 #include <string>
 
 #include "DeltaTime.h"
+#include "Input.h"
 #include "UIComponentTypes.h"
 #include "UIConfig.h"
 
@@ -14,7 +15,7 @@ public:
     virtual ~UIManager() = default;
 
     virtual void createUI(std::unique_ptr<UIConfig>) = 0;
-    virtual void update(utils::DeltaTime) = 0;
+    virtual void update(utils::DeltaTime, const input::Input&) = 0;
     virtual void activate() = 0;
     virtual void deactivate() = 0;
     virtual void setColor(UIComponentType, const std::string& componentName, graphics::Color) = 0;

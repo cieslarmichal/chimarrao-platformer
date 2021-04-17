@@ -26,8 +26,11 @@ set(UT_SOURCES
 add_library(graphics SHARED ${SOURCES})
 target_link_libraries(graphics PUBLIC utils window)
 target_include_directories(graphics PUBLIC src)
+target_compile_options(graphics PUBLIC ${FLAGS})
 
 add_executable(graphicsUT ${UT_SOURCES} ${SOURCES})
 target_link_libraries(graphicsUT PUBLIC gmock_main gtest utils window)
+target_compile_options(graphicsUT PUBLIC ${FLAGS})
+
 add_test(NAME graphicsUT COMMAND graphicsUT WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 

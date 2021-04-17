@@ -14,10 +14,9 @@ namespace components::ui
 class CheckBox : public UIComponent
 {
 public:
-    CheckBox(const std::shared_ptr<input::InputManager>&, const std::shared_ptr<graphics::RendererPool>&,
-             std::unique_ptr<CheckBoxConfig>);
+    CheckBox(const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<CheckBoxConfig>);
 
-    void update(utils::DeltaTime) override;
+    void update(utils::DeltaTime, const input::Input&) override;
     std::string getName() const override;
     void activate() override;
     void deactivate() override;

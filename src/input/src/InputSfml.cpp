@@ -1,14 +1,13 @@
-#include "InputStatus.h"
+#include "InputSfml.h"
 
 #include <tuple>
 
-#include "InputKey.h"
 #include "StlOperators.h"
 
 namespace input
 {
 
-InputStatus::InputStatus()
+InputSfml::InputSfml()
     : numberOfKeys{static_cast<unsigned long>(allKeys.size())},
       pressedKeys(numberOfKeys, false),
       pressedKeysHistory(numberOfKeys, false),
@@ -16,22 +15,22 @@ InputStatus::InputStatus()
 {
 }
 
-bool InputStatus::isKeyPressed(InputKey key) const
+bool InputSfml::isKeyPressed(InputKey key) const
 {
     return pressedKeys.at(static_cast<unsigned>(key));
 }
 
-void InputStatus::setKeyPressed(InputKey key)
+void InputSfml::setKeyPressed(InputKey key)
 {
     pressedKeys[static_cast<unsigned>(key)] = true;
 }
 
-bool InputStatus::isKeyReleased(InputKey key) const
+bool InputSfml::isKeyReleased(InputKey key) const
 {
     return releasedKeys.at(static_cast<unsigned>(key));
 }
 
-void InputStatus::setReleasedKeys()
+void InputSfml::setReleasedKeys()
 {
     for (unsigned long i = 0; i < numberOfKeys; i++)
     {
@@ -40,17 +39,17 @@ void InputStatus::setReleasedKeys()
     pressedKeysHistory = pressedKeys;
 }
 
-void InputStatus::setMousePosition(const utils::Vector2f& position)
+void InputSfml::setMousePosition(const utils::Vector2f& position)
 {
     mousePosition = position;
 }
 
-utils::Vector2f InputStatus::getMousePosition() const
+utils::Vector2f InputSfml::getMousePosition() const
 {
     return mousePosition;
 }
 
-void InputStatus::clearPressedKeys()
+void InputSfml::clearPressedKeys()
 {
     for (unsigned long i = 0; i < numberOfKeys; i++)
     {
@@ -60,7 +59,7 @@ void InputStatus::clearPressedKeys()
 
 namespace
 {
-std::tuple<std::vector<InputKey>, std::vector<InputKey>> getKeysInformation(const InputStatus& inputStatus)
+std::tuple<std::vector<InputKey>, std::vector<InputKey>> getKeysInformation(const Input& inputStatus)
 {
     std::vector<InputKey> pressedKeys;
     std::vector<InputKey> releasedKeys;
@@ -80,13 +79,13 @@ std::tuple<std::vector<InputKey>, std::vector<InputKey>> getKeysInformation(cons
 }
 }
 
-bool operator==(const InputStatus& lhs, const InputStatus& rhs)
+bool operator==(const Input& lhs, const Input& rhs)
 {
     return getKeysInformation(lhs) == getKeysInformation(rhs) &&
            lhs.getMousePosition() == rhs.getMousePosition();
 }
 
-std::ostream& operator<<(std::ostream& os, const InputStatus& inputStatus)
+std::ostream& operator<<(std::ostream& os, const Input& inputStatus)
 {
     const auto [pressedKeys, releasedKeys] = getKeysInformation(inputStatus);
     os << "PressedKeys: " << pressedKeys << std::endl;

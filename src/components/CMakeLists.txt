@@ -33,8 +33,10 @@ set(UT_SOURCES
 add_library(components ${SOURCES})
 target_link_libraries(components PUBLIC utils graphics animations input)
 target_include_directories(components PUBLIC src)
+target_compile_options(components PUBLIC ${FLAGS})
 
 add_executable(componentsUT ${UT_SOURCES})
 target_link_libraries(componentsUT PUBLIC gmock_main gtest components)
+target_compile_options(componentsUT PUBLIC ${FLAGS})
 add_test(NAME componentsUT COMMAND componentsUT WORKING_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 

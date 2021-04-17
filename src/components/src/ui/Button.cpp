@@ -10,8 +10,7 @@
 namespace components::ui
 {
 
-Button::Button(const std::shared_ptr<input::InputManager>& inputManager,
-               const std::shared_ptr<graphics::RendererPool>& rendererPool,
+Button::Button(const std::shared_ptr<graphics::RendererPool>& rendererPool,
                std::unique_ptr<ButtonConfig> buttonConfig)
     : timeAfterButtonCanBeClicked{0.25f}
 {
@@ -32,15 +31,13 @@ Button::Button(const std::shared_ptr<input::InputManager>& inputManager,
 
     if (buttonConfig->clickAction)
     {
-        coreComponentsOwner->addComponent<components::core::ClickableComponent>(inputManager,
-                                                                                *buttonConfig->clickAction);
+        coreComponentsOwner->addComponent<components::core::ClickableComponent>(*buttonConfig->clickAction);
     }
 
     if (buttonConfig->mouseOverActions)
     {
         coreComponentsOwner->addComponent<components::core::MouseOverComponent>(
-            inputManager, buttonConfig->mouseOverActions->mouseOverAction,
-            buttonConfig->mouseOverActions->mouseOutAction);
+            buttonConfig->mouseOverActions->mouseOverAction, buttonConfig->mouseOverActions->mouseOutAction);
     }
 
     coreComponentsOwner->loadDependentComponents();
@@ -53,7 +50,7 @@ Button::Button(const std::shared_ptr<input::InputManager>& inputManager,
     freezeClickableButtonTimer.start();
 }
 
-void Button::update(utils::DeltaTime deltaTime)
+void Button::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
     if (buttonClickActionFrozen &&
         freezeClickableButtonTimer.getElapsedSeconds() > timeAfterButtonCanBeClicked)
@@ -66,7 +63,7 @@ void Button::update(utils::DeltaTime deltaTime)
         }
     }
 
-    coreComponentsOwner->update(deltaTime);
+    coreComponentsOwner->update(deltaTime, input);
     coreComponentsOwner->lateUpdate(deltaTime);
 }
 

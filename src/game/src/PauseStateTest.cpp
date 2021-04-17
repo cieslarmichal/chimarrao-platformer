@@ -2,7 +2,6 @@
 
 #include "gtest/gtest.h"
 
-#include "InputManagerMock.h"
 #include "RendererPoolMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
@@ -18,15 +17,11 @@ class PauseStateTest_Base : public Test
 public:
     PauseStateTest_Base()
     {
-        EXPECT_CALL(*inputManager, registerObserver(_));
-        EXPECT_CALL(*inputManager, removeObserver(_));
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
     }
 
-    std::shared_ptr<StrictMock<input::InputManagerMock>> inputManager =
-        std::make_shared<StrictMock<input::InputManagerMock>>();
     std::shared_ptr<StrictMock<window::WindowMock>> window =
         std::make_shared<StrictMock<window::WindowMock>>();
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
@@ -40,7 +35,7 @@ public:
 class PauseStateTest : public PauseStateTest_Base
 {
 public:
-    PauseState pauseState{window, inputManager, rendererPool, states, std::move(uiManagerInit)};
+    PauseState pauseState{window, rendererPool, states, std::move(uiManagerInit)};
 };
 
 TEST_F(PauseStateTest, xxx) {}

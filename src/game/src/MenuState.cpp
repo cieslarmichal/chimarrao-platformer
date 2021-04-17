@@ -1,11 +1,10 @@
 #include "MenuState.h"
 
-#include "ControlsState.h"
+#include "CommonUIConfigElements.h"
 #include "GetProjectPath.h"
 #include "MenuStateUIConfigBuilder.h"
 #include "core/GraphicsComponent.h"
 #include "core/HitBoxComponent.h"
-#include "core/MouseOverComponent.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
@@ -24,23 +23,19 @@ const auto buttonColor = graphics::Color(251, 190, 102);
 const auto buttonHoverColor = graphics::Color(205, 128, 66);
 const auto buttonSize = utils::Vector2f{23, 6};
 const auto iconSize = utils::Vector2f{4, 4};
-const auto iconPath = utils::getProjectPath("chimarrao-platformer") + "resources/yerba_item.png";
 }
 
 MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
-                     const std::shared_ptr<input::InputManager>& inputManagerInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                      std::stack<std::unique_ptr<State>>& statesInit,
                      std::unique_ptr<components::ui::UIManager> uiManagerInit)
-    : State{windowInit, inputManagerInit, rendererPoolInit, statesInit},
-      inputStatus{nullptr},
+    : State{windowInit, rendererPoolInit, statesInit},
       currentButtonIndex{0},
-      timeAfterButtonCanBeSwitched{0.1},
+      timeAfterButtonCanBeSwitched{0.1f},
       buttonNames{"menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton",
                   "menuExitButton"},
       uiManager{std::move(uiManagerInit)}
 {
-    inputManager->registerObserver(this);
     uiManager->createUI(MenuStateUIConfigBuilder::createMenuUIConfig(this));
 
     createIcons();
@@ -49,24 +44,27 @@ MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
     setIconVisible(currentButtonIndex);
 }
 
-MenuState::~MenuState()
-{
-    inputManager->removeObserver(this);
-}
-
-NextState MenuState::update(const utils::DeltaTime& deltaTime)
+NextState MenuState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
     if (switchButtonTimer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
     {
-        handleButtonSwitching();
+        if (input.isKeyPressed(input::InputKey::Up))
+        {
+            changeSelectedButtonUp();
+        }
+        else if (input.isKeyPressed(input::InputKey::Down))
+        {
+            changeSelectedButtonDown();
+        }
+        switchButtonTimer.restart();
     }
 
-    uiManager->update(deltaTime);
+    uiManager->update(deltaTime, input);
 
     return NextState::Same;
 }
 
-void MenuState::lateUpdate(const utils::DeltaTime& deltaTime) {}
+void MenuState::lateUpdate(const utils::DeltaTime&) {}
 
 void MenuState::render()
 {
@@ -88,24 +86,6 @@ void MenuState::deactivate()
 {
     active = false;
     uiManager->deactivate();
-}
-
-void MenuState::handleInputStatus(const input::InputStatus& inputStatusInit)
-{
-    inputStatus = &inputStatusInit;
-}
-
-void MenuState::handleButtonSwitching()
-{
-    if (inputStatus->isKeyPressed(input::InputKey::Up))
-    {
-        changeSelectedButtonUp();
-    }
-    else if (inputStatus->isKeyPressed(input::InputKey::Down))
-    {
-        changeSelectedButtonDown();
-    }
-    switchButtonTimer.restart();
 }
 
 void MenuState::createIcons()
@@ -132,7 +112,7 @@ void MenuState::changeSelectedButtonUp()
 
     if (currentButtonIndex == 0)
     {
-        currentButtonIndex = buttonNames.size() - 1;
+        currentButtonIndex = static_cast<unsigned int>(buttonNames.size() - 1);
     }
     else
     {
