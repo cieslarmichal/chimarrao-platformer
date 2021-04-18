@@ -1,14 +1,14 @@
 #pragma once
 
-#include <map>
 #include <memory>
-#include <stack>
 
 #include "InputManager.h"
 #include "RendererPool.h"
 #include "State.h"
 #include "Timer.h"
 #include "Window.h"
+#include "States.h"
+#include "editor/TileMap.h"
 
 namespace game
 {
@@ -21,17 +21,14 @@ public:
 
 private:
     void update();
-    void lateUpdate();
     void render();
-    void initStates();
-    void backToThePreviousState();
-    void backToTheMenuState();
 
     utils::Timer timer;
-    utils::DeltaTime dt;
+    utils::DeltaTime deltaTime;
     std::shared_ptr<window::Window> window;
     std::shared_ptr<graphics::RendererPool> rendererPool;
     std::shared_ptr<input::InputManager> inputManager;
-    std::stack<std::unique_ptr<State>> states;
+    std::unique_ptr<TileMap> tileMap;
+    std::unique_ptr<States> states;
 };
 }

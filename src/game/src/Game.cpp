@@ -3,16 +3,25 @@
 #include <chrono>
 #include <thread>
 
+#include "DefaultStates.h"
 #include "GraphicsFactory.h"
 #include "InputManagerFactory.h"
 #include "MenuState.h"
 #include "Vector.h"
 #include "WindowFactory.h"
-#include "ui/DefaultUIManager.h"
 
 namespace game
 {
-Game::Game() : dt{0}
+namespace
+{
+const int rendererPoolSizeX = 80;
+const int rendererPoolSizeY = 60;
+const int tileSizeX = 4;
+const int tileSizeY = 4;
+}
+
+// TODO: inject dependencies to Game constructor and create GameFactory
+Game::Game() : deltaTime{0}
 {
     auto graphicsFactory = graphics::GraphicsFactory::createGraphicsFactory();
     auto windowFactory = window::WindowFactory::createWindowFactory();
@@ -25,8 +34,11 @@ Game::Game() : dt{0}
 
     rendererPool = graphicsFactory->createRendererPool(window, windowSize, mapSize);
     inputManager = inputManagerFactory->createInputManager(window);
+    tileMap = std::make_unique<TileMap>(
+        "", utils::Vector2i(rendererPoolSizeX / tileSizeX * 2, rendererPoolSizeY / tileSizeY));
+    states = std::make_unique<DefaultStates>(window, rendererPool, *tileMap);
     timer.start();
-    initStates();
+    states->addNextState(StateType::Menu);
 }
 
 void Game::run()
@@ -35,88 +47,27 @@ void Game::run()
     {
         std::this_thread::sleep_for(std::chrono::duration<double, std::nano>(1));
         update();
-        lateUpdate();
         render();
     }
 }
 
 void Game::update()
 {
-    dt = timer.getDurationFromLastUpdate();
+    deltaTime = timer.getDurationFromLastUpdate();
 
-    if (states.empty())
+    const auto& input = inputManager->readInput();
+    const auto statesStatus = states->updateCurrentState(deltaTime, input);
+    if (statesStatus == StatesStatus::Exit)
     {
         window->close();
-    }
-    else
-    {
-        const auto& input = inputManager->readInput();
-        auto nextState = states.top()->update(dt, input);
-
-        if (nextState == NextState::Previous)
-        {
-            backToThePreviousState();
-        }
-        else if (nextState == NextState::Menu)
-        {
-            backToTheMenuState();
-        }
-    }
-}
-
-void Game::lateUpdate()
-{
-    // TODO: problem with two different dt within update and lateUpdate
-    dt = timer.getDurationFromLastUpdate();
-
-    if (states.empty())
-    {
-        window->close();
-    }
-    else
-    {
-        states.top()->lateUpdate(dt);
     }
 }
 
 void Game::render()
 {
-    if (not states.empty())
-    {
-        states.top()->render();
-    }
-
+    states->render();
     window->update();
     window->display();
-}
-
-void Game::initStates()
-{
-    states.push(std::make_unique<MenuState>(
-        window, rendererPool, states, std::make_unique<components::ui::DefaultUIManager>(rendererPool)));
-}
-
-void Game::backToThePreviousState()
-{
-    states.pop();
-
-    if (not states.empty())
-    {
-        states.top()->activate();
-    }
-}
-
-void Game::backToTheMenuState()
-{
-    while (not states.empty() && states.top()->getName() != "Menu state")
-    {
-        states.pop();
-    }
-
-    if (not states.empty())
-    {
-        states.top()->activate();
-    }
 }
 
 }

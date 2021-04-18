@@ -9,7 +9,7 @@ namespace game
 
 PauseState::PauseState(const std::shared_ptr<window::Window>& windowInit,
                        const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                       std::stack<std::unique_ptr<State>>& statesInit,
+                       States& statesInit,
                        std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, rendererPoolInit, statesInit},
       timeAfterLeaveStateIsPossible{0.5f},
@@ -50,9 +50,9 @@ void PauseState::render()
     rendererPool->renderAll();
 }
 
-std::string PauseState::getName() const
+StateType PauseState::getType() const
 {
-    return "Pause state";
+    return StateType::Pause;
 }
 
 void PauseState::activate()

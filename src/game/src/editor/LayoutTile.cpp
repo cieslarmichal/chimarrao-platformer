@@ -8,9 +8,9 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
                        const utils::Vector2i& positionInit, const utils::Vector2f& sizeInit,
                        const std::shared_ptr<TileType>& currentTileTypeInit, TileMap& tileMapInit)
     : size(sizeInit),
-      position(positionInit),
+      position{positionInit},
       currentTileType(currentTileTypeInit),
-      tileMap(tileMapInit),
+      tileMap{tileMapInit},
       timeAfterTileCanBeClicked{0.25f}
 {
     componentOwner = std::make_shared<components::core::ComponentOwner>(
@@ -23,16 +23,20 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
     const auto onRightMouseButtonClickActionLambda = [=, &tileMapInit]
     {
         *currentTileType = getNextTileType(*currentTileType);
-        if (!tileMap.getTile(position)->type)
+      std::cerr << position;
+
+        if (!tileMapInit.getTile(position)->type)
         {
             graphicsComponent->setTexture(tileTypeToPathTexture(*currentTileType));
         }
     };
     const auto onLeftMouseButtonClickActionLambda = [=, &tileMapInit]
     {
-        if (!tileMap.getTile(position)->type)
+      std::cerr << position;
+
+      if (!tileMapInit.getTile(position)->type)
         {
-            tileMap.getTile(position)->type = *currentTileType;
+            tileMapInit.getTile(position)->type = *currentTileType;
             graphicsComponent->setColor(graphics::Color(255, 255, 255, 255));
             graphicsComponent->setOutline(0.0f, graphics::Color::Transparent);
             graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
@@ -40,7 +44,7 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
         }
         else
         {
-            tileMap.getTile(position)->type = std::nullopt;
+            tileMapInit.getTile(position)->type = std::nullopt;
             graphicsComponent->setTexture(tileTypeToPathTexture(*currentTileType));
             graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
             graphicsComponent->setColor(graphics::Color(255, 255, 255, 64));
@@ -53,8 +57,9 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
             {input::InputKey::MouseLeft, onLeftMouseButtonClickActionLambda}});
     const auto onMouseOverActionLambda = [=, &tileMapInit]
     {
-        graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
-        if (!tileMap.getTile(position)->type)
+      std::cerr << position;
+      graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
+        if (!tileMapInit.getTile(position)->type)
         {
             graphicsComponent->setTexture(tileTypeToPathTexture(*currentTileType));
             graphicsComponent->setColor(graphics::Color(255, 255, 255, 64));
@@ -67,7 +72,9 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
     };
     const auto onMouseOutActionLambda = [=, &tileMapInit]
     {
-        if (!tileMap.getTile(position)->type)
+      std::cerr << position;
+
+      if (!tileMapInit.getTile(position)->type)
         {
             graphicsComponent->setVisibility(graphics::VisibilityLayer::Invisible);
         }

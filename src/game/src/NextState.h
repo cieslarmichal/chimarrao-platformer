@@ -12,13 +12,16 @@ enum class NextState
 {
     Same,
     Previous,
-    Menu
+    Menu,
+    Exit
 };
 
 inline std::string toString(NextState nextState)
 {
-    std::unordered_map<NextState, std::string> nextStateToString{
-        {NextState::Same, "Same"}, {NextState::Previous, "Previous"}, {NextState::Menu, "Menu"}};
+    std::unordered_map<NextState, std::string> nextStateToString{{NextState::Same, "Same"},
+                                                                 {NextState::Previous, "Previous"},
+                                                                 {NextState::Menu, "Menu"},
+                                                                 {NextState::Exit, "Exit"}};
 
     return nextStateToString.at(nextState);
 }
@@ -27,8 +30,10 @@ inline NextState toNextState(const std::string& nextStateAsString)
 {
     const auto nextStateLowerString = utils::StringHelper::getLowerCases(nextStateAsString);
 
-    std::unordered_map<std::string, NextState> stringToNextStates{
-        {"same", NextState::Same}, {"previous", NextState::Previous}, {"menu", NextState::Menu}};
+    std::unordered_map<std::string, NextState> stringToNextStates{{"same", NextState::Same},
+                                                                  {"previous", NextState::Previous},
+                                                                  {"menu", NextState::Menu},
+                                                                  {"exit", NextState::Exit}};
 
     return stringToNextStates.at(nextStateAsString);
 }

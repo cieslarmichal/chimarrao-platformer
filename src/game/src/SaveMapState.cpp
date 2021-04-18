@@ -1,5 +1,7 @@
 #include "SaveMapState.h"
 
+#include <utility>
+
 #include "SaveMapStateUIConfigBuilder.h"
 
 namespace game
@@ -7,13 +9,13 @@ namespace game
 
 SaveMapState::SaveMapState(const std::shared_ptr<window::Window>& windowInit,
                            const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                           std::stack<std::unique_ptr<State>>& statesInit,
-                           std::unique_ptr<components::ui::UIManager> uiManagerInit, TileMap& tileMap)
+                           States& statesInit, std::unique_ptr<components::ui::UIManager> uiManagerInit,
+                           TileMap& tileMapInit)
     : State{windowInit, rendererPoolInit, statesInit},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditorMenu{false},
       uiManager{std::move(uiManagerInit)},
-      tileMap{tileMap}
+      tileMap{tileMapInit}
 {
     uiManager->createUI(SaveMapStateUIConfigBuilder::createSaveMapUIConfig(this));
 
@@ -39,9 +41,9 @@ void SaveMapState::render()
     rendererPool->renderAll();
 }
 
-std::string SaveMapState::getName() const
+StateType SaveMapState::getType() const
 {
-    return "Save map state";
+    return StateType::SaveMap;
 }
 
 void SaveMapState::activate()

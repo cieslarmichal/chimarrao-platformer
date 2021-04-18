@@ -1,6 +1,5 @@
-#include <Windows.h>
-
 #include "Game.h"
+//#include "Windows.h"
 
 int main()
 {
@@ -9,9 +8,9 @@ int main()
     return 0;
 }
 
-#ifdef _WIN32
-int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
-{
-    return main();
-}
-#endif
+//#ifdef _WIN32
+//int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+//{
+//    return main();
+//}
+//#endif

@@ -1,5 +1,7 @@
 #include "EditorMenuState.h"
 
+#include <utility>
+
 #include "EditorMenuStateUIConfigBuilder.h"
 #include "GetProjectPath.h"
 #include "ui/DefaultUIManager.h"
@@ -9,14 +11,14 @@ namespace game
 
 EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowInit,
                                  const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                                 std::stack<std::unique_ptr<State>>& statesInit,
-                                 std::unique_ptr<components::ui::UIManager> uiManagerInit, TileMap& tileMap)
+                                 States& statesInit,
+                                 std::unique_ptr<components::ui::UIManager> uiManagerInit, TileMap& tileMapInit)
     : State{windowInit, rendererPoolInit, statesInit},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditor{false},
       shouldBackToMenu{false},
       uiManager{std::move(uiManagerInit)},
-      tileMap{tileMap}
+      tileMap{tileMapInit}
 {
     uiManager->createUI(EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(this));
     possibleLeaveFromStateTimer.start();
@@ -51,9 +53,9 @@ void EditorMenuState::render()
     rendererPool->renderAll();
 }
 
-std::string EditorMenuState::getName() const
+StateType EditorMenuState::getType() const
 {
-    return "Editor menu state";
+    return StateType::EditorMenu;
 }
 
 void EditorMenuState::activate()

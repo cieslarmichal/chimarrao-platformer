@@ -17,12 +17,12 @@ class SettingsState : public State
 public:
     explicit SettingsState(const std::shared_ptr<window::Window>&,
                            const std::shared_ptr<graphics::RendererPool>&,
-                           std::stack<std::unique_ptr<State>>&, std::unique_ptr<components::ui::UIManager>);
+                           States&, std::unique_ptr<components::ui::UIManager>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
-    std::string getName() const override;
+    StateType getType() const override;
     void activate() override;
     void deactivate() override;
 

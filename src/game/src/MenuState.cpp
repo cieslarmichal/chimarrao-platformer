@@ -27,14 +27,14 @@ const auto iconSize = utils::Vector2f{4, 4};
 
 MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                     std::stack<std::unique_ptr<State>>& statesInit,
+                     States& statesInit,
                      std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, rendererPoolInit, statesInit},
       currentButtonIndex{0},
       timeAfterButtonCanBeSwitched{0.1f},
       buttonNames{"menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton",
                   "menuExitButton"},
-      uiManager{std::move(uiManagerInit)}
+      uiManager{std::move(uiManagerInit)}, shouldExit{false}
 {
     uiManager->createUI(MenuStateUIConfigBuilder::createMenuUIConfig(this));
 
@@ -61,6 +61,11 @@ NextState MenuState::update(const utils::DeltaTime& deltaTime, const input::Inpu
 
     uiManager->update(deltaTime, input);
 
+    if (shouldExit)
+    {
+        return NextState::Exit;
+    }
+
     return NextState::Same;
 }
 
@@ -71,9 +76,9 @@ void MenuState::render()
     rendererPool->renderAll();
 }
 
-std::string MenuState::getName() const
+StateType MenuState::getType() const
 {
-    return "Menu state";
+    return StateType::Menu;
 }
 
 void MenuState::activate()

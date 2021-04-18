@@ -20,6 +20,8 @@ set(SOURCES
         src/PauseStateUIConfigBuilder.cpp
         src/SaveMapStateUIConfigBuilder.cpp
         src/SettingsStateUIConfigBuilder.cpp
+        src/DefaultStates.cpp
+        src/StateFactory.cpp
         )
 
 set(UT_SOURCES
@@ -40,7 +42,9 @@ set(UT_SOURCES
         src/PauseStateUIConfigBuilderTest.cpp
         src/SaveMapStateUIConfigBuilderTest.cpp
         src/SettingsStateUIConfigBuilderTest.cpp
-        src/editor/TileMapSerializerJsonTest.cpp)
+        src/editor/TileMapSerializerJsonTest.cpp
+        src/DefaultStatesTest.cpp
+        )
 
 add_library(game ${SOURCES})
 target_include_directories(game PUBLIC src ${JSON_INCLUDE_DIR})

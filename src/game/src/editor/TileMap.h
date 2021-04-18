@@ -10,6 +10,7 @@
 
 namespace game
 {
+// TODO: add editor namespace
 class TileMap
 {
 public:

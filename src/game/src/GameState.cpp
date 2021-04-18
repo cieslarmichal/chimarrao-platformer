@@ -14,7 +14,7 @@ namespace game
 
 GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                     std::stack<std::unique_ptr<State>>& statesInit,
+                     States& statesInit,
                      std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, rendererPoolInit, statesInit},
       paused{false},
@@ -67,9 +67,9 @@ void GameState::render()
     rendererPool->renderAll();
 }
 
-std::string GameState::getName() const
+StateType GameState::getType() const
 {
-    return "Game state";
+    return StateType::Game;
 }
 
 void GameState::activate()
@@ -93,9 +93,7 @@ void GameState::pause()
     paused = true;
     player->disable();
     player->getComponent<components::core::GraphicsComponent>()->enable();
-
-    states.push(std::make_unique<PauseState>(
-        window, rendererPool, states, std::make_unique<components::ui::DefaultUIManager>(rendererPool)));
+    states.addNextState(StateType::Pause);
 }
 
 }

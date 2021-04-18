@@ -14,8 +14,7 @@ const auto buttonHoverColor = graphics::Color(205, 128, 66);
 
 SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                             std::stack<std::unique_ptr<State>>& statesInit,
-                             std::unique_ptr<components::ui::UIManager> uiManagerInit)
+                             States& statesInit, std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, rendererPoolInit, statesInit},
       shouldBackToMenu{false},
       uiManager{std::move(uiManagerInit)}
@@ -48,9 +47,9 @@ void SettingsState::render()
     rendererPool->renderAll();
 }
 
-std::string SettingsState::getName() const
+StateType SettingsState::getType() const
 {
-    return "Settings state";
+    return StateType::Settings;
 }
 
 void SettingsState::activate()

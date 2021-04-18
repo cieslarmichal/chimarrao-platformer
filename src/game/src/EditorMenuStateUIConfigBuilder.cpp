@@ -113,11 +113,8 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
         components::ui::MouseOverActions{saveMapButtonOnMouseOver, saveMapButtonOnMouseOut};
     auto saveMapClickAction = [=]
     {
-        editorMenuState->states.top()->deactivate();
-        editorMenuState->states.push(std::make_unique<SaveMapState>(
-            editorMenuState->window, editorMenuState->rendererPool, editorMenuState->states,
-            std::make_unique<components::ui::DefaultUIManager>(editorMenuState->rendererPool),
-            editorMenuState->tileMap));
+        editorMenuState->states.deactivateCurrentState();
+        editorMenuState->states.addNextState(StateType::SaveMap);
     };
     auto saveMapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "editorMenuSaveMapButton", saveMapButtonPosition, buttonSize, buttonColor, "Save map", textColor, 27,

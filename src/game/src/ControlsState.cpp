@@ -7,7 +7,7 @@ namespace game
 
 ControlsState::ControlsState(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                             std::stack<std::unique_ptr<State>>& statesInit,
+                             States& statesInit,
                              std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, rendererPoolInit, statesInit},
       shouldBackToMenu{false},
@@ -34,9 +34,9 @@ void ControlsState::render()
     rendererPool->renderAll();
 }
 
-std::string ControlsState::getName() const
+StateType ControlsState::getType() const
 {
-    return "Controls state";
+    return StateType::Controls;
 }
 
 void ControlsState::activate()

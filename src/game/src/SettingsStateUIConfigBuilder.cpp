@@ -85,7 +85,7 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
         backToMenuClickAction, backToMenuButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(backToMenuButtonConfig));
 
-    const auto applyChangesButtonSize = utils::Vector2f{1.3f, 5.f};
+    const auto applyChangesButtonSize = utils::Vector2f{13.f, 5.f};
     const auto applyChangesButtonOnMouseOver = [=]
     {
         settingsState->uiManager->setColor(components::ui::UIComponentType::Button,

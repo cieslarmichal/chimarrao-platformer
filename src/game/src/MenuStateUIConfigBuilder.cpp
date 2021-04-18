@@ -64,10 +64,8 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
         components::ui::MouseOverActions{playButtonOnMouseOver, playButtonOnMouseOut};
     const auto runGame = [=]
     {
-        menuState->states.top()->deactivate();
-        menuState->states.push(std::make_unique<GameState>(
-            menuState->window, menuState->rendererPool, menuState->states,
-            std::make_unique<components::ui::DefaultUIManager>(menuState->rendererPool)));
+        menuState->states.deactivateCurrentState();
+        menuState->states.addNextState(StateType::Game);
     };
     auto playButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuPlayButton", gameButtonPosition, buttonSize, buttonColor, "Play", graphics::Color::Black, 35,
@@ -92,10 +90,8 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
         components::ui::MouseOverActions{mapEditorButtonOnMouseOver, mapEditorButtonOnMouseOut};
     const auto runMapEditor = [=]
     {
-        menuState->states.top()->deactivate();
-        menuState->states.push(std::make_unique<EditorState>(
-            menuState->window, menuState->rendererPool, menuState->states,
-            std::make_unique<components::ui::DefaultUIManager>(menuState->rendererPool)));
+        menuState->states.deactivateCurrentState();
+        menuState->states.addNextState(StateType::Editor);
     };
     auto mapEditorButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuMapEditorButton", mapEditorButtonPosition, buttonSize, buttonColor, "Map Editor",
@@ -121,10 +117,9 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
         components::ui::MouseOverActions{controlsButtonOnMouseOver, controlsButtonOnMouseOut};
     const auto runControls = [=]
     {
-        menuState->states.top()->deactivate();
-        menuState->states.push(std::make_unique<ControlsState>(
-            menuState->window, menuState->rendererPool, menuState->states,
-            std::make_unique<components::ui::DefaultUIManager>(menuState->rendererPool)));
+        menuState->states.deactivateCurrentState();
+
+        menuState->states.addNextState(StateType::Controls);
     };
     auto controlsButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuControlsButton", controlsButtonPosition, buttonSize, buttonColor, "Controls",
@@ -150,10 +145,9 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
         components::ui::MouseOverActions{settingsButtonOnMouseOver, settingsButtonOnMouseOut};
     const auto runSettings = [=]
     {
-        menuState->states.top()->deactivate();
-        menuState->states.push(std::make_unique<SettingsState>(
-            menuState->window, menuState->rendererPool, menuState->states,
-            std::make_unique<components::ui::DefaultUIManager>(menuState->rendererPool)));
+        menuState->states.deactivateCurrentState();
+
+        menuState->states.addNextState(StateType::Settings);
     };
     auto settingsButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuSettingsButton", settingsButtonPosition, buttonSize, buttonColor, "Settings",
@@ -177,8 +171,7 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     };
     auto exitButtonMouseOverActions =
         components::ui::MouseOverActions{exitButtonOnMouseOver, exitButtonOnMouseOut};
-    // TODO: to check this window->close if ok, if it isn't set bool variable in menu class to exit game
-    const auto exit = [=] { menuState->window->close(); };
+    const auto exit = [=] { menuState->shouldExit = true; };
     auto exitButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuExitButton", exitButtonPosition, buttonSize, buttonColor, "Exit", graphics::Color::Black, 35,
         fontPath, utils::Vector2f{7, 1}, exit, exitButtonMouseOverActions);

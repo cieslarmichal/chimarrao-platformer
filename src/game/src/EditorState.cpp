@@ -1,5 +1,7 @@
 #include "EditorState.h"
 
+#include <utility>
+
 #include "EditorMenuState.h"
 #include "EditorStateUIConfigBuilder.h"
 #include "GetProjectPath.h"
@@ -19,14 +21,14 @@ const auto tilesTextureVector =
 
 }
 EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
-                         const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                         std::stack<std::unique_ptr<State>>& states,
-                         std::unique_ptr<components::ui::UIManager> uiManagerInit)
-    : State{windowInit, rendererPoolInit, states},
+                         const std::shared_ptr<graphics::RendererPool>& rendererPoolInit, States& statesInit,
+                         std::unique_ptr<components::ui::UIManager> uiManagerInit, TileMap& tileMapInit)
+    : State{windowInit, rendererPoolInit, statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
       timeAfterButtonsCanBeClicked{0.3f},
       uiManager{std::move(uiManagerInit)},
+      tileMap{tileMapInit},
       timeBetweenTileMoves{0.005f},
       currentTileType{std::make_shared<TileType>(defaultTileType)}
 {
@@ -34,15 +36,14 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
 
     currentTileId = 0;
     currentTilePath = tilesTextureVector[currentTileId];
-    tileMap = std::make_unique<TileMap>(
-        "", utils::Vector2i(rendererPoolSizeX / tileSizeX * 2, rendererPoolSizeY / tileSizeY));
+
     for (int y = 0; y < rendererPoolSizeY / tileSizeY; ++y)
     {
         for (int x = 0; x < rendererPoolSizeX / tileSizeX * 2; ++x)
         {
             layoutTileMap.emplace_back(LayoutTile{rendererPool, utils::Vector2i{x, y},
                                                   utils::Vector2f{tileSizeX, tileSizeY}, currentTileType,
-                                                  *tileMap});
+                                                  tileMap});
         }
     }
 
@@ -105,9 +106,9 @@ void EditorState::render()
     rendererPool->renderAll();
 }
 
-std::string EditorState::getName() const
+StateType EditorState::getType() const
 {
-    return "Editor state";
+    return StateType::Editor;
 }
 
 void EditorState::activate()
@@ -145,9 +146,7 @@ void EditorState::pause()
         layoutTile.pause();
     }
 
-    states.push(std::make_unique<EditorMenuState>(
-        window, rendererPool, states, std::make_unique<components::ui::DefaultUIManager>(rendererPool),
-        *tileMap));
+    states.addNextState(StateType::EditorMenu);
 }
 
 }

@@ -1,11 +1,13 @@
 #include "TileMap.h"
 
+#include <utility>
+
 #include "GetProjectPath.h"
 
 namespace game
 {
 
-TileMap::TileMap(std::string name, utils::Vector2i mapSizeInit) : tileMapInfo{name, mapSizeInit}
+TileMap::TileMap(std::string name, utils::Vector2i mapSizeInit) : tileMapInfo{std::move(name), mapSizeInit}
 {
     for (int y = 0; y < tileMapInfo.mapSize.y; y++)
     {
@@ -28,6 +30,7 @@ void TileMap::setTile(utils::Vector2i position, TileType value)
 {
     tileMapInfo.tiles[position.y][position.x]->type = value;
 }
+
 void TileMap::setName(const std::string& nameInit)
 {
     tileMapInfo.name = nameInit;

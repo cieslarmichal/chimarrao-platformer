@@ -19,13 +19,13 @@ public:
     friend class EditorStateUIConfigBuilder;
 
     explicit EditorState(const std::shared_ptr<window::Window>&,
-                         const std::shared_ptr<graphics::RendererPool>&, std::stack<std::unique_ptr<State>>&,
-                         std::unique_ptr<components::ui::UIManager>);
+                         const std::shared_ptr<graphics::RendererPool>&, States&,
+                         std::unique_ptr<components::ui::UIManager>, TileMap&);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;
     void render() override;
-    std::string getName() const override;
+    StateType getType() const override;
     void activate() override;
     void deactivate() override;
     void pause();
@@ -41,7 +41,7 @@ private:
     std::vector<std::shared_ptr<components::core::ComponentOwner>> clickableTileMap;
     std::shared_ptr<TileType> currentTileType;
     std::vector<LayoutTile> layoutTileMap;
-    std::unique_ptr<TileMap> tileMap;
+    TileMap& tileMap;
     bool buttonsActionsFrozen = true;
     utils::Timer freezeClickableButtonsTimer;
     const float timeAfterButtonsCanBeClicked;

@@ -5,7 +5,7 @@ namespace game
 
 State::State(std::shared_ptr<window::Window> windowInit,
              std::shared_ptr<graphics::RendererPool> rendererPoolInit,
-             std::stack<std::unique_ptr<State>>& statesInit)
+             States& statesInit)
     : window{std::move(windowInit)},
       rendererPool{std::move(rendererPoolInit)},
       states{statesInit},
