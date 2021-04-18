@@ -1,5 +1,7 @@
 #include "PauseState.h"
 
+#include <utility>
+
 #include "GetProjectPath.h"
 #include "PauseStateUIConfigBuilder.h"
 #include "ui/DefaultUIManager.h"
@@ -8,9 +10,10 @@ namespace game
 {
 
 PauseState::PauseState(const std::shared_ptr<window::Window>& windowInit,
-                       const std::shared_ptr<graphics::RendererPool>& rendererPoolInit, States& statesInit,
+                       const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
+                       std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                        std::unique_ptr<components::ui::UIManager> uiManagerInit)
-    : State{windowInit, rendererPoolInit, statesInit},
+    : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToGame{false},
       shouldBackToMenu{false},

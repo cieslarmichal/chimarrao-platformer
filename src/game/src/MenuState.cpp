@@ -1,5 +1,7 @@
 #include "MenuState.h"
 
+#include <utility>
+
 #include "CommonUIConfigElements.h"
 #include "GetProjectPath.h"
 #include "MenuStateUIConfigBuilder.h"
@@ -26,9 +28,10 @@ const auto iconSize = utils::Vector2f{4, 4};
 }
 
 MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
-                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit, States& statesInit,
+                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
+                     std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                      std::unique_ptr<components::ui::UIManager> uiManagerInit)
-    : State{windowInit, rendererPoolInit, statesInit},
+    : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       currentButtonIndex{0},
       timeAfterButtonCanBeSwitched{0.1f},
       buttonNames{"menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton",

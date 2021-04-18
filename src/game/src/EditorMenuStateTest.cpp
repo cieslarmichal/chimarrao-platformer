@@ -2,9 +2,10 @@
 
 #include "gtest/gtest.h"
 
+#include "FileAccessMock.h"
 #include "RendererPoolMock.h"
-#include "WindowMock.h"
 #include "StatesMock.h"
+#include "WindowMock.h"
 #include "ui/UIManagerMock.h"
 
 using namespace game;
@@ -25,6 +26,8 @@ public:
         std::make_shared<StrictMock<window::WindowMock>>();
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
+        std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
@@ -35,7 +38,8 @@ class EditorMenuStateTest : public EditorMenuStateTest_Base
 {
 public:
     TileMap tileMap{"", {0, 0}};
-    EditorMenuState editorMenuState{window, rendererPool, states, std::move(uiManagerInit), tileMap};
+    EditorMenuState editorMenuState{window, rendererPool, fileAccess, states, std::move(uiManagerInit),
+                                    tileMap};
 };
 
 TEST_F(EditorMenuStateTest, xxx) {}

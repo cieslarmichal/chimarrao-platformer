@@ -21,9 +21,10 @@ const auto tilesTextureVector =
 
 }
 EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
-                         const std::shared_ptr<graphics::RendererPool>& rendererPoolInit, States& statesInit,
+                         const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
+                         std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                          std::unique_ptr<components::ui::UIManager> uiManagerInit, TileMap& tileMapInit)
-    : State{windowInit, rendererPoolInit, statesInit},
+    : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
       timeAfterButtonsCanBeClicked{0.3f},

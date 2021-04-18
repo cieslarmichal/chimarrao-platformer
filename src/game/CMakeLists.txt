@@ -47,7 +47,7 @@ set(UT_SOURCES
         )
 
 add_library(game ${SOURCES})
-target_include_directories(game PUBLIC src ${JSON_INCLUDE_DIR})
+target_include_directories(game PUBLIC src ${JSON_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
 target_link_libraries(game PUBLIC utils graphics input components)
 target_compile_options(game PUBLIC ${FLAGS})
 

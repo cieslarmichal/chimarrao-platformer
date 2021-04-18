@@ -15,10 +15,12 @@
 namespace game
 {
 StateFactory::StateFactory(std::shared_ptr<window::Window> windowInit,
-                           std::shared_ptr<graphics::RendererPool> rendererPoolInit, States& statesInit,
+                           std::shared_ptr<graphics::RendererPool> rendererPoolInit,
+                           std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                            TileMap& tileMapInit)
     : window{std::move(windowInit)},
       rendererPool{std::move(rendererPoolInit)},
+      fileAccess{std::move(fileAccessInit)},
       states{statesInit},
       tileMap{tileMapInit}
 {
@@ -31,45 +33,47 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     case StateType::Controls:
     {
         return std::make_unique<ControlsState>(
-            window, rendererPool, states, std::make_unique<components::ui::DefaultUIManager>(rendererPool));
+            window, rendererPool, fileAccess, states,
+            std::make_unique<components::ui::DefaultUIManager>(rendererPool));
     }
     case StateType::EditorMenu:
     {
         return std::make_unique<EditorMenuState>(
-            window, rendererPool, states, std::make_unique<components::ui::DefaultUIManager>(rendererPool),
-            tileMap);
+            window, rendererPool, fileAccess, states,
+            std::make_unique<components::ui::DefaultUIManager>(rendererPool), tileMap);
     }
     case StateType::Editor:
     {
-        return std::make_unique<EditorState>(window, rendererPool, states,
+        return std::make_unique<EditorState>(window, rendererPool, fileAccess, states,
                                              std::make_unique<components::ui::DefaultUIManager>(rendererPool),
                                              tileMap);
     }
     case StateType::Game:
     {
-        return std::make_unique<GameState>(window, rendererPool, states,
+        return std::make_unique<GameState>(window, rendererPool, fileAccess, states,
                                            std::make_unique<components::ui::DefaultUIManager>(rendererPool));
     }
     case StateType::Menu:
     {
-        return std::make_unique<MenuState>(window, rendererPool, states,
+        return std::make_unique<MenuState>(window, rendererPool, fileAccess, states,
                                            std::make_unique<components::ui::DefaultUIManager>(rendererPool));
     }
     case StateType::Pause:
     {
-        return std::make_unique<PauseState>(window, rendererPool, states,
+        return std::make_unique<PauseState>(window, rendererPool, fileAccess, states,
                                             std::make_unique<components::ui::DefaultUIManager>(rendererPool));
     }
     case StateType::SaveMap:
     {
         return std::make_unique<SaveMapState>(
-            window, rendererPool, states, std::make_unique<components::ui::DefaultUIManager>(rendererPool),
-            tileMap);
+            window, rendererPool, fileAccess, states,
+            std::make_unique<components::ui::DefaultUIManager>(rendererPool), tileMap);
     }
     case StateType::Settings:
     {
         return std::make_unique<SettingsState>(
-            window, rendererPool, states, std::make_unique<components::ui::DefaultUIManager>(rendererPool));
+            window, rendererPool, fileAccess, states,
+            std::make_unique<components::ui::DefaultUIManager>(rendererPool));
     }
     default:
     {

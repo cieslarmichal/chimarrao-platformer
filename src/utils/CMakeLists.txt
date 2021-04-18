@@ -6,7 +6,9 @@ set(SOURCES
         src/IncrementalFilePathsCreator.cpp
         src/RandomNumberMersenneTwisterGenerator.cpp
         src/UniqueName.cpp
-        src/exceptions/FileNotFound.h
+        src/DefaultFileAccess.cpp
+        src/DefaultFileAccessFactory.cpp
+        src/FileAccessFactory.cpp
         )
 
 set(UT_SOURCES

@@ -1,6 +1,7 @@
 #include "GameFactory.h"
 
 #include "DefaultStates.h"
+#include "FileAccessFactory.h"
 #include "GraphicsFactory.h"
 #include "InputManagerFactory.h"
 #include "WindowFactory.h"
@@ -21,6 +22,7 @@ std::unique_ptr<Game> GameFactory::createGame()
     const auto graphicsFactory = graphics::GraphicsFactory::createGraphicsFactory();
     const auto windowFactory = window::WindowFactory::createWindowFactory();
     const auto inputManagerFactory = input::InputManagerFactory::createInputManagerFactory();
+    const auto fileAccessFactory = utils::FileAccessFactory::createFileAccessFactory();
 
     std::shared_ptr<window::Window> window = windowFactory->createWindow(windowSize, gameTitle);
 
@@ -32,7 +34,9 @@ std::unique_ptr<Game> GameFactory::createGame()
     auto tileMap = std::make_unique<TileMap>("", utils::Vector2i(static_cast<int>(mapSize.x) / tileSizeX * 2,
                                                                  static_cast<int>(mapSize.y) / tileSizeY));
 
-    auto states = std::make_unique<DefaultStates>(window, rendererPool, std::move(tileMap));
+    std::shared_ptr<utils::FileAccess> fileAccess = fileAccessFactory->createDefaultFileAccess();
+
+    auto states = std::make_unique<DefaultStates>(window, rendererPool, fileAccess, std::move(tileMap));
 
     return std::make_unique<Game>(window, inputManager, std::move(states));
 }

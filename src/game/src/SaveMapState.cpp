@@ -9,9 +9,9 @@ namespace game
 
 SaveMapState::SaveMapState(const std::shared_ptr<window::Window>& windowInit,
                            const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                           States& statesInit, std::unique_ptr<components::ui::UIManager> uiManagerInit,
-                           TileMap& tileMapInit)
-    : State{windowInit, rendererPoolInit, statesInit},
+                           std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
+                           std::unique_ptr<components::ui::UIManager> uiManagerInit, TileMap& tileMapInit)
+    : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditorMenu{false},
       uiManager{std::move(uiManagerInit)},

@@ -1,5 +1,7 @@
 #include "SettingsState.h"
 
+#include <utility>
+
 #include "GetProjectPath.h"
 #include "SettingsStateUIConfigBuilder.h"
 #include "ui/DefaultUIManager.h"
@@ -14,8 +16,9 @@ const auto buttonHoverColor = graphics::Color(205, 128, 66);
 
 SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                             States& statesInit, std::unique_ptr<components::ui::UIManager> uiManagerInit)
-    : State{windowInit, rendererPoolInit, statesInit},
+                             std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
+                             std::unique_ptr<components::ui::UIManager> uiManagerInit)
+    : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       shouldBackToMenu{false},
       uiManager{std::move(uiManagerInit)}
 {

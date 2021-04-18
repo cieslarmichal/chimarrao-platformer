@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "DeltaTime.h"
+#include "FileAccess.h"
 #include "Input.h"
 #include "NextState.h"
 #include "RendererPool.h"
@@ -22,7 +23,8 @@ namespace game
 class State : public window::WindowObserver
 {
 public:
-    explicit State(std::shared_ptr<window::Window>, std::shared_ptr<graphics::RendererPool>, States&);
+    explicit State(std::shared_ptr<window::Window>, std::shared_ptr<graphics::RendererPool>,
+                   std::shared_ptr<utils::FileAccess>, States&);
     virtual ~State();
 
     virtual NextState update(const utils::DeltaTime&, const input::Input&) = 0;
@@ -36,6 +38,7 @@ public:
 protected:
     std::shared_ptr<window::Window> window;
     std::shared_ptr<graphics::RendererPool> rendererPool;
+    std::shared_ptr<utils::FileAccess> fileAccess;
     States& states;
     bool active;
 };
