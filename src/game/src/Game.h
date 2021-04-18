@@ -5,9 +5,9 @@
 #include "InputManager.h"
 #include "RendererPool.h"
 #include "State.h"
+#include "States.h"
 #include "Timer.h"
 #include "Window.h"
-#include "States.h"
 #include "editor/TileMap.h"
 
 namespace game
@@ -15,7 +15,8 @@ namespace game
 class Game
 {
 public:
-    explicit Game();
+    explicit Game(std::shared_ptr<window::Window> window, std::shared_ptr<input::InputManager> inputManager,
+                  std::unique_ptr<States> states);
 
     void run();
 
@@ -24,11 +25,8 @@ private:
     void render();
 
     utils::Timer timer;
-    utils::DeltaTime deltaTime;
     std::shared_ptr<window::Window> window;
-    std::shared_ptr<graphics::RendererPool> rendererPool;
     std::shared_ptr<input::InputManager> inputManager;
-    std::unique_ptr<TileMap> tileMap;
     std::unique_ptr<States> states;
 };
 }

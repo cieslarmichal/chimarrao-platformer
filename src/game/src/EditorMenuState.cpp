@@ -11,8 +11,8 @@ namespace game
 
 EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowInit,
                                  const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                                 States& statesInit,
-                                 std::unique_ptr<components::ui::UIManager> uiManagerInit, TileMap& tileMapInit)
+                                 States& statesInit, std::unique_ptr<components::ui::UIManager> uiManagerInit,
+                                 TileMap& tileMapInit)
     : State{windowInit, rendererPoolInit, statesInit},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditor{false},

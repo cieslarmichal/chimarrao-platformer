@@ -3,40 +3,13 @@
 #include <chrono>
 #include <thread>
 
-#include "DefaultStates.h"
-#include "GraphicsFactory.h"
-#include "InputManagerFactory.h"
-#include "MenuState.h"
-#include "Vector.h"
-#include "WindowFactory.h"
-
 namespace game
 {
-namespace
+
+Game::Game(std::shared_ptr<window::Window> windowInit, std::shared_ptr<input::InputManager> inputManagerInit,
+           std::unique_ptr<States> statesInit)
+    : window{std::move(windowInit)}, inputManager{std::move(inputManagerInit)}, states{std::move(statesInit)}
 {
-const int rendererPoolSizeX = 80;
-const int rendererPoolSizeY = 60;
-const int tileSizeX = 4;
-const int tileSizeY = 4;
-}
-
-// TODO: inject dependencies to Game constructor and create GameFactory
-Game::Game() : deltaTime{0}
-{
-    auto graphicsFactory = graphics::GraphicsFactory::createGraphicsFactory();
-    auto windowFactory = window::WindowFactory::createWindowFactory();
-    auto inputManagerFactory = input::InputManagerFactory::createInputManagerFactory();
-
-    auto windowSize = utils::Vector2u{800, 600};
-    window = windowFactory->createWindow(windowSize, "chimarrao-platformer");
-
-    const utils::Vector2u mapSize{80, 60};
-
-    rendererPool = graphicsFactory->createRendererPool(window, windowSize, mapSize);
-    inputManager = inputManagerFactory->createInputManager(window);
-    tileMap = std::make_unique<TileMap>(
-        "", utils::Vector2i(rendererPoolSizeX / tileSizeX * 2, rendererPoolSizeY / tileSizeY));
-    states = std::make_unique<DefaultStates>(window, rendererPool, *tileMap);
     timer.start();
     states->addNextState(StateType::Menu);
 }
@@ -53,7 +26,7 @@ void Game::run()
 
 void Game::update()
 {
-    deltaTime = timer.getDurationFromLastUpdate();
+    auto deltaTime = timer.getDurationFromLastUpdate();
 
     const auto& input = inputManager->readInput();
     const auto statesStatus = states->updateCurrentState(deltaTime, input);

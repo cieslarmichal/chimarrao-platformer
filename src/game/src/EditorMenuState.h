@@ -17,9 +17,8 @@ public:
     friend class EditorMenuStateUIConfigBuilder;
 
     explicit EditorMenuState(const std::shared_ptr<window::Window>&,
-                             const std::shared_ptr<graphics::RendererPool>&,
-                             States&, std::unique_ptr<components::ui::UIManager>,
-                             TileMap&);
+                             const std::shared_ptr<graphics::RendererPool>&, States&,
+                             std::unique_ptr<components::ui::UIManager>, TileMap&);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;

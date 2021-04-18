@@ -13,8 +13,7 @@ namespace game
 {
 
 GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
-                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                     States& statesInit,
+                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit, States& statesInit,
                      std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, rendererPoolInit, statesInit},
       paused{false},

@@ -36,11 +36,7 @@ private:
     void onMouseOverAction();
     void onMouseOutAction();
 
-    TileMap& tileMap;
     std::shared_ptr<components::core::ComponentOwner> componentOwner;
-    utils::Vector2i position;
-    utils::Vector2f size;
-    std::shared_ptr<TileType> currentTileType;
     utils::Timer freezeClickableTileTimer;
     const float timeAfterTileCanBeClicked;
 };

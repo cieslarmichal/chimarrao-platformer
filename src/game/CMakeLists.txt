@@ -22,6 +22,7 @@ set(SOURCES
         src/SettingsStateUIConfigBuilder.cpp
         src/DefaultStates.cpp
         src/StateFactory.cpp
+        src/GameFactory.cpp
         )
 
 set(UT_SOURCES

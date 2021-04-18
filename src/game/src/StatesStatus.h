@@ -15,9 +15,8 @@ enum class StatesStatus
 
 inline std::string toString(StatesStatus statesStatus)
 {
-    std::unordered_map<StatesStatus, std::string> statesStatusToString{
-        {StatesStatus::Running, "Running"},
-        {StatesStatus::Exit, "Exit"}};
+    std::unordered_map<StatesStatus, std::string> statesStatusToString{{StatesStatus::Running, "Running"},
+                                                                       {StatesStatus::Exit, "Exit"}};
 
     try
     {

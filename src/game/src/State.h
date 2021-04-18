@@ -7,10 +7,10 @@
 #include "Input.h"
 #include "NextState.h"
 #include "RendererPool.h"
+#include "StateType.h"
 #include "States.h"
 #include "Window.h"
 #include "WindowObserver.h"
-#include "StateType.h"
 
 namespace sf
 {

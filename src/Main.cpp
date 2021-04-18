@@ -1,15 +1,15 @@
-#include "Game.h"
+#include "GameFactory.h"
 //#include "Windows.h"
 
 int main()
 {
-    game::Game game;
-    game.run();
+    auto game = game::GameFactory::createGame();
+    game->run();
     return 0;
 }
 
 //#ifdef _WIN32
-//int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
+// int APIENTRY WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 //{
 //    return main();
 //}

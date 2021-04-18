@@ -14,7 +14,7 @@ class DefaultStates : public States
 {
 public:
     DefaultStates(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
-                  TileMap&);
+                  std::unique_ptr<TileMap>);
 
     StatesStatus updateCurrentState(const utils::DeltaTime&, const input::Input&) override;
     void deactivateCurrentState() override;
@@ -25,6 +25,7 @@ private:
     void backToThePreviousState();
     void backToTheMenuState();
 
+    std::unique_ptr<TileMap> tileMap;
     std::unique_ptr<StateFactory> stateFactory;
     std::stack<std::unique_ptr<State>> states;
 };

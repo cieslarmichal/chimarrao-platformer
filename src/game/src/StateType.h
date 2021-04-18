@@ -24,14 +24,10 @@ enum class StateType
 inline std::string toString(StateType stateType)
 {
     std::unordered_map<StateType, std::string> stateTypeToString{
-        {StateType::Controls, "Controls"},
-        {StateType::EditorMenu, "EditorMenu"},
-        {StateType::Editor, "Editor"},
-        {StateType::Game, "Game"},
-        {StateType::Menu, "Menu"},
-        {StateType::Pause, "Pause"},
-        {StateType::SaveMap, "SaveMap"},
-        {StateType::Settings, "Settings"}};
+        {StateType::Controls, "Controls"}, {StateType::EditorMenu, "EditorMenu"},
+        {StateType::Editor, "Editor"},     {StateType::Game, "Game"},
+        {StateType::Menu, "Menu"},         {StateType::Pause, "Pause"},
+        {StateType::SaveMap, "SaveMap"},   {StateType::Settings, "Settings"}};
 
     try
     {
@@ -48,14 +44,10 @@ inline StateType toStateType(const std::string& stateTypeAsString)
     const auto stateTypeLowerString = utils::StringHelper::getLowerCases(stateTypeAsString);
 
     std::unordered_map<std::string, StateType> stringToStateType{
-        {"controls", StateType::Controls},
-        {"editormenu", StateType::EditorMenu},
-        {"editor", StateType::Editor},
-        {"game", StateType::Game},
-        {"menu", StateType::Menu},
-        {"pause", StateType::Pause},
-        {"savemap", StateType::SaveMap},
-        {"settings", StateType::Settings},
+        {"controls", StateType::Controls}, {"editormenu", StateType::EditorMenu},
+        {"editor", StateType::Editor},     {"game", StateType::Game},
+        {"menu", StateType::Menu},         {"pause", StateType::Pause},
+        {"savemap", StateType::SaveMap},   {"settings", StateType::Settings},
     };
 
     try

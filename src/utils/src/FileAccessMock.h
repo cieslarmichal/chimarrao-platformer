@@ -23,6 +23,6 @@ public:
                        std::vector<std::string>(const std::string& directoryPath));
     MOCK_CONST_METHOD2(getFilteredFilenamesFromDirectory,
                        std::vector<std::string>(const std::string& directoryPath,
-                           const std::vector<std::string>& extensions));
+                                                const std::vector<std::string>& extensions));
 };
 }
