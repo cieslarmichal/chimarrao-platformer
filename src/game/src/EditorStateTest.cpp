@@ -5,8 +5,7 @@
 #include "RendererPoolMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
-
-#include "StlOperators.h"
+#include "StatesMock.h"
 
 using namespace game;
 using namespace components::ui;
@@ -26,16 +25,17 @@ public:
         std::make_shared<StrictMock<window::WindowMock>>();
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
-    std::stack<std::unique_ptr<State>> states;
+    StrictMock<StatesMock> states;
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
     StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    TileMap tileMap{"", {0, 0}};
 };
 
 class EditorStateTest : public EditorStateTest_Base
 {
 public:
-    EditorState editorState{window, rendererPool, states, std::move(uiManagerInit)};
+    EditorState editorState{window, rendererPool, states, std::move(uiManagerInit), tileMap};
 };
 
 TEST_F(EditorStateTest, xxx) {}

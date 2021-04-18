@@ -44,7 +44,6 @@ set(UT_SOURCES
         src/SaveMapStateUIConfigBuilderTest.cpp
         src/SettingsStateUIConfigBuilderTest.cpp
         src/editor/TileMapSerializerJsonTest.cpp
-        src/DefaultStatesTest.cpp
         )
 
 add_library(game ${SOURCES})

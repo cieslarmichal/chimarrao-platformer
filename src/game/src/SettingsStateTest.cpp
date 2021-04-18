@@ -5,6 +5,7 @@
 #include "RendererPoolMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
+#include "StatesMock.h"
 
 #include "StlOperators.h"
 
@@ -26,7 +27,7 @@ public:
         std::make_shared<StrictMock<window::WindowMock>>();
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
-    std::stack<std::unique_ptr<State>> states;
+    StrictMock<StatesMock> states;
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
     StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
