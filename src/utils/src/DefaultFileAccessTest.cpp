@@ -216,17 +216,20 @@ TEST_F(DefaultFileAccessTest, givenRegularFilePath_whenCheckingForFileName_shoul
     ASSERT_EQ(actualFileName, filenameForReading);
 }
 
-TEST_F(DefaultFileAccessTest, givenIncorrectPath_whenCheckingForFileNameWithoutExtension_shouldThrowPathIsNotAFile)
+TEST_F(DefaultFileAccessTest,
+       givenIncorrectPath_whenCheckingForFileNameWithoutExtension_shouldThrowPathIsNotAFile)
 {
     ASSERT_THROW(fileAccess.getFileNameWithoutExtension(incorrectPath), exceptions::PathIsNotAFile);
 }
 
-TEST_F(DefaultFileAccessTest, givenDirectoryPath_whenCheckingForFileNameWithoutExtension_shouldThrowPathIsNotAFile)
+TEST_F(DefaultFileAccessTest,
+       givenDirectoryPath_whenCheckingForFileNameWithoutExtension_shouldThrowPathIsNotAFile)
 {
     ASSERT_THROW(fileAccess.getFileNameWithoutExtension(testDirectory), exceptions::PathIsNotAFile);
 }
 
-TEST_F(DefaultFileAccessTest, givenRegularFilePath_whenCheckingForFileNameWithoutExtension_shouldReturnFileNameWithoutExtension)
+TEST_F(DefaultFileAccessTest,
+       givenRegularFilePath_whenCheckingForFileNameWithoutExtension_shouldReturnFileNameWithoutExtension)
 {
     const auto actualFileName = fileAccess.getFileNameWithoutExtension(pathForReading);
 

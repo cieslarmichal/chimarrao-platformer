@@ -34,6 +34,7 @@ public:
     int actionVariable{0};
     int actionVariableLeft{0};
     int actionVariableRight{0};
+    int actionVariableRight2{0};
     const int clickValue{42};
     const utils::Vector2f size{5, 5};
     const utils::Vector2f offset{1, 1};
@@ -48,8 +49,10 @@ public:
     KeyAction keyAction1 = {InputKey::MouseLeft, [this] { clickAction(actionVariableLeft); }};
     KeyAction keyAction1copy = {InputKey::MouseLeft, [] {}};
     KeyAction keyAction2 = {InputKey::MouseRight, [this] { clickAction(actionVariableRight); }};
+    KeyAction keyAction3 = {InputKey::MouseRight, [this] { clickAction(actionVariableRight2); }};
     std::vector<KeyAction> invalidKeyActionVector{keyAction1, keyAction1copy};
     std::vector<KeyAction> validKeyActionVector{keyAction1, keyAction2};
+    std::vector<KeyAction> validKeyActionVectorAfterChange{keyAction3};
 };
 
 TEST_F(ClickableComponentTest, givenMousePositionOutsideHitboxAndLeftMouseKeyNotClicked_shouldNotCallAction)
@@ -141,4 +144,25 @@ TEST_F(ClickableComponentTest,
 
     ASSERT_TRUE(actionPerformed(actionVariableRight));
     ASSERT_FALSE(actionPerformed(actionVariableLeft));
+}
+
+TEST_F(ClickableComponentTest,
+       givenTwoKeyActions_thenChangeIntoOtherKeyAction_shouldBeAbleToOnlyPerformOtherOne)
+{
+    ComponentOwner localComponentOwner{position1, "clickableComponentOwner3"};
+    auto hitBoxComponent = localComponentOwner.addComponent<HitBoxComponent>(size, offset);
+    hitBoxComponent->lateUpdate(deltaTime);
+    auto localClickableComponent = ClickableComponent(&localComponentOwner, validKeyActionVector);
+    localClickableComponent.loadDependentComponents();
+
+    localClickableComponent.setKeyActions(validKeyActionVectorAfterChange);
+
+    EXPECT_CALL(*input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
+    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget));
+
+    localClickableComponent.update(deltaTime, *input);
+
+    ASSERT_FALSE(actionPerformed(actionVariableLeft));
+    ASSERT_FALSE(actionPerformed(actionVariableRight));
+    ASSERT_TRUE(actionPerformed(actionVariableRight2));
 }

@@ -135,6 +135,16 @@ void DefaultUIManager::setColor(UIComponentType componentType, const std::string
     }
 }
 
+void DefaultUIManager::changeClickAction(UIComponentType componentType, const std::string& componentName,
+                                         const std::vector<core::KeyAction>& keyActions)
+{
+    if (componentType == UIComponentType::Button)
+    {
+        auto& button = tryToGetComponentByName(buttons, componentName);
+        button->setClickAction(keyActions);
+    }
+}
+
 void DefaultUIManager::setText(UIComponentTypeWithLabel componentType, const std::string& componentName,
                                const std::string& text)
 {

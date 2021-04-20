@@ -1,9 +1,10 @@
 #include "MapFilePathsReader.h"
-#include "ProjectPathReader.h"
 
 #include "gtest/gtest.h"
 
 #include "FileAccessMock.h"
+
+#include "ProjectPathReader.h"
 
 using namespace game;
 using namespace ::testing;

@@ -16,20 +16,10 @@ ClickableComponent::ClickableComponent(ComponentOwner* ownerInit, std::function<
 }
 
 ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
-                                       const std::vector<KeyAction>& keyActionVectorInit)
+                                       const std::vector<KeyAction>& keyActionsInit)
     : Component(ownerInit)
 {
-    std::unordered_set<input::InputKey> inputKeys;
-    for (const auto& keyAction : keyActionVectorInit)
-    {
-        if (inputKeys.count(keyAction.key))
-        {
-            throw exceptions::ActionForKeyAlreadyExists{
-                "ClickableComponent: Two or more action for the same key"};
-        }
-        inputKeys.insert(keyAction.key);
-        keyActions.push_back(keyAction);
-    }
+    setKeyActions(keyActionsInit);
 }
 
 void ClickableComponent::loadDependentComponents()
@@ -74,6 +64,28 @@ void ClickableComponent::disable()
     for (auto& keyAction : keyActions)
     {
         keyAction.clicked = false;
+    }
+}
+
+void ClickableComponent::setKeyActions(const std::vector<KeyAction>& keyActionsInit)
+{
+    if (not enabled)
+    {
+        return;
+    }
+
+    keyActions.clear();
+
+    std::unordered_set<input::InputKey> inputKeys;
+    for (const auto& keyAction : keyActionsInit)
+    {
+        if (inputKeys.count(keyAction.key))
+        {
+            throw exceptions::ActionForKeyAlreadyExists{
+                "ClickableComponent: Two or more action for the same key"};
+        }
+        inputKeys.insert(keyAction.key);
+        keyActions.push_back(keyAction);
     }
 }
 }

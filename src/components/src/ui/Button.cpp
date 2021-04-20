@@ -99,4 +99,12 @@ void Button::setText(const std::string& text)
     coreComponentsOwner->getComponent<components::core::TextComponent>()->setText(text);
 }
 
+void Button::setClickAction(const std::vector<core::KeyAction>& keyActions)
+{
+    if (auto clickableComponent = coreComponentsOwner->getComponent<components::core::ClickableComponent>())
+    {
+        clickableComponent->setKeyActions(keyActions);
+    }
+}
+
 }

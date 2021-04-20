@@ -8,6 +8,7 @@
 #include "Timer.h"
 #include "UIComponent.h"
 #include "core/ComponentOwner.h"
+#include "core/KeyAction.h"
 
 namespace components::ui
 {
@@ -22,6 +23,7 @@ public:
     void activate() override;
     void setColor(graphics::Color);
     void setText(const std::string&);
+    void setClickAction(const std::vector<core::KeyAction>&);
 
 private:
     std::string name;

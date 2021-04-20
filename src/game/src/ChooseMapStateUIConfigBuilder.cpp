@@ -109,7 +109,8 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
         auto mapNameWithoutExtension =
             chooseMapState->fileAccess->getFileNameWithoutExtension(chooseMapState->mapFiles[mapIndex]);
         auto buttonUniqueName = "chooseMap" + std::to_string(mapIndex + 1) + "MapButton";
-        auto buttonPosition = firstMapButtonPosition + utils::Vector2f{0.f, static_cast<float>(mapIndex) * 6.f};
+        auto buttonPosition =
+            firstMapButtonPosition + utils::Vector2f{0.f, static_cast<float>(mapIndex) * 6.f};
         const auto mapButtonOnMouseOver = [=]
         {
             chooseMapState->uiManager->setColor(components::ui::UIComponentType::Button, buttonUniqueName,

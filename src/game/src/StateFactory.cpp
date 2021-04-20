@@ -2,8 +2,8 @@
 
 #include <utility>
 
-#include "ControlsState.h"
 #include "ChooseMapState.h"
+#include "ControlsState.h"
 #include "EditorMenuState.h"
 #include "EditorState.h"
 #include "GameState.h"

@@ -1,11 +1,11 @@
 #pragma once
 
+#include "MapFilePathsReader.h"
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
 #include "ui/UIConfig.h"
 #include "ui/UIManager.h"
-#include "MapFilePathsReader.h"
 
 namespace game
 {
@@ -17,8 +17,9 @@ class ChooseMapState : public State
 
 public:
     explicit ChooseMapState(const std::shared_ptr<window::Window>&,
-                           const std::shared_ptr<graphics::RendererPool>&, std::shared_ptr<utils::FileAccess>,
-                           States&, std::unique_ptr<components::ui::UIManager>);
+                            const std::shared_ptr<graphics::RendererPool>&,
+                            std::shared_ptr<utils::FileAccess>, States&,
+                            std::unique_ptr<components::ui::UIManager>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;

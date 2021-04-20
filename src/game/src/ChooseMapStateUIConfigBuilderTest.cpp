@@ -21,7 +21,8 @@ namespace
 const std::vector<std::string> expectedLabelNames{"chooseMapTitleLabel"};
 
 const std::vector<std::string> expectedButtonNames{"chooseMapBackToMenuButton", "chooseMapRightButton",
-                                                   "chooseMapLeftButton", "chooseMap1MapButton", "chooseMap2MapButton"};
+                                                   "chooseMapLeftButton", "chooseMap1MapButton",
+                                                   "chooseMap2MapButton"};
 }
 
 class ChooseMapStateUIConfigBuilderTest_Base : public Test
@@ -31,10 +32,8 @@ public:
     {
         EXPECT_CALL(*fileAccess, getAllPathsFromDirectory(mapsDirectory))
             .WillOnce(Return(std::vector<std::string>{"map1.txt", "map2.txt"}));
-        EXPECT_CALL(*fileAccess, getFileNameWithoutExtension("map1.txt"))
-            .WillRepeatedly(Return("map1"));
-        EXPECT_CALL(*fileAccess, getFileNameWithoutExtension("map2.txt"))
-            .WillRepeatedly(Return("map2"));
+        EXPECT_CALL(*fileAccess, getFileNameWithoutExtension("map1.txt")).WillRepeatedly(Return("map1"));
+        EXPECT_CALL(*fileAccess, getFileNameWithoutExtension("map2.txt")).WillRepeatedly(Return("map2"));
     }
 
     const std::string mapsDirectory = utils::ProjectPathReader::getProjectRootPath() + "maps";

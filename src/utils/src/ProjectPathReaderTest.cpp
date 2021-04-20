@@ -1,7 +1,8 @@
+#include "ProjectPathReader.h"
+
 #include "boost/algorithm/string/predicate.hpp"
 #include "gtest/gtest.h"
 
-#include "ProjectPathReader.h"
 #include "exceptions/FileNotFound.h"
 
 using namespace ::testing;

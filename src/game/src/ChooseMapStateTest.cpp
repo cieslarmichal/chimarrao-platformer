@@ -7,6 +7,7 @@
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
+
 #include "ProjectPathReader.h"
 
 using namespace game;
