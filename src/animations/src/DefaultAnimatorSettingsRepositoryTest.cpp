@@ -4,7 +4,7 @@
 
 #include "AnimatorSettingsReaderMock.h"
 
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 
 using namespace ::testing;
 using namespace animations;
@@ -12,7 +12,7 @@ using namespace animations;
 class DefaultAnimatorSettingsRepositoryTest : public Test
 {
 public:
-    const std::string projectPath{utils::getProjectPath("chimarrao-platformer")};
+    const std::string projectPath{utils::ProjectPathReader::getProjectRootPath()};
     const utils::FilePath settingsPath{projectPath + "config/animators.yaml"};
     const std::string existingAnimatorName{"existingAnimatorName"};
     const std::string nonExistingAnimatorName{"nonExistingAnimatorName"};

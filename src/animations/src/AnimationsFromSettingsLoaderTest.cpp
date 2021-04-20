@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 #include "exceptions/AnimationsFromSettingsNotFound.h"
 
 using namespace ::testing;
@@ -16,7 +16,7 @@ public:
     std::unordered_map<AnimationType, Animation> nonEmptyAnimations{{AnimationType::Jump, animation}};
     std::unordered_map<AnimationType, Animation> animations;
     const std::vector<MultipleFilesAnimationSettings> emptyAnimationsSettings{};
-    const std::string projectPath{utils::getProjectPath("chimarrao-platformer")};
+    const std::string projectPath{utils::ProjectPathReader::getProjectRootPath()};
     const std::vector<MultipleFilesAnimationSettings> animationsSettings{{"idle", "dev/x1.txt", 3, 0.4f},
                                                                          {"walk", "elo/123.txt", 2, 0.7f}};
 };

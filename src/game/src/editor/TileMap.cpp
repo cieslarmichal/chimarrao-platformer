@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 
 namespace game
 {
@@ -43,6 +43,6 @@ const std::string& TileMap::getName() const
 
 std::string TileMap::getPath() const
 {
-    return utils::getProjectPath("chimarrao-platformer") + "maps/" + tileMapInfo.name + ".chm";
+    return utils::ProjectPathReader::getProjectRootPath() + "maps/" + tileMapInfo.name + ".chm";
 }
 }

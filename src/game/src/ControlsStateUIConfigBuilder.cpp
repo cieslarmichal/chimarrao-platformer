@@ -3,7 +3,7 @@
 #include "Color.h"
 #include "CommonUIConfigElements.h"
 #include "ControlsState.h"
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 #include "Vector.h"
 
 namespace game

@@ -18,11 +18,8 @@ public:
     MOCK_CONST_METHOD1(exists, bool(const std::string& path));
     MOCK_CONST_METHOD1(isRegularFile, bool(const std::string& path));
     MOCK_CONST_METHOD1(isDirectory, bool(const std::string& path));
+    MOCK_CONST_METHOD1(getFileName, std::string(const std::string& path));
+    MOCK_CONST_METHOD1(getFileNameWithoutExtension, std::string(const std::string& path));
     MOCK_CONST_METHOD1(getAllPathsFromDirectory, std::vector<std::string>(const std::string& directoryPath));
-    MOCK_CONST_METHOD1(getAllFilenamesFromDirectory,
-                       std::vector<std::string>(const std::string& directoryPath));
-    MOCK_CONST_METHOD2(getFilteredFilenamesFromDirectory,
-                       std::vector<std::string>(const std::string& directoryPath,
-                                                const std::vector<std::string>& extensions));
 };
 }

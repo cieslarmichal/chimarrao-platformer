@@ -1,7 +1,7 @@
 #include "SaveMapStateUIConfigBuilder.h"
 
 #include "CommonUIConfigElements.h"
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 #include "SaveMapState.h"
 
 namespace game

@@ -19,5 +19,8 @@ public:
     virtual bool exists(const std::string& path) const = 0;
     virtual bool isRegularFile(const std::string& path) const = 0;
     virtual bool isDirectory(const std::string& path) const = 0;
+    virtual std::string getFileName(const std::string& path) const = 0;
+    virtual std::string getFileNameWithoutExtension(const std::string& path) const = 0;
+    virtual std::vector<std::string> getAllPathsFromDirectory(const std::string& directoryPath) const = 0;
 };
 }

@@ -1,8 +1,8 @@
 #include "PauseStateUIConfigBuilder.h"
 
 #include "CommonUIConfigElements.h"
-#include "GetProjectPath.h"
 #include "PauseState.h"
+#include "ProjectPathReader.h"
 
 namespace game
 {

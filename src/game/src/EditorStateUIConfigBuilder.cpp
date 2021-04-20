@@ -2,7 +2,7 @@
 
 #include "CommonUIConfigElements.h"
 #include "EditorState.h"
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 #include "SaveMapState.h"
 #include "Vector.h"
 
@@ -14,8 +14,8 @@ const float rendererPoolSizeX = 80;
 const float rendererPoolSizeY = 60;
 
 const auto tilesTextureVector =
-    std::vector<std::string>{utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png",
-                             utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/2.png"};
+    std::vector<std::string>{utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/brick.png",
+                             utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/2.png"};
 }
 
 std::unique_ptr<components::ui::UIConfig>

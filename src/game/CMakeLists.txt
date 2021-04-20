@@ -23,6 +23,9 @@ set(SOURCES
         src/DefaultStates.cpp
         src/StateFactory.cpp
         src/GameFactory.cpp
+        src/MapFilePathsReader.cpp
+        src/ChooseMapState.cpp
+        src/ChooseMapStateUIConfigBuilder.cpp
         )
 
 set(UT_SOURCES
@@ -44,6 +47,9 @@ set(UT_SOURCES
         src/SaveMapStateUIConfigBuilderTest.cpp
         src/SettingsStateUIConfigBuilderTest.cpp
         src/editor/TileMapSerializerJsonTest.cpp
+        src/MapFilePathsReaderTest.cpp
+        src/ChooseMapStateTest.cpp
+        src/ChooseMapStateUIConfigBuilderTest.cpp
         )
 
 add_library(game ${SOURCES})

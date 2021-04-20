@@ -1,7 +1,7 @@
 #include "BunnyAnimator.h"
 
 #include "AnimationsFromSettingsLoader.h"
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 #include "exceptions/AnimationTypeNotSupported.h"
 #include "exceptions/AnimatorSettingsNotFound.h"
 #include "exceptions/InvalidAnimatorSettings.h"

@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 #include "exceptions/AnimatorsConfigFileNotFound.h"
 #include "exceptions/InvalidAnimatorsConfigFile.h"
 
@@ -11,7 +11,7 @@ using namespace animations;
 
 namespace
 {
-const std::string projectPath{utils::getProjectPath("chimarrao-platformer")};
+const std::string projectPath{utils::ProjectPathReader::getProjectRootPath()};
 const std::string testDirectory = projectPath + "src/animations/src/testFiles/";
 const std::string invalidPath{testDirectory + "aaaaaaa.yaml"};
 const std::string invalidYaml{testDirectory + "invalidYaml.yaml"};

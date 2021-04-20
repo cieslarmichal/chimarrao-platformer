@@ -3,7 +3,7 @@
 #include <utility>
 
 #include "EditorMenuStateUIConfigBuilder.h"
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game

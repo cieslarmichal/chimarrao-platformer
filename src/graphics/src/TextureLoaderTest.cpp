@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 #include "exceptions/CannotAccessTextureFile.h"
 
 using namespace graphics;
@@ -11,7 +11,7 @@ using namespace ::testing;
 class TextureLoaderTest : public Test
 {
 public:
-    const std::string testDirectory{utils::getProjectPath("chimarrao-platformer") +
+    const std::string testDirectory{utils::ProjectPathReader::getProjectRootPath() +
                                     "src/graphics/src/testResources/"};
     const std::string nonExistingTexturePath{testDirectory + "nonExistingFile"};
     const std::string existingTexturePath{testDirectory + "attack-A1.png"};

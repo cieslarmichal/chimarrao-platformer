@@ -4,9 +4,10 @@
 #include <fstream>
 #include <sstream>
 
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 #include "exceptions/DirectoryNotFound.h"
 #include "exceptions/FileNotFound.h"
+#include "exceptions/PathIsNotAFile.h"
 
 namespace fs = std::filesystem;
 
@@ -94,9 +95,52 @@ bool DefaultFileAccess::isRegularFile(const std::string& absolutePath) const
 {
     return fs::is_regular_file(absolutePath);
 }
+
 bool DefaultFileAccess::isDirectory(const std::string& absolutePath) const
 {
     return fs::is_directory(absolutePath);
+}
+
+std::string DefaultFileAccess::getFileName(const std::string& pathInit) const
+{
+    if (not isRegularFile(pathInit))
+    {
+        throw exceptions::PathIsNotAFile{pathInit + " is not a file"};
+    }
+
+    fs::path path(pathInit);
+    return path.filename().string();
+}
+
+std::string DefaultFileAccess::getFileNameWithoutExtension(const std::string& pathInit) const
+{
+    if (not isRegularFile(pathInit))
+    {
+        throw exceptions::PathIsNotAFile{pathInit + " is not a file"};
+    }
+
+    fs::path path(pathInit);
+    return path.stem().string();
+}
+
+std::vector<std::string>
+DefaultFileAccess::getAllPathsFromDirectory(const std::string& directoryPathInit) const
+{
+    fs::path directoryPath(directoryPathInit);
+
+    if (not fs::exists(directoryPath) || not isDirectory(directoryPath.string()))
+    {
+        throw exceptions::DirectoryNotFound{directoryNotFoundMessage + directoryPathInit};
+    }
+
+    std::vector<std::string> filesInsideDirectory;
+
+    for (auto& file : fs::recursive_directory_iterator(directoryPath))
+    {
+        filesInsideDirectory.push_back(file.path().string());
+    }
+
+    return filesInsideDirectory;
 }
 
 namespace

@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "ControlsState.h"
+#include "ChooseMapState.h"
 #include "EditorMenuState.h"
 #include "EditorState.h"
 #include "GameState.h"
@@ -72,6 +73,12 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     case StateType::Settings:
     {
         return std::make_unique<SettingsState>(
+            window, rendererPool, fileAccess, states,
+            std::make_unique<components::ui::DefaultUIManager>(rendererPool));
+    }
+    case StateType::ChooseMap:
+    {
+        return std::make_unique<ChooseMapState>(
             window, rendererPool, fileAccess, states,
             std::make_unique<components::ui::DefaultUIManager>(rendererPool));
     }

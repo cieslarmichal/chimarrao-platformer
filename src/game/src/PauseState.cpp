@@ -2,8 +2,8 @@
 
 #include <utility>
 
-#include "GetProjectPath.h"
 #include "PauseStateUIConfigBuilder.h"
+#include "ProjectPathReader.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game

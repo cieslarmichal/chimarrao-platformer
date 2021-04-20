@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 #include "TexturePathForTileNotFound.h"
 
 namespace game
@@ -30,8 +30,8 @@ inline TileType getNextTileType(TileType tileType)
 inline std::string tileTypeToPathTexture(TileType type)
 {
     const std::unordered_map<TileType, std::string> tileTextures{
-        {TileType::Brick, utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/brick.png"},
-        {TileType::Grass, utils::getProjectPath("chimarrao-platformer") + "resources/Tiles/2.png"},
+        {TileType::Brick, utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/brick.png"},
+        {TileType::Grass, utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/2.png"},
     };
     try
     {

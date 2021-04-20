@@ -3,7 +3,7 @@
 #include "Color.h"
 #include "CommonUIConfigElements.h"
 #include "EditorMenuState.h"
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 #include "SaveMapState.h"
 #include "Vector.h"
 

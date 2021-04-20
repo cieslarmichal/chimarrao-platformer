@@ -16,5 +16,8 @@ public:
     bool exists(const std::string& absolutePath) const override;
     bool isRegularFile(const std::string& absolutePath) const override;
     bool isDirectory(const std::string& absolutePath) const override;
+    std::string getFileName(const std::string& path) const override;
+    std::string getFileNameWithoutExtension(const std::string& path) const override;
+    std::vector<std::string> getAllPathsFromDirectory(const std::string& directoryPath) const override;
 };
 }

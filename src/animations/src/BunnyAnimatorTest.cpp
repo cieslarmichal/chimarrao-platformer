@@ -5,8 +5,8 @@
 #include "AnimatorSettingsRepositoryMock.h"
 #include "RendererPoolMock.h"
 
-#include "GetProjectPath.h"
 #include "GraphicsIdGenerator.h"
+#include "ProjectPathReader.h"
 #include "exceptions/AnimationTypeNotSupported.h"
 #include "exceptions/AnimationsFromSettingsNotFound.h"
 #include "exceptions/AnimatorSettingsNotFound.h"
@@ -39,7 +39,7 @@ public:
     const utils::DeltaTime timeExceedingTimeBetweenTextures{2.5};
     const utils::Vector2f scaleRightDirection{1.0, 1.0};
     const utils::Vector2f scaleLeftDirection{-1.0, 1.0};
-    const std::string projectPath{utils::getProjectPath("chimarrao-platformer")};
+    const std::string projectPath{utils::ProjectPathReader::getProjectRootPath()};
     const SingleFileAnimationSettings bunnySingleFileIdleAnimationSettings{
         "idle",
         "resources/bunny-hop-spritesheet.png",

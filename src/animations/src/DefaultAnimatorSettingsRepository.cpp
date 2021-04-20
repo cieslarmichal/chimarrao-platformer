@@ -1,12 +1,12 @@
 #include "DefaultAnimatorSettingsRepository.h"
 
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 
 namespace animations
 {
 
 const std::string DefaultAnimatorSettingsRepository::animatorSettingsFilePath{
-    utils::getProjectPath("chimarrao-platformer") + "config/animators.yaml"};
+    utils::ProjectPathReader::getProjectRootPath() + "config/animators.yaml"};
 
 DefaultAnimatorSettingsRepository::DefaultAnimatorSettingsRepository(
     std::unique_ptr<AnimatorSettingsReader> reader)

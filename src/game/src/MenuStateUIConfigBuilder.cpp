@@ -4,8 +4,8 @@
 #include "ControlsState.h"
 #include "EditorState.h"
 #include "GameState.h"
-#include "GetProjectPath.h"
 #include "MenuState.h"
+#include "ProjectPathReader.h"
 #include "SettingsState.h"
 #include "ui/DefaultUIManager.h"
 
@@ -65,7 +65,7 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     const auto runGame = [=]
     {
         menuState->states.deactivateCurrentState();
-        menuState->states.addNextState(StateType::Game);
+        menuState->states.addNextState(StateType::ChooseMap);
     };
     auto playButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuPlayButton", gameButtonPosition, buttonSize, buttonColor, "Play", graphics::Color::Black, 35,

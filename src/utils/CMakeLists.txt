@@ -1,7 +1,7 @@
 set(SOURCES
         src/Timer.cpp
         src/GetExecutablePath.cpp
-        src/GetProjectPath.cpp
+        src/ProjectPathReader.cpp
         src/StringHelper.cpp
         src/IncrementalFilePathsCreator.cpp
         src/RandomNumberMersenneTwisterGenerator.cpp
@@ -14,11 +14,12 @@ set(SOURCES
 set(UT_SOURCES
         src/TimerTest.cpp
         src/GetExecutablePathTest.cpp
-        src/GetProjectPathTest.cpp
+        src/ProjectPathReaderTest.cpp
         src/StringHelperTest.cpp
         src/IncrementalFilePathsCreatorTest.cpp
         src/RandomNumberMersenneTwisterGeneratorTest.cpp
         src/UniqueNameTest.cpp
+        src/DefaultFileAccessTest.cpp
         )
 
 add_library(utils SHARED ${SOURCES})

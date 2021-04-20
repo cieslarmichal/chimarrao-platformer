@@ -3,8 +3,8 @@
 #include <utility>
 
 #include "CommonUIConfigElements.h"
-#include "GetProjectPath.h"
 #include "MenuStateUIConfigBuilder.h"
+#include "ProjectPathReader.h"
 #include "core/GraphicsComponent.h"
 #include "core/HitBoxComponent.h"
 #include "ui/DefaultUIManager.h"

@@ -1,7 +1,7 @@
 #include "AnimationsFromSettingsLoader.h"
 
-#include "GetProjectPath.h"
 #include "IncrementalFilePathsCreator.h"
+#include "ProjectPathReader.h"
 #include "exceptions/AnimationsFromSettingsNotFound.h"
 #include "exceptions/InvalidAnimatorSettings.h"
 
@@ -24,10 +24,11 @@ void AnimationsFromSettingsLoader::loadAnimationsFromMultipleFilesAnimationsSett
     {
         const auto animationType = toAnimationType(animationSettings.animationType);
         const auto texturePaths = utils::IncrementalFilePathsCreator::createFilePaths(
-            utils::getProjectPath("chimarrao-platformer") + animationSettings.firstTexturePath,
+            utils::ProjectPathReader::getProjectRootPath() + animationSettings.firstTexturePath,
             animationSettings.numberOfTextures);
 
         std::vector<graphics::TextureRect> textureRects;
+        textureRects.reserve(texturePaths.size());
         for (const auto& texturePath : texturePaths)
         {
             textureRects.push_back(graphics::TextureRect{texturePath, std::nullopt});
@@ -72,7 +73,7 @@ void AnimationsFromSettingsLoader::loadAnimationsFromSingleFileAnimationsSetting
             }
 
             textureRects.push_back(graphics::TextureRect{
-                utils::getProjectPath("chimarrao-platformer") + animationSettings.texturePath, rect});
+                utils::ProjectPathReader::getProjectRootPath() + animationSettings.texturePath, rect});
         }
 
         animations.insert({animationType, Animation{textureRects, timeBetweenTextures}});

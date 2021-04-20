@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include "GetProjectPath.h"
+#include "ProjectPathReader.h"
 #include "SettingsStateUIConfigBuilder.h"
 #include "ui/DefaultUIManager.h"
 
