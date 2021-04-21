@@ -1,6 +1,5 @@
 set(SOURCES
         src/Timer.cpp
-        src/GetExecutablePath.cpp
         src/ProjectPathReader.cpp
         src/StringHelper.cpp
         src/IncrementalFilePathsCreator.cpp
@@ -13,7 +12,6 @@ set(SOURCES
 
 set(UT_SOURCES
         src/TimerTest.cpp
-        src/GetExecutablePathTest.cpp
         src/ProjectPathReaderTest.cpp
         src/StringHelperTest.cpp
         src/IncrementalFilePathsCreatorTest.cpp

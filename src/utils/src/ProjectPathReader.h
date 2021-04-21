@@ -1,6 +1,5 @@
 #pragma once
 
-#include <optional>
 #include <string>
 
 #include "UtilsApi.h"
@@ -11,5 +10,8 @@ class ProjectPathReader
 {
 public:
     UTILS_API static std::string getProjectRootPath();
+
+private:
+    static std::string getExecutablePath();
 };
 }
