@@ -73,19 +73,23 @@ void ChooseMapState::showNextMaps()
     {
         const auto numberOfMapsRemaining = mapNames.size() - mapsCurrentPage * maximumNumberOfMapsToDisplay;
 
-        for (auto mapIndex = 0; mapIndex < numberOfMapsRemaining && mapIndex < maximumNumberOfMapsToDisplay; mapIndex++)
+        for (auto mapIndex = 0; mapIndex < numberOfMapsRemaining && mapIndex < maximumNumberOfMapsToDisplay;
+             mapIndex++)
         {
-            uiManager->setText(components::ui::UIComponentTypeWithLabel::Button, mapButtonsUniqueNames[mapIndex], mapNames[mapsCurrentPage*maximumNumberOfMapsToDisplay + mapIndex]);
+            uiManager->setText(components::ui::UIComponentTypeWithLabel::Button,
+                               mapButtonsUniqueNames[mapIndex],
+                               mapNames[mapsCurrentPage * maximumNumberOfMapsToDisplay + mapIndex]);
         }
 
         if (numberOfMapsRemaining < maximumNumberOfMapsToDisplay)
         {
-            for (auto mapIndex = numberOfMapsRemaining; mapIndex< maximumNumberOfMapsToDisplay; mapIndex++)
+            for (auto mapIndex = numberOfMapsRemaining; mapIndex < maximumNumberOfMapsToDisplay; mapIndex++)
             {
-                uiManager->deactivateComponent(components::ui::UIComponentType::Button, mapButtonsUniqueNames[mapIndex]);
+                uiManager->deactivateComponent(components::ui::UIComponentType::Button,
+                                               mapButtonsUniqueNames[mapIndex]);
             }
         }
-            mapsCurrentPage++;
+        mapsCurrentPage++;
     }
 }
 

@@ -102,7 +102,6 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
         leftButtonClickAction, leftButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(leftButtonConfig));
 
-
     for (auto mapIndex = 0; mapIndex < chooseMapState->mapButtonsUniqueNames.size(); mapIndex++)
     {
         const auto buttonUniqueName = chooseMapState->mapButtonsUniqueNames[mapIndex];

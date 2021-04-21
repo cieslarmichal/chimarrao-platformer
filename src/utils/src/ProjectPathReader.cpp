@@ -7,6 +7,8 @@
 #include <unistd.h>
 #endif
 
+#include <optional>
+
 #include "StringHelper.h"
 #include "exceptions/FileNotFound.h"
 
