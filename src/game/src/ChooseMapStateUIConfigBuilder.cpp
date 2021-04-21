@@ -102,14 +102,12 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
         leftButtonClickAction, leftButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(leftButtonConfig));
 
-    for (int mapIndex = 0;
-         mapIndex < chooseMapState->mapFiles.size() && mapIndex < chooseMapState->maximumNumberOfMapsToShow;
-         mapIndex++)
+
+    for (auto mapIndex = 0; mapIndex < chooseMapState->mapButtonsUniqueNames.size(); mapIndex++)
     {
-        auto mapNameWithoutExtension =
-            chooseMapState->fileAccess->getFileNameWithoutExtension(chooseMapState->mapFiles[mapIndex]);
-        auto buttonUniqueName = "chooseMap" + std::to_string(mapIndex + 1) + "MapButton";
-        auto buttonPosition =
+        const auto buttonUniqueName = chooseMapState->mapButtonsUniqueNames[mapIndex];
+        auto mapNameToDisplay = chooseMapState->mapNames[mapIndex];
+        const auto buttonPosition =
             firstMapButtonPosition + utils::Vector2f{0.f, static_cast<float>(mapIndex) * 6.f};
         const auto mapButtonOnMouseOver = [=]
         {
@@ -125,7 +123,7 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
             components::ui::MouseOverActions{mapButtonOnMouseOver, mapButtonOnMouseOut};
         auto mapButtonClickAction = [=] {};
         auto mapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
-            buttonUniqueName, buttonPosition, mapButtonSize, buttonColor, mapNameWithoutExtension,
+            buttonUniqueName, buttonPosition, mapButtonSize, buttonColor, mapNameToDisplay,
             graphics::Color::Black, arrowButtonFontSize, fontPath, utils::Vector2f{2.0f, 0.7f},
             mapButtonClickAction, mapButtonMouseOverActions);
         buttonsConfig.emplace_back(std::move(mapButtonConfig));

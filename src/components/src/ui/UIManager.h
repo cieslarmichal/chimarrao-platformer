@@ -26,5 +26,7 @@ public:
     virtual void setText(UIComponentTypeWithLabel, const std::string& componentName,
                          const std::string& text) = 0;
     virtual void setChecked(UIComponentTypeWithCheck, const std::string& componentName, bool checked) = 0;
+    virtual void activateComponent(UIComponentType, const std::string& componentName) = 0;
+    virtual void deactivateComponent(UIComponentType, const std::string& componentName) = 0;
 };
 }

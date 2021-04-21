@@ -28,6 +28,8 @@ public:
     void setText(UIComponentTypeWithLabel, const std::string& componentName,
                  const std::string& text) override;
     void setChecked(UIComponentTypeWithCheck, const std::string& componentName, bool checked) override;
+    void activateComponent(UIComponentType, const std::string& componentName) override;
+    void deactivateComponent(UIComponentType, const std::string& componentName) override;
 
 private:
     void createUIComponents(std::unique_ptr<UIConfig>);

@@ -179,6 +179,78 @@ void DefaultUIManager::setChecked(UIComponentTypeWithCheck componentType, const 
     }
 }
 
+void DefaultUIManager::activateComponent(UIComponentType componentType, const std::string& componentName)
+{
+    switch (componentType)
+    {
+    case UIComponentType::Background:
+    {
+        background->activate();
+        break;
+    }
+    case UIComponentType::Button:
+    {
+        auto& button = tryToGetComponentByName(buttons, componentName);
+        button->activate();
+        break;
+    }
+    case UIComponentType::CheckBox:
+    {
+        auto& checkBox = tryToGetComponentByName(checkBoxes, componentName);
+        checkBox->activate();
+        break;
+    }
+    case UIComponentType::Label:
+    {
+        auto& label = tryToGetComponentByName(labels, componentName);
+        label->activate();
+        break;
+    }
+    case UIComponentType::TextField:
+    {
+        auto& textField = tryToGetComponentByName(textFields, componentName);
+        textField->activate();
+        break;
+    }
+    }
+}
+
+void DefaultUIManager::deactivateComponent(UIComponentType componentType, const std::string& componentName)
+{
+    switch (componentType)
+    {
+    case UIComponentType::Background:
+    {
+        background->deactivate();
+        break;
+    }
+    case UIComponentType::Button:
+    {
+        auto& button = tryToGetComponentByName(buttons, componentName);
+        button->deactivate();
+        break;
+    }
+    case UIComponentType::CheckBox:
+    {
+        auto& checkBox = tryToGetComponentByName(checkBoxes, componentName);
+        checkBox->deactivate();
+        break;
+    }
+    case UIComponentType::Label:
+    {
+        auto& label = tryToGetComponentByName(labels, componentName);
+        label->deactivate();
+        break;
+    }
+    case UIComponentType::TextField:
+    {
+        auto& textField = tryToGetComponentByName(textFields, componentName);
+        textField->deactivate();
+        break;
+    }
+    }
+}
+
 void DefaultUIManager::createUIComponents(std::unique_ptr<UIConfig> uiConfig)
 {
     background = uiComponentFactory->createBackground(std::move(uiConfig->backgroundConfig));

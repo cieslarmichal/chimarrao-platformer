@@ -36,6 +36,10 @@ private:
     std::unique_ptr<MapFilePathsReader> mapFilePathsReader;
     bool shouldBackToMenu;
     std::vector<std::string> mapFiles;
-    const int maximumNumberOfMapsToShow = 5;
+    std::vector<std::string> mapNames;
+    unsigned int mapsCurrentPage;
+    unsigned int mapsPages;
+    const int maximumNumberOfMapsToDisplay = 5;
+    std::vector<std::string> mapButtonsUniqueNames;
 };
 }
