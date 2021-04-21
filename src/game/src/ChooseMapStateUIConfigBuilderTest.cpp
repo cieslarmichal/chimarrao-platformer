@@ -31,9 +31,9 @@ public:
     ChooseMapStateUIConfigBuilderTest_Base()
     {
         EXPECT_CALL(*fileAccess, getAllPathsFromDirectory(mapsDirectory))
-            .WillOnce(Return(std::vector<std::string>{"map1.txt", "map2.txt"}));
-        EXPECT_CALL(*fileAccess, getFileNameWithoutExtension("map1.txt")).WillRepeatedly(Return("map1"));
-        EXPECT_CALL(*fileAccess, getFileNameWithoutExtension("map2.txt")).WillRepeatedly(Return("map2"));
+            .WillOnce(Return(std::vector<std::string>{"map01.txt", "map02.txt"}));
+        EXPECT_CALL(*fileAccess, getFileNameWithoutExtension("map01.txt")).WillRepeatedly(Return("map01"));
+        EXPECT_CALL(*fileAccess, getFileNameWithoutExtension("map02.txt")).WillRepeatedly(Return("map02"));
     }
 
     const std::string mapsDirectory = utils::ProjectPathReader::getProjectRootPath() + "maps";

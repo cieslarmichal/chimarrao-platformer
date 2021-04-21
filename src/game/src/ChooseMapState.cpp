@@ -17,6 +17,7 @@ ChooseMapState::ChooseMapState(const std::shared_ptr<window::Window>& windowInit
       mapsCurrentPage{1}
 {
     mapFiles = mapFilePathsReader->readMapFilePaths();
+    std::sort(mapFiles.begin(), mapFiles.end());
     std::transform(mapFiles.begin(), mapFiles.end(), std::back_inserter(mapNames),
                    [&](const std::string& mapFile)
                    { return fileAccess->getFileNameWithoutExtension(mapFile); });
@@ -93,5 +94,20 @@ void ChooseMapState::showNextMaps()
     }
 }
 
-void ChooseMapState::showPreviousMaps() {}
+void ChooseMapState::showPreviousMaps()
+{
+    if (mapsCurrentPage > 1)
+    {
+        for (auto mapIndex = 0; mapIndex < maximumNumberOfMapsToDisplay; mapIndex++)
+        {
+            uiManager->activateComponent(components::ui::UIComponentType::Button,
+                                           mapButtonsUniqueNames[mapIndex]);
+            uiManager->setText(components::ui::UIComponentTypeWithLabel::Button,
+                               mapButtonsUniqueNames[mapIndex],
+                               mapNames[(mapsCurrentPage - 2) * maximumNumberOfMapsToDisplay + mapIndex]);
+        }
+
+        mapsCurrentPage--;
+    }
+}
 }
