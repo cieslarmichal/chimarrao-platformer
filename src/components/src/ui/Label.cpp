@@ -48,4 +48,9 @@ void Label::setColor(graphics::Color color)
 {
     coreComponentsOwner->getComponent<components::core::TextComponent>()->setColor(color);
 }
+
+bool Label::isActive() const
+{
+    return coreComponentsOwner->areComponentEnabled();
+}
 }

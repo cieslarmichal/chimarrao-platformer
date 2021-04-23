@@ -69,17 +69,12 @@ void ClickableComponent::disable()
 
 void ClickableComponent::setKeyActions(const std::vector<KeyAction>& keyActionsInit)
 {
-    if (not enabled)
-    {
-        return;
-    }
-
     keyActions.clear();
 
     std::unordered_set<input::InputKey> inputKeys;
     for (const auto& keyAction : keyActionsInit)
     {
-        if (inputKeys.count(keyAction.key))
+        if (inputKeys.contains(keyAction.key))
         {
             throw exceptions::ActionForKeyAlreadyExists{
                 "ClickableComponent: Two or more action for the same key"};

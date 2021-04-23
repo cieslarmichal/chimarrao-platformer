@@ -35,7 +35,7 @@ private:
     std::unique_ptr<components::ui::UIManager> uiManager;
     std::unique_ptr<MapFilePathsReader> mapFilePathsReader;
     bool shouldBackToMenu;
-    std::vector<std::string> mapFiles;
+    std::vector<std::string> mapFilePaths;
     std::vector<std::string> mapNames;
     unsigned int mapsCurrentPage;
     unsigned int mapsPages;

@@ -120,7 +120,7 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
         };
         auto mapButtonMouseOverActions =
             components::ui::MouseOverActions{mapButtonOnMouseOver, mapButtonOnMouseOut};
-        auto mapButtonClickAction = [=] {};
+        auto mapButtonClickAction = [=] { std::cerr << "mapButtonClickAction"; };
         auto mapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
             buttonUniqueName, buttonPosition, mapButtonSize, buttonColor, mapNameToDisplay,
             graphics::Color::Black, arrowButtonFontSize, fontPath, utils::Vector2f{2.0f, 0.7f},

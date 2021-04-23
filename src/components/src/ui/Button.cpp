@@ -107,4 +107,9 @@ void Button::setClickAction(const std::vector<core::KeyAction>& keyActions)
     }
 }
 
+bool Button::isActive() const
+{
+    return coreComponentsOwner->areComponentEnabled();
+}
+
 }

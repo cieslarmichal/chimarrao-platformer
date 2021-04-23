@@ -28,5 +28,6 @@ public:
     virtual void setChecked(UIComponentTypeWithCheck, const std::string& componentName, bool checked) = 0;
     virtual void activateComponent(UIComponentType, const std::string& componentName) = 0;
     virtual void deactivateComponent(UIComponentType, const std::string& componentName) = 0;
+    virtual bool isComponentActive(UIComponentType, const std::string& componentName) const = 0;
 };
 }

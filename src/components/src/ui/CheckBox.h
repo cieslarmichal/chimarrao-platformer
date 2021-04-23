@@ -22,6 +22,7 @@ public:
     void deactivate() override;
     void setColor(graphics::Color);
     void setChecked(bool checked);
+    bool isActive() const override;
 
 private:
     std::string name;

@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include "ChooseMapStateUIConfigBuilder.h"
+#include "core/KeyAction.h"
 
 namespace game
 {
@@ -16,13 +17,14 @@ ChooseMapState::ChooseMapState(const std::shared_ptr<window::Window>& windowInit
       shouldBackToMenu{false},
       mapsCurrentPage{1}
 {
-    mapFiles = mapFilePathsReader->readMapFilePaths();
-    std::sort(mapFiles.begin(), mapFiles.end());
-    std::transform(mapFiles.begin(), mapFiles.end(), std::back_inserter(mapNames),
+    mapFilePaths = mapFilePathsReader->readMapFilePaths();
+    std::sort(mapFilePaths.begin(), mapFilePaths.end());
+    std::transform(mapFilePaths.begin(), mapFilePaths.end(), std::back_inserter(mapNames),
                    [&](const std::string& mapFile)
                    { return fileAccess->getFileNameWithoutExtension(mapFile); });
 
-    for (int mapIndex = 0; mapIndex < mapFiles.size() && mapIndex < maximumNumberOfMapsToDisplay; mapIndex++)
+    for (int mapIndex = 0; mapIndex < mapFilePaths.size() && mapIndex < maximumNumberOfMapsToDisplay;
+         mapIndex++)
     {
         mapButtonsUniqueNames.push_back("chooseMap" + std::to_string(mapIndex + 1) + "MapButton");
     }
@@ -73,13 +75,21 @@ void ChooseMapState::showNextMaps()
     if (mapsCurrentPage < mapsPages)
     {
         const auto numberOfMapsRemaining = mapNames.size() - mapsCurrentPage * maximumNumberOfMapsToDisplay;
+        std::cerr << numberOfMapsRemaining << std::endl;
 
-        for (auto mapIndex = 0; mapIndex < numberOfMapsRemaining && mapIndex < maximumNumberOfMapsToDisplay;
-             mapIndex++)
+        for (auto uniqueMapIndex = 0;
+             uniqueMapIndex < numberOfMapsRemaining && uniqueMapIndex < maximumNumberOfMapsToDisplay;
+             uniqueMapIndex++)
         {
+            const auto currentMapNameIndex = mapsCurrentPage * maximumNumberOfMapsToDisplay + uniqueMapIndex;
+            const auto& mapName = mapNames[currentMapNameIndex];
+            const auto& mapPath = mapFilePaths[currentMapNameIndex];
             uiManager->setText(components::ui::UIComponentTypeWithLabel::Button,
-                               mapButtonsUniqueNames[mapIndex],
-                               mapNames[mapsCurrentPage * maximumNumberOfMapsToDisplay + mapIndex]);
+                               mapButtonsUniqueNames[uniqueMapIndex], mapName);
+            auto loadMap = [&] { std::cerr << mapPath << std::endl; };
+            components::core::KeyAction loadMapKeyAction{input::InputKey::MouseLeft, loadMap};
+            uiManager->changeClickAction(components::ui::UIComponentType::Button,
+                                         mapButtonsUniqueNames[uniqueMapIndex], {loadMapKeyAction});
         }
 
         if (numberOfMapsRemaining < maximumNumberOfMapsToDisplay)
@@ -100,11 +110,17 @@ void ChooseMapState::showPreviousMaps()
     {
         for (auto mapIndex = 0; mapIndex < maximumNumberOfMapsToDisplay; mapIndex++)
         {
+            const auto currentMapNameIndex = (mapsCurrentPage - 2) * maximumNumberOfMapsToDisplay + mapIndex;
+            const auto& mapName = mapNames[currentMapNameIndex];
+            const auto& mapPath = mapFilePaths[currentMapNameIndex];
             uiManager->activateComponent(components::ui::UIComponentType::Button,
-                                           mapButtonsUniqueNames[mapIndex]);
+                                         mapButtonsUniqueNames[mapIndex]);
             uiManager->setText(components::ui::UIComponentTypeWithLabel::Button,
-                               mapButtonsUniqueNames[mapIndex],
-                               mapNames[(mapsCurrentPage - 2) * maximumNumberOfMapsToDisplay + mapIndex]);
+                               mapButtonsUniqueNames[mapIndex], mapName);
+            auto loadMap = [&] { std::cerr << mapPath << std::endl; };
+            components::core::KeyAction loadMapKeyAction{input::InputKey::MouseLeft, loadMap};
+            uiManager->changeClickAction(components::ui::UIComponentType::Button,
+                                         mapButtonsUniqueNames[mapIndex], {loadMapKeyAction});
         }
 
         mapsCurrentPage--;

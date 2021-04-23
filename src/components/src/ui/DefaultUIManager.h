@@ -30,6 +30,7 @@ public:
     void setChecked(UIComponentTypeWithCheck, const std::string& componentName, bool checked) override;
     void activateComponent(UIComponentType, const std::string& componentName) override;
     void deactivateComponent(UIComponentType, const std::string& componentName) override;
+    bool isComponentActive(UIComponentType, const std::string& componentName) const override;
 
 private:
     void createUIComponents(std::unique_ptr<UIConfig>);

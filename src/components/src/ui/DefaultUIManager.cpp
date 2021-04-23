@@ -24,6 +24,20 @@ static auto& tryToGetComponentByName(std::vector<T>& uiComponents, const std::st
 }
 
 template <typename T>
+static auto& tryToGetComponentByName(const std::vector<T>& uiComponents, const std::string& nameToFind)
+{
+    auto foundComponent =
+        std::find_if(uiComponents.begin(), uiComponents.end(),
+                     [&nameToFind](const T& uiComponent) { return uiComponent->getName() == nameToFind; });
+    if (foundComponent != uiComponents.end())
+    {
+        return *foundComponent;
+    }
+
+    throw exceptions::UIComponentNotFound{"Component with name: " + nameToFind + " not found"};
+}
+
+template <typename T>
 void updateComponents(std::vector<T>& uiComponents, utils::DeltaTime deltaTime, const input::Input& input)
 {
     for (auto& uiComponent : uiComponents)
@@ -232,7 +246,7 @@ void DefaultUIManager::deactivateComponent(UIComponentType componentType, const 
     }
     case UIComponentType::CheckBox:
     {
-        auto& checkBox = tryToGetComponentByName(checkBoxes, componentName);
+        const auto& checkBox = tryToGetComponentByName(checkBoxes, componentName);
         checkBox->deactivate();
         break;
     }
@@ -248,6 +262,40 @@ void DefaultUIManager::deactivateComponent(UIComponentType componentType, const 
         textField->deactivate();
         break;
     }
+    }
+}
+
+bool DefaultUIManager::isComponentActive(UIComponentType componentType,
+                                         const std::string& componentName) const
+{
+    switch (componentType)
+    {
+    case UIComponentType::Background:
+    {
+        return background->isActive();
+    }
+    case UIComponentType::Button:
+    {
+        const auto& button = tryToGetComponentByName(buttons, componentName);
+        return button->isActive();
+    }
+    case UIComponentType::CheckBox:
+    {
+        const auto& checkBox = tryToGetComponentByName(checkBoxes, componentName);
+        return checkBox->isActive();
+    }
+    case UIComponentType::Label:
+    {
+        const auto& label = tryToGetComponentByName(labels, componentName);
+        return label->isActive();
+    }
+    case UIComponentType::TextField:
+    {
+        const auto& textField = tryToGetComponentByName(textFields, componentName);
+        return textField->isActive();
+    }
+    default:
+        return false;
     }
 }
 

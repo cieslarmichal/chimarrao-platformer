@@ -21,8 +21,8 @@ public:
     void lateUpdate(utils::DeltaTime);
     void enable();
     void disable();
-    // TODO: add test for getName
     std::string getName() const;
+    bool areComponentEnabled() const;
 
     template <typename T, typename... Args>
     std::shared_ptr<T> addComponent(Args... args)

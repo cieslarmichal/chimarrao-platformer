@@ -1,5 +1,7 @@
 #include "ComponentOwner.h"
 
+#include <algorithm>
+
 namespace components::core
 {
 ComponentOwner::ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit)
@@ -34,23 +36,29 @@ void ComponentOwner::lateUpdate(utils::DeltaTime deltaTime)
 
 void ComponentOwner::enable()
 {
-    for (int i = static_cast<int>(components.size() - 1); i >= 0; i--)
+    for (auto& component : components)
     {
-        components[i]->enable();
+        component->enable();
     }
 }
 
 void ComponentOwner::disable()
 {
-    for (int i = static_cast<int>(components.size() - 1); i >= 0; i--)
+    for (auto& component : components)
     {
-        components[i]->disable();
+        component->disable();
     }
 }
 
 std::string ComponentOwner::getName() const
 {
     return uniqueName.getName();
+}
+
+bool ComponentOwner::areComponentEnabled() const
+{
+    return std::all_of(components.begin(), components.end(),
+                       [](const auto& component) { return component->isEnabled(); });
 }
 
 }

@@ -13,53 +13,53 @@ namespace components::ui
 {
 struct ButtonConfig
 {
-    ButtonConfig(const std::string& uniqueNameInit, utils::Vector2f positionInit, utils::Vector2f sizeInit,
-                 graphics::Color buttonColorInit, const std::string& textInit, graphics::Color textColorInit,
-                 unsigned int fontSizeInit, const std::string& fontPathInit, utils::Vector2f textOffsetInit,
+    ButtonConfig(std::string uniqueNameInit, utils::Vector2f positionInit, utils::Vector2f sizeInit,
+                 graphics::Color buttonColorInit, std::string textInit, graphics::Color textColorInit,
+                 unsigned int fontSizeInit, std::string fontPathInit, utils::Vector2f textOffsetInit,
                  std::function<void(void)> clickActionInit, const MouseOverActions& mouseOverActionsInit)
-        : uniqueName{uniqueNameInit},
+        : uniqueName{std::move(uniqueNameInit)},
           position{positionInit},
           size{sizeInit},
           buttonColor{buttonColorInit},
-          text{textInit},
+          text{std::move(textInit)},
           textColor{textColorInit},
           fontSize{fontSizeInit},
-          fontPath{fontPathInit},
+          fontPath{std::move(fontPathInit)},
           textOffset{textOffsetInit},
           clickAction{std::move(clickActionInit)},
           mouseOverActions{mouseOverActionsInit}
     {
     }
 
-    ButtonConfig(const std::string& uniqueNameInit, utils::Vector2f positionInit, utils::Vector2f sizeInit,
-                 graphics::Color buttonColorInit, const std::string& textInit, graphics::Color textColorInit,
-                 unsigned int fontSizeInit, const std::string& fontPathInit, utils::Vector2f textOffsetInit,
+    ButtonConfig(std::string uniqueNameInit, utils::Vector2f positionInit, utils::Vector2f sizeInit,
+                 graphics::Color buttonColorInit, std::string textInit, graphics::Color textColorInit,
+                 unsigned int fontSizeInit, std::string fontPathInit, utils::Vector2f textOffsetInit,
                  std::function<void(void)> clickActionInit)
-        : uniqueName{uniqueNameInit},
+        : uniqueName{std::move(uniqueNameInit)},
           position{positionInit},
           size{sizeInit},
           buttonColor{buttonColorInit},
-          text{textInit},
+          text{std::move(textInit)},
           textColor{textColorInit},
           fontSize{fontSizeInit},
-          fontPath{fontPathInit},
+          fontPath{std::move(fontPathInit)},
           textOffset{textOffsetInit},
           clickAction{std::move(clickActionInit)},
           mouseOverActions{boost::none}
     {
     }
 
-    ButtonConfig(const std::string& uniqueNameInit, utils::Vector2f positionInit, utils::Vector2f sizeInit,
-                 graphics::Color buttonColorInit, const std::string& textInit, graphics::Color textColorInit,
-                 unsigned int fontSizeInit, const std::string& fontPathInit, utils::Vector2f textOffsetInit)
-        : uniqueName{uniqueNameInit},
+    ButtonConfig(std::string uniqueNameInit, utils::Vector2f positionInit, utils::Vector2f sizeInit,
+                 graphics::Color buttonColorInit, std::string textInit, graphics::Color textColorInit,
+                 unsigned int fontSizeInit, std::string fontPathInit, utils::Vector2f textOffsetInit)
+        : uniqueName{std::move(uniqueNameInit)},
           position{positionInit},
           size{sizeInit},
           buttonColor{buttonColorInit},
-          text{textInit},
+          text{std::move(textInit)},
           textColor{textColorInit},
           fontSize{fontSizeInit},
-          fontPath{fontPathInit},
+          fontPath{std::move(fontPathInit)},
           textOffset{textOffsetInit},
           clickAction{boost::none},
           mouseOverActions{boost::none}

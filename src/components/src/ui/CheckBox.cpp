@@ -86,4 +86,9 @@ void CheckBox::setChecked(bool checked)
     const auto text = checked ? "X" : "";
     coreComponentsOwner->getComponent<components::core::TextComponent>()->setText(text);
 }
+
+bool CheckBox::isActive() const
+{
+    return coreComponentsOwner->areComponentEnabled();
+}
 }

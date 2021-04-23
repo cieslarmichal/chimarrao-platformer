@@ -21,6 +21,7 @@ public:
     void deactivate() override;
     void setText(const std::string&);
     void setColor(graphics::Color);
+    bool isActive() const override;
 
 private:
     std::string name;

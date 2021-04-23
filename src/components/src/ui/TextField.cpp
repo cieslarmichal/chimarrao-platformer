@@ -121,4 +121,9 @@ void TextField::setText(const std::string& text)
     coreComponentsOwner->getComponent<components::core::TextComponent>()->setText(text);
 }
 
+bool TextField::isActive() const
+{
+    return coreComponentsOwner->areComponentEnabled();
+}
+
 }

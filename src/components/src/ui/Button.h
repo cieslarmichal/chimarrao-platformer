@@ -24,6 +24,7 @@ public:
     void setColor(graphics::Color);
     void setText(const std::string&);
     void setClickAction(const std::vector<core::KeyAction>&);
+    bool isActive() const override;
 
 private:
     std::string name;
