@@ -8,6 +8,7 @@ set(SOURCES
         src/core/ClickableComponent.cpp
         src/core/HitBoxComponent.cpp
         src/core/MouseOverComponent.cpp
+        src/core/ColliderComponent.cpp
         src/ui/Background.cpp
         src/ui/Button.cpp
         src/ui/CheckBox.cpp
@@ -28,6 +29,7 @@ set(UT_SOURCES
         src/core/ClickableComponentTest.cpp
         src/core/HitBoxComponentTest.cpp
         src/core/MouseOverComponentTest.cpp
+        src/core/ColliderComponentTest.cpp
         )
 
 add_library(components ${SOURCES})

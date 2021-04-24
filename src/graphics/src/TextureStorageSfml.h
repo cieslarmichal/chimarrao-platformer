@@ -3,7 +3,7 @@
 #include <memory>
 #include <unordered_map>
 
-#include "IntRect.h"
+#include "Rect.h"
 #include "TextureLoader.h"
 #include "TextureRect.h"
 #include "TextureStorage.h"

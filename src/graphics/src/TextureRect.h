@@ -3,7 +3,7 @@
 #include <optional>
 #include <string>
 
-#include "IntRect.h"
+#include "Rect.h"
 
 namespace graphics
 {

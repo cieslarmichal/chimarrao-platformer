@@ -4,7 +4,7 @@
 #include <string>
 #include <tuple>
 
-#include "IntRect.h"
+#include "Rect.h"
 #include "TexturePath.h"
 #include "Vector.h"
 
