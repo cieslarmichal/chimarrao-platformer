@@ -1,29 +1,17 @@
 #pragma once
 
+#include "CollisionInfo.h"
+#include "CollisionLayer.h"
 #include "Component.h"
-#include "Rect.h"
 
 namespace components::core
 {
-
-enum class CollisionLayer
-{
-    Default,
-    Player,
-    Tile
-};
-
-struct CollisionInfo
-{
-    bool colliding = false;
-    const utils::FloatRect* other;
-};
-
 class ColliderComponent : public Component
 {
 public:
     ColliderComponent(ComponentOwner*);
 
+    virtual bool intersects(const utils::Vector2f&) = 0;
     virtual CollisionInfo intersects(std::shared_ptr<ColliderComponent> other) = 0;
     virtual void resolveOverlap(const CollisionInfo&) = 0;
 

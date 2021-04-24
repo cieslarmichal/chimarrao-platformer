@@ -16,9 +16,12 @@ public:
     void addPosition(const utils::Vector2f& deltaPosition);
     void setX(float x);
     void setY(float y);
-    [[nodiscard]] const utils::Vector2f& getPosition() const;
+    const utils::Vector2f& getPosition() const;
+    void setStaticTransform(bool staticTransform);
+    bool isStaticTransform() const;
 
 private:
     utils::Vector2f position;
+    bool staticTransform;
 };
 }
