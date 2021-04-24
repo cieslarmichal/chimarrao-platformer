@@ -2,8 +2,8 @@
 
 #include <functional>
 
+#include "BoxColliderComponent.h"
 #include "Component.h"
-#include "HitBoxComponent.h"
 #include "KeyAction.h"
 
 namespace components::core
@@ -21,7 +21,7 @@ public:
     void setKeyActions(const std::vector<KeyAction>&);
 
 private:
-    std::shared_ptr<HitBoxComponent> hitBox;
+    std::shared_ptr<BoxColliderComponent> boxCollider;
     std::vector<KeyAction> keyActions;
 };
 }

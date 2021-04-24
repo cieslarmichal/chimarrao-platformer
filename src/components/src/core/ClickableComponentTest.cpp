@@ -16,9 +16,9 @@ class ClickableComponentTest : public Test
 public:
     ClickableComponentTest()
     {
-        auto hitBoxComponent = componentOwner.addComponent<HitBoxComponent>(size, offset);
+        auto boxCollider = owner.addComponent<BoxColliderComponent>(size, offset);
         clickableComponent.loadDependentComponents();
-        hitBoxComponent->lateUpdate(deltaTime);
+        boxCollider->lateUpdate(deltaTime);
     }
 
     void clickAction(int& actionVariableInit)
@@ -41,11 +41,11 @@ public:
     const utils::Vector2f position1{20, 20};
     const utils::Vector2f positionInsideTarget{21, 21};
     const utils::Vector2f positionOutsideTarget{27, 21};
-    ComponentOwner componentOwner{position1, "clickableComponentOwnerTest"};
+    ComponentOwner owner{position1, "clickableComponentOwnerTest"};
     utils::DeltaTime deltaTime{1};
     std::unique_ptr<StrictMock<input::InputMock>> inputInit{std::make_unique<StrictMock<input::InputMock>>()};
     StrictMock<input::InputMock>* input{inputInit.get()};
-    ClickableComponent clickableComponent{&componentOwner, [this] { clickAction(actionVariable); }};
+    ClickableComponent clickableComponent{&owner, [this] { clickAction(actionVariable); }};
     KeyAction keyAction1 = {InputKey::MouseLeft, [this] { clickAction(actionVariableLeft); }};
     KeyAction keyAction1copy = {InputKey::MouseLeft, [] {}};
     KeyAction keyAction2 = {InputKey::MouseRight, [this] { clickAction(actionVariableRight); }};
@@ -106,7 +106,7 @@ TEST_F(ClickableComponentTest,
 TEST_F(ClickableComponentTest,
        multipleKeyActionClicableComponentConstructor_givenMoreThanOneActionForOneKey_shouldThrowException)
 {
-    ASSERT_THROW(ClickableComponent(&componentOwner, invalidKeyActionVector),
+    ASSERT_THROW(ClickableComponent(&owner, invalidKeyActionVector),
                  components::core::exceptions::ActionForKeyAlreadyExists);
 }
 
@@ -114,8 +114,7 @@ TEST_F(ClickableComponentTest,
        givenMousePositionInsideHitboxRightAndLeftMouseKeyClicked_shouldCallBothActionAtOneUpdate)
 {
     ComponentOwner localComponentOwner{position1, "clickableComponentOwner1"};
-    auto hitBoxComponent = localComponentOwner.addComponent<HitBoxComponent>(size, offset);
-    hitBoxComponent->lateUpdate(deltaTime);
+    auto boxCollider = localComponentOwner.addComponent<BoxColliderComponent>(size, offset);
     auto localClickableComponent = ClickableComponent(&localComponentOwner, validKeyActionVector);
     localClickableComponent.loadDependentComponents();
     EXPECT_CALL(*input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
@@ -132,8 +131,7 @@ TEST_F(ClickableComponentTest,
        givenMousePositionInsideHitboxRightMouseKeyClicked_shouldCallOnlyRightClickAction)
 {
     ComponentOwner localComponentOwner{position1, "clickableComponentOwner2"};
-    auto hitBoxComponent = localComponentOwner.addComponent<HitBoxComponent>(size, offset);
-    hitBoxComponent->lateUpdate(deltaTime);
+    auto boxCollider = localComponentOwner.addComponent<BoxColliderComponent>(size, offset);
     auto localClickableComponent = ClickableComponent(&localComponentOwner, validKeyActionVector);
     localClickableComponent.loadDependentComponents();
     EXPECT_CALL(*input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(false));
@@ -150,8 +148,7 @@ TEST_F(ClickableComponentTest,
        givenTwoKeyActions_thenChangeIntoOtherKeyAction_shouldBeAbleToOnlyPerformOtherOne)
 {
     ComponentOwner localComponentOwner{position1, "clickableComponentOwner3"};
-    auto hitBoxComponent = localComponentOwner.addComponent<HitBoxComponent>(size, offset);
-    hitBoxComponent->lateUpdate(deltaTime);
+    auto boxCollider = localComponentOwner.addComponent<BoxColliderComponent>(size, offset);
     auto localClickableComponent = ClickableComponent(&localComponentOwner, validKeyActionVector);
     localClickableComponent.loadDependentComponents();
 

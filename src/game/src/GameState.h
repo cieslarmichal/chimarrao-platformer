@@ -27,6 +27,7 @@ private:
     utils::Timer timer;
     const float timeAfterStateCouldBePaused;
     std::shared_ptr<components::core::ComponentOwner> player;
+    std::shared_ptr<components::core::ComponentOwner> obstacle;
     std::unique_ptr<components::ui::UIManager> uiManager;
 };
 }

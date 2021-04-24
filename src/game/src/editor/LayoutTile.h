@@ -9,7 +9,6 @@
 #include "core/ClickableComponent.h"
 #include "core/ComponentOwner.h"
 #include "core/GraphicsComponent.h"
-#include "core/HitBoxComponent.h"
 #include "core/MouseOverComponent.h"
 
 namespace game

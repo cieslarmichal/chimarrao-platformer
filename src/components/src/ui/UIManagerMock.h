@@ -25,6 +25,7 @@ public:
                 (override));
     MOCK_METHOD(void, activateComponent, (UIComponentType, const std::string& componentName), (override));
     MOCK_METHOD(void, deactivateComponent, (UIComponentType, const std::string& componentName), (override));
-    MOCK_METHOD(bool, isComponentActive, (UIComponentType, const std::string& componentName), (override));
+    MOCK_METHOD(bool, isComponentActive, (UIComponentType, const std::string& componentName),
+                (const override));
 };
 }

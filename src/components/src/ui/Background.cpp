@@ -1,8 +1,8 @@
 #include "Background.h"
 
+#include "core/BoxColliderComponent.h"
 #include "core/ClickableComponent.h"
 #include "core/GraphicsComponent.h"
-#include "core/HitBoxComponent.h"
 #include "exceptions/InvalidUIComponentConfig.h"
 #include "exceptions/UIComponentConfigNotFound.h"
 
@@ -41,7 +41,7 @@ Background::Background(const std::shared_ptr<graphics::RendererPool>& rendererPo
 
     if (not backgroundConfig->keyActions.empty())
     {
-        coreComponentsOwner->addComponent<components::core::HitBoxComponent>(backgroundConfig->size);
+        coreComponentsOwner->addComponent<components::core::BoxColliderComponent>(backgroundConfig->size);
         coreComponentsOwner->addComponent<components::core::ClickableComponent>(backgroundConfig->keyActions);
     }
 

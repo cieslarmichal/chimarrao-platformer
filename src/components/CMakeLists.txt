@@ -6,7 +6,6 @@ set(SOURCES
         src/core/AnimationComponent.cpp
         src/core/TextComponent.cpp
         src/core/ClickableComponent.cpp
-        src/core/HitBoxComponent.cpp
         src/core/MouseOverComponent.cpp
         src/core/ColliderComponent.cpp
         src/core/BoxColliderComponent.cpp
@@ -28,7 +27,6 @@ set(UT_SOURCES
         src/core/AnimationComponentTest.cpp
         src/core/TextComponentTest.cpp
         src/core/ClickableComponentTest.cpp
-        src/core/HitBoxComponentTest.cpp
         src/core/MouseOverComponentTest.cpp
         src/core/ColliderComponentTest.cpp
         src/core/BoxColliderComponentTest.cpp

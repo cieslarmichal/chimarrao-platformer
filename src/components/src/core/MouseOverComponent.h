@@ -2,8 +2,8 @@
 
 #include <functional>
 
+#include "BoxColliderComponent.h"
 #include "Component.h"
-#include "HitBoxComponent.h"
 
 namespace components::core
 {
@@ -19,7 +19,7 @@ public:
     void disable() override;
 
 private:
-    std::shared_ptr<HitBoxComponent> hitBox;
+    std::shared_ptr<BoxColliderComponent> boxCollider;
     std::function<void(void)> mouseOverAction;
     std::function<void(void)> mouseOutAction;
     bool mouseOver;

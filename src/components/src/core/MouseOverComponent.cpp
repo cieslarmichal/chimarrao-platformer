@@ -18,10 +18,10 @@ MouseOverComponent::MouseOverComponent(ComponentOwner* ownerInit,
 
 void MouseOverComponent::loadDependentComponents()
 {
-    hitBox = owner->getComponent<HitBoxComponent>();
-    if (not hitBox)
+    boxCollider = owner->getComponent<BoxColliderComponent>();
+    if (not boxCollider)
     {
-        throw exceptions::DependentComponentNotFound{"MouseOverComponent: HitBox component not found"};
+        throw exceptions::DependentComponentNotFound{"MouseOverComponent: BoxColliderComponent not found"};
     }
 }
 
@@ -32,12 +32,12 @@ void MouseOverComponent::update(utils::DeltaTime, const input::Input& input)
         return;
     }
 
-    if (not mouseOver && hitBox->intersects(input.getMousePosition()))
+    if (not mouseOver && boxCollider->intersects(input.getMousePosition()))
     {
         mouseOverAction();
         mouseOver = true;
     }
-    else if (mouseOver && not hitBox->intersects(input.getMousePosition()))
+    else if (mouseOver && not boxCollider->intersects(input.getMousePosition()))
     {
         mouseOutAction();
         mouseOver = false;

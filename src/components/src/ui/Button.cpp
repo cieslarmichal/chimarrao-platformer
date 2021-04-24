@@ -1,8 +1,8 @@
 #include "Button.h"
 
+#include "core/BoxColliderComponent.h"
 #include "core/ClickableComponent.h"
 #include "core/GraphicsComponent.h"
-#include "core/HitBoxComponent.h"
 #include "core/MouseOverComponent.h"
 #include "core/TextComponent.h"
 #include "exceptions/UIComponentConfigNotFound.h"
@@ -27,7 +27,7 @@ Button::Button(const std::shared_ptr<graphics::RendererPool>& rendererPool,
     coreComponentsOwner->addComponent<components::core::TextComponent>(
         rendererPool, buttonConfig->position, buttonConfig->text, buttonConfig->fontPath,
         buttonConfig->fontSize, buttonConfig->textColor, buttonConfig->textOffset);
-    coreComponentsOwner->addComponent<components::core::HitBoxComponent>(buttonConfig->size);
+    coreComponentsOwner->addComponent<components::core::BoxColliderComponent>(buttonConfig->size);
 
     if (buttonConfig->clickAction)
     {

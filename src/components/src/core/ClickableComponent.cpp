@@ -24,10 +24,10 @@ ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
 
 void ClickableComponent::loadDependentComponents()
 {
-    hitBox = owner->getComponent<HitBoxComponent>();
-    if (not hitBox)
+    boxCollider = owner->getComponent<BoxColliderComponent>();
+    if (not boxCollider)
     {
-        throw exceptions::DependentComponentNotFound{"ClickableComponent: HitBox component not found"};
+        throw exceptions::DependentComponentNotFound{"ClickableComponent: BoxColliderComponent not found"};
     }
 }
 
@@ -41,7 +41,7 @@ void ClickableComponent::update(utils::DeltaTime, const input::Input& input)
     for (auto& keyAction : keyActions)
     {
         if (not keyAction.clicked && input.isKeyReleased(keyAction.key) &&
-            hitBox->intersects(input.getMousePosition()))
+            boxCollider->intersects(input.getMousePosition()))
         {
             keyAction.action();
         }

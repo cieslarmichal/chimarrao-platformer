@@ -1,8 +1,8 @@
 #include "TextField.h"
 
+#include "core/BoxColliderComponent.h"
 #include "core/ClickableComponent.h"
 #include "core/GraphicsComponent.h"
-#include "core/HitBoxComponent.h"
 #include "core/MouseOverComponent.h"
 #include "core/TextComponent.h"
 #include "exceptions/UIComponentConfigNotFound.h"
@@ -27,7 +27,7 @@ TextField::TextField(const std::shared_ptr<graphics::RendererPool>& rendererPool
     coreComponentsOwner->addComponent<components::core::TextComponent>(
         rendererPool, textFieldConfig->size, "", textFieldConfig->fontPath, textFieldConfig->fontSize,
         graphics::Color::White, textFieldConfig->textOffset);
-    coreComponentsOwner->addComponent<components::core::HitBoxComponent>(textFieldConfig->size);
+    coreComponentsOwner->addComponent<components::core::BoxColliderComponent>(textFieldConfig->size);
 
     clickInsideFieldAction = textFieldConfig->clickInFieldAction;
     clickOutsideFieldAction = textFieldConfig->clickOutsideFieldAction;
@@ -49,7 +49,8 @@ void TextField::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
     if (input.isKeyPressed(input::InputKey::MouseLeft))
     {
-        if (auto textFieldHitBox = coreComponentsOwner->getComponent<components::core::HitBoxComponent>())
+        if (auto textFieldHitBox =
+                coreComponentsOwner->getComponent<components::core::BoxColliderComponent>())
         {
             if (not textFieldHitBox->intersects(input.getMousePosition()))
             {

@@ -6,7 +6,6 @@
 #include "MenuStateUIConfigBuilder.h"
 #include "ProjectPathReader.h"
 #include "core/GraphicsComponent.h"
-#include "core/HitBoxComponent.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game

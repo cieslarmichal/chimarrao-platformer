@@ -18,7 +18,7 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
         utils::Vector2f{static_cast<float>(position.x) * sizeInit.x,
                         static_cast<float>(position.y) * sizeInit.y},
         tileTypeToPathTexture(*currentTileType), graphics::VisibilityLayer::Invisible);
-    componentOwner->addComponent<components::core::HitBoxComponent>(sizeInit);
+    componentOwner->addComponent<components::core::BoxColliderComponent>(sizeInit);
     const auto onRightMouseButtonClickActionLambda = [=, &tileMap]
     {
         *currentTileType = getNextTileType(*currentTileType);

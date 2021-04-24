@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 
-#include "HitBoxComponent.h"
+#include "BoxColliderComponent.h"
 
 using namespace ::testing;
 using namespace components::core;
@@ -23,54 +23,60 @@ TEST_F(ComponentOwnerTest, initialPosition_shouldBeSetFromConstructor)
 
 TEST_F(ComponentOwnerTest, addComponent_shouldBeValid)
 {
-    const auto hitBoxComponent = componentOwner.addComponent<HitBoxComponent>(utils::Vector2f{1, 1});
+    const auto boxColliderComponent =
+        componentOwner.addComponent<BoxColliderComponent>(utils::Vector2f{1, 1});
 
-    ASSERT_TRUE(hitBoxComponent);
+    ASSERT_TRUE(boxColliderComponent);
 }
 
 TEST_F(ComponentOwnerTest, addComponentTwoTimes_shouldBeReturnSameComponentPointer)
 {
-    const auto hitBoxComponent1 = componentOwner.addComponent<HitBoxComponent>(utils::Vector2f{5, 2});
-    const auto hitBoxComponent2 = componentOwner.addComponent<HitBoxComponent>(utils::Vector2f{1, 2});
+    const auto boxColliderComponent1 =
+        componentOwner.addComponent<BoxColliderComponent>(utils::Vector2f{5, 2});
+    const auto boxColliderComponent2 =
+        componentOwner.addComponent<BoxColliderComponent>(utils::Vector2f{1, 2});
 
-    ASSERT_EQ(hitBoxComponent1, hitBoxComponent2);
+    ASSERT_EQ(boxColliderComponent1, boxColliderComponent2);
 }
 
 TEST_F(ComponentOwnerTest, getComponentWhenComponentNotCreated_shouldReturnNullptr)
 {
-    const auto hitBoxComponent = componentOwner.getComponent<HitBoxComponent>();
+    const auto boxColliderComponent = componentOwner.getComponent<BoxColliderComponent>();
 
-    ASSERT_FALSE(hitBoxComponent);
+    ASSERT_FALSE(boxColliderComponent);
 }
 
 TEST_F(ComponentOwnerTest, getComponentWhenComponentCreated_shouldReturnValidComponentPointer)
 {
-    const auto addedHitBoxComponent = componentOwner.addComponent<HitBoxComponent>(utils::Vector2f{8, 0});
+    const auto addedBoxColliderComponent =
+        componentOwner.addComponent<BoxColliderComponent>(utils::Vector2f{8, 0});
 
-    const auto hitBoxComponentByGet = componentOwner.getComponent<HitBoxComponent>();
+    const auto boxColliderComponentByGet = componentOwner.getComponent<BoxColliderComponent>();
 
-    ASSERT_EQ(addedHitBoxComponent, hitBoxComponentByGet);
+    ASSERT_EQ(addedBoxColliderComponent, boxColliderComponentByGet);
 }
 
 TEST_F(ComponentOwnerTest, shouldDisableComponents)
 {
-    const auto hitBoxComponent = componentOwner.addComponent<HitBoxComponent>(utils::Vector2f{3, 0});
+    const auto boxColliderComponent =
+        componentOwner.addComponent<BoxColliderComponent>(utils::Vector2f{3, 0});
     auto transformComponent = componentOwner.transform;
 
     componentOwner.disable();
 
-    ASSERT_FALSE(hitBoxComponent->isEnabled());
+    ASSERT_FALSE(boxColliderComponent->isEnabled());
     ASSERT_FALSE(transformComponent->isEnabled());
 }
 
 TEST_F(ComponentOwnerTest, shouldEnableComponents)
 {
-    const auto hitBoxComponent = componentOwner.addComponent<HitBoxComponent>(utils::Vector2f{3, 0});
+    const auto boxColliderComponent =
+        componentOwner.addComponent<BoxColliderComponent>(utils::Vector2f{3, 0});
     auto transformComponent = componentOwner.transform;
     componentOwner.disable();
 
     componentOwner.enable();
 
-    ASSERT_TRUE(hitBoxComponent->isEnabled());
+    ASSERT_TRUE(boxColliderComponent->isEnabled());
     ASSERT_TRUE(transformComponent->isEnabled());
 }

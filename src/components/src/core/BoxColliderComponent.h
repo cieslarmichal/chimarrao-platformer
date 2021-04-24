@@ -16,7 +16,8 @@ enum class CollisionSource
 class BoxColliderComponent : public ColliderComponent
 {
 public:
-    BoxColliderComponent(ComponentOwner*, const utils::Vector2f& size, const utils::Vector2f& offset = {0, 0});
+    BoxColliderComponent(ComponentOwner*, const utils::Vector2f& size,
+                         const utils::Vector2f& offset = {0, 0});
 
     bool intersects(const utils::Vector2f&) override;
     CollisionInfo intersects(std::shared_ptr<ColliderComponent>) override;

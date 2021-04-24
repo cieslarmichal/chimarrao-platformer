@@ -1,8 +1,8 @@
 #include "CheckBox.h"
 
+#include "core/BoxColliderComponent.h"
 #include "core/ClickableComponent.h"
 #include "core/GraphicsComponent.h"
-#include "core/HitBoxComponent.h"
 #include "core/MouseOverComponent.h"
 #include "core/TextComponent.h"
 #include "exceptions/UIComponentConfigNotFound.h"
@@ -28,7 +28,7 @@ CheckBox::CheckBox(const std::shared_ptr<graphics::RendererPool>& rendererPool,
     coreComponentsOwner->addComponent<components::core::TextComponent>(
         rendererPool, checkBoxConfig->position, text, checkBoxConfig->fontPath, checkBoxConfig->fontSize,
         graphics::Color::Black, checkBoxConfig->textOffset);
-    coreComponentsOwner->addComponent<components::core::HitBoxComponent>(checkBoxConfig->size);
+    coreComponentsOwner->addComponent<components::core::BoxColliderComponent>(checkBoxConfig->size);
     coreComponentsOwner->addComponent<components::core::ClickableComponent>(checkBoxConfig->clickAction);
 
     if (checkBoxConfig->mouseOverActions)

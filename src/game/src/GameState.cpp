@@ -6,7 +6,9 @@
 #include "GameStateUIConfigBuilder.h"
 #include "PauseState.h"
 #include "PlayerAnimator.h"
+#include "ProjectPathReader.h"
 #include "core/AnimationComponent.h"
+#include "core/BoxColliderComponent.h"
 #include "core/GraphicsComponent.h"
 #include "core/KeyboardMovementComponent.h"
 #include "ui/DefaultUIManager.h"
@@ -34,13 +36,26 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     auto animatorsFactory = animations::AnimatorFactory::createAnimatorFactory(rendererPool);
     std::shared_ptr<animations::Animator> bunnyAnimator = animatorsFactory->createBunnyAnimator(graphicsId);
     player->addComponent<components::core::AnimationComponent>(bunnyAnimator);
+    player->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{5, 5});
+
+    obstacle = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{30, 30}, "obstacle");
+    obstacle->addComponent<components::core::GraphicsComponent>(
+        rendererPool, utils::Vector2f{5, 5}, utils::Vector2f{30, 30},
+        utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/brick.png",
+        graphics::VisibilityLayer::Second);
+    obstacle->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{5, 5});
 
     player->loadDependentComponents();
+    obstacle->loadDependentComponents();
     timer.start();
 }
 
 NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
+    auto collisionInfo = player->getComponent<components::core::BoxColliderComponent>()->intersects(
+        obstacle->getComponent<components::core::BoxColliderComponent>());
+    player->getComponent<components::core::BoxColliderComponent>()->resolveOverlap(collisionInfo);
+
     if (timer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
         input.isKeyPressed(input::InputKey::Escape))
     {
@@ -49,6 +64,7 @@ NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Inpu
 
     if (not paused)
     {
+        obstacle->update(deltaTime, input);
         player->update(deltaTime, input);
         uiManager->update(deltaTime, input);
     }
@@ -61,6 +77,7 @@ void GameState::lateUpdate(const utils::DeltaTime& deltaTime)
     if (not paused)
     {
         player->lateUpdate(deltaTime);
+        obstacle->lateUpdate(deltaTime);
     }
 }
 
@@ -79,6 +96,7 @@ void GameState::activate()
     active = true;
     paused = false;
     player->enable();
+    obstacle->enable();
     timer.restart();
     uiManager->activate();
 }

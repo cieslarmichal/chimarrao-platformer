@@ -15,9 +15,8 @@ class MouseOverComponentTest : public Test
 public:
     void prepareMouseOverComponent(MouseOverComponent& mouseOverComponent)
     {
-        auto hitBoxComponent = componentOwner.addComponent<HitBoxComponent>(size, offset);
+        auto boxCollider = componentOwner.addComponent<BoxColliderComponent>(size, offset);
         mouseOverComponent.loadDependentComponents();
-        hitBoxComponent->lateUpdate(deltaTime);
     }
 
     void mouseOverAction()

@@ -29,7 +29,7 @@ PauseStateUIConfigBuilder::createBackgroundConfig(PauseState*)
 {
     return std::make_unique<components::ui::BackgroundConfig>(
         "pauseBackground", utils::Vector2f{25, 10}, utils::Vector2f{31, 32},
-        graphics::VisibilityLayer::Background, graphics::Color{172});
+        graphics::VisibilityLayer::Second, graphics::Color{172});
 }
 
 std::vector<std::unique_ptr<components::ui::ButtonConfig>>
