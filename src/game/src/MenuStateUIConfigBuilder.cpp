@@ -3,10 +3,8 @@
 #include "CommonUIConfigElements.h"
 #include "ControlsState.h"
 #include "EditorState.h"
-#include "GameState.h"
 #include "MenuState.h"
 #include "ProjectPathReader.h"
-#include "SettingsState.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game

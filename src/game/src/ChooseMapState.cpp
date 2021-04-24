@@ -75,7 +75,6 @@ void ChooseMapState::showNextMaps()
     if (mapsCurrentPage < mapsPages)
     {
         const auto numberOfMapsRemaining = mapNames.size() - mapsCurrentPage * maximumNumberOfMapsToDisplay;
-        std::cerr << numberOfMapsRemaining << std::endl;
 
         for (auto uniqueMapIndex = 0;
              uniqueMapIndex < numberOfMapsRemaining && uniqueMapIndex < maximumNumberOfMapsToDisplay;
@@ -86,7 +85,12 @@ void ChooseMapState::showNextMaps()
             const auto& mapPath = mapFilePaths[currentMapNameIndex];
             uiManager->setText(components::ui::UIComponentTypeWithLabel::Button,
                                mapButtonsUniqueNames[uniqueMapIndex], mapName);
-            auto loadMap = [&] { std::cerr << mapPath << std::endl; };
+            auto loadMap = [&]
+            {
+                std::cerr << mapPath << std::endl;
+                states.deactivateCurrentState();
+                states.addNextState(StateType::Game);
+            };
             components::core::KeyAction loadMapKeyAction{input::InputKey::MouseLeft, loadMap};
             uiManager->changeClickAction(components::ui::UIComponentType::Button,
                                          mapButtonsUniqueNames[uniqueMapIndex], {loadMapKeyAction});
@@ -117,7 +121,12 @@ void ChooseMapState::showPreviousMaps()
                                          mapButtonsUniqueNames[mapIndex]);
             uiManager->setText(components::ui::UIComponentTypeWithLabel::Button,
                                mapButtonsUniqueNames[mapIndex], mapName);
-            auto loadMap = [&] { std::cerr << mapPath << std::endl; };
+            auto loadMap = [&]
+            {
+                std::cerr << mapPath << std::endl;
+                states.deactivateCurrentState();
+                states.addNextState(StateType::Game);
+            };
             components::core::KeyAction loadMapKeyAction{input::InputKey::MouseLeft, loadMap};
             uiManager->changeClickAction(components::ui::UIComponentType::Button,
                                          mapButtonsUniqueNames[mapIndex], {loadMapKeyAction});

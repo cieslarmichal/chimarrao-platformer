@@ -3,7 +3,6 @@
 #include "CommonUIConfigElements.h"
 #include "EditorState.h"
 #include "ProjectPathReader.h"
-#include "SaveMapState.h"
 #include "Vector.h"
 
 namespace game

@@ -106,6 +106,7 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
     {
         const auto buttonUniqueName = chooseMapState->mapButtonsUniqueNames[mapIndex];
         auto mapNameToDisplay = chooseMapState->mapNames[mapIndex];
+        auto mapFilePath = chooseMapState->mapFilePaths[mapIndex];
         const auto buttonPosition =
             firstMapButtonPosition + utils::Vector2f{0.f, static_cast<float>(mapIndex) * 6.f};
         const auto mapButtonOnMouseOver = [=]
@@ -120,7 +121,12 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
         };
         auto mapButtonMouseOverActions =
             components::ui::MouseOverActions{mapButtonOnMouseOver, mapButtonOnMouseOut};
-        auto mapButtonClickAction = [=] { std::cerr << "mapButtonClickAction"; };
+        auto mapButtonClickAction = [=]
+        {
+            std::cerr << mapFilePath << std::endl;
+            chooseMapState->states.deactivateCurrentState();
+            chooseMapState->states.addNextState(StateType::Game);
+        };
         auto mapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
             buttonUniqueName, buttonPosition, mapButtonSize, buttonColor, mapNameToDisplay,
             graphics::Color::Black, arrowButtonFontSize, fontPath, utils::Vector2f{2.0f, 0.7f},
