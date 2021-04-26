@@ -17,12 +17,12 @@ Quadtree::Quadtree(Quadtree* parentInit, int maxObjectsInNodeBeforeSplitInit, in
 
 void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxColliderComponent>& colliderToInsert)
 {
-    if (children[0] != nullptr)
+    if (children[0])
     {
-        int indexToPlaceObject =
+        const int indexToPlaceObject =
             getIndexIndicatingToWhichNodeColliderBelongs(colliderToInsert->getCollisionBox());
 
-        if (indexToPlaceObject != thisTree)
+        if (indexToPlaceObject != thisTreeIndex)
         {
             children[indexToPlaceObject]->insertCollider(colliderToInsert);
             return;
@@ -36,9 +36,9 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
         splitIntoChildNodes();
         for (auto& collider : colliders)
         {
-            if (int indexToPlaceObject =
+            if (const int indexToPlaceObject =
                     getIndexIndicatingToWhichNodeColliderBelongs(collider->getCollisionBox());
-                indexToPlaceObject != thisTree)
+                indexToPlaceObject != thisTreeIndex)
             {
                 children[indexToPlaceObject]->insertCollider(collider);
             }
@@ -47,7 +47,7 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
         colliders.erase(std::remove_if(colliders.begin(), colliders.end(),
                                        [&](auto& collider) {
                                            return getIndexIndicatingToWhichNodeColliderBelongs(
-                                                      collider->getCollisionBox()) != thisTree;
+                                                      collider->getCollisionBox()) != thisTreeIndex;
                                        }),
                         colliders.end());
     }
@@ -55,9 +55,9 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
 
 void Quadtree::removeCollider(const std::shared_ptr<components::core::BoxColliderComponent>& colliderToRemove)
 {
-    int index = getIndexIndicatingToWhichNodeColliderBelongs(colliderToRemove->getCollisionBox());
+    const int index = getIndexIndicatingToWhichNodeColliderBelongs(colliderToRemove->getCollisionBox());
 
-    if (index != thisTree && children[index])
+    if (index != thisTreeIndex && children[index])
     {
         children[index]->removeCollider(colliderToRemove);
         return;
@@ -73,13 +73,10 @@ void Quadtree::clearAllColliders()
 {
     colliders.clear();
 
-    for (int i = 0; i < 4; i++)
+    for (auto& child : children)
     {
-        if (children[i])
-        {
-            children[i]->clearAllColliders();
-            children[i] = nullptr;
-        }
+        child->clearAllColliders();
+        child = nullptr;
     }
 }
 
@@ -114,13 +111,13 @@ Quadtree::getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRe
 
     if (children[0])
     {
-        if (int index = getIndexIndicatingToWhichNodeColliderBelongs(area); index == thisTree)
+        if (int index = getIndexIndicatingToWhichNodeColliderBelongs(area); index == thisTreeIndex)
         {
             for (int i = 0; i < 4; i++)
             {
                 if (children[i]->getNodeBounds().intersects(area))
                 {
-                    auto possibleCollidersFromChild =
+                    const auto possibleCollidersFromChild =
                         children[i]->getAllCollidersFromQuadtreeNodesIntersectingWithArea(area);
                     possibleColliders.insert(possibleColliders.end(), possibleCollidersFromChild.begin(),
                                              possibleCollidersFromChild.end());
@@ -129,7 +126,7 @@ Quadtree::getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRe
         }
         else
         {
-            auto possibleCollidersFromChild =
+            const auto possibleCollidersFromChild =
                 children[index]->getAllCollidersFromQuadtreeNodesIntersectingWithArea(area);
             possibleColliders.insert(possibleColliders.end(), possibleCollidersFromChild.begin(),
                                      possibleCollidersFromChild.end());
@@ -155,26 +152,26 @@ int Quadtree::getIndexIndicatingToWhichNodeColliderBelongs(const sf::FloatRect& 
     {
         if (north)
         {
-            return childNE;
+            return childNorthEastIndex;
         }
         else if (south)
         {
-            return childSE;
+            return childSouthEastIndex;
         }
     }
     else if (west)
     {
         if (north)
         {
-            return childNW;
+            return childNorthWestIndex;
         }
         else if (south)
         {
-            return childSW;
+            return childSouthWestIndex;
         }
     }
 
-    return thisTree;
+    return thisTreeIndex;
 }
 
 void Quadtree::splitIntoChildNodes()
@@ -182,16 +179,16 @@ void Quadtree::splitIntoChildNodes()
     const float childWidth = nodeBounds.width / 2.f;
     const float childHeight = nodeBounds.height / 2.f;
 
-    children[childNE] = std::make_shared<Quadtree>(
+    children[childNorthEastIndex] = std::make_shared<Quadtree>(
         this, maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left + childWidth, nodeBounds.top, childWidth, childHeight));
-    children[childNW] = std::make_shared<Quadtree>(
+    children[childNorthWestIndex] = std::make_shared<Quadtree>(
         this, maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left, nodeBounds.top, childWidth, childHeight));
-    children[childSW] = std::make_shared<Quadtree>(
+    children[childSouthWestIndex] = std::make_shared<Quadtree>(
         this, maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left, nodeBounds.top + childHeight, childWidth, childHeight));
-    children[childSE] = std::make_shared<Quadtree>(
+    children[childSouthEastIndex] = std::make_shared<Quadtree>(
         this, maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left + childWidth, nodeBounds.top + childHeight, childWidth, childHeight));
 }
