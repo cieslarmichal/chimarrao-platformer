@@ -11,7 +11,8 @@ Quadtree::Quadtree(Quadtree* parentInit, int maxObjectsInNodeBeforeSplitInit, in
       maxObjectsInNodeBeforeSplit{maxObjectsInNodeBeforeSplitInit},
       maxNumberOfSplits{maxNumberOfSplitsInit},
       currentTreeDepthLevel{treeDepthLevelInit},
-      nodeBounds{boundsInit}
+      nodeBounds{boundsInit},
+      children{nullptr, nullptr, nullptr, nullptr}
 {
 }
 
@@ -73,10 +74,13 @@ void Quadtree::clearAllColliders()
 {
     colliders.clear();
 
-    for (auto& child : children)
+    if (children[0])
     {
-        child->clearAllColliders();
-        child = nullptr;
+        for (auto& child : children)
+        {
+            child->clearAllColliders();
+            child = nullptr;
+        }
     }
 }
 

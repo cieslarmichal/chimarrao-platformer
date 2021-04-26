@@ -45,6 +45,18 @@ public:
         std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromBelow, size, noOffset);
 };
 
+TEST_F(BoxColliderComponentTest, getCollisionLayerWithNewObject_shouldReturnDefaultLayer)
+{
+    ASSERT_EQ(boxColliderComponent1.getCollisionLayer(), CollisionLayer::Default);
+}
+
+TEST_F(BoxColliderComponentTest, shouldSetCollisionLayer)
+{
+    boxColliderComponent1.setCollisionLayer(CollisionLayer::Player);
+
+    ASSERT_EQ(boxColliderComponent1.getCollisionLayer(), CollisionLayer::Player);
+}
+
 TEST_F(BoxColliderComponentTest, givenPositionInsideTarget_shouldIntersect)
 {
     ASSERT_TRUE(boxColliderComponent1.intersects(positionInsideTarget));
