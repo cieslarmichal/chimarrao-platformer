@@ -3,6 +3,7 @@ add_subdirectory(graphics)
 add_subdirectory(animations)
 add_subdirectory(input)
 add_subdirectory(components)
+add_subdirectory(physics)
 add_subdirectory(game)
 add_subdirectory(window)
 

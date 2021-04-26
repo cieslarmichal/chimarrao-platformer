@@ -30,7 +30,6 @@ set(UT_SOURCES
         src/core/TextComponentTest.cpp
         src/core/ClickableComponentTest.cpp
         src/core/MouseOverComponentTest.cpp
-        src/core/ColliderComponentTest.cpp
         src/core/BoxColliderComponentTest.cpp
         src/core/IdComponentTest.cpp
         )

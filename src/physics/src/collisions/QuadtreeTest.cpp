@@ -4,7 +4,7 @@
 
 #include "StlOperators.h"
 
-using namespace game::collisions;
+using namespace physics::collisions;
 using namespace components::core;
 using namespace ::testing;
 
@@ -56,12 +56,11 @@ public:
         std::make_shared<BoxColliderComponent>(&componentOwner9, size, noOffset);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent10 =
         std::make_shared<BoxColliderComponent>(&componentOwner10, size, noOffset);
-
-    Quadtree quadtree{};
 };
 
 TEST_F(QuadtreeTest, insertedColliderIntersectingWithArea_canBeIntersectedWithArea)
 {
+    Quadtree quadtree{};
     quadtree.insertCollider(boxColliderComponent1);
 
     const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area1);
@@ -72,6 +71,7 @@ TEST_F(QuadtreeTest, insertedColliderIntersectingWithArea_canBeIntersectedWithAr
 
 TEST_F(QuadtreeTest, removedColliderIntersectingWithArea_canNotBeIntersectedWithArea)
 {
+    Quadtree quadtree{};
     quadtree.insertCollider(boxColliderComponent1);
     quadtree.removeCollider(boxColliderComponent1);
 
@@ -82,6 +82,7 @@ TEST_F(QuadtreeTest, removedColliderIntersectingWithArea_canNotBeIntersectedWith
 
 TEST_F(QuadtreeTest, clearedCollidersIntersectingWithArea_shouldReturnEmptyColliders)
 {
+    Quadtree quadtree{};
     quadtree.insertCollider(boxColliderComponent1);
     quadtree.insertCollider(boxColliderComponent2);
     quadtree.clearAllColliders();
@@ -91,8 +92,29 @@ TEST_F(QuadtreeTest, clearedCollidersIntersectingWithArea_shouldReturnEmptyColli
     ASSERT_TRUE(collidersIntersectingWithArea.empty());
 }
 
+TEST_F(QuadtreeTest, clearCollidersFromDifferentQuadtreeChildren_shouldReturnEmptyColliders)
+{
+    Quadtree quadtree{2, 10, 1, utils::FloatRect(0, 0, 80, 60)};
+    quadtree.insertCollider(boxColliderComponent1);
+    quadtree.insertCollider(boxColliderComponent2);
+    quadtree.insertCollider(boxColliderComponent3);
+    quadtree.insertCollider(boxColliderComponent4);
+    quadtree.insertCollider(boxColliderComponent5);
+    quadtree.insertCollider(boxColliderComponent6);
+    quadtree.insertCollider(boxColliderComponent7);
+    quadtree.insertCollider(boxColliderComponent8);
+    quadtree.insertCollider(boxColliderComponent9);
+    quadtree.insertCollider(boxColliderComponent10);
+
+    quadtree.clearAllColliders();
+
+    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area1);
+    ASSERT_TRUE(collidersIntersectingWithArea.empty());
+}
+
 TEST_F(QuadtreeTest, givenNoColliders_shouldReturnEmptyColliders)
 {
+    Quadtree quadtree{};
     const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area1);
 
     ASSERT_TRUE(collidersIntersectingWithArea.empty());
@@ -100,6 +122,7 @@ TEST_F(QuadtreeTest, givenNoColliders_shouldReturnEmptyColliders)
 
 TEST_F(QuadtreeTest, givenColliderNotIntersectingWithArea_shouldReturnEmptyColliders)
 {
+    Quadtree quadtree{};
     quadtree.insertCollider(boxColliderComponent3);
 
     const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area1);
@@ -109,6 +132,7 @@ TEST_F(QuadtreeTest, givenColliderNotIntersectingWithArea_shouldReturnEmptyColli
 
 TEST_F(QuadtreeTest, givenTwoColliders_onlyOneOfThemIntersectingWithArea_shouldReturnOneCollider)
 {
+    Quadtree quadtree{};
     quadtree.insertCollider(boxColliderComponent1);
     quadtree.insertCollider(boxColliderComponent3);
 
@@ -123,6 +147,7 @@ TEST_F(
     QuadtreeTest,
     givenTenCollidersAtDifferentPlaces_andAreaIntersectingWithThem_shouldReturnCollidersIntersectingWithArea)
 {
+    Quadtree quadtree{2, 10, 1, utils::FloatRect(0, 0, 80, 60)};
     const std::vector<std::shared_ptr<BoxColliderComponent>> expectedColliders{
         boxColliderComponent3, boxColliderComponent4, boxColliderComponent5, boxColliderComponent6};
     quadtree.insertCollider(boxColliderComponent1);
@@ -144,6 +169,7 @@ TEST_F(
 TEST_F(QuadtreeTest,
        givenTenCollidersAtDifferentPlaces_andAreaNotIntersectingWithThem_shouldReturnEmptyColliders)
 {
+    Quadtree quadtree{};
     quadtree.insertCollider(boxColliderComponent1);
     quadtree.insertCollider(boxColliderComponent2);
     quadtree.insertCollider(boxColliderComponent3);
@@ -162,6 +188,8 @@ TEST_F(QuadtreeTest,
 
 TEST_F(QuadtreeTest, shouldReturnDefaultNodeBounds)
 {
+    Quadtree quadtree{};
+
     const auto nodeBounds = quadtree.getNodeBounds();
 
     ASSERT_EQ(nodeBounds, utils::FloatRect(0, 0, 80, 60));
@@ -170,9 +198,9 @@ TEST_F(QuadtreeTest, shouldReturnDefaultNodeBounds)
 TEST_F(QuadtreeTest, shouldReturnNodeBoundsSetInContructor)
 {
     const auto expectedBounds = utils::FloatRect(5, 5, 50, 50);
-    Quadtree quadtree2{nullptr, 5, 6, 1, expectedBounds};
+    Quadtree quadtree{5, 6, 1, expectedBounds};
 
-    const auto actualNodeBounds = quadtree2.getNodeBounds();
+    const auto actualNodeBounds = quadtree.getNodeBounds();
 
     ASSERT_EQ(actualNodeBounds, expectedBounds);
 }

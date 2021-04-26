@@ -1,14 +1,12 @@
 #include "Quadtree.h"
 
-namespace game::collisions
+namespace physics::collisions
 {
+Quadtree::Quadtree() : Quadtree{5, 5, 0, {0, 0, 80, 60}} {}
 
-Quadtree::Quadtree() : Quadtree{nullptr, 5, 5, 0, {0, 0, 80, 60}} {}
-
-Quadtree::Quadtree(Quadtree* parentInit, int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsInit,
-                   int treeDepthLevelInit, utils::FloatRect boundsInit)
-    : parent{parentInit},
-      maxObjectsInNodeBeforeSplit{maxObjectsInNodeBeforeSplitInit},
+Quadtree::Quadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsInit, int treeDepthLevelInit,
+                   utils::FloatRect boundsInit)
+    : maxObjectsInNodeBeforeSplit{maxObjectsInNodeBeforeSplitInit},
       maxNumberOfSplits{maxNumberOfSplitsInit},
       currentTreeDepthLevel{treeDepthLevelInit},
       nodeBounds{boundsInit},
@@ -85,7 +83,7 @@ void Quadtree::clearAllColliders()
 }
 
 std::vector<std::shared_ptr<components::core::BoxColliderComponent>>
-Quadtree::getCollidersIntersectingWithArea(const utils::FloatRect& area)
+Quadtree::getCollidersIntersectingWithArea(const utils::FloatRect& area) const
 {
     const auto possibleColliders = getAllCollidersFromQuadtreeNodesIntersectingWithArea(area);
 
@@ -102,13 +100,13 @@ Quadtree::getCollidersIntersectingWithArea(const utils::FloatRect& area)
     return collidersIntersectingWithArea;
 }
 
-const utils::FloatRect& Quadtree::getNodeBounds()
+const utils::FloatRect& Quadtree::getNodeBounds() const
 {
     return nodeBounds;
 }
 
 std::vector<std::shared_ptr<components::core::BoxColliderComponent>>
-Quadtree::getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRect& area)
+Quadtree::getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRect& area) const
 {
     std::vector<std::shared_ptr<components::core::BoxColliderComponent>> possibleColliders(colliders.begin(),
                                                                                            colliders.end());
@@ -140,7 +138,7 @@ Quadtree::getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRe
     return possibleColliders;
 }
 
-int Quadtree::getIndexIndicatingToWhichNodeColliderBelongs(const sf::FloatRect& objectBounds)
+int Quadtree::getIndexIndicatingToWhichNodeColliderBelongs(const sf::FloatRect& objectBounds) const
 {
     const double verticalDividingLine = nodeBounds.left + nodeBounds.width * 0.5f;
     const double horizontalDividingLine = nodeBounds.top + nodeBounds.height * 0.5f;
@@ -184,16 +182,16 @@ void Quadtree::splitIntoChildNodes()
     const float childHeight = nodeBounds.height / 2.f;
 
     children[childNorthEastIndex] = std::make_shared<Quadtree>(
-        this, maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
+        maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left + childWidth, nodeBounds.top, childWidth, childHeight));
-    children[childNorthWestIndex] = std::make_shared<Quadtree>(
-        this, maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
-        sf::FloatRect(nodeBounds.left, nodeBounds.top, childWidth, childHeight));
+    children[childNorthWestIndex] =
+        std::make_shared<Quadtree>(maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
+                                   sf::FloatRect(nodeBounds.left, nodeBounds.top, childWidth, childHeight));
     children[childSouthWestIndex] = std::make_shared<Quadtree>(
-        this, maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
+        maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left, nodeBounds.top + childHeight, childWidth, childHeight));
     children[childSouthEastIndex] = std::make_shared<Quadtree>(
-        this, maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
+        maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left + childWidth, nodeBounds.top + childHeight, childWidth, childHeight));
 }
 

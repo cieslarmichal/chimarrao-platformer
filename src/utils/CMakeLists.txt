@@ -1,4 +1,5 @@
 set(SOURCES
+        src/Bitmask.cpp
         src/Timer.cpp
         src/ProjectPathReader.cpp
         src/StringHelper.cpp
@@ -11,6 +12,7 @@ set(SOURCES
         )
 
 set(UT_SOURCES
+        src/BitmaskTest.cpp
         src/TimerTest.cpp
         src/ProjectPathReaderTest.cpp
         src/StringHelperTest.cpp

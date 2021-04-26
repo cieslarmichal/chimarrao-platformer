@@ -26,7 +26,6 @@ set(SOURCES
         src/MapFilePathsReader.cpp
         src/ChooseMapState.cpp
         src/ChooseMapStateUIConfigBuilder.cpp
-        src/collisions/Quadtree.cpp
         )
 
 set(UT_SOURCES
@@ -51,7 +50,6 @@ set(UT_SOURCES
         src/MapFilePathsReaderTest.cpp
         src/ChooseMapStateTest.cpp
         src/ChooseMapStateUIConfigBuilderTest.cpp
-        src/collisions/QuadtreeTest.cpp
         )
 
 add_library(game ${SOURCES})
