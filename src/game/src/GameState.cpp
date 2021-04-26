@@ -64,7 +64,6 @@ NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Inpu
 
     if (not paused)
     {
-        obstacle->update(deltaTime, input);
         player->update(deltaTime, input);
         uiManager->update(deltaTime, input);
     }
@@ -77,7 +76,6 @@ void GameState::lateUpdate(const utils::DeltaTime& deltaTime)
     if (not paused)
     {
         player->lateUpdate(deltaTime);
-        obstacle->lateUpdate(deltaTime);
     }
 }
 
@@ -96,7 +94,6 @@ void GameState::activate()
     active = true;
     paused = false;
     player->enable();
-    obstacle->enable();
     timer.restart();
     uiManager->activate();
 }

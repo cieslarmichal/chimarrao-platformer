@@ -1,5 +1,6 @@
 set(SOURCES
         src/core/ComponentOwner.cpp
+        src/core/Component.cpp
         src/core/TransformComponent.cpp
         src/core/GraphicsComponent.cpp
         src/core/KeyboardMovementComponent.cpp
@@ -9,6 +10,7 @@ set(SOURCES
         src/core/MouseOverComponent.cpp
         src/core/ColliderComponent.cpp
         src/core/BoxColliderComponent.cpp
+        src/core/IdComponent.cpp
         src/ui/Background.cpp
         src/ui/Button.cpp
         src/ui/CheckBox.cpp
@@ -30,6 +32,7 @@ set(UT_SOURCES
         src/core/MouseOverComponentTest.cpp
         src/core/ColliderComponentTest.cpp
         src/core/BoxColliderComponentTest.cpp
+        src/core/IdComponentTest.cpp
         )
 
 add_library(components ${SOURCES})

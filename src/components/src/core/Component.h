@@ -12,23 +12,16 @@ class ComponentOwner;
 class Component
 {
 public:
-    Component(ComponentOwner* ownerInit) : owner{ownerInit} {}
+    Component(ComponentOwner*);
 
-    virtual void loadDependentComponents() {}
-    virtual void update(utils::DeltaTime, const input::Input&) {}
-    virtual void lateUpdate(utils::DeltaTime) {}
-    virtual void enable()
-    {
-        enabled = true;
-    };
-    virtual void disable()
-    {
-        enabled = false;
-    };
-    bool isEnabled() const
-    {
-        return enabled;
-    }
+    virtual void loadDependentComponents();
+    virtual void update(utils::DeltaTime, const input::Input&);
+    virtual void lateUpdate(utils::DeltaTime);
+    virtual void enable();
+    virtual void disable();
+    bool isEnabled() const;
+    std::string getOwnerName() const;
+    unsigned int getOwnerId() const;
 
 protected:
     ComponentOwner* owner;

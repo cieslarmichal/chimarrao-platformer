@@ -11,7 +11,8 @@ class ComponentTest : public Test
 {
 public:
     const utils::Vector2f initialPosition{0.0, 11.0};
-    ComponentOwner componentOwner{initialPosition, "componentTest"};
+    const std::string ownerName{"componentTest"};
+    ComponentOwner componentOwner{initialPosition, ownerName};
     Component component{&componentOwner};
 };
 
@@ -35,3 +36,11 @@ TEST_F(ComponentTest, enableComponent)
 
     ASSERT_TRUE(component.isEnabled());
 }
+
+TEST_F(ComponentTest, shouldReturnOwnerName)
+{
+    const auto actualOwnerName = component.getOwnerName();
+
+    ASSERT_EQ(actualOwnerName, ownerName);
+}
+

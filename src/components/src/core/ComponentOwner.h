@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "TransformComponent.h"
 #include "UniqueName.h"
+#include "IdComponent.h"
 
 namespace components::core
 {
@@ -22,6 +23,7 @@ public:
     void enable();
     void disable();
     std::string getName() const;
+    unsigned int getId() const;
     bool areComponentEnabled() const;
 
     template <typename T, typename... Args>
@@ -60,6 +62,7 @@ public:
     }
 
     std::shared_ptr<TransformComponent> transform;
+    std::shared_ptr<IdComponent> id;
 
 protected:
     std::vector<std::shared_ptr<Component>> components;

@@ -8,6 +8,7 @@ ComponentOwner::ComponentOwner(const utils::Vector2f& position, const std::strin
     : uniqueName{uniqueNameInit}
 {
     transform = addComponent<TransformComponent>(position);
+    id = addComponent<IdComponent>();
 }
 
 void ComponentOwner::loadDependentComponents()
@@ -53,6 +54,11 @@ void ComponentOwner::disable()
 std::string ComponentOwner::getName() const
 {
     return uniqueName.getName();
+}
+
+unsigned int ComponentOwner::getId() const
+{
+    return id->getId();
 }
 
 bool ComponentOwner::areComponentEnabled() const
