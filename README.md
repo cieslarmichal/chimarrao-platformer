@@ -1,6 +1,6 @@
 # chimarrao
 
-<h3>1. Requirements:</h3>
+## Requirements:
 <ul>
   <li>compiler that supports C++ 20</li>
   <li>git</li>
