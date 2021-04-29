@@ -1,6 +1,6 @@
 #include "Quadtree.h"
 
-namespace physics::collisions
+namespace physics
 {
 Quadtree::Quadtree() : Quadtree{5, 5, 0, {0, 0, 80, 60}} {}
 

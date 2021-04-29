@@ -4,7 +4,7 @@
 
 #include "CollisionSystem.h"
 
-namespace input
+namespace physics
 {
 class CollisionSystemMock : public CollisionSystem
 {

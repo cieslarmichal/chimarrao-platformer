@@ -2,6 +2,7 @@
 
 #include "gtest/gtest.h"
 
+#include "CollisionSystemMock.h"
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
@@ -17,6 +18,11 @@ using namespace ::testing;
 class GameStateUIConfigBuilderTest : public Test
 {
 public:
+    GameStateUIConfigBuilderTest()
+    {
+        EXPECT_CALL(*collisionSystem, add(_));
+    }
+
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
@@ -26,11 +32,15 @@ public:
     std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
         std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
     components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
-    GameState gameState{window, rendererPool, fileAccess, states, std::move(uiManagerInit)};
+    std::unique_ptr<StrictMock<physics::CollisionSystemMock>> collisionSystemInit{
+        std::make_unique<StrictMock<physics::CollisionSystemMock>>()};
+    StrictMock<physics::CollisionSystemMock>* collisionSystem{collisionSystemInit.get()};
 };
 
 TEST_F(GameStateUIConfigBuilderTest, createGameUI)
 {
+    GameState gameState{
+        window, rendererPool, fileAccess, states, std::move(uiManagerInit), std::move(collisionSystemInit)};
     const auto gameUI = GameStateUIConfigBuilder::createGameUIConfig(&gameState);
 
     ASSERT_EQ(gameUI->backgroundConfig->uniqueName, "gameBackground");

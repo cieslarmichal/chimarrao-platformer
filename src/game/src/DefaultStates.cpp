@@ -6,10 +6,11 @@ namespace game
 DefaultStates::DefaultStates(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                              const std::shared_ptr<utils::FileAccess>& fileAccessInit,
-                             std::unique_ptr<TileMap> tileMapInit)
+                             std::unique_ptr<TileMap> tileMapInit,
+                             std::unique_ptr<physics::CollisionSystem> collisionSystemInit)
     : tileMap{std::move(tileMapInit)},
-      stateFactory{
-          std::make_unique<StateFactory>(windowInit, rendererPoolInit, fileAccessInit, *this, *tileMap)}
+      stateFactory{std::make_unique<StateFactory>(windowInit, rendererPoolInit, fileAccessInit, *this,
+                                                  *tileMap, std::move(collisionSystemInit))}
 {
 }
 

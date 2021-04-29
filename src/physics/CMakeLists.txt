@@ -1,11 +1,13 @@
 set(SOURCES
-        src/collisions/Quadtree.cpp
-        src/collisions/DefaultCollisionSystem.cpp
+        src/Quadtree.cpp
+        src/DefaultCollisionSystem.cpp
+        src/CollisionSystemFactory.cpp
+        src/DefaultCollisionSystemFactory.cpp
         )
 
 set(UT_SOURCES
-        src/collisions/QuadtreeTest.cpp
-        src/collisions/DefaultCollisionSystemTest.cpp
+        src/QuadtreeTest.cpp
+        src/DefaultCollisionSystemTest.cpp
         )
 
 add_library(physics SHARED ${SOURCES})

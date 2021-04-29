@@ -10,9 +10,9 @@
 #include "core/BoxColliderComponent.h"
 #include "core/CollisionLayer.h"
 
-namespace physics::collisions
+namespace physics
 {
-class DefaultCollisionSystem : CollisionSystem
+class DefaultCollisionSystem : public CollisionSystem
 {
 public:
     DefaultCollisionSystem();

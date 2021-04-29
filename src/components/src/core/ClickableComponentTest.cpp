@@ -16,7 +16,7 @@ class ClickableComponentTest : public Test
 public:
     ClickableComponentTest()
     {
-        auto boxCollider = owner.addComponent<BoxColliderComponent>(size, offset);
+        auto boxCollider = owner.addComponent<BoxColliderComponent>(size, CollisionLayer::Default, offset);
         clickableComponent.loadDependentComponents();
         boxCollider->lateUpdate(deltaTime);
     }
@@ -114,7 +114,8 @@ TEST_F(ClickableComponentTest,
        givenMousePositionInsideHitboxRightAndLeftMouseKeyClicked_shouldCallBothActionAtOneUpdate)
 {
     ComponentOwner localComponentOwner{position1, "clickableComponentOwner1"};
-    auto boxCollider = localComponentOwner.addComponent<BoxColliderComponent>(size, offset);
+    auto boxCollider =
+        localComponentOwner.addComponent<BoxColliderComponent>(size, CollisionLayer::Default, offset);
     auto localClickableComponent = ClickableComponent(&localComponentOwner, validKeyActionVector);
     localClickableComponent.loadDependentComponents();
     EXPECT_CALL(*input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
@@ -131,7 +132,8 @@ TEST_F(ClickableComponentTest,
        givenMousePositionInsideHitboxRightMouseKeyClicked_shouldCallOnlyRightClickAction)
 {
     ComponentOwner localComponentOwner{position1, "clickableComponentOwner2"};
-    auto boxCollider = localComponentOwner.addComponent<BoxColliderComponent>(size, offset);
+    auto boxCollider =
+        localComponentOwner.addComponent<BoxColliderComponent>(size, CollisionLayer::Default, offset);
     auto localClickableComponent = ClickableComponent(&localComponentOwner, validKeyActionVector);
     localClickableComponent.loadDependentComponents();
     EXPECT_CALL(*input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(false));
@@ -148,7 +150,8 @@ TEST_F(ClickableComponentTest,
        givenTwoKeyActions_thenChangeIntoOtherKeyAction_shouldBeAbleToOnlyPerformOtherOne)
 {
     ComponentOwner localComponentOwner{position1, "clickableComponentOwner3"};
-    auto boxCollider = localComponentOwner.addComponent<BoxColliderComponent>(size, offset);
+    auto boxCollider =
+        localComponentOwner.addComponent<BoxColliderComponent>(size, CollisionLayer::Default, offset);
     auto localClickableComponent = ClickableComponent(&localComponentOwner, validKeyActionVector);
     localClickableComponent.loadDependentComponents();
 

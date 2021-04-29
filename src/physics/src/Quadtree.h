@@ -5,7 +5,7 @@
 #include "core/BoxColliderComponent.h"
 #include "core/ComponentOwner.h"
 
-namespace physics::collisions
+namespace physics
 {
 class Quadtree
 {

@@ -4,7 +4,7 @@
 
 #include "StlOperators.h"
 
-using namespace physics::collisions;
+using namespace physics;
 using namespace components::core;
 using namespace ::testing;
 

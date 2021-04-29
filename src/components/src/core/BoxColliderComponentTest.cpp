@@ -22,27 +22,27 @@ public:
     const utils::Vector2f positionInsideTarget{25, 25};
     const utils::Vector2f positionOutsideTarget{27, 21};
     ComponentOwner componentOwner1{position, "boxColliderComponentTest1"};
-    BoxColliderComponent boxColliderComponent1{&componentOwner1, size, offset1};
+    BoxColliderComponent boxColliderComponent1{&componentOwner1, size, CollisionLayer::Default, offset1};
     ComponentOwner componentOwner2{positionOutsideTarget, "boxColliderComponentTest2"};
     std::shared_ptr<BoxColliderComponent> boxColliderComponentNotIntersecting =
-        std::make_shared<BoxColliderComponent>(&componentOwner2, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwner2, size);
 
     ComponentOwner componentOwnerIntersectingFromLeft{positionIntersectingFromLeft,
                                                       "boxColliderComponentTest3"};
     std::shared_ptr<BoxColliderComponent> boxColliderComponentIntersectingFromLeft =
-        std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromLeft, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromLeft, size);
     ComponentOwner componentOwnerIntersectingFromRight{positionIntersectingFromRight,
                                                        "boxColliderComponentTest4"};
     std::shared_ptr<BoxColliderComponent> boxColliderComponentIntersectingFromRight =
-        std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromRight, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromRight, size);
     ComponentOwner componentOwnerIntersectingFromAbove{positionIntersectingFromAbove,
                                                        "boxColliderComponentTest5"};
     std::shared_ptr<BoxColliderComponent> boxColliderComponentIntersectingFromAbove =
-        std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromAbove, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromAbove, size);
     ComponentOwner componentOwnerIntersectingFromBelow{positionIntersectingFromBelow,
                                                        "boxColliderComponentTest6"};
     std::shared_ptr<BoxColliderComponent> boxColliderComponentIntersectingFromBelow =
-        std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromBelow, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromBelow, size);
 };
 
 TEST_F(BoxColliderComponentTest, getCollisionLayerWithNewObject_shouldReturnDefaultLayer)
@@ -87,7 +87,7 @@ TEST_F(BoxColliderComponentTest, resolveOverlapFromStaticTransformObject_shouldN
 {
     ComponentOwner componentOwner{position, "boxColliderComponentTest7"};
     componentOwner.transform->setStaticTransform(true);
-    BoxColliderComponent boxColliderComponent{&componentOwner, size, offset1};
+    BoxColliderComponent boxColliderComponent{&componentOwner, size, CollisionLayer::Default, offset1};
     const auto collisionInfo = boxColliderComponent.intersects(boxColliderComponentIntersectingFromLeft);
     const auto collisionBoxBefore = boxColliderComponent.getCollisionBox();
 
@@ -100,7 +100,7 @@ TEST_F(BoxColliderComponentTest, resolveOverlapFromStaticTransformObject_shouldN
 TEST_F(BoxColliderComponentTest, resolveOverlapWithNoCollision_shouldNotMove)
 {
     ComponentOwner componentOwner{position, "boxColliderComponentTest8"};
-    BoxColliderComponent boxColliderComponent{&componentOwner, size, offset1};
+    BoxColliderComponent boxColliderComponent{&componentOwner, size, CollisionLayer::Default, offset1};
     const auto collisionInfo = boxColliderComponent.intersects(boxColliderComponentNotIntersecting);
     const auto collisionBoxBefore = boxColliderComponent.getCollisionBox();
 
@@ -113,7 +113,7 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithNoCollision_shouldNotMove)
 TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromLeft_shouldMoveToRight)
 {
     ComponentOwner componentOwner{position, "boxColliderComponentTest9"};
-    BoxColliderComponent boxColliderComponent{&componentOwner, size, offset1};
+    BoxColliderComponent boxColliderComponent{&componentOwner, size, CollisionLayer::Default, offset1};
     const auto collisionInfo = boxColliderComponent.intersects(boxColliderComponentIntersectingFromLeft);
     const auto collisionBoxBefore = boxColliderComponent.getCollisionBox();
 
@@ -126,7 +126,7 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromLeft_shouldMoveT
 TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromRight_shouldMoveToLeft)
 {
     ComponentOwner componentOwner{position, "boxColliderComponentTest10"};
-    BoxColliderComponent boxColliderComponent{&componentOwner, size, offset1};
+    BoxColliderComponent boxColliderComponent{&componentOwner, size, CollisionLayer::Default, offset1};
     const auto collisionInfo = boxColliderComponent.intersects(boxColliderComponentIntersectingFromRight);
     const auto collisionBoxBefore = boxColliderComponent.getCollisionBox();
 
@@ -139,7 +139,7 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromRight_shouldMove
 TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromAbove_shouldMoveDownwords)
 {
     ComponentOwner componentOwner{position, "boxColliderComponentTest11"};
-    BoxColliderComponent boxColliderComponent{&componentOwner, size, offset1};
+    BoxColliderComponent boxColliderComponent{&componentOwner, size, CollisionLayer::Default, offset1};
     const auto collisionInfo = boxColliderComponent.intersects(boxColliderComponentIntersectingFromAbove);
     const auto collisionBoxBefore = boxColliderComponent.getCollisionBox();
 
@@ -152,7 +152,7 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromAbove_shouldMove
 TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromBelow_shouldUpwords)
 {
     ComponentOwner componentOwner{position, "boxColliderComponentTest12"};
-    BoxColliderComponent boxColliderComponent{&componentOwner, size, offset1};
+    BoxColliderComponent boxColliderComponent{&componentOwner, size, CollisionLayer::Default, offset1};
     const auto collisionInfo = boxColliderComponent.intersects(boxColliderComponentIntersectingFromBelow);
     const auto collisionBoxBefore = boxColliderComponent.getCollisionBox();
 

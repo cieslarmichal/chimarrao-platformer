@@ -2,6 +2,7 @@
 
 #include "gtest/gtest.h"
 
+#include "CollisionSystemMock.h"
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
@@ -33,13 +34,17 @@ public:
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
     StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    std::unique_ptr<StrictMock<physics::CollisionSystemMock>> collisionSystemInit{
+        std::make_unique<StrictMock<physics::CollisionSystemMock>>()};
+    StrictMock<physics::CollisionSystemMock>* collisionSystem{collisionSystemInit.get()};
     StrictMock<StatesMock> states;
 };
 
 class GameStateTest : public GameStateTest_Base
 {
 public:
-    GameState gameState{window, rendererPool, fileAccess, states, std::move(uiManagerInit)};
+    GameState gameState{
+        window, rendererPool, fileAccess, states, std::move(uiManagerInit), std::move(collisionSystemInit)};
 };
 
 TEST_F(GameStateTest, xxx) {}

@@ -14,7 +14,8 @@ class DefaultStates : public States
 {
 public:
     DefaultStates(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
-                  const std::shared_ptr<utils::FileAccess>&, std::unique_ptr<TileMap>);
+                  const std::shared_ptr<utils::FileAccess>&, std::unique_ptr<TileMap>,
+                  std::unique_ptr<physics::CollisionSystem>);
 
     StatesStatus updateCurrentState(const utils::DeltaTime&, const input::Input&) override;
     void deactivateCurrentState() override;

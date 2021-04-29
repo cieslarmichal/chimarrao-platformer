@@ -15,7 +15,8 @@ class MouseOverComponentTest : public Test
 public:
     void prepareMouseOverComponent(MouseOverComponent& mouseOverComponent)
     {
-        auto boxCollider = componentOwner.addComponent<BoxColliderComponent>(size, offset);
+        auto boxCollider =
+            componentOwner.addComponent<BoxColliderComponent>(size, CollisionLayer::Default, offset);
         mouseOverComponent.loadDependentComponents();
     }
 

@@ -1,5 +1,6 @@
 #include "GameFactory.h"
 
+#include "CollisionSystemFactory.h"
 #include "DefaultStates.h"
 #include "FileAccessFactory.h"
 #include "GraphicsFactory.h"
@@ -13,7 +14,7 @@ namespace
 const int tileSizeX = 4;
 const int tileSizeY = 4;
 const auto windowSize = utils::Vector2u{800, 600};
-const utils::Vector2u mapSize{80u, 60u};
+const auto mapSize = utils::Vector2u{80u, 60u};
 const auto gameTitle = "chimarrao-platformer";
 }
 
@@ -23,6 +24,7 @@ std::unique_ptr<Game> GameFactory::createGame()
     const auto windowFactory = window::WindowFactory::createWindowFactory();
     const auto inputManagerFactory = input::InputManagerFactory::createInputManagerFactory();
     const auto fileAccessFactory = utils::FileAccessFactory::createFileAccessFactory();
+    const auto collisionSystemFactory = physics::CollisionSystemFactory::createCollisionSystemFactory();
 
     std::shared_ptr<window::Window> window = windowFactory->createWindow(windowSize, gameTitle);
 
@@ -36,7 +38,10 @@ std::unique_ptr<Game> GameFactory::createGame()
 
     std::shared_ptr<utils::FileAccess> fileAccess = fileAccessFactory->createDefaultFileAccess();
 
-    auto states = std::make_unique<DefaultStates>(window, rendererPool, fileAccess, std::move(tileMap));
+    auto collisionSystem = collisionSystemFactory->createCollisionSystem();
+
+    auto states = std::make_unique<DefaultStates>(window, rendererPool, fileAccess, std::move(tileMap),
+                                                  std::move(collisionSystem));
 
     return std::make_unique<Game>(window, inputManager, std::move(states));
 }

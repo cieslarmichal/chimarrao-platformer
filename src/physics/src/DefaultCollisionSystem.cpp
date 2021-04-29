@@ -1,6 +1,6 @@
 #include "DefaultCollisionSystem.h"
 
-namespace physics::collisions
+namespace physics
 {
 using namespace components::core;
 

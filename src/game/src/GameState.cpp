@@ -1,11 +1,7 @@
 #include "GameState.h"
 
-#include <utility>
-
 #include "AnimatorFactory.h"
 #include "GameStateUIConfigBuilder.h"
-#include "PauseState.h"
-#include "PlayerAnimator.h"
 #include "ProjectPathReader.h"
 #include "core/AnimationComponent.h"
 #include "core/BoxColliderComponent.h"
@@ -19,10 +15,12 @@ namespace game
 GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                      std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                     std::unique_ptr<components::ui::UIManager> uiManagerInit)
+                     std::unique_ptr<components::ui::UIManager> uiManagerInit,
+                     std::unique_ptr<physics::CollisionSystem> collisionSystemInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
+      collisionSystem{std::move(collisionSystemInit)},
       uiManager{std::move(uiManagerInit)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
@@ -37,6 +35,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     std::shared_ptr<animations::Animator> bunnyAnimator = animatorsFactory->createBunnyAnimator(graphicsId);
     player->addComponent<components::core::AnimationComponent>(bunnyAnimator);
     player->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{5, 5});
+    objects.push_back(player);
 
     obstacle = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{30, 30}, "obstacle");
     obstacle->addComponent<components::core::GraphicsComponent>(
@@ -44,17 +43,18 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
         utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/brick.png",
         graphics::VisibilityLayer::Second);
     obstacle->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{5, 5});
+    objects.push_back(obstacle);
 
     player->loadDependentComponents();
     obstacle->loadDependentComponents();
     timer.start();
+
+    collisionSystem->add(objects);
 }
 
 NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    auto collisionInfo = player->getComponent<components::core::BoxColliderComponent>()->intersects(
-        obstacle->getComponent<components::core::BoxColliderComponent>());
-    player->getComponent<components::core::BoxColliderComponent>()->resolveOverlap(collisionInfo);
+    collisionSystem->update();
 
     if (timer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
         input.isKeyPressed(input::InputKey::Escape))
