@@ -1,4 +1,5 @@
 #include "Component.h"
+
 #include "ComponentOwner.h"
 
 namespace components::core
@@ -35,4 +36,15 @@ unsigned int Component::getOwnerId() const
 {
     return owner->getId();
 }
+
+bool Component::shouldBeRemoved() const
+{
+    return owner->shouldBeRemoved();
+}
+
+const ComponentOwner& Component::getOwner() const
+{
+    return *owner;
+}
+
 }

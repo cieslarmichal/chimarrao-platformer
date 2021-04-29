@@ -5,10 +5,10 @@
 
 #include "Component.h"
 #include "DeltaTime.h"
+#include "IdComponent.h"
 #include "Input.h"
 #include "TransformComponent.h"
 #include "UniqueName.h"
-#include "IdComponent.h"
 
 namespace components::core
 {
@@ -25,6 +25,8 @@ public:
     std::string getName() const;
     unsigned int getId() const;
     bool areComponentEnabled() const;
+    void remove();
+    bool shouldBeRemoved() const;
 
     template <typename T, typename... Args>
     std::shared_ptr<T> addComponent(Args... args)
@@ -69,5 +71,6 @@ protected:
 
 private:
     utils::UniqueName uniqueName;
+    bool toRemove{false};
 };
 }

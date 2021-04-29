@@ -3,8 +3,8 @@
 namespace components::core
 {
 
-ColliderComponent::ColliderComponent(ComponentOwner* owner)
-    : Component{owner}, collisionLayer{CollisionLayer::Default}
+ColliderComponent::ColliderComponent(ComponentOwner* owner, CollisionLayer collisionLayerInit)
+    : Component{owner}, collisionLayer{collisionLayerInit}
 {
 }
 

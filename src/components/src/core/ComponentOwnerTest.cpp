@@ -80,3 +80,30 @@ TEST_F(ComponentOwnerTest, shouldEnableComponents)
     ASSERT_TRUE(boxColliderComponent->isEnabled());
     ASSERT_TRUE(transformComponent->isEnabled());
 }
+
+TEST_F(ComponentOwnerTest, givenEnabledComponents_shouldReturnTrue)
+{
+    componentOwner.addComponent<BoxColliderComponent>(utils::Vector2f{3, 0});
+
+    ASSERT_TRUE(componentOwner.areComponentEnabled());
+}
+
+TEST_F(ComponentOwnerTest, givenDisabledComponents_shouldReturnFalse)
+{
+    const auto boxColliderComponent =
+        componentOwner.addComponent<BoxColliderComponent>(utils::Vector2f{3, 0});
+    boxColliderComponent->disable();
+
+    ASSERT_FALSE(componentOwner.areComponentEnabled());
+}
+
+TEST_F(ComponentOwnerTest, defaultComponentOwner_shouldNotBeSetToRemoval)
+{
+    ASSERT_FALSE(componentOwner.shouldBeRemoved());
+}
+
+TEST_F(ComponentOwnerTest, givenRemovedComponentOwner_shouldReturnTrue)
+{
+    componentOwner.remove();
+    ASSERT_TRUE(componentOwner.shouldBeRemoved());
+}

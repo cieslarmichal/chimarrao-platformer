@@ -15,6 +15,14 @@ enum class CollisionLayer
     Tile
 };
 
+inline int toInt(CollisionLayer collisionLayer)
+{
+    std::unordered_map<CollisionLayer, int> collisionLayerToInit{
+        {CollisionLayer::Default, 0}, {CollisionLayer::Player, 1}, {CollisionLayer::Tile, 2}};
+
+    return collisionLayerToInit.at(collisionLayer);
+}
+
 inline std::string toString(CollisionLayer collisionLayer)
 {
     std::unordered_map<CollisionLayer, std::string> collisionLayerToString{

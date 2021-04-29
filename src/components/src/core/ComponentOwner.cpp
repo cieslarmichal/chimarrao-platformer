@@ -67,4 +67,14 @@ bool ComponentOwner::areComponentEnabled() const
                        [](const auto& component) { return component->isEnabled(); });
 }
 
+void ComponentOwner::remove()
+{
+    toRemove = true;
+}
+
+bool ComponentOwner::shouldBeRemoved() const
+{
+    return toRemove;
+}
+
 }

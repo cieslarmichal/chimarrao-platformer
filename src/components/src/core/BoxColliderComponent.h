@@ -17,6 +17,7 @@ class BoxColliderComponent : public ColliderComponent
 {
 public:
     BoxColliderComponent(ComponentOwner*, const utils::Vector2f& size,
+                         CollisionLayer collisionLayer = CollisionLayer::Default,
                          const utils::Vector2f& offset = {0, 0});
 
     bool intersects(const utils::Vector2f&) override;

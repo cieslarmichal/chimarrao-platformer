@@ -6,8 +6,9 @@ namespace components::core
 {
 
 BoxColliderComponent::BoxColliderComponent(ComponentOwner* owner, const utils::Vector2f& sizeInit,
+                                           CollisionLayer collisionLayerInit,
                                            const utils::Vector2f& offsetInit)
-    : ColliderComponent{owner}, offset{offsetInit}
+    : ColliderComponent{owner, collisionLayerInit}, offset{offsetInit}
 {
     rect.width = sizeInit.x;
     rect.height = sizeInit.y;

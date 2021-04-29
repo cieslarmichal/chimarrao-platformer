@@ -44,3 +44,14 @@ TEST_F(ComponentTest, shouldReturnOwnerName)
     ASSERT_EQ(actualOwnerName, ownerName);
 }
 
+TEST_F(ComponentTest, newlyCreatedComponent_shouldNotBeSetToRemoval)
+{
+    ASSERT_FALSE(component.shouldBeRemoved());
+}
+
+TEST_F(ComponentTest, givenOwnerSetToRemoval_componentShouldBeSetToRemoveAsWell)
+{
+    componentOwner.remove();
+
+    ASSERT_TRUE(component.shouldBeRemoved());
+}

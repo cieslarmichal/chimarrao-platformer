@@ -12,7 +12,6 @@ class QuadtreeTest : public Test
 {
 public:
     const utils::Vector2f size{5, 5};
-    const utils::Vector2f noOffset{0, 0};
     const utils::Vector2f position1{20, 20};
     const utils::Vector2f position2{22, 22};
     const utils::Vector2f position3{30, 30};
@@ -37,25 +36,25 @@ public:
     ComponentOwner componentOwner9{position9, "quadtreeTest9"};
     ComponentOwner componentOwner10{position10, "quadtreeTest10"};
     std::shared_ptr<BoxColliderComponent> boxColliderComponent1 =
-        std::make_shared<BoxColliderComponent>(&componentOwner1, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwner1, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent2 =
-        std::make_shared<BoxColliderComponent>(&componentOwner2, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwner2, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent3 =
-        std::make_shared<BoxColliderComponent>(&componentOwner3, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwner3, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent4 =
-        std::make_shared<BoxColliderComponent>(&componentOwner4, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwner4, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent5 =
-        std::make_shared<BoxColliderComponent>(&componentOwner5, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwner5, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent6 =
-        std::make_shared<BoxColliderComponent>(&componentOwner6, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwner6, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent7 =
-        std::make_shared<BoxColliderComponent>(&componentOwner7, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwner7, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent8 =
-        std::make_shared<BoxColliderComponent>(&componentOwner8, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwner8, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent9 =
-        std::make_shared<BoxColliderComponent>(&componentOwner9, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwner9, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent10 =
-        std::make_shared<BoxColliderComponent>(&componentOwner10, size, noOffset);
+        std::make_shared<BoxColliderComponent>(&componentOwner10, size);
 };
 
 TEST_F(QuadtreeTest, insertedColliderIntersectingWithArea_canBeIntersectedWithArea)

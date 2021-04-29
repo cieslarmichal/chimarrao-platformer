@@ -9,7 +9,7 @@ namespace components::core
 class ColliderComponent : public Component
 {
 public:
-    ColliderComponent(ComponentOwner*);
+    ColliderComponent(ComponentOwner*, CollisionLayer collisionLayer = CollisionLayer::Default);
 
     virtual bool intersects(const utils::Vector2f&) = 0;
     virtual CollisionInfo intersects(std::shared_ptr<ColliderComponent> other) = 0;

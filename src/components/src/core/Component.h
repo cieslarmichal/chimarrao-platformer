@@ -22,6 +22,8 @@ public:
     bool isEnabled() const;
     std::string getOwnerName() const;
     unsigned int getOwnerId() const;
+    bool shouldBeRemoved() const;
+    const ComponentOwner& getOwner() const;
 
 protected:
     ComponentOwner* owner;
