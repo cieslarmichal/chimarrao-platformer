@@ -30,7 +30,7 @@ private:
     std::shared_ptr<components::core::ComponentOwner> player;
     std::shared_ptr<components::core::ComponentOwner> obstacle;
     std::vector<std::shared_ptr<components::core::ComponentOwner>> objects;
-    std::unique_ptr<physics::CollisionSystem> collisionSystem;
+    std::shared_ptr<physics::CollisionSystem> collisionSystem;
     std::unique_ptr<components::ui::UIManager> uiManager;
 };
 }

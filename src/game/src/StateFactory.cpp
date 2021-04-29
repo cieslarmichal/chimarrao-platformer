@@ -18,14 +18,13 @@ namespace game
 StateFactory::StateFactory(std::shared_ptr<window::Window> windowInit,
                            std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                            std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                           TileMap& tileMapInit,
-                           std::unique_ptr<physics::CollisionSystem> collisionSystemInit)
+                           TileMap& tileMapInit)
     : window{std::move(windowInit)},
       rendererPool{std::move(rendererPoolInit)},
       fileAccess{std::move(fileAccessInit)},
       states{statesInit},
       tileMap{tileMapInit},
-      collisionSystem{std::move(collisionSystemInit)}
+      collisionSystemFactory{physics::CollisionSystemFactory::createCollisionSystemFactory()}
 {
 }
 
@@ -55,7 +54,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     {
         return std::make_unique<GameState>(window, rendererPool, fileAccess, states,
                                            std::make_unique<components::ui::DefaultUIManager>(rendererPool),
-                                           std::move(collisionSystem));
+                                           collisionSystemFactory->createCollisionSystem());
     }
     case StateType::Menu:
     {

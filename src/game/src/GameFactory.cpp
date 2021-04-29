@@ -1,6 +1,5 @@
 #include "GameFactory.h"
 
-#include "CollisionSystemFactory.h"
 #include "DefaultStates.h"
 #include "FileAccessFactory.h"
 #include "GraphicsFactory.h"
@@ -24,7 +23,6 @@ std::unique_ptr<Game> GameFactory::createGame()
     const auto windowFactory = window::WindowFactory::createWindowFactory();
     const auto inputManagerFactory = input::InputManagerFactory::createInputManagerFactory();
     const auto fileAccessFactory = utils::FileAccessFactory::createFileAccessFactory();
-    const auto collisionSystemFactory = physics::CollisionSystemFactory::createCollisionSystemFactory();
 
     std::shared_ptr<window::Window> window = windowFactory->createWindow(windowSize, gameTitle);
 
@@ -38,10 +36,7 @@ std::unique_ptr<Game> GameFactory::createGame()
 
     std::shared_ptr<utils::FileAccess> fileAccess = fileAccessFactory->createDefaultFileAccess();
 
-    auto collisionSystem = collisionSystemFactory->createCollisionSystem();
-
-    auto states = std::make_unique<DefaultStates>(window, rendererPool, fileAccess, std::move(tileMap),
-                                                  std::move(collisionSystem));
+    auto states = std::make_unique<DefaultStates>(window, rendererPool, fileAccess, std::move(tileMap));
 
     return std::make_unique<Game>(window, inputManager, std::move(states));
 }
