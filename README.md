@@ -1,10 +1,23 @@
 # chimarrao
 
-## Compilation with  MinGW
-1. install [MinGW 7.3.0 POSIX threads](https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.3.0/threads-posix/seh/x86_64-7.3.0-release-posix-seh-rt_v5-rev0.7z)
-2. download [SFML 2.5.1 for MinGW 7.3.0](https://www.sfml-dev.org/files/SFML-2.5.1-windows-gcc-7.3.0-mingw-64-bit.zip) and unzip in directory C:\libraries\sfml
-3. download [Boost 1.71](https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.zip) and unzip in directory C:\libraries\boost
-4. add path to sfml binaries directory to PATH and restart computer
+## Requirements:
+<ul>
+  <li>compiler that supports C++ 20</li>
+  <li>git</li>
+  <li>cmake</li>
+</ul>
+
+## Setup on Windows 10 with MSVC
+1. Download [SFML 2.5.1 for MSVC](https://www.sfml-dev.org/files/SFML-2.5.1-windows-vc15-64-bit.zip) and unzip in directory C:\libraries\sfml
+2. Download [Boost 1.71](https://dl.bintray.com/boostorg/release/1.71.0/source/boost_1_71_0.zip) and unzip in directory C:\libraries\boost
+3. Add path to SFML binaries directory to PATH and restart computer
+4. Get repository:
+
+       git clone https://github.com/walter-strazak/chimarrao-platformer.git
+       
+5. Inside chimarrao directory initialize third-party libraries:
+
+       git submodule update --init --recursive
 
 
 ## Setup on Ubuntu 20.04
