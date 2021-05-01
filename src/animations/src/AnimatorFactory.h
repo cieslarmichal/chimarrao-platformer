@@ -18,6 +18,7 @@ public:
 
     virtual std::unique_ptr<Animator> createBunnyAnimator(graphics::GraphicsId) const = 0;
     virtual std::unique_ptr<Animator> createPlayerAnimator(graphics::GraphicsId) const = 0;
+    virtual std::unique_ptr<Animator> createDruidAnimator(graphics::GraphicsId) const = 0;
 
     static std::unique_ptr<AnimatorFactory>
     createAnimatorFactory(const std::shared_ptr<graphics::RendererPool>&);

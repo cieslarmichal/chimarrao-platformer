@@ -3,6 +3,7 @@
 #include "AnimatorSettingsYamlReader.h"
 #include "BunnyAnimator.h"
 #include "DefaultAnimatorSettingsRepository.h"
+#include "DruidAnimator.h"
 #include "PlayerAnimator.h"
 
 namespace animations
@@ -18,8 +19,14 @@ std::unique_ptr<Animator> DefaultAnimatorFactory::createBunnyAnimator(graphics::
 {
     return std::make_unique<BunnyAnimator>(graphicsId, rendererPool, animatorSettingsRepository);
 }
+
 std::unique_ptr<Animator> DefaultAnimatorFactory::createPlayerAnimator(graphics::GraphicsId graphicsId) const
 {
     return std::make_unique<PlayerAnimator>(graphicsId, rendererPool, animatorSettingsRepository);
+}
+
+std::unique_ptr<Animator> DefaultAnimatorFactory::createDruidAnimator(graphics::GraphicsId graphicsId) const
+{
+    return std::make_unique<DruidAnimator>(graphicsId, rendererPool, animatorSettingsRepository);
 }
 }

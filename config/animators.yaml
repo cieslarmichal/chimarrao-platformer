@@ -9,6 +9,16 @@ multipleFilesAnimators:
         firstTexturePath: resources/Player/Walk/walk-with-weapon-1.png
         numberOfTextures: 11
         timeBetweenTexturesInSeconds: 0.1
+  - name: druid
+    animations:
+      - type: idle
+        firstTexturePath: resources/DRUIDS/1/IDLE_0.png
+        numberOfTextures: 5
+        timeBetweenTexturesInSeconds: 0.2
+      - type: walk
+        firstTexturePath: resources/DRUIDS/1/WALK_0.png
+        numberOfTextures: 4
+        timeBetweenTexturesInSeconds: 0.14
 
 singleFileAnimators:
   - name: bunny

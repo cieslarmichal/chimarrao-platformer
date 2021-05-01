@@ -32,8 +32,8 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     auto graphicsId = graphicsComponent->getGraphicsId();
     player->addComponent<components::core::KeyboardMovementComponent>();
     auto animatorsFactory = animations::AnimatorFactory::createAnimatorFactory(rendererPool);
-    std::shared_ptr<animations::Animator> bunnyAnimator = animatorsFactory->createBunnyAnimator(graphicsId);
-    player->addComponent<components::core::AnimationComponent>(bunnyAnimator);
+    std::shared_ptr<animations::Animator> druidAnimator = animatorsFactory->createDruidAnimator(graphicsId);
+    player->addComponent<components::core::AnimationComponent>(druidAnimator);
     player->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{5, 5});
 
     auto obstacle = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{30, 30}, "obstacle");

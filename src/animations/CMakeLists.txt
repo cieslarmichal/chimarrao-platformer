@@ -5,6 +5,7 @@ set(SOURCES
         src/DefaultAnimatorSettingsRepository.cpp
         src/PlayerAnimator.cpp
         src/BunnyAnimator.cpp
+        src/DruidAnimator.cpp
         src/DefaultAnimatorFactory.cpp
         src/AnimatorFactory.cpp
         )
@@ -18,6 +19,7 @@ set(UT_SOURCES
         src/DefaultAnimatorSettingsRepositoryTest.cpp
         src/PlayerAnimatorTest.cpp
         src/BunnyAnimatorTest.cpp
+        src/DruidAnimatorTest.cpp
         )
 
 add_library(animations SHARED ${SOURCES})

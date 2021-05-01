@@ -12,6 +12,7 @@ public:
 
     std::unique_ptr<Animator> createBunnyAnimator(graphics::GraphicsId) const override;
     std::unique_ptr<Animator> createPlayerAnimator(graphics::GraphicsId) const override;
+    std::unique_ptr<Animator> createDruidAnimator(graphics::GraphicsId) const override;
 
 private:
     std::shared_ptr<graphics::RendererPool> rendererPool;
