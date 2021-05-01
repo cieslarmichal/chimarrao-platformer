@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ComponentOwnersManager.h"
 #include "CollisionSystem.h"
+#include "ComponentOwnersManager.h"
 
 namespace game
 {
@@ -23,5 +23,3 @@ private:
     std::unique_ptr<physics::CollisionSystem> collisionSystem;
 };
 }
-
-

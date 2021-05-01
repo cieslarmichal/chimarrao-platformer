@@ -1,26 +1,25 @@
 #include "EditorMenuStateUIConfigBuilder.h"
 
-#include <FileAccessFactory.h>
-#include <editor/TileMapSerializerJson.h>
-
 #include "Color.h"
 #include "CommonUIConfigElements.h"
 #include "EditorMenuState.h"
 #include "ProjectPathReader.h"
 #include "Vector.h"
+#include "editor/TileMapSerializerJson.h"
 #include "nfd.hpp"
 
-namespace game
-{
-std::string getPathToMap();
 namespace
 {
+std::string getPathToMap();
+
 const auto buttonColor = graphics::Color{65, 105, 200};
 const auto buttonHoverColor = graphics::Color(4, 8, 97);
 const auto textColor = graphics::Color(200, 200, 200);
 const auto buttonSize = utils::Vector2f{25.f, 5.f};
 }
 
+namespace game
+{
 std::unique_ptr<components::ui::UIConfig>
 EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(EditorMenuState* editorMenuState)
 {
@@ -200,6 +199,10 @@ EditorMenuStateUIConfigBuilder::createImageConfigs(EditorMenuState*)
     return {};
 }
 
+}
+
+namespace
+{
 std::string getPathToMap()
 {
     NFD_Init();
@@ -225,5 +228,4 @@ std::string getPathToMap()
     NFD_Quit();
     return "";
 }
-
 }

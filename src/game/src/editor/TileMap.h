@@ -7,8 +7,8 @@
 #include "FileAccess.h"
 #include "Tile.h"
 #include "TileMapInfo.h"
-#include "TileType.h"
 #include "TileMapSerializer.h"
+#include "TileType.h"
 
 namespace game
 {
@@ -16,7 +16,9 @@ namespace game
 class TileMap
 {
 public:
-    TileMap(std::string name, utils::Vector2i mapSize, std::unique_ptr<TileMapSerializer>, std::shared_ptr<utils::FileAccess>);
+    TileMap(std::string name, utils::Vector2i mapSize, std::unique_ptr<TileMapSerializer>,
+            std::shared_ptr<utils::FileAccess>);
+
     void saveToFile();
     void setTileMapInfo(const TileMapInfo&);
     void setName(const std::string&);

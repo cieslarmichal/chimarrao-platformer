@@ -10,8 +10,13 @@
 
 namespace game
 {
-
-TileMapSerializerJson::TileMapSerializerJson() {}
+namespace
+{
+const std::unordered_map<std::optional<TileType>, int> tileTypeToInt{
+    {std::nullopt, 0}, {TileType::Grass, 1}, {TileType::Brick, 2}};
+const std::unordered_map<int, std::optional<TileType>> intToTileType{
+    {0, std::nullopt}, {1, TileType::Grass}, {2, TileType::Brick}};
+}
 
 std::string TileMapSerializerJson::serialize(const TileMapInfo& tileMapInfo) const
 {

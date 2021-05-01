@@ -37,7 +37,12 @@ public:
     components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
     TileMap tileMap{
         "", {0, 0}, std::make_unique<TileMapSerializerJson>(), std::make_shared<utils::FileAccessMock>()};
-    SaveMapState saveMapState{window, rendererPool, fileAccess, states, std::move(uiManagerInit), std::make_shared<TileMap>(std::move(tileMap))};
+    SaveMapState saveMapState{window,
+                              rendererPool,
+                              fileAccess,
+                              states,
+                              std::move(uiManagerInit),
+                              std::make_shared<TileMap>(std::move(tileMap))};
 };
 
 TEST_F(SaveMapStateUIConfigBuilderTest, createSaveMapUI)

@@ -1,7 +1,5 @@
 #include "EditorMenuStateUIConfigBuilder.h"
 
-#include <editor/TileMapSerializerJson.h>
-
 #include "gtest/gtest.h"
 
 #include "FileAccessMock.h"
@@ -12,6 +10,7 @@
 
 #include "EditorMenuState.h"
 #include "StlOperators.h"
+#include "editor/TileMapSerializerJson.h"
 
 using namespace game;
 using namespace components::ui;
@@ -37,9 +36,11 @@ public:
     std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
         std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
     components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
-    TileMap tileMap{"", {0, 0}, std::make_unique<TileMapSerializerJson>(),std::make_shared<utils::FileAccessMock>()};
+    std::shared_ptr<TileMap> tileMap =
+        std::make_shared<TileMap>("editorMenuStateTestTileMap", utils::Vector2i{40, 15},
+                                  std::make_unique<TileMapSerializerJson>(), fileAccess);
     EditorMenuState editorMenuState{window, rendererPool, fileAccess, states, std::move(uiManagerInit),
-                                    std::make_shared<TileMap>(std::move(tileMap))};
+                                    tileMap};
 };
 
 TEST_F(EditorMenuStateUIConfigBuilderTest, createEditorMenuUI)

@@ -69,9 +69,7 @@ NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Inpu
     return NextState::Same;
 }
 
-void GameState::lateUpdate(const utils::DeltaTime&)
-{
-}
+void GameState::lateUpdate(const utils::DeltaTime&) {}
 
 void GameState::render()
 {

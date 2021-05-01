@@ -17,14 +17,12 @@ class LayoutTile
 {
 public:
     LayoutTile(const std::shared_ptr<graphics::RendererPool>&, const utils::Vector2i& position,
-               const utils::Vector2f& size, TileType& currentTileType,
-               TileMap& tileMap);
+               const utils::Vector2f& size, TileType& currentTileType, TileMap& tileMap);
 
     void update(const utils::DeltaTime&, const input::Input&);
     void activate();
     void deactivate();
     void pause();
-
     void moveTile(utils::Vector2f);
     const utils::Vector2f& getPosition() const;
     const bool isActive() const;

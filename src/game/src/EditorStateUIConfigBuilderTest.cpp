@@ -28,8 +28,10 @@ public:
     std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
         std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
     components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
-    TileMap tileMap{"", {0, 0}, std::make_unique<TileMapSerializerJson>(),std::make_shared<utils::FileAccessMock>()};
-    EditorState editorState{window, rendererPool, fileAccess, states, std::move(uiManagerInit), std::make_shared<TileMap>(std::move(tileMap))};
+    std::shared_ptr<TileMap> tileMap =
+        std::make_shared<TileMap>("editorMenuStateTestTileMap", utils::Vector2i{40, 15},
+                                  std::make_unique<TileMapSerializerJson>(), fileAccess);
+    EditorState editorState{window, rendererPool, fileAccess, states, std::move(uiManagerInit), tileMap};
 };
 
 TEST_F(EditorStateUIConfigBuilderTest, createEditorUI)

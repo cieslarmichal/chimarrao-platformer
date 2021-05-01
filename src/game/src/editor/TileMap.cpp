@@ -58,7 +58,7 @@ std::string TileMap::getPath() const
 void TileMap::setTileMapInfo(const TileMapInfo& newTileMapInfo)
 {
     tileMapInfo = newTileMapInfo;
-    if(tileMapInfo.tiles.empty())
+    if (tileMapInfo.tiles.empty())
     {
         for (int y = 0; y < tileMapInfo.mapSize.x; y++)
         {

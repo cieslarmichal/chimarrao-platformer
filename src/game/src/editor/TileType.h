@@ -19,6 +19,7 @@ const std::vector<TileType> tileTypes{
     TileType::Brick,
     TileType::Grass,
 };
+
 const TileType defaultTileType = TileType::Brick;
 
 inline TileType getNextTileType(TileType tileType)

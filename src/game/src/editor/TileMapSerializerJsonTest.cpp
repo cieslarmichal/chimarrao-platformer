@@ -114,7 +114,7 @@ TEST_F(TileMapSerializerJsonTest, giveValidTileMapInfoJson_deserializeAndSeriali
 TEST_F(TileMapSerializerJsonTest, giveValidRealTileMapInfoJson_deserialize_shouldReturnTileMapInfo)
 {
     auto deserializedTileMapInfo = serializer.deserialize(validTileMapInfo_realMap);
-    ASSERT_EQ(deserializedTileMapInfo.mapSize.y,deserializedTileMapInfo.tiles.size());
-    ASSERT_EQ(deserializedTileMapInfo.mapSize.x,deserializedTileMapInfo.tiles[0].size());
+    ASSERT_EQ(deserializedTileMapInfo.mapSize.y, deserializedTileMapInfo.tiles.size());
+    ASSERT_EQ(deserializedTileMapInfo.mapSize.x, deserializedTileMapInfo.tiles[0].size());
     ASSERT_TRUE(deserializedTileMapInfo.tiles[1][1]->type == TileType::Brick);
 }

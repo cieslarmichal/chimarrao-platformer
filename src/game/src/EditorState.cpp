@@ -13,7 +13,7 @@ namespace
 {
 const int rendererPoolSizeX = 80;
 const int rendererPoolSizeY = 60;
-const int tileSizeX = 5;
+const int tileSizeX = 4;
 const int tileSizeY = 4;
 
 }
@@ -139,6 +139,7 @@ void EditorState::pause()
 
     states.addNextState(StateType::EditorMenu);
 }
+
 void EditorState::setTileMap()
 {
     layoutTileMap.clear();
