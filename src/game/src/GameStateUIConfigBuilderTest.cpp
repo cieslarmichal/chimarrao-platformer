@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 
-#include "CollisionSystemMock.h"
+#include "ComponentOwnersManagerMock.h"
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
@@ -10,17 +10,29 @@
 #include "ui/UIManagerMock.h"
 
 #include "GameState.h"
+#include "ProjectPathReader.h"
 
 using namespace game;
 using namespace components::ui;
 using namespace ::testing;
+
+namespace
+{
+const auto brickTexturePath = utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/brick.png";
+}
 
 class GameStateUIConfigBuilderTest : public Test
 {
 public:
     GameStateUIConfigBuilderTest()
     {
-        EXPECT_CALL(*collisionSystem, add(_));
+        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5, 5}, utils::Vector2f{10, 10},
+                                           graphics::Color{128, 91, 50}, graphics::VisibilityLayer::Second));
+        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5, 5}, utils::Vector2f{30, 30}, brickTexturePath,
+                                           graphics::VisibilityLayer::Second));
+        EXPECT_CALL(*componentOwnersManager, add(_)).Times(2);
+        EXPECT_CALL(*componentOwnersManager, processNewObjects());
+        EXPECT_CALL(*rendererPool, release(_)).Times(2);
     }
 
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
@@ -32,15 +44,19 @@ public:
     std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
         std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
     components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
-    std::unique_ptr<StrictMock<physics::CollisionSystemMock>> collisionSystemInit{
-        std::make_unique<StrictMock<physics::CollisionSystemMock>>()};
-    StrictMock<physics::CollisionSystemMock>* collisionSystem{collisionSystemInit.get()};
+    std::unique_ptr<StrictMock<ComponentOwnersManagerMock>> componentOwnersManagerInit{
+        std::make_unique<StrictMock<ComponentOwnersManagerMock>>()};
+    StrictMock<ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
 };
 
 TEST_F(GameStateUIConfigBuilderTest, createGameUI)
 {
-    GameState gameState{
-        window, rendererPool, fileAccess, states, std::move(uiManagerInit), std::move(collisionSystemInit)};
+    GameState gameState{window,
+                        rendererPool,
+                        fileAccess,
+                        states,
+                        std::move(uiManagerInit),
+                        std::move(componentOwnersManagerInit)};
     const auto gameUI = GameStateUIConfigBuilder::createGameUIConfig(&gameState);
 
     ASSERT_EQ(gameUI->backgroundConfig->uniqueName, "gameBackground");

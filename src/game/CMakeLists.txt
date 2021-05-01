@@ -10,6 +10,7 @@ set(SOURCES
         src/SettingsState.cpp
         src/ControlsState.cpp
         src/SaveMapState.cpp
+        src/ChooseMapState.cpp
         src/editor/LayoutTile.cpp
         src/editor/TileMapSerializerJson.cpp
         src/ControlsStateUIConfigBuilder.cpp
@@ -25,7 +26,7 @@ set(SOURCES
         src/StateFactory.cpp
         src/GameFactory.cpp
         src/FileSystemMapsReader.cpp
-        src/ChooseMapState.cpp
+        src/DefaultComponentOwnersManager.cpp
         )
 
 set(UT_SOURCES
@@ -50,6 +51,7 @@ set(UT_SOURCES
         src/SettingsStateUIConfigBuilderTest.cpp
         src/editor/TileMapSerializerJsonTest.cpp
         src/ChooseMapStateUIConfigBuilderTest.cpp
+        src/DefaultComponentOwnersManagerTest.cpp
         )
 
 add_library(game ${SOURCES})

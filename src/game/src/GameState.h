@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CollisionSystem.h"
+#include "ComponentOwnersManager.h"
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
@@ -13,7 +14,7 @@ class GameState : public State
 public:
     explicit GameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
                        std::shared_ptr<utils::FileAccess>, States&,
-                       std::unique_ptr<components::ui::UIManager>, std::unique_ptr<physics::CollisionSystem>);
+                       std::unique_ptr<components::ui::UIManager>, std::unique_ptr<ComponentOwnersManager>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;
@@ -21,16 +22,14 @@ public:
     StateType getType() const override;
     void activate() override;
     void deactivate() override;
-    void pause();
 
 private:
+    void pause();
+
     bool paused;
     utils::Timer timer;
     const float timeAfterStateCouldBePaused;
-    std::shared_ptr<components::core::ComponentOwner> player;
-    std::shared_ptr<components::core::ComponentOwner> obstacle;
-    std::vector<std::shared_ptr<components::core::ComponentOwner>> objects;
-    std::shared_ptr<physics::CollisionSystem> collisionSystem;
     std::unique_ptr<components::ui::UIManager> uiManager;
+    std::unique_ptr<ComponentOwnersManager> componentOwnersManager;
 };
 }

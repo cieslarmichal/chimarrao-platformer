@@ -4,6 +4,7 @@
 
 #include "ChooseMapState.h"
 #include "ControlsState.h"
+#include "DefaultComponentOwnersManager.h"
 #include "EditorMenuState.h"
 #include "EditorState.h"
 #include "FileSystemMapsReader.h"
@@ -52,9 +53,10 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     }
     case StateType::Game:
     {
-        return std::make_unique<GameState>(window, rendererPool, fileAccess, states,
-                                           std::make_unique<components::ui::DefaultUIManager>(rendererPool),
-                                           collisionSystemFactory->createCollisionSystem());
+        return std::make_unique<GameState>(
+            window, rendererPool, fileAccess, states,
+            std::make_unique<components::ui::DefaultUIManager>(rendererPool),
+            std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()));
     }
     case StateType::Menu:
     {

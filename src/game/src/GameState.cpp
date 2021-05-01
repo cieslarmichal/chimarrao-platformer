@@ -16,16 +16,16 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                      std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                      std::unique_ptr<components::ui::UIManager> uiManagerInit,
-                     std::unique_ptr<physics::CollisionSystem> collisionSystemInit)
+                     std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
-      collisionSystem{std::move(collisionSystemInit)},
-      uiManager{std::move(uiManagerInit)}
+      uiManager{std::move(uiManagerInit)},
+      componentOwnersManager{std::move(componentOwnersManagerInit)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
-    player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10}, "player");
+    auto player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10}, "player");
     auto graphicsComponent = player->addComponent<components::core::GraphicsComponent>(
         rendererPool, utils::Vector2f{5, 5}, utils::Vector2f{10, 10}, graphics::Color{128, 91, 50},
         graphics::VisibilityLayer::Second);
@@ -35,27 +35,25 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     std::shared_ptr<animations::Animator> bunnyAnimator = animatorsFactory->createBunnyAnimator(graphicsId);
     player->addComponent<components::core::AnimationComponent>(bunnyAnimator);
     player->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{5, 5});
-    objects.push_back(player);
 
-    obstacle = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{30, 30}, "obstacle");
+    auto obstacle = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{30, 30}, "obstacle");
     obstacle->addComponent<components::core::GraphicsComponent>(
         rendererPool, utils::Vector2f{5, 5}, utils::Vector2f{30, 30},
         utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/brick.png",
         graphics::VisibilityLayer::Second);
     obstacle->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{5, 5});
-    objects.push_back(obstacle);
 
     player->loadDependentComponents();
     obstacle->loadDependentComponents();
     timer.start();
 
-    collisionSystem->add(objects);
+    componentOwnersManager->add(player);
+    componentOwnersManager->add(obstacle);
+    componentOwnersManager->processNewObjects();
 }
 
 NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    collisionSystem->update();
-
     if (timer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
         input.isKeyPressed(input::InputKey::Escape))
     {
@@ -64,19 +62,15 @@ NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Inpu
 
     if (not paused)
     {
-        player->update(deltaTime, input);
+        componentOwnersManager->update(deltaTime, input);
         uiManager->update(deltaTime, input);
     }
 
     return NextState::Same;
 }
 
-void GameState::lateUpdate(const utils::DeltaTime& deltaTime)
+void GameState::lateUpdate(const utils::DeltaTime&)
 {
-    if (not paused)
-    {
-        player->lateUpdate(deltaTime);
-    }
 }
 
 void GameState::render()
@@ -93,8 +87,8 @@ void GameState::activate()
 {
     active = true;
     paused = false;
-    player->enable();
     timer.restart();
+    componentOwnersManager->activate();
     uiManager->activate();
 }
 
@@ -102,14 +96,14 @@ void GameState::deactivate()
 {
     active = false;
     timer.restart();
+    componentOwnersManager->deactivate();
     uiManager->deactivate();
 }
 
 void GameState::pause()
 {
     paused = true;
-    player->disable();
-    player->getComponent<components::core::GraphicsComponent>()->enable();
+    componentOwnersManager->deactivate();
     states.addNextState(StateType::Pause);
 }
 
