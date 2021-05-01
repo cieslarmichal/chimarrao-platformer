@@ -6,7 +6,7 @@ namespace game
 {
 LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPool,
                        const utils::Vector2i& position, const utils::Vector2f& sizeInit,
-                       const std::shared_ptr<TileType>& currentTileType, TileMap& tileMap)
+                       TileType& currentTileType, TileMap& tileMap)
     : timeAfterTileCanBeClicked{0.25f}
 {
     componentOwner = std::make_shared<components::core::ComponentOwner>(
@@ -17,31 +17,34 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
         rendererPool, sizeInit,
         utils::Vector2f{static_cast<float>(position.x) * sizeInit.x,
                         static_cast<float>(position.y) * sizeInit.y},
-        tileTypeToPathTexture(*currentTileType), graphics::VisibilityLayer::Invisible);
+        tileTypeToPathTexture(TileType::Grass),
+        tileMap.getTile(position)->type ? graphics::VisibilityLayer::Second :
+                                          graphics::VisibilityLayer::Invisible);
+    graphicsComponent->setTexture(tileTypeToPathTexture(
+        tileMap.getTile(position)->type ? *tileMap.getTile(position)->type : currentTileType));
     componentOwner->addComponent<components::core::BoxColliderComponent>(sizeInit);
-    const auto onRightMouseButtonClickActionLambda = [=, &tileMap]
+    const auto onRightMouseButtonClickActionLambda = [=, &tileMap, &currentTileType]
     {
-        *currentTileType = getNextTileType(*currentTileType);
+        currentTileType = getNextTileType(currentTileType);
         if (!tileMap.getTile(position)->type)
         {
-            graphicsComponent->setTexture(tileTypeToPathTexture(*currentTileType));
+            graphicsComponent->setTexture(tileTypeToPathTexture(currentTileType));
         }
     };
-    const auto onLeftMouseButtonClickActionLambda = [=, &tileMap]
+    const auto onLeftMouseButtonClickActionLambda = [=, &tileMap, &currentTileType]
     {
         if (!tileMap.getTile(position)->type)
         {
-            tileMap.getTile(position)->type = *currentTileType;
+            tileMap.getTile(position)->type = currentTileType;
             graphicsComponent->setColor(graphics::Color(255, 255, 255, 255));
-            graphicsComponent->setOutline(0.0f, graphics::Color::Transparent);
-            graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
+            graphicsComponent->setVisibility(graphics::VisibilityLayer::Second);
             graphicsComponent->setOutline(0.2f, graphics::Color::Red);
         }
         else
         {
             tileMap.getTile(position)->type = std::nullopt;
-            graphicsComponent->setTexture(tileTypeToPathTexture(*currentTileType));
-            graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
+            graphicsComponent->setTexture(tileTypeToPathTexture(currentTileType));
+            graphicsComponent->setVisibility(graphics::VisibilityLayer::Second);
             graphicsComponent->setColor(graphics::Color(255, 255, 255, 64));
             graphicsComponent->setOutline(0.2f, graphics::Color::Green);
         }
@@ -50,12 +53,12 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
         std::vector<components::core::KeyAction>{
             {input::InputKey::MouseRight, onRightMouseButtonClickActionLambda},
             {input::InputKey::MouseLeft, onLeftMouseButtonClickActionLambda}});
-    const auto onMouseOverActionLambda = [=, &tileMap]
+    const auto onMouseOverActionLambda = [=, &tileMap, &currentTileType]
     {
         graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
         if (!tileMap.getTile(position)->type)
         {
-            graphicsComponent->setTexture(tileTypeToPathTexture(*currentTileType));
+            graphicsComponent->setTexture(tileTypeToPathTexture(currentTileType));
             graphicsComponent->setColor(graphics::Color(255, 255, 255, 64));
             graphicsComponent->setOutline(0.2f, graphics::Color::Green);
         }
@@ -82,34 +85,6 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
     componentOwner->enable();
     freezeClickableTileTimer.start();
     activate();
-}
-
-void LayoutTile::onLeftMouseButtonClickAction()
-{
-    if (auto graphicsComponent = componentOwner->getComponent<components::core::GraphicsComponent>())
-    {
-    }
-}
-
-void LayoutTile::onRightMouseButtonAction()
-{
-    if (auto graphicsComponent = componentOwner->getComponent<components::core::GraphicsComponent>())
-    {
-    }
-}
-
-void LayoutTile::onMouseOverAction()
-{
-    if (auto graphicsComponent = componentOwner->getComponent<components::core::GraphicsComponent>())
-    {
-    }
-}
-
-void LayoutTile::onMouseOutAction()
-{
-    if (auto graphicsComponent = componentOwner->getComponent<components::core::GraphicsComponent>())
-    {
-    }
 }
 
 void LayoutTile::update(const utils::DeltaTime& deltaTime, const input::Input& input)

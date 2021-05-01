@@ -20,7 +20,7 @@ public:
 
     explicit EditorState(const std::shared_ptr<window::Window>&,
                          const std::shared_ptr<graphics::RendererPool>&, std::shared_ptr<utils::FileAccess>,
-                         States&, std::unique_ptr<components::ui::UIManager>, TileMap&);
+                         States&, std::unique_ptr<components::ui::UIManager>, std::shared_ptr<TileMap>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;
@@ -31,6 +31,8 @@ public:
     void pause();
 
 private:
+    void setTileMap();
+
     bool paused;
     utils::Timer pauseTimer;
     utils::Timer moveTimer;
@@ -41,7 +43,7 @@ private:
     std::vector<std::shared_ptr<components::core::ComponentOwner>> clickableTileMap;
     std::shared_ptr<TileType> currentTileType;
     std::vector<LayoutTile> layoutTileMap;
-    TileMap& tileMap;
+    std::shared_ptr<TileMap> tileMap;
     bool buttonsActionsFrozen = true;
     utils::Timer freezeClickableButtonsTimer;
     const float timeAfterButtonsCanBeClicked;

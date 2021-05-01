@@ -56,7 +56,7 @@ set(UT_SOURCES
 
 add_library(game ${SOURCES})
 target_include_directories(game PUBLIC src ${JSON_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
-target_link_libraries(game PUBLIC utils graphics input components physics)
+target_link_libraries(game PUBLIC utils graphics input components physics nfd)
 target_compile_options(game PUBLIC ${FLAGS})
 
 add_executable(gameUT ${UT_SOURCES})

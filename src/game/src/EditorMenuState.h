@@ -19,7 +19,7 @@ public:
     explicit EditorMenuState(const std::shared_ptr<window::Window>&,
                              const std::shared_ptr<graphics::RendererPool>&,
                              std::shared_ptr<utils::FileAccess>, States&,
-                             std::unique_ptr<components::ui::UIManager>, TileMap&);
+                             std::unique_ptr<components::ui::UIManager>, std::shared_ptr<TileMap>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;
@@ -34,6 +34,6 @@ private:
     bool shouldBackToEditor;
     bool shouldBackToMenu;
     std::unique_ptr<components::ui::UIManager> uiManager;
-    TileMap& tileMap;
+    std::shared_ptr<TileMap> tileMap;
 };
 }

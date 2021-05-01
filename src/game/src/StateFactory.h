@@ -14,7 +14,7 @@ class StateFactory
 {
 public:
     StateFactory(std::shared_ptr<window::Window>, std::shared_ptr<graphics::RendererPool>,
-                 std::shared_ptr<utils::FileAccess>, States&, TileMap&);
+                 std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<TileMap>);
 
     std::unique_ptr<State> createState(StateType);
 
@@ -23,7 +23,7 @@ private:
     const std::shared_ptr<graphics::RendererPool> rendererPool;
     std::shared_ptr<utils::FileAccess> fileAccess;
     States& states;
-    TileMap& tileMap;
+    std::shared_ptr<TileMap> tileMap;
     std::unique_ptr<physics::CollisionSystemFactory> collisionSystemFactory;
 };
 }
