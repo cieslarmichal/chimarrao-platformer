@@ -3,21 +3,21 @@
 #include <cmath>
 
 #include "ChooseMapStateUIConfigBuilder.h"
-#include "core/KeyAction.h"
 
 namespace game
 {
 ChooseMapState::ChooseMapState(const std::shared_ptr<window::Window>& windowInit,
                                const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                                std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                               std::unique_ptr<components::ui::UIManager> uiManagerInit)
+                               std::unique_ptr<components::ui::UIManager> uiManagerInit,
+                               std::unique_ptr<MapsReader> mapsReaderInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       uiManager{std::move(uiManagerInit)},
-      mapFilePathsReader{std::make_unique<MapFilePathsReader>(fileAccess)},
+      mapsReader{std::move(mapsReaderInit)},
       shouldBackToMenu{false},
       mapsCurrentPage{1}
 {
-    mapFilePaths = mapFilePathsReader->readMapFilePaths();
+    mapFilePaths = mapsReader->readMapFilePaths();
     std::sort(mapFilePaths.begin(), mapFilePaths.end());
     std::transform(mapFilePaths.begin(), mapFilePaths.end(), std::back_inserter(mapNames),
                    [&](const std::string& mapFile)

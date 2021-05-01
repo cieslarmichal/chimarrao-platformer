@@ -6,12 +6,12 @@
 #include "ControlsState.h"
 #include "EditorMenuState.h"
 #include "EditorState.h"
+#include "FileSystemMapsReader.h"
 #include "GameState.h"
 #include "MenuState.h"
 #include "PauseState.h"
 #include "SaveMapState.h"
 #include "SettingsState.h"
-#include "exceptions/StateTypeNotFound.h"
 
 namespace game
 {
@@ -82,7 +82,8 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     {
         return std::make_unique<ChooseMapState>(
             window, rendererPool, fileAccess, states,
-            std::make_unique<components::ui::DefaultUIManager>(rendererPool));
+            std::make_unique<components::ui::DefaultUIManager>(rendererPool),
+            std::make_unique<FileSystemMapsReader>(fileAccess));
     }
     default:
     {

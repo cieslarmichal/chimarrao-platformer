@@ -20,12 +20,12 @@ set(SOURCES
         src/PauseStateUIConfigBuilder.cpp
         src/SaveMapStateUIConfigBuilder.cpp
         src/SettingsStateUIConfigBuilder.cpp
+        src/ChooseMapStateUIConfigBuilder.cpp
         src/DefaultStates.cpp
         src/StateFactory.cpp
         src/GameFactory.cpp
-        src/MapFilePathsReader.cpp
+        src/FileSystemMapsReader.cpp
         src/ChooseMapState.cpp
-        src/ChooseMapStateUIConfigBuilder.cpp
         )
 
 set(UT_SOURCES
@@ -38,6 +38,8 @@ set(UT_SOURCES
         src/SettingsStateTest.cpp
         src/ControlsStateTest.cpp
         src/SaveMapStateTest.cpp
+        src/ChooseMapStateTest.cpp
+        src/FileSystemMapsReaderTest.cpp
         src/ControlsStateUIConfigBuilderTest.cpp
         src/EditorMenuStateUIConfigBuilderTest.cpp
         src/EditorStateUIConfigBuilderTest.cpp
@@ -47,8 +49,6 @@ set(UT_SOURCES
         src/SaveMapStateUIConfigBuilderTest.cpp
         src/SettingsStateUIConfigBuilderTest.cpp
         src/editor/TileMapSerializerJsonTest.cpp
-        src/MapFilePathsReaderTest.cpp
-        src/ChooseMapStateTest.cpp
         src/ChooseMapStateUIConfigBuilderTest.cpp
         )
 

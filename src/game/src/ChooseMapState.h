@@ -1,6 +1,6 @@
 #pragma once
 
-#include "MapFilePathsReader.h"
+#include "MapsReader.h"
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
@@ -19,7 +19,7 @@ public:
     explicit ChooseMapState(const std::shared_ptr<window::Window>&,
                             const std::shared_ptr<graphics::RendererPool>&,
                             std::shared_ptr<utils::FileAccess>, States&,
-                            std::unique_ptr<components::ui::UIManager>);
+                            std::unique_ptr<components::ui::UIManager>, std::unique_ptr<MapsReader>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;
@@ -33,7 +33,7 @@ private:
     void showPreviousMaps();
 
     std::unique_ptr<components::ui::UIManager> uiManager;
-    std::unique_ptr<MapFilePathsReader> mapFilePathsReader;
+    std::unique_ptr<MapsReader> mapsReader;
     bool shouldBackToMenu;
     std::vector<std::string> mapFilePaths;
     std::vector<std::string> mapNames;

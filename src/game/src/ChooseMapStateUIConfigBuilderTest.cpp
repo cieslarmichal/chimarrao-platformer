@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "FileAccessMock.h"
+#include "MapsReaderMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
@@ -18,11 +19,11 @@ using namespace ::testing;
 
 namespace
 {
+const std::vector<std::string> mapPaths{"x1", "x2", "x3", "x4", "x5", "x6"};
 const std::vector<std::string> expectedLabelNames{"chooseMapTitleLabel"};
-
-const std::vector<std::string> expectedButtonNames{"chooseMapBackToMenuButton", "chooseMapRightButton",
-                                                   "chooseMapLeftButton", "chooseMap1MapButton",
-                                                   "chooseMap2MapButton"};
+const std::vector<std::string> expectedButtonNames{
+    "chooseMapBackToMenuButton", "chooseMapRightButton", "chooseMapLeftButton", "chooseMap1MapButton",
+    "chooseMap2MapButton",       "chooseMap3MapButton",  "chooseMap4MapButton", "chooseMap5MapButton"};
 }
 
 class ChooseMapStateUIConfigBuilderTest_Base : public Test
@@ -30,13 +31,15 @@ class ChooseMapStateUIConfigBuilderTest_Base : public Test
 public:
     ChooseMapStateUIConfigBuilderTest_Base()
     {
-        EXPECT_CALL(*fileAccess, getAllPathsFromDirectory(mapsDirectory))
-            .WillOnce(Return(std::vector<std::string>{"map01.txt", "map02.txt"}));
-        EXPECT_CALL(*fileAccess, getFileNameWithoutExtension("map01.txt")).WillRepeatedly(Return("map01"));
-        EXPECT_CALL(*fileAccess, getFileNameWithoutExtension("map02.txt")).WillRepeatedly(Return("map02"));
+        EXPECT_CALL(*mapsReader, readMapFilePaths()).WillOnce(Return(mapPaths));
+        EXPECT_CALL(*fileAccess, getFileNameWithoutExtension(_))
+            .WillOnce(Return("x1"))
+            .WillOnce(Return("x2"))
+            .WillOnce(Return("x3"))
+            .WillOnce(Return("x4"))
+            .WillOnce(Return("x5"))
+            .WillOnce(Return("x6"));
     }
-
-    const std::string mapsDirectory = utils::ProjectPathReader::getProjectRootPath() + "maps";
 
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
@@ -47,12 +50,16 @@ public:
     std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
         std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
     components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
+    std::unique_ptr<StrictMock<MapsReaderMock>> mapsReaderInit{
+        std::make_unique<StrictMock<MapsReaderMock>>()};
+    StrictMock<MapsReaderMock>* mapsReader{mapsReaderInit.get()};
 };
 
 class ChooseMapStateUIConfigBuilderTest : public ChooseMapStateUIConfigBuilderTest_Base
 {
 public:
-    ChooseMapState chooseMapState{window, rendererPool, fileAccess, states, std::move(uiManagerInit)};
+    ChooseMapState chooseMapState{
+        window, rendererPool, fileAccess, states, std::move(uiManagerInit), std::move(mapsReaderInit)};
 };
 
 TEST_F(ChooseMapStateUIConfigBuilderTest, createChooseMapUI)
