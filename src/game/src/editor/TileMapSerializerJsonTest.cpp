@@ -56,7 +56,7 @@ public:
         "0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,"
         "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,"
         "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]},\"info\":{\"mapSize\":{\"x\":40,\"y\":15},"
-        "\"name\":\"schody\"}}"};
+        "\"name\":\"RealMap\"}}"};
 };
 
 TEST_F(TileMapSerializerJsonTest, giveValidTileMapInfo_shouldReturnSerializedTileMapInfo)
@@ -115,6 +115,14 @@ TEST_F(TileMapSerializerJsonTest, giveValidRealTileMapInfoJson_deserialize_shoul
 {
     auto deserializedTileMapInfo = serializer.deserialize(validTileMapInfo_realMap);
     ASSERT_EQ(deserializedTileMapInfo.mapSize.y, deserializedTileMapInfo.tiles.size());
+    for (const auto& mapRow : deserializedTileMapInfo.tiles)
+    {
+        ASSERT_EQ(deserializedTileMapInfo.mapSize.x, mapRow.size());
+    }
     ASSERT_EQ(deserializedTileMapInfo.mapSize.x, deserializedTileMapInfo.tiles[0].size());
-    ASSERT_TRUE(deserializedTileMapInfo.tiles[1][1]->type == TileType::Brick);
+    ASSERT_EQ(deserializedTileMapInfo.tiles[0][0]->type, TileType::Brick);
+    ASSERT_EQ(deserializedTileMapInfo.tiles[1][1]->type, TileType::Brick);
+    ASSERT_EQ(deserializedTileMapInfo.tiles[0][1]->type, TileType::Grass);
+    ASSERT_EQ(deserializedTileMapInfo.tiles[1][2]->type, TileType::Grass);
+    ASSERT_EQ("RealMap", deserializedTileMapInfo.name);
 }

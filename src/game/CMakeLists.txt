@@ -26,8 +26,7 @@ set(SOURCES
         src/StateFactory.cpp
         src/GameFactory.cpp
         src/FileSystemMapsReader.cpp
-        src/DefaultComponentOwnersManager.cpp
-        )
+        src/DefaultComponentOwnersManager.cpp)
 
 set(UT_SOURCES
         src/GameTest.cpp
@@ -51,6 +50,9 @@ set(UT_SOURCES
         src/SettingsStateUIConfigBuilderTest.cpp
         src/editor/TileMapSerializerJsonTest.cpp
         src/ChooseMapStateUIConfigBuilderTest.cpp
+        src/editor/LayoutTileTest.cpp
+        src/editor/TileMapTest.cpp
+        src/editor/TileTypeTest.cpp
         src/DefaultComponentOwnersManagerTest.cpp
         )
 
