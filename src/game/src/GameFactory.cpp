@@ -1,5 +1,7 @@
 #include "GameFactory.h"
 
+#include <editor/TileMapSerializerJson.h>
+
 #include "DefaultStates.h"
 #include "FileAccessFactory.h"
 #include "GraphicsFactory.h"
@@ -31,12 +33,14 @@ std::unique_ptr<Game> GameFactory::createGame()
 
     std::shared_ptr<input::InputManager> inputManager = inputManagerFactory->createInputManager(window);
 
-    auto tileMap = std::make_unique<TileMap>("", utils::Vector2i(static_cast<int>(mapSize.x) / tileSizeX * 2,
-                                                                 static_cast<int>(mapSize.y) / tileSizeY));
-
     std::shared_ptr<utils::FileAccess> fileAccess = fileAccessFactory->createDefaultFileAccess();
 
-    auto states = std::make_unique<DefaultStates>(window, rendererPool, fileAccess, std::move(tileMap));
+    auto tileMap = std::make_shared<TileMap>(
+        "",
+        utils::Vector2i(static_cast<int>(mapSize.x) / tileSizeX * 2, static_cast<int>(mapSize.y) / tileSizeY),
+        std::make_unique<TileMapSerializerJson>(), fileAccess);
+
+    auto states = std::make_unique<DefaultStates>(window, rendererPool, fileAccess, tileMap);
 
     return std::make_unique<Game>(window, inputManager, std::move(states));
 }

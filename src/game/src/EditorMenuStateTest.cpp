@@ -1,5 +1,8 @@
 #include "EditorMenuState.h"
 
+#include <editor/TileMapSerializerJson.h>
+#include <memory>
+
 #include "gtest/gtest.h"
 
 #include "FileAccessMock.h"
@@ -37,9 +40,9 @@ public:
 class EditorMenuStateTest : public EditorMenuStateTest_Base
 {
 public:
-    TileMap tileMap{"", {0, 0}};
+    TileMap tileMap{"", {0, 0}, std::make_unique<TileMapSerializerJson>(),std::make_shared<utils::FileAccessMock>()};
     EditorMenuState editorMenuState{window, rendererPool, fileAccess, states, std::move(uiManagerInit),
-                                    tileMap};
+                                    std::make_shared<TileMap>(std::move(tileMap))};
 };
 
 TEST_F(EditorMenuStateTest, xxx) {}

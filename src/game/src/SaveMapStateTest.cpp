@@ -1,5 +1,7 @@
 #include "SaveMapState.h"
 
+#include <editor/TileMapSerializerJson.h>
+
 #include "gtest/gtest.h"
 
 #include "FileAccessMock.h"
@@ -39,8 +41,8 @@ public:
 class SaveMapStateTest : public SaveMapStateTest_Base
 {
 public:
-    TileMap tileMap{"", {0, 0}};
-    SaveMapState saveMapState{window, rendererPool, fileAccess, states, std::move(uiManagerInit), tileMap};
+    TileMap tileMap{"", {0, 0}, std::make_unique<TileMapSerializerJson>(),std::make_shared<utils::FileAccessMock>()};
+    SaveMapState saveMapState{window, rendererPool, fileAccess, states, std::move(uiManagerInit), std::make_shared<TileMap>(std::move(tileMap))};
 };
 
 TEST_F(SaveMapStateTest, xxx) {}

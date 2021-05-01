@@ -17,7 +17,7 @@ class LayoutTile
 {
 public:
     LayoutTile(const std::shared_ptr<graphics::RendererPool>&, const utils::Vector2i& position,
-               const utils::Vector2f& size, const std::shared_ptr<TileType>& currentTileType,
+               const utils::Vector2f& size, TileType& currentTileType,
                TileMap& tileMap);
 
     void update(const utils::DeltaTime&, const input::Input&);
@@ -30,11 +30,6 @@ public:
     const bool isActive() const;
 
 private:
-    void onLeftMouseButtonClickAction();
-    void onRightMouseButtonAction();
-    void onMouseOverAction();
-    void onMouseOutAction();
-
     std::shared_ptr<components::core::ComponentOwner> componentOwner;
     utils::Timer freezeClickableTileTimer;
     const float timeAfterTileCanBeClicked;

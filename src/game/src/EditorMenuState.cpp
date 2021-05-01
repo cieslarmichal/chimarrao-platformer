@@ -13,7 +13,7 @@ EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowIn
                                  const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                                  std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                                  std::unique_ptr<components::ui::UIManager> uiManagerInit,
-                                 TileMap& tileMapInit)
+                                 std::shared_ptr<TileMap> tileMapInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditor{false},

@@ -21,11 +21,11 @@ std::string TileMapSerializerJson::serialize(const TileMapInfo& tileMapInfo) con
     checkMapSize(tileMapInfo.mapSize, tileMapInfo.tiles);
     json["info"]["mapSize"]["x"] = tileMapInfo.mapSize.x;
     json["info"]["mapSize"]["y"] = tileMapInfo.mapSize.y;
-    for (int y = 0; y < tileMapInfo.tiles.size(); y++)
+    for (int x = 0; x < tileMapInfo.tiles.size(); x++)
     {
-        for (int x = 0; x < tileMapInfo.tiles[y].size(); x++)
+        for (int y = 0; y < tileMapInfo.tiles[x].size(); y++)
         {
-            json["data"]["tiles"][x][y] = tileTypeToInt.at(tileMapInfo.tiles[y][x]->type);
+            json["data"]["tiles"][x][y] = tileTypeToInt.at(tileMapInfo.tiles[x][y]->type);
         }
     }
     return json.dump();
@@ -56,7 +56,7 @@ void TileMapSerializerJson::checkMapName(const std::string& name) const
 void TileMapSerializerJson::checkMapSize(const utils::Vector2i& size,
                                          const std::vector<std::vector<std::shared_ptr<Tile>>>& map) const
 {
-    if (size.x != map.size())
+    if (size.y != map.size())
     {
         throw exceptions::WrongMapSize{"TileMapSerializerJson: Wrong map size"};
     }
@@ -64,7 +64,7 @@ void TileMapSerializerJson::checkMapSize(const utils::Vector2i& size,
     {
         for (const auto& row : map)
         {
-            if (size.y != row.size())
+            if (size.x != row.size())
             {
                 throw exceptions::WrongMapSize{"TileMapSerializerJson: Wrong map size"};
             }
@@ -141,10 +141,10 @@ TileMapSerializerJson::parseTiles(const nlohmann::json& mapDataJson, utils::Vect
     }
     auto tilesJson = mapDataJson["tiles"];
     std::vector<std::vector<std::shared_ptr<Tile>>> tiles;
-    tiles.resize(size.x);
+    tiles.resize(size.y);
     for (auto& row : tiles)
     {
-        row.resize(size.y);
+        row.resize(size.x);
     }
 
     if (not tilesJson.is_array())
@@ -152,26 +152,26 @@ TileMapSerializerJson::parseTiles(const nlohmann::json& mapDataJson, utils::Vect
         throw exceptions::InvalidField{
             R"(TileMapSerializerJson: Field "tiles" is not an array or has wrong size)"};
     }
-    if (tilesJson.size() != size.x)
+    if (tilesJson.size() != size.y)
     {
         throw exceptions::InvalidField{R"(TileMapSerializerJson: Field "tiles" has wrong size)"};
     }
-    for (int xIter = 0; xIter < size.x; ++xIter)
+    for (int yIter = 0; yIter < size.y; ++yIter)
     {
-        if (not tilesJson[xIter].is_array())
+        if (not tilesJson[yIter].is_array())
         {
             throw exceptions::InvalidField{
                 R"(TileMapSerializerJson: Field "tiles" is not an array or has wrong size)"};
         }
-        if (tilesJson.size() != size.y)
+        if (tilesJson[yIter].size() != size.x)
         {
             throw exceptions::InvalidField{R"(TileMapSerializerJson: Field "tiles" has wrong size)"};
         }
-        auto rowJson = tilesJson[xIter];
-        for (int yIter = 0; yIter < size.x; ++yIter)
+        auto rowJson = tilesJson[yIter];
+        for (int xIter = 0; xIter < size.x; ++xIter)
         {
-            tiles[xIter][yIter] =
-                std::make_shared<game::Tile>(game::Tile{intToTileType.at(rowJson[yIter].get<int>())});
+            tiles[yIter][xIter] =
+                std::make_shared<game::Tile>(game::Tile{intToTileType.at(rowJson[xIter].get<int>())});
         }
     }
     return tiles;

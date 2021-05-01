@@ -1,13 +1,18 @@
 #include "EditorMenuStateUIConfigBuilder.h"
 
+#include <FileAccessFactory.h>
+#include <editor/TileMapSerializerJson.h>
+
 #include "Color.h"
 #include "CommonUIConfigElements.h"
 #include "EditorMenuState.h"
 #include "ProjectPathReader.h"
 #include "Vector.h"
+#include "nfd.hpp"
 
 namespace game
 {
+std::string getPathToMap();
 namespace
 {
 const auto buttonColor = graphics::Color{65, 105, 200};
@@ -72,7 +77,16 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
     };
     auto loadMapButtonMouseOverActions =
         components::ui::MouseOverActions{loadMapButtonOnMouseOver, loadMapButtonOnMouseOut};
-    auto loadMapClickAction = [&] { std::cout << "load map\n"; };
+    auto loadMapClickAction = [=]
+    {
+        std::cout << "load map\n";
+        auto pathToMapFile = getPathToMap();
+        auto tileMapSerializer = TileMapSerializerJson();
+        auto mapText = editorMenuState->fileAccess->readContent(pathToMapFile);
+        auto tileMapInfo = tileMapSerializer.deserialize(mapText);
+        editorMenuState->tileMap->setTileMapInfo(tileMapInfo);
+        editorMenuState->shouldBackToEditor = true;
+    };
     auto loadMapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "editorMenuLoadMapButton", loadMapButtonPosition, buttonSize, buttonColor, "Load map", textColor, 27,
         fontPath, utils::Vector2f{7.f, 0.75f}, loadMapClickAction, loadMapButtonMouseOverActions);
@@ -91,7 +105,13 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
     };
     auto newMapButtonMouseOverActions =
         components::ui::MouseOverActions{newMapButtonOnMouseOver, newMapButtonOnMouseOut};
-    auto newMapClickAction = [&] { std::cout << "new map\n"; };
+    auto newMapClickAction = [=]
+    {
+        std::cout << "new map\n";
+        TileMapInfo tileMapInfo = TileMapInfo{"", {40, 15}};
+        editorMenuState->tileMap->setTileMapInfo(tileMapInfo);
+        editorMenuState->shouldBackToEditor = true;
+    };
     auto newMapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "editorMenuNewMapButton", newMapButtonPosition, buttonSize, buttonColor, "New map", textColor, 27,
         fontPath, utils::Vector2f{7.f, 0.75f}, newMapClickAction, newMapButtonMouseOverActions);
@@ -133,7 +153,13 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
     };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
-    auto backToMenuClickAction = [=] { editorMenuState->shouldBackToMenu = true; };
+    auto backToMenuClickAction = [=]
+    {
+        editorMenuState->shouldBackToMenu = true;
+        TileMapInfo tileMapInfo = TileMapInfo{"", {40, 15}};
+        editorMenuState->tileMap->setTileMapInfo(tileMapInfo);
+        editorMenuState->shouldBackToMenu = true;
+    };
     auto backToMenuButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "editorMenuBackToMenuButton", backToMenuButtonPosition, buttonSize, buttonColor, "Back to menu",
         textColor, 27, fontPath, utils::Vector2f{2.75f, 0.75f}, backToMenuClickAction,
@@ -166,5 +192,31 @@ std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
 EditorMenuStateUIConfigBuilder::createTextFieldConfigs(EditorMenuState*)
 {
     return {};
+}
+
+std::string getPathToMap()
+{
+    NFD_Init();
+    nfdchar_t* outPath;
+    auto mapsPath = utils::ProjectPathReader::getProjectRootPath() + "maps";
+    nfdfilteritem_t filterItem[2] = {{"Map File", "map"}, {"Any file", "*"}};
+    nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 2, mapsPath.c_str());
+    if (result == NFD_OKAY)
+    {
+        auto pathToMap = std::string(outPath);
+        std::cout << "Path to map: " << pathToMap << std::endl;
+        NFD_FreePath(outPath);
+        return pathToMap;
+    }
+    else if (result == NFD_CANCEL)
+    {
+        puts("User pressed cancel.");
+    }
+    else
+    {
+        printf("Error: %s\n", NFD_GetError());
+    }
+    NFD_Quit();
+    return "";
 }
 }

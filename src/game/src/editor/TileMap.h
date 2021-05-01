@@ -4,9 +4,11 @@
 #include <memory>
 #include <vector>
 
+#include "FileAccess.h"
 #include "Tile.h"
 #include "TileMapInfo.h"
 #include "TileType.h"
+#include "TileMapSerializer.h"
 
 namespace game
 {
@@ -14,8 +16,9 @@ namespace game
 class TileMap
 {
 public:
-    TileMap(std::string name, utils::Vector2i mapSize);
+    TileMap(std::string name, utils::Vector2i mapSize, std::unique_ptr<TileMapSerializer>, std::shared_ptr<utils::FileAccess>);
     void saveToFile();
+    void setTileMapInfo(const TileMapInfo&);
     void setName(const std::string&);
     const std::string& getName() const;
     std::string getPath() const;
@@ -24,5 +27,7 @@ public:
 
 private:
     TileMapInfo tileMapInfo;
+    std::unique_ptr<TileMapSerializer> tileMapSerializer;
+    std::shared_ptr<utils::FileAccess> fileAccess;
 };
 }
