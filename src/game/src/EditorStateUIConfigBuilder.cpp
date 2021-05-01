@@ -23,7 +23,7 @@ EditorStateUIConfigBuilder::createEditorUIConfig(EditorState* editorState)
     return std::make_unique<components::ui::UIConfig>(
         createBackgroundConfig(editorState), std::move(createButtonConfigs(editorState)),
         createCheckBoxConfigs(editorState), createLabelConfigs(editorState),
-        createTextFieldConfigs(editorState));
+        createTextFieldConfigs(editorState), createImageConfigs(editorState));
 }
 
 std::unique_ptr<components::ui::BackgroundConfig>
@@ -63,6 +63,12 @@ EditorStateUIConfigBuilder::createLabelConfigs(EditorState*)
 
 std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
 EditorStateUIConfigBuilder::createTextFieldConfigs(EditorState*)
+{
+    return {};
+}
+
+std::vector<std::unique_ptr<components::ui::ImageConfig>>
+EditorStateUIConfigBuilder::createImageConfigs(EditorState*)
 {
     return {};
 }

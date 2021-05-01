@@ -39,4 +39,5 @@ TEST_F(EditorStateUIConfigBuilderTest, createEditorUI)
     ASSERT_TRUE(editorUI->labelsConfig.empty());
     ASSERT_TRUE(editorUI->checkBoxesConfig.empty());
     ASSERT_TRUE(editorUI->textFieldsConfig.empty());
+    ASSERT_TRUE(editorUI->imagesConfig.empty());
 }

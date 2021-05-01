@@ -49,7 +49,7 @@ ControlsStateUIConfigBuilder::createControlsUIConfig(ControlsState* controlsStat
     return std::make_unique<components::ui::UIConfig>(
         createBackgroundConfig(controlsState), std::move(createButtonConfigs(controlsState)),
         createCheckBoxConfigs(controlsState), createLabelConfigs(controlsState),
-        createTextFieldConfigs(controlsState));
+        createTextFieldConfigs(controlsState), createImageConfigs(controlsState));
 }
 
 std::unique_ptr<components::ui::BackgroundConfig>
@@ -188,6 +188,12 @@ ControlsStateUIConfigBuilder::createLabelConfigs(ControlsState*)
 
 std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
 ControlsStateUIConfigBuilder::createTextFieldConfigs(ControlsState*)
+{
+    return {};
+}
+
+std::vector<std::unique_ptr<components::ui::ImageConfig>>
+ControlsStateUIConfigBuilder::createImageConfigs(ControlsState*)
 {
     return {};
 }

@@ -146,6 +146,10 @@ void DefaultUIManager::setColor(UIComponentType componentType, const std::string
         textField->setColor(color);
         break;
     }
+    case UIComponentType::Image:
+    {
+        break;
+    }
     }
 }
 
@@ -226,6 +230,12 @@ void DefaultUIManager::activateComponent(UIComponentType componentType, const st
         textField->activate();
         break;
     }
+    case UIComponentType::Image:
+    {
+        const auto& image = tryToGetComponentByName(images, componentName);
+        image->activate();
+        break;
+    }
     }
 }
 
@@ -262,6 +272,12 @@ void DefaultUIManager::deactivateComponent(UIComponentType componentType, const 
         textField->deactivate();
         break;
     }
+    case UIComponentType::Image:
+    {
+        const auto& image = tryToGetComponentByName(images, componentName);
+        image->deactivate();
+        break;
+    }
     }
 }
 
@@ -294,6 +310,11 @@ bool DefaultUIManager::isComponentActive(UIComponentType componentType,
         const auto& textField = tryToGetComponentByName(textFields, componentName);
         return textField->isActive();
     }
+    case UIComponentType::Image:
+    {
+        const auto& image = tryToGetComponentByName(images, componentName);
+        return image->isActive();
+    }
     default:
         return false;
     }
@@ -325,6 +346,12 @@ void DefaultUIManager::createUIComponents(std::unique_ptr<UIConfig> uiConfig)
     {
         auto textField = uiComponentFactory->createTextField(std::move(textFieldConfig));
         textFields.emplace_back(std::move(textField));
+    }
+
+    for (auto& imageConfig : uiConfig->imagesConfig)
+    {
+        auto image = uiComponentFactory->createImage(std::move(imageConfig));
+        images.emplace_back(std::move(image));
     }
 }
 

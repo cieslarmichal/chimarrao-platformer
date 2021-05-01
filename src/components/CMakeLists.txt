@@ -16,6 +16,7 @@ set(SOURCES
         src/ui/CheckBox.cpp
         src/ui/Label.cpp
         src/ui/TextField.cpp
+        src/ui/Image.cpp
         src/ui/DefaultUIManager.cpp
         src/ui/UIComponentFactory.cpp
         )

@@ -5,6 +5,7 @@
 #include "Background.h"
 #include "Button.h"
 #include "CheckBox.h"
+#include "Image.h"
 #include "InputManager.h"
 #include "Label.h"
 #include "RendererPool.h"
@@ -23,6 +24,7 @@ public:
     std::unique_ptr<CheckBox> createCheckBox(std::unique_ptr<CheckBoxConfig>) const;
     std::unique_ptr<Label> createLabel(std::unique_ptr<LabelConfig>) const;
     std::unique_ptr<TextField> createTextField(std::unique_ptr<TextFieldConfig>) const;
+    std::unique_ptr<Image> createImage(std::unique_ptr<ImageConfig>) const;
 
 private:
     std::shared_ptr<graphics::RendererPool> rendererPool;

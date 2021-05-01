@@ -20,8 +20,8 @@ PauseStateUIConfigBuilder::createPauseUIConfig(PauseState* pauseState)
 {
     return std::make_unique<components::ui::UIConfig>(
         createBackgroundConfig(pauseState), std::move(createButtonConfigs(pauseState)),
-        createCheckBoxConfigs(pauseState), createLabelConfigs(pauseState),
-        createTextFieldConfigs(pauseState));
+        createCheckBoxConfigs(pauseState), createLabelConfigs(pauseState), createTextFieldConfigs(pauseState),
+        createImageConfigs(pauseState));
 }
 
 std::unique_ptr<components::ui::BackgroundConfig>
@@ -99,6 +99,12 @@ PauseStateUIConfigBuilder::createLabelConfigs(PauseState*)
 
 std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
 PauseStateUIConfigBuilder::createTextFieldConfigs(PauseState*)
+{
+    return {};
+}
+
+std::vector<std::unique_ptr<components::ui::ImageConfig>>
+PauseStateUIConfigBuilder::createImageConfigs(PauseState*)
 {
     return {};
 }

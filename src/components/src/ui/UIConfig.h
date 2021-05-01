@@ -6,6 +6,7 @@
 #include "BackgroundConfig.h"
 #include "ButtonConfig.h"
 #include "CheckBoxConfig.h"
+#include "ImageConfig.h"
 #include "LabelConfig.h"
 #include "TextFieldConfig.h"
 
@@ -17,12 +18,14 @@ struct UIConfig
              std::vector<std::unique_ptr<ButtonConfig>> buttonsConfigInit,
              std::vector<std::unique_ptr<CheckBoxConfig>> checkBoxesConfigInit,
              std::vector<std::unique_ptr<LabelConfig>> labelsConfigInit,
-             std::vector<std::unique_ptr<TextFieldConfig>> textFieldsConfigInit)
+             std::vector<std::unique_ptr<TextFieldConfig>> textFieldsConfigInit,
+             std::vector<std::unique_ptr<ImageConfig>> imagesConfigInit)
         : backgroundConfig{std::move(backgroundConfigInit)},
           buttonsConfig{std::move(buttonsConfigInit)},
           checkBoxesConfig{std::move(checkBoxesConfigInit)},
           labelsConfig{std::move(labelsConfigInit)},
-          textFieldsConfig{std::move(textFieldsConfigInit)}
+          textFieldsConfig{std::move(textFieldsConfigInit)},
+          imagesConfig{std::move(imagesConfigInit)}
     {
     }
 
@@ -31,5 +34,6 @@ struct UIConfig
     std::vector<std::unique_ptr<CheckBoxConfig>> checkBoxesConfig;
     std::vector<std::unique_ptr<LabelConfig>> labelsConfig;
     std::vector<std::unique_ptr<TextFieldConfig>> textFieldsConfig;
+    std::vector<std::unique_ptr<ImageConfig>> imagesConfig;
 };
 }

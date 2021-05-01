@@ -11,6 +11,7 @@ struct ButtonConfig;
 struct CheckBoxConfig;
 struct LabelConfig;
 struct TextFieldConfig;
+struct ImageConfig;
 }
 
 namespace game
@@ -30,5 +31,6 @@ private:
     static std::vector<std::unique_ptr<components::ui::LabelConfig>> createLabelConfigs(ChooseMapState*);
     static std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
     createTextFieldConfigs(ChooseMapState*);
+    static std::vector<std::unique_ptr<components::ui::ImageConfig>> createImageConfigs(ChooseMapState*);
 };
 }

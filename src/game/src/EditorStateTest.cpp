@@ -3,11 +3,11 @@
 #include "gtest/gtest.h"
 
 #include "FileAccessMock.h"
+#include "InputMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
-#include "InputMock.h"
 
 using namespace game;
 using namespace components::ui;
@@ -70,9 +70,9 @@ TEST_F(EditorStateTest, render_shouldRenderAllFromRendererPool)
     editorState.render();
 }
 
-//TEST_F(EditorStateTest, update_shouldUpdateUI)
+// TEST_F(EditorStateTest, update_shouldUpdateUI)
 //{
-//    EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
+//     EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
 //
-//    editorState.update(deltaTime, input);
-//}
+//     editorState.update(deltaTime, input);
+// }

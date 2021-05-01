@@ -19,6 +19,8 @@ namespace
 {
 const std::vector<std::string> expectedButtonNames{
     "menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton", "menuExitButton"};
+const std::vector<std::string> expectedImagesNames{"menuIcon1Image", "menuIcon2Image", "menuIcon3Image",
+                                                   "menuIcon4Image", "menuIcon5Image"};
 }
 class MenuStateUIConfigBuilderTest : public Test
 {
@@ -44,9 +46,15 @@ TEST_F(MenuStateUIConfigBuilderTest, createMenuUI)
                    std::back_inserter(actualButtonsNames),
                    [](const auto& buttonConfig) { return buttonConfig->uniqueName; });
 
+    std::vector<std::string> actualImageNames;
+    std::transform(menuUI->imagesConfig.begin(), menuUI->imagesConfig.end(),
+                   std::back_inserter(actualImageNames),
+                   [](const auto& imageConfig) { return imageConfig->uniqueName; });
+
     ASSERT_EQ(menuUI->backgroundConfig->uniqueName, "menuBackground");
     ASSERT_TRUE(compareVectors(actualButtonsNames, expectedButtonNames));
     ASSERT_TRUE(menuUI->labelsConfig.empty());
     ASSERT_TRUE(menuUI->checkBoxesConfig.empty());
     ASSERT_TRUE(menuUI->textFieldsConfig.empty());
+    ASSERT_TRUE(compareVectors(actualImageNames, expectedImagesNames));
 }

@@ -48,4 +48,5 @@ TEST_F(GameStateUIConfigBuilderTest, createGameUI)
     ASSERT_TRUE(gameUI->labelsConfig.empty());
     ASSERT_TRUE(gameUI->checkBoxesConfig.empty());
     ASSERT_TRUE(gameUI->textFieldsConfig.empty());
+    ASSERT_TRUE(gameUI->imagesConfig.empty());
 }

@@ -1,8 +1,9 @@
+#include "FileSystemMapsReader.h"
+
 #include "gtest/gtest.h"
 
 #include "FileAccessMock.h"
 
-#include "FileSystemMapsReader.h"
 #include "ProjectPathReader.h"
 
 using namespace game;

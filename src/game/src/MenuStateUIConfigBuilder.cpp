@@ -29,7 +29,8 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
 {
     return std::make_unique<components::ui::UIConfig>(
         createBackgroundConfig(menuState), std::move(createButtonConfigs(menuState)),
-        createCheckBoxConfigs(menuState), createLabelConfigs(menuState), createTextFieldConfigs(menuState));
+        createCheckBoxConfigs(menuState), createLabelConfigs(menuState), createTextFieldConfigs(menuState),
+        createImageConfigs(menuState));
 }
 
 std::unique_ptr<components::ui::BackgroundConfig> MenuStateUIConfigBuilder::createBackgroundConfig(MenuState*)
@@ -194,5 +195,24 @@ std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
 MenuStateUIConfigBuilder::createTextFieldConfigs(MenuState*)
 {
     return {};
+}
+
+std::vector<std::unique_ptr<components::ui::ImageConfig>>
+MenuStateUIConfigBuilder::createImageConfigs(MenuState* menuState)
+{
+    std::vector<std::unique_ptr<components::ui::ImageConfig>> imagesConfig;
+
+    for (int iconIndex = 0; iconIndex < menuState->iconUniqueNames.size(); iconIndex++)
+    {
+        const auto iconPosition =
+            utils::Vector2f{buttonsPositions[iconIndex].x + buttonSize.x, buttonsPositions[iconIndex].y + 1};
+
+        auto imageConfig = std::make_unique<components::ui::ImageConfig>(
+            menuState->iconUniqueNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First,
+            iconPath);
+        imagesConfig.push_back(std::move(imageConfig));
+    }
+
+    return imagesConfig;
 }
 }

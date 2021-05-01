@@ -12,14 +12,6 @@ namespace game
 {
 namespace
 {
-const auto gameButtonPosition = utils::Vector2f{50, 7};
-const auto mapEditorButtonPosition = utils::Vector2f{50, 17};
-const auto controlsButtonPosition = utils::Vector2f{50, 27};
-const auto settingsButtonPosition = utils::Vector2f{50, 37};
-const auto exitButtonPosition = utils::Vector2f{50, 47};
-const std::vector<utils::Vector2f> buttonsPositions{gameButtonPosition, mapEditorButtonPosition,
-                                                    controlsButtonPosition, settingsButtonPosition,
-                                                    exitButtonPosition};
 const auto buttonColor = graphics::Color(251, 190, 102);
 const auto buttonHoverColor = graphics::Color(205, 128, 66);
 const auto buttonSize = utils::Vector2f{23, 6};
@@ -36,11 +28,11 @@ MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
       buttonNames{"menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton",
                   "menuExitButton"},
       uiManager{std::move(uiManagerInit)},
-      shouldExit{false}
+      shouldExit{false},
+      iconUniqueNames{"menuIcon1Image", "menuIcon2Image", "menuIcon3Image", "menuIcon4Image",
+                      "menuIcon5Image"}
 {
     uiManager->createUI(MenuStateUIConfigBuilder::createMenuUIConfig(this));
-
-    createIcons();
     uiManager->setColor(components::ui::UIComponentType::Button, buttonNames.at(currentButtonIndex),
                         buttonHoverColor);
     setIconVisible(currentButtonIndex);
@@ -95,24 +87,6 @@ void MenuState::deactivate()
     uiManager->deactivate();
 }
 
-void MenuState::createIcons()
-{
-    for (const auto& buttonPosition : buttonsPositions)
-    {
-        const auto iconPosition = utils::Vector2f{buttonPosition.x + buttonSize.x, buttonPosition.y + 1};
-        addIcon(iconPosition);
-    }
-}
-
-void MenuState::addIcon(const utils::Vector2f& position)
-{
-    auto icon = std::make_unique<components::core::ComponentOwner>(
-        position, "icon" + std::to_string(position.x) + std::to_string(position.y));
-    icon->addComponent<components::core::GraphicsComponent>(rendererPool, iconSize, position, iconPath,
-                                                            graphics::VisibilityLayer::First);
-    icons.push_back(std::move(icon));
-}
-
 void MenuState::changeSelectedButtonUp()
 {
     unselectAllButtons();
@@ -165,16 +139,14 @@ void MenuState::unselectAllButtons()
 void MenuState::setIconVisible(unsigned int iconIndex)
 {
     hideIcons();
-    icons[iconIndex]->getComponent<components::core::GraphicsComponent>()->setVisibility(
-        graphics::VisibilityLayer::First);
+    uiManager->activateComponent(components::ui::UIComponentType::Image, iconUniqueNames[iconIndex]);
 }
 
 void MenuState::hideIcons()
 {
-    for (auto& icon : icons)
+    for (auto& iconUniqueName : iconUniqueNames)
     {
-        icon->getComponent<components::core::GraphicsComponent>()->setVisibility(
-            graphics::VisibilityLayer::Invisible);
+        uiManager->deactivateComponent(components::ui::UIComponentType::Image, iconUniqueName);
     }
 }
 

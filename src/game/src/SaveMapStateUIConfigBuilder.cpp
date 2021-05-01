@@ -25,7 +25,7 @@ SaveMapStateUIConfigBuilder::createSaveMapUIConfig(SaveMapState* saveMapState)
     return std::make_unique<components::ui::UIConfig>(
         createBackgroundConfig(saveMapState), std::move(createButtonConfigs(saveMapState)),
         createCheckBoxConfigs(saveMapState), createLabelConfigs(saveMapState),
-        createTextFieldConfigs(saveMapState));
+        createTextFieldConfigs(saveMapState), createImageConfigs(saveMapState));
 }
 
 std::unique_ptr<components::ui::BackgroundConfig>
@@ -124,5 +124,11 @@ SaveMapStateUIConfigBuilder::createTextFieldConfigs(SaveMapState* saveMapState)
     textFieldsConfig.emplace_back(std::move(mapNameTextFieldConfig));
 
     return textFieldsConfig;
+}
+
+std::vector<std::unique_ptr<components::ui::ImageConfig>>
+SaveMapStateUIConfigBuilder::createImageConfigs(SaveMapState*)
+{
+    return {};
 }
 }

@@ -59,4 +59,5 @@ TEST_F(EditorMenuStateUIConfigBuilderTest, createEditorMenuUI)
     ASSERT_TRUE(compareVectors(actualButtonsNames, expectedButtonNames));
     ASSERT_TRUE(editorMenuUI->checkBoxesConfig.empty());
     ASSERT_TRUE(editorMenuUI->textFieldsConfig.empty());
+    ASSERT_TRUE(editorMenuUI->imagesConfig.empty());
 }

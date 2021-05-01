@@ -4,11 +4,11 @@
 
 #include "CollisionSystemMock.h"
 #include "FileAccessMock.h"
+#include "InputMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
-#include "InputMock.h"
 
 #include "StlOperators.h"
 

@@ -5,6 +5,7 @@
 #include "Background.h"
 #include "Button.h"
 #include "CheckBox.h"
+#include "Image.h"
 #include "Label.h"
 #include "TextField.h"
 #include "UIComponentFactory.h"
@@ -41,5 +42,6 @@ private:
     std::vector<std::unique_ptr<Label>> labels;
     std::vector<std::unique_ptr<TextField>> textFields;
     std::vector<std::unique_ptr<CheckBox>> checkBoxes;
+    std::vector<std::unique_ptr<Image>> images;
 };
 }

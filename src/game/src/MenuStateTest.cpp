@@ -15,6 +15,12 @@ using namespace game;
 using namespace components::ui;
 using namespace ::testing;
 
+namespace
+{
+const graphics::Color buttonHoverColor = graphics::Color(205, 128, 66);
+const utils::DeltaTime deltaTime{1.0};
+}
+
 class MenuStateTest_Base : public Test
 {
 public:
@@ -23,6 +29,19 @@ public:
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
+        EXPECT_CALL(*uiManager,
+                    setColor(components::ui::UIComponentType::Button, "menuPlayButton", buttonHoverColor));
+        EXPECT_CALL(*uiManager,
+                    deactivateComponent(components::ui::UIComponentType::Image, "menuIcon1Image"));
+        EXPECT_CALL(*uiManager,
+                    deactivateComponent(components::ui::UIComponentType::Image, "menuIcon2Image"));
+        EXPECT_CALL(*uiManager,
+                    deactivateComponent(components::ui::UIComponentType::Image, "menuIcon3Image"));
+        EXPECT_CALL(*uiManager,
+                    deactivateComponent(components::ui::UIComponentType::Image, "menuIcon4Image"));
+        EXPECT_CALL(*uiManager,
+                    deactivateComponent(components::ui::UIComponentType::Image, "menuIcon5Image"));
+        EXPECT_CALL(*uiManager, activateComponent(components::ui::UIComponentType::Image, "menuIcon1Image"));
     }
 
     std::shared_ptr<StrictMock<window::WindowMock>> window =
@@ -35,7 +54,6 @@ public:
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
     StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
-    const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
 };
 

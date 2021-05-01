@@ -8,7 +8,8 @@ enum class UIComponentType
     Button,
     CheckBox,
     Label,
-    TextField
+    TextField,
+    Image
 };
 
 enum class UIComponentTypeWithLabel

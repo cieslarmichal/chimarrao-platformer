@@ -37,4 +37,9 @@ UIComponentFactory::createTextField(std::unique_ptr<TextFieldConfig> textFieldCo
     return std::make_unique<TextField>(rendererPool, std::move(textFieldConfig));
 }
 
+std::unique_ptr<Image> UIComponentFactory::createImage(std::unique_ptr<ImageConfig> imageConfig) const
+{
+    return std::make_unique<Image>(rendererPool, std::move(imageConfig));
+}
+
 }

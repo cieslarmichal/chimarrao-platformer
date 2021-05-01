@@ -67,4 +67,5 @@ TEST_F(ControlsStateUIConfigBuilderTest, createControlsUI)
     ASSERT_TRUE(compareVectors(actualButtonsNames, expectedButtonNames));
     ASSERT_TRUE(controlsUI->checkBoxesConfig.empty());
     ASSERT_TRUE(controlsUI->textFieldsConfig.empty());
+    ASSERT_TRUE(controlsUI->imagesConfig.empty());
 }

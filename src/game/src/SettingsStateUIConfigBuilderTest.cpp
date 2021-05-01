@@ -68,4 +68,5 @@ TEST_F(SettingsStateUIConfigBuilderTest, createSettingsUI)
     ASSERT_TRUE(compareVectors(actualButtonsNames, expectedButtonNames));
     ASSERT_TRUE(compareVectors(actualCheckBoxesNames, expectedCheckBoxesNames));
     ASSERT_TRUE(settingsUI->textFieldsConfig.empty());
+    ASSERT_TRUE(settingsUI->imagesConfig.empty());
 }

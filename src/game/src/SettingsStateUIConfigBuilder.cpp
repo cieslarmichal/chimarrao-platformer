@@ -49,7 +49,7 @@ SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsStat
     return std::make_unique<components::ui::UIConfig>(
         createBackgroundConfig(settingsState), std::move(createButtonConfigs(settingsState)),
         createCheckBoxConfigs(settingsState), createLabelConfigs(settingsState),
-        createTextFieldConfigs(settingsState));
+        createTextFieldConfigs(settingsState), createImageConfigs(settingsState));
 }
 
 std::unique_ptr<components::ui::BackgroundConfig>
@@ -267,6 +267,12 @@ SettingsStateUIConfigBuilder::createLabelConfigs(SettingsState*)
 
 std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
 SettingsStateUIConfigBuilder::createTextFieldConfigs(SettingsState*)
+{
+    return {};
+}
+
+std::vector<std::unique_ptr<components::ui::ImageConfig>>
+SettingsStateUIConfigBuilder::createImageConfigs(SettingsState*)
 {
     return {};
 }

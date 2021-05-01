@@ -55,4 +55,5 @@ TEST_F(PauseStateUIConfigBuilderTest, createPauseUI)
     ASSERT_TRUE(compareVectors(actualButtonsNames, expectedButtonNames));
     ASSERT_TRUE(pauseUI->checkBoxesConfig.empty());
     ASSERT_TRUE(pauseUI->textFieldsConfig.empty());
+    ASSERT_TRUE(pauseUI->imagesConfig.empty());
 }

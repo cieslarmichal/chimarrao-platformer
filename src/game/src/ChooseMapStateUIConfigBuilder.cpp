@@ -28,7 +28,7 @@ ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(ChooseMapState* chooseMap
     return std::make_unique<components::ui::UIConfig>(
         createBackgroundConfig(chooseMapState), std::move(createButtonConfigs(chooseMapState)),
         createCheckBoxConfigs(chooseMapState), createLabelConfigs(chooseMapState),
-        createTextFieldConfigs(chooseMapState));
+        createTextFieldConfigs(chooseMapState), createImageConfigs(chooseMapState));
 }
 
 std::unique_ptr<components::ui::BackgroundConfig>
@@ -157,6 +157,12 @@ ChooseMapStateUIConfigBuilder::createLabelConfigs(ChooseMapState*)
 
 std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
 ChooseMapStateUIConfigBuilder::createTextFieldConfigs(ChooseMapState*)
+{
+    return {};
+}
+
+std::vector<std::unique_ptr<components::ui::ImageConfig>>
+ChooseMapStateUIConfigBuilder::createImageConfigs(ChooseMapState*)
 {
     return {};
 }

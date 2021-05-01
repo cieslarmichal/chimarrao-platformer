@@ -12,7 +12,8 @@ std::unique_ptr<components::ui::UIConfig> GameStateUIConfigBuilder::createGameUI
 {
     return std::make_unique<components::ui::UIConfig>(
         createBackgroundConfig(gameState), std::move(createButtonConfigs(gameState)),
-        createCheckBoxConfigs(gameState), createLabelConfigs(gameState), createTextFieldConfigs(gameState));
+        createCheckBoxConfigs(gameState), createLabelConfigs(gameState), createTextFieldConfigs(gameState),
+        createImageConfigs(gameState));
 }
 
 std::unique_ptr<components::ui::BackgroundConfig> GameStateUIConfigBuilder::createBackgroundConfig(GameState*)
@@ -42,6 +43,12 @@ GameStateUIConfigBuilder::createLabelConfigs(GameState*)
 
 std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
 GameStateUIConfigBuilder::createTextFieldConfigs(GameState*)
+{
+    return {};
+}
+
+std::vector<std::unique_ptr<components::ui::ImageConfig>>
+GameStateUIConfigBuilder::createImageConfigs(GameState*)
 {
     return {};
 }

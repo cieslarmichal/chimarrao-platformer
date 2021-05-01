@@ -61,4 +61,5 @@ TEST_F(SaveMapStateUIConfigBuilderTest, createSaveMapUI)
     ASSERT_TRUE(compareVectors(actualButtonsNames, expectedButtonNames));
     ASSERT_TRUE(saveMapUI->checkBoxesConfig.empty());
     ASSERT_TRUE(compareVectors(actualTextFieldsNames, expectedTextFieldsNames));
+    ASSERT_TRUE(saveMapUI->imagesConfig.empty());
 }

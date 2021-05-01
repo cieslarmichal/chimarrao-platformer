@@ -28,8 +28,6 @@ public:
     void deactivate() override;
 
 private:
-    void createIcons();
-    void addIcon(const utils::Vector2f& position);
     void changeSelectedButtonUp();
     void changeSelectedButtonDown();
     void changeSelectedButton(unsigned int buttonIndex);
@@ -37,12 +35,12 @@ private:
     void setIconVisible(unsigned int iconIndex);
     void hideIcons();
 
-    std::vector<std::unique_ptr<components::core::ComponentOwner>> icons;
     unsigned int currentButtonIndex;
     utils::Timer switchButtonTimer;
     const float timeAfterButtonCanBeSwitched;
     const std::vector<std::string> buttonNames;
     std::unique_ptr<components::ui::UIManager> uiManager;
     bool shouldExit;
+    std::vector<std::string> iconUniqueNames;
 };
 }

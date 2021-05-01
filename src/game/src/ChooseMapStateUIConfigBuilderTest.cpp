@@ -81,4 +81,5 @@ TEST_F(ChooseMapStateUIConfigBuilderTest, createChooseMapUI)
     ASSERT_TRUE(compareVectors(actualButtonsNames, expectedButtonNames));
     ASSERT_TRUE(chooseMapUI->checkBoxesConfig.empty());
     ASSERT_TRUE(chooseMapUI->textFieldsConfig.empty());
+    ASSERT_TRUE(chooseMapUI->imagesConfig.empty());
 }
