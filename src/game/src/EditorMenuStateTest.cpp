@@ -7,6 +7,7 @@
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
+#include "InputMock.h"
 
 using namespace game;
 using namespace components::ui;
@@ -32,6 +33,8 @@ public:
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
     StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    const utils::DeltaTime deltaTime{1.0};
+    StrictMock<input::InputMock> input;
 };
 
 class EditorMenuStateTest : public EditorMenuStateTest_Base
@@ -42,4 +45,35 @@ public:
                                     tileMap};
 };
 
-TEST_F(EditorMenuStateTest, xxx) {}
+TEST_F(EditorMenuStateTest, activate_shouldActivateUI)
+{
+    EXPECT_CALL(*uiManager, activate());
+
+    editorMenuState.activate();
+}
+
+TEST_F(EditorMenuStateTest, deactivate_shouldDeactivateUI)
+{
+    EXPECT_CALL(*uiManager, deactivate());
+
+    editorMenuState.deactivate();
+}
+
+TEST_F(EditorMenuStateTest, getType_shouldReturnChooseMap)
+{
+    ASSERT_EQ(editorMenuState.getType(), StateType::EditorMenu);
+}
+
+TEST_F(EditorMenuStateTest, render_shouldRenderAllFromRendererPool)
+{
+    EXPECT_CALL(*rendererPool, renderAll());
+
+    editorMenuState.render();
+}
+
+TEST_F(EditorMenuStateTest, update_shouldUpdateUI)
+{
+    EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
+
+    editorMenuState.update(deltaTime, input);
+}

@@ -26,7 +26,6 @@ SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
 
     supportedResolutions = window->getSupportedResolutions();
     supportedFrameLimits = window->getSupportedFrameLimits();
-    // TODO: throw if supported resolution or frameLimits == 0
 
     synchronizeWindowSettings();
     refreshWindowSettingsUI();

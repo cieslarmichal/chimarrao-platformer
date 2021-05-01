@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "FileAccessMock.h"
+#include "InputMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
@@ -34,6 +35,8 @@ public:
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
     StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    const utils::DeltaTime deltaTime{1.0};
+    StrictMock<input::InputMock> input;
 };
 
 class MenuStateTest : public MenuStateTest_Base
@@ -42,4 +45,35 @@ public:
     MenuState menuState{window, rendererPool, fileAccess, states, std::move(uiManagerInit)};
 };
 
-TEST_F(MenuStateTest, xxx) {}
+TEST_F(MenuStateTest, activate_shouldActivateUI)
+{
+    EXPECT_CALL(*uiManager, activate());
+
+    menuState.activate();
+}
+
+TEST_F(MenuStateTest, deactivate_shouldDeactivateUI)
+{
+    EXPECT_CALL(*uiManager, deactivate());
+
+    menuState.deactivate();
+}
+
+TEST_F(MenuStateTest, getType_shouldReturnChooseMap)
+{
+    ASSERT_EQ(menuState.getType(), StateType::Menu);
+}
+
+TEST_F(MenuStateTest, render_shouldRenderAllFromRendererPool)
+{
+    EXPECT_CALL(*rendererPool, renderAll());
+
+    menuState.render();
+}
+
+TEST_F(MenuStateTest, update_shouldUpdateUI)
+{
+    EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
+
+    menuState.update(deltaTime, input);
+}

@@ -8,6 +8,7 @@
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
+#include "InputMock.h"
 
 #include "StlOperators.h"
 
@@ -38,6 +39,8 @@ public:
         std::make_unique<StrictMock<physics::CollisionSystemMock>>()};
     StrictMock<physics::CollisionSystemMock>* collisionSystem{collisionSystemInit.get()};
     StrictMock<StatesMock> states;
+    const utils::DeltaTime deltaTime{1.0};
+    StrictMock<input::InputMock> input;
 };
 
 class GameStateTest : public GameStateTest_Base
@@ -47,4 +50,35 @@ public:
         window, rendererPool, fileAccess, states, std::move(uiManagerInit), std::move(collisionSystemInit)};
 };
 
-TEST_F(GameStateTest, xxx) {}
+TEST_F(GameStateTest, activate_shouldActivateUI)
+{
+    EXPECT_CALL(*uiManager, activate());
+
+    gameState.activate();
+}
+
+TEST_F(GameStateTest, deactivate_shouldDeactivateUI)
+{
+    EXPECT_CALL(*uiManager, deactivate());
+
+    gameState.deactivate();
+}
+
+TEST_F(GameStateTest, getType_shouldReturnChooseMap)
+{
+    ASSERT_EQ(gameState.getType(), StateType::Game);
+}
+
+TEST_F(GameStateTest, render_shouldRenderAllFromRendererPool)
+{
+    EXPECT_CALL(*rendererPool, renderAll());
+
+    gameState.render();
+}
+
+TEST_F(GameStateTest, update_shouldUpdateUI)
+{
+    EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
+
+    gameState.update(deltaTime, input);
+}

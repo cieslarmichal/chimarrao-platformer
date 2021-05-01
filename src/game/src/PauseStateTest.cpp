@@ -7,6 +7,7 @@
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
+#include "InputMock.h"
 
 using namespace game;
 using namespace components::ui;
@@ -32,6 +33,8 @@ public:
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
     StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    const utils::DeltaTime deltaTime{1.0};
+    StrictMock<input::InputMock> input;
 };
 
 class PauseStateTest : public PauseStateTest_Base
@@ -40,4 +43,35 @@ public:
     PauseState pauseState{window, rendererPool, fileAccess, states, std::move(uiManagerInit)};
 };
 
-TEST_F(PauseStateTest, xxx) {}
+TEST_F(PauseStateTest, activate_shouldActivateUI)
+{
+    EXPECT_CALL(*uiManager, activate());
+
+    pauseState.activate();
+}
+
+TEST_F(PauseStateTest, deactivate_shouldDeactivateUI)
+{
+    EXPECT_CALL(*uiManager, deactivate());
+
+    pauseState.deactivate();
+}
+
+TEST_F(PauseStateTest, getType_shouldReturnChooseMap)
+{
+    ASSERT_EQ(pauseState.getType(), StateType::Pause);
+}
+
+TEST_F(PauseStateTest, render_shouldRenderAllFromRendererPool)
+{
+    EXPECT_CALL(*rendererPool, renderAll());
+
+    pauseState.render();
+}
+
+TEST_F(PauseStateTest, update_shouldUpdateUI)
+{
+    EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
+
+    pauseState.update(deltaTime, input);
+}

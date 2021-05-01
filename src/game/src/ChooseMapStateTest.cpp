@@ -89,7 +89,7 @@ TEST_F(ChooseMapStateTest, render_shouldRenderAllFromRendererPool)
     chooseMapState.render();
 }
 
-TEST_F(ChooseMapStateTest, clickOnNextMapsButton_shouldLoadNextMaps)
+TEST_F(ChooseMapStateTest, update_shouldUpdateUI)
 {
     EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
 

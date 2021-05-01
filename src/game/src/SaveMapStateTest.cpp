@@ -7,6 +7,7 @@
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "ui/UIManagerMock.h"
+#include "InputMock.h"
 
 #include "StlOperators.h"
 
@@ -34,6 +35,8 @@ public:
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
     StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    const utils::DeltaTime deltaTime{1.0};
+    StrictMock<input::InputMock> input;
 };
 
 class SaveMapStateTest : public SaveMapStateTest_Base
@@ -43,4 +46,35 @@ public:
     SaveMapState saveMapState{window, rendererPool, fileAccess, states, std::move(uiManagerInit), tileMap};
 };
 
-TEST_F(SaveMapStateTest, xxx) {}
+TEST_F(SaveMapStateTest, activate_shouldActivateUI)
+{
+    EXPECT_CALL(*uiManager, activate());
+
+    saveMapState.activate();
+}
+
+TEST_F(SaveMapStateTest, deactivate_shouldDeactivateUI)
+{
+    EXPECT_CALL(*uiManager, deactivate());
+
+    saveMapState.deactivate();
+}
+
+TEST_F(SaveMapStateTest, getType_shouldReturnChooseMap)
+{
+    ASSERT_EQ(saveMapState.getType(), StateType::SaveMap);
+}
+
+TEST_F(SaveMapStateTest, render_shouldRenderAllFromRendererPool)
+{
+    EXPECT_CALL(*rendererPool, renderAll());
+
+    saveMapState.render();
+}
+
+TEST_F(SaveMapStateTest, update_shouldUpdateUI)
+{
+    EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
+
+    saveMapState.update(deltaTime, input);
+}
