@@ -123,7 +123,6 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
             components::ui::MouseOverActions{mapButtonOnMouseOver, mapButtonOnMouseOut};
         auto mapButtonClickAction = [=]
         {
-            std::cerr << mapFilePath << std::endl;
             chooseMapState->states.deactivateCurrentState();
             chooseMapState->states.addNextState(StateType::Game);
         };

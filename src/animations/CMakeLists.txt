@@ -3,9 +3,8 @@ set(SOURCES
         src/AnimatorSettingsYamlReader.cpp
         src/AnimationsFromSettingsLoader.cpp
         src/DefaultAnimatorSettingsRepository.cpp
-        src/PlayerAnimator.cpp
-        src/BunnyAnimator.cpp
-        src/DruidAnimator.cpp
+        src/SingleFileAnimator.cpp
+        src/MultipleFileAnimator.cpp
         src/DefaultAnimatorFactory.cpp
         src/AnimatorFactory.cpp
         )
@@ -17,9 +16,8 @@ set(UT_SOURCES
         src/AnimationDirectionTest.cpp
         src/AnimationsFromSettingsLoaderTest.cpp
         src/DefaultAnimatorSettingsRepositoryTest.cpp
-        src/PlayerAnimatorTest.cpp
-        src/BunnyAnimatorTest.cpp
-        src/DruidAnimatorTest.cpp
+        src/SingleFileAnimatorTest.cpp
+        src/MultipleFileAnimatorTest.cpp
         )
 
 add_library(animations SHARED ${SOURCES})

@@ -14,12 +14,12 @@
 
 namespace animations
 {
-class PlayerAnimator : public Animator
+class MultipleFileAnimator : public Animator
 {
 public:
-    PlayerAnimator(graphics::GraphicsId, std::shared_ptr<graphics::RendererPool>,
-                   const std::shared_ptr<AnimatorSettingsRepository>&, AnimationType = AnimationType::Idle,
-                   AnimationDirection = AnimationDirection::Right);
+    MultipleFileAnimator(graphics::GraphicsId, std::shared_ptr<graphics::RendererPool>,
+                         const std::shared_ptr<AnimatorSettingsRepository>&, std::string animatorName,
+                         AnimationType = AnimationType::Walk, AnimationDirection = AnimationDirection::Right);
 
     AnimationChanged update(const utils::DeltaTime&) override;
     void setAnimation(AnimationType) override;

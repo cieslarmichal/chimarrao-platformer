@@ -2,9 +2,9 @@
 
 #include "IncrementalFilePathsCreator.h"
 #include "ProjectPathReader.h"
+#include "StlOperators.h"
 #include "exceptions/AnimationsFromSettingsNotFound.h"
 #include "exceptions/InvalidAnimatorSettings.h"
-#include "StlOperators.h"
 
 namespace animations
 {

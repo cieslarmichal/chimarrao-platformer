@@ -1,10 +1,9 @@
 #include "DefaultAnimatorFactory.h"
 
 #include "AnimatorSettingsYamlReader.h"
-#include "BunnyAnimator.h"
 #include "DefaultAnimatorSettingsRepository.h"
-#include "DruidAnimator.h"
-#include "PlayerAnimator.h"
+#include "MultipleFileAnimator.h"
+#include "SingleFileAnimator.h"
 
 namespace animations
 {
@@ -17,16 +16,19 @@ DefaultAnimatorFactory::DefaultAnimatorFactory(std::shared_ptr<graphics::Rendere
 
 std::unique_ptr<Animator> DefaultAnimatorFactory::createBunnyAnimator(graphics::GraphicsId graphicsId) const
 {
-    return std::make_unique<BunnyAnimator>(graphicsId, rendererPool, animatorSettingsRepository);
+    return std::make_unique<SingleFileAnimator>(graphicsId, rendererPool, animatorSettingsRepository, "bunny",
+                                                AnimationType::Walk);
 }
 
 std::unique_ptr<Animator> DefaultAnimatorFactory::createPlayerAnimator(graphics::GraphicsId graphicsId) const
 {
-    return std::make_unique<PlayerAnimator>(graphicsId, rendererPool, animatorSettingsRepository);
+    return std::make_unique<MultipleFileAnimator>(graphicsId, rendererPool, animatorSettingsRepository,
+                                                  "player", AnimationType::Idle);
 }
 
 std::unique_ptr<Animator> DefaultAnimatorFactory::createDruidAnimator(graphics::GraphicsId graphicsId) const
 {
-    return std::make_unique<DruidAnimator>(graphicsId, rendererPool, animatorSettingsRepository);
+    return std::make_unique<MultipleFileAnimator>(graphicsId, rendererPool, animatorSettingsRepository,
+                                                  "druid", AnimationType::Walk);
 }
 }

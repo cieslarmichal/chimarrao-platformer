@@ -1,7 +1,8 @@
-#include "BunnyAnimator.h"
+#include "MultipleFileAnimator.h"
+
+#include <utility>
 
 #include "AnimationsFromSettingsLoader.h"
-#include "ProjectPathReader.h"
 #include "exceptions/AnimationTypeNotSupported.h"
 #include "exceptions/AnimatorSettingsNotFound.h"
 #include "exceptions/InvalidAnimatorSettings.h"
@@ -9,19 +10,19 @@
 namespace animations
 {
 
-BunnyAnimator::BunnyAnimator(
+MultipleFileAnimator::MultipleFileAnimator(
     graphics::GraphicsId graphicsIdInit, std::shared_ptr<graphics::RendererPool> rendererPoolInit,
     const std::shared_ptr<AnimatorSettingsRepository>& animatorSettingsRepositoryInit,
-    AnimationType animationTypeInit, AnimationDirection animationDirectionInit)
+    std::string animatorNameInit, AnimationType animationTypeInit, AnimationDirection animationDirectionInit)
     : graphicsId{graphicsIdInit},
       rendererPool{std::move(rendererPoolInit)},
       currentAnimationType{animationTypeInit},
       currentAnimationDirection{animationDirectionInit},
-      animatorName{"bunny"},
+      animatorName{std::move(animatorNameInit)},
       newAnimationTypeIsSet{false},
       newAnimationDirectionIsSet{false}
 {
-    auto animatorSettings = animatorSettingsRepositoryInit->getSingleFileAnimatorSettings(animatorName);
+    auto animatorSettings = animatorSettingsRepositoryInit->getMultipleFileAnimatorSettings(animatorName);
 
     if (not animatorSettings)
     {
@@ -45,7 +46,7 @@ BunnyAnimator::BunnyAnimator(
     rendererPool->setTexture(graphicsId, animations.at(currentAnimationType).getCurrentTextureRect());
 }
 
-AnimationChanged BunnyAnimator::update(const utils::DeltaTime& deltaTime)
+AnimationChanged MultipleFileAnimator::update(const utils::DeltaTime& deltaTime)
 {
     const auto textureChanged = animations.at(currentAnimationType).update(deltaTime);
 
@@ -63,12 +64,12 @@ AnimationChanged BunnyAnimator::update(const utils::DeltaTime& deltaTime)
     return false;
 }
 
-void BunnyAnimator::setAnimation(AnimationType animationType)
+void MultipleFileAnimator::setAnimation(AnimationType animationType)
 {
     setAnimation(animationType, currentAnimationDirection);
 }
 
-void BunnyAnimator::setAnimation(AnimationType animationType, AnimationDirection animationDirection)
+void MultipleFileAnimator::setAnimation(AnimationType animationType, AnimationDirection animationDirection)
 {
     if (not containsAnimation(animationType))
     {
@@ -91,7 +92,7 @@ void BunnyAnimator::setAnimation(AnimationType animationType, AnimationDirection
     }
 }
 
-void BunnyAnimator::setAnimationDirection(AnimationDirection animationDirection)
+void MultipleFileAnimator::setAnimationDirection(AnimationDirection animationDirection)
 {
     if (currentAnimationDirection != animationDirection)
     {
@@ -101,30 +102,30 @@ void BunnyAnimator::setAnimationDirection(AnimationDirection animationDirection)
     }
 }
 
-AnimationType BunnyAnimator::getAnimationType() const
+AnimationType MultipleFileAnimator::getAnimationType() const
 {
     return currentAnimationType;
 }
 
-AnimationDirection BunnyAnimator::getAnimationDirection() const
+AnimationDirection MultipleFileAnimator::getAnimationDirection() const
 {
     return currentAnimationDirection;
 }
 
-void BunnyAnimator::initializeAnimations(const std::vector<SingleFileAnimationSettings>& animationsSettings)
+void MultipleFileAnimator::initializeAnimations(
+    const std::vector<MultipleFilesAnimationSettings>& animationsSettings)
 {
-    AnimationsFromSettingsLoader::loadAnimationsFromSingleFileAnimationsSettings(animations,
-                                                                                 animationsSettings);
+    AnimationsFromSettingsLoader::loadAnimationsFromMultipleFilesAnimationsSettings(animations,
+                                                                                    animationsSettings);
 }
 
-bool BunnyAnimator::containsAnimation(const AnimationType& animationType) const
+bool MultipleFileAnimator::containsAnimation(const AnimationType& animationType) const
 {
     return animations.count(animationType);
 }
 
-bool BunnyAnimator::animationChanged(TextureRectChanged textureChanged) const
+bool MultipleFileAnimator::animationChanged(TextureRectChanged textureChanged) const
 {
     return textureChanged || newAnimationTypeIsSet || newAnimationDirectionIsSet;
 }
-
 }

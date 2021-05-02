@@ -14,12 +14,12 @@
 
 namespace animations
 {
-class BunnyAnimator : public Animator
+class SingleFileAnimator : public Animator
 {
 public:
-    BunnyAnimator(graphics::GraphicsId, std::shared_ptr<graphics::RendererPool>,
-                  const std::shared_ptr<AnimatorSettingsRepository>&, AnimationType = AnimationType::Walk,
-                  AnimationDirection = AnimationDirection::Right);
+    SingleFileAnimator(graphics::GraphicsId, std::shared_ptr<graphics::RendererPool>,
+                       const std::shared_ptr<AnimatorSettingsRepository>&, std::string animatorName,
+                       AnimationType, AnimationDirection = AnimationDirection::Right);
 
     AnimationChanged update(const utils::DeltaTime&) override;
     void setAnimation(AnimationType) override;

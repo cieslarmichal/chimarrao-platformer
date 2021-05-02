@@ -1,4 +1,6 @@
-#include "DruidAnimator.h"
+#include "SingleFileAnimator.h"
+
+#include <utility>
 
 #include "AnimationsFromSettingsLoader.h"
 #include "exceptions/AnimationTypeNotSupported.h"
@@ -8,18 +10,19 @@
 namespace animations
 {
 
-DruidAnimator::DruidAnimator(graphics::GraphicsId graphicsIdInit, std::shared_ptr<graphics::RendererPool> rendererPoolInit,
-                             const std::shared_ptr<AnimatorSettingsRepository>& animatorSettingsRepositoryInit, AnimationType animationTypeInit,
-                             AnimationDirection animationDirectionInit)
+SingleFileAnimator::SingleFileAnimator(
+    graphics::GraphicsId graphicsIdInit, std::shared_ptr<graphics::RendererPool> rendererPoolInit,
+    const std::shared_ptr<AnimatorSettingsRepository>& animatorSettingsRepositoryInit,
+    std::string animatorNameInit, AnimationType animationTypeInit, AnimationDirection animationDirectionInit)
     : graphicsId{graphicsIdInit},
       rendererPool{std::move(rendererPoolInit)},
       currentAnimationType{animationTypeInit},
       currentAnimationDirection{animationDirectionInit},
-      animatorName{"druid"},
+      animatorName{std::move(animatorNameInit)},
       newAnimationTypeIsSet{false},
       newAnimationDirectionIsSet{false}
 {
-    auto animatorSettings = animatorSettingsRepositoryInit->getMultipleFileAnimatorSettings(animatorName);
+    auto animatorSettings = animatorSettingsRepositoryInit->getSingleFileAnimatorSettings(animatorName);
 
     if (not animatorSettings)
     {
@@ -43,15 +46,15 @@ DruidAnimator::DruidAnimator(graphics::GraphicsId graphicsIdInit, std::shared_pt
     rendererPool->setTexture(graphicsId, animations.at(currentAnimationType).getCurrentTextureRect());
 }
 
-AnimationChanged DruidAnimator::update(const utils::DeltaTime& deltaTime)
+AnimationChanged SingleFileAnimator::update(const utils::DeltaTime& deltaTime)
 {
     const auto textureChanged = animations.at(currentAnimationType).update(deltaTime);
 
     if (animationChanged(textureChanged))
     {
         const utils::Vector2f scale = (currentAnimationDirection == AnimationDirection::Left) ?
-                                      utils::Vector2f(-1.0f, 1.0f) :
-                                      utils::Vector2f(1.0f, 1.0f);
+                                          utils::Vector2f(-1.0f, 1.0f) :
+                                          utils::Vector2f(1.0f, 1.0f);
         rendererPool->setTexture(graphicsId, animations.at(currentAnimationType).getCurrentTextureRect(),
                                  scale);
         newAnimationTypeIsSet = false;
@@ -61,12 +64,12 @@ AnimationChanged DruidAnimator::update(const utils::DeltaTime& deltaTime)
     return false;
 }
 
-void DruidAnimator::setAnimation(AnimationType animationType)
+void SingleFileAnimator::setAnimation(AnimationType animationType)
 {
     setAnimation(animationType, currentAnimationDirection);
 }
 
-void DruidAnimator::setAnimation(AnimationType animationType, AnimationDirection animationDirection)
+void SingleFileAnimator::setAnimation(AnimationType animationType, AnimationDirection animationDirection)
 {
     if (not containsAnimation(animationType))
     {
@@ -89,7 +92,7 @@ void DruidAnimator::setAnimation(AnimationType animationType, AnimationDirection
     }
 }
 
-void DruidAnimator::setAnimationDirection(AnimationDirection animationDirection)
+void SingleFileAnimator::setAnimationDirection(AnimationDirection animationDirection)
 {
     if (currentAnimationDirection != animationDirection)
     {
@@ -99,29 +102,31 @@ void DruidAnimator::setAnimationDirection(AnimationDirection animationDirection)
     }
 }
 
-AnimationType DruidAnimator::getAnimationType() const
+AnimationType SingleFileAnimator::getAnimationType() const
 {
     return currentAnimationType;
 }
 
-AnimationDirection DruidAnimator::getAnimationDirection() const
+AnimationDirection SingleFileAnimator::getAnimationDirection() const
 {
     return currentAnimationDirection;
 }
 
-void DruidAnimator::initializeAnimations(const std::vector<MultipleFilesAnimationSettings>& animationsSettings)
+void SingleFileAnimator::initializeAnimations(
+    const std::vector<SingleFileAnimationSettings>& animationsSettings)
 {
-    AnimationsFromSettingsLoader::loadAnimationsFromMultipleFilesAnimationsSettings(animations,
-                                                                                    animationsSettings);
+    AnimationsFromSettingsLoader::loadAnimationsFromSingleFileAnimationsSettings(animations,
+                                                                                 animationsSettings);
 }
 
-bool DruidAnimator::containsAnimation(const AnimationType& animationType) const
+bool SingleFileAnimator::containsAnimation(const AnimationType& animationType) const
 {
     return animations.count(animationType);
 }
 
-bool DruidAnimator::animationChanged(TextureRectChanged textureChanged) const
+bool SingleFileAnimator::animationChanged(TextureRectChanged textureChanged) const
 {
     return textureChanged || newAnimationTypeIsSet || newAnimationDirectionIsSet;
 }
+
 }

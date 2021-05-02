@@ -8,7 +8,7 @@ namespace components::core
 {
 
 KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* ownerInit)
-    : Component{ownerInit}, movementSpeed{10.f}
+    : Component{ownerInit}, movementSpeed{5.f}
 {
 }
 
