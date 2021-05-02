@@ -4,6 +4,7 @@
 #include "Color.h"
 #include "CommonUIConfigElements.h"
 #include "ProjectPathReader.h"
+#include "StlOperators.h"
 #include "Vector.h"
 
 namespace game
@@ -104,9 +105,9 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
 
     for (auto mapIndex = 0; mapIndex < chooseMapState->mapButtonsUniqueNames.size(); mapIndex++)
     {
-        const auto buttonUniqueName = chooseMapState->mapButtonsUniqueNames[mapIndex];
-        auto mapNameToDisplay = chooseMapState->mapNames[mapIndex];
-        auto mapFilePath = chooseMapState->mapFilePaths[mapIndex];
+        const auto& buttonUniqueName = chooseMapState->mapButtonsUniqueNames[mapIndex];
+        auto& mapNameToDisplay = chooseMapState->mapNames[mapIndex];
+        auto& mapFilePath = chooseMapState->mapFilePaths[mapIndex];
         const auto buttonPosition =
             firstMapButtonPosition + utils::Vector2f{0.f, static_cast<float>(mapIndex) * 6.f};
         const auto mapButtonOnMouseOver = [=]
@@ -121,9 +122,9 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
         };
         auto mapButtonMouseOverActions =
             components::ui::MouseOverActions{mapButtonOnMouseOver, mapButtonOnMouseOut};
-        auto mapButtonClickAction = [=]
+        auto mapButtonClickAction = [=, &mapFilePath]
         {
-            std::cerr << mapFilePath << std::endl;
+            chooseMapState->tileMap->loadFromFile(mapFilePath);
             chooseMapState->states.deactivateCurrentState();
             chooseMapState->states.addNextState(StateType::Game);
         };

@@ -56,7 +56,8 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
         return std::make_unique<GameState>(
             window, rendererPool, fileAccess, states,
             std::make_unique<components::ui::DefaultUIManager>(rendererPool),
-            std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()));
+            std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()),
+            tileMap);
     }
     case StateType::Menu:
     {
@@ -85,7 +86,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
         return std::make_unique<ChooseMapState>(
             window, rendererPool, fileAccess, states,
             std::make_unique<components::ui::DefaultUIManager>(rendererPool),
-            std::make_unique<FileSystemMapsReader>(fileAccess));
+            std::make_unique<FileSystemMapsReader>(fileAccess), tileMap);
     }
     default:
     {
