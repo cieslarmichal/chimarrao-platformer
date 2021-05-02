@@ -10,12 +10,14 @@ ChooseMapState::ChooseMapState(const std::shared_ptr<window::Window>& windowInit
                                const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                                std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                                std::unique_ptr<components::ui::UIManager> uiManagerInit,
-                               std::unique_ptr<MapsReader> mapsReaderInit)
+                               std::unique_ptr<MapsReader> mapsReaderInit,
+                               std::shared_ptr<TileMap> tileMapInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       uiManager{std::move(uiManagerInit)},
       mapsReader{std::move(mapsReaderInit)},
       shouldBackToMenu{false},
-      mapsCurrentPage{1}
+      mapsCurrentPage{1},
+      tileMap{tileMapInit}
 {
     mapFilePaths = mapsReader->readMapFilePaths();
     std::sort(mapFilePaths.begin(), mapFilePaths.end());
@@ -87,7 +89,7 @@ void ChooseMapState::showNextMaps()
                                mapButtonsUniqueNames[uniqueMapIndex], mapName);
             auto loadMap = [&]
             {
-                std::cerr << mapPath << std::endl;
+                tileMap->loadFromFile(mapPath);
                 states.deactivateCurrentState();
                 states.addNextState(StateType::Game);
             };
@@ -123,7 +125,7 @@ void ChooseMapState::showPreviousMaps()
                                mapButtonsUniqueNames[mapIndex], mapName);
             auto loadMap = [&]
             {
-                std::cerr << mapPath << std::endl;
+                tileMap->loadFromFile(mapPath);
                 states.deactivateCurrentState();
                 states.addNextState(StateType::Game);
             };

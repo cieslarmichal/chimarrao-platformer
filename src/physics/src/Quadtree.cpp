@@ -2,7 +2,7 @@
 
 namespace physics
 {
-Quadtree::Quadtree() : Quadtree{5, 5, 0, {0, 0, 80, 60}} {}
+Quadtree::Quadtree() : Quadtree{5, 0, 0, {0, 0, 80, 60}} {}
 
 Quadtree::Quadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsInit, int treeDepthLevelInit,
                    utils::FloatRect boundsInit)

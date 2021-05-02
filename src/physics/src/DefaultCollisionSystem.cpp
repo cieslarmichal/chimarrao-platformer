@@ -82,7 +82,6 @@ void DefaultCollisionSystem::resolve()
             }
 
             auto collisions = collisionTree.getCollidersIntersectingWithArea(collider->getCollisionBox());
-
             for (const auto& collision : collisions)
             {
                 if (collider->getOwnerId() == collision->getOwnerId())

@@ -55,12 +55,13 @@ std::string TileMap::getPath() const
 {
     return utils::ProjectPathReader::getProjectRootPath() + "maps/" + tileMapInfo.name + ".map";
 }
+
 void TileMap::setTileMapInfo(const TileMapInfo& newTileMapInfo)
 {
     tileMapInfo = newTileMapInfo;
     if (tileMapInfo.tiles.empty())
     {
-        for (int y = 0; y < tileMapInfo.mapSize.x; y++)
+        for (int y = 0; y < tileMapInfo.mapSize.y; y++)
         {
             tileMapInfo.tiles.emplace_back(tileMapInfo.mapSize.x, nullptr);
             for (auto& tile : tileMapInfo.tiles[y])
@@ -69,5 +70,17 @@ void TileMap::setTileMapInfo(const TileMapInfo& newTileMapInfo)
             }
         }
     }
+}
+
+void TileMap::loadFromFile(std::string path)
+{
+    auto mapFile = fileAccess->readContent(path);
+    auto tileMapInfoFroFile = tileMapSerializer->deserialize(mapFile);
+    setTileMapInfo(tileMapInfoFroFile);
+}
+
+utils::Vector2i TileMap::getSize() const
+{
+    return tileMapInfo.mapSize;
 }
 }

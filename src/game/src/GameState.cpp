@@ -1,5 +1,7 @@
 #include "GameState.h"
 
+#include <utility>
+
 #include "AnimatorFactory.h"
 #include "GameStateUIConfigBuilder.h"
 #include "ProjectPathReader.h"
@@ -16,12 +18,14 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                      std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                      std::unique_ptr<components::ui::UIManager> uiManagerInit,
-                     std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit)
+                     std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit,
+                     std::shared_ptr<TileMap> tileMapInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
       uiManager{std::move(uiManagerInit)},
-      componentOwnersManager{std::move(componentOwnersManagerInit)}
+      componentOwnersManager{std::move(componentOwnersManagerInit)},
+      tileMap{std::move(tileMapInit)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
@@ -34,21 +38,32 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     auto animatorsFactory = animations::AnimatorFactory::createAnimatorFactory(rendererPool);
     std::shared_ptr<animations::Animator> druidAnimator = animatorsFactory->createDruidAnimator(graphicsId);
     player->addComponent<components::core::AnimationComponent>(druidAnimator);
-    player->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{5, 5});
+    player->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{5, 5},
+                                                                 components::core::CollisionLayer::Player);
 
-    auto obstacle = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{30, 30}, "obstacle");
-    obstacle->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{5, 5}, utils::Vector2f{30, 30},
-        utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/brick.png",
-        graphics::VisibilityLayer::Second);
-    obstacle->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{5, 5});
+    for (int x = 0; x < tileMap->getSize().x; x++)
+    {
+        for (int y = 0; y < tileMap->getSize().y; y++)
+        {
+            if (tileMap->getTile(utils::Vector2i{x, y})->type)
+            {
+                auto obstacle = std::make_shared<components::core::ComponentOwner>(
+                    utils::Vector2f{x * 4.f, y * 4.f},
+                    "obstacle" + std::to_string(x) + std::to_string(y) + std::to_string(y));
+                obstacle->addComponent<components::core::GraphicsComponent>(
+                    rendererPool, utils::Vector2f{4, 4}, utils::Vector2f{x * 4.f, y * 4.f},
+                    tileTypeToPathTexture(*(tileMap->getTile(utils::Vector2i{x, y})->type)),
+                    graphics::VisibilityLayer::Second);
+                obstacle->addComponent<components::core::BoxColliderComponent>(
+                    utils::Vector2f{4, 4}, components::core::CollisionLayer::Tile);
+                componentOwnersManager->add(obstacle);
+            }
+        }
+    }
 
-    player->loadDependentComponents();
-    obstacle->loadDependentComponents();
     timer.start();
 
     componentOwnersManager->add(player);
-    componentOwnersManager->add(obstacle);
     componentOwnersManager->processNewObjects();
 }
 

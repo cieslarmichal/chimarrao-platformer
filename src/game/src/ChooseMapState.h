@@ -4,6 +4,7 @@
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
+#include "editor/TileMap.h"
 #include "ui/UIConfig.h"
 #include "ui/UIManager.h"
 
@@ -19,7 +20,8 @@ public:
     explicit ChooseMapState(const std::shared_ptr<window::Window>&,
                             const std::shared_ptr<graphics::RendererPool>&,
                             std::shared_ptr<utils::FileAccess>, States&,
-                            std::unique_ptr<components::ui::UIManager>, std::unique_ptr<MapsReader>);
+                            std::unique_ptr<components::ui::UIManager>, std::unique_ptr<MapsReader>,
+                            std::shared_ptr<TileMap>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;
@@ -41,5 +43,6 @@ private:
     unsigned int mapsPages;
     const int maximumNumberOfMapsToDisplay = 5;
     std::vector<std::string> mapButtonsUniqueNames;
+    std::shared_ptr<TileMap> tileMap;
 };
 }

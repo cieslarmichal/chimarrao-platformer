@@ -5,6 +5,7 @@
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
+#include "editor/TileMap.h"
 #include "ui/UIManager.h"
 
 namespace game
@@ -14,7 +15,8 @@ class GameState : public State
 public:
     explicit GameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
                        std::shared_ptr<utils::FileAccess>, States&,
-                       std::unique_ptr<components::ui::UIManager>, std::unique_ptr<ComponentOwnersManager>);
+                       std::unique_ptr<components::ui::UIManager>, std::unique_ptr<ComponentOwnersManager>,
+                       std::shared_ptr<TileMap>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&) override;
@@ -31,5 +33,7 @@ private:
     const float timeAfterStateCouldBePaused;
     std::unique_ptr<components::ui::UIManager> uiManager;
     std::unique_ptr<ComponentOwnersManager> componentOwnersManager;
+
+    std::shared_ptr<TileMap> tileMap;
 };
 }

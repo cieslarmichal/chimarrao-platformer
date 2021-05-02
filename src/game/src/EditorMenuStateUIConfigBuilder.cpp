@@ -10,7 +10,7 @@
 
 namespace
 {
-std::string getPathToMap();
+std::optional<std::string> getPathToMap();
 
 const auto buttonColor = graphics::Color{65, 105, 200};
 const auto buttonHoverColor = graphics::Color(4, 8, 97);
@@ -78,12 +78,12 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
         components::ui::MouseOverActions{loadMapButtonOnMouseOver, loadMapButtonOnMouseOut};
     auto loadMapClickAction = [=]
     {
-        std::cout << "load map\n";
         auto pathToMapFile = getPathToMap();
-        auto tileMapSerializer = TileMapSerializerJson();
-        auto mapText = editorMenuState->fileAccess->readContent(pathToMapFile);
-        auto tileMapInfo = tileMapSerializer.deserialize(mapText);
-        editorMenuState->tileMap->setTileMapInfo(tileMapInfo);
+        if (not pathToMapFile)
+        {
+            return;
+        }
+        editorMenuState->tileMap->loadFromFile(*pathToMapFile);
         editorMenuState->shouldBackToEditor = true;
     };
     auto loadMapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
@@ -203,29 +203,25 @@ EditorMenuStateUIConfigBuilder::createImageConfigs(EditorMenuState*)
 
 namespace
 {
-std::string getPathToMap()
+std::optional<std::string> getPathToMap()
 {
     NFD_Init();
     nfdchar_t* outPath;
     auto mapsPath = utils::ProjectPathReader::getProjectRootPath() + "maps";
-    nfdfilteritem_t filterItem[2] = {{"Map File", "map"}, {"Any file", "*"}};
-    nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 2, mapsPath.c_str());
+    nfdfilteritem_t filterItem[1] = {{"Map File", "map"}};
+    nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 1, mapsPath.c_str());
     if (result == NFD_OKAY)
     {
         auto pathToMap = std::string(outPath);
         std::cout << "Path to map: " << pathToMap << std::endl;
         NFD_FreePath(outPath);
+        NFD_Quit();
         return pathToMap;
-    }
-    else if (result == NFD_CANCEL)
-    {
-        puts("User pressed cancel.");
     }
     else
     {
-        printf("Error: %s\n", NFD_GetError());
+        NFD_Quit();
+        return std::nullopt;
     }
-    NFD_Quit();
-    return "";
 }
 }
