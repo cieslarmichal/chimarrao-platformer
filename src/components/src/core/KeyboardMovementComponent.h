@@ -2,6 +2,7 @@
 
 #include "Component.h"
 #include "Vector.h"
+#include "VelocityComponent.h"
 
 namespace components::core
 {
@@ -17,9 +18,14 @@ public:
     void setMovementSpeed(float speed);
     float getMovementSpeed() const;
 
+    bool canMoveRight;
+    bool canMoveLeft;
+    bool canMoveUp;
+    bool canMoveDown;
+
 private:
     std::shared_ptr<AnimationComponent> animation;
-    utils::Vector2f currentMovementSpeed;
+    std::shared_ptr<VelocityComponent> velocityComponent;
     float movementSpeed;
 };
 }

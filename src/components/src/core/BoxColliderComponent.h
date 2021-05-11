@@ -1,7 +1,9 @@
 #pragma once
 
-#include "ColliderComponent.h"
+#include "CollisionLayer.h"
+#include "KeyboardMovementComponent.h"
 #include "Rect.h"
+#include "VelocityComponent.h"
 
 namespace components::core
 {
@@ -10,27 +12,34 @@ enum class CollisionSource
     Left,
     Right,
     Above,
-    Below
+    Below,
+    None
 };
 
-class BoxColliderComponent : public ColliderComponent
+class BoxColliderComponent : public Component
 {
 public:
     BoxColliderComponent(ComponentOwner*, const utils::Vector2f& size,
                          CollisionLayer collisionLayer = CollisionLayer::Default,
                          const utils::Vector2f& offset = {0, 0});
 
-    bool intersects(const utils::Vector2f&) override;
-    CollisionInfo intersects(std::shared_ptr<ColliderComponent>) override;
-    void resolveOverlap(const CollisionInfo&) override;
-
+    void loadDependentComponents() override;
+    bool intersects(const utils::Vector2f&);
+    bool intersects(const std::shared_ptr<BoxColliderComponent>&);
+    void resolveOverlap(const std::shared_ptr<BoxColliderComponent>&);
+    void setAvailableMovementDirections();
     const utils::FloatRect& getCollisionBox();
+    CollisionLayer getCollisionLayer() const;
+    void setCollisionLayer(CollisionLayer layer);
 
 private:
-    static CollisionSource calculateCollisionSource(const utils::FloatRect&, const utils::FloatRect&);
-    void setPosition();
+    CollisionSource calculateCollisionSource(const utils::FloatRect&);
 
-    utils::FloatRect rect;
-    sf::Vector2f offset;
+    CollisionLayer collisionLayer;
+    const sf::Vector2f offset;
+    utils::FloatRect collisionBoundaries;
+    std::shared_ptr<KeyboardMovementComponent> movementComponent;
+    std::shared_ptr<VelocityComponent> velocityComponent;
+    utils::Vector2f size;
 };
 }

@@ -82,6 +82,7 @@ TEST_F(BoxColliderComponentTest, givenRectOutsideTarget_shouldNotIntersect)
     ASSERT_FALSE(collisionInfo.colliding);
     ASSERT_FALSE(collisionInfo.other);
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_F(BoxColliderComponentTest, resolveOverlapFromStaticTransformObject_shouldNotMove)
 {

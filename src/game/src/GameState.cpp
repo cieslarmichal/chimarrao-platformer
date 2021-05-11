@@ -9,6 +9,7 @@
 #include "core/BoxColliderComponent.h"
 #include "core/GraphicsComponent.h"
 #include "core/KeyboardMovementComponent.h"
+#include "core/VelocityComponent.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
@@ -31,15 +32,16 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
 
     auto player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10}, "player");
     auto graphicsComponent = player->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{5, 5}, utils::Vector2f{10, 10}, graphics::Color{128, 91, 50},
+        rendererPool, utils::Vector2f{4, 4}, utils::Vector2f{10, 10}, graphics::Color{128, 91, 50},
         graphics::VisibilityLayer::Second);
     auto graphicsId = graphicsComponent->getGraphicsId();
     player->addComponent<components::core::KeyboardMovementComponent>();
     auto animatorsFactory = animations::AnimatorFactory::createAnimatorFactory(rendererPool);
     std::shared_ptr<animations::Animator> druidAnimator = animatorsFactory->createDruidAnimator(graphicsId);
     player->addComponent<components::core::AnimationComponent>(druidAnimator);
-    player->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{5, 5},
+    player->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4, 4},
                                                                  components::core::CollisionLayer::Player);
+    player->addComponent<components::core::VelocityComponent>();
 
     for (int x = 0; x < tileMap->getSize().x; x++)
     {

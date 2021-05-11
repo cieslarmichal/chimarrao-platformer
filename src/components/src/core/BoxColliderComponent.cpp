@@ -1,6 +1,6 @@
 #include "BoxColliderComponent.h"
 
-#include "ComponentOwner.h"
+#include <cmath>
 
 namespace components::core
 {
@@ -8,11 +8,17 @@ namespace components::core
 BoxColliderComponent::BoxColliderComponent(ComponentOwner* owner, const utils::Vector2f& sizeInit,
                                            CollisionLayer collisionLayerInit,
                                            const utils::Vector2f& offsetInit)
-    : ColliderComponent{owner, collisionLayerInit}, offset{offsetInit}
+    : Component{owner}, collisionLayer{collisionLayerInit}, offset{offsetInit}
 {
-    rect.width = sizeInit.x;
-    rect.height = sizeInit.y;
-    setPosition();
+    collisionBoundaries.width = sizeInit.x;
+    collisionBoundaries.height = sizeInit.y;
+}
+
+void BoxColliderComponent::loadDependentComponents()
+{
+    Component::loadDependentComponents();
+
+    movementComponent = owner->getComponent<KeyboardMovementComponent>();
 }
 
 bool BoxColliderComponent::intersects(const utils::Vector2f& point)
@@ -21,31 +27,24 @@ bool BoxColliderComponent::intersects(const utils::Vector2f& point)
     return thisRect.contains(point);
 }
 
-CollisionInfo BoxColliderComponent::intersects(std::shared_ptr<ColliderComponent> other)
+bool BoxColliderComponent::intersects(const std::shared_ptr<BoxColliderComponent>& other)
 {
-    CollisionInfo collisionInfo;
-
-    std::shared_ptr<BoxColliderComponent> otherBoxCollider =
-        std::dynamic_pointer_cast<BoxColliderComponent>(other);
-
-    if (otherBoxCollider)
+    if (other)
     {
         const sf::FloatRect& thisRect = getCollisionBox();
-        const sf::FloatRect& otherRect = otherBoxCollider->getCollisionBox();
+        const sf::FloatRect& otherRect = other->getCollisionBox();
 
         if (thisRect.intersects(otherRect))
         {
-            collisionInfo.colliding = true;
-            collisionInfo.other = &otherRect;
+            return true;
         }
     }
-
-    return collisionInfo;
+    return false;
 }
 
-void BoxColliderComponent::resolveOverlap(const CollisionInfo& collisionInfo)
+void BoxColliderComponent::resolveOverlap(const std::shared_ptr<BoxColliderComponent>& other)
 {
-    if (not collisionInfo.colliding or not collisionInfo.other)
+    if (not movementComponent)
     {
         return;
     }
@@ -55,33 +54,28 @@ void BoxColliderComponent::resolveOverlap(const CollisionInfo& collisionInfo)
         return;
     }
 
-    const sf::FloatRect& rect1 = getCollisionBox();
-    const sf::FloatRect& rect2 = *collisionInfo.other;
+    const sf::FloatRect& otherRect = other->collisionBoundaries;
 
-    switch (calculateCollisionSource(rect1, rect2))
+    switch (calculateCollisionSource(otherRect))
     {
     case CollisionSource::Left:
     {
-        const auto moveRightDistance = (rect2.left + rect2.width) - rect1.left;
-        owner->transform->addPosition(moveRightDistance, 0);
+        movementComponent->canMoveLeft = false;
         return;
     }
     case CollisionSource::Right:
     {
-        const auto moveLeftDistance = -((rect1.left + rect1.width) - rect2.left);
-        owner->transform->addPosition(moveLeftDistance, 0);
+        movementComponent->canMoveRight = false;
         return;
     }
     case CollisionSource::Above:
     {
-        const auto moveDownDistance = (rect2.top + rect2.height) - rect1.top;
-        owner->transform->addPosition(0, moveDownDistance);
+        movementComponent->canMoveUp = false;
         return;
     }
     case CollisionSource::Below:
     {
-        const auto moveUpDistance = -((rect1.top + rect1.height) - rect2.top);
-        owner->transform->addPosition(0, moveUpDistance);
+        movementComponent->canMoveDown = false;
         return;
     }
     }
@@ -89,48 +83,68 @@ void BoxColliderComponent::resolveOverlap(const CollisionInfo& collisionInfo)
 
 const sf::FloatRect& BoxColliderComponent::getCollisionBox()
 {
-    setPosition();
-    return rect;
-}
-
-void BoxColliderComponent::setPosition()
-{
     const sf::Vector2f& pos = owner->transform->getPosition();
-
-    rect.left = pos.x + offset.x;
-    rect.top = pos.y + offset.y;
+    collisionBoundaries.left = pos.x + offset.x;
+    collisionBoundaries.top = pos.y + offset.y;
+    return collisionBoundaries;
 }
 
-CollisionSource BoxColliderComponent::calculateCollisionSource(const utils::FloatRect& rect1,
-                                                               const utils::FloatRect& rect2)
+CollisionSource BoxColliderComponent::calculateCollisionSource(const utils::FloatRect& otherRect)
 {
-    float xDifferenceBetweenCentrePoints =
-        (rect1.left + (rect1.width * 0.5f)) - (rect2.left + (rect2.width * 0.5f));
-    float yDifferenceBetweenCentrePoints =
-        (rect1.top + (rect1.height * 0.5f)) - (rect2.top + (rect2.height * 0.5f));
+    int distances[4];
+    const int TOP = 0;
+    const int BOT = 1;
+    const int LEFT = 2;
+    const int RIGHT = 3;
 
-    if (fabs(xDifferenceBetweenCentrePoints) > fabs(yDifferenceBetweenCentrePoints))
+    distances[TOP] = 1.42 * abs(otherRect.top + otherRect.height - collisionBoundaries.top);
+    distances[BOT] = 1.42 * abs(otherRect.top - (collisionBoundaries.top + collisionBoundaries.height));
+    distances[LEFT] = 1.42 * abs(otherRect.left + otherRect.width - collisionBoundaries.left);
+    distances[RIGHT] = 1.42 * abs(otherRect.left - (collisionBoundaries.left + collisionBoundaries.width));
+
+    if ((distances[TOP] < distances[BOT] && distances[TOP] < distances[LEFT] &&
+         distances[TOP] < distances[RIGHT]))
     {
-        if (xDifferenceBetweenCentrePoints > 0)
-        {
-            return CollisionSource::Left;
-        }
-        else
-        {
-            return CollisionSource::Right;
-        }
+        return CollisionSource::Above;
     }
-    else
+    else if ((distances[BOT] < distances[TOP] && distances[BOT] < distances[LEFT] &&
+              distances[BOT] < distances[RIGHT]))
     {
-        if (yDifferenceBetweenCentrePoints > 0)
-        {
-            return CollisionSource::Above;
-        }
-        else
-        {
-            return CollisionSource::Below;
-        }
+        return CollisionSource::Below;
     }
+    else if ((distances[LEFT] < distances[BOT] && distances[LEFT] < distances[TOP] &&
+              distances[LEFT] < distances[RIGHT]))
+    {
+        return CollisionSource::Left;
+    }
+    else if ((distances[RIGHT] < distances[BOT] && distances[RIGHT] < distances[LEFT] &&
+              distances[RIGHT] < distances[TOP]))
+    {
+        return CollisionSource::Right;
+    }
+
+    return CollisionSource::None;
+}
+
+void BoxColliderComponent::setAvailableMovementDirections()
+{
+    if (movementComponent)
+    {
+        movementComponent->canMoveRight = true;
+        movementComponent->canMoveLeft = true;
+        movementComponent->canMoveUp = true;
+        movementComponent->canMoveDown = true;
+    }
+}
+
+CollisionLayer BoxColliderComponent::getCollisionLayer() const
+{
+    return collisionLayer;
+}
+
+void BoxColliderComponent::setCollisionLayer(CollisionLayer layer)
+{
+    collisionLayer = layer;
 }
 
 }

@@ -82,6 +82,7 @@ void DefaultCollisionSystem::resolve()
             }
 
             auto collisions = collisionTree.getCollidersIntersectingWithArea(collider->getCollisionBox());
+            collider->setAvailableMovementDirections();
             for (const auto& collision : collisions)
             {
                 if (collider->getOwnerId() == collision->getOwnerId())
@@ -94,9 +95,9 @@ void DefaultCollisionSystem::resolve()
 
                 if (layersCollide)
                 {
-                    if (auto collisionInfo = collider->intersects(collision); collisionInfo.colliding)
+                    if (collider->intersects(collision))
                     {
-                        collider->resolveOverlap(collisionInfo);
+                        collider->resolveOverlap(collision);
                     }
                 }
             }

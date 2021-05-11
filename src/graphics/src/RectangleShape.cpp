@@ -9,6 +9,8 @@ RectangleShape::RectangleShape(GraphicsId graphicsId, const utils::Vector2f& siz
     setSize(size);
     setPosition(position);
     setFillColor(color);
+    setOutlineThickness(0.1);
+    setOutlineColor(Color::Black);
 }
 
 GraphicsId RectangleShape::getGraphicsId() const
