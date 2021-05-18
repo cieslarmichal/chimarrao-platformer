@@ -28,7 +28,7 @@ public:
     virtual ~State();
 
     virtual NextState update(const utils::DeltaTime&, const input::Input&) = 0;
-    virtual void lateUpdate(const utils::DeltaTime&) = 0;
+    virtual void lateUpdate(const utils::DeltaTime&, const input::Input&) = 0;
     virtual void render() = 0;
     virtual StateType getType() const = 0;
     virtual void activate() = 0;

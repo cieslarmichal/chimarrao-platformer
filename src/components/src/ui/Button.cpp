@@ -64,7 +64,7 @@ void Button::update(utils::DeltaTime deltaTime, const input::Input& input)
     }
 
     coreComponentsOwner->update(deltaTime, input);
-    coreComponentsOwner->lateUpdate(deltaTime);
+    coreComponentsOwner->lateUpdate(deltaTime, input);
 }
 
 std::string Button::getName() const

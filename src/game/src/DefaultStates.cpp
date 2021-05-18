@@ -37,7 +37,7 @@ StatesStatus DefaultStates::updateCurrentState(const utils::DeltaTime& deltaTime
         return StatesStatus::Exit;
     }
 
-    states.top()->lateUpdate(deltaTime);
+    states.top()->lateUpdate(deltaTime, input);
     return StatesStatus::Running;
 }
 

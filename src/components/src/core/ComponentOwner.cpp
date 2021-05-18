@@ -27,11 +27,11 @@ void ComponentOwner::update(utils::DeltaTime deltaTime, const input::Input& inpu
     }
 }
 
-void ComponentOwner::lateUpdate(utils::DeltaTime deltaTime)
+void ComponentOwner::lateUpdate(utils::DeltaTime deltaTime, const input::Input& input)
 {
     for (int i = static_cast<int>(components.size() - 1); i >= 0; i--)
     {
-        components[i]->lateUpdate(deltaTime);
+        components[i]->lateUpdate(deltaTime, input);
     }
 }
 

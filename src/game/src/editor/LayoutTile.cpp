@@ -98,7 +98,7 @@ void LayoutTile::update(const utils::DeltaTime& deltaTime, const input::Input& i
         }
     }
     componentOwner->update(deltaTime, input);
-    componentOwner->lateUpdate(deltaTime);
+    componentOwner->lateUpdate(deltaTime, input);
 }
 
 void LayoutTile::activate()

@@ -32,12 +32,12 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
 
     auto player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10}, "player");
     auto graphicsComponent = player->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{4, 4}, utils::Vector2f{10, 10}, graphics::Color{128, 91, 50},
+        rendererPool, utils::Vector2f{4, 4}, utils::Vector2f{10, 10}, graphics::Color::White,
         graphics::VisibilityLayer::Second);
     auto graphicsId = graphicsComponent->getGraphicsId();
     player->addComponent<components::core::KeyboardMovementComponent>();
     auto animatorsFactory = animations::AnimatorFactory::createAnimatorFactory(rendererPool);
-    std::shared_ptr<animations::Animator> druidAnimator = animatorsFactory->createDruidAnimator(graphicsId);
+    std::shared_ptr<animations::Animator> druidAnimator = animatorsFactory->createPlayerAnimator(graphicsId);
     player->addComponent<components::core::AnimationComponent>(druidAnimator);
     player->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4, 4},
                                                                  components::core::CollisionLayer::Player);
@@ -86,7 +86,7 @@ NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Inpu
     return NextState::Same;
 }
 
-void GameState::lateUpdate(const utils::DeltaTime&) {}
+void GameState::lateUpdate(const utils::DeltaTime&, const input::Input&) {}
 
 void GameState::render()
 {

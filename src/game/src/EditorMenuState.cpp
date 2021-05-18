@@ -47,7 +47,7 @@ NextState EditorMenuState::update(const utils::DeltaTime& deltaTime, const input
     return NextState::Same;
 }
 
-void EditorMenuState::lateUpdate(const utils::DeltaTime&) {}
+void EditorMenuState::lateUpdate(const utils::DeltaTime&, const input::Input&) {}
 
 void EditorMenuState::render()
 {

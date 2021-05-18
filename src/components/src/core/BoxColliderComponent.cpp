@@ -12,6 +12,12 @@ BoxColliderComponent::BoxColliderComponent(ComponentOwner* owner, const utils::V
 {
     collisionBoundaries.width = sizeInit.x;
     collisionBoundaries.height = sizeInit.y;
+    nextFrameCollisionBoundaries = collisionBoundaries;
+}
+
+void BoxColliderComponent::update(utils::DeltaTime deltaTime, const input::Input&)
+{
+    currentDeltaTime = deltaTime;
 }
 
 void BoxColliderComponent::loadDependentComponents()
@@ -19,11 +25,12 @@ void BoxColliderComponent::loadDependentComponents()
     Component::loadDependentComponents();
 
     movementComponent = owner->getComponent<KeyboardMovementComponent>();
+    velocityComponent = owner->getComponent<VelocityComponent>();
 }
 
 bool BoxColliderComponent::intersects(const utils::Vector2f& point)
 {
-    const sf::FloatRect& thisRect = getCollisionBox();
+    const utils::FloatRect& thisRect = getNextFrameCollisionBox();
     return thisRect.contains(point);
 }
 
@@ -31,8 +38,8 @@ bool BoxColliderComponent::intersects(const std::shared_ptr<BoxColliderComponent
 {
     if (other)
     {
-        const sf::FloatRect& thisRect = getCollisionBox();
-        const sf::FloatRect& otherRect = other->getCollisionBox();
+        const utils::FloatRect& thisRect = getNextFrameCollisionBox();
+        const utils::FloatRect& otherRect = other->getNextFrameCollisionBox();
 
         if (thisRect.intersects(otherRect))
         {
@@ -54,7 +61,7 @@ void BoxColliderComponent::resolveOverlap(const std::shared_ptr<BoxColliderCompo
         return;
     }
 
-    const sf::FloatRect& otherRect = other->collisionBoundaries;
+    const utils::FloatRect& otherRect = other->collisionBoundaries;
 
     switch (calculateCollisionSource(otherRect))
     {
@@ -89,18 +96,34 @@ const sf::FloatRect& BoxColliderComponent::getCollisionBox()
     return collisionBoundaries;
 }
 
+const utils::FloatRect& BoxColliderComponent::getNextFrameCollisionBox()
+{
+    getCollisionBox();
+
+    if (not velocityComponent)
+    {
+        return collisionBoundaries;
+    }
+    nextFrameCollisionBoundaries.left =
+        collisionBoundaries.left + velocityComponent->getVelocity().x * currentDeltaTime.count();
+    nextFrameCollisionBoundaries.top =
+        collisionBoundaries.top + velocityComponent->getVelocity().y * currentDeltaTime.count();
+
+    return nextFrameCollisionBoundaries;
+}
+
 CollisionSource BoxColliderComponent::calculateCollisionSource(const utils::FloatRect& otherRect)
 {
-    int distances[4];
+    float distances[4];
     const int TOP = 0;
     const int BOT = 1;
     const int LEFT = 2;
     const int RIGHT = 3;
 
-    distances[TOP] = 1.42 * abs(otherRect.top + otherRect.height - collisionBoundaries.top);
-    distances[BOT] = 1.42 * abs(otherRect.top - (collisionBoundaries.top + collisionBoundaries.height));
-    distances[LEFT] = 1.42 * abs(otherRect.left + otherRect.width - collisionBoundaries.left);
-    distances[RIGHT] = 1.42 * abs(otherRect.left - (collisionBoundaries.left + collisionBoundaries.width));
+    distances[TOP] = abs(otherRect.top + otherRect.height - nextFrameCollisionBoundaries.top);
+    distances[BOT] = abs(otherRect.top - (nextFrameCollisionBoundaries.top + nextFrameCollisionBoundaries.height));
+    distances[LEFT] = abs(otherRect.left + otherRect.width - nextFrameCollisionBoundaries.left);
+    distances[RIGHT] = abs(otherRect.left - (nextFrameCollisionBoundaries.left + nextFrameCollisionBoundaries.width));
 
     if ((distances[TOP] < distances[BOT] && distances[TOP] < distances[LEFT] &&
          distances[TOP] < distances[RIGHT]))

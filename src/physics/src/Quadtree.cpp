@@ -19,7 +19,7 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
     if (children[0])
     {
         const int indexToPlaceObject =
-            getIndexIndicatingToWhichNodeColliderBelongs(colliderToInsert->getCollisionBox());
+            getIndexIndicatingToWhichNodeColliderBelongs(colliderToInsert->getNextFrameCollisionBox());
 
         if (indexToPlaceObject != thisTreeIndex)
         {
@@ -36,7 +36,7 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
         for (auto& collider : colliders)
         {
             if (const int indexToPlaceObject =
-                    getIndexIndicatingToWhichNodeColliderBelongs(collider->getCollisionBox());
+                    getIndexIndicatingToWhichNodeColliderBelongs(collider->getNextFrameCollisionBox());
                 indexToPlaceObject != thisTreeIndex)
             {
                 children[indexToPlaceObject]->insertCollider(collider);
@@ -46,7 +46,7 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
         colliders.erase(std::remove_if(colliders.begin(), colliders.end(),
                                        [&](auto& collider) {
                                            return getIndexIndicatingToWhichNodeColliderBelongs(
-                                                      collider->getCollisionBox()) != thisTreeIndex;
+                                                      collider->getNextFrameCollisionBox()) != thisTreeIndex;
                                        }),
                         colliders.end());
     }
@@ -54,7 +54,7 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
 
 void Quadtree::removeCollider(const std::shared_ptr<components::core::BoxColliderComponent>& colliderToRemove)
 {
-    const int index = getIndexIndicatingToWhichNodeColliderBelongs(colliderToRemove->getCollisionBox());
+    const int index = getIndexIndicatingToWhichNodeColliderBelongs(colliderToRemove->getNextFrameCollisionBox());
 
     if (index != thisTreeIndex && children[index])
     {
@@ -91,7 +91,7 @@ Quadtree::getCollidersIntersectingWithArea(const utils::FloatRect& area) const
 
     for (const auto& possibleCollider : possibleColliders)
     {
-        if (area.intersects(possibleCollider->getCollisionBox()))
+        if (area.intersects(possibleCollider->getNextFrameCollisionBox()))
         {
             collidersIntersectingWithArea.emplace_back(possibleCollider);
         }

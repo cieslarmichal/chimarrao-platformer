@@ -19,7 +19,7 @@ public:
                   const utils::Vector2f& transformOffset = utils::Vector2f{0, 0});
     ~TextComponent();
 
-    void lateUpdate(utils::DeltaTime) override;
+    void lateUpdate(utils::DeltaTime, const input::Input& input) override;
     const graphics::GraphicsId& getGraphicsId();
     void setColor(const graphics::Color&);
     void setText(const std::string&);

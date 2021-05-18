@@ -79,13 +79,13 @@ NextState EditorState::update(const utils::DeltaTime& deltaTime, const input::In
     return NextState::Same;
 }
 
-void EditorState::lateUpdate(const utils::DeltaTime& deltaTime)
+void EditorState::lateUpdate(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
     if (not paused)
     {
         for (auto& tile : clickableTileMap)
         {
-            tile->lateUpdate(deltaTime);
+            tile->lateUpdate(deltaTime, input);
         }
     }
 }

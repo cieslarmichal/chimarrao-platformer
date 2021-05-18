@@ -7,6 +7,7 @@
 #include "ComponentOwner.h"
 #include "DeltaTime.h"
 #include "GraphicsIdGenerator.h"
+#include "InputMock.h"
 
 using namespace components::core;
 using namespace graphics;
@@ -55,6 +56,7 @@ public:
         std::make_shared<StrictMock<RendererPoolMock>>();
     ComponentOwner componentOwner{position1, "textComponentTest"};
     utils::DeltaTime deltaTime{1};
+    input::InputMock input;
 };
 
 TEST_F(TextComponentTest, createTextComponent_shouldCreateGraphicsObject)
@@ -87,7 +89,7 @@ TEST_F(TextComponentTest,
     componentOwner.transform->setPosition(position2);
     EXPECT_CALL(*rendererPool, setPosition(graphicsId, position2));
 
-    textComponent->lateUpdate(deltaTime);
+    textComponent->lateUpdate(deltaTime, input);
 
     expectReleaseGraphicsId();
 }

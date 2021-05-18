@@ -3,12 +3,13 @@
 #include "AnimationComponent.h"
 #include "ComponentOwner.h"
 #include "exceptions/DependentComponentNotFound.h"
+#include "BoxColliderComponent.h"
 
 namespace components::core
 {
 
 KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* ownerInit)
-    : Component{ownerInit}, movementSpeed{5.f}
+    : Component{ownerInit}, movementSpeed{5.f}, previousMovementSpeedY{0.f}
 {
 }
 
@@ -27,6 +28,9 @@ void KeyboardMovementComponent::loadDependentComponents()
         throw exceptions::DependentComponentNotFound{
             "KeyboardMovementComponent: Velocity component not found"};
     }
+
+    boxColliderComponent = owner->getComponent<BoxColliderComponent>();
+
 }
 
 void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
@@ -38,50 +42,67 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
 
     auto currentMovementSpeed = velocityComponent->getVelocity();
 
-    if (input.isKeyPressed(input::InputKey::Left) && canMoveLeft)
+    if (input.isKeyPressed(input::InputKey::Left))
     {
 
         currentMovementSpeed.x = -movementSpeed;
-
         animation->setAnimationDirection(animations::AnimationDirection::Left);
     }
-    else if (input.isKeyPressed(input::InputKey::Right) && canMoveRight)
+    else if (input.isKeyPressed(input::InputKey::Right))
     {
         currentMovementSpeed.x = movementSpeed;
         animation->setAnimationDirection(animations::AnimationDirection::Right);
     }
     else
     {
-        currentMovementSpeed.x = 0;
+        currentMovementSpeed.x = 0.f;
     }
 
-    if (input.isKeyPressed(input::InputKey::Up) && canMoveUp && not canMoveDown)
+    if (input.isKeyPressed(input::InputKey::Up) && not canMoveDown && canMoveUp)
     {
+        std::cerr << boxColliderComponent->getNextFrameCollisionBox()<< std::endl;
         currentMovementSpeed.y = -2.5f * movementSpeed;
     }
     else
     {
-        if (not canMoveUp && currentMovementSpeed.y < 0.f)
-        {
-            currentMovementSpeed.y = 0.f;
-        }
-        else if (canMoveDown)
-        {
-            currentMovementSpeed.y += 15.f * deltaTime.count();
-        }
-        else
-        {
-            currentMovementSpeed.y = 0;
-        }
+        currentMovementSpeed.y += 15.f * deltaTime.count();
     }
 
-    if (currentMovementSpeed.x == 0 && currentMovementSpeed.y == 0)
+    if (currentMovementSpeed.x == 0.f && currentMovementSpeed.y == 0.f)
     {
         animation->setAnimation(animations::AnimationType::Idle);
     }
     else
     {
         animation->setAnimation(animations::AnimationType::Walk);
+    }
+    velocityComponent->setVelocity(currentMovementSpeed);
+}
+
+void KeyboardMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input& input)
+{
+    if (not enabled)
+    {
+        return;
+    }
+
+    auto currentMovementSpeed = velocityComponent->getVelocity();
+
+    if (currentMovementSpeed.x < 0 and not canMoveLeft)
+    {
+        currentMovementSpeed.x = 0;
+    }
+    if (currentMovementSpeed.x > 0 and not canMoveRight)
+    {
+        currentMovementSpeed.x = 0;
+    }
+    if (currentMovementSpeed.y < 0 and not canMoveUp)
+    {
+        currentMovementSpeed.y = 0;
+    }
+    if (currentMovementSpeed.y > 0 and not canMoveDown)
+    {
+        currentMovementSpeed.y = 0;
     }
 
     velocityComponent->setVelocity(currentMovementSpeed);
@@ -99,5 +120,4 @@ float KeyboardMovementComponent::getMovementSpeed() const
 {
     return movementSpeed;
 }
-
 }

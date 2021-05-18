@@ -42,7 +42,7 @@ NextState SettingsState::update(const utils::DeltaTime& deltaTime, const input::
     return NextState::Same;
 }
 
-void SettingsState::lateUpdate(const utils::DeltaTime&) {}
+void SettingsState::lateUpdate(const utils::DeltaTime&, const input::Input&) {}
 
 void SettingsState::render()
 {

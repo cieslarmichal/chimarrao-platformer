@@ -29,7 +29,7 @@ NextState ControlsState::update(const utils::DeltaTime& deltaTime, const input::
     return NextState::Same;
 }
 
-void ControlsState::lateUpdate(const utils::DeltaTime&) {}
+void ControlsState::lateUpdate(const utils::DeltaTime&, const input::Input&) {}
 
 void ControlsState::render()
 {

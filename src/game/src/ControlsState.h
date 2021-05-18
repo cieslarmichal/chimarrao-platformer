@@ -18,7 +18,7 @@ public:
                            States&, std::unique_ptr<components::ui::UIManager>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
-    void lateUpdate(const utils::DeltaTime&) override;
+    void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
     void render() override;
     StateType getType() const override;
     void activate() override;

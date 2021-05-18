@@ -19,7 +19,7 @@ public:
 
     void loadDependentComponents();
     void update(utils::DeltaTime, const input::Input&);
-    void lateUpdate(utils::DeltaTime);
+    void lateUpdate(utils::DeltaTime, const input::Input& input);
     void enable();
     void disable();
     std::string getName() const;

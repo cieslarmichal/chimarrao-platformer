@@ -45,7 +45,7 @@ NextState PauseState::update(const utils::DeltaTime& deltaTime, const input::Inp
     return NextState::Same;
 }
 
-void PauseState::lateUpdate(const utils::DeltaTime&) {}
+void PauseState::lateUpdate(const utils::DeltaTime&, const input::Input&) {}
 
 void PauseState::render()
 {

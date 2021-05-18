@@ -35,7 +35,7 @@ NextState SaveMapState::update(const utils::DeltaTime& deltaTime, const input::I
     return NextState::Same;
 }
 
-void SaveMapState::lateUpdate(const utils::DeltaTime&) {}
+void SaveMapState::lateUpdate(const utils::DeltaTime&, const input::Input&) {}
 
 void SaveMapState::render()
 {

@@ -48,7 +48,7 @@ NextState ChooseMapState::update(const utils::DeltaTime& deltaTime, const input:
     return NextState::Same;
 }
 
-void ChooseMapState::lateUpdate(const utils::DeltaTime&) {}
+void ChooseMapState::lateUpdate(const utils::DeltaTime&, const input::Input&) {}
 
 void ChooseMapState::render()
 {

@@ -16,7 +16,7 @@ public:
 
     virtual void loadDependentComponents();
     virtual void update(utils::DeltaTime, const input::Input&);
-    virtual void lateUpdate(utils::DeltaTime);
+    virtual void lateUpdate(utils::DeltaTime, const input::Input& input);
     virtual void enable();
     virtual void disable();
     bool isEnabled() const;

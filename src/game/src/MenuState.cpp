@@ -63,7 +63,7 @@ NextState MenuState::update(const utils::DeltaTime& deltaTime, const input::Inpu
     return NextState::Same;
 }
 
-void MenuState::lateUpdate(const utils::DeltaTime&) {}
+void MenuState::lateUpdate(const utils::DeltaTime&, const input::Input&) {}
 
 void MenuState::render()
 {

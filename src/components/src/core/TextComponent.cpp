@@ -23,7 +23,7 @@ TextComponent::~TextComponent()
     rendererPool->release(id);
 }
 
-void TextComponent::lateUpdate(utils::DeltaTime)
+void TextComponent::lateUpdate(utils::DeltaTime, const input::Input&)
 {
     if (enabled)
     {

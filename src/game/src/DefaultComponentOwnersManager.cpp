@@ -21,10 +21,14 @@ void DefaultComponentOwnersManager::update(const utils::DeltaTime& deltaTime, co
     for (auto& componentOwner : componentOwners)
     {
         componentOwner->update(deltaTime, input);
-        componentOwner->lateUpdate(deltaTime);
     }
 
     collisionSystem->update();
+
+    for (auto& componentOwner : componentOwners)
+    {
+        componentOwner->lateUpdate(deltaTime, input);
+    }
 }
 
 void DefaultComponentOwnersManager::processNewObjects()

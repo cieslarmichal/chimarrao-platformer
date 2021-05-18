@@ -18,7 +18,7 @@ public:
     {
         auto boxCollider = owner.addComponent<BoxColliderComponent>(size, CollisionLayer::Default, offset);
         clickableComponent.loadDependentComponents();
-        boxCollider->lateUpdate(deltaTime);
+        boxCollider->lateUpdate(deltaTime, input);
     }
 
     void clickAction(int& actionVariableInit)

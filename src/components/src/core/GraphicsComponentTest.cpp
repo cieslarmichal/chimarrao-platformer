@@ -7,6 +7,7 @@
 #include "ComponentOwner.h"
 #include "DeltaTime.h"
 #include "GraphicsIdGenerator.h"
+#include "InputMock.h"
 
 using namespace ::testing;
 using namespace graphics;
@@ -51,6 +52,7 @@ public:
     ComponentOwner componentOwner{position1, "graphicsComponentTest"};
     utils::DeltaTime deltaTime{1};
     graphics::TexturePath texturePath{"/path/to/texture"};
+    input::InputMock input;
 };
 
 TEST_F(GraphicsComponentTest, createGraphicsComponent_shouldCreateGraphicsShape)
@@ -91,7 +93,7 @@ TEST_F(GraphicsComponentTest, lateUpdate_shouldSynchronizePositionWithTransformC
     componentOwner.transform->setPosition(position2);
     EXPECT_CALL(*rendererPool, setPosition(graphicsId, position2));
 
-    graphicsComponent->lateUpdate(deltaTime);
+    graphicsComponent->lateUpdate(deltaTime, input);
 
     expectReleaseGraphicsId();
 }
@@ -104,7 +106,7 @@ TEST_F(GraphicsComponentTest, componentDisabled_lateUpdate_shouldNotSynchronizeP
     EXPECT_CALL(*rendererPool, setVisibility(graphicsId, invisible));
     graphicsComponent->disable();
 
-    graphicsComponent->lateUpdate(deltaTime);
+    graphicsComponent->lateUpdate(deltaTime, input);
 
     expectReleaseGraphicsId();
 }

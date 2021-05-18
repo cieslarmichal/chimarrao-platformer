@@ -26,7 +26,7 @@ Image::Image(const std::shared_ptr<graphics::RendererPool>& rendererPool,
 void Image::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
     coreComponentsOwner->update(deltaTime, input);
-    coreComponentsOwner->lateUpdate(deltaTime);
+    coreComponentsOwner->lateUpdate(deltaTime, input);
 }
 
 std::string Image::getName() const

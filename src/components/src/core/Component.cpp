@@ -10,7 +10,7 @@ void Component::loadDependentComponents() {}
 
 void Component::update(utils::DeltaTime, const input::Input&) {}
 
-void Component::lateUpdate(utils::DeltaTime) {}
+void Component::lateUpdate(utils::DeltaTime, const input::Input&) {}
 
 void Component::enable()
 {

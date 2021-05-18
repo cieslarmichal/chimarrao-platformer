@@ -81,7 +81,7 @@ void DefaultCollisionSystem::resolve()
                 continue;
             }
 
-            auto collisions = collisionTree.getCollidersIntersectingWithArea(collider->getCollisionBox());
+            auto collisions = collisionTree.getCollidersIntersectingWithArea(collider->getNextFrameCollisionBox());
             collider->setAvailableMovementDirections();
             for (const auto& collision : collisions)
             {
