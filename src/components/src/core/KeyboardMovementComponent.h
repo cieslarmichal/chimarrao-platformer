@@ -30,6 +30,5 @@ private:
     std::shared_ptr<VelocityComponent> velocityComponent;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     float movementSpeed;
-    float previousMovementSpeedY;
 };
 }

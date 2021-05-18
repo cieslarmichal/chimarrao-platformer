@@ -9,7 +9,7 @@ namespace components::core
 {
 
 KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* ownerInit)
-    : Component{ownerInit}, movementSpeed{5.f}, previousMovementSpeedY{0.f}
+    : Component{ownerInit}, movementSpeed{7.f}
 {
 }
 
@@ -60,15 +60,14 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
 
     if (input.isKeyPressed(input::InputKey::Up) && not canMoveDown && canMoveUp)
     {
-        std::cerr << boxColliderComponent->getNextFrameCollisionBox()<< std::endl;
-        currentMovementSpeed.y = -2.5f * movementSpeed;
+        currentMovementSpeed.y = -2.89f * 5.f;
     }
     else
     {
-        currentMovementSpeed.y += 15.f * deltaTime.count();
+        currentMovementSpeed.y += 20.f * deltaTime.count();
     }
 
-    if (currentMovementSpeed.x == 0.f && currentMovementSpeed.y == 0.f)
+    if (currentMovementSpeed.x == 0.f)
     {
         animation->setAnimation(animations::AnimationType::Idle);
     }

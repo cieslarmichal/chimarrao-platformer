@@ -1,5 +1,6 @@
 #include "BoxColliderComponent.h"
 
+#include <array>
 #include <cmath>
 
 namespace components::core
@@ -114,11 +115,11 @@ const utils::FloatRect& BoxColliderComponent::getNextFrameCollisionBox()
 
 CollisionSource BoxColliderComponent::calculateCollisionSource(const utils::FloatRect& otherRect)
 {
-    float distances[4];
-    const int TOP = 0;
-    const int BOT = 1;
-    const int LEFT = 2;
-    const int RIGHT = 3;
+    std::array<float, 4> distances{};
+    constexpr int TOP = 0;
+    constexpr int BOT = 1;
+    constexpr int LEFT = 2;
+    constexpr int RIGHT = 3;
 
     distances[TOP] = abs(otherRect.top + otherRect.height - nextFrameCollisionBoundaries.top);
     distances[BOT] = abs(otherRect.top - (nextFrameCollisionBoundaries.top + nextFrameCollisionBoundaries.height));

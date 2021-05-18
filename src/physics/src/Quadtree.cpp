@@ -44,7 +44,8 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
         }
 
         colliders.erase(std::remove_if(colliders.begin(), colliders.end(),
-                                       [&](auto& collider) {
+                                       [&](auto& collider)
+                                       {
                                            return getIndexIndicatingToWhichNodeColliderBelongs(
                                                       collider->getNextFrameCollisionBox()) != thisTreeIndex;
                                        }),
@@ -54,7 +55,8 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
 
 void Quadtree::removeCollider(const std::shared_ptr<components::core::BoxColliderComponent>& colliderToRemove)
 {
-    const int index = getIndexIndicatingToWhichNodeColliderBelongs(colliderToRemove->getNextFrameCollisionBox());
+    const int index =
+        getIndexIndicatingToWhichNodeColliderBelongs(colliderToRemove->getNextFrameCollisionBox());
 
     if (index != thisTreeIndex && children[index])
     {
@@ -87,16 +89,42 @@ Quadtree::getCollidersIntersectingWithArea(const utils::FloatRect& area) const
 {
     const auto possibleColliders = getAllCollidersFromQuadtreeNodesIntersectingWithArea(area);
 
-    std::vector<std::shared_ptr<components::core::BoxColliderComponent>> collidersIntersectingWithArea;
+    std::vector<std::pair<std::shared_ptr<components::core::BoxColliderComponent>, double>>
+        collidersIntersectingWithAreaAndDistance;
 
     for (const auto& possibleCollider : possibleColliders)
     {
         if (area.intersects(possibleCollider->getNextFrameCollisionBox()))
         {
-            collidersIntersectingWithArea.emplace_back(possibleCollider);
+            auto& collider = possibleCollider->getNextFrameCollisionBox();
+            double distance = pow((area.top + area.height / 2) - (collider.top + collider.height / 2), 2) +
+                              pow((area.left + area.width / 2) - (collider.left + collider.width / 2), 2);
+            if (distance > 0.0)
+            {
+                collidersIntersectingWithAreaAndDistance.emplace_back(
+                    std::pair<std::shared_ptr<components::core::BoxColliderComponent>, double>(
+                        possibleCollider, distance));
+            }
         }
     }
+    if(collidersIntersectingWithAreaAndDistance.empty())
+    {
+        return {};
+    }
 
+    double minDistance = std::min_element(collidersIntersectingWithAreaAndDistance.begin(),
+                     collidersIntersectingWithAreaAndDistance.end(),
+                     [](auto lhs, auto rhs) { return lhs.second < rhs.second; })->second;
+
+
+    std::vector<std::shared_ptr<components::core::BoxColliderComponent>> collidersIntersectingWithArea;
+    for (const auto& pair : collidersIntersectingWithAreaAndDistance)
+    {
+        if (pair.second / minDistance < 1.3f)
+        {
+            collidersIntersectingWithArea.push_back(pair.first);
+        }
+    }
     return collidersIntersectingWithArea;
 }
 
