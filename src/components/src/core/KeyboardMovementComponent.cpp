@@ -60,11 +60,11 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
 
     if (input.isKeyPressed(input::InputKey::Up) && not canMoveDown && canMoveUp)
     {
-        currentMovementSpeed.y = -2.89f * 5.f;
+        currentMovementSpeed.y = -3.4f * 5.f;
     }
     else
     {
-        currentMovementSpeed.y += 20.f * deltaTime.count();
+        currentMovementSpeed.y += 25.f * deltaTime.count();
     }
 
     if (currentMovementSpeed.x == 0.f)

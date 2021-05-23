@@ -19,7 +19,9 @@ public:
     void clearAllColliders();
     const utils::FloatRect& getNodeBounds() const;
     std::vector<std::shared_ptr<components::core::BoxColliderComponent>>
-    getCollidersIntersectingWithArea(const utils::FloatRect& area) const;
+    getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) const;
+    std::vector<std::shared_ptr<components::core::BoxColliderComponent>>
+    getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) const;
 
 private:
     std::vector<std::shared_ptr<components::core::BoxColliderComponent>>

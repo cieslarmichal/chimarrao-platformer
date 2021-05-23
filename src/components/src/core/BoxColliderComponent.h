@@ -26,11 +26,14 @@ public:
     void update(utils::DeltaTime, const input::Input&) override;
     void loadDependentComponents() override;
     bool intersects(const utils::Vector2f&);
-    bool intersects(const std::shared_ptr<BoxColliderComponent>&);
-    void resolveOverlap(const std::shared_ptr<BoxColliderComponent>&);
+    bool intersectsX(const std::shared_ptr<BoxColliderComponent>&);
+    bool intersectsY(const std::shared_ptr<BoxColliderComponent>&);
+    void resolveOverlapX(const std::shared_ptr<BoxColliderComponent>&);
+    void resolveOverlapY(const std::shared_ptr<BoxColliderComponent>&);
     void setAvailableMovementDirections();
     const utils::FloatRect& getCollisionBox();
-    const utils::FloatRect& getNextFrameCollisionBox();
+    const utils::FloatRect& getNextFrameXCollisionBox();
+    const utils::FloatRect& getNextFrameYCollisionBox();
     CollisionLayer getCollisionLayer() const;
     void setCollisionLayer(CollisionLayer layer);
 

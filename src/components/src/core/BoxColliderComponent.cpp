@@ -31,16 +31,16 @@ void BoxColliderComponent::loadDependentComponents()
 
 bool BoxColliderComponent::intersects(const utils::Vector2f& point)
 {
-    const utils::FloatRect& thisRect = getNextFrameCollisionBox();
+    const utils::FloatRect& thisRect = getCollisionBox();
     return thisRect.contains(point);
 }
 
-bool BoxColliderComponent::intersects(const std::shared_ptr<BoxColliderComponent>& other)
+bool BoxColliderComponent::intersectsX(const std::shared_ptr<BoxColliderComponent>& other)
 {
     if (other)
     {
-        const utils::FloatRect& thisRect = getNextFrameCollisionBox();
-        const utils::FloatRect& otherRect = other->getNextFrameCollisionBox();
+        const utils::FloatRect& thisRect = getNextFrameXCollisionBox();
+        const utils::FloatRect& otherRect = other->getNextFrameXCollisionBox();
 
         if (thisRect.intersects(otherRect))
         {
@@ -50,7 +50,22 @@ bool BoxColliderComponent::intersects(const std::shared_ptr<BoxColliderComponent
     return false;
 }
 
-void BoxColliderComponent::resolveOverlap(const std::shared_ptr<BoxColliderComponent>& other)
+bool BoxColliderComponent::intersectsY(const std::shared_ptr<BoxColliderComponent>& other)
+{
+    if (other)
+    {
+        const utils::FloatRect& thisRect = getNextFrameYCollisionBox();
+        const utils::FloatRect& otherRect = other->getNextFrameYCollisionBox();
+
+        if (thisRect.intersects(otherRect))
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void BoxColliderComponent::resolveOverlapX(const std::shared_ptr<BoxColliderComponent>& other)
 {
     if (not movementComponent)
     {
@@ -64,30 +79,46 @@ void BoxColliderComponent::resolveOverlap(const std::shared_ptr<BoxColliderCompo
 
     const utils::FloatRect& otherRect = other->collisionBoundaries;
 
-    switch (calculateCollisionSource(otherRect))
-    {
-    case CollisionSource::Left:
+    float left = abs(otherRect.left + otherRect.width - nextFrameCollisionBoundaries.left);
+    float right = abs(otherRect.left - (nextFrameCollisionBoundaries.left + nextFrameCollisionBoundaries.width));
+
+    if (left < right)
     {
         movementComponent->canMoveLeft = false;
-        return;
     }
-    case CollisionSource::Right:
+    else
     {
         movementComponent->canMoveRight = false;
-        return;
-    }
-    case CollisionSource::Above:
-    {
-        movementComponent->canMoveUp = false;
-        return;
-    }
-    case CollisionSource::Below:
-    {
-        movementComponent->canMoveDown = false;
-        return;
-    }
     }
 }
+
+void BoxColliderComponent::resolveOverlapY(const std::shared_ptr<BoxColliderComponent>& other)
+{
+    if (not movementComponent)
+    {
+        return;
+    }
+
+    if (owner->transform->isStaticTransform())
+    {
+        return;
+    }
+
+    const utils::FloatRect& otherRect = other->collisionBoundaries;
+
+    float top = abs(otherRect.top + otherRect.height - nextFrameCollisionBoundaries.top);
+    float bot = abs(otherRect.top - (nextFrameCollisionBoundaries.top + nextFrameCollisionBoundaries.height));
+
+    if (top < bot)
+    {
+        movementComponent->canMoveUp = false;
+    }
+    else
+    {
+        movementComponent->canMoveDown = false;
+    }
+}
+
 
 const sf::FloatRect& BoxColliderComponent::getCollisionBox()
 {
@@ -95,22 +126,6 @@ const sf::FloatRect& BoxColliderComponent::getCollisionBox()
     collisionBoundaries.left = pos.x + offset.x;
     collisionBoundaries.top = pos.y + offset.y;
     return collisionBoundaries;
-}
-
-const utils::FloatRect& BoxColliderComponent::getNextFrameCollisionBox()
-{
-    getCollisionBox();
-
-    if (not velocityComponent)
-    {
-        return collisionBoundaries;
-    }
-    nextFrameCollisionBoundaries.left =
-        collisionBoundaries.left + velocityComponent->getVelocity().x * currentDeltaTime.count();
-    nextFrameCollisionBoundaries.top =
-        collisionBoundaries.top + velocityComponent->getVelocity().y * currentDeltaTime.count();
-
-    return nextFrameCollisionBoundaries;
 }
 
 CollisionSource BoxColliderComponent::calculateCollisionSource(const utils::FloatRect& otherRect)
@@ -169,6 +184,39 @@ CollisionLayer BoxColliderComponent::getCollisionLayer() const
 void BoxColliderComponent::setCollisionLayer(CollisionLayer layer)
 {
     collisionLayer = layer;
+}
+
+const utils::FloatRect& BoxColliderComponent::getNextFrameXCollisionBox()
+{
+    getCollisionBox();
+
+    if (not velocityComponent)
+    {
+        return collisionBoundaries;
+    }
+
+    nextFrameCollisionBoundaries.left =
+        collisionBoundaries.left + velocityComponent->getVelocity().x * currentDeltaTime.count();
+    nextFrameCollisionBoundaries.top = collisionBoundaries.top;
+
+    return nextFrameCollisionBoundaries;
+}
+
+const utils::FloatRect& BoxColliderComponent::getNextFrameYCollisionBox()
+{
+    getCollisionBox();
+
+    if (not velocityComponent)
+    {
+        return collisionBoundaries;
+    }
+
+    nextFrameCollisionBoundaries.left =
+        collisionBoundaries.left;
+    nextFrameCollisionBoundaries.top =
+        collisionBoundaries.top + velocityComponent->getVelocity().y * currentDeltaTime.count();
+
+    return nextFrameCollisionBoundaries;
 }
 
 }

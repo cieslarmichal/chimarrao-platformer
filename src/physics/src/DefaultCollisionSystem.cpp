@@ -81,9 +81,10 @@ void DefaultCollisionSystem::resolve()
                 continue;
             }
 
-            auto collisions = collisionTree.getCollidersIntersectingWithArea(collider->getNextFrameCollisionBox());
             collider->setAvailableMovementDirections();
-            for (const auto& collision : collisions)
+
+            auto xCollisions = collisionTree.getCollidersIntersectingWithAreaFromX(collider->getNextFrameXCollisionBox());
+            for (const auto& collision : xCollisions)
             {
                 if (collider->getOwnerId() == collision->getOwnerId())
                 {
@@ -95,9 +96,29 @@ void DefaultCollisionSystem::resolve()
 
                 if (layersCollide)
                 {
-                    if (collider->intersects(collision))
+                    if (collider->intersectsX(collision))
                     {
-                        collider->resolveOverlap(collision);
+                        collider->resolveOverlapX(collision);
+                    }
+                }
+            }
+
+            auto yCollisions = collisionTree.getCollidersIntersectingWithAreaFromY(collider->getNextFrameYCollisionBox());
+            for (const auto& collision : yCollisions)
+            {
+                if (collider->getOwnerId() == collision->getOwnerId())
+                {
+                    continue;
+                }
+
+                bool layersCollide = possibleCollisionsInLayers[collider->getCollisionLayer()].isBitSet(
+                    (toInt(collision->getCollisionLayer())));
+
+                if (layersCollide)
+                {
+                    if (collider->intersectsY(collision))
+                    {
+                        collider->resolveOverlapY(collision);
                     }
                 }
             }
