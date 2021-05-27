@@ -30,7 +30,7 @@ GraphicsComponent::~GraphicsComponent()
     rendererPool->release(id);
 }
 
-void GraphicsComponent::lateUpdate(utils::DeltaTime, const input::Input& input)
+void GraphicsComponent::lateUpdate(utils::DeltaTime, const input::Input&)
 {
     if (enabled)
     {

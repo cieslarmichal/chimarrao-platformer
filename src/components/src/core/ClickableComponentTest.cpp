@@ -43,8 +43,7 @@ public:
     const utils::Vector2f positionOutsideTarget{27, 21};
     ComponentOwner owner{position1, "clickableComponentOwnerTest"};
     utils::DeltaTime deltaTime{1};
-    std::unique_ptr<StrictMock<input::InputMock>> inputInit{std::make_unique<StrictMock<input::InputMock>>()};
-    StrictMock<input::InputMock>* input{inputInit.get()};
+    StrictMock<input::InputMock> input;
     ClickableComponent clickableComponent{&owner, [this] { clickAction(actionVariable); }};
     KeyAction keyAction1 = {InputKey::MouseLeft, [this] { clickAction(actionVariableLeft); }};
     KeyAction keyAction1copy = {InputKey::MouseLeft, [] {}};
@@ -57,38 +56,38 @@ public:
 
 TEST_F(ClickableComponentTest, givenMousePositionOutsideHitboxAndLeftMouseKeyNotClicked_shouldNotCallAction)
 {
-    EXPECT_CALL(*input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(false));
 
-    clickableComponent.update(deltaTime, *input);
+    clickableComponent.update(deltaTime, input);
 
     ASSERT_FALSE(actionPerformed(actionVariable));
 }
 
 TEST_F(ClickableComponentTest, givenMousePositionOutsideHitboxAndLeftMouseKeyClicked_shouldNotCallAction)
 {
-    EXPECT_CALL(*input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(true));
-    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionOutsideTarget));
+    EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(true));
+    EXPECT_CALL(input, getMousePosition()).WillOnce(Return(positionOutsideTarget));
 
-    clickableComponent.update(deltaTime, *input);
+    clickableComponent.update(deltaTime, input);
 
     ASSERT_FALSE(actionPerformed(actionVariable));
 }
 
 TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxAndLeftMouseKeyNotClicked_shouldNotCallAction)
 {
-    EXPECT_CALL(*input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(false));
 
-    clickableComponent.update(deltaTime, *input);
+    clickableComponent.update(deltaTime, input);
 
     ASSERT_FALSE(actionPerformed(actionVariable));
 }
 
 TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxLeftMouseKeyClicked_shouldCallAction)
 {
-    EXPECT_CALL(*input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(true));
-    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget));
+    EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(true));
+    EXPECT_CALL(input, getMousePosition()).WillOnce(Return(positionInsideTarget));
 
-    clickableComponent.update(deltaTime, *input);
+    clickableComponent.update(deltaTime, input);
 
     ASSERT_TRUE(actionPerformed(actionVariable));
 }
@@ -98,7 +97,7 @@ TEST_F(ClickableComponentTest,
 {
     clickableComponent.disable();
 
-    clickableComponent.update(deltaTime, *input);
+    clickableComponent.update(deltaTime, input);
 
     ASSERT_FALSE(actionPerformed(actionVariable));
 }
@@ -118,11 +117,11 @@ TEST_F(ClickableComponentTest,
         localComponentOwner.addComponent<BoxColliderComponent>(size, CollisionLayer::Default, offset);
     auto localClickableComponent = ClickableComponent(&localComponentOwner, validKeyActionVector);
     localClickableComponent.loadDependentComponents();
-    EXPECT_CALL(*input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
-    EXPECT_CALL(*input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(true));
-    EXPECT_CALL(*input, getMousePosition()).WillRepeatedly(Return(positionInsideTarget));
+    EXPECT_CALL(input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
+    EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(true));
+    EXPECT_CALL(input, getMousePosition()).WillRepeatedly(Return(positionInsideTarget));
 
-    localClickableComponent.update(deltaTime, *input);
+    localClickableComponent.update(deltaTime, input);
 
     ASSERT_TRUE(actionPerformed(actionVariableRight));
     ASSERT_TRUE(actionPerformed(actionVariableLeft));
@@ -136,11 +135,11 @@ TEST_F(ClickableComponentTest,
         localComponentOwner.addComponent<BoxColliderComponent>(size, CollisionLayer::Default, offset);
     auto localClickableComponent = ClickableComponent(&localComponentOwner, validKeyActionVector);
     localClickableComponent.loadDependentComponents();
-    EXPECT_CALL(*input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(false));
-    EXPECT_CALL(*input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
-    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget));
+    EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
+    EXPECT_CALL(input, getMousePosition()).WillOnce(Return(positionInsideTarget));
 
-    localClickableComponent.update(deltaTime, *input);
+    localClickableComponent.update(deltaTime, input);
 
     ASSERT_TRUE(actionPerformed(actionVariableRight));
     ASSERT_FALSE(actionPerformed(actionVariableLeft));
@@ -157,10 +156,10 @@ TEST_F(ClickableComponentTest,
 
     localClickableComponent.setKeyActions(validKeyActionVectorAfterChange);
 
-    EXPECT_CALL(*input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
-    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget));
+    EXPECT_CALL(input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
+    EXPECT_CALL(input, getMousePosition()).WillOnce(Return(positionInsideTarget));
 
-    localClickableComponent.update(deltaTime, *input);
+    localClickableComponent.update(deltaTime, input);
 
     ASSERT_FALSE(actionPerformed(actionVariableLeft));
     ASSERT_FALSE(actionPerformed(actionVariableRight));

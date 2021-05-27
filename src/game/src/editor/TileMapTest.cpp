@@ -66,14 +66,6 @@ TEST_F(TileMapTest, saveToFile_shouldUserSerializerAndFileAccess)
     tileMap.saveToFile();
 }
 
-TEST_F(TileMapTest, saveToFile_shouldUserSerializerAndFileAccess)
-{
-    EXPECT_CALL(*mapSerializer, serialize(_)).WillOnce(Return(serializedMap));
-    EXPECT_CALL(*fileAccess, write(mapPath, serializedMap));
-
-    tileMap.saveToFile();
-}
-
 TEST_F(TileMapTest, getTile_givePositionOnMap_shouldReturnEmptyTile)
 {
     auto tile = tileMap.getTile(positionOnMap);

@@ -20,7 +20,6 @@ public:
         componentOwnerWithPlayerCollider1->addComponent<BoxColliderComponent>(size, CollisionLayer::Player);
         componentOwnerWithPlayerCollider2->addComponent<BoxColliderComponent>(size, CollisionLayer::Player);
         componentOwnerWitStaticTransform->addComponent<BoxColliderComponent>(size, CollisionLayer::Player);
-        componentOwnerWitStaticTransform->transform->setStaticTransform(true);
     }
 
     const utils::Vector2f size{5, 5};

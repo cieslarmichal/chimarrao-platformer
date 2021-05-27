@@ -2,14 +2,13 @@
 
 #include "AnimationComponent.h"
 #include "BoxColliderComponent.h"
-#include "ComponentOwner.h"
 #include "exceptions/DependentComponentNotFound.h"
 
 namespace components::core
 {
 
 KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* ownerInit)
-    : Component{ownerInit}, movementSpeed{7.f}
+    : Component{ownerInit}, movementSpeed{6.f}
 {
 }
 
@@ -28,8 +27,6 @@ void KeyboardMovementComponent::loadDependentComponents()
         throw exceptions::DependentComponentNotFound{
             "KeyboardMovementComponent: Velocity component not found"};
     }
-
-    boxColliderComponent = owner->getComponent<BoxColliderComponent>();
 }
 
 void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
@@ -43,7 +40,6 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
 
     if (input.isKeyPressed(input::InputKey::Left))
     {
-
         currentMovementSpeed.x = -movementSpeed;
         animation->setAnimationDirection(animations::AnimationDirection::Left);
     }

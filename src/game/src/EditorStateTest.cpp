@@ -1,6 +1,6 @@
 #include "EditorState.h"
 
-#include <editor/TileMapSerializerJson.h>
+#include "editor/TileMapSerializerMock.h"
 #include <memory>
 
 #include "gtest/gtest.h"
@@ -36,9 +36,12 @@ public:
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
     StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    std::unique_ptr<StrictMock<TileMapSerializerMock>> tileMapSerializerInit{
+        std::make_unique<StrictMock<TileMapSerializerMock>>()};
+    StrictMock<TileMapSerializerMock>* tileMapSerializer{tileMapSerializerInit.get()};
     std::shared_ptr<TileMap> tileMap =
         std::make_shared<TileMap>("editorStateTestTileMap", utils::Vector2i{40, 15},
-                                  std::make_unique<TileMapSerializerJson>(), fileAccess);
+                                  std::move(tileMapSerializerInit), fileAccess);
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
 };

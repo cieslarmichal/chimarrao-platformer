@@ -1,5 +1,7 @@
 #include "GameStateUIConfigBuilder.h"
 
+#include "editor/TileMapSerializerMock.h"
+
 #include "gtest/gtest.h"
 
 #include "ComponentOwnersManagerMock.h"
@@ -47,6 +49,12 @@ public:
     std::unique_ptr<StrictMock<ComponentOwnersManagerMock>> componentOwnersManagerInit{
         std::make_unique<StrictMock<ComponentOwnersManagerMock>>()};
     StrictMock<ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
+    std::unique_ptr<StrictMock<TileMapSerializerMock>> tileMapSerializerInit{
+        std::make_unique<StrictMock<TileMapSerializerMock>>()};
+    StrictMock<TileMapSerializerMock>* tileMapSerializer{tileMapSerializerInit.get()};
+    std::shared_ptr<TileMap> tileMap =
+        std::make_shared<TileMap>("editorStateTestTileMap", utils::Vector2i{40, 15},
+                                  std::move(tileMapSerializerInit), fileAccess);
 };
 
 TEST_F(GameStateUIConfigBuilderTest, createGameUI)
@@ -56,7 +64,8 @@ TEST_F(GameStateUIConfigBuilderTest, createGameUI)
                         fileAccess,
                         states,
                         std::move(uiManagerInit),
-                        std::move(componentOwnersManagerInit)};
+                        std::move(componentOwnersManagerInit),
+                        tileMap};
     const auto gameUI = GameStateUIConfigBuilder::createGameUIConfig(&gameState);
 
     ASSERT_EQ(gameUI->backgroundConfig->uniqueName, "gameBackground");

@@ -38,8 +38,6 @@ public:
     void setCollisionLayer(CollisionLayer layer);
 
 private:
-    CollisionSource calculateCollisionSource(const utils::FloatRect&);
-
     CollisionLayer collisionLayer;
     const sf::Vector2f offset;
     utils::FloatRect collisionBoundaries;

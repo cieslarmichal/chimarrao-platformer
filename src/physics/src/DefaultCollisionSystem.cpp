@@ -1,4 +1,6 @@
 #include "DefaultCollisionSystem.h"
+#include "core/KeyboardMovementComponent.h"
+#include "core/ComponentOwner.h"
 
 namespace physics
 {
@@ -76,7 +78,7 @@ void DefaultCollisionSystem::resolve()
 
         for (auto& collider : collidersInCollisionLayer)
         {
-            if (collider->getOwner().transform->isStaticTransform())
+            if (not collider->getOwner().getComponent<components::core::KeyboardMovementComponent>())
             {
                 continue;
             }

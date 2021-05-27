@@ -8,6 +8,7 @@
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
+#include "editor/TileMapSerializerMock.h"
 #include "ui/UIManagerMock.h"
 
 #include "ProjectPathReader.h"
@@ -55,6 +56,11 @@ public:
     StrictMock<StatesMock> states;
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
+    std::unique_ptr<StrictMock<TileMapSerializerMock>> tileMapSerializerInit{
+        std::make_unique<StrictMock<TileMapSerializerMock>>()};
+    StrictMock<TileMapSerializerMock>* tileMapSerializer{tileMapSerializerInit.get()};
+    std::shared_ptr<TileMap> tileMap = std::make_shared<TileMap>(
+        "editorStateTestTileMap", utils::Vector2i{40, 15}, std::move(tileMapSerializerInit), fileAccess);
 };
 
 class GameStateTest : public GameStateTest_Base
@@ -65,7 +71,8 @@ public:
                         fileAccess,
                         states,
                         std::move(uiManagerInit),
-                        std::move(componentOwnersManagerInit)};
+                        std::move(componentOwnersManagerInit),
+                        tileMap};
 };
 
 TEST_F(GameStateTest, activate_shouldActivateUIAndOwners)

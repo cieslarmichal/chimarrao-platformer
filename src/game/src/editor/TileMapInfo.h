@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "Vector.h"
+#include "Tile.h"
 
 namespace game
 {

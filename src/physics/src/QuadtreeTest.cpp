@@ -62,7 +62,7 @@ TEST_F(QuadtreeTest, insertedColliderIntersectingWithArea_canBeIntersectedWithAr
     Quadtree quadtree{};
     quadtree.insertCollider(boxColliderComponent1);
 
-    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area1);
+    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithAreaFromX(area1);
 
     ASSERT_TRUE(std::find(collidersIntersectingWithArea.begin(), collidersIntersectingWithArea.end(),
                           boxColliderComponent1) != collidersIntersectingWithArea.end());
@@ -74,7 +74,7 @@ TEST_F(QuadtreeTest, removedColliderIntersectingWithArea_canNotBeIntersectedWith
     quadtree.insertCollider(boxColliderComponent1);
     quadtree.removeCollider(boxColliderComponent1);
 
-    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area1);
+    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithAreaFromX(area1);
 
     ASSERT_TRUE(collidersIntersectingWithArea.empty());
 }
@@ -86,7 +86,7 @@ TEST_F(QuadtreeTest, clearedCollidersIntersectingWithArea_shouldReturnEmptyColli
     quadtree.insertCollider(boxColliderComponent2);
     quadtree.clearAllColliders();
 
-    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area1);
+    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithAreaFromX(area1);
 
     ASSERT_TRUE(collidersIntersectingWithArea.empty());
 }
@@ -107,14 +107,14 @@ TEST_F(QuadtreeTest, clearCollidersFromDifferentQuadtreeChildren_shouldReturnEmp
 
     quadtree.clearAllColliders();
 
-    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area1);
+    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithAreaFromX(area1);
     ASSERT_TRUE(collidersIntersectingWithArea.empty());
 }
 
 TEST_F(QuadtreeTest, givenNoColliders_shouldReturnEmptyColliders)
 {
     Quadtree quadtree{};
-    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area1);
+    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithAreaFromX(area1);
 
     ASSERT_TRUE(collidersIntersectingWithArea.empty());
 }
@@ -124,7 +124,7 @@ TEST_F(QuadtreeTest, givenColliderNotIntersectingWithArea_shouldReturnEmptyColli
     Quadtree quadtree{};
     quadtree.insertCollider(boxColliderComponent3);
 
-    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area1);
+    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithAreaFromX(area1);
 
     ASSERT_TRUE(collidersIntersectingWithArea.empty());
 }
@@ -135,7 +135,7 @@ TEST_F(QuadtreeTest, givenTwoColliders_onlyOneOfThemIntersectingWithArea_shouldR
     quadtree.insertCollider(boxColliderComponent1);
     quadtree.insertCollider(boxColliderComponent3);
 
-    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area1);
+    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithAreaFromX(area1);
 
     ASSERT_EQ(collidersIntersectingWithArea.size(), 1u);
     ASSERT_TRUE(std::find(collidersIntersectingWithArea.begin(), collidersIntersectingWithArea.end(),
@@ -160,7 +160,7 @@ TEST_F(
     quadtree.insertCollider(boxColliderComponent9);
     quadtree.insertCollider(boxColliderComponent10);
 
-    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area2);
+    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithAreaFromX(area2);
 
     ASSERT_TRUE(compareVectors(collidersIntersectingWithArea, expectedColliders));
 }
@@ -180,7 +180,7 @@ TEST_F(QuadtreeTest,
     quadtree.insertCollider(boxColliderComponent9);
     quadtree.insertCollider(boxColliderComponent10);
 
-    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithArea(area3);
+    const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithAreaFromX(area3);
 
     ASSERT_TRUE(collidersIntersectingWithArea.empty());
 }

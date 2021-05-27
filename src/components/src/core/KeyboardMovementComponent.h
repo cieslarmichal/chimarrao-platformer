@@ -7,7 +7,6 @@
 namespace components::core
 {
 class AnimationComponent;
-class BoxColliderComponent;
 
 class KeyboardMovementComponent : public Component
 {
@@ -28,7 +27,6 @@ public:
 private:
     std::shared_ptr<AnimationComponent> animation;
     std::shared_ptr<VelocityComponent> velocityComponent;
-    std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     float movementSpeed;
 };
 }

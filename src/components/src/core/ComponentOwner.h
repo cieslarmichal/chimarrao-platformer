@@ -48,7 +48,7 @@ public:
     }
 
     template <typename T>
-    std::shared_ptr<T> getComponent()
+    std::shared_ptr<T> getComponent() const
     {
         static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
 

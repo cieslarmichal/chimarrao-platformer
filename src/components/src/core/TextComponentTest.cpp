@@ -102,7 +102,7 @@ TEST_F(TextComponentTest, componentDisabled_lateUpdate_shouldNotSynchronizePosit
     EXPECT_CALL(*rendererPool, setVisibility(graphicsId, invisible));
     textComponent->disable();
 
-    textComponent->lateUpdate(deltaTime);
+    textComponent->lateUpdate(deltaTime, input);
 
     expectReleaseGraphicsId();
 }
@@ -116,7 +116,7 @@ TEST_F(
     componentOwner.transform->setPosition(position2);
     EXPECT_CALL(*rendererPool, setPosition(graphicsId, position2 + offset));
 
-    textComponent->lateUpdate(deltaTime);
+    textComponent->lateUpdate(deltaTime, input);
 
     expectReleaseGraphicsId();
 }

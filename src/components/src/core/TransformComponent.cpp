@@ -4,7 +4,7 @@ namespace components::core
 {
 
 TransformComponent::TransformComponent(ComponentOwner* ownerInit, const utils::Vector2f& positionInit)
-    : Component{ownerInit}, position{positionInit}, staticTransform{false}
+    : Component{ownerInit}, position{positionInit}
 {
 }
 
@@ -42,16 +42,6 @@ void TransformComponent::setY(float y)
 const utils::Vector2f& TransformComponent::getPosition() const
 {
     return position;
-}
-
-void TransformComponent::setStaticTransform(bool staticTransformInit)
-{
-    staticTransform = staticTransformInit;
-}
-
-bool TransformComponent::isStaticTransform() const
-{
-    return staticTransform;
 }
 
 }
