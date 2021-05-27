@@ -75,12 +75,7 @@ std::string Button::getName() const
 void Button::activate()
 {
     coreComponentsOwner->enable();
-    if (auto clickableComponent = coreComponentsOwner->getComponent<components::core::ClickableComponent>())
-    {
-        clickableComponent->disable();
-    }
-    freezeClickableButtonTimer.restart();
-    buttonClickActionFrozen = true;
+    restartClickActionFreezeTimer();
 }
 
 void Button::deactivate()
@@ -118,6 +113,16 @@ void Button::invokeClickAction(input::InputKey inputKey)
 bool Button::isActive() const
 {
     return coreComponentsOwner->areComponentEnabled();
+}
+
+void Button::restartClickActionFreezeTimer()
+{
+    if (auto clickableComponent = coreComponentsOwner->getComponent<components::core::ClickableComponent>())
+    {
+        clickableComponent->disable();
+    }
+    freezeClickableButtonTimer.restart();
+    buttonClickActionFrozen = true;
 }
 
 }

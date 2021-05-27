@@ -33,7 +33,7 @@ public:
     virtual StateType getType() const = 0;
     virtual void activate() = 0;
     virtual void deactivate() = 0;
-    void handleWindowSizeChange(const utils::Vector2u& windowSize) override;
+    virtual void handleWindowSizeChange(const utils::Vector2u& windowSize);
 
 protected:
     std::shared_ptr<window::Window> window;

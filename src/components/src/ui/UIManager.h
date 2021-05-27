@@ -31,5 +31,6 @@ public:
     virtual void activateComponent(UIComponentType, const std::string& componentName) = 0;
     virtual void deactivateComponent(UIComponentType, const std::string& componentName) = 0;
     virtual bool isComponentActive(UIComponentType, const std::string& componentName) const = 0;
+    virtual void freezeAllButtons() = 0;
 };
 }

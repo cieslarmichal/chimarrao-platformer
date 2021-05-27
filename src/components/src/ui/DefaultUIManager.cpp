@@ -373,4 +373,12 @@ void DefaultUIManager::createUIComponents(std::unique_ptr<UIConfig> uiConfig)
     }
 }
 
+void DefaultUIManager::freezeAllButtons()
+{
+    for (auto& button : buttons)
+    {
+        button->restartClickActionFreezeTimer();
+    }
+}
+
 }

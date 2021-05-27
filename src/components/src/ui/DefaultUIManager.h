@@ -33,6 +33,7 @@ public:
     void activateComponent(UIComponentType, const std::string& componentName) override;
     void deactivateComponent(UIComponentType, const std::string& componentName) override;
     bool isComponentActive(UIComponentType, const std::string& componentName) const override;
+    void freezeAllButtons() override;
 
 private:
     void createUIComponents(std::unique_ptr<UIConfig>);

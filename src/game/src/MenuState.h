@@ -26,6 +26,7 @@ public:
     StateType getType() const override;
     void activate() override;
     void deactivate() override;
+    void handleWindowSizeChange(const utils::Vector2u& windowSize) override;
 
 private:
     void changeSelectedButtonUp();

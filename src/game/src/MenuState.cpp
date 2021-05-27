@@ -157,4 +157,10 @@ void MenuState::hideIcons()
     }
 }
 
+void MenuState::handleWindowSizeChange(const utils::Vector2u& windowSize)
+{
+    State::handleWindowSizeChange(windowSize);
+    uiManager->freezeAllButtons();
+}
+
 }

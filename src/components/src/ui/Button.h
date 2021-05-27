@@ -26,6 +26,7 @@ public:
     void setClickAction(const std::vector<core::KeyAction>&);
     void invokeClickAction(input::InputKey);
     bool isActive() const override;
+    void restartClickActionFreezeTimer();
 
 private:
     std::string name;
