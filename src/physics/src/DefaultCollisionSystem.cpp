@@ -83,7 +83,8 @@ void DefaultCollisionSystem::resolve()
 
             collider->setAvailableMovementDirections();
 
-            auto xCollisions = collisionTree.getCollidersIntersectingWithAreaFromX(collider->getNextFrameXCollisionBox());
+            const auto xCollisions = collisionTree.getCollidersIntersectingWithAreaFromX(collider->getNextFrameXCollisionBox());
+
             for (const auto& collision : xCollisions)
             {
                 if (collider->getOwnerId() == collision->getOwnerId())
@@ -91,7 +92,7 @@ void DefaultCollisionSystem::resolve()
                     continue;
                 }
 
-                bool layersCollide = possibleCollisionsInLayers[collider->getCollisionLayer()].isBitSet(
+                const auto layersCollide = possibleCollisionsInLayers[collider->getCollisionLayer()].isBitSet(
                     (toInt(collision->getCollisionLayer())));
 
                 if (layersCollide)
@@ -103,7 +104,8 @@ void DefaultCollisionSystem::resolve()
                 }
             }
 
-            auto yCollisions = collisionTree.getCollidersIntersectingWithAreaFromY(collider->getNextFrameYCollisionBox());
+            const auto yCollisions = collisionTree.getCollidersIntersectingWithAreaFromY(collider->getNextFrameYCollisionBox());
+
             for (const auto& collision : yCollisions)
             {
                 if (collider->getOwnerId() == collision->getOwnerId())
@@ -111,7 +113,7 @@ void DefaultCollisionSystem::resolve()
                     continue;
                 }
 
-                bool layersCollide = possibleCollisionsInLayers[collider->getCollisionLayer()].isBitSet(
+                const auto layersCollide = possibleCollisionsInLayers[collider->getCollisionLayer()].isBitSet(
                     (toInt(collision->getCollisionLayer())));
 
                 if (layersCollide)

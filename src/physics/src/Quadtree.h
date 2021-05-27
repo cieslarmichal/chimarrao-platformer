@@ -11,7 +11,7 @@ class Quadtree
 {
 public:
     Quadtree();
-    Quadtree(int maxObjectsInNodeBeforeSplit, int maxNumberOfSplits, int treeDepthLevel,
+    Quadtree(int maxObjectsInNodeBeforeSplit, int maxNumberOfSplits, int currentTreeDepthLevel,
              utils::FloatRect bounds);
 
     void insertCollider(const std::shared_ptr<components::core::BoxColliderComponent>&);
@@ -35,6 +35,7 @@ private:
     const int maxObjectsInNodeBeforeSplit;
     const int maxNumberOfSplits;
     int currentTreeDepthLevel;
+    unsigned numberOfCollidersOnEdges;
 
     static const int thisTreeIndex = -1;
     static const int childNorthEastIndex = 0;

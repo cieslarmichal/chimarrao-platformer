@@ -2,7 +2,7 @@
 
 namespace physics
 {
-Quadtree::Quadtree() : Quadtree{5, 0, 0, {0, 0, 80, 60}} {}
+Quadtree::Quadtree() : Quadtree{5, 5, 0, {0, 0, 80, 60}} {}
 
 Quadtree::Quadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsInit, int treeDepthLevelInit,
                    utils::FloatRect boundsInit)
@@ -10,7 +10,8 @@ Quadtree::Quadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsIni
       maxNumberOfSplits{maxNumberOfSplitsInit},
       currentTreeDepthLevel{treeDepthLevelInit},
       nodeBounds{boundsInit},
-      children{nullptr, nullptr, nullptr, nullptr}
+      children{nullptr, nullptr, nullptr, nullptr},
+      numberOfCollidersOnEdges{0}
 {
 }
 
@@ -24,8 +25,12 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
         if (indexToPlaceObject != thisTreeIndex)
         {
             children[indexToPlaceObject]->insertCollider(colliderToInsert);
-            return;
         }
+        else
+        {
+            colliders.emplace_back(colliderToInsert);
+        }
+        return;
     }
 
     colliders.emplace_back(colliderToInsert);
@@ -44,8 +49,7 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
         }
 
         colliders.erase(std::remove_if(colliders.begin(), colliders.end(),
-                                       [&](auto& collider)
-                                       {
+                                       [&](auto& collider) {
                                            return getIndexIndicatingToWhichNodeColliderBelongs(
                                                       collider->getCollisionBox()) != thisTreeIndex;
                                        }),
@@ -55,8 +59,7 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
 
 void Quadtree::removeCollider(const std::shared_ptr<components::core::BoxColliderComponent>& colliderToRemove)
 {
-    const int index =
-        getIndexIndicatingToWhichNodeColliderBelongs(colliderToRemove->getCollisionBox());
+    const int index = getIndexIndicatingToWhichNodeColliderBelongs(colliderToRemove->getCollisionBox());
 
     if (index != thisTreeIndex && children[index])
     {
@@ -94,11 +97,15 @@ Quadtree::getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) co
 
     for (const auto& possibleCollider : possibleColliders)
     {
-        if (area.intersects(possibleCollider->getNextFrameXCollisionBox()))
+        auto& possibleColliderBox = possibleCollider->getNextFrameXCollisionBox();
+
+        if (area.intersects(possibleColliderBox))
         {
-            auto& collider = possibleCollider->getNextFrameXCollisionBox();
-            double distance = pow((area.top + area.height / 2) - (collider.top + collider.height / 2), 2) +
-                              pow((area.left + area.width / 2) - (collider.left + collider.width / 2), 2);
+            double distance =
+                pow((area.top + area.height / 2) - (possibleColliderBox.top + possibleColliderBox.height / 2),
+                    2) +
+                pow((area.left + area.width / 2) - (possibleColliderBox.left + possibleColliderBox.width / 2),
+                    2);
             if (distance > 0.0)
             {
                 collidersIntersectingWithAreaAndDistance.emplace_back(
@@ -107,15 +114,15 @@ Quadtree::getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) co
             }
         }
     }
-    if(collidersIntersectingWithAreaAndDistance.empty())
+    if (collidersIntersectingWithAreaAndDistance.empty())
     {
         return {};
     }
 
     double minDistance = std::min_element(collidersIntersectingWithAreaAndDistance.begin(),
                                           collidersIntersectingWithAreaAndDistance.end(),
-                                          [](auto lhs, auto rhs) { return lhs.second < rhs.second; })->second;
-
+                                          [](auto lhs, auto rhs) { return lhs.second < rhs.second; })
+                             ->second;
 
     std::vector<std::shared_ptr<components::core::BoxColliderComponent>> collidersIntersectingWithArea;
     for (const auto& pair : collidersIntersectingWithAreaAndDistance)
@@ -138,11 +145,15 @@ Quadtree::getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) co
 
     for (const auto& possibleCollider : possibleColliders)
     {
-        if (area.intersects(possibleCollider->getNextFrameYCollisionBox()))
+        auto& possibleColliderBox = possibleCollider->getNextFrameYCollisionBox();
+
+        if (area.intersects(possibleColliderBox))
         {
-            auto& collider = possibleCollider->getNextFrameYCollisionBox();
-            double distance = pow((area.top + area.height / 2) - (collider.top + collider.height / 2), 2) +
-                              pow((area.left + area.width / 2) - (collider.left + collider.width / 2), 2);
+            double distance =
+                pow((area.top + area.height / 2) - (possibleColliderBox.top + possibleColliderBox.height / 2),
+                    2) +
+                pow((area.left + area.width / 2) - (possibleColliderBox.left + possibleColliderBox.width / 2),
+                    2);
             if (distance > 0.0)
             {
                 collidersIntersectingWithAreaAndDistance.emplace_back(
@@ -151,15 +162,15 @@ Quadtree::getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) co
             }
         }
     }
-    if(collidersIntersectingWithAreaAndDistance.empty())
+    if (collidersIntersectingWithAreaAndDistance.empty())
     {
         return {};
     }
 
     double minDistance = std::min_element(collidersIntersectingWithAreaAndDistance.begin(),
                                           collidersIntersectingWithAreaAndDistance.end(),
-                                          [](auto lhs, auto rhs) { return lhs.second < rhs.second; })->second;
-
+                                          [](auto lhs, auto rhs) { return lhs.second < rhs.second; })
+                             ->second;
 
     std::vector<std::shared_ptr<components::core::BoxColliderComponent>> collidersIntersectingWithArea;
     for (const auto& pair : collidersIntersectingWithAreaAndDistance)
@@ -187,12 +198,12 @@ Quadtree::getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRe
     {
         if (int index = getIndexIndicatingToWhichNodeColliderBelongs(area); index == thisTreeIndex)
         {
-            for (int i = 0; i < 4; i++)
+            for (const auto& child : children)
             {
-                if (children[i]->getNodeBounds().intersects(area))
+                if (child->getNodeBounds().intersects(area))
                 {
                     const auto possibleCollidersFromChild =
-                        children[i]->getAllCollidersFromQuadtreeNodesIntersectingWithArea(area);
+                        child->getAllCollidersFromQuadtreeNodesIntersectingWithArea(area);
                     possibleColliders.insert(possibleColliders.end(), possibleCollidersFromChild.begin(),
                                              possibleCollidersFromChild.end());
                 }
@@ -202,6 +213,7 @@ Quadtree::getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRe
         {
             const auto possibleCollidersFromChild =
                 children[index]->getAllCollidersFromQuadtreeNodesIntersectingWithArea(area);
+
             possibleColliders.insert(possibleColliders.end(), possibleCollidersFromChild.begin(),
                                      possibleCollidersFromChild.end());
         }
