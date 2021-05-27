@@ -40,9 +40,9 @@ public:
         EXPECT_CALL(*window, getWindowSettings()).WillOnce(Return(windowSettings));
         EXPECT_CALL(*uiManager, setColor(components::ui::UIComponentType::Button, "settingsWindowModeButton",
                                          buttonHoverColor));
-        EXPECT_CALL(*uiManager, setText(components::ui::UIComponentTypeWithLabel::Label,
+        EXPECT_CALL(*uiManager, setText(components::ui::UIComponentTypeWithText::Label,
                                         "settingsResolutionValueLabel", toString(selectedResolution)));
-        EXPECT_CALL(*uiManager, setText(components::ui::UIComponentTypeWithLabel::Label,
+        EXPECT_CALL(*uiManager, setText(components::ui::UIComponentTypeWithText::Label,
                                         "settingsFrameLimitValueLabel", std::to_string(selectedFrameLimit)));
         EXPECT_CALL(*uiManager, setChecked(components::ui::UIComponentTypeWithCheck::CheckBox,
                                            "settingsVsyncCheckBox", true));

@@ -163,21 +163,27 @@ void DefaultUIManager::changeClickAction(UIComponentType componentType, const st
     }
 }
 
-void DefaultUIManager::setText(UIComponentTypeWithLabel componentType, const std::string& componentName,
+void DefaultUIManager::setText(UIComponentTypeWithText componentType, const std::string& componentName,
                                const std::string& text)
 {
     switch (componentType)
     {
-    case UIComponentTypeWithLabel::Button:
+    case UIComponentTypeWithText::Button:
     {
         auto& button = tryToGetComponentByName(buttons, componentName);
         button->setText(text);
         break;
     }
-    case UIComponentTypeWithLabel::Label:
+    case UIComponentTypeWithText::Label:
     {
         auto& label = tryToGetComponentByName(labels, componentName);
         label->setText(text);
+        break;
+    }
+    case UIComponentTypeWithText::TextField:
+    {
+        auto& textField = tryToGetComponentByName(textFields, componentName);
+        textField->setText(text);
         break;
     }
     }

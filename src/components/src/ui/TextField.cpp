@@ -120,6 +120,7 @@ void TextField::setColor(graphics::Color color)
 void TextField::setText(const std::string& text)
 {
     coreComponentsOwner->getComponent<components::core::TextComponent>()->setText(text);
+    inputBuffer = text;
 }
 
 bool TextField::isActive() const

@@ -124,9 +124,9 @@ void SettingsState::refreshWindowSettingsUI()
                             buttonHoverColor);
     }
 
-    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsResolutionValueLabel",
+    uiManager->setText(components::ui::UIComponentTypeWithText::Label, "settingsResolutionValueLabel",
                        toString(selectedWindowsSettings.resolution));
-    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsFrameLimitValueLabel",
+    uiManager->setText(components::ui::UIComponentTypeWithText::Label, "settingsFrameLimitValueLabel",
                        std::to_string(selectedWindowsSettings.frameLimit));
     uiManager->setChecked(components::ui::UIComponentTypeWithCheck::CheckBox, "settingsVsyncCheckBox",
                           selectedWindowsSettings.vsync);
@@ -144,7 +144,7 @@ void SettingsState::increaseResolution()
     }
 
     selectedWindowsSettings.resolution = supportedResolutions[selectedResolutionIndex];
-    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsResolutionValueLabel",
+    uiManager->setText(components::ui::UIComponentTypeWithText::Label, "settingsResolutionValueLabel",
                        toString(selectedWindowsSettings.resolution));
 }
 
@@ -160,7 +160,7 @@ void SettingsState::decreaseResolution()
     }
 
     selectedWindowsSettings.resolution = supportedResolutions[selectedResolutionIndex];
-    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsResolutionValueLabel",
+    uiManager->setText(components::ui::UIComponentTypeWithText::Label, "settingsResolutionValueLabel",
                        toString(selectedWindowsSettings.resolution));
 }
 
@@ -176,7 +176,7 @@ void SettingsState::increaseFrameLimit()
     }
 
     selectedWindowsSettings.frameLimit = supportedFrameLimits[selectedFrameLimitIndex];
-    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsFrameLimitValueLabel",
+    uiManager->setText(components::ui::UIComponentTypeWithText::Label, "settingsFrameLimitValueLabel",
                        std::to_string(selectedWindowsSettings.frameLimit));
 }
 
@@ -192,7 +192,7 @@ void SettingsState::decreaseFrameLimit()
     }
 
     selectedWindowsSettings.frameLimit = supportedFrameLimits[selectedFrameLimitIndex];
-    uiManager->setText(components::ui::UIComponentTypeWithLabel::Label, "settingsFrameLimitValueLabel",
+    uiManager->setText(components::ui::UIComponentTypeWithText::Label, "settingsFrameLimitValueLabel",
                        std::to_string(selectedWindowsSettings.frameLimit));
 }
 

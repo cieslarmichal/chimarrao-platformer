@@ -22,10 +22,9 @@ public:
     void deactivate() override;
     void setColor(graphics::Color);
     bool isActive() const override;
-
-private:
     void setText(const std::string&);
 
+private:
     std::string name;
     std::unique_ptr<components::core::ComponentOwner> coreComponentsOwner;
     std::string inputBuffer;

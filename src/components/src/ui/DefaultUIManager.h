@@ -26,7 +26,7 @@ public:
     void setColor(UIComponentType, const std::string& componentName, graphics::Color) override;
     void changeClickAction(UIComponentType, const std::string& componentName,
                            const std::vector<core::KeyAction>&) override;
-    void setText(UIComponentTypeWithLabel, const std::string& componentName,
+    void setText(UIComponentTypeWithText, const std::string& componentName,
                  const std::string& text) override;
     void setChecked(UIComponentTypeWithCheck, const std::string& componentName, bool checked) override;
     void activateComponent(UIComponentType, const std::string& componentName) override;

@@ -85,7 +85,7 @@ void ChooseMapState::showNextMaps()
             const auto currentMapNameIndex = mapsCurrentPage * maximumNumberOfMapsToDisplay + uniqueMapIndex;
             const auto& mapName = mapNames[currentMapNameIndex];
             const auto& mapPath = mapFilePaths[currentMapNameIndex];
-            uiManager->setText(components::ui::UIComponentTypeWithLabel::Button,
+            uiManager->setText(components::ui::UIComponentTypeWithText::Button,
                                mapButtonsUniqueNames[uniqueMapIndex], mapName);
             auto loadMap = [&]
             {
@@ -121,7 +121,7 @@ void ChooseMapState::showPreviousMaps()
             const auto& mapPath = mapFilePaths[currentMapNameIndex];
             uiManager->activateComponent(components::ui::UIComponentType::Button,
                                          mapButtonsUniqueNames[mapIndex]);
-            uiManager->setText(components::ui::UIComponentTypeWithLabel::Button,
+            uiManager->setText(components::ui::UIComponentTypeWithText::Button,
                                mapButtonsUniqueNames[mapIndex], mapName);
             auto loadMap = [&]
             {

@@ -12,10 +12,11 @@ enum class UIComponentType
     Image
 };
 
-enum class UIComponentTypeWithLabel
+enum class UIComponentTypeWithText
 {
     Button,
-    Label
+    Label,
+    TextField
 };
 
 enum class UIComponentTypeWithCheck

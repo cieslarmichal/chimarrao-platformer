@@ -19,7 +19,7 @@ public:
                 (UIComponentType, const std::string& componentName, const std::vector<core::KeyAction>&),
                 (override));
     MOCK_METHOD(void, setText,
-                (UIComponentTypeWithLabel, const std::string& componentName, const std::string& text),
+                (UIComponentTypeWithText, const std::string& componentName, const std::string& text),
                 (override));
     MOCK_METHOD(void, setChecked, (UIComponentTypeWithCheck, const std::string& componentName, bool checked),
                 (override));
