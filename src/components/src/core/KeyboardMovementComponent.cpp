@@ -1,9 +1,9 @@
 #include "KeyboardMovementComponent.h"
 
 #include "AnimationComponent.h"
+#include "BoxColliderComponent.h"
 #include "ComponentOwner.h"
 #include "exceptions/DependentComponentNotFound.h"
-#include "BoxColliderComponent.h"
 
 namespace components::core
 {
@@ -30,7 +30,6 @@ void KeyboardMovementComponent::loadDependentComponents()
     }
 
     boxColliderComponent = owner->getComponent<BoxColliderComponent>();
-
 }
 
 void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
@@ -78,7 +77,7 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
     velocityComponent->setVelocity(currentMovementSpeed);
 }
 
-void KeyboardMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input& input)
+void KeyboardMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input&)
 {
     if (not enabled)
     {

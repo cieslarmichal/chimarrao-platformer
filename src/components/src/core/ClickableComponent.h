@@ -19,6 +19,7 @@ public:
     void enable() override;
     void disable() override;
     void setKeyActions(const std::vector<KeyAction>&);
+    void invokeKeyAction(input::InputKey);
 
 private:
     std::shared_ptr<BoxColliderComponent> boxCollider;

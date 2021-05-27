@@ -2,12 +2,12 @@
 
 #include "gtest/gtest.h"
 
+#include "InputMock.h"
 #include "RendererPoolMock.h"
 
 #include "ComponentOwner.h"
 #include "DeltaTime.h"
 #include "GraphicsIdGenerator.h"
-#include "InputMock.h"
 
 using namespace ::testing;
 using namespace graphics;

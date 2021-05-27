@@ -107,6 +107,14 @@ void Button::setClickAction(const std::vector<core::KeyAction>& keyActions)
     }
 }
 
+void Button::invokeClickAction(input::InputKey inputKey)
+{
+    if (auto clickableComponent = coreComponentsOwner->getComponent<components::core::ClickableComponent>())
+    {
+        clickableComponent->invokeKeyAction(inputKey);
+    }
+}
+
 bool Button::isActive() const
 {
     return coreComponentsOwner->areComponentEnabled();

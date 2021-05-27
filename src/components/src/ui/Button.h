@@ -24,6 +24,7 @@ public:
     void setColor(graphics::Color);
     void setText(const std::string&);
     void setClickAction(const std::vector<core::KeyAction>&);
+    void invokeClickAction(input::InputKey);
     bool isActive() const override;
 
 private:

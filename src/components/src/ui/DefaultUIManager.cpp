@@ -101,6 +101,7 @@ void DefaultUIManager::activate()
     activateComponents(checkBoxes);
     activateComponents(labels);
     activateComponents(textFields);
+    activateComponents(images);
 }
 
 void DefaultUIManager::deactivate()
@@ -110,6 +111,7 @@ void DefaultUIManager::deactivate()
     deactivateComponents(checkBoxes);
     deactivateComponents(labels);
     deactivateComponents(textFields);
+    deactivateComponents(images);
 }
 
 void DefaultUIManager::setColor(UIComponentType componentType, const std::string& componentName,
@@ -160,6 +162,16 @@ void DefaultUIManager::changeClickAction(UIComponentType componentType, const st
     {
         auto& button = tryToGetComponentByName(buttons, componentName);
         button->setClickAction(keyActions);
+    }
+}
+
+void DefaultUIManager::invokeClickAction(UIComponentType componentType, const std::string& componentName,
+                                         input::InputKey keyAssignedToClickAction)
+{
+    if (componentType == UIComponentType::Button)
+    {
+        auto& button = tryToGetComponentByName(buttons, componentName);
+        button->invokeClickAction(keyAssignedToClickAction);
     }
 }
 

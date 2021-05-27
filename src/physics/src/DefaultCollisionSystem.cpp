@@ -83,7 +83,8 @@ void DefaultCollisionSystem::resolve()
 
             collider->setAvailableMovementDirections();
 
-            const auto xCollisions = collisionTree.getCollidersIntersectingWithAreaFromX(collider->getNextFrameXCollisionBox());
+            const auto xCollisions =
+                collisionTree.getCollidersIntersectingWithAreaFromX(collider->getNextFrameXCollisionBox());
 
             for (const auto& collision : xCollisions)
             {
@@ -104,7 +105,8 @@ void DefaultCollisionSystem::resolve()
                 }
             }
 
-            const auto yCollisions = collisionTree.getCollidersIntersectingWithAreaFromY(collider->getNextFrameYCollisionBox());
+            const auto yCollisions =
+                collisionTree.getCollidersIntersectingWithAreaFromY(collider->getNextFrameYCollisionBox());
 
             for (const auto& collision : yCollisions)
             {

@@ -53,6 +53,12 @@ NextState MenuState::update(const utils::DeltaTime& deltaTime, const input::Inpu
         switchButtonTimer.restart();
     }
 
+    if (input.isKeyPressed(input::InputKey::Enter))
+    {
+        uiManager->invokeClickAction(components::ui::UIComponentType::Button, buttonNames.at(currentButtonIndex),
+                            input::InputKey::MouseLeft);
+    }
+
     uiManager->update(deltaTime, input);
 
     if (shouldExit)
@@ -79,6 +85,7 @@ void MenuState::activate()
 {
     active = true;
     uiManager->activate();
+    setIconVisible(currentButtonIndex);
 }
 
 void MenuState::deactivate()

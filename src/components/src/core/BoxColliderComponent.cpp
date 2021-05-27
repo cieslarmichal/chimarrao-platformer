@@ -80,7 +80,8 @@ void BoxColliderComponent::resolveOverlapX(const std::shared_ptr<BoxColliderComp
     const utils::FloatRect& otherRect = other->collisionBoundaries;
 
     float left = abs(otherRect.left + otherRect.width - nextFrameCollisionBoundaries.left);
-    float right = abs(otherRect.left - (nextFrameCollisionBoundaries.left + nextFrameCollisionBoundaries.width));
+    float right =
+        abs(otherRect.left - (nextFrameCollisionBoundaries.left + nextFrameCollisionBoundaries.width));
 
     if (left < right)
     {
@@ -119,7 +120,6 @@ void BoxColliderComponent::resolveOverlapY(const std::shared_ptr<BoxColliderComp
     }
 }
 
-
 const sf::FloatRect& BoxColliderComponent::getCollisionBox()
 {
     const sf::Vector2f& pos = owner->transform->getPosition();
@@ -137,9 +137,11 @@ CollisionSource BoxColliderComponent::calculateCollisionSource(const utils::Floa
     constexpr int RIGHT = 3;
 
     distances[TOP] = abs(otherRect.top + otherRect.height - nextFrameCollisionBoundaries.top);
-    distances[BOT] = abs(otherRect.top - (nextFrameCollisionBoundaries.top + nextFrameCollisionBoundaries.height));
+    distances[BOT] =
+        abs(otherRect.top - (nextFrameCollisionBoundaries.top + nextFrameCollisionBoundaries.height));
     distances[LEFT] = abs(otherRect.left + otherRect.width - nextFrameCollisionBoundaries.left);
-    distances[RIGHT] = abs(otherRect.left - (nextFrameCollisionBoundaries.left + nextFrameCollisionBoundaries.width));
+    distances[RIGHT] =
+        abs(otherRect.left - (nextFrameCollisionBoundaries.left + nextFrameCollisionBoundaries.width));
 
     if ((distances[TOP] < distances[BOT] && distances[TOP] < distances[LEFT] &&
          distances[TOP] < distances[RIGHT]))
@@ -211,8 +213,7 @@ const utils::FloatRect& BoxColliderComponent::getNextFrameYCollisionBox()
         return collisionBoundaries;
     }
 
-    nextFrameCollisionBoundaries.left =
-        collisionBoundaries.left;
+    nextFrameCollisionBoundaries.left = collisionBoundaries.left;
     nextFrameCollisionBoundaries.top =
         collisionBoundaries.top + velocityComponent->getVelocity().y * currentDeltaTime.count();
 

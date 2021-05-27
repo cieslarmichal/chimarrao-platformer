@@ -83,4 +83,11 @@ void ClickableComponent::setKeyActions(const std::vector<KeyAction>& keyActionsI
         keyActions.push_back(keyAction);
     }
 }
+
+void ClickableComponent::invokeKeyAction(input::InputKey inputKey)
+{
+    auto foundKeyAction = std::find_if(keyActions.begin(), keyActions.end(),
+                                       [&](const KeyAction& keyAction) { return keyAction.key == inputKey; });
+    foundKeyAction->action();
+}
 }

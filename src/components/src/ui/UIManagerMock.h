@@ -18,6 +18,9 @@ public:
     MOCK_METHOD(void, changeClickAction,
                 (UIComponentType, const std::string& componentName, const std::vector<core::KeyAction>&),
                 (override));
+    MOCK_METHOD(void, invokeClickAction,
+                (UIComponentType, const std::string& componentName, input::InputKey keyAssignedToClickAction),
+                (override));
     MOCK_METHOD(void, setText,
                 (UIComponentTypeWithText, const std::string& componentName, const std::string& text),
                 (override));
