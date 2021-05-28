@@ -2,10 +2,12 @@
 
 #include "gtest/gtest.h"
 
-#include "DeltaTime.h"
 #include "AnimatorMock.h"
-#include "AnimationComponent.h"
 #include "InputMock.h"
+
+#include "AnimationComponent.h"
+#include "DeltaTime.h"
+#include "exceptions/DependentComponentNotFound.h"
 
 using namespace components::core;
 using namespace ::testing;
@@ -51,12 +53,16 @@ public:
     const utils::Vector2f positionInsideTarget{20, 20};
     const utils::Vector2f positionOutsideTarget{100, 212};
     StrictMock<input::InputMock> input;
-    std::shared_ptr<StrictMock<animations::AnimatorMock>> animator = std::make_shared<StrictMock<animations::AnimatorMock>>();
-    ComponentOwner componentOwnerWithoutMovementComponent{position2, "componentOwnerWithoutMovementComponent"};
-    BoxColliderComponent boxColliderComponentWithoutMovement{&componentOwnerWithoutMovementComponent, size, CollisionLayer::Default};
+    std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
+        std::make_shared<StrictMock<animations::AnimatorMock>>();
+    ComponentOwner componentOwnerWithoutMovementComponent{position2,
+                                                          "componentOwnerWithoutMovementComponent"};
+    BoxColliderComponent boxColliderComponentWithoutMovement{&componentOwnerWithoutMovementComponent, size,
+                                                             CollisionLayer::Default};
 
     ComponentOwner componentOwnerWithMovementComponent{position, "componentOwnerWithMovementComponent"};
-    BoxColliderComponent boxColliderComponentWithMovement{&componentOwnerWithMovementComponent, size, CollisionLayer::Default};
+    BoxColliderComponent boxColliderComponentWithMovement{&componentOwnerWithMovementComponent, size,
+                                                          CollisionLayer::Default};
     std::shared_ptr<KeyboardMovementComponent> movementComponent;
     std::shared_ptr<VelocityComponent> velocityComponent;
 
@@ -85,6 +91,28 @@ public:
         std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromBelow, size);
     utils::DeltaTime deltaTime{1};
 };
+
+TEST_F(BoxColliderComponentTest,
+       loadDependentComponentsWithoutAnimatorComponent_shouldThrowDependentComponentNotFound)
+{
+    ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator"};
+    BoxColliderComponent boxColliderComponentWithoutAnimator{&componentOwnerWithoutAnimator, size};
+    componentOwnerWithoutAnimator.addComponent<VelocityComponent>();
+
+    ASSERT_THROW(boxColliderComponentWithoutAnimator.loadDependentComponents(),
+                 components::core::exceptions::DependentComponentNotFound);
+}
+
+TEST_F(BoxColliderComponentTest,
+       loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
+{
+    ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity"};
+    BoxColliderComponent boxColliderComponentWithoutVelocity{&componentOwnerWithoutVelocity, size};
+    componentOwnerWithoutVelocity.addComponent<AnimationComponent>(animator);
+
+    ASSERT_THROW(boxColliderComponentWithoutVelocity.loadDependentComponents(),
+                 components::core::exceptions::DependentComponentNotFound);
+}
 
 TEST_F(BoxColliderComponentTest, getCollisionLayerWithNewObject_shouldReturnDefaultLayer)
 {
@@ -120,7 +148,8 @@ TEST_F(BoxColliderComponentTest, givenRectOutsideTarget_shouldNotIntersect)
     ASSERT_FALSE(boxColliderComponentWithoutMovement.intersectsY(boxColliderComponentNotIntersecting));
 }
 
-TEST_F(BoxColliderComponentTest, givenMovingRectWithNextFrameColisionBoundariesXAndYOutsideTarget_shouldNotIntersect)
+TEST_F(BoxColliderComponentTest,
+       givenMovingRectWithNextFrameColisionBoundariesXAndYOutsideTarget_shouldNotIntersect)
 {
     ASSERT_FALSE(boxColliderComponentWithMovement.intersectsX(boxColliderComponentNotIntersecting));
     ASSERT_FALSE(boxColliderComponentWithMovement.intersectsY(boxColliderComponentNotIntersecting));
@@ -148,7 +177,8 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromLeft_shouldBlock
 {
     velocityComponent->setVelocity(-1.f, 0.f);
     boxColliderComponentWithMovement.update(deltaTime, input);
-    const auto intersectsOnX = boxColliderComponentWithMovement.intersectsX(boxColliderComponentIntersectingFromLeft);
+    const auto intersectsOnX =
+        boxColliderComponentWithMovement.intersectsX(boxColliderComponentIntersectingFromLeft);
 
     boxColliderComponentWithMovement.resolveOverlapX(boxColliderComponentIntersectingFromLeft);
 
@@ -161,7 +191,8 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromRight_shouldBloc
 {
     velocityComponent->setVelocity(1.f, 0.f);
     boxColliderComponentWithMovement.update(deltaTime, input);
-    const auto intersectsOnX = boxColliderComponentWithMovement.intersectsX(boxColliderComponentIntersectingFromRight);
+    const auto intersectsOnX =
+        boxColliderComponentWithMovement.intersectsX(boxColliderComponentIntersectingFromRight);
 
     boxColliderComponentWithMovement.resolveOverlapX(boxColliderComponentIntersectingFromRight);
 
@@ -174,7 +205,8 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromAbove_shouldBloc
 {
     velocityComponent->setVelocity(0.f, -1.f);
     boxColliderComponentWithMovement.update(deltaTime, input);
-    const auto intersectsOnY = boxColliderComponentWithMovement.intersectsY(boxColliderComponentIntersectingFromAbove);
+    const auto intersectsOnY =
+        boxColliderComponentWithMovement.intersectsY(boxColliderComponentIntersectingFromAbove);
 
     boxColliderComponentWithMovement.resolveOverlapY(boxColliderComponentIntersectingFromAbove);
 
@@ -187,7 +219,8 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromBelow_shouldBloc
 {
     velocityComponent->setVelocity(0.f, 1.f);
     boxColliderComponentWithMovement.update(deltaTime, input);
-    const auto intersectsOnY = boxColliderComponentWithMovement.intersectsY(boxColliderComponentIntersectingFromBelow);
+    const auto intersectsOnY =
+        boxColliderComponentWithMovement.intersectsY(boxColliderComponentIntersectingFromBelow);
 
     boxColliderComponentWithMovement.resolveOverlapY(boxColliderComponentIntersectingFromBelow);
 

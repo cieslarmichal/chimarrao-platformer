@@ -6,6 +6,7 @@
 
 #include "ComponentOwner.h"
 #include "exceptions/ActionForKeyAlreadyExists.h"
+#include "exceptions/DependentComponentNotFound.h"
 
 using namespace components::core;
 using namespace ::testing;
@@ -53,6 +54,17 @@ public:
     std::vector<KeyAction> validKeyActionVector{keyAction1, keyAction2};
     std::vector<KeyAction> validKeyActionVectorAfterChange{keyAction3};
 };
+
+TEST_F(ClickableComponentTest,
+       loadDependentComponentsWithoutBoxColliderComponent_shouldThrowDependentComponentNotFound)
+{
+    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider"};
+    ClickableComponent clickableComponentWithoutBoxCollider{&componentOwnerWithoutBoxCollider,
+                                                            validKeyActionVector};
+
+    ASSERT_THROW(clickableComponentWithoutBoxCollider.loadDependentComponents(),
+                 components::core::exceptions::DependentComponentNotFound);
+}
 
 TEST_F(ClickableComponentTest, givenMousePositionOutsideHitboxAndLeftMouseKeyNotClicked_shouldNotCallAction)
 {
@@ -164,4 +176,17 @@ TEST_F(ClickableComponentTest,
     ASSERT_FALSE(actionPerformed(actionVariableLeft));
     ASSERT_FALSE(actionPerformed(actionVariableRight));
     ASSERT_TRUE(actionPerformed(actionVariableRight2));
+}
+
+TEST_F(ClickableComponentTest, invokeKeyActionWithNonExistingKey_shouldNotThrow)
+{
+    ASSERT_NO_THROW(clickableComponent.invokeKeyAction(input::InputKey::E));
+}
+
+TEST_F(ClickableComponentTest, invokeKeyActionWithExistingKey_shouldInvokeActionAssociatedWithKey)
+{
+    clickableComponent.invokeKeyAction(input::InputKey::MouseLeft);
+
+    ASSERT_TRUE(actionPerformed(actionVariable));
+
 }

@@ -3,6 +3,8 @@
 #include <array>
 #include <cmath>
 
+#include "exceptions/DependentComponentNotFound.h"
+
 namespace components::core
 {
 
@@ -23,10 +25,18 @@ void BoxColliderComponent::update(utils::DeltaTime deltaTime, const input::Input
 
 void BoxColliderComponent::loadDependentComponents()
 {
-    Component::loadDependentComponents();
-
     movementComponent = owner->getComponent<KeyboardMovementComponent>();
+    if (not movementComponent)
+    {
+        throw exceptions::DependentComponentNotFound{
+            "BoxColliderComponent: Keyboard movement component not found"};
+    }
+
     velocityComponent = owner->getComponent<VelocityComponent>();
+    if (not velocityComponent)
+    {
+        throw exceptions::DependentComponentNotFound{"BoxColliderComponent: Velocity component not found"};
+    }
 }
 
 bool BoxColliderComponent::intersects(const utils::Vector2f& point)

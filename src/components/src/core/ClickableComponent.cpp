@@ -88,6 +88,9 @@ void ClickableComponent::invokeKeyAction(input::InputKey inputKey)
 {
     auto foundKeyAction = std::find_if(keyActions.begin(), keyActions.end(),
                                        [&](const KeyAction& keyAction) { return keyAction.key == inputKey; });
-    foundKeyAction->action();
+    if (foundKeyAction != keyActions.end())
+    {
+        foundKeyAction->action();
+    }
 }
 }

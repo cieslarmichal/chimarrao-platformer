@@ -63,7 +63,7 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
         components::ui::MouseOverActions{playButtonOnMouseOver, playButtonOnMouseOut};
     const auto runGame = [=]
     {
-      menuState->states.deactivateCurrentState();
+        menuState->states.deactivateCurrentState();
         menuState->states.addNextState(StateType::ChooseMap);
     };
     auto playButtonConfig = std::make_unique<components::ui::ButtonConfig>(
@@ -89,7 +89,7 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
         components::ui::MouseOverActions{mapEditorButtonOnMouseOver, mapEditorButtonOnMouseOut};
     const auto runMapEditor = [=]
     {
-      menuState->states.deactivateCurrentState();
+        menuState->states.deactivateCurrentState();
         menuState->states.addNextState(StateType::Editor);
     };
     auto mapEditorButtonConfig = std::make_unique<components::ui::ButtonConfig>(
@@ -116,7 +116,7 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
         components::ui::MouseOverActions{controlsButtonOnMouseOver, controlsButtonOnMouseOut};
     const auto runControls = [=]
     {
-      menuState->states.deactivateCurrentState();
+        menuState->states.deactivateCurrentState();
         menuState->states.addNextState(StateType::Controls);
     };
     auto controlsButtonConfig = std::make_unique<components::ui::ButtonConfig>(
@@ -143,7 +143,7 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
         components::ui::MouseOverActions{settingsButtonOnMouseOver, settingsButtonOnMouseOut};
     const auto runSettings = [=]
     {
-      menuState->states.deactivateCurrentState();
+        menuState->states.deactivateCurrentState();
         menuState->states.addNextState(StateType::Settings);
     };
     auto settingsButtonConfig = std::make_unique<components::ui::ButtonConfig>(

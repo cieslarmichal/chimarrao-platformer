@@ -5,6 +5,7 @@
 #include "InputMock.h"
 
 #include "ComponentOwner.h"
+#include "exceptions/DependentComponentNotFound.h"
 
 using namespace input;
 using namespace components::core;
@@ -64,6 +65,16 @@ public:
     std::unique_ptr<StrictMock<input::InputMock>> inputInit{std::make_unique<StrictMock<input::InputMock>>()};
     StrictMock<input::InputMock>* input{inputInit.get()};
 };
+
+TEST_F(MouseOverComponentTest,
+       loadDependentComponentsWithoutBoxColliderComponent_shouldThrowDependentComponentNotFound)
+{
+    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider"};
+    MouseOverComponent mouseOverComponentWithoutBoxCollider{
+        &componentOwnerWithoutBoxCollider, [this] { mouseOverAction(); }, [this] { mouseOutAction(); }};
+    ASSERT_THROW(mouseOverComponentWithoutBoxCollider.loadDependentComponents(),
+                 components::core::exceptions::DependentComponentNotFound);
+}
 
 TEST_F(MouseOverComponentTest, givenMousePositionOutsideHitbox_shouldNotCallAnyAction)
 {

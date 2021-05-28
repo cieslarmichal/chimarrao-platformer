@@ -55,8 +55,8 @@ NextState MenuState::update(const utils::DeltaTime& deltaTime, const input::Inpu
 
     if (input.isKeyPressed(input::InputKey::Enter))
     {
-        uiManager->invokeClickAction(components::ui::UIComponentType::Button, buttonNames.at(currentButtonIndex),
-                            input::InputKey::MouseLeft);
+        uiManager->invokeClickAction(components::ui::UIComponentType::Button,
+                                     buttonNames.at(currentButtonIndex), input::InputKey::MouseLeft);
     }
 
     uiManager->update(deltaTime, input);

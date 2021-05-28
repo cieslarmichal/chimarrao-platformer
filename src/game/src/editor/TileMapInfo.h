@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 
-#include "Vector.h"
 #include "Tile.h"
+#include "Vector.h"
 
 namespace game
 {

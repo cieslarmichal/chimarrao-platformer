@@ -1,7 +1,5 @@
 #include "GameStateUIConfigBuilder.h"
 
-#include "editor/TileMapSerializerMock.h"
-
 #include "gtest/gtest.h"
 
 #include "ComponentOwnersManagerMock.h"
@@ -9,6 +7,7 @@
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
+#include "editor/TileMapSerializerMock.h"
 #include "ui/UIManagerMock.h"
 
 #include "GameState.h"
@@ -52,9 +51,8 @@ public:
     std::unique_ptr<StrictMock<TileMapSerializerMock>> tileMapSerializerInit{
         std::make_unique<StrictMock<TileMapSerializerMock>>()};
     StrictMock<TileMapSerializerMock>* tileMapSerializer{tileMapSerializerInit.get()};
-    std::shared_ptr<TileMap> tileMap =
-        std::make_shared<TileMap>("editorStateTestTileMap", utils::Vector2i{40, 15},
-                                  std::move(tileMapSerializerInit), fileAccess);
+    std::shared_ptr<TileMap> tileMap = std::make_shared<TileMap>(
+        "editorStateTestTileMap", utils::Vector2i{40, 15}, std::move(tileMapSerializerInit), fileAccess);
 };
 
 TEST_F(GameStateUIConfigBuilderTest, createGameUI)

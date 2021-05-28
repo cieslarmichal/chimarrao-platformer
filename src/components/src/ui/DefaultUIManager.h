@@ -27,7 +27,7 @@ public:
     void changeClickAction(UIComponentType, const std::string& componentName,
                            const std::vector<core::KeyAction>&) override;
     void invokeClickAction(UIComponentType, const std::string& componentName,
-                                   input::InputKey keyAssignedToClickAction) override;
+                           input::InputKey keyAssignedToClickAction) override;
     void setText(UIComponentTypeWithText, const std::string& componentName, const std::string& text) override;
     void setChecked(UIComponentTypeWithCheck, const std::string& componentName, bool checked) override;
     void activateComponent(UIComponentType, const std::string& componentName) override;

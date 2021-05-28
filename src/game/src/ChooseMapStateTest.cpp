@@ -58,16 +58,16 @@ public:
     std::unique_ptr<StrictMock<TileMapSerializerMock>> tileMapSerializerInit{
         std::make_unique<StrictMock<TileMapSerializerMock>>()};
     StrictMock<TileMapSerializerMock>* tileMapSerializer{tileMapSerializerInit.get()};
-    std::shared_ptr<TileMap> tileMap =
-        std::make_shared<TileMap>("editorStateTestTileMap", utils::Vector2i{40, 15},
-                                  std::move(tileMapSerializerInit), fileAccess);
+    std::shared_ptr<TileMap> tileMap = std::make_shared<TileMap>(
+        "editorStateTestTileMap", utils::Vector2i{40, 15}, std::move(tileMapSerializerInit), fileAccess);
 };
 
 class ChooseMapStateTest : public ChooseMapStateTest_Base
 {
 public:
     ChooseMapState chooseMapState{
-        window, rendererPool, fileAccess, states, std::move(uiManagerInit), std::move(mapsReaderInit), tileMap};
+        window, rendererPool, fileAccess, states, std::move(uiManagerInit), std::move(mapsReaderInit),
+        tileMap};
 };
 
 TEST_F(ChooseMapStateTest, activate_shouldActivateUI)
