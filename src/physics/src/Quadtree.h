@@ -35,7 +35,6 @@ private:
     const int maxObjectsInNodeBeforeSplit;
     const int maxNumberOfSplits;
     int currentTreeDepthLevel;
-    unsigned numberOfCollidersOnEdges;
 
     static const int thisTreeIndex = -1;
     static const int childNorthEastIndex = 0;

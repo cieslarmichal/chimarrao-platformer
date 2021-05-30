@@ -1,5 +1,7 @@
 #include "VelocityComponent.h"
 
+#include <cmath>
+
 namespace components::core
 {
 
@@ -27,7 +29,7 @@ const sf::Vector2f& VelocityComponent::getVelocity() const
 
 void VelocityComponent::trimVelocity()
 {
-    if (fabs(velocity.x) > maxVelocity.x)
+    if (std::fabs(velocity.x) > maxVelocity.x)
     {
         if (velocity.x > 0.f)
         {
@@ -39,7 +41,7 @@ void VelocityComponent::trimVelocity()
         }
     }
 
-    if (fabs(velocity.y) > maxVelocity.y)
+    if (std::fabs(velocity.y) > maxVelocity.y)
     {
         if (velocity.y > 0.f)
         {

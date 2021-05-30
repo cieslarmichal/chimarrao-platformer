@@ -6,6 +6,8 @@ namespace components::core
 {
 Component::Component(ComponentOwner* ownerInit) : owner{ownerInit} {}
 
+Component::~Component() {}
+
 void Component::loadDependentComponents() {}
 
 void Component::update(utils::DeltaTime, const input::Input&) {}

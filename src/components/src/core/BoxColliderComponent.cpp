@@ -1,9 +1,6 @@
 #include "BoxColliderComponent.h"
 
-#include <array>
 #include <cmath>
-
-#include "exceptions/DependentComponentNotFound.h"
 
 namespace components::core
 {
@@ -26,22 +23,12 @@ void BoxColliderComponent::update(utils::DeltaTime deltaTime, const input::Input
 void BoxColliderComponent::loadDependentComponents()
 {
     movementComponent = owner->getComponent<KeyboardMovementComponent>();
-    if (not movementComponent)
-    {
-        throw exceptions::DependentComponentNotFound{
-            "BoxColliderComponent: Keyboard movement component not found"};
-    }
-
     velocityComponent = owner->getComponent<VelocityComponent>();
-    if (not velocityComponent)
-    {
-        throw exceptions::DependentComponentNotFound{"BoxColliderComponent: Velocity component not found"};
-    }
 }
 
 bool BoxColliderComponent::intersects(const utils::Vector2f& point)
 {
-    const utils::FloatRect& thisRect = getCollisionBox();
+    const auto& thisRect = getCollisionBox();
     return thisRect.contains(point);
 }
 
@@ -49,8 +36,8 @@ bool BoxColliderComponent::intersectsX(const std::shared_ptr<BoxColliderComponen
 {
     if (other)
     {
-        const utils::FloatRect& thisRect = getNextFrameXCollisionBox();
-        const utils::FloatRect& otherRect = other->getNextFrameXCollisionBox();
+        const auto& thisRect = getNextFrameXCollisionBox();
+        const auto& otherRect = other->getNextFrameXCollisionBox();
 
         if (thisRect.intersects(otherRect))
         {
@@ -64,8 +51,8 @@ bool BoxColliderComponent::intersectsY(const std::shared_ptr<BoxColliderComponen
 {
     if (other)
     {
-        const utils::FloatRect& thisRect = getNextFrameYCollisionBox();
-        const utils::FloatRect& otherRect = other->getNextFrameYCollisionBox();
+        const auto& thisRect = getNextFrameYCollisionBox();
+        const auto& otherRect = other->getNextFrameYCollisionBox();
 
         if (thisRect.intersects(otherRect))
         {
@@ -82,11 +69,11 @@ void BoxColliderComponent::resolveOverlapX(const std::shared_ptr<BoxColliderComp
         return;
     }
 
-    const utils::FloatRect& otherRect = other->getNextFrameXCollisionBox();
+    const auto& otherRect = other->getNextFrameXCollisionBox();
 
-    float left = abs(otherRect.left + otherRect.width - nextFrameCollisionBoundaries.left);
-    float right =
-        abs(otherRect.left - (nextFrameCollisionBoundaries.left + nextFrameCollisionBoundaries.width));
+    const auto left = std::abs(otherRect.left + otherRect.width - nextFrameCollisionBoundaries.left);
+    const auto right =
+        std::abs(otherRect.left - (nextFrameCollisionBoundaries.left + nextFrameCollisionBoundaries.width));
 
     if (left < right)
     {
@@ -105,10 +92,11 @@ void BoxColliderComponent::resolveOverlapY(const std::shared_ptr<BoxColliderComp
         return;
     }
 
-    const utils::FloatRect& otherRect = other->getNextFrameYCollisionBox();
+    const auto& otherRect = other->getNextFrameYCollisionBox();
 
-    float top = abs(otherRect.top + otherRect.height - nextFrameCollisionBoundaries.top);
-    float bot = abs(otherRect.top - (nextFrameCollisionBoundaries.top + nextFrameCollisionBoundaries.height));
+    const auto top = std::abs(otherRect.top + otherRect.height - nextFrameCollisionBoundaries.top);
+    const auto bot =
+        std::abs(otherRect.top - (nextFrameCollisionBoundaries.top + nextFrameCollisionBoundaries.height));
 
     if (top < bot)
     {
@@ -122,9 +110,9 @@ void BoxColliderComponent::resolveOverlapY(const std::shared_ptr<BoxColliderComp
 
 const sf::FloatRect& BoxColliderComponent::getCollisionBox()
 {
-    const sf::Vector2f& pos = owner->transform->getPosition();
-    collisionBoundaries.left = pos.x + offset.x;
-    collisionBoundaries.top = pos.y + offset.y;
+    const auto& position = owner->transform->getPosition();
+    collisionBoundaries.left = position.x + offset.x;
+    collisionBoundaries.top = position.y + offset.y;
     return collisionBoundaries;
 }
 

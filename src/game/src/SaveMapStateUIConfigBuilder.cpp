@@ -23,7 +23,7 @@ std::unique_ptr<components::ui::UIConfig>
 SaveMapStateUIConfigBuilder::createSaveMapUIConfig(SaveMapState* saveMapState)
 {
     return std::make_unique<components::ui::UIConfig>(
-        createBackgroundConfig(saveMapState), std::move(createButtonConfigs(saveMapState)),
+        createBackgroundConfig(saveMapState), createButtonConfigs(saveMapState),
         createCheckBoxConfigs(saveMapState), createLabelConfigs(saveMapState),
         createTextFieldConfigs(saveMapState), createImageConfigs(saveMapState));
 }

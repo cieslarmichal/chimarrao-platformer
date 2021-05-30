@@ -24,7 +24,7 @@ public:
     void pause();
     void moveTile(utils::Vector2f);
     const utils::Vector2f& getPosition() const;
-    const bool isActive() const;
+    bool isActive() const;
 
 private:
     std::shared_ptr<components::core::ComponentOwner> componentOwner;

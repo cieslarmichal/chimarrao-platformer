@@ -28,9 +28,8 @@ const auto iconSize = utils::Vector2f{4, 4};
 std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUIConfig(MenuState* menuState)
 {
     return std::make_unique<components::ui::UIConfig>(
-        createBackgroundConfig(menuState), std::move(createButtonConfigs(menuState)),
-        createCheckBoxConfigs(menuState), createLabelConfigs(menuState), createTextFieldConfigs(menuState),
-        createImageConfigs(menuState));
+        createBackgroundConfig(menuState), createButtonConfigs(menuState), createCheckBoxConfigs(menuState),
+        createLabelConfigs(menuState), createTextFieldConfigs(menuState), createImageConfigs(menuState));
 }
 
 std::unique_ptr<components::ui::BackgroundConfig> MenuStateUIConfigBuilder::createBackgroundConfig(MenuState*)
@@ -200,7 +199,7 @@ MenuStateUIConfigBuilder::createImageConfigs(MenuState* menuState)
 {
     std::vector<std::unique_ptr<components::ui::ImageConfig>> imagesConfig;
 
-    for (int iconIndex = 0; iconIndex < menuState->iconUniqueNames.size(); iconIndex++)
+    for (std::size_t iconIndex = 0; iconIndex < menuState->iconUniqueNames.size(); iconIndex++)
     {
         const auto iconPosition =
             utils::Vector2f{buttonsPositions[iconIndex].x + buttonSize.x, buttonsPositions[iconIndex].y + 1};

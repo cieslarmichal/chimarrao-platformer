@@ -135,7 +135,7 @@ const utils::Vector2f& LayoutTile::getPosition() const
     return componentOwner->transform->getPosition();
 }
 
-const bool LayoutTile::isActive() const
+bool LayoutTile::isActive() const
 {
     return componentOwner->transform->isEnabled();
 }

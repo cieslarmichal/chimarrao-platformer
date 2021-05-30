@@ -7,7 +7,6 @@
 
 #include "AnimationComponent.h"
 #include "DeltaTime.h"
-#include "exceptions/DependentComponentNotFound.h"
 
 using namespace components::core;
 using namespace ::testing;
@@ -92,27 +91,6 @@ public:
     utils::DeltaTime deltaTime{1};
 };
 
-TEST_F(BoxColliderComponentTest,
-       loadDependentComponentsWithoutAnimatorComponent_shouldThrowDependentComponentNotFound)
-{
-    ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator"};
-    BoxColliderComponent boxColliderComponentWithoutAnimator{&componentOwnerWithoutAnimator, size};
-    componentOwnerWithoutAnimator.addComponent<VelocityComponent>();
-
-    ASSERT_THROW(boxColliderComponentWithoutAnimator.loadDependentComponents(),
-                 components::core::exceptions::DependentComponentNotFound);
-}
-
-TEST_F(BoxColliderComponentTest,
-       loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
-{
-    ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity"};
-    BoxColliderComponent boxColliderComponentWithoutVelocity{&componentOwnerWithoutVelocity, size};
-    componentOwnerWithoutVelocity.addComponent<AnimationComponent>(animator);
-
-    ASSERT_THROW(boxColliderComponentWithoutVelocity.loadDependentComponents(),
-                 components::core::exceptions::DependentComponentNotFound);
-}
 
 TEST_F(BoxColliderComponentTest, getCollisionLayerWithNewObject_shouldReturnDefaultLayer)
 {

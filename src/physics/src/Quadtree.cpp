@@ -1,5 +1,7 @@
 #include "Quadtree.h"
 
+#include <cmath>
+
 namespace physics
 {
 Quadtree::Quadtree() : Quadtree{5, 5, 0, {0, 0, 80, 60}} {}
@@ -10,8 +12,7 @@ Quadtree::Quadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsIni
       maxNumberOfSplits{maxNumberOfSplitsInit},
       currentTreeDepthLevel{treeDepthLevelInit},
       nodeBounds{boundsInit},
-      children{nullptr, nullptr, nullptr, nullptr},
-      numberOfCollidersOnEdges{0}
+      children{nullptr, nullptr, nullptr, nullptr}
 {
 }
 
@@ -35,7 +36,8 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
 
     colliders.emplace_back(colliderToInsert);
 
-    if (colliders.size() > maxObjectsInNodeBeforeSplit && currentTreeDepthLevel < maxNumberOfSplits)
+    if (static_cast<int>(colliders.size()) > maxObjectsInNodeBeforeSplit &&
+        currentTreeDepthLevel < maxNumberOfSplits)
     {
         splitIntoChildNodes();
         for (auto& collider : colliders)
@@ -101,11 +103,12 @@ Quadtree::getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) co
 
         if (area.intersects(possibleColliderBox))
         {
-            double distance =
-                pow((area.top + area.height / 2) - (possibleColliderBox.top + possibleColliderBox.height / 2),
-                    2) +
-                pow((area.left + area.width / 2) - (possibleColliderBox.left + possibleColliderBox.width / 2),
-                    2);
+            double distance = std::pow((area.top + area.height / 2) -
+                                           (possibleColliderBox.top + possibleColliderBox.height / 2),
+                                       2) +
+                              std::pow((area.left + area.width / 2) -
+                                           (possibleColliderBox.left + possibleColliderBox.width / 2),
+                                       2);
             if (distance > 0.0)
             {
                 collidersIntersectingWithAreaAndDistance.emplace_back(

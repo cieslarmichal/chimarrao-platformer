@@ -47,7 +47,7 @@ std::unique_ptr<components::ui::UIConfig>
 ControlsStateUIConfigBuilder::createControlsUIConfig(ControlsState* controlsState)
 {
     return std::make_unique<components::ui::UIConfig>(
-        createBackgroundConfig(controlsState), std::move(createButtonConfigs(controlsState)),
+        createBackgroundConfig(controlsState), createButtonConfigs(controlsState),
         createCheckBoxConfigs(controlsState), createLabelConfigs(controlsState),
         createTextFieldConfigs(controlsState), createImageConfigs(controlsState));
 }

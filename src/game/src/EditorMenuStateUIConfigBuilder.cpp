@@ -24,7 +24,7 @@ std::unique_ptr<components::ui::UIConfig>
 EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(EditorMenuState* editorMenuState)
 {
     return std::make_unique<components::ui::UIConfig>(
-        createBackgroundConfig(editorMenuState), std::move(createButtonConfigs(editorMenuState)),
+        createBackgroundConfig(editorMenuState), createButtonConfigs(editorMenuState),
         createCheckBoxConfigs(editorMenuState), createLabelConfigs(editorMenuState),
         createTextFieldConfigs(editorMenuState), createImageConfigs(editorMenuState));
 }
@@ -107,7 +107,7 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
     auto newMapClickAction = [=]
     {
         std::cout << "new map\n";
-        TileMapInfo tileMapInfo = TileMapInfo{"", {40, 15}};
+        TileMapInfo tileMapInfo = TileMapInfo{"", {40, 15}, {}};
         editorMenuState->tileMap->setTileMapInfo(tileMapInfo);
         editorMenuState->shouldBackToEditor = true;
     };
@@ -155,7 +155,7 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
     auto backToMenuClickAction = [=]
     {
         editorMenuState->shouldBackToMenu = true;
-        TileMapInfo tileMapInfo = TileMapInfo{"", {40, 15}};
+        TileMapInfo tileMapInfo = TileMapInfo{"", {40, 15}, {}};
         editorMenuState->tileMap->setTileMapInfo(tileMapInfo);
         editorMenuState->shouldBackToMenu = true;
     };

@@ -20,7 +20,7 @@ set(UT_SOURCES
         src/MultipleFileAnimatorTest.cpp
         )
 
-add_library(animations SHARED ${SOURCES})
+add_library(animations STATIC ${SOURCES})
 target_link_libraries(animations PUBLIC utils graphics yaml-cpp)
 target_include_directories(animations PUBLIC src)
 

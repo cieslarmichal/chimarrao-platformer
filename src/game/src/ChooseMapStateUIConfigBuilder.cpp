@@ -27,7 +27,7 @@ std::unique_ptr<components::ui::UIConfig>
 ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(ChooseMapState* chooseMapState)
 {
     return std::make_unique<components::ui::UIConfig>(
-        createBackgroundConfig(chooseMapState), std::move(createButtonConfigs(chooseMapState)),
+        createBackgroundConfig(chooseMapState), createButtonConfigs(chooseMapState),
         createCheckBoxConfigs(chooseMapState), createLabelConfigs(chooseMapState),
         createTextFieldConfigs(chooseMapState), createImageConfigs(chooseMapState));
 }
@@ -103,7 +103,7 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
         leftButtonClickAction, leftButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(leftButtonConfig));
 
-    for (auto mapIndex = 0; mapIndex < chooseMapState->mapButtonsUniqueNames.size(); mapIndex++)
+    for (std::size_t mapIndex = 0; mapIndex < chooseMapState->mapButtonsUniqueNames.size(); mapIndex++)
     {
         const auto& buttonUniqueName = chooseMapState->mapButtonsUniqueNames[mapIndex];
         auto& mapNameToDisplay = chooseMapState->mapNames[mapIndex];

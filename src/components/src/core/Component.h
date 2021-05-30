@@ -13,6 +13,7 @@ class Component
 {
 public:
     Component(ComponentOwner*);
+    virtual ~Component();
 
     virtual void loadDependentComponents();
     virtual void update(utils::DeltaTime, const input::Input&);
