@@ -53,23 +53,28 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
         currentMovementSpeed.x = 0.f;
     }
 
+    if (not canMoveDown)
+    {
+        if (currentMovementSpeed.x == 0.f)
+        {
+            animation->setAnimation(animations::AnimationType::Idle);
+        }
+        else
+        {
+            animation->setAnimation(animations::AnimationType::Walk);
+        }
+    }
+
     if (input.isKeyPressed(input::InputKey::Up) && not canMoveDown && canMoveUp)
     {
         currentMovementSpeed.y = -3.4f * 5.f;
+        animation->setAnimation(animations::AnimationType::Jump);
     }
     else
     {
         currentMovementSpeed.y += 25.f * deltaTime.count();
     }
 
-    if (currentMovementSpeed.x == 0.f)
-    {
-        animation->setAnimation(animations::AnimationType::Idle);
-    }
-    else
-    {
-        animation->setAnimation(animations::AnimationType::Walk);
-    }
     velocityComponent->setVelocity(currentMovementSpeed);
 }
 
@@ -81,7 +86,7 @@ void KeyboardMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const inp
     }
 
     auto currentMovementSpeed = velocityComponent->getVelocity();
-    std::cerr << currentMovementSpeed;
+
     if (currentMovementSpeed.x < 0 and not canMoveLeft)
     {
         currentMovementSpeed.x = 0;
@@ -99,10 +104,9 @@ void KeyboardMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const inp
         currentMovementSpeed.y = 0;
     }
 
-    std::cerr << currentMovementSpeed;
     velocityComponent->setVelocity(currentMovementSpeed);
-    float xFrameMove = currentMovementSpeed.x * deltaTime.count();
-    float yFrameMove = currentMovementSpeed.y * deltaTime.count();
+    const float xFrameMove = currentMovementSpeed.x * deltaTime.count();
+    const float yFrameMove = currentMovementSpeed.y * deltaTime.count();
     owner->transform->addPosition(xFrameMove, yFrameMove);
 }
 

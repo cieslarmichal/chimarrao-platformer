@@ -36,7 +36,6 @@ void WindowSfml::display()
 
 void WindowSfml::update()
 {
-    // TODO: sf::Event in update param
     sf::Event event{};
 
     while (window->pollEvent(event))

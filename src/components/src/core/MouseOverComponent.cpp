@@ -46,7 +46,6 @@ void MouseOverComponent::update(utils::DeltaTime, const input::Input& input)
 
 void MouseOverComponent::enable()
 {
-    // TODO: test
     Component::enable();
     mouseOver = false;
 }

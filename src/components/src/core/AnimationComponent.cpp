@@ -15,6 +15,7 @@ void AnimationComponent::update(utils::DeltaTime deltaTime, const input::Input&)
 
 void AnimationComponent::setAnimation(animations::AnimationType animationType)
 {
+    std::cerr << animationType<< std::endl;
     animator->setAnimation(animationType);
 }
 

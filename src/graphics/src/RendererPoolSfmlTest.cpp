@@ -397,7 +397,6 @@ TEST_F(RendererPoolSfmlTest, setTextWithValidGraphicsId_shouldNotThrow)
     ASSERT_NO_THROW(rendererPool.setText(textId, exampleText));
 }
 
-// TODO: test setColor with validId
 TEST_F(RendererPoolSfmlTest, setColorWithInvalidGraphicsId_shouldNotThrow)
 {
     ASSERT_NO_THROW(rendererPool.setColor(invalidId, sf::Color::Red));

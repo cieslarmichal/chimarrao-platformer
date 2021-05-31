@@ -50,7 +50,6 @@ void ClickableComponent::update(utils::DeltaTime, const input::Input& input)
 
 void ClickableComponent::enable()
 {
-    // TODO: test
     Component::enable();
     for (auto& keyAction : keyActions)
     {
