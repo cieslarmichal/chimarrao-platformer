@@ -81,7 +81,7 @@ void KeyboardMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const inp
     }
 
     auto currentMovementSpeed = velocityComponent->getVelocity();
-
+    std::cerr << currentMovementSpeed;
     if (currentMovementSpeed.x < 0 and not canMoveLeft)
     {
         currentMovementSpeed.x = 0;
@@ -99,6 +99,7 @@ void KeyboardMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const inp
         currentMovementSpeed.y = 0;
     }
 
+    std::cerr << currentMovementSpeed;
     velocityComponent->setVelocity(currentMovementSpeed);
     float xFrameMove = currentMovementSpeed.x * deltaTime.count();
     float yFrameMove = currentMovementSpeed.y * deltaTime.count();

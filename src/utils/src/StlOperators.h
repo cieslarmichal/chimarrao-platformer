@@ -32,6 +32,12 @@ std::ostream& operator<<(std::ostream& os, const std::vector<T>& v)
     return ::printRange(os, v.begin(), v.end());
 }
 
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const std::set<T>& v)
+{
+    return ::printRange(os, v.begin(), v.end());
+}
+
 template <typename T, typename S>
 std::ostream& operator<<(std::ostream& os, const std::map<T, S>& m)
 {

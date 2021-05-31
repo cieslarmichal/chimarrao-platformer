@@ -147,7 +147,6 @@ TEST_F(WindowSfmlTest, shouldRetrieveSupportedResolutions)
 {
     const auto actualSupportedResolutions = window.getSupportedResolutions();
 
-    ASSERT_TRUE(std::is_sorted(actualSupportedResolutions.begin(), actualSupportedResolutions.end()));
     ASSERT_TRUE(std::all_of(actualSupportedResolutions.begin(), actualSupportedResolutions.end(),
                             [&](const auto& actualResolution)
                             { return commonResolutions.contains(actualResolution); }));

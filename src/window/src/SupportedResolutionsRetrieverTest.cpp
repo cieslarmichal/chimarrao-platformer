@@ -4,6 +4,8 @@
 
 #include "gtest/gtest.h"
 
+#include "StlOperators.h"
+
 using namespace ::testing;
 using namespace window;
 
@@ -18,7 +20,8 @@ TEST_F(SupportedResolutionsRetrieverTest, shouldRetrieveSupportedResolutions)
 {
     const auto actualSupportedResolutions = SupportedResolutionsRetriever::retrieveSupportedResolutions();
 
-    ASSERT_TRUE(std::is_sorted(actualSupportedResolutions.begin(), actualSupportedResolutions.end()));
+    ASSERT_TRUE(std::is_sorted(actualSupportedResolutions.begin(), actualSupportedResolutions.end(),
+                               std::greater<>()));
     ASSERT_TRUE(std::all_of(actualSupportedResolutions.begin(), actualSupportedResolutions.end(),
                             [&](const auto& actualResolution)
                             { return commonResolutions.contains(actualResolution); }));

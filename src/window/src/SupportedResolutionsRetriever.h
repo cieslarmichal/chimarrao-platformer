@@ -15,7 +15,7 @@ public:
     static Resolution retrieveHighestResolution();
 
 private:
-    static std::vector<Resolution> getAllSupportedResolutions();
+    static std::set<Resolution> getAllSupportedResolutions();
 
     static const std::set<Resolution> commonResolutions;
 };

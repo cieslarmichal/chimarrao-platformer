@@ -24,7 +24,7 @@ std::vector<Resolution> SupportedResolutionsRetriever::retrieveSupportedResoluti
             supportedCommonResolutions.push_back(supportedResolution);
         }
     }
-    std::reverse(supportedCommonResolutions.begin(), supportedCommonResolutions.end());
+    std::sort(supportedCommonResolutions.begin(), supportedCommonResolutions.end(), std::greater<>());
     return supportedCommonResolutions;
 }
 
@@ -40,7 +40,7 @@ Resolution SupportedResolutionsRetriever::retrieveHighestResolution()
     return *std::max_element(supportedResolutions.begin(), supportedResolutions.end());
 }
 
-std::vector<Resolution> SupportedResolutionsRetriever::getAllSupportedResolutions()
+std::set<Resolution> SupportedResolutionsRetriever::getAllSupportedResolutions()
 {
     const auto allModes = sf::VideoMode::getFullscreenModes();
     if (allModes.empty())
@@ -48,11 +48,10 @@ std::vector<Resolution> SupportedResolutionsRetriever::getAllSupportedResolution
         throw exceptions::ResolutionsNotDetected{"Not found any supported resolutions"};
     }
 
-    std::vector<Resolution> allSupportedResolutions;
-    allSupportedResolutions.reserve(allModes.size());
+    std::set<Resolution> allSupportedResolutions;
     for (const auto& mode : allModes)
     {
-        allSupportedResolutions.push_back({mode.width, mode.height});
+        allSupportedResolutions.insert({mode.width, mode.height});
     }
     return allSupportedResolutions;
 }

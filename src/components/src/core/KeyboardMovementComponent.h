@@ -19,10 +19,10 @@ public:
     void setMovementSpeed(float speed);
     float getMovementSpeed() const;
 
-    bool canMoveRight;
-    bool canMoveLeft;
-    bool canMoveUp;
-    bool canMoveDown;
+    bool canMoveRight{true};
+    bool canMoveLeft{true};
+    bool canMoveUp{true};
+    bool canMoveDown{true};
 
 private:
     std::shared_ptr<AnimationComponent> animation;
