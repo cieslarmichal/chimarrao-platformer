@@ -5,6 +5,7 @@
 #include "EditorState.h"
 #include "MenuState.h"
 #include "ProjectPathReader.h"
+#include "StateUINavigator.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
@@ -46,15 +47,13 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
 
     const auto playButtonOnMouseOver = [=]
     {
-        menuState->unselectAllButtons();
-        menuState->changeSelectedButton(0);
+        menuState->uiNavigator->setFocusOnItem(0);
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuPlayButton",
                                        buttonHoverColor);
     };
     const auto playButtonOnMouseOut = [=]
     {
-        menuState->unselectAllButtons();
-        menuState->hideIcons();
+        menuState->uiNavigator->loseFocus();
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuPlayButton",
                                        buttonColor);
     };
@@ -72,15 +71,13 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
 
     const auto mapEditorButtonOnMouseOver = [=]
     {
-        menuState->unselectAllButtons();
-        menuState->changeSelectedButton(1);
+        menuState->uiNavigator->setFocusOnItem(1);
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuMapEditorButton",
                                        buttonHoverColor);
     };
     const auto mapEditorButtonOnMouseOut = [=]
     {
-        menuState->unselectAllButtons();
-        menuState->hideIcons();
+        menuState->uiNavigator->loseFocus();
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuMapEditorButton",
                                        buttonColor);
     };
@@ -99,15 +96,13 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
 
     const auto controlsButtonOnMouseOver = [=]
     {
-        menuState->unselectAllButtons();
-        menuState->changeSelectedButton(2);
+        menuState->uiNavigator->setFocusOnItem(2);
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuControlsButton",
                                        buttonHoverColor);
     };
     const auto controlsButtonOnMouseOut = [=]
     {
-        menuState->unselectAllButtons();
-        menuState->hideIcons();
+        menuState->uiNavigator->loseFocus();
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuControlsButton",
                                        buttonColor);
     };
@@ -126,15 +121,13 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
 
     const auto settingsButtonOnMouseOver = [=]
     {
-        menuState->unselectAllButtons();
-        menuState->changeSelectedButton(3);
+        menuState->uiNavigator->setFocusOnItem(3);
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuSettingsButton",
                                        buttonHoverColor);
     };
     const auto settingsButtonOnMouseOut = [=]
     {
-        menuState->unselectAllButtons();
-        menuState->hideIcons();
+        menuState->uiNavigator->loseFocus();
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuSettingsButton",
                                        buttonColor);
     };
@@ -153,15 +146,13 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
 
     const auto exitButtonOnMouseOver = [=]
     {
-        menuState->unselectAllButtons();
-        menuState->changeSelectedButton(4);
+        menuState->uiNavigator->setFocusOnItem(4);
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuExitButton",
                                        buttonHoverColor);
     };
     const auto exitButtonOnMouseOut = [=]
     {
-        menuState->unselectAllButtons();
-        menuState->hideIcons();
+        menuState->uiNavigator->loseFocus();
         menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuExitButton",
                                        buttonColor);
     };
@@ -199,13 +190,13 @@ MenuStateUIConfigBuilder::createImageConfigs(MenuState* menuState)
 {
     std::vector<std::unique_ptr<components::ui::ImageConfig>> imagesConfig;
 
-    for (std::size_t iconIndex = 0; iconIndex < menuState->iconUniqueNames.size(); iconIndex++)
+    for (std::size_t iconIndex = 0; iconIndex < menuState->iconNames.size(); iconIndex++)
     {
         const auto iconPosition =
             utils::Vector2f{buttonsPositions[iconIndex].x + buttonSize.x, buttonsPositions[iconIndex].y + 1};
 
         auto imageConfig = std::make_unique<components::ui::ImageConfig>(
-            menuState->iconUniqueNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First,
+            menuState->iconNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First,
             iconPath);
         imagesConfig.push_back(std::move(imageConfig));
     }

@@ -26,7 +26,10 @@ set(SOURCES
         src/StateFactory.cpp
         src/GameFactory.cpp
         src/FileSystemMapsReader.cpp
-        src/DefaultComponentOwnersManager.cpp)
+        src/DefaultComponentOwnersManager.cpp
+        src/StateUINavigator.cpp
+        )
+
 
 set(UT_SOURCES
         src/GameTest.cpp
@@ -54,6 +57,7 @@ set(UT_SOURCES
         src/editor/TileMapTest.cpp
         src/editor/TileTypeTest.cpp
         src/DefaultComponentOwnersManagerTest.cpp
+        src/StateUINavigatorTest.cpp
         )
 
 add_library(game ${SOURCES})

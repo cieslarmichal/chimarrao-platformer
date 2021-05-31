@@ -188,5 +188,4 @@ TEST_F(ClickableComponentTest, invokeKeyActionWithExistingKey_shouldInvokeAction
     clickableComponent.invokeKeyAction(input::InputKey::MouseLeft);
 
     ASSERT_TRUE(actionPerformed(actionVariable));
-
 }

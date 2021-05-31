@@ -91,7 +91,6 @@ public:
     utils::DeltaTime deltaTime{1};
 };
 
-
 TEST_F(BoxColliderComponentTest, getCollisionLayerWithNewObject_shouldReturnDefaultLayer)
 {
     ASSERT_EQ(boxColliderComponentWithoutMovement.getCollisionLayer(), CollisionLayer::Default);

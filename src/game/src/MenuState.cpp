@@ -2,63 +2,30 @@
 
 #include <utility>
 
-#include "CommonUIConfigElements.h"
 #include "MenuStateUIConfigBuilder.h"
-#include "ProjectPathReader.h"
-#include "core/GraphicsComponent.h"
-#include "ui/DefaultUIManager.h"
+#include "StateUINavigator.h"
 
 namespace game
 {
-namespace
-{
-const auto buttonColor = graphics::Color(251, 190, 102);
-const auto buttonHoverColor = graphics::Color(205, 128, 66);
-const auto buttonSize = utils::Vector2f{23, 6};
-const auto iconSize = utils::Vector2f{4, 4};
-}
 
 MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                      std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                      std::unique_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
-      currentButtonIndex{0},
-      timeAfterButtonCanBeSwitched{0.1f},
+      uiManager{std::move(uiManagerInit)},
       buttonNames{"menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton",
                   "menuExitButton"},
-      uiManager{std::move(uiManagerInit)},
-      shouldExit{false},
-      iconUniqueNames{"menuIcon1Image", "menuIcon2Image", "menuIcon3Image", "menuIcon4Image",
-                      "menuIcon5Image"}
+      iconNames{"menuIcon1Image", "menuIcon2Image", "menuIcon3Image", "menuIcon4Image", "menuIcon5Image"},
+      shouldExit{false}
 {
     uiManager->createUI(MenuStateUIConfigBuilder::createMenuUIConfig(this));
-    uiManager->setColor(components::ui::UIComponentType::Button, buttonNames.at(currentButtonIndex),
-                        buttonHoverColor);
-    setIconVisible(currentButtonIndex);
+    uiNavigator = std::make_unique<StateUINavigator>(*uiManager, buttonNames, iconNames);
 }
 
 NextState MenuState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    if (switchButtonTimer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
-    {
-        if (input.isKeyPressed(input::InputKey::Up))
-        {
-            changeSelectedButtonUp();
-        }
-        else if (input.isKeyPressed(input::InputKey::Down))
-        {
-            changeSelectedButtonDown();
-        }
-        switchButtonTimer.restart();
-    }
-
-    if (input.isKeyPressed(input::InputKey::Enter))
-    {
-        uiManager->invokeClickAction(components::ui::UIComponentType::Button,
-                                     buttonNames.at(currentButtonIndex), input::InputKey::MouseLeft);
-    }
-
+    uiNavigator->update(deltaTime, input);
     uiManager->update(deltaTime, input);
 
     if (shouldExit)
@@ -85,76 +52,13 @@ void MenuState::activate()
 {
     active = true;
     uiManager->activate();
-    setIconVisible(currentButtonIndex);
+    uiNavigator->activate();
 }
 
 void MenuState::deactivate()
 {
     active = false;
     uiManager->deactivate();
-}
-
-void MenuState::changeSelectedButtonUp()
-{
-    unselectAllButtons();
-
-    if (currentButtonIndex == 0)
-    {
-        currentButtonIndex = static_cast<unsigned int>(buttonNames.size() - 1);
-    }
-    else
-    {
-        currentButtonIndex--;
-    }
-    uiManager->setColor(components::ui::UIComponentType::Button, buttonNames.at(currentButtonIndex),
-                        buttonHoverColor);
-    setIconVisible(currentButtonIndex);
-}
-
-void MenuState::changeSelectedButtonDown()
-{
-    unselectAllButtons();
-
-    if (currentButtonIndex == buttonNames.size() - 1)
-    {
-        currentButtonIndex = 0;
-    }
-    else
-    {
-        currentButtonIndex++;
-    }
-    uiManager->setColor(components::ui::UIComponentType::Button, buttonNames.at(currentButtonIndex),
-                        buttonHoverColor);
-    setIconVisible(currentButtonIndex);
-}
-
-void MenuState::changeSelectedButton(unsigned int buttonIndex)
-{
-    currentButtonIndex = buttonIndex;
-    setIconVisible(currentButtonIndex);
-}
-
-void MenuState::unselectAllButtons()
-{
-    uiManager->setColor(components::ui::UIComponentType::Button, "menuPlayButton", buttonColor);
-    uiManager->setColor(components::ui::UIComponentType::Button, "menuMapEditorButton", buttonColor);
-    uiManager->setColor(components::ui::UIComponentType::Button, "menuControlsButton", buttonColor);
-    uiManager->setColor(components::ui::UIComponentType::Button, "menuSettingsButton", buttonColor);
-    uiManager->setColor(components::ui::UIComponentType::Button, "menuExitButton", buttonColor);
-}
-
-void MenuState::setIconVisible(unsigned int iconIndex)
-{
-    hideIcons();
-    uiManager->activateComponent(components::ui::UIComponentType::Image, iconUniqueNames[iconIndex]);
-}
-
-void MenuState::hideIcons()
-{
-    for (auto& iconUniqueName : iconUniqueNames)
-    {
-        uiManager->deactivateComponent(components::ui::UIComponentType::Image, iconUniqueName);
-    }
 }
 
 void MenuState::handleWindowSizeChange(const utils::Vector2u& windowSize)
