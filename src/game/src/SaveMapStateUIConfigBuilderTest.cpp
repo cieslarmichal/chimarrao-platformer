@@ -1,13 +1,12 @@
 #include "SaveMapStateUIConfigBuilder.h"
 
-#include <editor/TileMapSerializerJson.h>
-
 #include "gtest/gtest.h"
 
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
+#include "editor/TileMapMock.h"
 #include "ui/UIManagerMock.h"
 
 #include "SaveMapState.h"
@@ -22,8 +21,20 @@ namespace
 const std::vector<std::string> expectedLabelNames{"saveMapTitleLabel", "saveMapMapNameLabel"};
 const std::vector<std::string> expectedButtonNames{"saveMapCancelButton", "saveMapSaveButton"};
 const std::vector<std::string> expectedTextFieldsNames{"saveMapNameTextField"};
+const std::string name{"name"};
 }
-class SaveMapStateUIConfigBuilderTest : public Test
+
+class SaveMapStateUIConfigBuilderTest_Base : public Test
+{
+public:
+    SaveMapStateUIConfigBuilderTest_Base()
+    {
+        EXPECT_CALL(*tileMap, getName()).WillOnce(ReturnRef(name));
+    }
+    std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
+};
+
+class SaveMapStateUIConfigBuilderTest : public SaveMapStateUIConfigBuilderTest_Base
 {
 public:
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
@@ -35,18 +46,13 @@ public:
     std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
         std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
     components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
-    TileMap tileMap{
-        "", {0, 0}, std::make_unique<TileMapSerializerJson>(), std::make_shared<utils::FileAccessMock>()};
-    SaveMapState saveMapState{window,
-                              rendererPool,
-                              fileAccess,
-                              states,
-                              std::move(uiManagerInit),
-                              std::make_shared<TileMap>(std::move(tileMap))};
+
+    SaveMapState saveMapState{window, rendererPool, fileAccess, states, std::move(uiManagerInit), tileMap};
 };
 
 TEST_F(SaveMapStateUIConfigBuilderTest, createSaveMapUI)
 {
+    EXPECT_CALL(*tileMap, getName()).WillRepeatedly(ReturnRef(name));
     const auto saveMapUI = SaveMapStateUIConfigBuilder::createSaveMapUIConfig(&saveMapState);
 
     std::vector<std::string> actualLabelNames;

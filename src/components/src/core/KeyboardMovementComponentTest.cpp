@@ -66,6 +66,7 @@ TEST_F(KeyboardMovementComponentTest, setMovementSpeed)
 
 TEST_F(KeyboardMovementComponentTest, givenInputStatusWithNoKeyPressed_shouldSetAnimationTypeToIdle)
 {
+    keyboardMovementComponent.canMoveDown = false;
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(false));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
@@ -77,6 +78,7 @@ TEST_F(KeyboardMovementComponentTest, givenInputStatusWithNoKeyPressed_shouldSet
 TEST_F(KeyboardMovementComponentTest,
        givenInputStatusWithRightKeyPressed_shouldSetAnimationDirectionToRightAndSetAnimationTypeToWalk)
 {
+    keyboardMovementComponent.canMoveDown = false;
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(true));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
@@ -89,6 +91,7 @@ TEST_F(KeyboardMovementComponentTest,
 TEST_F(KeyboardMovementComponentTest,
        givenInputStatusWithLeftKeyPressed_shouldSetAnimationDirectionToLeftAndSetAnimationTypeToWalk)
 {
+    keyboardMovementComponent.canMoveDown = false;
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(true));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
     EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Left));
@@ -100,6 +103,7 @@ TEST_F(KeyboardMovementComponentTest,
 TEST_F(KeyboardMovementComponentTest,
        givenRightKeyPressed_update_shouldAddPositionChangeFromInputToTransformComponent)
 {
+    keyboardMovementComponent.canMoveDown = false;
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(true));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
@@ -111,15 +115,15 @@ TEST_F(KeyboardMovementComponentTest,
     keyboardMovementComponent.lateUpdate(deltaTime, *input);
 
     const auto positionChangeToRight = deltaTime.count() * keyboardMovementComponent.getMovementSpeed();
-    const auto positionChangeToDown = deltaTime.count() * deltaTime.count() * 25.f;
     const auto expectedPositionAfterUpdate = utils::Vector2f{positionBeforeUpdate.x + positionChangeToRight,
-                                                             positionBeforeUpdate.y + positionChangeToDown};
+                                                             positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
 
 TEST_F(KeyboardMovementComponentTest, givenRightKeyPressedAndBlockedRightMovement_update_shouldNotMoveRight)
 {
+    keyboardMovementComponent.canMoveDown = false;
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(true));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
@@ -131,9 +135,8 @@ TEST_F(KeyboardMovementComponentTest, givenRightKeyPressedAndBlockedRightMovemen
     keyboardMovementComponent.canMoveRight = false;
     keyboardMovementComponent.lateUpdate(deltaTime, *input);
 
-    const auto positionChangeToDown = deltaTime.count() * deltaTime.count() * 25.f;
     const auto expectedPositionAfterUpdate =
-        utils::Vector2f{positionBeforeUpdate.x, positionBeforeUpdate.y + positionChangeToDown};
+        utils::Vector2f{positionBeforeUpdate.x, positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
@@ -141,6 +144,7 @@ TEST_F(KeyboardMovementComponentTest, givenRightKeyPressedAndBlockedRightMovemen
 TEST_F(KeyboardMovementComponentTest,
        givenLeftKeyPressed_update_shouldAddPositionChangeFromInputToTransformComponent)
 {
+    keyboardMovementComponent.canMoveDown = false;
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(true));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
     EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Left));
@@ -151,15 +155,15 @@ TEST_F(KeyboardMovementComponentTest,
     keyboardMovementComponent.lateUpdate(deltaTime, *input);
 
     const auto positionChangeToLeft = -deltaTime.count() * keyboardMovementComponent.getMovementSpeed();
-    const auto positionChangeToDown = deltaTime.count() * deltaTime.count() * 25.f;
     const auto expectedPositionAfterUpdate = utils::Vector2f{positionBeforeUpdate.x + positionChangeToLeft,
-                                                             positionBeforeUpdate.y + positionChangeToDown};
+                                                             positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
 
 TEST_F(KeyboardMovementComponentTest, givenLeftKeyPressedAndBlockedLeftMovement_update_shouldNotMoveLeft)
 {
+    keyboardMovementComponent.canMoveDown = false;
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(true));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
     EXPECT_CALL(*animator, setAnimationDirection(AnimationDirection::Left));
@@ -170,9 +174,8 @@ TEST_F(KeyboardMovementComponentTest, givenLeftKeyPressedAndBlockedLeftMovement_
     keyboardMovementComponent.canMoveLeft = false;
     keyboardMovementComponent.lateUpdate(deltaTime, *input);
 
-    const auto positionChangeToDown = deltaTime.count() * deltaTime.count() * 25.f;
     const auto expectedPositionAfterUpdate =
-        utils::Vector2f{positionBeforeUpdate.x, positionBeforeUpdate.y + positionChangeToDown};
+        utils::Vector2f{positionBeforeUpdate.x, positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
@@ -184,6 +187,7 @@ TEST_F(KeyboardMovementComponentTest,
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(false));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(true));
     EXPECT_CALL(*animator, setAnimation(AnimationType::Idle));
+    EXPECT_CALL(*animator, setAnimation(AnimationType::Jump));
     const auto positionBeforeUpdate = componentOwner.transform->getPosition();
     keyboardMovementComponent.canMoveDown = false;
 
@@ -203,6 +207,7 @@ TEST_F(KeyboardMovementComponentTest, givenUpKeyPressedAndBlockedUpMovement_upda
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(false));
     EXPECT_CALL(*input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(true));
     EXPECT_CALL(*animator, setAnimation(AnimationType::Idle));
+    EXPECT_CALL(*animator, setAnimation(AnimationType::Jump));
     const auto positionBeforeUpdate = componentOwner.transform->getPosition();
     keyboardMovementComponent.canMoveDown = false;
 

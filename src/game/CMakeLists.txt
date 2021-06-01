@@ -5,7 +5,7 @@ set(SOURCES
         src/MenuState.cpp
         src/EditorState.cpp
         src/PauseState.cpp
-        src/editor/TileMap.cpp
+        src/editor/DefaultTileMap.cpp
         src/EditorMenuState.cpp
         src/SettingsState.cpp
         src/ControlsState.cpp

@@ -4,6 +4,8 @@ directory_path = input("Resource directory (to undo): ")
 
 
 def to_undo(path):
+    if len(path.split(".")) < 2:
+        return False
     return path.split(".")[-2] == "bak"
 
 
@@ -20,4 +22,4 @@ for dirpath, dirnames, filenames in os.walk(directory_path):
 
         if to_undo(file_path):
             image = undo_image(file_path)
-            image.save(file_path[:-8], "PNG")
+            image.save(file_path[:-8] + ".png", "PNG")

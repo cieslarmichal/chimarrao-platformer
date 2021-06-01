@@ -7,6 +7,7 @@
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
+#include "editor/TileMapMock.h"
 #include "editor/TileMapSerializerMock.h"
 #include "ui/UIManagerMock.h"
 
@@ -20,6 +21,7 @@ using namespace ::testing;
 namespace
 {
 const auto brickTexturePath = utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/brick.png";
+std::shared_ptr<Tile> tile = std::make_shared<Tile>();
 }
 
 class GameStateUIConfigBuilderTest : public Test
@@ -27,13 +29,15 @@ class GameStateUIConfigBuilderTest : public Test
 public:
     GameStateUIConfigBuilderTest()
     {
-        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5, 5}, utils::Vector2f{10, 10},
-                                           graphics::Color{128, 91, 50}, graphics::VisibilityLayer::Second));
-        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5, 5}, utils::Vector2f{30, 30}, brickTexturePath,
-                                           graphics::VisibilityLayer::Second));
-        EXPECT_CALL(*componentOwnersManager, add(_)).Times(2);
+        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{3.8f, 3.8f}, utils::Vector2f{10, 10},
+                                           graphics::Color::White, graphics::VisibilityLayer::Second));
+//        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5.f, 5.f}, utils::Vector2f{30, 30}, brickTexturePath,
+//                                           graphics::VisibilityLayer::Second));
+        EXPECT_CALL(*componentOwnersManager, add(_));
         EXPECT_CALL(*componentOwnersManager, processNewObjects());
-        EXPECT_CALL(*rendererPool, release(_)).Times(2);
+        EXPECT_CALL(*rendererPool, release(_));
+        EXPECT_CALL(*tileMap,getSize()).WillRepeatedly(Return(utils::Vector2i{1,1}));
+        EXPECT_CALL(*tileMap,getTile(utils::Vector2i{0,0})).WillRepeatedly(ReturnRef(tile));
     }
 
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
@@ -44,15 +48,10 @@ public:
     StrictMock<StatesMock> states;
     std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
         std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
-    components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
     std::unique_ptr<StrictMock<ComponentOwnersManagerMock>> componentOwnersManagerInit{
         std::make_unique<StrictMock<ComponentOwnersManagerMock>>()};
     StrictMock<ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
-    std::unique_ptr<StrictMock<TileMapSerializerMock>> tileMapSerializerInit{
-        std::make_unique<StrictMock<TileMapSerializerMock>>()};
-    StrictMock<TileMapSerializerMock>* tileMapSerializer{tileMapSerializerInit.get()};
-    std::shared_ptr<TileMap> tileMap = std::make_shared<TileMap>(
-        "editorStateTestTileMap", utils::Vector2i{40, 15}, std::move(tileMapSerializerInit), fileAccess);
+    std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
 };
 
 TEST_F(GameStateUIConfigBuilderTest, createGameUI)

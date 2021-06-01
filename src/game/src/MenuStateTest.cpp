@@ -66,6 +66,17 @@ public:
 TEST_F(MenuStateTest, activate_shouldActivateUI)
 {
     EXPECT_CALL(*uiManager, activate());
+    EXPECT_CALL(*uiManager,
+                deactivateComponent(components::ui::UIComponentType::Image, "menuIcon1Image"));
+    EXPECT_CALL(*uiManager,
+                deactivateComponent(components::ui::UIComponentType::Image, "menuIcon2Image"));
+    EXPECT_CALL(*uiManager,
+                deactivateComponent(components::ui::UIComponentType::Image, "menuIcon3Image"));
+    EXPECT_CALL(*uiManager,
+                deactivateComponent(components::ui::UIComponentType::Image, "menuIcon4Image"));
+    EXPECT_CALL(*uiManager,
+                deactivateComponent(components::ui::UIComponentType::Image, "menuIcon5Image"));
+    EXPECT_CALL(*uiManager, activateComponent(components::ui::UIComponentType::Image, "menuIcon1Image"));
 
     menuState.activate();
 }
@@ -92,6 +103,7 @@ TEST_F(MenuStateTest, render_shouldRenderAllFromRendererPool)
 TEST_F(MenuStateTest, update_shouldUpdateUI)
 {
     EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
+    EXPECT_CALL(input,isKeyPressed(input::InputKey::Enter)).WillOnce(Return(false));
 
     menuState.update(deltaTime, input);
 }

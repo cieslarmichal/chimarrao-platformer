@@ -6,6 +6,7 @@
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
+#include "editor/TileMapMock.h"
 #include "ui/UIManagerMock.h"
 
 #include "EditorMenuState.h"
@@ -36,9 +37,8 @@ public:
     std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
         std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
     components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
-    std::shared_ptr<TileMap> tileMap =
-        std::make_shared<TileMap>("editorMenuStateTestTileMap", utils::Vector2i{40, 15},
-                                  std::make_unique<TileMapSerializerJson>(), fileAccess);
+    std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
+
     EditorMenuState editorMenuState{window, rendererPool, fileAccess, states, std::move(uiManagerInit),
                                     tileMap};
 };

@@ -9,6 +9,7 @@
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapSerializerMock.h"
+#include "editor/TileMapMock.h"
 #include "ui/UIManagerMock.h"
 
 #include "ProjectPathReader.h"
@@ -21,6 +22,7 @@ using namespace ::testing;
 namespace
 {
 const auto brickTexturePath = utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/brick.png";
+std::shared_ptr<Tile> tile = std::make_shared<Tile>();
 }
 
 class GameStateTest_Base : public Test
@@ -28,16 +30,18 @@ class GameStateTest_Base : public Test
 public:
     GameStateTest_Base()
     {
+        EXPECT_CALL(*tileMap, getSize()).WillRepeatedly(Return(utils::Vector2i{1,1}));
+        EXPECT_CALL(*tileMap, getTile(utils::Vector2i{0,0})).WillRepeatedly(ReturnRef(tile));
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
-        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5, 5}, utils::Vector2f{10, 10},
-                                           graphics::Color{128, 91, 50}, graphics::VisibilityLayer::Second));
-        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5, 5}, utils::Vector2f{30, 30}, brickTexturePath,
-                                           graphics::VisibilityLayer::Second));
-        EXPECT_CALL(*componentOwnersManager, add(_)).Times(2);
+        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{3.800000, 3.800000}, utils::Vector2f{10, 10},
+                                           graphics::Color::White, graphics::VisibilityLayer::Second));
+//        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5, 5}, utils::Vector2f{30, 30}, brickTexturePath,
+//                                           graphics::VisibilityLayer::Second));
+        EXPECT_CALL(*componentOwnersManager, add(_));
         EXPECT_CALL(*componentOwnersManager, processNewObjects());
-        EXPECT_CALL(*rendererPool, release(_)).Times(2);
+        EXPECT_CALL(*rendererPool, release(_));
         EXPECT_CALL(*rendererPool, setTexture(_, _, _));
     }
 
@@ -56,11 +60,7 @@ public:
     StrictMock<StatesMock> states;
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
-    std::unique_ptr<StrictMock<TileMapSerializerMock>> tileMapSerializerInit{
-        std::make_unique<StrictMock<TileMapSerializerMock>>()};
-    StrictMock<TileMapSerializerMock>* tileMapSerializer{tileMapSerializerInit.get()};
-    std::shared_ptr<TileMap> tileMap = std::make_shared<TileMap>(
-        "editorStateTestTileMap", utils::Vector2i{40, 15}, std::move(tileMapSerializerInit), fileAccess);
+    std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
 };
 
 class GameStateTest : public GameStateTest_Base
