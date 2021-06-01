@@ -27,7 +27,8 @@ set(SOURCES
         src/GameFactory.cpp
         src/FileSystemMapsReader.cpp
         src/DefaultComponentOwnersManager.cpp
-        src/StateUINavigator.cpp
+        src/PaginatedButtonsNavigator.cpp
+        src/GridButtonsNavigator.cpp
         )
 
 
@@ -57,7 +58,8 @@ set(UT_SOURCES
         src/editor/TileMapTest.cpp
         src/editor/TileTypeTest.cpp
         src/DefaultComponentOwnersManagerTest.cpp
-        src/StateUINavigatorTest.cpp
+        src/PaginatedButtonsNavigatorTest.cpp
+        src/GridButtonsNavigatorTest.cpp
         )
 
 add_library(game ${SOURCES})

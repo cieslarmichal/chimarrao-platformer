@@ -1,7 +1,7 @@
 #pragma once
 
+#include "PaginatedButtonsNavigator.h"
 #include "State.h"
-#include "StateUINavigator.h"
 #include "Timer.h"
 #include "Window.h"
 #include "core/ComponentOwner.h"
@@ -33,7 +33,7 @@ private:
     std::unique_ptr<components::ui::UIManager> uiManager;
     const std::vector<std::string> buttonNames;
     const std::vector<std::string> iconNames;
-    std::unique_ptr<StateUINavigator> uiNavigator;
+    std::unique_ptr<PaginatedButtonsNavigator> uiNavigator;
     bool shouldExit;
 };
 }

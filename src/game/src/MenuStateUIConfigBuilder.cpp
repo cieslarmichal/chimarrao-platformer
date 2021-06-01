@@ -4,8 +4,8 @@
 #include "ControlsState.h"
 #include "EditorState.h"
 #include "MenuState.h"
+#include "PaginatedButtonsNavigator.h"
 #include "ProjectPathReader.h"
-#include "StateUINavigator.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game

@@ -7,11 +7,14 @@
 
 namespace game
 {
-class StateUINavigator
+class PaginatedButtonsNavigator
 {
 public:
-    explicit StateUINavigator(components::ui::UIManager&, const std::vector<std::string>& buttonNames,
-                              const std::vector<std::string>& iconNames);
+    explicit PaginatedButtonsNavigator(components::ui::UIManager&,
+                                       const std::vector<std::string>& buttonNames,
+                                       const std::vector<std::string>& iconNames,
+                                       graphics::Color buttonsDefaultColor,
+                                       graphics::Color buttonsHoverColor);
 
     void update(const utils::DeltaTime&, const input::Input&);
     void activate();
@@ -32,5 +35,7 @@ private:
     unsigned int currentItemIndex{0};
     utils::Timer switchItemTimer;
     const float timeAfterButtonCanBeSwitched;
+    const graphics::Color buttonsDefaultColor;
+    const graphics::Color buttonsHoverColor;
 };
 }

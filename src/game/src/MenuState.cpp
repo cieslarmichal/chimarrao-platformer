@@ -3,10 +3,16 @@
 #include <utility>
 
 #include "MenuStateUIConfigBuilder.h"
-#include "StateUINavigator.h"
+#include "PaginatedButtonsNavigator.h"
 
 namespace game
 {
+
+namespace
+{
+const auto buttonColor = graphics::Color(251, 190, 102);
+const auto buttonHoverColor = graphics::Color(205, 128, 66);
+}
 
 MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
@@ -20,7 +26,8 @@ MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
       shouldExit{false}
 {
     uiManager->createUI(MenuStateUIConfigBuilder::createMenuUIConfig(this));
-    uiNavigator = std::make_unique<StateUINavigator>(*uiManager, buttonNames, iconNames);
+    uiNavigator = std::make_unique<PaginatedButtonsNavigator>(*uiManager, buttonNames, iconNames, buttonColor,
+                                                              buttonHoverColor);
 }
 
 NextState MenuState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
