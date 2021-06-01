@@ -18,6 +18,9 @@ jobs:
     - uses: actions/checkout@v2
 
     # install dependencies
+    - name: build env
+      run: sudo apt-get install build-essential libgtk-3-dev
+    
     - name: sfml
       run: sudo apt-get update && sudo apt install -yq libsfml-dev
       
