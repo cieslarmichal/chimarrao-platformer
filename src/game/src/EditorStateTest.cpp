@@ -9,12 +9,26 @@
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
-#include "editor/TileMapSerializerMock.h"
+#include "editor/TileMapMock.h"
 #include "ui/UIManagerMock.h"
 
 using namespace game;
 using namespace components::ui;
 using namespace ::testing;
+
+namespace
+{
+const utils::Vector2i positionInit{0, 0};
+const utils::Vector2f position{0, 0};
+const utils::Vector2f size{0, 0};
+const utils::Vector2f offset{1, 1};
+const utils::Vector2f newPosition{1, 1};
+std::shared_ptr<Tile> tile = std::make_shared<Tile>();
+
+const std::string mapName{"name"};
+const utils::Vector2i mapSize{1, 1};
+const auto grassTexturePath = utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/2.png";
+}
 
 class EditorStateTest_Base : public Test
 {
@@ -24,23 +38,22 @@ public:
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
+        EXPECT_CALL(*tileMap, getSize()).WillOnce(Return(utils::Vector2i{1, 1}));
+        EXPECT_CALL(*tileMap, setTileMapInfo(_));
+        EXPECT_CALL(*tileMap, getTile(_)).WillRepeatedly(ReturnRef(tile));
     }
 
     std::shared_ptr<StrictMock<window::WindowMock>> window =
         std::make_shared<StrictMock<window::WindowMock>>();
-    std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
-        std::make_shared<StrictMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
     std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
         std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
     StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
-    std::unique_ptr<StrictMock<TileMapSerializerMock>> tileMapSerializerInit{
-        std::make_unique<StrictMock<TileMapSerializerMock>>()};
-    StrictMock<TileMapSerializerMock>* tileMapSerializer{tileMapSerializerInit.get()};
-    std::shared_ptr<TileMap> tileMap = std::make_shared<TileMap>(
-        "editorStateTestTileMap", utils::Vector2i{40, 15}, std::move(tileMapSerializerInit), fileAccess);
+    std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
 };

@@ -12,7 +12,7 @@ multipleFilesAnimators:
       - type: jump
         firstTexturePath: resources/Player/Jump/jump-1.png
         numberOfTextures: 14
-        timeBetweenTexturesInSeconds: 0.1
+        timeBetweenTexturesInSeconds: 0.05
   - name: druid
     animations:
       - type: idle

@@ -1,13 +1,12 @@
 #include "EditorStateUIConfigBuilder.h"
 
-#include <editor/TileMapSerializerJson.h>
-
 #include "gtest/gtest.h"
 
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
+#include "editor/TileMapMock.h"
 #include "ui/UIManagerMock.h"
 
 #include "EditorState.h"
@@ -16,7 +15,24 @@ using namespace game;
 using namespace components::ui;
 using namespace ::testing;
 
-class EditorStateUIConfigBuilderTest : public Test
+namespace
+{
+std::shared_ptr<Tile> tile = std::make_shared<Tile>();
+}
+
+class EditorStateUIConfigBuilderTest_Base : public Test
+{
+public:
+    EditorStateUIConfigBuilderTest_Base()
+    {
+        EXPECT_CALL(*tileMap, getSize()).WillOnce(Return(utils::Vector2i{1, 1}));
+        EXPECT_CALL(*tileMap, setTileMapInfo(_));
+        EXPECT_CALL(*tileMap, getTile(_)).WillRepeatedly(ReturnRef(tile));
+    }
+    std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
+};
+
+class EditorStateUIConfigBuilderTest : public EditorStateUIConfigBuilderTest_Base
 {
 public:
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
@@ -28,9 +44,7 @@ public:
     std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
         std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
     components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
-    std::shared_ptr<TileMap> tileMap =
-        std::make_shared<TileMap>("editorMenuStateTestTileMap", utils::Vector2i{40, 15},
-                                  std::make_unique<TileMapSerializerJson>(), fileAccess);
+
     EditorState editorState{window, rendererPool, fileAccess, states, std::move(uiManagerInit), tileMap};
 };
 

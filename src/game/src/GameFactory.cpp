@@ -1,12 +1,12 @@
 #include "GameFactory.h"
 
-#include <editor/TileMapSerializerJson.h>
-
 #include "DefaultStates.h"
 #include "FileAccessFactory.h"
 #include "GraphicsFactory.h"
 #include "InputManagerFactory.h"
 #include "WindowFactory.h"
+#include "editor/DefaultTileMap.h"
+#include "editor/TileMapSerializerJson.h"
 
 namespace game
 {
@@ -35,7 +35,7 @@ std::unique_ptr<Game> GameFactory::createGame()
 
     std::shared_ptr<utils::FileAccess> fileAccess = fileAccessFactory->createDefaultFileAccess();
 
-    auto tileMap = std::make_shared<TileMap>(
+    auto tileMap = std::make_shared<DefaultTileMap>(
         "",
         utils::Vector2i(static_cast<int>(mapSize.x) / tileSizeX * 2, static_cast<int>(mapSize.y) / tileSizeY),
         std::make_unique<TileMapSerializerJson>(), fileAccess);

@@ -1,7 +1,5 @@
 #include "SaveMapState.h"
 
-#include <editor/TileMapSerializerJson.h>
-
 #include "gtest/gtest.h"
 
 #include "FileAccessMock.h"
@@ -9,6 +7,7 @@
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
+#include "editor/TileMapMock.h"
 #include "ui/UIManagerMock.h"
 
 #include "StlOperators.h"
@@ -17,14 +16,22 @@ using namespace game;
 using namespace components::ui;
 using namespace ::testing;
 
+namespace
+{
+    const std::string mapName{"name"};
+}
+
 class SaveMapStateTest_Base : public Test
 {
 public:
     SaveMapStateTest_Base()
     {
+        EXPECT_CALL(*tileMap, getName()).WillOnce(ReturnRef(mapName));
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
+        EXPECT_CALL(*uiManager, setText(components::ui::UIComponentTypeWithText::TextField,
+                                        "saveMapNameTextField", mapName));
     }
 
     std::shared_ptr<StrictMock<window::WindowMock>> window =
@@ -39,19 +46,13 @@ public:
     StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
+    std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
 };
 
 class SaveMapStateTest : public SaveMapStateTest_Base
 {
 public:
-    TileMap tileMap{
-        "", {0, 0}, std::make_unique<TileMapSerializerJson>(), std::make_shared<utils::FileAccessMock>()};
-    SaveMapState saveMapState{window,
-                              rendererPool,
-                              fileAccess,
-                              states,
-                              std::move(uiManagerInit),
-                              std::make_shared<TileMap>(std::move(tileMap))};
+    SaveMapState saveMapState{window, rendererPool, fileAccess, states, std::move(uiManagerInit), tileMap};
 };
 
 TEST_F(SaveMapStateTest, activate_shouldActivateUI)

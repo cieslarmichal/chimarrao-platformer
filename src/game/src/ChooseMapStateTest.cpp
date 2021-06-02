@@ -8,6 +8,7 @@
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
+#include "editor/TileMapMock.h"
 #include "editor/TileMapSerializerMock.h"
 #include "ui/UIManagerMock.h"
 
@@ -55,11 +56,7 @@ public:
         std::make_unique<StrictMock<MapsReaderMock>>()};
     StrictMock<MapsReaderMock>* mapsReader{mapsReaderInit.get()};
     StrictMock<input::InputMock> input;
-    std::unique_ptr<StrictMock<TileMapSerializerMock>> tileMapSerializerInit{
-        std::make_unique<StrictMock<TileMapSerializerMock>>()};
-    StrictMock<TileMapSerializerMock>* tileMapSerializer{tileMapSerializerInit.get()};
-    std::shared_ptr<TileMap> tileMap = std::make_shared<TileMap>(
-        "editorStateTestTileMap", utils::Vector2i{40, 15}, std::move(tileMapSerializerInit), fileAccess);
+    std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
 };
 
 class ChooseMapStateTest : public ChooseMapStateTest_Base

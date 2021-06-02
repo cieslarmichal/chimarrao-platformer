@@ -1,4 +1,4 @@
-#include "TileMap.h"
+#include "DefaultTileMap.h"
 
 #include "gtest/gtest.h"
 
@@ -33,7 +33,7 @@ public:
     std::unique_ptr<StrictMock<TileMapSerializerMock>> mapSerializerInit =
         std::make_unique<StrictMock<TileMapSerializerMock>>();
     StrictMock<TileMapSerializerMock>* mapSerializer = mapSerializerInit.get();
-    TileMap tileMap{mapName, mapSize, std::move(mapSerializerInit), fileAccess};
+    DefaultTileMap tileMap{mapName, mapSize, std::move(mapSerializerInit), fileAccess};
 };
 
 TEST_F(TileMapTest, getName_shouldReturnMapName)
