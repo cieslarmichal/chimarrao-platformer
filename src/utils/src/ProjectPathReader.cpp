@@ -26,7 +26,7 @@ std::string ProjectPathReader::getProjectRootPath()
     }
 
     const std::string currentPath = getExecutablePath();
-    const auto projectNamePosition = currentPath.find(projectName);
+    const auto projectNamePosition = currentPath.rfind(projectName);
     if (projectNamePosition == std::string::npos)
     {
         throw exceptions::FileNotFound{"Project directory not found in path: " + currentPath};
