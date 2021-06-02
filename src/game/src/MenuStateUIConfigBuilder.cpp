@@ -48,14 +48,12 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     const auto playButtonOnMouseOver = [=]
     {
         menuState->uiNavigator->setFocusOnItem(0);
-        menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuPlayButton",
-                                       buttonHoverColor);
+        menuState->uiManager->setColor("menuPlayButton", buttonHoverColor);
     };
     const auto playButtonOnMouseOut = [=]
     {
         menuState->uiNavigator->loseFocus();
-        menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuPlayButton",
-                                       buttonColor);
+        menuState->uiManager->setColor("menuPlayButton", buttonColor);
     };
     auto playButtonMouseOverActions =
         components::ui::MouseOverActions{playButtonOnMouseOver, playButtonOnMouseOut};
@@ -72,14 +70,12 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     const auto mapEditorButtonOnMouseOver = [=]
     {
         menuState->uiNavigator->setFocusOnItem(1);
-        menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuMapEditorButton",
-                                       buttonHoverColor);
+        menuState->uiManager->setColor("menuMapEditorButton", buttonHoverColor);
     };
     const auto mapEditorButtonOnMouseOut = [=]
     {
         menuState->uiNavigator->loseFocus();
-        menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuMapEditorButton",
-                                       buttonColor);
+        menuState->uiManager->setColor("menuMapEditorButton", buttonColor);
     };
     auto mapEditorButtonMouseOverActions =
         components::ui::MouseOverActions{mapEditorButtonOnMouseOver, mapEditorButtonOnMouseOut};
@@ -97,14 +93,12 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     const auto controlsButtonOnMouseOver = [=]
     {
         menuState->uiNavigator->setFocusOnItem(2);
-        menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuControlsButton",
-                                       buttonHoverColor);
+        menuState->uiManager->setColor("menuControlsButton", buttonHoverColor);
     };
     const auto controlsButtonOnMouseOut = [=]
     {
         menuState->uiNavigator->loseFocus();
-        menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuControlsButton",
-                                       buttonColor);
+        menuState->uiManager->setColor("menuControlsButton", buttonColor);
     };
     auto controlsButtonMouseOverActions =
         components::ui::MouseOverActions{controlsButtonOnMouseOver, controlsButtonOnMouseOut};
@@ -122,14 +116,12 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     const auto settingsButtonOnMouseOver = [=]
     {
         menuState->uiNavigator->setFocusOnItem(3);
-        menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuSettingsButton",
-                                       buttonHoverColor);
+        menuState->uiManager->setColor("menuSettingsButton", buttonHoverColor);
     };
     const auto settingsButtonOnMouseOut = [=]
     {
         menuState->uiNavigator->loseFocus();
-        menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuSettingsButton",
-                                       buttonColor);
+        menuState->uiManager->setColor("menuSettingsButton", buttonColor);
     };
     auto settingsButtonMouseOverActions =
         components::ui::MouseOverActions{settingsButtonOnMouseOver, settingsButtonOnMouseOut};
@@ -147,14 +139,12 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     const auto exitButtonOnMouseOver = [=]
     {
         menuState->uiNavigator->setFocusOnItem(4);
-        menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuExitButton",
-                                       buttonHoverColor);
+        menuState->uiManager->setColor("menuExitButton", buttonHoverColor);
     };
     const auto exitButtonOnMouseOut = [=]
     {
         menuState->uiNavigator->loseFocus();
-        menuState->uiManager->setColor(components::ui::UIComponentType::Button, "menuExitButton",
-                                       buttonColor);
+        menuState->uiManager->setColor("menuExitButton", buttonColor);
     };
     auto exitButtonMouseOverActions =
         components::ui::MouseOverActions{exitButtonOnMouseOver, exitButtonOnMouseOut};

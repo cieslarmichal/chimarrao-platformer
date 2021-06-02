@@ -67,15 +67,9 @@ ControlsStateUIConfigBuilder::createButtonConfigs(ControlsState* controlsState)
 
     const auto backToMenuButtonSize = utils::Vector2f{13.f, 5.f};
     const auto backToMenuButtonOnMouseOver = [=]
-    {
-        controlsState->uiManager->setColor(components::ui::UIComponentType::Button,
-                                           "controlsBackToMenuButton", buttonHoverColor);
-    };
+    { controlsState->uiManager->setColor("controlsBackToMenuButton", buttonHoverColor); };
     const auto backToMenuButtonOnMouseOut = [=]
-    {
-        controlsState->uiManager->setColor(components::ui::UIComponentType::Button,
-                                           "controlsBackToMenuButton", buttonColor);
-    };
+    { controlsState->uiManager->setColor("controlsBackToMenuButton", buttonColor); };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
     auto backToMenuClickAction = [=] { controlsState->shouldBackToMenu = true; };

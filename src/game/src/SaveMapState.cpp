@@ -19,8 +19,7 @@ SaveMapState::SaveMapState(const std::shared_ptr<window::Window>& windowInit,
       tileMap{std::move(tileMapInit)}
 {
     uiManager->createUI(SaveMapStateUIConfigBuilder::createSaveMapUIConfig(this));
-    uiManager->setText(components::ui::UIComponentTypeWithText::TextField, "saveMapNameTextField",
-                       tileMap->getName());
+    uiManager->setText("saveMapNameTextField", tileMap->getName());
     possibleLeaveFromStateTimer.start();
 }
 

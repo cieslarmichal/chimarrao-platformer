@@ -15,8 +15,7 @@ PaginatedButtonsNavigator::PaginatedButtonsNavigator(components::ui::UIManager& 
       buttonsDefaultColor{buttonsDefaultColor},
       buttonsHoverColor{buttonsHoverColor}
 {
-    uiManager.setColor(components::ui::UIComponentType::Button, buttonNames.at(currentItemIndex),
-                       buttonsHoverColor);
+    uiManager.setColor(buttonNames.at(currentItemIndex), buttonsHoverColor);
     setIconVisible(currentItemIndex);
 }
 
@@ -37,8 +36,7 @@ void PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input::Inp
 
     if (input.isKeyPressed(input::InputKey::Enter))
     {
-        uiManager.invokeClickAction(components::ui::UIComponentType::Button, buttonNames.at(currentItemIndex),
-                                    input::InputKey::MouseLeft);
+        uiManager.invokeClickAction(buttonNames.at(currentItemIndex), input::InputKey::MouseLeft);
     }
 }
 
@@ -76,8 +74,8 @@ void PaginatedButtonsNavigator::changeSelectedButtonUp()
     {
         currentItemIndex--;
     }
-    uiManager.setColor(components::ui::UIComponentType::Button, buttonNames.at(currentItemIndex),
-                       buttonsHoverColor);
+
+    uiManager.setColor(buttonNames.at(currentItemIndex), buttonsHoverColor);
     setIconVisible(currentItemIndex);
 }
 
@@ -93,8 +91,7 @@ void PaginatedButtonsNavigator::changeSelectedButtonDown()
     {
         currentItemIndex++;
     }
-    uiManager.setColor(components::ui::UIComponentType::Button, buttonNames.at(currentItemIndex),
-                       buttonsHoverColor);
+    uiManager.setColor(buttonNames.at(currentItemIndex), buttonsHoverColor);
     setIconVisible(currentItemIndex);
 }
 
@@ -108,21 +105,21 @@ void PaginatedButtonsNavigator::unselectAllButtons()
 {
     for (const auto& buttonName : buttonNames)
     {
-        uiManager.setColor(components::ui::UIComponentType::Button, buttonName, buttonsDefaultColor);
+        uiManager.setColor(buttonName, buttonsDefaultColor);
     }
 }
 
 void PaginatedButtonsNavigator::setIconVisible(unsigned int iconIndex)
 {
     hideIcons();
-    uiManager.activateComponent(components::ui::UIComponentType::Image, iconNames[iconIndex]);
+    uiManager.activateComponent(iconNames[iconIndex]);
 }
 
 void PaginatedButtonsNavigator::hideIcons()
 {
     for (auto& iconName : iconNames)
     {
-        uiManager.deactivateComponent(components::ui::UIComponentType::Image, iconName);
+        uiManager.deactivateComponent(iconName);
     }
 }
 

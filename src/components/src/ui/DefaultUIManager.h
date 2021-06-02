@@ -23,20 +23,20 @@ public:
     void update(utils::DeltaTime, const input::Input&) override;
     void activate() override;
     void deactivate() override;
-    void setColor(UIComponentType, const std::string& componentName, graphics::Color) override;
-    void changeClickAction(UIComponentType, const std::string& componentName,
-                           const std::vector<core::KeyAction>&) override;
-    void invokeClickAction(UIComponentType, const std::string& componentName,
+    void setColor(const std::string& componentName, graphics::Color) override;
+    void changeClickAction(const std::string& componentName, const std::vector<core::KeyAction>&) override;
+    void invokeClickAction(const std::string& componentName,
                            input::InputKey keyAssignedToClickAction) override;
-    void setText(UIComponentTypeWithText, const std::string& componentName, const std::string& text) override;
-    void setChecked(UIComponentTypeWithCheck, const std::string& componentName, bool checked) override;
-    void activateComponent(UIComponentType, const std::string& componentName) override;
-    void deactivateComponent(UIComponentType, const std::string& componentName) override;
-    bool isComponentActive(UIComponentType, const std::string& componentName) const override;
+    void setText(const std::string& componentName, const std::string& text) override;
+    void setChecked(const std::string& componentName, bool checked) override;
+    void activateComponent(const std::string& componentName) override;
+    void deactivateComponent(const std::string& componentName) override;
+    bool isComponentActive(const std::string& componentName) const override;
     void freezeAllButtons() override;
 
 private:
     void createUIComponents(std::unique_ptr<UIConfig>);
+    UIComponentType getComponentType(const std::string& componentName) const;
 
     std::unique_ptr<UIComponentFactory> uiComponentFactory;
     std::unique_ptr<Background> background;
@@ -45,5 +45,6 @@ private:
     std::vector<std::unique_ptr<TextField>> textFields;
     std::vector<std::unique_ptr<CheckBox>> checkBoxes;
     std::vector<std::unique_ptr<Image>> images;
+    std::unordered_map<std::string, UIComponentType> componentsRegistry;
 };
 }

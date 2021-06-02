@@ -11,16 +11,4 @@ enum class UIComponentType
     TextField,
     Image
 };
-
-enum class UIComponentTypeWithText
-{
-    Button,
-    Label,
-    TextField
-};
-
-enum class UIComponentTypeWithCheck
-{
-    CheckBox
-};
 }

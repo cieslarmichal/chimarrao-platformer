@@ -27,8 +27,7 @@ GridButtonsNavigator::GridButtonsNavigator(components::ui::UIManager& uiManager,
         }
     }
 
-    uiManager.setColor(components::ui::UIComponentType::Button,
-                       gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
+    uiManager.setColor(gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
     setIconAssociatedWithButtonVisible(currentItemIndex);
 }
 
@@ -46,19 +45,18 @@ void GridButtonsNavigator::update(const utils::DeltaTime&, const input::Input& i
         }
         else if (input.isKeyPressed(input::InputKey::Left))
         {
-            changeSelectedButtonDown();
+            changeSelectedButtonLeft();
         }
         else if (input.isKeyPressed(input::InputKey::Right))
         {
-            changeSelectedButtonDown();
+            changeSelectedButtonRight();
         }
         switchItemTimer.restart();
     }
 
     if (input.isKeyPressed(input::InputKey::Enter))
     {
-        uiManager.invokeClickAction(components::ui::UIComponentType::Button,
-                                    gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName,
+        uiManager.invokeClickAction(gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName,
                                     input::InputKey::MouseLeft);
     }
 }
@@ -110,8 +108,7 @@ void GridButtonsNavigator::changeSelectedButtonUp()
         --currentItemIndex.y;
     }
     currentItemIndex.x = 0;
-    uiManager.setColor(components::ui::UIComponentType::Button,
-                       gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
+    uiManager.setColor(gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
     setIconAssociatedWithButtonVisible(currentItemIndex);
 }
 
@@ -129,8 +126,7 @@ void GridButtonsNavigator::changeSelectedButtonDown()
     }
     currentItemIndex.x = 0;
 
-    uiManager.setColor(components::ui::UIComponentType::Button,
-                       gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
+    uiManager.setColor(gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
     setIconAssociatedWithButtonVisible(currentItemIndex);
 }
 
@@ -147,8 +143,7 @@ void GridButtonsNavigator::changeSelectedButtonLeft()
         --currentItemIndex.x;
     }
 
-    uiManager.setColor(components::ui::UIComponentType::Button,
-                       gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
+    uiManager.setColor(gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
     setIconAssociatedWithButtonVisible(currentItemIndex);
 }
 
@@ -165,8 +160,7 @@ void GridButtonsNavigator::changeSelectedButtonRight()
         ++currentItemIndex.x;
     }
 
-    uiManager.setColor(components::ui::UIComponentType::Button,
-                       gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
+    uiManager.setColor(gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
     setIconAssociatedWithButtonVisible(currentItemIndex);
 }
 
@@ -182,8 +176,7 @@ void GridButtonsNavigator::unselectAllButtons()
     {
         for (const auto& gridButtonInfo : rowOfGridButtonsInfo)
         {
-            uiManager.setColor(components::ui::UIComponentType::Button, gridButtonInfo.buttonName,
-                               buttonsDefaultColor);
+            uiManager.setColor(gridButtonInfo.buttonName, buttonsDefaultColor);
         }
     }
 }
@@ -191,15 +184,14 @@ void GridButtonsNavigator::unselectAllButtons()
 void GridButtonsNavigator::setIconAssociatedWithButtonVisible(const utils::Vector2u& buttonIndex)
 {
     hideIcons();
-    uiManager.activateComponent(components::ui::UIComponentType::Image,
-                                iconNames[gridButtonsInfo[buttonIndex.y][buttonIndex.x].iconIndex]);
+    uiManager.activateComponent(iconNames[gridButtonsInfo[buttonIndex.y][buttonIndex.x].iconIndex]);
 }
 
 void GridButtonsNavigator::hideIcons()
 {
     for (auto& iconName : iconNames)
     {
-        uiManager.deactivateComponent(components::ui::UIComponentType::Image, iconName);
+        uiManager.deactivateComponent(iconName);
     }
 }
 

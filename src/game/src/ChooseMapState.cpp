@@ -85,8 +85,7 @@ void ChooseMapState::showNextMaps()
             const auto currentMapNameIndex = mapsCurrentPage * maximumNumberOfMapsToDisplay + uniqueMapIndex;
             const auto& mapName = mapNames[currentMapNameIndex];
             const auto& mapPath = mapFilePaths[currentMapNameIndex];
-            uiManager->setText(components::ui::UIComponentTypeWithText::Button,
-                               mapButtonsUniqueNames[uniqueMapIndex], mapName);
+            uiManager->setText(mapButtonsUniqueNames[uniqueMapIndex], mapName);
             auto loadMap = [&]
             {
                 tileMap->loadFromFile(mapPath);
@@ -94,16 +93,14 @@ void ChooseMapState::showNextMaps()
                 states.addNextState(StateType::Game);
             };
             components::core::KeyAction loadMapKeyAction{input::InputKey::MouseLeft, loadMap};
-            uiManager->changeClickAction(components::ui::UIComponentType::Button,
-                                         mapButtonsUniqueNames[uniqueMapIndex], {loadMapKeyAction});
+            uiManager->changeClickAction(mapButtonsUniqueNames[uniqueMapIndex], {loadMapKeyAction});
         }
 
         if (numberOfMapsRemaining < maximumNumberOfMapsToDisplay)
         {
             for (auto mapIndex = numberOfMapsRemaining; mapIndex < maximumNumberOfMapsToDisplay; mapIndex++)
             {
-                uiManager->deactivateComponent(components::ui::UIComponentType::Button,
-                                               mapButtonsUniqueNames[mapIndex]);
+                uiManager->deactivateComponent(mapButtonsUniqueNames[mapIndex]);
             }
         }
         mapsCurrentPage++;
@@ -119,10 +116,8 @@ void ChooseMapState::showPreviousMaps()
             const auto currentMapNameIndex = (mapsCurrentPage - 2) * maximumNumberOfMapsToDisplay + mapIndex;
             const auto& mapName = mapNames[currentMapNameIndex];
             const auto& mapPath = mapFilePaths[currentMapNameIndex];
-            uiManager->activateComponent(components::ui::UIComponentType::Button,
-                                         mapButtonsUniqueNames[mapIndex]);
-            uiManager->setText(components::ui::UIComponentTypeWithText::Button,
-                               mapButtonsUniqueNames[mapIndex], mapName);
+            uiManager->activateComponent(mapButtonsUniqueNames[mapIndex]);
+            uiManager->setText(mapButtonsUniqueNames[mapIndex], mapName);
             auto loadMap = [&]
             {
                 tileMap->loadFromFile(mapPath);
@@ -130,8 +125,7 @@ void ChooseMapState::showPreviousMaps()
                 states.addNextState(StateType::Game);
             };
             components::core::KeyAction loadMapKeyAction{input::InputKey::MouseLeft, loadMap};
-            uiManager->changeClickAction(components::ui::UIComponentType::Button,
-                                         mapButtonsUniqueNames[mapIndex], {loadMapKeyAction});
+            uiManager->changeClickAction(mapButtonsUniqueNames[mapIndex], {loadMapKeyAction});
         }
 
         mapsCurrentPage--;

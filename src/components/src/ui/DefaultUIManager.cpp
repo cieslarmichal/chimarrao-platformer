@@ -114,10 +114,9 @@ void DefaultUIManager::deactivate()
     deactivateComponents(images);
 }
 
-void DefaultUIManager::setColor(UIComponentType componentType, const std::string& componentName,
-                                graphics::Color color)
+void DefaultUIManager::setColor(const std::string& componentName, graphics::Color color)
 {
-    switch (componentType)
+    switch (getComponentType(componentName))
     {
     case UIComponentType::Background:
     {
@@ -155,69 +154,65 @@ void DefaultUIManager::setColor(UIComponentType componentType, const std::string
     }
 }
 
-void DefaultUIManager::changeClickAction(UIComponentType componentType, const std::string& componentName,
+void DefaultUIManager::changeClickAction(const std::string& componentName,
                                          const std::vector<core::KeyAction>& keyActions)
 {
-    if (componentType == UIComponentType::Button)
+    if (getComponentType(componentName) == UIComponentType::Button)
     {
         auto& button = tryToGetComponentByName(buttons, componentName);
         button->setClickAction(keyActions);
     }
 }
 
-void DefaultUIManager::invokeClickAction(UIComponentType componentType, const std::string& componentName,
+void DefaultUIManager::invokeClickAction(const std::string& componentName,
                                          input::InputKey keyAssignedToClickAction)
 {
-    if (componentType == UIComponentType::Button)
+    if (getComponentType(componentName) == UIComponentType::Button)
     {
         auto& button = tryToGetComponentByName(buttons, componentName);
         button->invokeClickAction(keyAssignedToClickAction);
     }
 }
 
-void DefaultUIManager::setText(UIComponentTypeWithText componentType, const std::string& componentName,
-                               const std::string& text)
+void DefaultUIManager::setText(const std::string& componentName, const std::string& text)
 {
-    switch (componentType)
+    switch (getComponentType(componentName))
     {
-    case UIComponentTypeWithText::Button:
+    case UIComponentType::Button:
     {
         auto& button = tryToGetComponentByName(buttons, componentName);
         button->setText(text);
         break;
     }
-    case UIComponentTypeWithText::Label:
+    case UIComponentType::Label:
     {
         auto& label = tryToGetComponentByName(labels, componentName);
         label->setText(text);
         break;
     }
-    case UIComponentTypeWithText::TextField:
+    case UIComponentType::TextField:
     {
         auto& textField = tryToGetComponentByName(textFields, componentName);
         textField->setText(text);
         break;
     }
+    default:
+        break;
     }
 }
 
-void DefaultUIManager::setChecked(UIComponentTypeWithCheck componentType, const std::string& componentName,
-                                  bool checked)
+void DefaultUIManager::setChecked(const std::string& componentName, bool checked)
 {
-    switch (componentType)
-    {
-    case UIComponentTypeWithCheck::CheckBox:
+    if (getComponentType(componentName) == UIComponentType::CheckBox)
     {
         auto& checkBox = tryToGetComponentByName(checkBoxes, componentName);
         checkBox->setChecked(checked);
-        break;
-    }
     }
 }
 
-void DefaultUIManager::activateComponent(UIComponentType componentType, const std::string& componentName)
+void DefaultUIManager::activateComponent(const std::string& componentName)
 {
-    switch (componentType)
+    switch (getComponentType(componentName))
     {
     case UIComponentType::Background:
     {
@@ -257,9 +252,9 @@ void DefaultUIManager::activateComponent(UIComponentType componentType, const st
     }
 }
 
-void DefaultUIManager::deactivateComponent(UIComponentType componentType, const std::string& componentName)
+void DefaultUIManager::deactivateComponent(const std::string& componentName)
 {
-    switch (componentType)
+    switch (getComponentType(componentName))
     {
     case UIComponentType::Background:
     {
@@ -299,10 +294,9 @@ void DefaultUIManager::deactivateComponent(UIComponentType componentType, const 
     }
 }
 
-bool DefaultUIManager::isComponentActive(UIComponentType componentType,
-                                         const std::string& componentName) const
+bool DefaultUIManager::isComponentActive(const std::string& componentName) const
 {
-    switch (componentType)
+    switch (getComponentType(componentName))
     {
     case UIComponentType::Background:
     {
@@ -341,36 +335,47 @@ bool DefaultUIManager::isComponentActive(UIComponentType componentType,
 void DefaultUIManager::createUIComponents(std::unique_ptr<UIConfig> uiConfig)
 {
     background = uiComponentFactory->createBackground(std::move(uiConfig->backgroundConfig));
+    componentsRegistry.insert({background->getName(), UIComponentType::Background});
 
     for (auto& buttonConfig : uiConfig->buttonsConfig)
     {
         auto button = uiComponentFactory->createButton(std::move(buttonConfig));
+        componentsRegistry.insert({button->getName(), UIComponentType::Button});
         buttons.emplace_back(std::move(button));
     }
 
     for (auto& checkBoxConfig : uiConfig->checkBoxesConfig)
     {
         auto checkBox = uiComponentFactory->createCheckBox(std::move(checkBoxConfig));
+        componentsRegistry.insert({checkBox->getName(), UIComponentType::CheckBox});
         checkBoxes.emplace_back(std::move(checkBox));
     }
 
     for (auto& labelConfig : uiConfig->labelsConfig)
     {
         auto label = uiComponentFactory->createLabel(std::move(labelConfig));
+        componentsRegistry.insert({label->getName(), UIComponentType::Label});
         labels.emplace_back(std::move(label));
     }
 
     for (auto& textFieldConfig : uiConfig->textFieldsConfig)
     {
         auto textField = uiComponentFactory->createTextField(std::move(textFieldConfig));
+        componentsRegistry.insert({textField->getName(), UIComponentType::TextField});
         textFields.emplace_back(std::move(textField));
     }
 
     for (auto& imageConfig : uiConfig->imagesConfig)
     {
         auto image = uiComponentFactory->createImage(std::move(imageConfig));
+        componentsRegistry.insert({image->getName(), UIComponentType::Image});
         images.emplace_back(std::move(image));
     }
+}
+
+UIComponentType DefaultUIManager::getComponentType(const std::string& componentName) const
+{
+    return componentsRegistry.at(componentName);
 }
 
 void DefaultUIManager::freezeAllButtons()

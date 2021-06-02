@@ -47,15 +47,9 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
 
     const auto backToMenuButtonSize = utils::Vector2f{13.f, 5.f};
     const auto backToMenuButtonOnMouseOver = [=]
-    {
-        chooseMapState->uiManager->setColor(components::ui::UIComponentType::Button,
-                                            "chooseMapBackToMenuButton", buttonHoverColor);
-    };
+    { chooseMapState->uiManager->setColor("chooseMapBackToMenuButton", buttonHoverColor); };
     const auto backToMenuButtonOnMouseOut = [=]
-    {
-        chooseMapState->uiManager->setColor(components::ui::UIComponentType::Button,
-                                            "chooseMapBackToMenuButton", buttonColor);
-    };
+    { chooseMapState->uiManager->setColor("chooseMapBackToMenuButton", buttonColor); };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
     auto backToMenuClickAction = [=] { chooseMapState->shouldBackToMenu = true; };
@@ -66,15 +60,9 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
     buttonsConfig.emplace_back(std::move(backToMenuButtonConfig));
 
     const auto rightButtonOnMouseOver = [=]
-    {
-        chooseMapState->uiManager->setColor(components::ui::UIComponentType::Button, "chooseMapRightButton",
-                                            buttonHoverColor);
-    };
+    { chooseMapState->uiManager->setColor("chooseMapRightButton", buttonHoverColor); };
     const auto rightButtonOnMouseOut = [=]
-    {
-        chooseMapState->uiManager->setColor(components::ui::UIComponentType::Button, "chooseMapRightButton",
-                                            buttonColor);
-    };
+    { chooseMapState->uiManager->setColor("chooseMapRightButton", buttonColor); };
     auto rightButtonMouseOverActions =
         components::ui::MouseOverActions{rightButtonOnMouseOver, rightButtonOnMouseOut};
     auto rightButtonClickAction = [=] { chooseMapState->showNextMaps(); };
@@ -85,15 +73,9 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
     buttonsConfig.emplace_back(std::move(rightButtonConfig));
 
     const auto leftButtonOnMouseOver = [=]
-    {
-        chooseMapState->uiManager->setColor(components::ui::UIComponentType::Button, "chooseMapLeftButton",
-                                            buttonHoverColor);
-    };
+    { chooseMapState->uiManager->setColor("chooseMapLeftButton", buttonHoverColor); };
     const auto leftButtonOnMouseOut = [=]
-    {
-        chooseMapState->uiManager->setColor(components::ui::UIComponentType::Button, "chooseMapLeftButton",
-                                            buttonColor);
-    };
+    { chooseMapState->uiManager->setColor("chooseMapLeftButton", buttonColor); };
     auto leftButtonMouseOverActions =
         components::ui::MouseOverActions{leftButtonOnMouseOver, leftButtonOnMouseOut};
     auto leftButtonClickAction = [=] { chooseMapState->showPreviousMaps(); };
@@ -111,15 +93,9 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
         const auto buttonPosition =
             firstMapButtonPosition + utils::Vector2f{0.f, static_cast<float>(mapIndex) * 6.f};
         const auto mapButtonOnMouseOver = [=]
-        {
-            chooseMapState->uiManager->setColor(components::ui::UIComponentType::Button, buttonUniqueName,
-                                                buttonHoverColor);
-        };
+        { chooseMapState->uiManager->setColor(buttonUniqueName, buttonHoverColor); };
         const auto mapButtonOnMouseOut = [=]
-        {
-            chooseMapState->uiManager->setColor(components::ui::UIComponentType::Button, buttonUniqueName,
-                                                buttonColor);
-        };
+        { chooseMapState->uiManager->setColor(buttonUniqueName, buttonColor); };
         auto mapButtonMouseOverActions =
             components::ui::MouseOverActions{mapButtonOnMouseOver, mapButtonOnMouseOut};
         auto mapButtonClickAction = [=, &mapFilePath]

@@ -13,23 +13,16 @@ public:
     MOCK_METHOD(void, update, (utils::DeltaTime, const input::Input&), (override));
     MOCK_METHOD(void, activate, (), (override));
     MOCK_METHOD(void, deactivate, (), (override));
-    MOCK_METHOD(void, setColor, (UIComponentType, const std::string& componentName, graphics::Color),
-                (override));
+    MOCK_METHOD(void, setColor, (const std::string& componentName, graphics::Color), (override));
     MOCK_METHOD(void, changeClickAction,
-                (UIComponentType, const std::string& componentName, const std::vector<core::KeyAction>&),
-                (override));
+                (const std::string& componentName, const std::vector<core::KeyAction>&), (override));
     MOCK_METHOD(void, invokeClickAction,
-                (UIComponentType, const std::string& componentName, input::InputKey keyAssignedToClickAction),
-                (override));
-    MOCK_METHOD(void, setText,
-                (UIComponentTypeWithText, const std::string& componentName, const std::string& text),
-                (override));
-    MOCK_METHOD(void, setChecked, (UIComponentTypeWithCheck, const std::string& componentName, bool checked),
-                (override));
-    MOCK_METHOD(void, activateComponent, (UIComponentType, const std::string& componentName), (override));
-    MOCK_METHOD(void, deactivateComponent, (UIComponentType, const std::string& componentName), (override));
-    MOCK_METHOD(bool, isComponentActive, (UIComponentType, const std::string& componentName),
-                (const override));
+                (const std::string& componentName, input::InputKey keyAssignedToClickAction), (override));
+    MOCK_METHOD(void, setText, (const std::string& componentName, const std::string& text), (override));
+    MOCK_METHOD(void, setChecked, (const std::string& componentName, bool checked), (override));
+    MOCK_METHOD(void, activateComponent, (const std::string& componentName), (override));
+    MOCK_METHOD(void, deactivateComponent, (const std::string& componentName), (override));
+    MOCK_METHOD(bool, isComponentActive, (const std::string& componentName), (const override));
     MOCK_METHOD(void, freezeAllButtons, (), (override));
 };
 }

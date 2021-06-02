@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GridButtonsNavigator.h"
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
@@ -45,5 +46,7 @@ private:
     std::vector<unsigned int> supportedFrameLimits;
     unsigned int selectedFrameLimitIndex = 0;
     std::unique_ptr<components::ui::UIManager> uiManager;
+    const std::vector<std::string> iconNames;
+    std::unique_ptr<GridButtonsNavigator> uiNavigator;
 };
 }
