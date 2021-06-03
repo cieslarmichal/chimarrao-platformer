@@ -7,14 +7,8 @@ matrix:
       addons:
         apt:
           update: true
-          sources:
-            - ubuntu-toolchain-r-test
-            - sourceline: 'ppa:mhier/libboost-latest'
           packages:
             - g++-8
-            - boost1.68
-            - valgrind
-            - libgl1-mesa-dev
       env:
       - C_COMPILER=gcc-8
       - CXX_COMPILER=g++-8
@@ -31,6 +25,7 @@ before_install:
 
 install:
   - sudo apt-get install build-essential libgtk-3-dev
+  - sudo apt install -yq libboost-all-dev 
   - sudo apt install -yq libsfml-dev
 
 script:
