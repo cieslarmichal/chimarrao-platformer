@@ -18,9 +18,9 @@ matrix:
       env:
       - C_COMPILER=gcc-8
       - CXX_COMPILER=g++-8
-      - TRAVIS_DIST_NAME=bionic
+      - TRAVIS_DIST_NAME=focal
       
-dist: bionic
+dist: focal
 
 before_install:
   - sudo add-apt-repository main
