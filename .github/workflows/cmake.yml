@@ -28,7 +28,10 @@ jobs:
       run: sudo apt install -yq libboost-all-dev   
     
     - name: x11
-      run: sudo apt-get install -y x11-utils
+      run: sudo apt install xorg-x11-xauth
+      
+    - name: configure display port
+      run: export DISPLAY=:0.0
       
     - name: externals
       run: git submodule update --init --recursive 
