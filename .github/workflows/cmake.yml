@@ -28,7 +28,7 @@ jobs:
       run: sudo apt install -yq libboost-all-dev   
     
     - name: x11
-      run: sudo apt install xorg-x11-xauth
+      run: sudo apt install xauth
       
     - name: configure display port
       run: export DISPLAY=:0.0
