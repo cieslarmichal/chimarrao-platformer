@@ -18,7 +18,7 @@ jobs:
     - uses: actions/checkout@v2
 
     # install dependencies
-    - name: build env
+    - name: build essential
       run: sudo apt-get install build-essential libgtk-3-dev
     
     - name: sfml
@@ -26,6 +26,9 @@ jobs:
       
     - name: boost
       run: sudo apt install -yq libboost-all-dev   
+    
+    - name: x11
+      run: sudo apt-get install -y x11-utils
       
     - name: externals
       run: git submodule update --init --recursive 
