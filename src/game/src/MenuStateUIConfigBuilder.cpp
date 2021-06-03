@@ -6,6 +6,7 @@
 #include "MenuState.h"
 #include "PaginatedButtonsNavigator.h"
 #include "ProjectPathReader.h"
+#include "StlOperators.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
@@ -26,11 +27,26 @@ const auto buttonSize = utils::Vector2f{23, 6};
 const auto iconSize = utils::Vector2f{4, 4};
 }
 
+std::vector<std::string> MenuStateUIConfigBuilder::buttonNames{
+    "menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton", "menuExitButton"};
+std::vector<std::string> MenuStateUIConfigBuilder::iconNames{
+    "menuIcon1Image", "menuIcon2Image", "menuIcon3Image", "menuIcon4Image", "menuIcon5Image"};
+
 std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUIConfig(MenuState* menuState)
 {
     return std::make_unique<components::ui::UIConfig>(
         createBackgroundConfig(menuState), createButtonConfigs(menuState), createCheckBoxConfigs(menuState),
         createLabelConfigs(menuState), createTextFieldConfigs(menuState), createImageConfigs(menuState));
+}
+
+std::vector<std::string> MenuStateUIConfigBuilder::getButtonNames()
+{
+    return buttonNames;
+}
+
+std::vector<std::string> MenuStateUIConfigBuilder::getIconNames()
+{
+    return iconNames;
 }
 
 std::unique_ptr<components::ui::BackgroundConfig> MenuStateUIConfigBuilder::createBackgroundConfig(MenuState*)
@@ -47,12 +63,12 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
 
     const auto playButtonOnMouseOver = [=]
     {
-        menuState->uiNavigator->setFocusOnItem(0);
+        menuState->buttonsNavigator->setFocusOnButton("menuPlayButton");
         menuState->uiManager->setColor("menuPlayButton", buttonHoverColor);
     };
     const auto playButtonOnMouseOut = [=]
     {
-        menuState->uiNavigator->loseFocus();
+        menuState->buttonsNavigator->loseFocus();
         menuState->uiManager->setColor("menuPlayButton", buttonColor);
     };
     auto playButtonMouseOverActions =
@@ -69,12 +85,12 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
 
     const auto mapEditorButtonOnMouseOver = [=]
     {
-        menuState->uiNavigator->setFocusOnItem(1);
+        menuState->buttonsNavigator->setFocusOnButton("menuMapEditorButton");
         menuState->uiManager->setColor("menuMapEditorButton", buttonHoverColor);
     };
     const auto mapEditorButtonOnMouseOut = [=]
     {
-        menuState->uiNavigator->loseFocus();
+        menuState->buttonsNavigator->loseFocus();
         menuState->uiManager->setColor("menuMapEditorButton", buttonColor);
     };
     auto mapEditorButtonMouseOverActions =
@@ -92,12 +108,12 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
 
     const auto controlsButtonOnMouseOver = [=]
     {
-        menuState->uiNavigator->setFocusOnItem(2);
+        menuState->buttonsNavigator->setFocusOnButton("menuControlsButton");
         menuState->uiManager->setColor("menuControlsButton", buttonHoverColor);
     };
     const auto controlsButtonOnMouseOut = [=]
     {
-        menuState->uiNavigator->loseFocus();
+        menuState->buttonsNavigator->loseFocus();
         menuState->uiManager->setColor("menuControlsButton", buttonColor);
     };
     auto controlsButtonMouseOverActions =
@@ -115,12 +131,12 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
 
     const auto settingsButtonOnMouseOver = [=]
     {
-        menuState->uiNavigator->setFocusOnItem(3);
+        menuState->buttonsNavigator->setFocusOnButton("menuSettingsButton");
         menuState->uiManager->setColor("menuSettingsButton", buttonHoverColor);
     };
     const auto settingsButtonOnMouseOut = [=]
     {
-        menuState->uiNavigator->loseFocus();
+        menuState->buttonsNavigator->loseFocus();
         menuState->uiManager->setColor("menuSettingsButton", buttonColor);
     };
     auto settingsButtonMouseOverActions =
@@ -138,12 +154,12 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
 
     const auto exitButtonOnMouseOver = [=]
     {
-        menuState->uiNavigator->setFocusOnItem(4);
+        menuState->buttonsNavigator->setFocusOnButton("menuExitButton");
         menuState->uiManager->setColor("menuExitButton", buttonHoverColor);
     };
     const auto exitButtonOnMouseOut = [=]
     {
-        menuState->uiNavigator->loseFocus();
+        menuState->buttonsNavigator->loseFocus();
         menuState->uiManager->setColor("menuExitButton", buttonColor);
     };
     auto exitButtonMouseOverActions =
@@ -176,21 +192,21 @@ MenuStateUIConfigBuilder::createTextFieldConfigs(MenuState*)
 }
 
 std::vector<std::unique_ptr<components::ui::ImageConfig>>
-MenuStateUIConfigBuilder::createImageConfigs(MenuState* menuState)
+MenuStateUIConfigBuilder::createImageConfigs(MenuState*)
 {
     std::vector<std::unique_ptr<components::ui::ImageConfig>> imagesConfig;
 
-    for (std::size_t iconIndex = 0; iconIndex < menuState->iconNames.size(); iconIndex++)
+    for (std::size_t iconIndex = 0; iconIndex < iconNames.size(); iconIndex++)
     {
         const auto iconPosition =
             utils::Vector2f{buttonsPositions[iconIndex].x + buttonSize.x, buttonsPositions[iconIndex].y + 1};
 
         auto imageConfig = std::make_unique<components::ui::ImageConfig>(
-            menuState->iconNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First,
-            iconPath);
+            iconNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First, iconPath);
         imagesConfig.push_back(std::move(imageConfig));
     }
 
     return imagesConfig;
 }
+
 }

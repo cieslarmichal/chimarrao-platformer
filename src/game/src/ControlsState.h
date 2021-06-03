@@ -15,7 +15,7 @@ class ControlsState : public State
 public:
     explicit ControlsState(const std::shared_ptr<window::Window>&,
                            const std::shared_ptr<graphics::RendererPool>&, std::shared_ptr<utils::FileAccess>,
-                           States&, std::unique_ptr<components::ui::UIManager>);
+                           States&, std::shared_ptr<components::ui::UIManager>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -26,6 +26,6 @@ public:
 
 private:
     bool shouldBackToMenu;
-    std::unique_ptr<components::ui::UIManager> uiManager;
+    std::shared_ptr<components::ui::UIManager> uiManager;
 };
 }

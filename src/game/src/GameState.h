@@ -15,7 +15,7 @@ class GameState : public State
 public:
     explicit GameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
                        std::shared_ptr<utils::FileAccess>, States&,
-                       std::unique_ptr<components::ui::UIManager>, std::unique_ptr<ComponentOwnersManager>,
+                       std::shared_ptr<components::ui::UIManager>, std::unique_ptr<ComponentOwnersManager>,
                        std::shared_ptr<TileMap>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
@@ -31,7 +31,7 @@ private:
     bool paused;
     utils::Timer timer;
     const float timeAfterStateCouldBePaused;
-    std::unique_ptr<components::ui::UIManager> uiManager;
+    std::shared_ptr<components::ui::UIManager> uiManager;
     std::unique_ptr<ComponentOwnersManager> componentOwnersManager;
 
     std::shared_ptr<TileMap> tileMap;

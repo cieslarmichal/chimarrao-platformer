@@ -20,7 +20,7 @@ public:
     explicit ChooseMapState(const std::shared_ptr<window::Window>&,
                             const std::shared_ptr<graphics::RendererPool>&,
                             std::shared_ptr<utils::FileAccess>, States&,
-                            std::unique_ptr<components::ui::UIManager>, std::unique_ptr<MapsReader>,
+                            std::shared_ptr<components::ui::UIManager>, std::unique_ptr<MapsReader>,
                             std::shared_ptr<TileMap>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
@@ -34,7 +34,7 @@ private:
     void showNextMaps();
     void showPreviousMaps();
 
-    std::unique_ptr<components::ui::UIManager> uiManager;
+    std::shared_ptr<components::ui::UIManager> uiManager;
     std::unique_ptr<MapsReader> mapsReader;
     bool shouldBackToMenu;
     std::vector<std::string> mapFilePaths;

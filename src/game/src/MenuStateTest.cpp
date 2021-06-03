@@ -2,6 +2,7 @@
 
 #include "gtest/gtest.h"
 
+#include "ButtonsNavigatorMock.h"
 #include "FileAccessMock.h"
 #include "InputMock.h"
 #include "RendererPoolMock.h"
@@ -29,19 +30,7 @@ public:
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
-        EXPECT_CALL(*uiManager,
-                    setColor(components::ui::UIComponentType::Button, "menuPlayButton", buttonHoverColor));
-        EXPECT_CALL(*uiManager,
-                    deactivateComponent(components::ui::UIComponentType::Image, "menuIcon1Image"));
-        EXPECT_CALL(*uiManager,
-                    deactivateComponent(components::ui::UIComponentType::Image, "menuIcon2Image"));
-        EXPECT_CALL(*uiManager,
-                    deactivateComponent(components::ui::UIComponentType::Image, "menuIcon3Image"));
-        EXPECT_CALL(*uiManager,
-                    deactivateComponent(components::ui::UIComponentType::Image, "menuIcon4Image"));
-        EXPECT_CALL(*uiManager,
-                    deactivateComponent(components::ui::UIComponentType::Image, "menuIcon5Image"));
-        EXPECT_CALL(*uiManager, activateComponent(components::ui::UIComponentType::Image, "menuIcon1Image"));
+        EXPECT_CALL(*buttonsNavigator, initialize());
     }
 
     std::shared_ptr<StrictMock<window::WindowMock>> window =
@@ -51,32 +40,24 @@ public:
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
-    std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
-        std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
-    StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
+        std::make_shared<StrictMock<components::ui::UIManagerMock>>()};
+    std::unique_ptr<StrictMock<ButtonsNavigatorMock>> buttonsNavigatorInit{
+        std::make_unique<StrictMock<ButtonsNavigatorMock>>()};
+    StrictMock<ButtonsNavigatorMock>* buttonsNavigator = buttonsNavigatorInit.get();
     StrictMock<input::InputMock> input;
 };
 
 class MenuStateTest : public MenuStateTest_Base
 {
 public:
-    MenuState menuState{window, rendererPool, fileAccess, states, std::move(uiManagerInit)};
+    MenuState menuState{window, rendererPool, fileAccess, states, uiManager, std::move(buttonsNavigatorInit)};
 };
 
 TEST_F(MenuStateTest, activate_shouldActivateUI)
 {
     EXPECT_CALL(*uiManager, activate());
-    EXPECT_CALL(*uiManager,
-                deactivateComponent(components::ui::UIComponentType::Image, "menuIcon1Image"));
-    EXPECT_CALL(*uiManager,
-                deactivateComponent(components::ui::UIComponentType::Image, "menuIcon2Image"));
-    EXPECT_CALL(*uiManager,
-                deactivateComponent(components::ui::UIComponentType::Image, "menuIcon3Image"));
-    EXPECT_CALL(*uiManager,
-                deactivateComponent(components::ui::UIComponentType::Image, "menuIcon4Image"));
-    EXPECT_CALL(*uiManager,
-                deactivateComponent(components::ui::UIComponentType::Image, "menuIcon5Image"));
-    EXPECT_CALL(*uiManager, activateComponent(components::ui::UIComponentType::Image, "menuIcon1Image"));
+    EXPECT_CALL(*buttonsNavigator, activate());
 
     menuState.activate();
 }
@@ -102,8 +83,8 @@ TEST_F(MenuStateTest, render_shouldRenderAllFromRendererPool)
 
 TEST_F(MenuStateTest, update_shouldUpdateUI)
 {
+    EXPECT_CALL(*buttonsNavigator, update(deltaTime, Ref(input)));
     EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
-    EXPECT_CALL(input,isKeyPressed(input::InputKey::Enter)).WillOnce(Return(false));
 
     menuState.update(deltaTime, input);
 }

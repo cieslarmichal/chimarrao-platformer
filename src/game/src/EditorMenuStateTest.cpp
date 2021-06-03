@@ -33,9 +33,8 @@ public:
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
-    std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
-        std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
-    StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
+        std::make_shared<StrictMock<components::ui::UIManagerMock>>()};
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
 };
@@ -44,12 +43,7 @@ class EditorMenuStateTest : public EditorMenuStateTest_Base
 {
 public:
     std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
-    EditorMenuState editorMenuState{window,
-                                    rendererPool,
-                                    fileAccess,
-                                    states,
-                                    std::move(uiManagerInit),
-                                    tileMap};
+    EditorMenuState editorMenuState{window, rendererPool, fileAccess, states, uiManager, tileMap};
 };
 
 TEST_F(EditorMenuStateTest, activate_shouldActivateUI)

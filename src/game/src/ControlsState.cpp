@@ -10,7 +10,7 @@ namespace game
 ControlsState::ControlsState(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                              std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                             std::unique_ptr<components::ui::UIManager> uiManagerInit)
+                             std::shared_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       shouldBackToMenu{false},
       uiManager{std::move(uiManagerInit)}

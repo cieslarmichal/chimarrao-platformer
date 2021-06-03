@@ -14,7 +14,7 @@ class PauseState : public State
 public:
     explicit PauseState(const std::shared_ptr<window::Window>&,
                         const std::shared_ptr<graphics::RendererPool>&, std::shared_ptr<utils::FileAccess>,
-                        States&, std::unique_ptr<components::ui::UIManager>);
+                        States&, std::shared_ptr<components::ui::UIManager>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -28,6 +28,6 @@ private:
     const float timeAfterLeaveStateIsPossible;
     bool shouldBackToGame;
     bool shouldBackToMenu;
-    std::unique_ptr<components::ui::UIManager> uiManager;
+    std::shared_ptr<components::ui::UIManager> uiManager;
 };
 }

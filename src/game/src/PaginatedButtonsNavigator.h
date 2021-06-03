@@ -1,27 +1,29 @@
 #pragma once
 
-#include "DeltaTime.h"
-#include "Input.h"
+#include "ButtonsNavigator.h"
 #include "Timer.h"
 #include "ui/UIManager.h"
 
 namespace game
 {
-class PaginatedButtonsNavigator
+
+class PaginatedButtonsNavigator : public ButtonsNavigator
 {
 public:
-    explicit PaginatedButtonsNavigator(components::ui::UIManager&,
+    explicit PaginatedButtonsNavigator(std::shared_ptr<components::ui::UIManager>,
                                        const std::vector<std::string>& buttonNames,
                                        const std::vector<std::string>& iconNames,
                                        graphics::Color buttonsDefaultColor,
                                        graphics::Color buttonsHoverColor);
 
-    void update(const utils::DeltaTime&, const input::Input&);
-    void activate();
-    void setFocusOnItem(unsigned int itemIndex);
-    void loseFocus();
+    void initialize() override;
+    void update(const utils::DeltaTime&, const input::Input&) override;
+    void activate() override;
+    void setFocusOnButton(const std::string& buttonName) override;
+    void loseFocus() override;
 
 private:
+    std::unordered_map<std::string, unsigned> getButtonNamesWithIndices();
     void changeSelectedButtonUp();
     void changeSelectedButtonDown();
     void changeSelectedButton(unsigned int buttonIndex);
@@ -29,8 +31,9 @@ private:
     void setIconVisible(unsigned int iconIndex);
     void hideIcons();
 
-    components::ui::UIManager& uiManager;
+    std::shared_ptr<components::ui::UIManager> uiManager;
     const std::vector<std::string> buttonNames;
+    const std::unordered_map<std::string, unsigned> buttonNamesWithIndices;
     const std::vector<std::string> iconNames;
     unsigned int currentItemIndex{0};
     utils::Timer switchItemTimer;

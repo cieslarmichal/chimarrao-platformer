@@ -8,31 +8,23 @@
 namespace game
 {
 
-namespace
-{
-const auto buttonColor = graphics::Color(251, 190, 102);
-const auto buttonHoverColor = graphics::Color(205, 128, 66);
-}
-
 MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                      std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                     std::unique_ptr<components::ui::UIManager> uiManagerInit)
+                     std::shared_ptr<components::ui::UIManager> uiManagerInit,
+                     std::unique_ptr<ButtonsNavigator> buttonsNavigator)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       uiManager{std::move(uiManagerInit)},
-      buttonNames{"menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton",
-                  "menuExitButton"},
-      iconNames{"menuIcon1Image", "menuIcon2Image", "menuIcon3Image", "menuIcon4Image", "menuIcon5Image"},
+      buttonsNavigator{std::move(buttonsNavigator)},
       shouldExit{false}
 {
     uiManager->createUI(MenuStateUIConfigBuilder::createMenuUIConfig(this));
-    uiNavigator = std::make_unique<PaginatedButtonsNavigator>(*uiManager, buttonNames, iconNames, buttonColor,
-                                                              buttonHoverColor);
+    this->buttonsNavigator->initialize();
 }
 
 NextState MenuState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    uiNavigator->update(deltaTime, input);
+    buttonsNavigator->update(deltaTime, input);
     uiManager->update(deltaTime, input);
 
     if (shouldExit)
@@ -59,7 +51,7 @@ void MenuState::activate()
 {
     active = true;
     uiManager->activate();
-    uiNavigator->activate();
+    buttonsNavigator->activate();
 }
 
 void MenuState::deactivate()

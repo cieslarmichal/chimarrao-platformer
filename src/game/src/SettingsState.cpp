@@ -17,25 +17,15 @@ const auto buttonHoverColor = graphics::Color(205, 128, 66);
 SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                              std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                             std::unique_ptr<components::ui::UIManager> uiManagerInit)
+                             std::shared_ptr<components::ui::UIManager> uiManagerInit,
+                             std::unique_ptr<ButtonsNavigator> buttonsNavigator)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       shouldBackToMenu{false},
       uiManager{std::move(uiManagerInit)},
-      iconNames{"settingsIcon1Image", "settingsIcon2Image", "settingsIcon3Image", "settingsIcon4Image",
-                "settingsIcon5Image"}
+      buttonsNavigator{std::move(buttonsNavigator)}
 {
     uiManager->createUI(SettingsStateUIConfigBuilder::createSettingsUIConfig(this));
-    std::vector<std::vector<GridButtonInfo>> gridButtonsInfo{
-        {GridButtonInfo{"settingsWindowModeButton", 0, true},
-         GridButtonInfo{"settingsFullscreenModeButton", 0, true}},
-        {GridButtonInfo{"settingsResolutionDecreaseButton", 1, true},
-         GridButtonInfo{"settingsResolutionIncreaseButton", 1, true}},
-        {GridButtonInfo{"settingsFrameLimitDecreaseButton", 3, true},
-         GridButtonInfo{"settingsFrameLimitIncreaseButton", 3, true}},
-        {GridButtonInfo{"settingsBackToMenuButton", 4, false},
-         GridButtonInfo{"settingsApplyChangesButton", 4, false}}};
-    uiNavigator = std::make_unique<GridButtonsNavigator>(*uiManager, gridButtonsInfo, iconNames, buttonColor,
-                                                         buttonHoverColor);
+    this->buttonsNavigator->initialize();
 
     supportedResolutions = window->getSupportedResolutions();
     supportedFrameLimits = window->getSupportedFrameLimits();
@@ -51,7 +41,7 @@ NextState SettingsState::update(const utils::DeltaTime& deltaTime, const input::
         return NextState::Menu;
     }
 
-    uiNavigator->update(deltaTime, input);
+    buttonsNavigator->update(deltaTime, input);
     uiManager->update(deltaTime, input);
     return NextState::Same;
 }
@@ -73,7 +63,7 @@ void SettingsState::activate()
     active = true;
     synchronizeWindowSettings();
     uiManager->activate();
-    uiNavigator->activate();
+    buttonsNavigator->activate();
 }
 
 void SettingsState::deactivate()

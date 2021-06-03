@@ -49,9 +49,8 @@ public:
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
-    std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
-        std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
-    StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
+        std::make_shared<StrictMock<components::ui::UIManagerMock>>()};
     std::unique_ptr<StrictMock<MapsReaderMock>> mapsReaderInit{
         std::make_unique<StrictMock<MapsReaderMock>>()};
     StrictMock<MapsReaderMock>* mapsReader{mapsReaderInit.get()};
@@ -63,8 +62,7 @@ class ChooseMapStateTest : public ChooseMapStateTest_Base
 {
 public:
     ChooseMapState chooseMapState{
-        window, rendererPool, fileAccess, states, std::move(uiManagerInit), std::move(mapsReaderInit),
-        tileMap};
+        window, rendererPool, fileAccess, states, uiManager, std::move(mapsReaderInit), tileMap};
 };
 
 TEST_F(ChooseMapStateTest, activate_shouldActivateUI)

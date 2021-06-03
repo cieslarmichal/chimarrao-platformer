@@ -47,6 +47,10 @@ const std::vector<utils::Vector2f> sectionPositions{displayModeSectionPosition, 
                                                     backToMenuButtonPosition,   applyChangesButtonPosition};
 }
 
+std::vector<std::string> SettingsStateUIConfigBuilder::iconNames{"settingsIcon1Image", "settingsIcon2Image",
+                                                                 "settingsIcon3Image", "settingsIcon4Image",
+                                                                 "settingsIcon5Image"};
+
 std::unique_ptr<components::ui::UIConfig>
 SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsState)
 {
@@ -54,6 +58,26 @@ SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsStat
         createBackgroundConfig(settingsState), createButtonConfigs(settingsState),
         createCheckBoxConfigs(settingsState), createLabelConfigs(settingsState),
         createTextFieldConfigs(settingsState), createImageConfigs(settingsState));
+}
+
+std::vector<std::vector<GridButtonInfo>> SettingsStateUIConfigBuilder::getGridButtonsInfo()
+{
+    std::vector<std::vector<GridButtonInfo>> gridButtonsInfo{
+        {GridButtonInfo{"settingsWindowModeButton", 0, true},
+         GridButtonInfo{"settingsFullscreenModeButton", 0, true}},
+        {GridButtonInfo{"settingsResolutionDecreaseButton", 1, true},
+         GridButtonInfo{"settingsResolutionIncreaseButton", 1, true}},
+        {GridButtonInfo{"settingsFrameLimitDecreaseButton", 3, true},
+         GridButtonInfo{"settingsFrameLimitIncreaseButton", 3, true}},
+        {GridButtonInfo{"settingsBackToMenuButton", 4, false},
+         GridButtonInfo{"settingsApplyChangesButton", 4, false}}};
+
+    return gridButtonsInfo;
+}
+
+std::vector<std::string> SettingsStateUIConfigBuilder::getIconNames()
+{
+    return iconNames;
 }
 
 std::unique_ptr<components::ui::BackgroundConfig>
@@ -234,21 +258,21 @@ SettingsStateUIConfigBuilder::createTextFieldConfigs(SettingsState*)
 }
 
 std::vector<std::unique_ptr<components::ui::ImageConfig>>
-SettingsStateUIConfigBuilder::createImageConfigs(SettingsState* settingsState)
+SettingsStateUIConfigBuilder::createImageConfigs(SettingsState*)
 {
     std::vector<std::unique_ptr<components::ui::ImageConfig>> imagesConfig;
 
-    for (std::size_t iconIndex = 0; iconIndex < settingsState->iconNames.size(); iconIndex++)
+    for (std::size_t iconIndex = 0; iconIndex < iconNames.size(); iconIndex++)
     {
         const auto iconPosition = utils::Vector2f{sectionPositions[iconIndex].x - buttonSize.x - 1,
                                                   sectionPositions[iconIndex].y + 1};
 
         auto imageConfig = std::make_unique<components::ui::ImageConfig>(
-            settingsState->iconNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First,
-            iconPath);
+            iconNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First, iconPath);
         imagesConfig.push_back(std::move(imageConfig));
     }
 
     return imagesConfig;
 }
+
 }

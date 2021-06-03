@@ -8,8 +8,8 @@
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
-#include "editor/TileMapSerializerMock.h"
 #include "editor/TileMapMock.h"
+#include "editor/TileMapSerializerMock.h"
 #include "ui/UIManagerMock.h"
 
 #include "ProjectPathReader.h"
@@ -21,7 +21,6 @@ using namespace ::testing;
 
 namespace
 {
-const auto brickTexturePath = utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/brick.png";
 std::shared_ptr<Tile> tile = std::make_shared<Tile>();
 }
 
@@ -30,15 +29,13 @@ class GameStateTest_Base : public Test
 public:
     GameStateTest_Base()
     {
-        EXPECT_CALL(*tileMap, getSize()).WillRepeatedly(Return(utils::Vector2i{1,1}));
-        EXPECT_CALL(*tileMap, getTile(utils::Vector2i{0,0})).WillRepeatedly(ReturnRef(tile));
+        EXPECT_CALL(*tileMap, getSize()).WillRepeatedly(Return(utils::Vector2i{1, 1}));
+        EXPECT_CALL(*tileMap, getTile(utils::Vector2i{0, 0})).WillRepeatedly(ReturnRef(tile));
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
         EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{3.800000, 3.800000}, utils::Vector2f{10, 10},
                                            graphics::Color::White, graphics::VisibilityLayer::Second));
-//        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5, 5}, utils::Vector2f{30, 30}, brickTexturePath,
-//                                           graphics::VisibilityLayer::Second));
         EXPECT_CALL(*componentOwnersManager, add(_));
         EXPECT_CALL(*componentOwnersManager, processNewObjects());
         EXPECT_CALL(*rendererPool, release(_));
@@ -51,9 +48,8 @@ public:
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
-    std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
-        std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
-    StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
+        std::make_shared<StrictMock<components::ui::UIManagerMock>>()};
     std::unique_ptr<StrictMock<ComponentOwnersManagerMock>> componentOwnersManagerInit{
         std::make_unique<StrictMock<ComponentOwnersManagerMock>>()};
     StrictMock<ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
@@ -66,13 +62,8 @@ public:
 class GameStateTest : public GameStateTest_Base
 {
 public:
-    GameState gameState{window,
-                        rendererPool,
-                        fileAccess,
-                        states,
-                        std::move(uiManagerInit),
-                        std::move(componentOwnersManagerInit),
-                        tileMap};
+    GameState gameState{
+        window, rendererPool, fileAccess, states, uiManager, std::move(componentOwnersManagerInit), tileMap};
 };
 
 TEST_F(GameStateTest, activate_shouldActivateUIAndOwners)

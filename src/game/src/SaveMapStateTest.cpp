@@ -18,7 +18,7 @@ using namespace ::testing;
 
 namespace
 {
-    const std::string mapName{"name"};
+const std::string mapName{"name"};
 }
 
 class SaveMapStateTest_Base : public Test
@@ -30,8 +30,7 @@ public:
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
-        EXPECT_CALL(*uiManager, setText(components::ui::UIComponentTypeWithText::TextField,
-                                        "saveMapNameTextField", mapName));
+        EXPECT_CALL(*uiManager, setText("saveMapNameTextField", mapName));
     }
 
     std::shared_ptr<StrictMock<window::WindowMock>> window =
@@ -41,9 +40,8 @@ public:
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
-    std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
-        std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
-    StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
+        std::make_shared<StrictMock<components::ui::UIManagerMock>>()};
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
     std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
@@ -52,7 +50,7 @@ public:
 class SaveMapStateTest : public SaveMapStateTest_Base
 {
 public:
-    SaveMapState saveMapState{window, rendererPool, fileAccess, states, std::move(uiManagerInit), tileMap};
+    SaveMapState saveMapState{window, rendererPool, fileAccess, states, uiManager, tileMap};
 };
 
 TEST_F(SaveMapStateTest, activate_shouldActivateUI)

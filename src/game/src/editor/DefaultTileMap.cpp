@@ -9,8 +9,8 @@ namespace game
 {
 
 DefaultTileMap::DefaultTileMap(std::string name, utils::Vector2i mapSizeInit,
-                 std::unique_ptr<TileMapSerializer> tileMapSerializerInit,
-                 std::shared_ptr<utils::FileAccess> fileAccessInit)
+                               std::unique_ptr<TileMapSerializer> tileMapSerializerInit,
+                               std::shared_ptr<utils::FileAccess> fileAccessInit)
     : tileMapInfo{std::move(name), mapSizeInit},
       tileMapSerializer{std::move(tileMapSerializerInit)},
       fileAccess{std::move(fileAccessInit)}

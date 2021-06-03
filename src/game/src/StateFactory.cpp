@@ -9,13 +9,26 @@
 #include "EditorState.h"
 #include "FileSystemMapsReader.h"
 #include "GameState.h"
+#include "GridButtonsNavigator.h"
 #include "MenuState.h"
+#include "MenuStateUIConfigBuilder.h"
+#include "PaginatedButtonsNavigator.h"
 #include "PauseState.h"
 #include "SaveMapState.h"
 #include "SettingsState.h"
+#include "SettingsStateUIConfigBuilder.h"
 
 namespace game
 {
+
+namespace
+{
+const auto menuButtonColor = graphics::Color(251, 190, 102);
+const auto menuButtonHoverColor = graphics::Color(205, 128, 66);
+const auto settingsButtonColor = menuButtonColor;
+const auto settingsButtonHoverColor = menuButtonHoverColor;
+}
+
 StateFactory::StateFactory(std::shared_ptr<window::Window> windowInit,
                            std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                            std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
@@ -24,7 +37,7 @@ StateFactory::StateFactory(std::shared_ptr<window::Window> windowInit,
       rendererPool{std::move(rendererPoolInit)},
       fileAccess{std::move(fileAccessInit)},
       states{statesInit},
-      tileMap{tileMapInit},
+      tileMap{std::move(tileMapInit)},
       collisionSystemFactory{physics::CollisionSystemFactory::createCollisionSystemFactory()}
 {
 }
@@ -61,8 +74,12 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     }
     case StateType::Menu:
     {
-        return std::make_unique<MenuState>(window, rendererPool, fileAccess, states,
-                                           std::make_unique<components::ui::DefaultUIManager>(rendererPool));
+        auto uiManager = std::make_shared<components::ui::DefaultUIManager>(rendererPool);
+        auto buttonsNavigator = std::make_unique<PaginatedButtonsNavigator>(
+            uiManager, MenuStateUIConfigBuilder::getButtonNames(), MenuStateUIConfigBuilder::getIconNames(),
+            menuButtonColor, menuButtonHoverColor);
+        return std::make_unique<MenuState>(window, rendererPool, fileAccess, states, uiManager,
+                                           std::move(buttonsNavigator));
     }
     case StateType::Pause:
     {
@@ -77,9 +94,12 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     }
     case StateType::Settings:
     {
-        return std::make_unique<SettingsState>(
-            window, rendererPool, fileAccess, states,
-            std::make_unique<components::ui::DefaultUIManager>(rendererPool));
+        auto uiManager = std::make_shared<components::ui::DefaultUIManager>(rendererPool);
+        auto buttonsNavigator = std::make_unique<GridButtonsNavigator>(
+            uiManager, SettingsStateUIConfigBuilder::getGridButtonsInfo(),
+            SettingsStateUIConfigBuilder::getIconNames(), settingsButtonColor, settingsButtonHoverColor);
+        return std::make_unique<SettingsState>(window, rendererPool, fileAccess, states, uiManager,
+                                               std::move(buttonsNavigator));
     }
     case StateType::ChooseMap:
     {

@@ -2,6 +2,7 @@
 
 #include "gtest/gtest.h"
 
+#include "ButtonsNavigatorMock.h"
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
@@ -28,13 +29,15 @@ public:
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
-    std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
-        std::make_shared<StrictMock<utils::FileAccessMock>>();
-    StrictMock<StatesMock> states;
-    std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
-        std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
-    components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
-    MenuState menuState{window, rendererPool, fileAccess, states, std::move(uiManagerInit)};
+    std::shared_ptr<NiceMock<utils::FileAccessMock>> fileAccess =
+        std::make_shared<NiceMock<utils::FileAccessMock>>();
+    NiceMock<StatesMock> states;
+    std::shared_ptr<components::ui::UIManagerMock> uiManager{
+        std::make_shared<NiceMock<components::ui::UIManagerMock>>()};
+    std::unique_ptr<NiceMock<ButtonsNavigatorMock>> buttonsNavigatorInit{
+        std::make_unique<NiceMock<ButtonsNavigatorMock>>()};
+    NiceMock<ButtonsNavigatorMock>* buttonsNavigator = buttonsNavigatorInit.get();
+    MenuState menuState{window, rendererPool, fileAccess, states, uiManager, std::move(buttonsNavigatorInit)};
 };
 
 TEST_F(MenuStateUIConfigBuilderTest, createMenuUI)
@@ -57,4 +60,18 @@ TEST_F(MenuStateUIConfigBuilderTest, createMenuUI)
     ASSERT_TRUE(menuUI->checkBoxesConfig.empty());
     ASSERT_TRUE(menuUI->textFieldsConfig.empty());
     ASSERT_TRUE(compareVectors(actualImageNames, expectedImagesNames));
+}
+
+TEST_F(MenuStateUIConfigBuilderTest, getGridButtonNames)
+{
+    const auto actualButtonNames = MenuStateUIConfigBuilder::getButtonNames();
+
+    ASSERT_EQ(actualButtonNames, expectedButtonNames);
+}
+
+TEST_F(MenuStateUIConfigBuilderTest, getIconNames)
+{
+    const auto actualIconNames = MenuStateUIConfigBuilder::getIconNames();
+
+    ASSERT_EQ(actualIconNames, expectedImagesNames);
 }

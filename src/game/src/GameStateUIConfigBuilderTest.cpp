@@ -31,13 +31,14 @@ public:
     {
         EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{3.8f, 3.8f}, utils::Vector2f{10, 10},
                                            graphics::Color::White, graphics::VisibilityLayer::Second));
-//        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5.f, 5.f}, utils::Vector2f{30, 30}, brickTexturePath,
-//                                           graphics::VisibilityLayer::Second));
+        //        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5.f, 5.f}, utils::Vector2f{30, 30},
+        //        brickTexturePath,
+        //                                           graphics::VisibilityLayer::Second));
         EXPECT_CALL(*componentOwnersManager, add(_));
         EXPECT_CALL(*componentOwnersManager, processNewObjects());
         EXPECT_CALL(*rendererPool, release(_));
-        EXPECT_CALL(*tileMap,getSize()).WillRepeatedly(Return(utils::Vector2i{1,1}));
-        EXPECT_CALL(*tileMap,getTile(utils::Vector2i{0,0})).WillRepeatedly(ReturnRef(tile));
+        EXPECT_CALL(*tileMap, getSize()).WillRepeatedly(Return(utils::Vector2i{1, 1}));
+        EXPECT_CALL(*tileMap, getTile(utils::Vector2i{0, 0})).WillRepeatedly(ReturnRef(tile));
     }
 
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
@@ -46,8 +47,8 @@ public:
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
-    std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
-        std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
+    std::shared_ptr<components::ui::UIManagerMock> uiManager{
+        std::make_shared<NiceMock<components::ui::UIManagerMock>>()};
     std::unique_ptr<StrictMock<ComponentOwnersManagerMock>> componentOwnersManagerInit{
         std::make_unique<StrictMock<ComponentOwnersManagerMock>>()};
     StrictMock<ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
@@ -56,13 +57,8 @@ public:
 
 TEST_F(GameStateUIConfigBuilderTest, createGameUI)
 {
-    GameState gameState{window,
-                        rendererPool,
-                        fileAccess,
-                        states,
-                        std::move(uiManagerInit),
-                        std::move(componentOwnersManagerInit),
-                        tileMap};
+    GameState gameState{
+        window, rendererPool, fileAccess, states, uiManager, std::move(componentOwnersManagerInit), tileMap};
     const auto gameUI = GameStateUIConfigBuilder::createGameUIConfig(&gameState);
 
     ASSERT_EQ(gameUI->backgroundConfig->uniqueName, "gameBackground");

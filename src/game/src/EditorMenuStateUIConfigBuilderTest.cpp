@@ -34,13 +34,11 @@ public:
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
-    std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
-        std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
-    components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
+    std::shared_ptr<components::ui::UIManagerMock> uiManager{
+        std::make_shared<NiceMock<components::ui::UIManagerMock>>()};
     std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
 
-    EditorMenuState editorMenuState{window, rendererPool, fileAccess, states, std::move(uiManagerInit),
-                                    tileMap};
+    EditorMenuState editorMenuState{window, rendererPool, fileAccess, states, uiManager, tileMap};
 };
 
 TEST_F(EditorMenuStateUIConfigBuilderTest, createEditorMenuUI)

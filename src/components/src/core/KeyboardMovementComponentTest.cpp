@@ -115,8 +115,8 @@ TEST_F(KeyboardMovementComponentTest,
     keyboardMovementComponent.lateUpdate(deltaTime, *input);
 
     const auto positionChangeToRight = deltaTime.count() * keyboardMovementComponent.getMovementSpeed();
-    const auto expectedPositionAfterUpdate = utils::Vector2f{positionBeforeUpdate.x + positionChangeToRight,
-                                                             positionBeforeUpdate.y};
+    const auto expectedPositionAfterUpdate =
+        utils::Vector2f{positionBeforeUpdate.x + positionChangeToRight, positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
@@ -135,8 +135,7 @@ TEST_F(KeyboardMovementComponentTest, givenRightKeyPressedAndBlockedRightMovemen
     keyboardMovementComponent.canMoveRight = false;
     keyboardMovementComponent.lateUpdate(deltaTime, *input);
 
-    const auto expectedPositionAfterUpdate =
-        utils::Vector2f{positionBeforeUpdate.x, positionBeforeUpdate.y};
+    const auto expectedPositionAfterUpdate = utils::Vector2f{positionBeforeUpdate.x, positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
@@ -155,8 +154,8 @@ TEST_F(KeyboardMovementComponentTest,
     keyboardMovementComponent.lateUpdate(deltaTime, *input);
 
     const auto positionChangeToLeft = -deltaTime.count() * keyboardMovementComponent.getMovementSpeed();
-    const auto expectedPositionAfterUpdate = utils::Vector2f{positionBeforeUpdate.x + positionChangeToLeft,
-                                                             positionBeforeUpdate.y};
+    const auto expectedPositionAfterUpdate =
+        utils::Vector2f{positionBeforeUpdate.x + positionChangeToLeft, positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
@@ -174,8 +173,7 @@ TEST_F(KeyboardMovementComponentTest, givenLeftKeyPressedAndBlockedLeftMovement_
     keyboardMovementComponent.canMoveLeft = false;
     keyboardMovementComponent.lateUpdate(deltaTime, *input);
 
-    const auto expectedPositionAfterUpdate =
-        utils::Vector2f{positionBeforeUpdate.x, positionBeforeUpdate.y};
+    const auto expectedPositionAfterUpdate = utils::Vector2f{positionBeforeUpdate.x, positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }

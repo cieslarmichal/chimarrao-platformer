@@ -20,7 +20,7 @@ public:
 
     explicit EditorState(const std::shared_ptr<window::Window>&,
                          const std::shared_ptr<graphics::RendererPool>&, std::shared_ptr<utils::FileAccess>,
-                         States&, std::unique_ptr<components::ui::UIManager>, std::shared_ptr<TileMap>);
+                         States&, std::shared_ptr<components::ui::UIManager>, std::shared_ptr<TileMap>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -47,6 +47,6 @@ private:
     bool buttonsActionsFrozen = true;
     utils::Timer freezeClickableButtonsTimer;
     const float timeAfterButtonsCanBeClicked;
-    std::unique_ptr<components::ui::UIManager> uiManager;
+    std::shared_ptr<components::ui::UIManager> uiManager;
 };
 }

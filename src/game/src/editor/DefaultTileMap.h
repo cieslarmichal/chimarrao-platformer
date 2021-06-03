@@ -6,18 +6,18 @@
 
 #include "FileAccess.h"
 #include "Tile.h"
-#include "TileMapInfo.h"
 #include "TileMap.h"
+#include "TileMapInfo.h"
 #include "TileMapSerializer.h"
 #include "TileType.h"
 
 namespace game
 {
-class DefaultTileMap: public TileMap
+class DefaultTileMap : public TileMap
 {
 public:
     DefaultTileMap(std::string name, utils::Vector2i mapSize, std::unique_ptr<TileMapSerializer>,
-            std::shared_ptr<utils::FileAccess>);
+                   std::shared_ptr<utils::FileAccess>);
 
     void saveToFile() override;
     void loadFromFile(const std::string& path) override;

@@ -1,9 +1,9 @@
-#include "DefaultTileMap.h"
-
 #include "gtest/gtest.h"
 
 #include "FileAccessMock.h"
 #include "TileMapSerializerMock.h"
+
+#include "DefaultTileMap.h"
 
 using namespace game;
 using namespace ::testing;

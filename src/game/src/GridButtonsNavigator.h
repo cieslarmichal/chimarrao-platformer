@@ -1,19 +1,12 @@
 #pragma once
 
-#include "DeltaTime.h"
-#include "Input.h"
+#include "ButtonsNavigator.h"
+#include "GridButtonInfo.h"
 #include "Timer.h"
 #include "ui/UIManager.h"
 
 namespace game
 {
-struct GridButtonInfo
-{
-    std::string buttonName;
-    unsigned iconIndex;
-    bool horizontalMoveCauseAction;
-};
-
 struct ButtonIndexHash
 {
     std::size_t operator()(const utils::Vector2u& vec) const
@@ -22,21 +15,22 @@ struct ButtonIndexHash
     };
 };
 
-class GridButtonsNavigator
+class GridButtonsNavigator : public ButtonsNavigator
 {
 public:
-    explicit GridButtonsNavigator(components::ui::UIManager&,
+    explicit GridButtonsNavigator(std::shared_ptr<components::ui::UIManager>,
                                   const std::vector<std::vector<GridButtonInfo>>& gridButtonsInfo,
                                   const std::vector<std::string>& iconNames,
                                   graphics::Color buttonsDefaultColor, graphics::Color buttonsHoverColor);
 
-    void update(const utils::DeltaTime&, const input::Input&);
-    void activate();
-    void setFocusOnItem(const utils::Vector2u& itemIndex);
-    void loseFocus();
+    void initialize() override;
+    void update(const utils::DeltaTime&, const input::Input&) override;
+    void activate() override;
+    void setFocusOnButton(const std::string& buttonName) override;
+    void loseFocus() override;
 
 private:
-    std::unordered_set<utils::Vector2u, ButtonIndexHash> getAvailableGridButtonsIndices();
+    std::unordered_map<std::string, utils::Vector2u> getButtonNamesWithIndices();
     void changeSelectedButtonUp();
     void changeSelectedButtonDown();
     void changeSelectedButtonLeft();
@@ -46,12 +40,12 @@ private:
     void setIconAssociatedWithButtonVisible(const utils::Vector2u& buttonIndex);
     void hideIcons();
 
-    components::ui::UIManager& uiManager;
+    std::shared_ptr<components::ui::UIManager> uiManager;
     const std::vector<std::vector<GridButtonInfo>> gridButtonsInfo;
-    const std::unordered_set<utils::Vector2u, ButtonIndexHash> availableGridButtonsIndices;
+    const std::unordered_map<std::string, utils::Vector2u> buttonNamesWithIndices;
     const std::vector<std::string> iconNames;
-    utils::Vector2u currentItemIndex{0, 0};
-    utils::Timer switchItemTimer;
+    utils::Vector2u currentButtonIndex{0, 0};
+    utils::Timer switchButtonTimer;
     const float timeAfterButtonCanBeSwitched;
     const graphics::Color buttonsDefaultColor;
     const graphics::Color buttonsHoverColor;

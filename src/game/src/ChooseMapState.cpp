@@ -9,7 +9,7 @@ namespace game
 ChooseMapState::ChooseMapState(const std::shared_ptr<window::Window>& windowInit,
                                const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                                std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                               std::unique_ptr<components::ui::UIManager> uiManagerInit,
+                               std::shared_ptr<components::ui::UIManager> uiManagerInit,
                                std::unique_ptr<MapsReader> mapsReaderInit,
                                std::shared_ptr<TileMap> tileMapInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},

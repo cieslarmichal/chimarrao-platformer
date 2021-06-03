@@ -7,10 +7,12 @@
 #include <unistd.h>
 #endif
 
+#include <filesystem>
+#include <iostream>
 #include <optional>
 
 #include "StringHelper.h"
-#include "exceptions/FileNotFound.h"
+#include "exceptions/DirectoryNotFound.h"
 
 namespace utils
 {
@@ -25,15 +27,24 @@ std::string ProjectPathReader::getProjectRootPath()
         return *projectPath;
     }
 
-    const std::string currentPath = getExecutablePath();
-    const auto projectNamePosition = currentPath.rfind(projectName);
-    if (projectNamePosition == std::string::npos)
+    const auto executablePath = getExecutablePath();
+    std::filesystem::path projectRootPath;
+    std::size_t projectNamePosition;
+    auto findNameOffset = 0;
+    while (not std::filesystem::is_directory(projectRootPath) && projectNamePosition != std::string::npos)
     {
-        throw exceptions::FileNotFound{"Project directory not found in path: " + currentPath};
+        projectNamePosition = executablePath.rfind(projectName, executablePath.size() - 1 - findNameOffset);
+        projectRootPath =
+            utils::StringHelper::substring(executablePath, 0, projectNamePosition + projectName.length() + 1);
+        ++findNameOffset;
     }
 
-    projectPath =
-        utils::StringHelper::substring(currentPath, 0, projectNamePosition + projectName.length() + 1);
+    if (projectNamePosition == std::string::npos)
+    {
+        throw exceptions::DirectoryNotFound{"Project directory not found in path: " + executablePath};
+    }
+
+    projectPath = projectRootPath;
     return *projectPath;
 }
 

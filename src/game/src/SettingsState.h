@@ -18,7 +18,8 @@ class SettingsState : public State
 public:
     explicit SettingsState(const std::shared_ptr<window::Window>&,
                            const std::shared_ptr<graphics::RendererPool>&, std::shared_ptr<utils::FileAccess>,
-                           States&, std::unique_ptr<components::ui::UIManager>);
+                           States&, std::shared_ptr<components::ui::UIManager>,
+                           std::unique_ptr<ButtonsNavigator>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -45,8 +46,7 @@ private:
     unsigned int selectedResolutionIndex = 0;
     std::vector<unsigned int> supportedFrameLimits;
     unsigned int selectedFrameLimitIndex = 0;
-    std::unique_ptr<components::ui::UIManager> uiManager;
-    const std::vector<std::string> iconNames;
-    std::unique_ptr<GridButtonsNavigator> uiNavigator;
+    std::shared_ptr<components::ui::UIManager> uiManager;
+    std::unique_ptr<ButtonsNavigator> buttonsNavigator;
 };
 }

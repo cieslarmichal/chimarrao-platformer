@@ -3,14 +3,14 @@
 namespace game
 {
 
-GridButtonsNavigator::GridButtonsNavigator(components::ui::UIManager& uiManager,
+GridButtonsNavigator::GridButtonsNavigator(std::shared_ptr<components::ui::UIManager> uiManager,
                                            const std::vector<std::vector<GridButtonInfo>>& gridButtonsInfo,
                                            const std::vector<std::string>& iconNames,
                                            graphics::Color buttonsDefaultColor,
                                            graphics::Color buttonsHoverColor)
-    : uiManager{uiManager},
+    : uiManager{std::move(uiManager)},
       gridButtonsInfo{gridButtonsInfo},
-      availableGridButtonsIndices{getAvailableGridButtonsIndices()},
+      buttonNamesWithIndices{getButtonNamesWithIndices()},
       iconNames{iconNames},
       timeAfterButtonCanBeSwitched{0.1f},
       buttonsDefaultColor{buttonsDefaultColor},
@@ -26,14 +26,18 @@ GridButtonsNavigator::GridButtonsNavigator(components::ui::UIManager& uiManager,
             throw std::runtime_error{"Incorrect grid buttons info: icon index not within icon names indices"};
         }
     }
+}
 
-    uiManager.setColor(gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
-    setIconAssociatedWithButtonVisible(currentItemIndex);
+void GridButtonsNavigator::initialize()
+{
+    uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                        buttonsHoverColor);
+    setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
 void GridButtonsNavigator::update(const utils::DeltaTime&, const input::Input& input)
 {
-    if (switchItemTimer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
+    if (switchButtonTimer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
     {
         if (input.isKeyPressed(input::InputKey::Up))
         {
@@ -51,27 +55,27 @@ void GridButtonsNavigator::update(const utils::DeltaTime&, const input::Input& i
         {
             changeSelectedButtonRight();
         }
-        switchItemTimer.restart();
+        switchButtonTimer.restart();
     }
 
     if (input.isKeyPressed(input::InputKey::Enter))
     {
-        uiManager.invokeClickAction(gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName,
-                                    input::InputKey::MouseLeft);
+        uiManager->invokeClickAction(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                                     input::InputKey::MouseLeft);
     }
 }
 
 void GridButtonsNavigator::activate()
 {
-    setIconAssociatedWithButtonVisible(currentItemIndex);
+    setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
-void GridButtonsNavigator::setFocusOnItem(const utils::Vector2u& itemIndex)
+void GridButtonsNavigator::setFocusOnButton(const std::string& buttonName)
 {
-    if (availableGridButtonsIndices.contains(itemIndex))
+    if (buttonNamesWithIndices.contains(buttonName))
     {
         unselectAllButtons();
-        changeSelectedButton(itemIndex);
+        changeSelectedButton(buttonNamesWithIndices.at(buttonName));
     }
 }
 
@@ -81,93 +85,101 @@ void GridButtonsNavigator::loseFocus()
     hideIcons();
 }
 
-std::unordered_set<utils::Vector2u, ButtonIndexHash> GridButtonsNavigator::getAvailableGridButtonsIndices()
+std::unordered_map<std::string, utils::Vector2u> GridButtonsNavigator::getButtonNamesWithIndices()
 {
-    std::unordered_set<utils::Vector2u, ButtonIndexHash> buttonsIndices;
+    std::unordered_map<std::string, utils::Vector2u> buttonNamesWithIndicesInit;
 
     for (std::size_t y = 0; y < gridButtonsInfo.size(); ++y)
     {
         for (std::size_t x = 0; x < gridButtonsInfo[y].size(); ++x)
         {
-            buttonsIndices.insert(utils::Vector2u{static_cast<unsigned>(x), static_cast<unsigned>(y)});
+            buttonNamesWithIndicesInit.insert(
+                {gridButtonsInfo[y][x].buttonName,
+                 utils::Vector2u{static_cast<unsigned>(x), static_cast<unsigned>(y)}});
         }
     }
-    return buttonsIndices;
+
+    return buttonNamesWithIndicesInit;
 }
 
 void GridButtonsNavigator::changeSelectedButtonUp()
 {
     unselectAllButtons();
 
-    if (currentItemIndex.y == 0)
+    if (currentButtonIndex.y == 0)
     {
-        currentItemIndex.y = static_cast<unsigned int>(gridButtonsInfo.size() - 1);
+        currentButtonIndex.y = static_cast<unsigned int>(gridButtonsInfo.size() - 1);
     }
     else
     {
-        --currentItemIndex.y;
+        --currentButtonIndex.y;
     }
-    currentItemIndex.x = 0;
-    uiManager.setColor(gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
-    setIconAssociatedWithButtonVisible(currentItemIndex);
+
+    currentButtonIndex.x = 0;
+    uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                        buttonsHoverColor);
+    setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
 void GridButtonsNavigator::changeSelectedButtonDown()
 {
     unselectAllButtons();
 
-    if (currentItemIndex.y == gridButtonsInfo.size() - 1)
+    if (currentButtonIndex.y == gridButtonsInfo.size() - 1)
     {
-        currentItemIndex.y = 0;
+        currentButtonIndex.y = 0;
     }
     else
     {
-        ++currentItemIndex.y;
+        ++currentButtonIndex.y;
     }
-    currentItemIndex.x = 0;
+    currentButtonIndex.x = 0;
 
-    uiManager.setColor(gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
-    setIconAssociatedWithButtonVisible(currentItemIndex);
+    uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                        buttonsHoverColor);
+    setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
 void GridButtonsNavigator::changeSelectedButtonLeft()
 {
     unselectAllButtons();
 
-    if (currentItemIndex.x == 0)
+    if (currentButtonIndex.x == 0)
     {
-        currentItemIndex.x = static_cast<unsigned int>(gridButtonsInfo[currentItemIndex.y].size() - 1);
+        currentButtonIndex.x = static_cast<unsigned int>(gridButtonsInfo[currentButtonIndex.y].size() - 1);
     }
     else
     {
-        --currentItemIndex.x;
+        --currentButtonIndex.x;
     }
 
-    uiManager.setColor(gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
-    setIconAssociatedWithButtonVisible(currentItemIndex);
+    uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                        buttonsHoverColor);
+    setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
 void GridButtonsNavigator::changeSelectedButtonRight()
 {
     unselectAllButtons();
 
-    if (currentItemIndex.x == gridButtonsInfo[currentItemIndex.y].size() - 1)
+    if (currentButtonIndex.x == gridButtonsInfo[currentButtonIndex.y].size() - 1)
     {
-        currentItemIndex.x = 0;
+        currentButtonIndex.x = 0;
     }
     else
     {
-        ++currentItemIndex.x;
+        ++currentButtonIndex.x;
     }
 
-    uiManager.setColor(gridButtonsInfo[currentItemIndex.y][currentItemIndex.x].buttonName, buttonsHoverColor);
-    setIconAssociatedWithButtonVisible(currentItemIndex);
+    uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                        buttonsHoverColor);
+    setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
 void GridButtonsNavigator::changeSelectedButton(const utils::Vector2u& buttonIndex)
 {
-    currentItemIndex = buttonIndex;
-    setIconAssociatedWithButtonVisible(currentItemIndex);
+    currentButtonIndex = buttonIndex;
+    setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
 void GridButtonsNavigator::unselectAllButtons()
@@ -176,7 +188,7 @@ void GridButtonsNavigator::unselectAllButtons()
     {
         for (const auto& gridButtonInfo : rowOfGridButtonsInfo)
         {
-            uiManager.setColor(gridButtonInfo.buttonName, buttonsDefaultColor);
+            uiManager->setColor(gridButtonInfo.buttonName, buttonsDefaultColor);
         }
     }
 }
@@ -184,15 +196,14 @@ void GridButtonsNavigator::unselectAllButtons()
 void GridButtonsNavigator::setIconAssociatedWithButtonVisible(const utils::Vector2u& buttonIndex)
 {
     hideIcons();
-    uiManager.activateComponent(iconNames[gridButtonsInfo[buttonIndex.y][buttonIndex.x].iconIndex]);
+    uiManager->activateComponent(iconNames[gridButtonsInfo[buttonIndex.y][buttonIndex.x].iconIndex]);
 }
 
 void GridButtonsNavigator::hideIcons()
 {
     for (auto& iconName : iconNames)
     {
-        uiManager.deactivateComponent(iconName);
+        uiManager->deactivateComponent(iconName);
     }
 }
-
 }

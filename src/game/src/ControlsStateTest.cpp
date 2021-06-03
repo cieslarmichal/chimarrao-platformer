@@ -30,9 +30,8 @@ public:
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
-    std::unique_ptr<StrictMock<components::ui::UIManagerMock>> uiManagerInit{
-        std::make_unique<StrictMock<components::ui::UIManagerMock>>()};
-    StrictMock<components::ui::UIManagerMock>* uiManager{uiManagerInit.get()};
+    std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
+        std::make_shared<StrictMock<components::ui::UIManagerMock>>()};
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
 };
@@ -40,7 +39,7 @@ public:
 class ControlsStateTest : public ControlsStateTest_Base
 {
 public:
-    ControlsState controlsState{window, rendererPool, fileAccess, states, std::move(uiManagerInit)};
+    ControlsState controlsState{window, rendererPool, fileAccess, states, uiManager};
 };
 
 TEST_F(ControlsStateTest, activate_shouldActivateUI)

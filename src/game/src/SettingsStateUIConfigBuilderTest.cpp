@@ -2,6 +2,7 @@
 
 #include "gtest/gtest.h"
 
+#include "ButtonsNavigatorMock.h"
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
@@ -28,6 +29,9 @@ const std::vector<std::string> expectedButtonNames{
     "settingsResolutionDecreaseButton", "settingsResolutionIncreaseButton",
     "settingsFrameLimitDecreaseButton", "settingsFrameLimitIncreaseButton"};
 const std::vector<std::string> expectedCheckBoxesNames{"settingsVsyncCheckBox"};
+const std::vector<std::string> expectedIconNames{"settingsIcon1Image", "settingsIcon2Image",
+                                                 "settingsIcon3Image", "settingsIcon4Image",
+                                                 "settingsIcon5Image"};
 }
 class SettingsStateUIConfigBuilderTest : public Test
 {
@@ -38,10 +42,13 @@ public:
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
-    std::unique_ptr<components::ui::UIManagerMock> uiManagerInit{
-        std::make_unique<NiceMock<components::ui::UIManagerMock>>()};
-    components::ui::UIManagerMock* uiManager{uiManagerInit.get()};
-    SettingsState settingsState{window, rendererPool, fileAccess, states, std::move(uiManagerInit)};
+    std::shared_ptr<components::ui::UIManagerMock> uiManager{
+        std::make_shared<NiceMock<components::ui::UIManagerMock>>()};
+    std::unique_ptr<NiceMock<ButtonsNavigatorMock>> buttonsNavigatorInit{
+        std::make_unique<NiceMock<ButtonsNavigatorMock>>()};
+    NiceMock<ButtonsNavigatorMock>* buttonsNavigator = buttonsNavigatorInit.get();
+    SettingsState settingsState{window, rendererPool, fileAccess,
+                                states, uiManager,    std::move(buttonsNavigatorInit)};
 };
 
 TEST_F(SettingsStateUIConfigBuilderTest, createSettingsUI)
@@ -63,10 +70,39 @@ TEST_F(SettingsStateUIConfigBuilderTest, createSettingsUI)
                    std::back_inserter(actualCheckBoxesNames),
                    [](const auto& checkBoxConfig) { return checkBoxConfig->uniqueName; });
 
+    std::vector<std::string> actualImagesNames;
+    std::transform(settingsUI->imagesConfig.begin(), settingsUI->imagesConfig.end(),
+                   std::back_inserter(actualImagesNames),
+                   [](const auto& imageConfig) { return imageConfig->uniqueName; });
+
     ASSERT_EQ(settingsUI->backgroundConfig->uniqueName, "settingsBackground");
     ASSERT_TRUE(compareVectors(actualLabelNames, expectedLabelNames));
     ASSERT_TRUE(compareVectors(actualButtonsNames, expectedButtonNames));
     ASSERT_TRUE(compareVectors(actualCheckBoxesNames, expectedCheckBoxesNames));
     ASSERT_TRUE(settingsUI->textFieldsConfig.empty());
-    ASSERT_TRUE(settingsUI->imagesConfig.empty());
+    ASSERT_TRUE(compareVectors(actualImagesNames, expectedIconNames));
+}
+
+TEST_F(SettingsStateUIConfigBuilderTest, getGridButtonsInfo)
+{
+    const std::vector<std::vector<GridButtonInfo>> expectedGridButtonsInfo{
+        {GridButtonInfo{"settingsWindowModeButton", 0, true},
+         GridButtonInfo{"settingsFullscreenModeButton", 0, true}},
+        {GridButtonInfo{"settingsResolutionDecreaseButton", 1, true},
+         GridButtonInfo{"settingsResolutionIncreaseButton", 1, true}},
+        {GridButtonInfo{"settingsFrameLimitDecreaseButton", 3, true},
+         GridButtonInfo{"settingsFrameLimitIncreaseButton", 3, true}},
+        {GridButtonInfo{"settingsBackToMenuButton", 4, false},
+         GridButtonInfo{"settingsApplyChangesButton", 4, false}}};
+
+    const auto actualGridButtonsInfo = SettingsStateUIConfigBuilder::getGridButtonsInfo();
+
+    ASSERT_EQ(actualGridButtonsInfo, expectedGridButtonsInfo);
+}
+
+TEST_F(SettingsStateUIConfigBuilderTest, getIconNames)
+{
+    const auto actualIconNames = SettingsStateUIConfigBuilder::getIconNames();
+
+    ASSERT_EQ(actualIconNames, expectedIconNames);
 }

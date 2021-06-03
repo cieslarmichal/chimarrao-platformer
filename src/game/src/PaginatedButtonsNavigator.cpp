@@ -3,19 +3,24 @@
 namespace game
 {
 
-PaginatedButtonsNavigator::PaginatedButtonsNavigator(components::ui::UIManager& uiManager,
+PaginatedButtonsNavigator::PaginatedButtonsNavigator(std::shared_ptr<components::ui::UIManager> uiManager,
                                                      const std::vector<std::string>& buttonNames,
                                                      const std::vector<std::string>& iconNames,
                                                      graphics::Color buttonsDefaultColor,
                                                      graphics::Color buttonsHoverColor)
-    : uiManager{uiManager},
+    : uiManager{std::move(uiManager)},
       buttonNames{buttonNames},
+      buttonNamesWithIndices{getButtonNamesWithIndices()},
       iconNames{iconNames},
       timeAfterButtonCanBeSwitched{0.1f},
       buttonsDefaultColor{buttonsDefaultColor},
       buttonsHoverColor{buttonsHoverColor}
 {
-    uiManager.setColor(buttonNames.at(currentItemIndex), buttonsHoverColor);
+}
+
+void PaginatedButtonsNavigator::initialize()
+{
+    uiManager->setColor(buttonNames.at(currentItemIndex), buttonsHoverColor);
     setIconVisible(currentItemIndex);
 }
 
@@ -36,7 +41,7 @@ void PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input::Inp
 
     if (input.isKeyPressed(input::InputKey::Enter))
     {
-        uiManager.invokeClickAction(buttonNames.at(currentItemIndex), input::InputKey::MouseLeft);
+        uiManager->invokeClickAction(buttonNames.at(currentItemIndex), input::InputKey::MouseLeft);
     }
 }
 
@@ -45,21 +50,30 @@ void PaginatedButtonsNavigator::activate()
     setIconVisible(currentItemIndex);
 }
 
-void PaginatedButtonsNavigator::setFocusOnItem(unsigned int itemIndex)
+void PaginatedButtonsNavigator::setFocusOnButton(const std::string& buttonName)
 {
-    if (itemIndex < 0 or itemIndex >= buttonNames.size())
+    if (buttonNamesWithIndices.contains(buttonName))
     {
-        return;
+        unselectAllButtons();
+        changeSelectedButton(buttonNamesWithIndices.at(buttonName));
     }
-
-    unselectAllButtons();
-    changeSelectedButton(itemIndex);
 }
 
 void PaginatedButtonsNavigator::loseFocus()
 {
     unselectAllButtons();
     hideIcons();
+}
+
+std::unordered_map<std::string, unsigned> PaginatedButtonsNavigator::getButtonNamesWithIndices()
+{
+    std::unordered_map<std::string, unsigned> buttonNamesWithIndicesInit;
+
+    for (std::size_t index = 0; index < buttonNames.size(); ++index)
+    {
+        buttonNamesWithIndicesInit.insert({buttonNames[index], index});
+    }
+    return buttonNamesWithIndicesInit;
 }
 
 void PaginatedButtonsNavigator::changeSelectedButtonUp()
@@ -75,7 +89,7 @@ void PaginatedButtonsNavigator::changeSelectedButtonUp()
         currentItemIndex--;
     }
 
-    uiManager.setColor(buttonNames.at(currentItemIndex), buttonsHoverColor);
+    uiManager->setColor(buttonNames.at(currentItemIndex), buttonsHoverColor);
     setIconVisible(currentItemIndex);
 }
 
@@ -91,7 +105,7 @@ void PaginatedButtonsNavigator::changeSelectedButtonDown()
     {
         currentItemIndex++;
     }
-    uiManager.setColor(buttonNames.at(currentItemIndex), buttonsHoverColor);
+    uiManager->setColor(buttonNames.at(currentItemIndex), buttonsHoverColor);
     setIconVisible(currentItemIndex);
 }
 
@@ -105,21 +119,21 @@ void PaginatedButtonsNavigator::unselectAllButtons()
 {
     for (const auto& buttonName : buttonNames)
     {
-        uiManager.setColor(buttonName, buttonsDefaultColor);
+        uiManager->setColor(buttonName, buttonsDefaultColor);
     }
 }
 
 void PaginatedButtonsNavigator::setIconVisible(unsigned int iconIndex)
 {
     hideIcons();
-    uiManager.activateComponent(iconNames[iconIndex]);
+    uiManager->activateComponent(iconNames[iconIndex]);
 }
 
 void PaginatedButtonsNavigator::hideIcons()
 {
     for (auto& iconName : iconNames)
     {
-        uiManager.deactivateComponent(iconName);
+        uiManager->deactivateComponent(iconName);
     }
 }
 
