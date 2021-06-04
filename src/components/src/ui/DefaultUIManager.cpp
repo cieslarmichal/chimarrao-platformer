@@ -172,6 +172,11 @@ void DefaultUIManager::invokeClickAction(const std::string& componentName,
         auto& button = tryToGetComponentByName(buttons, componentName);
         button->invokeClickAction(keyAssignedToClickAction);
     }
+    else if (getComponentType(componentName) == UIComponentType::CheckBox)
+    {
+        auto& checkBox = tryToGetComponentByName(checkBoxes, componentName);
+        checkBox->toggle();
+    }
 }
 
 void DefaultUIManager::setText(const std::string& componentName, const std::string& text)

@@ -90,6 +90,7 @@ TEST_F(SettingsStateUIConfigBuilderTest, getGridButtonsInfo)
          GridButtonInfo{"settingsFullscreenModeButton", 0, true}},
         {GridButtonInfo{"settingsResolutionDecreaseButton", 1, true},
          GridButtonInfo{"settingsResolutionIncreaseButton", 1, true}},
+        {GridButtonInfo{"settingsVsyncCheckBox", 2, false}},
         {GridButtonInfo{"settingsFrameLimitDecreaseButton", 3, true},
          GridButtonInfo{"settingsFrameLimitIncreaseButton", 3, true}},
         {GridButtonInfo{"settingsBackToMenuButton", 4, false},

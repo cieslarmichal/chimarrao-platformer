@@ -21,7 +21,8 @@ public:
     void activate() override;
     void deactivate() override;
     void setColor(graphics::Color);
-    void setChecked(bool checked);
+    void setChecked(bool isChecked);
+    void toggle();
     bool isActive() const override;
 
 private:
@@ -30,5 +31,6 @@ private:
     bool checkBoxClickActionFrozen = true;
     const float timeAfterCheckBoxCanBeClicked;
     std::unique_ptr<utils::Timer> freezeClickableCheckBoxTimer;
+    bool checked{false};
 };
 }

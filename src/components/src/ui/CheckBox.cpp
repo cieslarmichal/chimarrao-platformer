@@ -29,7 +29,15 @@ CheckBox::CheckBox(const std::shared_ptr<graphics::RendererPool>& rendererPool,
         rendererPool, checkBoxConfig->position, text, checkBoxConfig->fontPath, checkBoxConfig->fontSize,
         graphics::Color::Black, checkBoxConfig->textOffset);
     coreComponentsOwner->addComponent<components::core::BoxColliderComponent>(checkBoxConfig->size);
-    coreComponentsOwner->addComponent<components::core::ClickableComponent>(checkBoxConfig->clickAction);
+
+    auto clickAction = checkBoxConfig->clickAction;
+    auto checkBoxClickedAction = [=]
+    {
+        clickAction();
+        toggle();
+    };
+
+    coreComponentsOwner->addComponent<components::core::ClickableComponent>(checkBoxClickedAction);
 
     if (checkBoxConfig->mouseOverActions)
     {
@@ -79,10 +87,28 @@ void CheckBox::setColor(graphics::Color color)
     coreComponentsOwner->getComponent<components::core::GraphicsComponent>()->setColor(color);
 }
 
-void CheckBox::setChecked(bool checked)
+void CheckBox::setChecked(bool isChecked)
 {
-    const auto text = checked ? "X" : "";
-    coreComponentsOwner->getComponent<components::core::TextComponent>()->setText(text);
+    if (isChecked != checked)
+    {
+        checked = isChecked;
+        const auto text = isChecked ? "X" : "";
+        coreComponentsOwner->getComponent<components::core::TextComponent>()->setText(text);
+    }
+}
+
+void CheckBox::toggle()
+{
+    if (checked)
+    {
+        coreComponentsOwner->getComponent<components::core::TextComponent>()->setText("");
+        checked = false;
+    }
+    else
+    {
+        coreComponentsOwner->getComponent<components::core::TextComponent>()->setText("X");
+        checked = true;
+    }
 }
 
 bool CheckBox::isActive() const

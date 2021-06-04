@@ -15,9 +15,9 @@ const auto sectionTextFontSize{37};
 const auto displayModeFontSize{12};
 const auto displayModeButtonSize = utils::Vector2f{8.f, 3.f};
 const auto settingsTitlePosition = utils::Vector2f{32.f, 6.f};
-const auto displayModeSectionPosition = utils::Vector2f{38.f, 18.f};
+const auto displayModeSectionPosition = utils::Vector2f{38.f, 18.5f};
 const auto windowModeButtonPosition = utils::Vector2f{
-    displayModeSectionPosition.x + 15.8f + displayModeButtonSize.x, displayModeSectionPosition.y + 0.5f};
+    displayModeSectionPosition.x + 15.8f + displayModeButtonSize.x, displayModeSectionPosition.y};
 const auto fullscreenModeButtonPosition =
     utils::Vector2f{windowModeButtonPosition.x + displayModeButtonSize.x + 0.5f, windowModeButtonPosition.y};
 const auto resolutionSectionPosition = utils::Vector2f{38.f, 24.f};
@@ -62,11 +62,12 @@ SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsStat
 
 std::vector<std::vector<GridButtonInfo>> SettingsStateUIConfigBuilder::getGridButtonsInfo()
 {
-    std::vector<std::vector<GridButtonInfo>> gridButtonsInfo{
+    const std::vector<std::vector<GridButtonInfo>> gridButtonsInfo{
         {GridButtonInfo{"settingsWindowModeButton", 0, true},
          GridButtonInfo{"settingsFullscreenModeButton", 0, true}},
         {GridButtonInfo{"settingsResolutionDecreaseButton", 1, true},
          GridButtonInfo{"settingsResolutionIncreaseButton", 1, true}},
+        {GridButtonInfo{"settingsVsyncCheckBox", 2, false}},
         {GridButtonInfo{"settingsFrameLimitDecreaseButton", 3, true},
          GridButtonInfo{"settingsFrameLimitIncreaseButton", 3, true}},
         {GridButtonInfo{"settingsBackToMenuButton", 4, false},
@@ -264,8 +265,8 @@ SettingsStateUIConfigBuilder::createImageConfigs(SettingsState*)
 
     for (std::size_t iconIndex = 0; iconIndex < iconNames.size(); iconIndex++)
     {
-        const auto iconPosition = utils::Vector2f{sectionPositions[iconIndex].x - buttonSize.x - 1,
-                                                  sectionPositions[iconIndex].y + 1};
+        const auto iconPosition =
+            utils::Vector2f{sectionPositions[iconIndex].x - 4.f, sectionPositions[iconIndex].y - 0.5f};
 
         auto imageConfig = std::make_unique<components::ui::ImageConfig>(
             iconNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First, iconPath);

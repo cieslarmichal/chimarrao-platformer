@@ -24,7 +24,11 @@ MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
 
 NextState MenuState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    buttonsNavigator->update(deltaTime, input);
+    if (const auto nextState = buttonsNavigator->update(deltaTime, input); nextState == NextState::Previous)
+    {
+        return NextState::Exit;
+    }
+
     uiManager->update(deltaTime, input);
 
     if (shouldExit)

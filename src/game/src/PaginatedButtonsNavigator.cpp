@@ -8,7 +8,8 @@ PaginatedButtonsNavigator::PaginatedButtonsNavigator(std::shared_ptr<components:
                                                      const std::vector<std::string>& iconNames,
                                                      graphics::Color buttonsDefaultColor,
                                                      graphics::Color buttonsHoverColor,
-                                                     std::unique_ptr<utils::Timer> timer)
+                                                     std::unique_ptr<utils::Timer> moveTimer,
+                                                     std::unique_ptr<utils::Timer> actionTimer)
     : uiManager{std::move(uiManager)},
       buttonNames{buttonNames},
       buttonNamesWithIndices{getButtonNamesWithIndices()},
@@ -16,7 +17,9 @@ PaginatedButtonsNavigator::PaginatedButtonsNavigator(std::shared_ptr<components:
       buttonsDefaultColor{buttonsDefaultColor},
       buttonsHoverColor{buttonsHoverColor},
       timeAfterButtonCanBeSwitched{0.1f},
-      switchItemTimer{std::move(timer)}
+      timeAfterActionCanBeExecuted{0.1f},
+      switchButtonTimer{std::move(moveTimer)},
+      actionTimer{std::move(actionTimer)}
 {
     if (buttonNames.size() != iconNames.size())
     {
@@ -32,7 +35,7 @@ void PaginatedButtonsNavigator::initialize()
 
 NextState PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input::Input& input)
 {
-    if (switchItemTimer->getElapsedSeconds() > timeAfterButtonCanBeSwitched)
+    if (switchButtonTimer->getElapsedSeconds() > timeAfterButtonCanBeSwitched)
     {
         if (input.isKeyPressed(input::InputKey::Up))
         {
@@ -48,17 +51,22 @@ NextState PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input
         else if (input.isKeyPressed(input::InputKey::Right))
         {
         }
-        switchItemTimer->restart();
+
+        switchButtonTimer->restart();
     }
 
-    if (input.isKeyPressed(input::InputKey::Enter))
+    if (actionTimer->getElapsedSeconds() > timeAfterActionCanBeExecuted)
     {
-        uiManager->invokeClickAction(buttonNames.at(currentItemIndex), input::InputKey::MouseLeft);
-    }
+        if (input.isKeyPressed(input::InputKey::Enter))
+        {
+            uiManager->invokeClickAction(buttonNames.at(currentItemIndex), input::InputKey::MouseLeft);
+        }
+        else if (input.isKeyPressed(input::InputKey::Escape))
+        {
+            return NextState::Previous;
+        }
 
-    if (input.isKeyPressed(input::InputKey::Escape))
-    {
-        return NextState::Previous;
+        actionTimer->restart();
     }
 
     return NextState::Same;
@@ -67,6 +75,8 @@ NextState PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input
 void PaginatedButtonsNavigator::activate()
 {
     setIconVisible(currentItemIndex);
+    switchButtonTimer->restart();
+    actionTimer->restart();
 }
 
 void PaginatedButtonsNavigator::setFocusOnButton(const std::string& buttonName)

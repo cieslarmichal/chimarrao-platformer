@@ -52,7 +52,7 @@ public:
         EXPECT_CALL(*uiManager, setColor("settingsApplyChangesButton", buttonColor));
     }
 
-    void moveToTheButtonOnTheRightSide()
+    void moveToTheFullscreenButton()
     {
         expectUnselectAllButtons();
         expectHideAllIcons();
@@ -60,21 +60,39 @@ public:
         gridButtonsNavigator.setFocusOnButton("settingsFullscreenModeButton");
     }
 
+    void moveToTheBackButton()
+    {
+        expectUnselectAllButtons();
+        expectHideAllIcons();
+        EXPECT_CALL(*uiManager, activateComponent("settingsIcon5Image"));
+        gridButtonsNavigator.setFocusOnButton("settingsBackToMenuButton");
+    }
+
+    void moveToTheApplyButton()
+    {
+        expectUnselectAllButtons();
+        expectHideAllIcons();
+        EXPECT_CALL(*uiManager, activateComponent("settingsIcon5Image"));
+        gridButtonsNavigator.setFocusOnButton("settingsApplyChangesButton");
+    }
+
     std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
         std::make_shared<StrictMock<components::ui::UIManagerMock>>()};
-    std::unique_ptr<StrictMock<utils::TimerMock>> timerInit{std::make_unique<StrictMock<utils::TimerMock>>()};
-    StrictMock<utils::TimerMock>* timer{timerInit.get()};
+    std::unique_ptr<StrictMock<utils::TimerMock>> moveTimerInit{std::make_unique<StrictMock<utils::TimerMock>>()};
+    StrictMock<utils::TimerMock>* moveTimer{moveTimerInit.get()};
+    std::unique_ptr<StrictMock<utils::TimerMock>> actionTimerInit{std::make_unique<StrictMock<utils::TimerMock>>()};
+    StrictMock<utils::TimerMock>* actionTimer{actionTimerInit.get()};
     StrictMock<input::InputMock> input;
     const utils::DeltaTime deltaTime{1};
 
     GridButtonsNavigator gridButtonsNavigator{uiManager,   validGridButtonsInfo, validIconNames,
-                                              buttonColor, buttonHoverColor,     std::move(timerInit)};
+                                              buttonColor, buttonHoverColor,     std::move(moveTimerInit), std::move(actionTimerInit)};
 };
 
 TEST_F(GridButtonsNavigatorTest, givenInvalidGridButtonsInfoAndIconNames_shouldThrowRuntimeError)
 {
     ASSERT_ANY_THROW(
-        GridButtonsNavigator(uiManager, validGridButtonsInfo, {}, buttonColor, buttonHoverColor, std::move(timerInit)));
+        GridButtonsNavigator(uiManager, validGridButtonsInfo, {}, buttonColor, buttonHoverColor, std::move(moveTimerInit), std::move(actionTimerInit)));
 }
 
 TEST_F(GridButtonsNavigatorTest,
@@ -91,6 +109,8 @@ TEST_F(GridButtonsNavigatorTest, activate_shouldHideAllIconsAndSetCurrentIconVis
 {
     expectHideAllIcons();
     EXPECT_CALL(*uiManager, activateComponent("settingsIcon1Image"));
+    EXPECT_CALL(*moveTimer, restart());
+    EXPECT_CALL(*actionTimer, restart());
 
     gridButtonsNavigator.activate();
 }
@@ -119,20 +139,20 @@ TEST_F(GridButtonsNavigatorTest, loseFocus_shouldUnselectAllButtonsAndHideAllIco
 }
 
 TEST_F(GridButtonsNavigatorTest,
-       update_withRightArrowClicked_shouldMoveToTheButtonOnTheRightSide_andReturnSameState)
+       update_withRightArrowClickedAndButtonsHorizontalMoveCauseAction_shouldMoveToTheButtonOnTheRightSideAndCallItsAction)
 {
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.f));
-    EXPECT_CALL(*timer, restart());
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*moveTimer, restart());
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(true));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Enter)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Escape)).WillOnce(Return(false));
     expectUnselectAllButtons();
     EXPECT_CALL(*uiManager, setColor("settingsFullscreenModeButton", buttonHoverColor));
     expectHideAllIcons();
     EXPECT_CALL(*uiManager, activateComponent("settingsIcon1Image"));
+    EXPECT_CALL(*uiManager, invokeClickAction("settingsFullscreenModeButton", input::InputKey::MouseLeft));
 
     const auto nextState = gridButtonsNavigator.update(deltaTime, input);
 
@@ -140,20 +160,61 @@ TEST_F(GridButtonsNavigatorTest,
 }
 
 TEST_F(GridButtonsNavigatorTest,
-       update_withLeftArrowClicked_shouldMoveToTheButtonOnTheLeftSide_andReturnSameState)
+       update_withRightArrowClickedAndButtonsHorizontalMoveNotCauseAction_shouldMoveToTheButtonOnTheRight)
 {
-    moveToTheButtonOnTheRightSide();
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.f));
-    EXPECT_CALL(*timer, restart());
+    moveToTheBackButton();
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*moveTimer, restart());
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(true));
+    expectUnselectAllButtons();
+    EXPECT_CALL(*uiManager, setColor("settingsApplyChangesButton", buttonHoverColor));
+    expectHideAllIcons();
+    EXPECT_CALL(*uiManager, activateComponent("settingsIcon5Image"));
+
+    const auto nextState = gridButtonsNavigator.update(deltaTime, input);
+
+    ASSERT_EQ(nextState, NextState::Same);
+}
+
+TEST_F(GridButtonsNavigatorTest,
+       update_withLeftArrowClickedAndButtonsHorizontalMoveCauseAction_shouldMoveToTheButtonOnTheLeftSide_andReturnSameStateAndCallItsAction)
+{
+    moveToTheFullscreenButton();
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*moveTimer, restart());
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(true));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Enter)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Escape)).WillOnce(Return(false));
     expectUnselectAllButtons();
     EXPECT_CALL(*uiManager, setColor("settingsWindowModeButton", buttonHoverColor));
     expectHideAllIcons();
     EXPECT_CALL(*uiManager, activateComponent("settingsIcon1Image"));
+    EXPECT_CALL(*uiManager, invokeClickAction("settingsWindowModeButton", input::InputKey::MouseLeft));
+
+    const auto nextState = gridButtonsNavigator.update(deltaTime, input);
+
+    ASSERT_EQ(nextState, NextState::Same);
+}
+
+TEST_F(GridButtonsNavigatorTest,
+       update_withLeftArrowClickedAndButtonsHorizontalMoveNotCauseAction_shouldMoveToTheButtonOnTheLeftSide_andReturnSameState)
+{
+    moveToTheApplyButton();
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*moveTimer, restart());
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(true));
+    expectUnselectAllButtons();
+    EXPECT_CALL(*uiManager, setColor("settingsBackToMenuButton", buttonHoverColor));
+    expectHideAllIcons();
+    EXPECT_CALL(*uiManager, activateComponent("settingsIcon5Image"));
 
     const auto nextState = gridButtonsNavigator.update(deltaTime, input);
 
@@ -162,11 +223,10 @@ TEST_F(GridButtonsNavigatorTest,
 
 TEST_F(GridButtonsNavigatorTest, update_withUpArrowClicked_shouldMoveToTheButtonAbove_andReturnSameState)
 {
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.f));
-    EXPECT_CALL(*timer, restart());
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*moveTimer, restart());
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(true));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Enter)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Escape)).WillOnce(Return(false));
     expectUnselectAllButtons();
     EXPECT_CALL(*uiManager, setColor("settingsBackToMenuButton", buttonHoverColor));
     expectHideAllIcons();
@@ -179,12 +239,11 @@ TEST_F(GridButtonsNavigatorTest, update_withUpArrowClicked_shouldMoveToTheButton
 
 TEST_F(GridButtonsNavigatorTest, update_withDownArrowClicked_shouldMoveToTheButtonBelow_andReturnSameState)
 {
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.f));
-    EXPECT_CALL(*timer, restart());
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*moveTimer, restart());
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(true));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Enter)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Escape)).WillOnce(Return(false));
     expectUnselectAllButtons();
     EXPECT_CALL(*uiManager, setColor("settingsResolutionDecreaseButton", buttonHoverColor));
     expectHideAllIcons();
@@ -197,14 +256,10 @@ TEST_F(GridButtonsNavigatorTest, update_withDownArrowClicked_shouldMoveToTheButt
 
 TEST_F(GridButtonsNavigatorTest, update_withEnter_shouldInvokeButtonAction_andReturnSameState)
 {
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.f));
-    EXPECT_CALL(*timer, restart());
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(false));
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(1.f));
+    EXPECT_CALL(*actionTimer, restart());
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Enter)).WillOnce(Return(true));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Escape)).WillOnce(Return(false));
     EXPECT_CALL(*uiManager, invokeClickAction("settingsWindowModeButton", input::InputKey::MouseLeft));
 
     const auto nextState = gridButtonsNavigator.update(deltaTime, input);
@@ -214,12 +269,8 @@ TEST_F(GridButtonsNavigatorTest, update_withEnter_shouldInvokeButtonAction_andRe
 
 TEST_F(GridButtonsNavigatorTest, update_withEscape_shouldReturnPreviousState)
 {
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.f));
-    EXPECT_CALL(*timer, restart());
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(false));
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(1.f));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Enter)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Escape)).WillOnce(Return(true));
 

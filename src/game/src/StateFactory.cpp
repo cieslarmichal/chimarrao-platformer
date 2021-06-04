@@ -78,7 +78,8 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
         auto uiManager = std::make_shared<components::ui::DefaultUIManager>(rendererPool);
         auto buttonsNavigator = std::make_unique<PaginatedButtonsNavigator>(
             uiManager, MenuStateUIConfigBuilder::getButtonNames(), MenuStateUIConfigBuilder::getIconNames(),
-            menuButtonColor, menuButtonHoverColor, utils::TimerFactory::createTimer());
+            menuButtonColor, menuButtonHoverColor, utils::TimerFactory::createTimer(),
+            utils::TimerFactory::createTimer());
         return std::make_unique<MenuState>(window, rendererPool, fileAccess, states, uiManager,
                                            std::move(buttonsNavigator));
     }
@@ -99,7 +100,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
         auto buttonsNavigator = std::make_unique<GridButtonsNavigator>(
             uiManager, SettingsStateUIConfigBuilder::getGridButtonsInfo(),
             SettingsStateUIConfigBuilder::getIconNames(), settingsButtonColor, settingsButtonHoverColor,
-            utils::TimerFactory::createTimer());
+            utils::TimerFactory::createTimer(), utils::TimerFactory::createTimer());
         return std::make_unique<SettingsState>(window, rendererPool, fileAccess, states, uiManager,
                                                std::move(buttonsNavigator));
     }

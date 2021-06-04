@@ -8,14 +8,6 @@
 
 namespace game
 {
-struct ButtonIndexHash
-{
-    std::size_t operator()(const utils::Vector2u& vec) const
-    {
-        return std::hash<std::string>()(toString(vec));
-    };
-};
-
 class GridButtonsNavigator : public ButtonsNavigator
 {
 public:
@@ -23,7 +15,8 @@ public:
                                   const std::vector<std::vector<GridButtonInfo>>& gridButtonsInfo,
                                   const std::vector<std::string>& iconNames,
                                   graphics::Color buttonsDefaultColor, graphics::Color buttonsHoverColor,
-                                  std::unique_ptr<utils::Timer>);
+                                  std::unique_ptr<utils::Timer> moveTimer,
+                                  std::unique_ptr<utils::Timer> actionTimer);
 
     void initialize() override;
     NextState update(const utils::DeltaTime&, const input::Input&) override;
@@ -50,6 +43,8 @@ private:
     const graphics::Color buttonsDefaultColor;
     const graphics::Color buttonsHoverColor;
     const float timeAfterButtonCanBeSwitched;
+    const float timeAfterActionCanBeExecuted;
     std::unique_ptr<utils::Timer> switchButtonTimer;
+    std::unique_ptr<utils::Timer> actionTimer;
 };
 }

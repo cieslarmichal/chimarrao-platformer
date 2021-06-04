@@ -16,7 +16,8 @@ public:
                                        const std::vector<std::string>& iconNames,
                                        graphics::Color buttonsDefaultColor,
                                        graphics::Color buttonsHoverColor,
-                                       std::unique_ptr<utils::Timer>);
+                                       std::unique_ptr<utils::Timer> moveTimer,
+                                       std::unique_ptr<utils::Timer> actionTimer);
 
     void initialize() override;
     NextState update(const utils::DeltaTime&, const input::Input&) override;
@@ -41,6 +42,8 @@ private:
     const graphics::Color buttonsDefaultColor;
     const graphics::Color buttonsHoverColor;
     const float timeAfterButtonCanBeSwitched;
-    std::unique_ptr<utils::Timer> switchItemTimer;
+    const float timeAfterActionCanBeExecuted;
+    std::unique_ptr<utils::Timer> switchButtonTimer;
+    std::unique_ptr<utils::Timer> actionTimer;
 };
 }

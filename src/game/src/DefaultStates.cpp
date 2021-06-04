@@ -1,5 +1,7 @@
 #include "DefaultStates.h"
 
+#include <utility>
+
 namespace game
 {
 
@@ -7,7 +9,7 @@ DefaultStates::DefaultStates(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                              const std::shared_ptr<utils::FileAccess>& fileAccessInit,
                              std::shared_ptr<TileMap> tileMapInit)
-    : tileMap{tileMapInit},
+    : tileMap{std::move(tileMapInit)},
       stateFactory{
           std::make_unique<StateFactory>(windowInit, rendererPoolInit, fileAccessInit, *this, tileMap)}
 {

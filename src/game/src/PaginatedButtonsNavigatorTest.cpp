@@ -43,19 +43,23 @@ public:
 
     std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
         std::make_shared<StrictMock<components::ui::UIManagerMock>>()};
-    std::unique_ptr<StrictMock<utils::TimerMock>> timerInit{std::make_unique<StrictMock<utils::TimerMock>>()};
-    StrictMock<utils::TimerMock>* timer{timerInit.get()};
+    std::unique_ptr<StrictMock<utils::TimerMock>> moveTimerInit{
+        std::make_unique<StrictMock<utils::TimerMock>>()};
+    StrictMock<utils::TimerMock>* moveTimer{moveTimerInit.get()};
+    std::unique_ptr<StrictMock<utils::TimerMock>> actionTimerInit{
+        std::make_unique<StrictMock<utils::TimerMock>>()};
+    StrictMock<utils::TimerMock>* actionTimer{actionTimerInit.get()};
     StrictMock<input::InputMock> input;
     const utils::DeltaTime deltaTime{1};
 
     PaginatedButtonsNavigator paginatedButtonsNavigator{uiManager,   validButtonNames, validIconNames,
-                                              buttonColor, buttonHoverColor,     std::move(timerInit)};
+                                              buttonColor, buttonHoverColor,     std::move(moveTimerInit), std::move(actionTimerInit)};
 };
 
 TEST_F(PaginatedButtonsNavigatorTest, givenInvalidGridButtonsInfoAndIconNames_shouldThrowRuntimeError)
 {
     ASSERT_ANY_THROW(
-        PaginatedButtonsNavigator(uiManager, validButtonNames, {}, buttonColor, buttonHoverColor, std::move(timerInit)));
+        PaginatedButtonsNavigator(uiManager, validButtonNames, {}, buttonColor, buttonHoverColor, std::move(moveTimerInit), std::move(actionTimerInit)));
 }
 
 TEST_F(PaginatedButtonsNavigatorTest,
@@ -72,6 +76,8 @@ TEST_F(PaginatedButtonsNavigatorTest, activate_shouldHideAllIconsAndSetCurrentIc
 {
     expectHideAllIcons();
     EXPECT_CALL(*uiManager, activateComponent("menuIcon1Image"));
+    EXPECT_CALL(*moveTimer, restart());
+    EXPECT_CALL(*actionTimer, restart());
 
     paginatedButtonsNavigator.activate();
 }
@@ -102,14 +108,13 @@ TEST_F(PaginatedButtonsNavigatorTest, loseFocus_shouldUnselectAllButtonsAndHideA
 TEST_F(PaginatedButtonsNavigatorTest,
        update_withRightArrowClicked_shouldMoveToTheButtonOnTheRightSide_andReturnSameState)
 {
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.f));
-    EXPECT_CALL(*timer, restart());
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*moveTimer, restart());
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(true));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Enter)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Escape)).WillOnce(Return(false));
 
     const auto nextState = paginatedButtonsNavigator.update(deltaTime, input);
 
@@ -119,13 +124,12 @@ TEST_F(PaginatedButtonsNavigatorTest,
 TEST_F(PaginatedButtonsNavigatorTest,
        update_withLeftArrowClicked_shouldMoveToTheButtonOnTheLeftSide_andReturnSameState)
 {
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.f));
-    EXPECT_CALL(*timer, restart());
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*moveTimer, restart());
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(true));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Enter)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Escape)).WillOnce(Return(false));
 
     const auto nextState = paginatedButtonsNavigator.update(deltaTime, input);
 
@@ -134,11 +138,10 @@ TEST_F(PaginatedButtonsNavigatorTest,
 
 TEST_F(PaginatedButtonsNavigatorTest, update_withUpArrowClicked_shouldMoveToTheButtonAbove_andReturnSameState)
 {
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.f));
-    EXPECT_CALL(*timer, restart());
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*moveTimer, restart());
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(true));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Enter)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Escape)).WillOnce(Return(false));
     expectUnselectAllButtons();
     EXPECT_CALL(*uiManager, setColor("menuExitButton", buttonHoverColor));
     expectHideAllIcons();
@@ -151,12 +154,11 @@ TEST_F(PaginatedButtonsNavigatorTest, update_withUpArrowClicked_shouldMoveToTheB
 
 TEST_F(PaginatedButtonsNavigatorTest, update_withDownArrowClicked_shouldMoveToTheButtonBelow_andReturnSameState)
 {
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.f));
-    EXPECT_CALL(*timer, restart());
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*moveTimer, restart());
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(true));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Enter)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Escape)).WillOnce(Return(false));
     expectUnselectAllButtons();
     EXPECT_CALL(*uiManager, setColor("menuMapEditorButton", buttonHoverColor));
     expectHideAllIcons();
@@ -169,14 +171,10 @@ TEST_F(PaginatedButtonsNavigatorTest, update_withDownArrowClicked_shouldMoveToTh
 
 TEST_F(PaginatedButtonsNavigatorTest, update_withEnter_shouldInvokeButtonAction_andReturnSameState)
 {
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.f));
-    EXPECT_CALL(*timer, restart());
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(false));
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(1.f));
+    EXPECT_CALL(*actionTimer, restart());
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Enter)).WillOnce(Return(true));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Escape)).WillOnce(Return(false));
     EXPECT_CALL(*uiManager, invokeClickAction("menuPlayButton", input::InputKey::MouseLeft));
 
     const auto nextState = paginatedButtonsNavigator.update(deltaTime, input);
@@ -186,12 +184,8 @@ TEST_F(PaginatedButtonsNavigatorTest, update_withEnter_shouldInvokeButtonAction_
 
 TEST_F(PaginatedButtonsNavigatorTest, update_withEscape_shouldReturnPreviousState)
 {
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.f));
-    EXPECT_CALL(*timer, restart());
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Down)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(false));
+    EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(0.f));
+    EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(1.f));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Enter)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Escape)).WillOnce(Return(true));
 

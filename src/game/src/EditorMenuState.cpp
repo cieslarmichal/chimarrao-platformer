@@ -3,7 +3,6 @@
 #include <utility>
 
 #include "EditorMenuStateUIConfigBuilder.h"
-#include "ProjectPathReader.h"
 #include "ui/DefaultUIManager.h"
 #include "TimerFactory.h"
 

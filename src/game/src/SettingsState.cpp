@@ -36,13 +36,18 @@ SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
 
 NextState SettingsState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
+    if (const auto nextState = buttonsNavigator->update(deltaTime, input); nextState == NextState::Previous)
+    {
+        return NextState::Previous;
+    }
+
+    uiManager->update(deltaTime, input);
+
     if (shouldBackToMenu)
     {
         return NextState::Menu;
     }
 
-    buttonsNavigator->update(deltaTime, input);
-    uiManager->update(deltaTime, input);
     return NextState::Same;
 }
 
@@ -197,12 +202,10 @@ void SettingsState::switchVsync()
     if (selectedWindowsSettings.vsync)
     {
         selectedWindowsSettings.vsync = false;
-        uiManager->setChecked("settingsVsyncCheckBox", false);
     }
     else
     {
         selectedWindowsSettings.vsync = true;
-        uiManager->setChecked("settingsVsyncCheckBox", true);
     }
 }
 
