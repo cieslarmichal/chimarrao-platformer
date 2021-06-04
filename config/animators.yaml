@@ -22,7 +22,7 @@ multipleFilesAnimators:
       - type: attack
         firstTexturePath: resources/Player/Attacks/attack-A1.png
         numberOfTextures: 7
-        timeBetweenTexturesInSeconds: 0.25
+        timeBetweenTexturesInSeconds: 0.15
         loopsAllowed: false
         interruptionAllowed: false
   - name: druid
