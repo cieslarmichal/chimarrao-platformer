@@ -1,6 +1,9 @@
 lsudo: required
 language: cpp
 
+services:
+  - xvfb
+  
 matrix:
   include:
     - compiler: gcc
@@ -9,7 +12,6 @@ matrix:
           update: true
           packages:
             - g++-10
-            - xvfb
       env:
       - C_COMPILER=gcc-10
       - CXX_COMPILER=g++-10
