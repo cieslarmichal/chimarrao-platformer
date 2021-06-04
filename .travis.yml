@@ -1,5 +1,8 @@
 lsudo: required
 language: cpp
+
+services:
+  - xvfb
   
 matrix:
   include:
@@ -22,7 +25,9 @@ before_install:
   - sudo add-apt-repository restricted
   - sudo add-apt-repository multiverse
   - sudo apt-get update -y
-  - "/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -ac -screen 0 1280x720x16"
+  -sudo service xvfb stop
+  -sudo sed -i 's/1024×768/1280×720/g' /etc/systemd/system/xvfb.service
+  -sudo service xvfb start
 
 install:
   - sudo apt-get install build-essential libgtk-3-dev
@@ -31,7 +36,6 @@ install:
 
 before_script:
 - export DISPLAY=:99.0
-- sh -e /etc/init.d/xvfb start
   
 script:
   - mkdir build
