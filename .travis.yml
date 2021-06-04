@@ -34,6 +34,7 @@ script:
   - env CC=${C_COMPILER} CXX=${CXX_COMPILER} cmake .. -DENABLE_COVERAGE:BOOL=TRUE -DCMAKE_BUILD_TYPE=DEBUG
   - echo "We have" `nproc` "cores here"
   - make -j `nproc`
+  - export DISPLAY=':99.0'
   - ctest -j `nproc` -V
 
 after_success:
