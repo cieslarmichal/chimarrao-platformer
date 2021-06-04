@@ -3,11 +3,10 @@
 #include <memory>
 
 #include "FileAccess.h"
-#include "UtilsApi.h"
 
 namespace utils
 {
-class UTILS_API FileAccessFactory
+class  FileAccessFactory
 {
 public:
     virtual ~FileAccessFactory() = default;

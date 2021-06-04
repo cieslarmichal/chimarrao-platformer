@@ -30,7 +30,7 @@ public:
 private:
     void saveMap();
 
-    utils::Timer possibleLeaveFromStateTimer;
+    std::unique_ptr<utils::Timer> possibleLeaveFromStateTimer;
     const float timeAfterLeaveStateIsPossible;
     bool shouldBackToEditorMenu;
     std::string currentMapName;

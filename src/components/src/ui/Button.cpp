@@ -11,8 +11,8 @@ namespace components::ui
 {
 
 Button::Button(const std::shared_ptr<graphics::RendererPool>& rendererPool,
-               std::unique_ptr<ButtonConfig> buttonConfig)
-    : timeAfterButtonCanBeClicked{0.25f}
+               std::unique_ptr<ButtonConfig> buttonConfig, std::unique_ptr<utils::Timer> timer)
+    : timeAfterButtonCanBeClicked{0.25f}, freezeClickableButtonTimer{std::move(timer)}
 {
     if (not buttonConfig)
     {
@@ -46,14 +46,12 @@ Button::Button(const std::shared_ptr<graphics::RendererPool>& rendererPool,
     {
         clickableComponent->disable();
     }
-
-    freezeClickableButtonTimer.start();
 }
 
 void Button::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
     if (buttonClickActionFrozen &&
-        freezeClickableButtonTimer.getElapsedSeconds() > timeAfterButtonCanBeClicked)
+        freezeClickableButtonTimer->getElapsedSeconds() > timeAfterButtonCanBeClicked)
     {
         buttonClickActionFrozen = false;
         if (auto clickableComponent =
@@ -121,7 +119,7 @@ void Button::restartClickActionFreezeTimer()
     {
         clickableComponent->disable();
     }
-    freezeClickableButtonTimer.restart();
+    freezeClickableButtonTimer->restart();
     buttonClickActionFrozen = true;
 }
 

@@ -24,7 +24,7 @@ public:
     void deactivate() override;
 
 private:
-    utils::Timer timer;
+    std::unique_ptr<utils::Timer> timer;
     const float timeAfterLeaveStateIsPossible;
     bool shouldBackToGame;
     bool shouldBackToMenu;

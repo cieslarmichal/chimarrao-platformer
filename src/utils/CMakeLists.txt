@@ -1,6 +1,6 @@
 set(SOURCES
         src/Bitmask.cpp
-        src/Timer.cpp
+        src/DefaultTimer.cpp
         src/ProjectPathReader.cpp
         src/StringHelper.cpp
         src/IncrementalFilePathsCreator.cpp
@@ -9,11 +9,12 @@ set(SOURCES
         src/DefaultFileAccess.cpp
         src/DefaultFileAccessFactory.cpp
         src/FileAccessFactory.cpp
+        src/TimerFactory.cpp
         )
 
 set(UT_SOURCES
         src/BitmaskTest.cpp
-        src/TimerTest.cpp
+        src/DefaultTimerTest.cpp
         src/ProjectPathReaderTest.cpp
         src/StringHelperTest.cpp
         src/IncrementalFilePathsCreatorTest.cpp
@@ -22,7 +23,7 @@ set(UT_SOURCES
         src/DefaultFileAccessTest.cpp
         )
 
-add_library(utils SHARED ${SOURCES})
+add_library(utils STATIC ${SOURCES})
 target_include_directories(utils PUBLIC src ${SFML_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
 target_link_libraries(utils PUBLIC ${SFML_LIBRARIES})
 target_compile_options(utils PUBLIC ${FLAGS})

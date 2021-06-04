@@ -6,7 +6,7 @@
 #include "RendererPool.h"
 #include "State.h"
 #include "States.h"
-#include "Timer.h"
+#include "GameTimer.h"
 #include "Window.h"
 #include "editor/TileMap.h"
 
@@ -24,7 +24,7 @@ private:
     void update();
     void render();
 
-    utils::Timer timer;
+    GameTimer timer;
     std::shared_ptr<window::Window> window;
     std::shared_ptr<input::InputManager> inputManager;
     std::unique_ptr<States> states;

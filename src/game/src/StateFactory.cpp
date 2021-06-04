@@ -17,6 +17,7 @@
 #include "SaveMapState.h"
 #include "SettingsState.h"
 #include "SettingsStateUIConfigBuilder.h"
+#include "TimerFactory.h"
 
 namespace game
 {
@@ -62,7 +63,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     {
         return std::make_unique<EditorState>(window, rendererPool, fileAccess, states,
                                              std::make_unique<components::ui::DefaultUIManager>(rendererPool),
-                                             tileMap);
+                                             tileMap, utils::TimerFactory::createTimer());
     }
     case StateType::Game:
     {
@@ -77,7 +78,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
         auto uiManager = std::make_shared<components::ui::DefaultUIManager>(rendererPool);
         auto buttonsNavigator = std::make_unique<PaginatedButtonsNavigator>(
             uiManager, MenuStateUIConfigBuilder::getButtonNames(), MenuStateUIConfigBuilder::getIconNames(),
-            menuButtonColor, menuButtonHoverColor);
+            menuButtonColor, menuButtonHoverColor, utils::TimerFactory::createTimer());
         return std::make_unique<MenuState>(window, rendererPool, fileAccess, states, uiManager,
                                            std::move(buttonsNavigator));
     }
@@ -97,7 +98,8 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
         auto uiManager = std::make_shared<components::ui::DefaultUIManager>(rendererPool);
         auto buttonsNavigator = std::make_unique<GridButtonsNavigator>(
             uiManager, SettingsStateUIConfigBuilder::getGridButtonsInfo(),
-            SettingsStateUIConfigBuilder::getIconNames(), settingsButtonColor, settingsButtonHoverColor);
+            SettingsStateUIConfigBuilder::getIconNames(), settingsButtonColor, settingsButtonHoverColor,
+            utils::TimerFactory::createTimer());
         return std::make_unique<SettingsState>(window, rendererPool, fileAccess, states, uiManager,
                                                std::move(buttonsNavigator));
     }

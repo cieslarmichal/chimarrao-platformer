@@ -3,14 +3,13 @@
 #include <boost/optional.hpp>
 
 #include "FilePath.h"
-#include "UtilsApi.h"
 
 namespace utils
 {
 class IncrementalFilePathsCreator
 {
 public:
-    static UTILS_API FilePaths createFilePaths(const FilePath& fullPathToFirstFile,
+    static  FilePaths createFilePaths(const FilePath& fullPathToFirstFile,
                                                unsigned numberOfIncrementalFiles);
 
 private:

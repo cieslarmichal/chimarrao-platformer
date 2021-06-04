@@ -3,8 +3,8 @@
 #include <utility>
 
 #include "PauseStateUIConfigBuilder.h"
-#include "ProjectPathReader.h"
 #include "ui/DefaultUIManager.h"
+#include "TimerFactory.h"
 
 namespace game
 {
@@ -20,12 +20,12 @@ PauseState::PauseState(const std::shared_ptr<window::Window>& windowInit,
       uiManager{std::move(uiManagerInit)}
 {
     uiManager->createUI(PauseStateUIConfigBuilder::createPauseUIConfig(this));
-    timer.start();
+    timer = utils::TimerFactory::createTimer();
 }
 
 NextState PauseState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    if (timer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
+    if (timer->getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
         input.isKeyPressed(input::InputKey::Escape))
     {
         shouldBackToGame = true;

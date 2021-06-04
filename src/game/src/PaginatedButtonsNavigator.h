@@ -15,7 +15,8 @@ public:
                                        const std::vector<std::string>& buttonNames,
                                        const std::vector<std::string>& iconNames,
                                        graphics::Color buttonsDefaultColor,
-                                       graphics::Color buttonsHoverColor);
+                                       graphics::Color buttonsHoverColor,
+                                       std::unique_ptr<utils::Timer>);
 
     void initialize() override;
     NextState update(const utils::DeltaTime&, const input::Input&) override;
@@ -37,9 +38,9 @@ private:
     const std::unordered_map<std::string, unsigned> buttonNamesWithIndices;
     const std::vector<std::string> iconNames;
     unsigned int currentItemIndex{0};
-    utils::Timer switchItemTimer;
-    const float timeAfterButtonCanBeSwitched;
     const graphics::Color buttonsDefaultColor;
     const graphics::Color buttonsHoverColor;
+    const float timeAfterButtonCanBeSwitched;
+    std::unique_ptr<utils::Timer> switchItemTimer;
 };
 }

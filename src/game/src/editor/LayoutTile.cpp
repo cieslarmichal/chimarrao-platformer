@@ -1,6 +1,7 @@
 #include "LayoutTile.h"
 
 #include "TileType.h"
+#include "TimerFactory.h"
 
 namespace game
 {
@@ -83,7 +84,7 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
                                                                        onMouseOutActionLambda);
     componentOwner->loadDependentComponents();
     componentOwner->enable();
-    freezeClickableTileTimer.start();
+    freezeClickableTileTimer = utils::TimerFactory::createTimer();
     activate();
 }
 
@@ -92,7 +93,7 @@ void LayoutTile::update(const utils::DeltaTime& deltaTime, const input::Input& i
     if (auto clickableComponent = componentOwner->getComponent<components::core::ClickableComponent>())
     {
         if (not clickableComponent->isEnabled() and
-            freezeClickableTileTimer.getElapsedSeconds() > timeAfterTileCanBeClicked)
+            freezeClickableTileTimer->getElapsedSeconds() > timeAfterTileCanBeClicked)
         {
             clickableComponent->enable();
         }
@@ -107,7 +108,7 @@ void LayoutTile::activate()
     if (auto clickableComponent = componentOwner->getComponent<components::core::ClickableComponent>())
     {
         clickableComponent->disable();
-        freezeClickableTileTimer.restart();
+        freezeClickableTileTimer->restart();
     }
 }
 

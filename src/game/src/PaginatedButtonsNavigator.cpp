@@ -7,15 +7,21 @@ PaginatedButtonsNavigator::PaginatedButtonsNavigator(std::shared_ptr<components:
                                                      const std::vector<std::string>& buttonNames,
                                                      const std::vector<std::string>& iconNames,
                                                      graphics::Color buttonsDefaultColor,
-                                                     graphics::Color buttonsHoverColor)
+                                                     graphics::Color buttonsHoverColor,
+                                                     std::unique_ptr<utils::Timer> timer)
     : uiManager{std::move(uiManager)},
       buttonNames{buttonNames},
       buttonNamesWithIndices{getButtonNamesWithIndices()},
       iconNames{iconNames},
-      timeAfterButtonCanBeSwitched{0.1f},
       buttonsDefaultColor{buttonsDefaultColor},
-      buttonsHoverColor{buttonsHoverColor}
+      buttonsHoverColor{buttonsHoverColor},
+      timeAfterButtonCanBeSwitched{0.1f},
+      switchItemTimer{std::move(timer)}
 {
+    if (buttonNames.size() != iconNames.size())
+    {
+        throw std::runtime_error{"Icons size is not equal buttons size"};
+    }
 }
 
 void PaginatedButtonsNavigator::initialize()
@@ -26,7 +32,7 @@ void PaginatedButtonsNavigator::initialize()
 
 NextState PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input::Input& input)
 {
-    if (switchItemTimer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
+    if (switchItemTimer->getElapsedSeconds() > timeAfterButtonCanBeSwitched)
     {
         if (input.isKeyPressed(input::InputKey::Up))
         {
@@ -36,7 +42,13 @@ NextState PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input
         {
             changeSelectedButtonDown();
         }
-        switchItemTimer.restart();
+        else if (input.isKeyPressed(input::InputKey::Left))
+        {
+        }
+        else if (input.isKeyPressed(input::InputKey::Right))
+        {
+        }
+        switchItemTimer->restart();
     }
 
     if (input.isKeyPressed(input::InputKey::Enter))

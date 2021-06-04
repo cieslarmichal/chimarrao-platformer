@@ -22,7 +22,8 @@ public:
     explicit GridButtonsNavigator(std::shared_ptr<components::ui::UIManager>,
                                   const std::vector<std::vector<GridButtonInfo>>& gridButtonsInfo,
                                   const std::vector<std::string>& iconNames,
-                                  graphics::Color buttonsDefaultColor, graphics::Color buttonsHoverColor);
+                                  graphics::Color buttonsDefaultColor, graphics::Color buttonsHoverColor,
+                                  std::unique_ptr<utils::Timer>);
 
     void initialize() override;
     NextState update(const utils::DeltaTime&, const input::Input&) override;
@@ -46,9 +47,9 @@ private:
     const std::unordered_map<std::string, utils::Vector2u> buttonNamesWithIndices;
     const std::vector<std::string> iconNames;
     utils::Vector2u currentButtonIndex{0, 0};
-    utils::Timer switchButtonTimer;
-    const float timeAfterButtonCanBeSwitched;
     const graphics::Color buttonsDefaultColor;
     const graphics::Color buttonsHoverColor;
+    const float timeAfterButtonCanBeSwitched;
+    std::unique_ptr<utils::Timer> switchButtonTimer;
 };
 }

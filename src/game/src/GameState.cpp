@@ -11,6 +11,7 @@
 #include "core/KeyboardMovementComponent.h"
 #include "core/VelocityComponent.h"
 #include "ui/DefaultUIManager.h"
+#include "TimerFactory.h"
 
 namespace game
 {
@@ -63,7 +64,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
         }
     }
 
-    timer.start();
+    timer = utils::TimerFactory::createTimer();
 
     componentOwnersManager->add(player);
     componentOwnersManager->processNewObjects();
@@ -71,7 +72,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
 
 NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    if (timer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
+    if (timer->getElapsedSeconds() > timeAfterStateCouldBePaused &&
         input.isKeyPressed(input::InputKey::Escape))
     {
         pause();
@@ -102,7 +103,7 @@ void GameState::activate()
 {
     active = true;
     paused = false;
-    timer.restart();
+    timer->restart();
     componentOwnersManager->activate();
     uiManager->activate();
 }
@@ -110,7 +111,7 @@ void GameState::activate()
 void GameState::deactivate()
 {
     active = false;
-    timer.restart();
+    timer->restart();
     componentOwnersManager->deactivate();
     uiManager->deactivate();
 }

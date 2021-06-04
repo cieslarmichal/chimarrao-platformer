@@ -29,7 +29,7 @@ public:
     void deactivate() override;
 
 private:
-    utils::Timer possibleLeaveFromStateTimer;
+    std::unique_ptr<utils::Timer> possibleLeaveFromStateTimer;
     const float timeAfterLeaveStateIsPossible;
     bool shouldBackToEditor;
     bool shouldBackToMenu;

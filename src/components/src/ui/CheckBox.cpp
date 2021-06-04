@@ -11,8 +11,8 @@ namespace components::ui
 {
 
 CheckBox::CheckBox(const std::shared_ptr<graphics::RendererPool>& rendererPool,
-                   std::unique_ptr<CheckBoxConfig> checkBoxConfig)
-    : timeAfterCheckBoxCanBeClicked{0.25f}
+                   std::unique_ptr<CheckBoxConfig> checkBoxConfig, std::unique_ptr<utils::Timer> timer)
+    : timeAfterCheckBoxCanBeClicked{0.25f}, freezeClickableCheckBoxTimer{std::move(timer)}
 {
     if (not checkBoxConfig)
     {
@@ -40,14 +40,12 @@ CheckBox::CheckBox(const std::shared_ptr<graphics::RendererPool>& rendererPool,
 
     coreComponentsOwner->loadDependentComponents();
     coreComponentsOwner->getComponent<components::core::ClickableComponent>()->disable();
-
-    freezeClickableCheckBoxTimer.start();
 }
 
 void CheckBox::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
     if (checkBoxClickActionFrozen &&
-        freezeClickableCheckBoxTimer.getElapsedSeconds() > timeAfterCheckBoxCanBeClicked)
+        freezeClickableCheckBoxTimer->getElapsedSeconds() > timeAfterCheckBoxCanBeClicked)
     {
         checkBoxClickActionFrozen = false;
         coreComponentsOwner->getComponent<components::core::ClickableComponent>()->enable();
@@ -66,7 +64,7 @@ void CheckBox::activate()
 {
     coreComponentsOwner->enable();
     coreComponentsOwner->getComponent<components::core::ClickableComponent>()->disable();
-    freezeClickableCheckBoxTimer.restart();
+    freezeClickableCheckBoxTimer->restart();
     checkBoxClickActionFrozen = true;
 }
 

@@ -7,14 +7,16 @@ GridButtonsNavigator::GridButtonsNavigator(std::shared_ptr<components::ui::UIMan
                                            const std::vector<std::vector<GridButtonInfo>>& gridButtonsInfo,
                                            const std::vector<std::string>& iconNames,
                                            graphics::Color buttonsDefaultColor,
-                                           graphics::Color buttonsHoverColor)
+                                           graphics::Color buttonsHoverColor,
+                                           std::unique_ptr<utils::Timer> timer)
     : uiManager{std::move(uiManager)},
       gridButtonsInfo{gridButtonsInfo},
       buttonNamesWithIndices{getButtonNamesWithIndices()},
       iconNames{iconNames},
-      timeAfterButtonCanBeSwitched{0.1f},
       buttonsDefaultColor{buttonsDefaultColor},
-      buttonsHoverColor{buttonsHoverColor}
+      buttonsHoverColor{buttonsHoverColor},
+      timeAfterButtonCanBeSwitched{0.1f},
+      switchButtonTimer{std::move(timer)}
 {
     for (const auto& rowOfGridButtonInfo : gridButtonsInfo)
     {
@@ -26,8 +28,6 @@ GridButtonsNavigator::GridButtonsNavigator(std::shared_ptr<components::ui::UIMan
             throw std::runtime_error{"Incorrect grid buttons info: icon index not within icon names indices"};
         }
     }
-
-    switchButtonTimer.restart();
 }
 
 void GridButtonsNavigator::initialize()
@@ -39,7 +39,7 @@ void GridButtonsNavigator::initialize()
 
 NextState GridButtonsNavigator::update(const utils::DeltaTime&, const input::Input& input)
 {
-    if (switchButtonTimer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
+    if (switchButtonTimer->getElapsedSeconds() > timeAfterButtonCanBeSwitched)
     {
         if (input.isKeyPressed(input::InputKey::Up))
         {
@@ -57,7 +57,7 @@ NextState GridButtonsNavigator::update(const utils::DeltaTime&, const input::Inp
         {
             changeSelectedButtonRight();
         }
-        switchButtonTimer.restart();
+        switchButtonTimer->restart();
     }
 
     if (input.isKeyPressed(input::InputKey::Enter))

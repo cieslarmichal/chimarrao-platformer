@@ -11,8 +11,10 @@ namespace components::ui
 {
 
 TextField::TextField(const std::shared_ptr<graphics::RendererPool>& rendererPool,
-                     std::unique_ptr<TextFieldConfig> textFieldConfig)
-    : inputBufferMaximumSize{15}, timeAfterNextLetterCanBeDeleted{0.08f}
+                     std::unique_ptr<TextFieldConfig> textFieldConfig, std::unique_ptr<utils::Timer> timer)
+    : inputBufferMaximumSize{15},
+      timeAfterNextLetterCanBeDeleted{0.08f},
+      deleteCharactersTimer{std::move(timer)}
 {
     if (not textFieldConfig)
     {
@@ -42,7 +44,6 @@ TextField::TextField(const std::shared_ptr<graphics::RendererPool>& rendererPool
         std::move(textFieldClickedAction));
 
     coreComponentsOwner->loadDependentComponents();
-    deleteCharactersTimer.start();
 }
 
 void TextField::update(utils::DeltaTime deltaTime, const input::Input& input)
@@ -76,7 +77,7 @@ void TextField::update(utils::DeltaTime deltaTime, const input::Input& input)
 
         if (input.isKeyPressed(input::InputKey::Backspace))
         {
-            if (deleteCharactersTimer.getElapsedSeconds() > timeAfterNextLetterCanBeDeleted)
+            if (deleteCharactersTimer->getElapsedSeconds() > timeAfterNextLetterCanBeDeleted)
             {
                 if (not inputBuffer.empty())
                 {
@@ -85,7 +86,7 @@ void TextField::update(utils::DeltaTime deltaTime, const input::Input& input)
                     setText(inputBuffer);
                 }
 
-                deleteCharactersTimer.restart();
+                deleteCharactersTimer->restart();
             }
         }
     }
@@ -103,7 +104,7 @@ void TextField::activate()
 {
     textFieldClicked = false;
     coreComponentsOwner->enable();
-    deleteCharactersTimer.restart();
+    deleteCharactersTimer->restart();
 }
 
 void TextField::deactivate()
