@@ -25,9 +25,9 @@ before_install:
   - sudo add-apt-repository restricted
   - sudo add-apt-repository multiverse
   - sudo apt-get update -y
-  -sudo service xvfb stop
-  -sudo sed -i 's/1024×768/1280×720/g' /etc/systemd/system/xvfb.service
-  -sudo service xvfb start
+  - sudo service xvfb stop
+  - sudo sed -i 's/1024×768/1280×720/g' /etc/systemd/system/xvfb.service
+  - sudo service xvfb start
 
 install:
   - sudo apt-get install build-essential libgtk-3-dev
