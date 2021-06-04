@@ -4,7 +4,6 @@
 #include "Color.h"
 #include "CommonUIConfigElements.h"
 #include "ProjectPathReader.h"
-#include "StlOperators.h"
 #include "Vector.h"
 
 namespace game

@@ -115,8 +115,6 @@ bool WindowSfml::setDisplayMode(DisplayMode displayMode)
                            windowTitle, getSfmlStyleFromDisplayMode(windowSettings.displayMode));
         }
 
-        //        window->setSize({window->getSize() + utils::Vector2u {1,1}});
-        //        window->setSize({window->getSize() - utils::Vector2u {1,1}});
         notifyObservers();
         return true;
     }

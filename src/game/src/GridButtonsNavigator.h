@@ -4,6 +4,7 @@
 #include "GridButtonInfo.h"
 #include "Timer.h"
 #include "ui/UIManager.h"
+#include "NextState.h"
 
 namespace game
 {
@@ -24,7 +25,7 @@ public:
                                   graphics::Color buttonsDefaultColor, graphics::Color buttonsHoverColor);
 
     void initialize() override;
-    void update(const utils::DeltaTime&, const input::Input&) override;
+    NextState update(const utils::DeltaTime&, const input::Input&) override;
     void activate() override;
     void setFocusOnButton(const std::string& buttonName) override;
     void loseFocus() override;

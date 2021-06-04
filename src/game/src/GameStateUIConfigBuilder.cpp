@@ -3,7 +3,6 @@
 #include "CommonUIConfigElements.h"
 #include "GameState.h"
 #include "ProjectPathReader.h"
-#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -11,7 +10,7 @@ namespace game
 std::unique_ptr<components::ui::UIConfig> GameStateUIConfigBuilder::createGameUIConfig(GameState* gameState)
 {
     return std::make_unique<components::ui::UIConfig>(
-        createBackgroundConfig(gameState), std::move(createButtonConfigs(gameState)),
+        createBackgroundConfig(gameState), createButtonConfigs(gameState),
         createCheckBoxConfigs(gameState), createLabelConfigs(gameState), createTextFieldConfigs(gameState),
         createImageConfigs(gameState));
 }

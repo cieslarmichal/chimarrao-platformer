@@ -24,7 +24,7 @@ void PaginatedButtonsNavigator::initialize()
     setIconVisible(currentItemIndex);
 }
 
-void PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input::Input& input)
+NextState PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input::Input& input)
 {
     if (switchItemTimer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
     {
@@ -43,6 +43,13 @@ void PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input::Inp
     {
         uiManager->invokeClickAction(buttonNames.at(currentItemIndex), input::InputKey::MouseLeft);
     }
+
+    if (input.isKeyPressed(input::InputKey::Escape))
+    {
+        return NextState::Previous;
+    }
+
+    return NextState::Same;
 }
 
 void PaginatedButtonsNavigator::activate()

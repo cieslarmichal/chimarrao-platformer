@@ -2,12 +2,9 @@
 
 #include "CommonUIConfigElements.h"
 #include "ControlsState.h"
-#include "EditorState.h"
 #include "MenuState.h"
 #include "PaginatedButtonsNavigator.h"
 #include "ProjectPathReader.h"
-#include "StlOperators.h"
-#include "ui/DefaultUIManager.h"
 
 namespace game
 {

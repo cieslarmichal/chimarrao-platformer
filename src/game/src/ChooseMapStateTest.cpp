@@ -9,7 +9,6 @@
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapMock.h"
-#include "editor/TileMapSerializerMock.h"
 #include "ui/UIManagerMock.h"
 
 #include "ProjectPathReader.h"

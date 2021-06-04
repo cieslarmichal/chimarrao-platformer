@@ -26,6 +26,8 @@ GridButtonsNavigator::GridButtonsNavigator(std::shared_ptr<components::ui::UIMan
             throw std::runtime_error{"Incorrect grid buttons info: icon index not within icon names indices"};
         }
     }
+
+    switchButtonTimer.restart();
 }
 
 void GridButtonsNavigator::initialize()
@@ -35,7 +37,7 @@ void GridButtonsNavigator::initialize()
     setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
-void GridButtonsNavigator::update(const utils::DeltaTime&, const input::Input& input)
+NextState GridButtonsNavigator::update(const utils::DeltaTime&, const input::Input& input)
 {
     if (switchButtonTimer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
     {
@@ -63,6 +65,13 @@ void GridButtonsNavigator::update(const utils::DeltaTime&, const input::Input& i
         uiManager->invokeClickAction(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
                                      input::InputKey::MouseLeft);
     }
+
+    if (input.isKeyPressed(input::InputKey::Escape))
+    {
+        return NextState::Previous;
+    }
+
+    return NextState::Same;
 }
 
 void GridButtonsNavigator::activate()
