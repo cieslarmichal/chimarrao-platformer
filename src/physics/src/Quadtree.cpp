@@ -103,13 +103,8 @@ Quadtree::getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) co
 
         if (area.intersects(possibleColliderBox))
         {
-            double distance = std::pow((area.top + area.height / 2) -
-                                           (possibleColliderBox.top + possibleColliderBox.height / 2),
-                                       2) +
-                              std::pow((area.left + area.width / 2) -
-                                           (possibleColliderBox.left + possibleColliderBox.width / 2),
-                                       2);
-            if (distance > 0.0)
+            if (const auto distance = calculateDistanceBetweenRect(area, possibleColliderBox);
+                distance != 0.0)
             {
                 collidersIntersectingWithAreaAndDistance.emplace_back(
                     std::pair<std::shared_ptr<components::core::BoxColliderComponent>, double>(
@@ -117,25 +112,8 @@ Quadtree::getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) co
             }
         }
     }
-    if (collidersIntersectingWithAreaAndDistance.empty())
-    {
-        return {};
-    }
 
-    double minDistance = std::min_element(collidersIntersectingWithAreaAndDistance.begin(),
-                                          collidersIntersectingWithAreaAndDistance.end(),
-                                          [](auto lhs, auto rhs) { return lhs.second < rhs.second; })
-                             ->second;
-
-    std::vector<std::shared_ptr<components::core::BoxColliderComponent>> collidersIntersectingWithArea;
-    for (const auto& pair : collidersIntersectingWithAreaAndDistance)
-    {
-        if (pair.second / minDistance < 1.3f)
-        {
-            collidersIntersectingWithArea.push_back(pair.first);
-        }
-    }
-    return collidersIntersectingWithArea;
+    return getNearestColliders(collidersIntersectingWithAreaAndDistance);
 }
 
 std::vector<std::shared_ptr<components::core::BoxColliderComponent>>
@@ -148,16 +126,12 @@ Quadtree::getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) co
 
     for (const auto& possibleCollider : possibleColliders)
     {
-        auto& possibleColliderBox = possibleCollider->getNextFrameYCollisionBox();
+        const auto& possibleColliderBox = possibleCollider->getNextFrameYCollisionBox();
 
         if (area.intersects(possibleColliderBox))
         {
-            double distance =
-                pow((area.top + area.height / 2) - (possibleColliderBox.top + possibleColliderBox.height / 2),
-                    2) +
-                pow((area.left + area.width / 2) - (possibleColliderBox.left + possibleColliderBox.width / 2),
-                    2);
-            if (distance > 0.0)
+            if (const auto distance = calculateDistanceBetweenRect(area, possibleColliderBox);
+                distance != 0.0)
             {
                 collidersIntersectingWithAreaAndDistance.emplace_back(
                     std::pair<std::shared_ptr<components::core::BoxColliderComponent>, double>(
@@ -165,25 +139,8 @@ Quadtree::getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) co
             }
         }
     }
-    if (collidersIntersectingWithAreaAndDistance.empty())
-    {
-        return {};
-    }
 
-    double minDistance = std::min_element(collidersIntersectingWithAreaAndDistance.begin(),
-                                          collidersIntersectingWithAreaAndDistance.end(),
-                                          [](auto lhs, auto rhs) { return lhs.second < rhs.second; })
-                             ->second;
-
-    std::vector<std::shared_ptr<components::core::BoxColliderComponent>> collidersIntersectingWithArea;
-    for (const auto& pair : collidersIntersectingWithAreaAndDistance)
-    {
-        if (pair.second / minDistance < 1.3f)
-        {
-            collidersIntersectingWithArea.push_back(pair.first);
-        }
-    }
-    return collidersIntersectingWithArea;
+    return getNearestColliders(collidersIntersectingWithAreaAndDistance);
 }
 
 const utils::FloatRect& Quadtree::getNodeBounds() const
@@ -194,8 +151,7 @@ const utils::FloatRect& Quadtree::getNodeBounds() const
 std::vector<std::shared_ptr<components::core::BoxColliderComponent>>
 Quadtree::getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRect& area) const
 {
-    std::vector<std::shared_ptr<components::core::BoxColliderComponent>> possibleColliders(colliders.begin(),
-                                                                                           colliders.end());
+    auto possibleColliders = colliders;
 
     if (children[0])
     {
@@ -280,6 +236,37 @@ void Quadtree::splitIntoChildNodes()
     children[childSouthEastIndex] = std::make_shared<Quadtree>(
         maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left + childWidth, nodeBounds.top + childHeight, childWidth, childHeight));
+}
+std::vector<std::shared_ptr<components::core::BoxColliderComponent>> Quadtree::getNearestColliders(
+    std::vector<std::pair<std::shared_ptr<components::core::BoxColliderComponent>, double>>
+        collidersIntersectingWithAreaAndDistance)
+{
+    if (collidersIntersectingWithAreaAndDistance.empty())
+    {
+        return {};
+    }
+
+    double minDistance = std::min_element(collidersIntersectingWithAreaAndDistance.begin(),
+                                          collidersIntersectingWithAreaAndDistance.end(),
+                                          [](auto lhs, auto rhs) { return lhs.second < rhs.second; })
+                             ->second;
+
+    std::vector<std::shared_ptr<components::core::BoxColliderComponent>> collidersIntersectingWithArea;
+    for (const auto& pair : collidersIntersectingWithAreaAndDistance)
+    {
+        if (pair.second / minDistance < 1.3f)
+        {
+            collidersIntersectingWithArea.push_back(pair.first);
+        }
+    }
+    return collidersIntersectingWithArea;
+}
+
+double Quadtree::calculateDistanceBetweenRect(const utils::FloatRect& lhs, const utils::FloatRect& rhs)
+{
+    constexpr auto square = [](const double number) { return number * number; };
+    return square((lhs.top + lhs.height / 2) - (rhs.top + rhs.height / 2)) *
+           square((lhs.left + lhs.width / 2) - (rhs.left + rhs.width / 2));
 }
 
 }

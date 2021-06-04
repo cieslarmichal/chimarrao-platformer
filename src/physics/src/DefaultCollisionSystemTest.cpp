@@ -2,7 +2,10 @@
 
 #include "gtest/gtest.h"
 
+#include "AnimatorMock.h"
+
 #include "StlOperators.h"
+#include "core/AnimationComponent.h"
 
 using namespace physics;
 using namespace components::core;
@@ -20,6 +23,62 @@ public:
         componentOwnerWithPlayerCollider1->addComponent<BoxColliderComponent>(size, CollisionLayer::Player);
         componentOwnerWithPlayerCollider2->addComponent<BoxColliderComponent>(size, CollisionLayer::Player);
         componentOwnerWitStaticTransform->addComponent<BoxColliderComponent>(size, CollisionLayer::Player);
+
+        componentOwnerWithDefaultCollider1->addComponent<AnimationComponent>(animator);
+        componentOwnerWithDefaultCollider2->addComponent<AnimationComponent>(animator);
+        componentOwnerWithTileCollider1->addComponent<AnimationComponent>(animator);
+        componentOwnerWithTileCollider2->addComponent<AnimationComponent>(animator);
+        componentOwnerWithPlayerCollider1->addComponent<AnimationComponent>(animator);
+        componentOwnerWithPlayerCollider2->addComponent<AnimationComponent>(animator);
+        componentOwnerWitStaticTransform->addComponent<AnimationComponent>(animator);
+
+        componentOwnerWithDefaultCollider1->addComponent<KeyboardMovementComponent>();
+        componentOwnerWithDefaultCollider2->addComponent<KeyboardMovementComponent>();
+        componentOwnerWithTileCollider1->addComponent<KeyboardMovementComponent>();
+        componentOwnerWithTileCollider2->addComponent<KeyboardMovementComponent>();
+        componentOwnerWithPlayerCollider1->addComponent<KeyboardMovementComponent>();
+        componentOwnerWithPlayerCollider2->addComponent<KeyboardMovementComponent>();
+        componentOwnerWitStaticTransform->addComponent<KeyboardMovementComponent>();
+
+        componentOwnerWithDefaultCollider1->addComponent<VelocityComponent>();
+        componentOwnerWithDefaultCollider2->addComponent<VelocityComponent>();
+        componentOwnerWithTileCollider1->addComponent<VelocityComponent>();
+        componentOwnerWithTileCollider2->addComponent<VelocityComponent>();
+        componentOwnerWithPlayerCollider1->addComponent<VelocityComponent>();
+        componentOwnerWithPlayerCollider2->addComponent<VelocityComponent>();
+        componentOwnerWitStaticTransform->addComponent<VelocityComponent>();
+
+        componentOwnerWithDefaultCollider1->loadDependentComponents();
+        componentOwnerWithDefaultCollider2->loadDependentComponents();
+        componentOwnerWithTileCollider1->loadDependentComponents();
+        componentOwnerWithTileCollider2->loadDependentComponents();
+        componentOwnerWithPlayerCollider1->loadDependentComponents();
+        componentOwnerWithPlayerCollider2->loadDependentComponents();
+        componentOwnerWitStaticTransform->loadDependentComponents();
+    }
+
+    bool canMoveLeft(std::shared_ptr<ComponentOwner> componentOwner) const
+    {
+        auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
+        return movementComponent->canMoveLeft;
+    }
+
+    bool canMoveRight(std::shared_ptr<ComponentOwner> componentOwner) const
+    {
+        auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
+        return movementComponent->canMoveRight;
+    }
+
+    bool canMoveUp(std::shared_ptr<ComponentOwner> componentOwner) const
+    {
+        auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
+        return movementComponent->canMoveUp;
+    }
+
+    bool canMoveDown(std::shared_ptr<ComponentOwner> componentOwner) const
+    {
+        auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
+        return movementComponent->canMoveDown;
     }
 
     const utils::Vector2f size{5, 5};
@@ -41,6 +100,8 @@ public:
         std::make_shared<ComponentOwner>(position2, "collisionSystemTest7");
     std::shared_ptr<ComponentOwner> componentOwnerWitStaticTransform =
         std::make_shared<ComponentOwner>(position2, "collisionSystemTest8");
+    std::shared_ptr<NiceMock<animations::AnimatorMock>> animator =
+        std::make_shared<NiceMock<animations::AnimatorMock>>();
 
     DefaultCollisionSystem collisionSystem{};
 };
@@ -83,169 +144,149 @@ TEST_F(DefaultCollisionSystemTest, updateOnEmptyCollisionSystem_shouldNotThrow)
 }
 
 TEST_F(DefaultCollisionSystemTest,
-       defaultColliderIntersectingWithDefaultCollider_defaultColliderPositionShouldBeUpdated)
+       defaultColliderIntersectingWithDefaultCollider_shouldBlockRightAndDownMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithDefaultCollider1,
                                                                  componentOwnerWithDefaultCollider2};
     collisionSystem.add(componentOwners);
-    const auto defaultColliderPositionBeforeUpdate =
-        componentOwnerWithDefaultCollider1->transform->getPosition();
 
     collisionSystem.update();
 
-    const auto defaultColliderPositionAfterUpdate =
-        componentOwnerWithDefaultCollider1->transform->getPosition();
-    ASSERT_NE(defaultColliderPositionBeforeUpdate, defaultColliderPositionAfterUpdate);
+    ASSERT_FALSE(canMoveRight(componentOwnerWithDefaultCollider1) &&
+                 canMoveDown(componentOwnerWithDefaultCollider1));
+    ASSERT_TRUE(canMoveLeft(componentOwnerWithDefaultCollider1) &&
+                canMoveUp(componentOwnerWithDefaultCollider1));
 }
 
 TEST_F(DefaultCollisionSystemTest,
-       defaultColliderIntersectingWithTileCollider_defaultColliderPositionShouldNotBeUpdated)
+       defaultColliderIntersectingWithTileCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithDefaultCollider1,
                                                                  componentOwnerWithTileCollider2};
     collisionSystem.add(componentOwners);
-    const auto defaultColliderPositionBeforeUpdate =
-        componentOwnerWithDefaultCollider1->transform->getPosition();
 
     collisionSystem.update();
 
-    const auto defaultColliderPositionAfterUpdate =
-        componentOwnerWithDefaultCollider1->transform->getPosition();
-    ASSERT_EQ(defaultColliderPositionBeforeUpdate, defaultColliderPositionAfterUpdate);
+    ASSERT_TRUE(canMoveLeft(componentOwners[0]) && canMoveUp(componentOwners[0]) &&
+                canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
 }
 
 TEST_F(DefaultCollisionSystemTest,
-       defaultColliderIntersectingWithPlayerCollider_defaultColliderPositionShouldNotBeUpdated)
+       defaultColliderIntersectingWithPlayerCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithDefaultCollider1,
                                                                  componentOwnerWithPlayerCollider2};
     collisionSystem.add(componentOwners);
-    const auto defaultColliderPositionBeforeUpdate =
-        componentOwnerWithDefaultCollider1->transform->getPosition();
 
     collisionSystem.update();
 
-    const auto defaultColliderPositionAfterUpdate =
-        componentOwnerWithDefaultCollider1->transform->getPosition();
-    ASSERT_EQ(defaultColliderPositionBeforeUpdate, defaultColliderPositionAfterUpdate);
+    ASSERT_TRUE(canMoveLeft(componentOwners[0]) && canMoveUp(componentOwners[0]) &&
+                canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
 }
 
 TEST_F(DefaultCollisionSystemTest,
-       tileColliderIntersectingWithDefaultCollider_tileColliderPositionShouldNotBeUpdated)
+       tileColliderIntersectingWithDefaultCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithTileCollider1,
                                                                  componentOwnerWithDefaultCollider2};
     collisionSystem.add(componentOwners);
-    const auto tileColliderPositionBeforeUpdate = componentOwnerWithTileCollider1->transform->getPosition();
 
     collisionSystem.update();
 
-    const auto tileColliderPositionAfterUpdate = componentOwnerWithTileCollider1->transform->getPosition();
-    ASSERT_EQ(tileColliderPositionBeforeUpdate, tileColliderPositionAfterUpdate);
+    ASSERT_TRUE(canMoveLeft(componentOwners[0]) && canMoveUp(componentOwners[0]) &&
+                canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
 }
 
 TEST_F(DefaultCollisionSystemTest,
-       tileColliderIntersectingWithTileCollider_tileColliderPositionShouldNotBeUpdated)
+       tileColliderIntersectingWithTileCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithTileCollider1,
                                                                  componentOwnerWithTileCollider2};
     collisionSystem.add(componentOwners);
-    const auto tileColliderPositionBeforeUpdate = componentOwnerWithTileCollider1->transform->getPosition();
 
     collisionSystem.update();
 
-    const auto tileColliderPositionAfterUpdate = componentOwnerWithTileCollider1->transform->getPosition();
-    ASSERT_EQ(tileColliderPositionBeforeUpdate, tileColliderPositionAfterUpdate);
+    ASSERT_TRUE(canMoveLeft(componentOwners[0]) && canMoveUp(componentOwners[0]) &&
+                canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
 }
 
 TEST_F(DefaultCollisionSystemTest,
-       tileColliderIntersectingWithPlayerCollider_tileColliderPositionShouldNotBeUpdated)
+       tileColliderIntersectingWithPlayerCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithTileCollider1,
                                                                  componentOwnerWithPlayerCollider2};
     collisionSystem.add(componentOwners);
-    const auto tileColliderPositionBeforeUpdate = componentOwnerWithTileCollider1->transform->getPosition();
 
     collisionSystem.update();
 
-    const auto tileColliderPositionAfterUpdate = componentOwnerWithTileCollider1->transform->getPosition();
-    ASSERT_EQ(tileColliderPositionBeforeUpdate, tileColliderPositionAfterUpdate);
+    ASSERT_TRUE(canMoveLeft(componentOwners[0]) && canMoveUp(componentOwners[0]) &&
+                canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
 }
 
 TEST_F(DefaultCollisionSystemTest,
-       playerColliderIntersectingWithDefaultCollider_playerColliderPositionShouldBeUpdated)
+       playerColliderIntersectingWithDefaultCollider_shouldBlockRightAndDownMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithPlayerCollider1,
-                                                                 componentOwnerWithDefaultCollider1};
+                                                                 componentOwnerWithDefaultCollider2};
     collisionSystem.add(componentOwners);
-    const auto playerColliderPositionBeforeUpdate =
-        componentOwnerWithPlayerCollider1->transform->getPosition();
 
     collisionSystem.update();
 
-    const auto playerColliderPositionAfterUpdate =
-        componentOwnerWithPlayerCollider1->transform->getPosition();
-    ASSERT_NE(playerColliderPositionBeforeUpdate, playerColliderPositionAfterUpdate);
+    ASSERT_FALSE(canMoveRight(componentOwnerWithPlayerCollider1) &&
+                 canMoveDown(componentOwnerWithPlayerCollider1));
+    ASSERT_TRUE(canMoveLeft(componentOwnerWithPlayerCollider1) &&
+                canMoveUp(componentOwnerWithPlayerCollider1));
 }
 
 TEST_F(DefaultCollisionSystemTest,
-       playerColliderIntersectingWithTileCollider_playerColliderPositionShouldBeUpdated)
+       playerColliderIntersectingWithTileCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithPlayerCollider1,
                                                                  componentOwnerWithTileCollider2};
     collisionSystem.add(componentOwners);
-    const auto playerColliderPositionBeforeUpdate =
-        componentOwnerWithPlayerCollider1->transform->getPosition();
 
     collisionSystem.update();
 
-    const auto playerColliderPositionAfterUpdate =
-        componentOwnerWithPlayerCollider1->transform->getPosition();
-    ASSERT_NE(playerColliderPositionBeforeUpdate, playerColliderPositionAfterUpdate);
+    ASSERT_FALSE(canMoveRight(componentOwnerWithPlayerCollider1) &&
+                 canMoveDown(componentOwnerWithPlayerCollider1));
+    ASSERT_TRUE(canMoveLeft(componentOwnerWithPlayerCollider1) &&
+                canMoveUp(componentOwnerWithPlayerCollider1));
 }
 
 TEST_F(DefaultCollisionSystemTest,
-       playerColliderIntersectingWithPlayerCollider_playerColliderPositionShouldNotBeUpdated)
+       playerColliderIntersectingWithPlayerCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithPlayerCollider1,
                                                                  componentOwnerWithPlayerCollider2};
     collisionSystem.add(componentOwners);
-    const auto playerColliderPositionBeforeUpdate =
-        componentOwnerWithPlayerCollider1->transform->getPosition();
 
     collisionSystem.update();
 
-    const auto playerColliderPositionAfterUpdate =
-        componentOwnerWithPlayerCollider1->transform->getPosition();
-    ASSERT_EQ(playerColliderPositionBeforeUpdate, playerColliderPositionAfterUpdate);
+    ASSERT_TRUE(canMoveLeft(componentOwners[0]) && canMoveUp(componentOwners[0]) &&
+                canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
 }
 
 TEST_F(DefaultCollisionSystemTest,
-       playercolliderWithStaticTransformIntersectingWithTile_playerPositionShouldNotBeUpdated)
+       playercolliderWithStaticTransformIntersectingWithTile_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWitStaticTransform,
                                                                  componentOwnerWithTileCollider2};
     collisionSystem.add(componentOwners);
-    const auto playerColliderPositionBeforeUpdate =
-        componentOwnerWitStaticTransform->transform->getPosition();
 
     collisionSystem.update();
 
-    const auto playerColliderPositionAfterUpdate = componentOwnerWitStaticTransform->transform->getPosition();
-    ASSERT_EQ(playerColliderPositionBeforeUpdate, playerColliderPositionAfterUpdate);
+    ASSERT_TRUE(canMoveLeft(componentOwners[0]) && canMoveUp(componentOwners[0]) &&
+                canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
 }
 
-TEST_F(DefaultCollisionSystemTest, givenTwoSameColliders_shouldNotUpdatePosition)
+TEST_F(DefaultCollisionSystemTest, givenTwoSameColliders_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithDefaultCollider1,
                                                                  componentOwnerWithDefaultCollider1};
     collisionSystem.add(componentOwners);
-    const auto defaultColliderPositionBeforeUpdate =
-        componentOwnerWithDefaultCollider1->transform->getPosition();
 
     collisionSystem.update();
 
-    const auto defaultColliderPositionAfterUpdate =
-        componentOwnerWithDefaultCollider1->transform->getPosition();
-    ASSERT_EQ(defaultColliderPositionBeforeUpdate, defaultColliderPositionAfterUpdate);
+    ASSERT_TRUE(canMoveLeft(componentOwners[0]) && canMoveUp(componentOwners[0]) &&
+                canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
 }

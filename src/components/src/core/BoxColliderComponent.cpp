@@ -32,7 +32,7 @@ bool BoxColliderComponent::intersects(const utils::Vector2f& point)
     return thisRect.contains(point);
 }
 
-bool BoxColliderComponent::intersectsX(const std::shared_ptr<BoxColliderComponent>& other)
+std::optional<utils::FloatRect> BoxColliderComponent::intersectsX(const std::shared_ptr<BoxColliderComponent>& other)
 {
     if (other)
     {
@@ -41,13 +41,13 @@ bool BoxColliderComponent::intersectsX(const std::shared_ptr<BoxColliderComponen
 
         if (thisRect.intersects(otherRect))
         {
-            return true;
+            return otherRect;
         }
     }
-    return false;
+    return std::nullopt;
 }
 
-bool BoxColliderComponent::intersectsY(const std::shared_ptr<BoxColliderComponent>& other)
+std::optional<utils::FloatRect> BoxColliderComponent::intersectsY(const std::shared_ptr<BoxColliderComponent>& other)
 {
     if (other)
     {
@@ -56,20 +56,18 @@ bool BoxColliderComponent::intersectsY(const std::shared_ptr<BoxColliderComponen
 
         if (thisRect.intersects(otherRect))
         {
-            return true;
+            return otherRect;
         }
     }
-    return false;
+    return std::nullopt;
 }
 
-void BoxColliderComponent::resolveOverlapX(const std::shared_ptr<BoxColliderComponent>& other)
+void BoxColliderComponent::resolveOverlapX(const utils::FloatRect& otherRect)
 {
     if (not movementComponent)
     {
         return;
     }
-
-    const auto& otherRect = other->getNextFrameXCollisionBox();
 
     const auto left = std::abs(otherRect.left + otherRect.width - nextFrameCollisionBoundaries.left);
     const auto right =
@@ -85,14 +83,12 @@ void BoxColliderComponent::resolveOverlapX(const std::shared_ptr<BoxColliderComp
     }
 }
 
-void BoxColliderComponent::resolveOverlapY(const std::shared_ptr<BoxColliderComponent>& other)
+void BoxColliderComponent::resolveOverlapY(const utils::FloatRect& otherRect)
 {
     if (not movementComponent)
     {
         return;
     }
-
-    const auto& otherRect = other->getNextFrameYCollisionBox();
 
     const auto top = std::abs(otherRect.top + otherRect.height - nextFrameCollisionBoundaries.top);
     const auto bot =

@@ -36,7 +36,7 @@ public:
         EXPECT_CALL(*uiManager, createUI(_));
         EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{3.800000, 3.800000}, utils::Vector2f{10, 10},
                                            graphics::Color::White, graphics::VisibilityLayer::Second));
-        EXPECT_CALL(*componentOwnersManager, add(_));
+        EXPECT_CALL(*componentOwnersManager, add(_)).Times(5);
         EXPECT_CALL(*componentOwnersManager, processNewObjects());
         EXPECT_CALL(*rendererPool, release(_));
         EXPECT_CALL(*rendererPool, setTexture(_, _, _));

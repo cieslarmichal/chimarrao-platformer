@@ -15,15 +15,19 @@ public:
     const utils::Vector2f position1{20, 20};
     const utils::Vector2f position2{22, 22};
     const utils::Vector2f position3{30, 30};
-    const utils::Vector2f position4{38, 28};
+    const utils::Vector2f position4{30.1f, 30.1f};
     const utils::Vector2f position5{35, 35};
     const utils::Vector2f position6{43, 33};
     const utils::Vector2f position7{45, 20};
     const utils::Vector2f position8{60, 15};
     const utils::Vector2f position9{60, 65};
     const utils::Vector2f position10{20, 50};
+    const utils::Vector2f positionOnNorthEdge{38, 10};
+    const utils::Vector2f positionOnEastEdge{60, 28};
+    const utils::Vector2f positionOnSouthEdge{38, 50};
+    const utils::Vector2f positionOnWestEdge{20, 28};
     const utils::FloatRect area1{18, 18, 5, 5};
-    const utils::FloatRect area2{28, 28, 16, 8};
+    const utils::FloatRect area2{28, 28, 4, 4};
     const utils::FloatRect area3{60, 25, 10, 5};
     ComponentOwner componentOwner1{position1, "quadtreeTest1"};
     ComponentOwner componentOwner2{position2, "quadtreeTest2"};
@@ -35,6 +39,10 @@ public:
     ComponentOwner componentOwner8{position8, "quadtreeTest8"};
     ComponentOwner componentOwner9{position9, "quadtreeTest9"};
     ComponentOwner componentOwner10{position10, "quadtreeTest10"};
+    ComponentOwner componentOwnerOnNorthEdge{positionOnNorthEdge, "componentOwnerOnNorthEdge"};
+    ComponentOwner componentOwnerOnEastEdge{positionOnEastEdge, "componentOwnerOnEastEdge"};
+    ComponentOwner componentOwnerOnSouthEdge{positionOnSouthEdge, "componentOwnerOnSouthEdge"};
+    ComponentOwner componentOwnerOnWestEdge{positionOnWestEdge, "componentOwnerOnWestEdge"};
     std::shared_ptr<BoxColliderComponent> boxColliderComponent1 =
         std::make_shared<BoxColliderComponent>(&componentOwner1, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent2 =
@@ -55,6 +63,14 @@ public:
         std::make_shared<BoxColliderComponent>(&componentOwner9, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent10 =
         std::make_shared<BoxColliderComponent>(&componentOwner10, size);
+    std::shared_ptr<BoxColliderComponent> boxColliderComponentOnNorthEdge =
+        std::make_shared<BoxColliderComponent>(&componentOwnerOnNorthEdge, size);
+    std::shared_ptr<BoxColliderComponent> boxColliderComponentOnEastEdge =
+        std::make_shared<BoxColliderComponent>(&componentOwnerOnEastEdge, size);
+    std::shared_ptr<BoxColliderComponent> boxColliderComponentOnSouthEdge =
+        std::make_shared<BoxColliderComponent>(&componentOwnerOnSouthEdge, size);
+    std::shared_ptr<BoxColliderComponent> boxColliderComponentOnWestEdge =
+        std::make_shared<BoxColliderComponent>(&componentOwnerOnWestEdge, size);
 };
 
 TEST_F(QuadtreeTest, insertedColliderIntersectingWithArea_canBeIntersectedWithArea)
@@ -147,8 +163,8 @@ TEST_F(
     givenTenCollidersAtDifferentPlaces_andAreaIntersectingWithThem_shouldReturnCollidersIntersectingWithArea)
 {
     Quadtree quadtree{2, 10, 1, utils::FloatRect(0, 0, 80, 60)};
-    const std::vector<std::shared_ptr<BoxColliderComponent>> expectedColliders{
-        boxColliderComponent3, boxColliderComponent4, boxColliderComponent5, boxColliderComponent6};
+    const std::vector<std::shared_ptr<BoxColliderComponent>> expectedColliders{boxColliderComponent3,
+                                                                               boxColliderComponent4};
     quadtree.insertCollider(boxColliderComponent1);
     quadtree.insertCollider(boxColliderComponent2);
     quadtree.insertCollider(boxColliderComponent3);
@@ -202,4 +218,29 @@ TEST_F(QuadtreeTest, shouldReturnNodeBoundsSetInContructor)
     const auto actualNodeBounds = quadtree.getNodeBounds();
 
     ASSERT_EQ(actualNodeBounds, expectedBounds);
+}
+
+TEST_F(QuadtreeTest, giveCollidersOnEdgesAndRandoms_requestColidersFromScreenArea_shouldReturnAllColliders)
+{
+    const auto boxColliders = {
+        boxColliderComponent1,          boxColliderComponent2,          boxColliderComponent3,
+        boxColliderComponent4,          boxColliderComponent5,          boxColliderComponent6,
+        boxColliderComponent7,          boxColliderComponent8,          boxColliderComponent9,
+        boxColliderComponent10,         boxColliderComponentOnEastEdge, boxColliderComponentOnSouthEdge,
+        boxColliderComponentOnWestEdge, boxColliderComponentOnNorthEdge};
+    Quadtree quadtree{};
+    for (const auto& boxCollider : boxColliders)
+    {
+        quadtree.insertCollider(boxCollider);
+    }
+
+    for (const auto& boxCollider : boxColliders)
+    {
+        auto box = boxCollider->getCollisionBox();
+        box.left += 0.1f;
+        box.top += 0.1f;
+        const auto collidersIntersectingWithArea = quadtree.getCollidersIntersectingWithAreaFromX(box);
+
+        ASSERT_GE(collidersIntersectingWithArea.size(), 1);
+    }
 }

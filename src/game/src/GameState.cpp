@@ -62,6 +62,26 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
             }
         }
     }
+    auto leftMapBorder =
+        std::make_shared<components::core::ComponentOwner>(utils::Vector2f{-1, 0}, "left border");
+    leftMapBorder->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{1, tileMap->getSize().y * 4.f}, components::core::CollisionLayer::Default);
+    auto topMapBorder =
+        std::make_shared<components::core::ComponentOwner>(utils::Vector2f{0, -1}, "top border");
+    topMapBorder->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{tileMap->getSize().x * 4.f, 1}, components::core::CollisionLayer::Default);
+    auto rightMapBorder = std::make_shared<components::core::ComponentOwner>(
+        utils::Vector2f{tileMap->getSize().x * 4.f, 0}, "right border");
+    rightMapBorder->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{1, tileMap->getSize().y * 4.f}, components::core::CollisionLayer::Default);
+    auto bottomMapBorder = std::make_shared<components::core::ComponentOwner>(
+        utils::Vector2f{0, tileMap->getSize().y * 4.f}, "bottom border");
+    bottomMapBorder->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{tileMap->getSize().x * 4.f, 1}, components::core::CollisionLayer::Default);
+    componentOwnersManager->add(leftMapBorder);
+    componentOwnersManager->add(topMapBorder);
+    componentOwnersManager->add(rightMapBorder);
+    componentOwnersManager->add(bottomMapBorder);
 
     timer.start();
 

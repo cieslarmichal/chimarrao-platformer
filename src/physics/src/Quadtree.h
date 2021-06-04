@@ -28,6 +28,9 @@ private:
     getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRect& area) const;
     int getIndexIndicatingToWhichNodeColliderBelongs(const sf::FloatRect& objectBounds) const;
     void splitIntoChildNodes();
+    static std::vector<std::shared_ptr<components::core::BoxColliderComponent>> getNearestColliders(
+        std::vector<std::pair<std::shared_ptr<components::core::BoxColliderComponent>, double>>);
+    static double calculateDistanceBetweenRect(const utils::FloatRect&, const utils::FloatRect&);
 
     std::array<std::shared_ptr<Quadtree>, 4> children;
     std::vector<std::shared_ptr<components::core::BoxColliderComponent>> colliders;
