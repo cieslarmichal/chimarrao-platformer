@@ -1,8 +1,5 @@
 lsudo: required
 language: cpp
-
-services:
-  - xvfb
   
 matrix:
   include:
@@ -33,7 +30,8 @@ install:
   - sudo apt install -yq libsfml-dev
 
 before_script:
-  - "export DISPLAY=:99.0"
+- export DISPLAY=:99.0
+- sh -e /etc/init.d/xvfb start
   
 script:
   - mkdir build
