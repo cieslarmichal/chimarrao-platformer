@@ -29,7 +29,7 @@ std::string ProjectPathReader::getProjectRootPath()
 
     const auto executablePath = getExecutablePath();
     std::filesystem::path projectRootPath;
-    std::size_t projectNamePosition;
+    std::size_t projectNamePosition = 0;
     auto findNameOffset = 0;
     while (not std::filesystem::is_directory(projectRootPath) && projectNamePosition != std::string::npos)
     {
@@ -44,7 +44,7 @@ std::string ProjectPathReader::getProjectRootPath()
         throw exceptions::DirectoryNotFound{"Project directory not found in path: " + executablePath};
     }
 
-    projectPath = projectRootPath;
+    projectPath = projectRootPath.string();
     return *projectPath;
 }
 

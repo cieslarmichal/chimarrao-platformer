@@ -34,7 +34,7 @@ public:
         //        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5.f, 5.f}, utils::Vector2f{30, 30},
         //        brickTexturePath,
         //                                           graphics::VisibilityLayer::Second));
-        EXPECT_CALL(*componentOwnersManager, add(_));
+        EXPECT_CALL(*componentOwnersManager, add(_)).Times(5);
         EXPECT_CALL(*componentOwnersManager, processNewObjects());
         EXPECT_CALL(*rendererPool, release(_));
         EXPECT_CALL(*tileMap, getSize()).WillRepeatedly(Return(utils::Vector2i{1, 1}));

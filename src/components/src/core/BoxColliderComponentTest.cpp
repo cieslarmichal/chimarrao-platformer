@@ -157,7 +157,7 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromLeft_shouldBlock
     const auto intersectsOnX =
         boxColliderComponentWithMovement.intersectsX(boxColliderComponentIntersectingFromLeft);
 
-    boxColliderComponentWithMovement.resolveOverlapX(boxColliderComponentIntersectingFromLeft);
+    boxColliderComponentWithMovement.resolveOverlapX(intersectsOnX.value());
 
     ASSERT_TRUE(intersectsOnX);
     ASSERT_FALSE(canMoveLeft());
@@ -171,7 +171,7 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromRight_shouldBloc
     const auto intersectsOnX =
         boxColliderComponentWithMovement.intersectsX(boxColliderComponentIntersectingFromRight);
 
-    boxColliderComponentWithMovement.resolveOverlapX(boxColliderComponentIntersectingFromRight);
+    boxColliderComponentWithMovement.resolveOverlapX(intersectsOnX.value());
 
     ASSERT_TRUE(intersectsOnX);
     ASSERT_FALSE(canMoveRight());
@@ -185,7 +185,7 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromAbove_shouldBloc
     const auto intersectsOnY =
         boxColliderComponentWithMovement.intersectsY(boxColliderComponentIntersectingFromAbove);
 
-    boxColliderComponentWithMovement.resolveOverlapY(boxColliderComponentIntersectingFromAbove);
+    boxColliderComponentWithMovement.resolveOverlapY(intersectsOnY.value());
 
     ASSERT_TRUE(intersectsOnY);
     ASSERT_FALSE(canMoveUp());
@@ -199,7 +199,7 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromBelow_shouldBloc
     const auto intersectsOnY =
         boxColliderComponentWithMovement.intersectsY(boxColliderComponentIntersectingFromBelow);
 
-    boxColliderComponentWithMovement.resolveOverlapY(boxColliderComponentIntersectingFromBelow);
+    boxColliderComponentWithMovement.resolveOverlapY(intersectsOnY.value());
 
     ASSERT_TRUE(intersectsOnY);
     ASSERT_FALSE(canMoveDown());

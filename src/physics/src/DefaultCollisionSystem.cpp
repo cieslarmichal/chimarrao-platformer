@@ -1,8 +1,5 @@
 #include "DefaultCollisionSystem.h"
 
-#include "core/ComponentOwner.h"
-#include "core/KeyboardMovementComponent.h"
-
 namespace physics
 {
 using namespace components::core;
@@ -57,7 +54,7 @@ void DefaultCollisionSystem::update()
 {
     collisionTree.clearAllColliders();
 
-    for (auto& [_, collidersInCollisionLayer] : collidersPerLayers)
+    for (const auto& [_, collidersInCollisionLayer] : collidersPerLayers)
     {
         for (const auto& colliderInCollisionLayer : collidersInCollisionLayer)
         {
@@ -70,14 +67,14 @@ void DefaultCollisionSystem::update()
 
 void DefaultCollisionSystem::resolve()
 {
-    for (auto& [collisionLayer, collidersInCollisionLayer] : collidersPerLayers)
+    for (const auto& [collisionLayer, collidersInCollisionLayer] : collidersPerLayers)
     {
         if (possibleCollisionsInLayers[collisionLayer].getMask() == 0)
         {
             continue;
         }
 
-        for (auto& collider : collidersInCollisionLayer)
+        for (const auto& collider : collidersInCollisionLayer)
         {
             if (not collider->getOwner().getComponent<components::core::KeyboardMovementComponent>())
             {
@@ -101,9 +98,9 @@ void DefaultCollisionSystem::resolve()
 
                 if (layersCollide)
                 {
-                    if (collider->intersectsX(collision))
+                    if (const auto otherRect = collider->intersectsX(collision); otherRect)
                     {
-                        collider->resolveOverlapX(collision);
+                        collider->resolveOverlapX(otherRect.value());
                     }
                 }
             }
@@ -123,9 +120,9 @@ void DefaultCollisionSystem::resolve()
 
                 if (layersCollide)
                 {
-                    if (collider->intersectsY(collision))
+                    if (const auto otherRect = collider->intersectsY(collision); otherRect)
                     {
-                        collider->resolveOverlapY(collision);
+                        collider->resolveOverlapY(otherRect.value());
                     }
                 }
             }

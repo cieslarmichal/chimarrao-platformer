@@ -1,0 +1,49 @@
+lsudo: required
+language: cpp
+
+services:
+  - xvfb
+  
+matrix:
+  include:
+    - compiler: gcc
+      addons:
+        apt:
+          update: true
+          packages:
+            - g++-10
+      env:
+      - C_COMPILER=gcc-10
+      - CXX_COMPILER=g++-10
+      - TRAVIS_DIST_NAME=focal
+      
+dist: focal
+
+before_install:
+  - sudo add-apt-repository main
+  - sudo add-apt-repository universe
+  - sudo add-apt-repository restricted
+  - sudo add-apt-repository multiverse
+  - sudo apt-get update -y
+  - sudo service xvfb stop
+  - sudo sed -i 's/1024×768/1280×720/g' /etc/systemd/system/xvfb.service
+  - sudo service xvfb start
+
+install:
+  - sudo apt-get install build-essential libgtk-3-dev
+  - sudo apt install -yq libboost-all-dev 
+  - sudo apt install -yq libsfml-dev
+
+before_script:
+- export DISPLAY=:99.0
+  
+script:
+  - mkdir build
+  - cd build
+  - env CC=${C_COMPILER} CXX=${CXX_COMPILER} cmake .. -DENABLE_COVERAGE:BOOL=TRUE -DCMAKE_BUILD_TYPE=DEBUG
+  - echo "We have" `nproc` "cores here"
+  - make -j `nproc`
+  - ctest -V
+
+after_success:
+  - bash <(curl -s https://codecov.io/bash) -x gcov-8
