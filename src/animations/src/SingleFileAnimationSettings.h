@@ -18,6 +18,8 @@ struct SingleFileAnimationSettings
     utils::IntRect textureRect;
     int numberOfTextures;
     float timeBetweenTexturesInSeconds;
+    bool loopsAllowed;
+    bool interruptionAllowed;
 };
 
 inline bool operator==(const SingleFileAnimationSettings& lhs, const SingleFileAnimationSettings& rhs)
@@ -26,7 +28,7 @@ inline bool operator==(const SingleFileAnimationSettings& lhs, const SingleFileA
     {
         return std::tie(settings.animationType, settings.texturePath, settings.textureSize,
                         settings.textureRect, settings.numberOfTextures,
-                        settings.timeBetweenTexturesInSeconds);
+                        settings.timeBetweenTexturesInSeconds, settings.loopsAllowed, settings.interruptionAllowed);
     };
     return tieStruct(lhs) == tieStruct(rhs);
 }
@@ -38,7 +40,9 @@ inline std::ostream& operator<<(std::ostream& os, const SingleFileAnimationSetti
               << " textureSize: " << animationSettings.textureSize
               << " textureRect: " << animationSettings.textureRect
               << " numberOfTextures: " << animationSettings.numberOfTextures
-              << " timeBetweenTexturesInSeconds: " << animationSettings.timeBetweenTexturesInSeconds;
+              << " timeBetweenTexturesInSeconds: " << animationSettings.timeBetweenTexturesInSeconds
+              << " loopsAllowed: " << animationSettings.loopsAllowed
+              << " interruptionAllowed: " << animationSettings.interruptionAllowed;
 }
 
 }

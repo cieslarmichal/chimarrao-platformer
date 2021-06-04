@@ -75,6 +75,11 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
         currentMovementSpeed.y += 25.f * deltaTime.count();
     }
 
+    if (input.isKeyPressed(input::InputKey::Space))
+    {
+        animation->setAnimation(animations::AnimationType::Attack);
+    }
+
     velocityComponent->setVelocity(currentMovementSpeed);
 }
 

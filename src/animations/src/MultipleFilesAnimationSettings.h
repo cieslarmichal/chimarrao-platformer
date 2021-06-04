@@ -14,6 +14,8 @@ struct MultipleFilesAnimationSettings
     graphics::TexturePath firstTexturePath;
     int numberOfTextures;
     float timeBetweenTexturesInSeconds;
+    bool loopsAllowed;
+    bool interruptionAllowed;
 };
 
 inline bool operator==(const MultipleFilesAnimationSettings& lhs, const MultipleFilesAnimationSettings& rhs)
@@ -21,7 +23,7 @@ inline bool operator==(const MultipleFilesAnimationSettings& lhs, const Multiple
     auto tieStruct = [](const MultipleFilesAnimationSettings& settings)
     {
         return std::tie(settings.animationType, settings.firstTexturePath, settings.numberOfTextures,
-                        settings.timeBetweenTexturesInSeconds);
+                        settings.timeBetweenTexturesInSeconds, settings.loopsAllowed, settings.interruptionAllowed);
     };
     return tieStruct(lhs) == tieStruct(rhs);
 }
@@ -31,6 +33,8 @@ inline std::ostream& operator<<(std::ostream& os, const MultipleFilesAnimationSe
     return os << "animationType: " << animationSettings.animationType
               << " firstTexturePath: " << animationSettings.firstTexturePath
               << " numberOfTextures: " << animationSettings.numberOfTextures
-              << " timeBetweenTexturesInSeconds: " << animationSettings.timeBetweenTexturesInSeconds;
+              << " timeBetweenTexturesInSeconds: " << animationSettings.timeBetweenTexturesInSeconds
+              << " loopsAllowed: " << animationSettings.loopsAllowed
+              << " interruptionAllowed: " << animationSettings.interruptionAllowed;
 }
 }

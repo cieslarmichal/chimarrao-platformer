@@ -6,10 +6,12 @@ namespace animations
 {
 
 Animation::Animation(std::vector<graphics::TextureRect> consecutiveTextureRectsInit,
-                     float timeBetweenTexturesInit)
+                     float timeBetweenTexturesInit, bool loopsAllowed, bool interruptionAllowed)
     : consecutiveTextureRects{std::move(consecutiveTextureRectsInit)},
       timeBetweenTextures{timeBetweenTexturesInit},
-      timeUntilNextTexture{timeBetweenTextures}
+      timeUntilNextTexture{timeBetweenTextures},
+      loopsAllowed{loopsAllowed},
+      interruptionAllowed{interruptionAllowed}
 {
     if (consecutiveTextureRects.empty())
     {
@@ -35,11 +37,24 @@ const graphics::TextureRect& Animation::getCurrentTextureRect() const
     return *currentTextureRectIter;
 }
 
+bool Animation::hasAnimationFinished()
+{
+    return (currentTextureRectIter == consecutiveTextureRects.end() - 1) && not loopsAllowed;
+}
+
+bool Animation::areInterruptionsAllowed()
+{
+    return interruptionAllowed;
+}
+
 void Animation::moveToNextTextureRect()
 {
     if (currentTextureRectIter == consecutiveTextureRects.end() - 1)
     {
-        currentTextureRectIter = consecutiveTextureRects.begin();
+        if (loopsAllowed)
+        {
+            currentTextureRectIter = consecutiveTextureRects.begin();
+        }
     }
     else
     {
@@ -52,5 +67,6 @@ void Animation::reset()
     timeUntilNextTexture = timeBetweenTextures;
     currentTextureRectIter = consecutiveTextureRects.begin();
 }
+
 
 }

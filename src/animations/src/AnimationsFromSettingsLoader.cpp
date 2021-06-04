@@ -36,7 +36,11 @@ void AnimationsFromSettingsLoader::loadAnimationsFromMultipleFilesAnimationsSett
         }
 
         const auto timeBetweenTextures = animationSettings.timeBetweenTexturesInSeconds;
-        animations.insert({animationType, Animation{textureRects, timeBetweenTextures}});
+        const auto loopsAllowed = animationSettings.loopsAllowed;
+        const auto interruptionAllowed = animationSettings.interruptionAllowed;
+
+        animations.insert(
+            {animationType, Animation{textureRects, timeBetweenTextures, loopsAllowed, interruptionAllowed}});
     }
 }
 void AnimationsFromSettingsLoader::loadAnimationsFromSingleFileAnimationsSettings(
@@ -77,7 +81,11 @@ void AnimationsFromSettingsLoader::loadAnimationsFromSingleFileAnimationsSetting
                 utils::ProjectPathReader::getProjectRootPath() + animationSettings.texturePath, rect});
         }
 
-        animations.insert({animationType, Animation{textureRects, timeBetweenTextures}});
+        const auto loopsAllowed = animationSettings.loopsAllowed;
+        const auto interruptionAllowed = animationSettings.interruptionAllowed;
+
+        animations.insert(
+            {animationType, Animation{textureRects, timeBetweenTextures, loopsAllowed, interruptionAllowed}});
     }
 }
 
