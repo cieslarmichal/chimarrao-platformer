@@ -9,6 +9,7 @@ matrix:
           update: true
           packages:
             - g++-10
+            - xvfb
       env:
       - C_COMPILER=gcc-10
       - CXX_COMPILER=g++-10
@@ -27,6 +28,8 @@ install:
   - sudo apt-get install build-essential libgtk-3-dev
   - sudo apt install -yq libboost-all-dev 
   - sudo apt install -yq libsfml-dev
+  - export DISPLAY=':99.0'
+  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
 script:
   - mkdir build
@@ -34,7 +37,6 @@ script:
   - env CC=${C_COMPILER} CXX=${CXX_COMPILER} cmake .. -DENABLE_COVERAGE:BOOL=TRUE -DCMAKE_BUILD_TYPE=DEBUG
   - echo "We have" `nproc` "cores here"
   - make -j `nproc`
-  - export DISPLAY=':99.0'
   - ctest -j `nproc` -V
 
 after_success:
