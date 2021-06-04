@@ -8,10 +8,10 @@ matrix:
         apt:
           update: true
           packages:
-            - g++-8
+            - g++-10
       env:
-      - C_COMPILER=gcc-8
-      - CXX_COMPILER=g++-8
+      - C_COMPILER=gcc-10
+      - CXX_COMPILER=g++-10
       - TRAVIS_DIST_NAME=focal
       
 dist: focal
