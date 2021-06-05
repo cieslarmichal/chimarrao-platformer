@@ -32,7 +32,8 @@ bool BoxColliderComponent::intersects(const utils::Vector2f& point)
     return thisRect.contains(point);
 }
 
-std::optional<utils::FloatRect> BoxColliderComponent::intersectsX(const std::shared_ptr<BoxColliderComponent>& other)
+std::optional<utils::FloatRect>
+BoxColliderComponent::intersectsX(const std::shared_ptr<BoxColliderComponent>& other)
 {
     if (other)
     {
@@ -47,7 +48,8 @@ std::optional<utils::FloatRect> BoxColliderComponent::intersectsX(const std::sha
     return std::nullopt;
 }
 
-std::optional<utils::FloatRect> BoxColliderComponent::intersectsY(const std::shared_ptr<BoxColliderComponent>& other)
+std::optional<utils::FloatRect>
+BoxColliderComponent::intersectsY(const std::shared_ptr<BoxColliderComponent>& other)
 {
     if (other)
     {

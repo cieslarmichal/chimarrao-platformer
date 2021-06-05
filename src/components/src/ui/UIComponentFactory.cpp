@@ -19,7 +19,8 @@ UIComponentFactory::createBackground(std::unique_ptr<BackgroundConfig> backgroun
 
 std::unique_ptr<Button> UIComponentFactory::createButton(std::unique_ptr<ButtonConfig> buttonConfig) const
 {
-    return std::make_unique<Button>(rendererPool, std::move(buttonConfig), utils::TimerFactory::createTimer());
+    return std::make_unique<Button>(rendererPool, std::move(buttonConfig),
+                                    utils::TimerFactory::createTimer());
 }
 
 std::unique_ptr<CheckBox>

@@ -68,5 +68,4 @@ void Animation::reset()
     currentTextureRectIter = consecutiveTextureRects.begin();
 }
 
-
 }

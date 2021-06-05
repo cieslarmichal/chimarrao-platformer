@@ -9,8 +9,7 @@ namespace utils
 class IncrementalFilePathsCreator
 {
 public:
-    static  FilePaths createFilePaths(const FilePath& fullPathToFirstFile,
-                                               unsigned numberOfIncrementalFiles);
+    static FilePaths createFilePaths(const FilePath& fullPathToFirstFile, unsigned numberOfIncrementalFiles);
 
 private:
     static boost::optional<std::string> extractDirectory(const FilePath&);

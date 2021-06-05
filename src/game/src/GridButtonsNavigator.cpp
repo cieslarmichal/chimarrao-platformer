@@ -166,12 +166,14 @@ void GridButtonsNavigator::changeSelectedButtonLeft()
     {
         if (gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].horizontalMoveCauseAction)
         {
-            uiManager->invokeClickAction(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
-                                         input::InputKey::MouseLeft);
+            uiManager->invokeClickAction(
+                gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                input::InputKey::MouseLeft);
         }
         else
         {
-            currentButtonIndex.x = static_cast<unsigned int>(gridButtonsInfo[currentButtonIndex.y].size() - 1);
+            currentButtonIndex.x =
+                static_cast<unsigned int>(gridButtonsInfo[currentButtonIndex.y].size() - 1);
         }
     }
     else
@@ -179,11 +181,11 @@ void GridButtonsNavigator::changeSelectedButtonLeft()
         --currentButtonIndex.x;
         if (gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].horizontalMoveCauseAction)
         {
-            uiManager->invokeClickAction(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
-                                         input::InputKey::MouseLeft);
+            uiManager->invokeClickAction(
+                gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                input::InputKey::MouseLeft);
         }
     }
-
 
     unselectAllButtons();
     uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
@@ -197,8 +199,9 @@ void GridButtonsNavigator::changeSelectedButtonRight()
     {
         if (gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].horizontalMoveCauseAction)
         {
-            uiManager->invokeClickAction(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
-                                         input::InputKey::MouseLeft);
+            uiManager->invokeClickAction(
+                gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                input::InputKey::MouseLeft);
         }
         else
         {
@@ -210,8 +213,9 @@ void GridButtonsNavigator::changeSelectedButtonRight()
         ++currentButtonIndex.x;
         if (gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].horizontalMoveCauseAction)
         {
-            uiManager->invokeClickAction(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
-                                         input::InputKey::MouseLeft);
+            uiManager->invokeClickAction(
+                gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                input::InputKey::MouseLeft);
         }
     }
 

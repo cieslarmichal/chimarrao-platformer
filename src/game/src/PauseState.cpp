@@ -3,8 +3,8 @@
 #include <utility>
 
 #include "PauseStateUIConfigBuilder.h"
-#include "ui/DefaultUIManager.h"
 #include "TimerFactory.h"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {

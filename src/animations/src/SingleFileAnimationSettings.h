@@ -28,7 +28,8 @@ inline bool operator==(const SingleFileAnimationSettings& lhs, const SingleFileA
     {
         return std::tie(settings.animationType, settings.texturePath, settings.textureSize,
                         settings.textureRect, settings.numberOfTextures,
-                        settings.timeBetweenTexturesInSeconds, settings.loopsAllowed, settings.interruptionAllowed);
+                        settings.timeBetweenTexturesInSeconds, settings.loopsAllowed,
+                        settings.interruptionAllowed);
     };
     return tieStruct(lhs) == tieStruct(rhs);
 }

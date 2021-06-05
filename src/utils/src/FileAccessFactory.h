@@ -6,7 +6,7 @@
 
 namespace utils
 {
-class  FileAccessFactory
+class FileAccessFactory
 {
 public:
     virtual ~FileAccessFactory() = default;

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "ButtonsNavigator.h"
+#include "NextState.h"
 #include "Timer.h"
 #include "ui/UIManager.h"
-#include "NextState.h"
 
 namespace game
 {
@@ -14,8 +14,7 @@ public:
     explicit PaginatedButtonsNavigator(std::shared_ptr<components::ui::UIManager>,
                                        const std::vector<std::string>& buttonNames,
                                        const std::vector<std::string>& iconNames,
-                                       graphics::Color buttonsDefaultColor,
-                                       graphics::Color buttonsHoverColor,
+                                       graphics::Color buttonsDefaultColor, graphics::Color buttonsHoverColor,
                                        std::unique_ptr<utils::Timer> moveTimer,
                                        std::unique_ptr<utils::Timer> actionTimer);
 

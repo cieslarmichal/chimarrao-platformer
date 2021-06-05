@@ -5,7 +5,7 @@
 
 namespace utils
 {
-class  StringHelper
+class StringHelper
 {
 public:
     static std::string join(const std::vector<std::string>& contentWithLines,

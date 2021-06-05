@@ -3,8 +3,8 @@
 #include <utility>
 
 #include "EditorMenuStateUIConfigBuilder.h"
-#include "ui/DefaultUIManager.h"
 #include "TimerFactory.h"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -23,7 +23,6 @@ EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowIn
 {
     uiManager->createUI(EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(this));
     possibleLeaveFromStateTimer = utils::TimerFactory::createTimer();
-
 }
 
 NextState EditorMenuState::update(const utils::DeltaTime& deltaTime, const input::Input& input)

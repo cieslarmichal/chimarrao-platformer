@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Timer.h"
 #include <memory>
+
+#include "Timer.h"
 
 namespace utils
 {

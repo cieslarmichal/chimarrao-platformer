@@ -23,7 +23,8 @@ inline bool operator==(const MultipleFilesAnimationSettings& lhs, const Multiple
     auto tieStruct = [](const MultipleFilesAnimationSettings& settings)
     {
         return std::tie(settings.animationType, settings.firstTexturePath, settings.numberOfTextures,
-                        settings.timeBetweenTexturesInSeconds, settings.loopsAllowed, settings.interruptionAllowed);
+                        settings.timeBetweenTexturesInSeconds, settings.loopsAllowed,
+                        settings.interruptionAllowed);
     };
     return tieStruct(lhs) == tieStruct(rhs);
 }

@@ -78,21 +78,28 @@ public:
 
     std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
         std::make_shared<StrictMock<components::ui::UIManagerMock>>()};
-    std::unique_ptr<StrictMock<utils::TimerMock>> moveTimerInit{std::make_unique<StrictMock<utils::TimerMock>>()};
+    std::unique_ptr<StrictMock<utils::TimerMock>> moveTimerInit{
+        std::make_unique<StrictMock<utils::TimerMock>>()};
     StrictMock<utils::TimerMock>* moveTimer{moveTimerInit.get()};
-    std::unique_ptr<StrictMock<utils::TimerMock>> actionTimerInit{std::make_unique<StrictMock<utils::TimerMock>>()};
+    std::unique_ptr<StrictMock<utils::TimerMock>> actionTimerInit{
+        std::make_unique<StrictMock<utils::TimerMock>>()};
     StrictMock<utils::TimerMock>* actionTimer{actionTimerInit.get()};
     StrictMock<input::InputMock> input;
     const utils::DeltaTime deltaTime{1};
 
-    GridButtonsNavigator gridButtonsNavigator{uiManager,   validGridButtonsInfo, validIconNames,
-                                              buttonColor, buttonHoverColor,     std::move(moveTimerInit), std::move(actionTimerInit)};
+    GridButtonsNavigator gridButtonsNavigator{uiManager,
+                                              validGridButtonsInfo,
+                                              validIconNames,
+                                              buttonColor,
+                                              buttonHoverColor,
+                                              std::move(moveTimerInit),
+                                              std::move(actionTimerInit)};
 };
 
 TEST_F(GridButtonsNavigatorTest, givenInvalidGridButtonsInfoAndIconNames_shouldThrowRuntimeError)
 {
-    ASSERT_ANY_THROW(
-        GridButtonsNavigator(uiManager, validGridButtonsInfo, {}, buttonColor, buttonHoverColor, std::move(moveTimerInit), std::move(actionTimerInit)));
+    ASSERT_ANY_THROW(GridButtonsNavigator(uiManager, validGridButtonsInfo, {}, buttonColor, buttonHoverColor,
+                                          std::move(moveTimerInit), std::move(actionTimerInit)));
 }
 
 TEST_F(GridButtonsNavigatorTest,
@@ -138,8 +145,9 @@ TEST_F(GridButtonsNavigatorTest, loseFocus_shouldUnselectAllButtonsAndHideAllIco
     gridButtonsNavigator.loseFocus();
 }
 
-TEST_F(GridButtonsNavigatorTest,
-       update_withRightArrowClickedAndButtonsHorizontalMoveCauseAction_shouldMoveToTheButtonOnTheRightSideAndCallItsAction)
+TEST_F(
+    GridButtonsNavigatorTest,
+    update_withRightArrowClickedAndButtonsHorizontalMoveCauseAction_shouldMoveToTheButtonOnTheRightSideAndCallItsAction)
 {
     EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
     EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(0.f));
@@ -180,8 +188,9 @@ TEST_F(GridButtonsNavigatorTest,
     ASSERT_EQ(nextState, NextState::Same);
 }
 
-TEST_F(GridButtonsNavigatorTest,
-       update_withLeftArrowClickedAndButtonsHorizontalMoveCauseAction_shouldMoveToTheButtonOnTheLeftSide_andReturnSameStateAndCallItsAction)
+TEST_F(
+    GridButtonsNavigatorTest,
+    update_withLeftArrowClickedAndButtonsHorizontalMoveCauseAction_shouldMoveToTheButtonOnTheLeftSide_andReturnSameStateAndCallItsAction)
 {
     moveToTheFullscreenButton();
     EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
@@ -201,8 +210,9 @@ TEST_F(GridButtonsNavigatorTest,
     ASSERT_EQ(nextState, NextState::Same);
 }
 
-TEST_F(GridButtonsNavigatorTest,
-       update_withLeftArrowClickedAndButtonsHorizontalMoveNotCauseAction_shouldMoveToTheButtonOnTheLeftSide_andReturnSameState)
+TEST_F(
+    GridButtonsNavigatorTest,
+    update_withLeftArrowClickedAndButtonsHorizontalMoveNotCauseAction_shouldMoveToTheButtonOnTheLeftSide_andReturnSameState)
 {
     moveToTheApplyButton();
     EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));

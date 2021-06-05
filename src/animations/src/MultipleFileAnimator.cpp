@@ -93,11 +93,14 @@ void MultipleFileAnimator::setAnimation(AnimationType animationType, AnimationDi
 
 void MultipleFileAnimator::setAnimationDirection(AnimationDirection animationDirection)
 {
-    if (currentAnimationDirection != animationDirection)
+    auto& currentAnimation = animations.at(currentAnimationType);
+    if (currentAnimation.hasAnimationFinished() || currentAnimation.areInterruptionsAllowed())
     {
-        currentAnimationDirection = animationDirection;
-        animations.at(currentAnimationType).reset();
-        newAnimationDirectionIsSet = true;
+        if (currentAnimationDirection != animationDirection)
+        {
+            currentAnimationDirection = animationDirection;
+            newAnimationDirectionIsSet = true;
+        }
     }
 }
 

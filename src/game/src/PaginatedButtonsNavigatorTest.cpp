@@ -11,8 +11,8 @@ using namespace ::testing;
 
 namespace
 {
-const std::vector<std::string> validButtonNames{
-    "menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton", "menuExitButton"};
+const std::vector<std::string> validButtonNames{"menuPlayButton", "menuMapEditorButton", "menuControlsButton",
+                                                "menuSettingsButton", "menuExitButton"};
 
 const std::vector<std::string> validIconNames{"menuIcon1Image", "menuIcon2Image", "menuIcon3Image",
                                               "menuIcon4Image", "menuIcon5Image"};
@@ -52,14 +52,19 @@ public:
     StrictMock<input::InputMock> input;
     const utils::DeltaTime deltaTime{1};
 
-    PaginatedButtonsNavigator paginatedButtonsNavigator{uiManager,   validButtonNames, validIconNames,
-                                              buttonColor, buttonHoverColor,     std::move(moveTimerInit), std::move(actionTimerInit)};
+    PaginatedButtonsNavigator paginatedButtonsNavigator{uiManager,
+                                                        validButtonNames,
+                                                        validIconNames,
+                                                        buttonColor,
+                                                        buttonHoverColor,
+                                                        std::move(moveTimerInit),
+                                                        std::move(actionTimerInit)};
 };
 
 TEST_F(PaginatedButtonsNavigatorTest, givenInvalidGridButtonsInfoAndIconNames_shouldThrowRuntimeError)
 {
-    ASSERT_ANY_THROW(
-        PaginatedButtonsNavigator(uiManager, validButtonNames, {}, buttonColor, buttonHoverColor, std::move(moveTimerInit), std::move(actionTimerInit)));
+    ASSERT_ANY_THROW(PaginatedButtonsNavigator(uiManager, validButtonNames, {}, buttonColor, buttonHoverColor,
+                                               std::move(moveTimerInit), std::move(actionTimerInit)));
 }
 
 TEST_F(PaginatedButtonsNavigatorTest,
@@ -152,7 +157,8 @@ TEST_F(PaginatedButtonsNavigatorTest, update_withUpArrowClicked_shouldMoveToTheB
     ASSERT_EQ(nextState, NextState::Same);
 }
 
-TEST_F(PaginatedButtonsNavigatorTest, update_withDownArrowClicked_shouldMoveToTheButtonBelow_andReturnSameState)
+TEST_F(PaginatedButtonsNavigatorTest,
+       update_withDownArrowClicked_shouldMoveToTheButtonBelow_andReturnSameState)
 {
     EXPECT_CALL(*moveTimer, getElapsedSeconds()).WillOnce(Return(1.f));
     EXPECT_CALL(*actionTimer, getElapsedSeconds()).WillOnce(Return(0.f));

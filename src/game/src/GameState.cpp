@@ -5,13 +5,13 @@
 #include "AnimatorFactory.h"
 #include "GameStateUIConfigBuilder.h"
 #include "ProjectPathReader.h"
+#include "TimerFactory.h"
 #include "core/AnimationComponent.h"
 #include "core/BoxColliderComponent.h"
 #include "core/GraphicsComponent.h"
 #include "core/KeyboardMovementComponent.h"
 #include "core/VelocityComponent.h"
 #include "ui/DefaultUIManager.h"
-#include "TimerFactory.h"
 
 namespace game
 {
@@ -40,8 +40,8 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     auto animatorsFactory = animations::AnimatorFactory::createAnimatorFactory(rendererPool);
     std::shared_ptr<animations::Animator> druidAnimator = animatorsFactory->createPlayerAnimator(graphicsId);
     player->addComponent<components::core::AnimationComponent>(druidAnimator);
-    player->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{2.f, 3.75f},
-                                                                 components::core::CollisionLayer::Player, utils::Vector2f{2.f, -0.1f});
+    player->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{2.f, 3.75f}, components::core::CollisionLayer::Player, utils::Vector2f{2.f, -0.1f});
     player->addComponent<components::core::VelocityComponent>();
 
     for (int x = 0; x < tileMap->getSize().x; x++)

@@ -186,7 +186,8 @@ AnimatorSettingsYamlReader::readSingleFileAnimationsSettings(const YAML::Node& a
              utils::Vector2u{textureWidthInPixels.as<unsigned>(), textureHeightInPixels.as<unsigned>()},
              utils::IntRect{startXPosition.as<int>(), startYPosition.as<int>(),
                             rectToCutWidthInPixels.as<int>(), rectToCutHeightInPixels.as<int>()},
-             numberOfTextures.as<int>(), timeBetweenTexturesInSeconds.as<float>(), loopsAllowed.as<bool>(), interruptionAllowed.as<bool>()});
+             numberOfTextures.as<int>(), timeBetweenTexturesInSeconds.as<float>(), loopsAllowed.as<bool>(),
+             interruptionAllowed.as<bool>()});
     }
 
     return animationsSettings;

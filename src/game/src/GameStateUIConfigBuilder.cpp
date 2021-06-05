@@ -10,9 +10,8 @@ namespace game
 std::unique_ptr<components::ui::UIConfig> GameStateUIConfigBuilder::createGameUIConfig(GameState* gameState)
 {
     return std::make_unique<components::ui::UIConfig>(
-        createBackgroundConfig(gameState), createButtonConfigs(gameState),
-        createCheckBoxConfigs(gameState), createLabelConfigs(gameState), createTextFieldConfigs(gameState),
-        createImageConfigs(gameState));
+        createBackgroundConfig(gameState), createButtonConfigs(gameState), createCheckBoxConfigs(gameState),
+        createLabelConfigs(gameState), createTextFieldConfigs(gameState), createImageConfigs(gameState));
 }
 
 std::unique_ptr<components::ui::BackgroundConfig> GameStateUIConfigBuilder::createBackgroundConfig(GameState*)

@@ -16,13 +16,19 @@ multipleFilesAnimators:
       - type: jump
         firstTexturePath: resources/Player/Jump/jump-1.png
         numberOfTextures: 14
-        timeBetweenTexturesInSeconds: 0.05
+        timeBetweenTexturesInSeconds: 0.075
         loopsAllowed: false
         interruptionAllowed: true
       - type: attack
         firstTexturePath: resources/Player/Attacks/attack-A1.png
         numberOfTextures: 7
         timeBetweenTexturesInSeconds: 0.15
+        loopsAllowed: false
+        interruptionAllowed: false
+      - type: roll
+        firstTexturePath: resources/Player/Roll/roll-1.png
+        numberOfTextures: 14
+        timeBetweenTexturesInSeconds: 0.095
         loopsAllowed: false
         interruptionAllowed: false
   - name: druid

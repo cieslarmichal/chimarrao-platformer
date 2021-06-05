@@ -8,10 +8,10 @@
 #include "InputMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
+#include "TimerMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapMock.h"
 #include "ui/UIManagerMock.h"
-#include "TimerMock.h"
 
 using namespace game;
 using namespace components::ui;
@@ -62,7 +62,8 @@ public:
 class EditorStateTest : public EditorStateTest_Base
 {
 public:
-    EditorState editorState{window, rendererPool, fileAccess, states, uiManager, tileMap, std::move(timerInit)};
+    EditorState editorState{window,    rendererPool, fileAccess,          states,
+                            uiManager, tileMap,      std::move(timerInit)};
 };
 
 TEST_F(EditorStateTest, activate_shouldActivateUI)

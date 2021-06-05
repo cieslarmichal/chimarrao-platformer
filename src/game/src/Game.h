@@ -2,11 +2,11 @@
 
 #include <memory>
 
+#include "GameTimer.h"
 #include "InputManager.h"
 #include "RendererPool.h"
 #include "State.h"
 #include "States.h"
-#include "GameTimer.h"
 #include "Window.h"
 #include "editor/TileMap.h"
 
