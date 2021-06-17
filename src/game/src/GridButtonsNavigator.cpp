@@ -136,8 +136,23 @@ void GridButtonsNavigator::changeSelectedButtonUp()
     }
 
     currentButtonIndex.x = 0;
-    uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
-                        buttonsHoverColor);
+
+    bool selectedButtonChanged = false;
+    for (const auto & horizontalButton : gridButtonsInfo[currentButtonIndex.y])
+    {
+        if (horizontalButton.verticalMoveKeepButtonSelected)
+        {
+            selectedButtonChanged = true;
+            break;
+        }
+    }
+
+    if (not selectedButtonChanged)
+    {
+        uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                            buttonsHoverColor);
+    }
+
     setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
@@ -155,8 +170,21 @@ void GridButtonsNavigator::changeSelectedButtonDown()
     }
     currentButtonIndex.x = 0;
 
-    uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
-                        buttonsHoverColor);
+    bool selectedButtonChanged = false;
+    for (const auto & horizontalButton : gridButtonsInfo[currentButtonIndex.y])
+    {
+        if (horizontalButton.verticalMoveKeepButtonSelected)
+        {
+            selectedButtonChanged = true;
+            break;
+        }
+    }
+
+    if (not selectedButtonChanged)
+    {
+        uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                            buttonsHoverColor);
+    }
     setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
@@ -237,7 +265,10 @@ void GridButtonsNavigator::unselectAllButtons()
     {
         for (const auto& gridButtonInfo : rowOfGridButtonsInfo)
         {
-            uiManager->setColor(gridButtonInfo.buttonName, buttonsDefaultColor);
+            if (not gridButtonInfo.verticalMoveKeepButtonSelected)
+            {
+                uiManager->setColor(gridButtonInfo.buttonName, buttonsDefaultColor);
+            }
         }
     }
 }

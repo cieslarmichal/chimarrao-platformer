@@ -49,7 +49,7 @@ const std::vector<utils::Vector2f> sectionPositions{displayModeSectionPosition, 
 
 std::vector<std::string> SettingsStateUIConfigBuilder::iconNames{"settingsIcon1Image", "settingsIcon2Image",
                                                                  "settingsIcon3Image", "settingsIcon4Image",
-                                                                 "settingsIcon5Image"};
+                                                                 "settingsIcon5Image", "settingsIcon6Image"};
 
 std::unique_ptr<components::ui::UIConfig>
 SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsState)
@@ -62,16 +62,16 @@ SettingsStateUIConfigBuilder::createSettingsUIConfig(SettingsState* settingsStat
 
 std::vector<std::vector<GridButtonInfo>> SettingsStateUIConfigBuilder::getGridButtonsInfo()
 {
-    const std::vector<std::vector<GridButtonInfo>> gridButtonsInfo{
-        {GridButtonInfo{"settingsWindowModeButton", 0, true},
-         GridButtonInfo{"settingsFullscreenModeButton", 0, true}},
-        {GridButtonInfo{"settingsResolutionDecreaseButton", 1, true},
-         GridButtonInfo{"settingsResolutionIncreaseButton", 1, true}},
-        {GridButtonInfo{"settingsVsyncCheckBox", 2, false}},
-        {GridButtonInfo{"settingsFrameLimitDecreaseButton", 3, true},
-         GridButtonInfo{"settingsFrameLimitIncreaseButton", 3, true}},
-        {GridButtonInfo{"settingsBackToMenuButton", 4, false},
-         GridButtonInfo{"settingsApplyChangesButton", 4, false}}};
+    std::vector<std::vector<GridButtonInfo>> gridButtonsInfo{
+        {GridButtonInfo{"settingsWindowModeButton", 0, true, true},
+         GridButtonInfo{"settingsFullscreenModeButton", 0, true, true}},
+        {GridButtonInfo{"settingsResolutionDecreaseButton", 1, true, false},
+         GridButtonInfo{"settingsResolutionIncreaseButton", 1, true, false}},
+        {GridButtonInfo{"settingsVsyncCheckBox", 2, false, false}},
+        {GridButtonInfo{"settingsFrameLimitDecreaseButton", 3, true, false},
+         GridButtonInfo{"settingsFrameLimitIncreaseButton", 3, true, false}},
+        {GridButtonInfo{"settingsBackToMenuButton", 4, false, false},
+         GridButtonInfo{"settingsApplyChangesButton", 5, false, false}}};
 
     return gridButtonsInfo;
 }
@@ -96,9 +96,15 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
 
     const auto backToMenuButtonSize = utils::Vector2f{13.f, 5.f};
     const auto backToMenuButtonOnMouseOver = [=]
-    { settingsState->uiManager->setColor("settingsBackToMenuButton", buttonHoverColor); };
+    {
+        settingsState->buttonsNavigator->setFocusOnButton("settingsBackToMenuButton");
+        settingsState->uiManager->setColor("settingsBackToMenuButton", buttonHoverColor);
+    };
     const auto backToMenuButtonOnMouseOut = [=]
-    { settingsState->uiManager->setColor("settingsBackToMenuButton", buttonColor); };
+    {
+        settingsState->buttonsNavigator->loseFocus();
+        settingsState->uiManager->setColor("settingsBackToMenuButton", buttonColor);
+    };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
     auto backToMenuClickAction = [=] { settingsState->shouldBackToMenu = true; };
@@ -110,9 +116,15 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
 
     const auto applyChangesButtonSize = utils::Vector2f{13.f, 5.f};
     const auto applyChangesButtonOnMouseOver = [=]
-    { settingsState->uiManager->setColor("settingsApplyChangesButton", buttonHoverColor); };
+    {
+        settingsState->buttonsNavigator->setFocusOnButton("settingsApplyChangesButton");
+        settingsState->uiManager->setColor("settingsApplyChangesButton", buttonHoverColor);
+    };
     const auto applyChangesButtonOnMouseOut = [=]
-    { settingsState->uiManager->setColor("settingsApplyChangesButton", buttonColor); };
+    {
+        settingsState->buttonsNavigator->loseFocus();
+        settingsState->uiManager->setColor("settingsApplyChangesButton", buttonColor);
+    };
     auto applyChangesButtonMouseOverActions =
         components::ui::MouseOverActions{applyChangesButtonOnMouseOver, applyChangesButtonOnMouseOut};
     auto applyChangesClickAction = [=] { settingsState->applyWindowSettingsChanges(); };
@@ -122,24 +134,40 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
         applyChangesClickAction, applyChangesButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(applyChangesButtonConfig));
 
+    const auto windowModeButtonOnMouseOver = [=]
+    { settingsState->buttonsNavigator->setFocusOnButton("settingsWindowModeButton"); };
+    const auto windowModeButtonOnMouseOut = [=] { settingsState->buttonsNavigator->loseFocus(); };
+    auto windowModeButtonMouseOverActions =
+        components::ui::MouseOverActions{windowModeButtonOnMouseOver, windowModeButtonOnMouseOut};
     auto windowModeClickAction = [=] { settingsState->setWindowMode(); };
     auto windowModeButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsWindowModeButton", windowModeButtonPosition, displayModeButtonSize, buttonColor, "Window",
         graphics::Color::Black, displayModeFontSize, fontPath, utils::Vector2f{2.f, 0.9f},
-        windowModeClickAction);
+        windowModeClickAction, windowModeButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(windowModeButtonConfig));
 
+    const auto fullscreenModeButtonOnMouseOver = [=]
+    { settingsState->buttonsNavigator->setFocusOnButton("settingsWindowModeButton"); };
+    const auto fullscreenModeButtonOnMouseOut = [=] { settingsState->buttonsNavigator->loseFocus(); };
+    auto fullscreenModeButtonMouseOverActions =
+        components::ui::MouseOverActions{fullscreenModeButtonOnMouseOver, fullscreenModeButtonOnMouseOut};
     auto fullscreenModeClickAction = [=] { settingsState->setFullscreenMode(); };
     auto fullscreenModeButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "settingsFullscreenModeButton", fullscreenModeButtonPosition, displayModeButtonSize, buttonColor,
         "Fullscreen", graphics::Color::Black, displayModeFontSize, fontPath, utils::Vector2f{0.5f, 0.9f},
-        fullscreenModeClickAction);
+        fullscreenModeClickAction, fullscreenModeButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(fullscreenModeButtonConfig));
 
     const auto resolutionDecreaseButtonOnMouseOver = [=]
-    { settingsState->uiManager->setColor("settingsResolutionDecreaseButton", buttonHoverColor); };
+    {
+        settingsState->buttonsNavigator->setFocusOnButton("settingsResolutionDecreaseButton");
+        settingsState->uiManager->setColor("settingsResolutionDecreaseButton", buttonHoverColor);
+    };
     const auto resolutionDecreaseButtonOnMouseOut = [=]
-    { settingsState->uiManager->setColor("settingsResolutionDecreaseButton", buttonColor); };
+    {
+        settingsState->buttonsNavigator->loseFocus();
+        settingsState->uiManager->setColor("settingsResolutionDecreaseButton", buttonColor);
+    };
     auto resolutionDecreaseButtonMouseOverActions = components::ui::MouseOverActions{
         resolutionDecreaseButtonOnMouseOver, resolutionDecreaseButtonOnMouseOut};
     auto resolutionDecreaseButtonClickAction = [=] { settingsState->decreaseResolution(); };
@@ -150,9 +178,15 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
     buttonsConfig.emplace_back(std::move(resolutionDecreaseButtonConfig));
 
     const auto resolutionIncreaseButtonOnMouseOver = [=]
-    { settingsState->uiManager->setColor("settingsResolutionIncreaseButton", buttonHoverColor); };
+    {
+        settingsState->buttonsNavigator->setFocusOnButton("settingsResolutionIncreaseButton");
+        settingsState->uiManager->setColor("settingsResolutionIncreaseButton", buttonHoverColor);
+    };
     const auto resolutionIncreaseButtonOnMouseOut = [=]
-    { settingsState->uiManager->setColor("settingsResolutionIncreaseButton", buttonColor); };
+    {
+        settingsState->buttonsNavigator->loseFocus();
+        settingsState->uiManager->setColor("settingsResolutionIncreaseButton", buttonColor);
+    };
     auto resolutionIncreaseButtonMouseOverActions = components::ui::MouseOverActions{
         resolutionIncreaseButtonOnMouseOver, resolutionIncreaseButtonOnMouseOut};
     auto resolutionIncreaseButtonClickAction = [=] { settingsState->increaseResolution(); };
@@ -163,9 +197,15 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
     buttonsConfig.emplace_back(std::move(resolutionIncreaseButtonConfig));
 
     const auto frameLimitDecreaseButtonOnMouseOver = [=]
-    { settingsState->uiManager->setColor("settingsFrameLimitDecreaseButton", buttonHoverColor); };
+    {
+        settingsState->buttonsNavigator->setFocusOnButton("settingsFrameLimitDecreaseButton");
+        settingsState->uiManager->setColor("settingsFrameLimitDecreaseButton", buttonHoverColor);
+    };
     const auto frameLimitDecreaseButtonOnMouseOut = [=]
-    { settingsState->uiManager->setColor("settingsFrameLimitDecreaseButton", buttonColor); };
+    {
+        settingsState->buttonsNavigator->loseFocus();
+        settingsState->uiManager->setColor("settingsFrameLimitDecreaseButton", buttonColor);
+    };
     auto frameLimitDecreaseButtonMouseOverActions = components::ui::MouseOverActions{
         frameLimitDecreaseButtonOnMouseOver, frameLimitDecreaseButtonOnMouseOut};
     auto frameLimitDecreaseButtonClickAction = [=] { settingsState->decreaseFrameLimit(); };
@@ -176,9 +216,15 @@ SettingsStateUIConfigBuilder::createButtonConfigs(SettingsState* settingsState)
     buttonsConfig.emplace_back(std::move(frameLimitDecreaseButtonConfig));
 
     const auto frameLimitIncreaseButtonOnMouseOver = [=]
-    { settingsState->uiManager->setColor("settingsFrameLimitIncreaseButton", buttonHoverColor); };
+    {
+        settingsState->buttonsNavigator->setFocusOnButton("settingsFrameLimitIncreaseButton");
+        settingsState->uiManager->setColor("settingsFrameLimitIncreaseButton", buttonHoverColor);
+    };
     const auto frameLimitIncreaseButtonOnMouseOut = [=]
-    { settingsState->uiManager->setColor("settingsFrameLimitIncreaseButton", buttonColor); };
+    {
+        settingsState->buttonsNavigator->loseFocus();
+        settingsState->uiManager->setColor("settingsFrameLimitIncreaseButton", buttonColor);
+    };
     auto frameLimitIncreaseButtonMouseOverActions = components::ui::MouseOverActions{
         frameLimitIncreaseButtonOnMouseOver, frameLimitIncreaseButtonOnMouseOut};
     auto frameLimitIncreaseButtonClickAction = [=] { settingsState->increaseFrameLimit(); };
@@ -197,9 +243,15 @@ SettingsStateUIConfigBuilder::createCheckBoxConfigs(SettingsState* settingsState
     std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> checkBoxesConfig;
 
     const auto vsyncCheckBoxOnMouseOver = [=]
-    { settingsState->uiManager->setColor("settingsVsyncCheckBox", buttonHoverColor); };
+    {
+        settingsState->buttonsNavigator->setFocusOnButton("settingsVsyncCheckBox");
+        settingsState->uiManager->setColor("settingsVsyncCheckBox", buttonHoverColor);
+    };
     const auto vsyncCheckBoxOnMouseOut = [=]
-    { settingsState->uiManager->setColor("settingsVsyncCheckBox", buttonColor); };
+    {
+        settingsState->buttonsNavigator->loseFocus();
+        settingsState->uiManager->setColor("settingsVsyncCheckBox", buttonColor);
+    };
     auto vsyncCheckBoxMouseOverActions =
         components::ui::MouseOverActions{vsyncCheckBoxOnMouseOver, vsyncCheckBoxOnMouseOut};
     auto vsyncCheckBoxClickAction = [=] { settingsState->switchVsync(); };
