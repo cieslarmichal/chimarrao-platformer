@@ -1,8 +1,7 @@
 multipleFilesAnimators:
   - name: player
     animations:
-      - type: idle
+      - firstTexturePath: resources/Player/Idle/idle-with-weapon-1.png
         numberOfTextures: 6
         timeBetweenTexturesInSeconds: 0.3
         loopsAllowed: true
-        interruptionAllowed: true

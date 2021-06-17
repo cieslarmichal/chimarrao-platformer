@@ -4,7 +4,11 @@ animations:
     firstTexturePath: resources/Player/Idle/idle-with-weapon-1.png
     numberOfTextures: 6
     timeBetweenTexturesInSeconds: 0.3
+    loopsAllowed: true
+    interruptionAllowed: true
   - type: walk
     firstTexturePath: resources/Player/Walk/walk-with-weapon-1.png
     numberOfTextures: 11
     timeBetweenTexturesInSeconds: 0.7
+    loopsAllowed: true
+    interruptionAllowed: true

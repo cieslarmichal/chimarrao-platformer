@@ -5,10 +5,14 @@ multipleFilesAnimators:
         firstTexturePath: resources/Player/Idle/idle-with-weapon-1.png
         numberOfTextures: 6
         timeBetweenTexturesInSeconds: 0.3
+        loopsAllowed: true
+        interruptionAllowed: true
       - type: walk
         firstTexturePath: resources/Player/Walk/walk-with-weapon-1.png
         numberOfTextures: 11
         timeBetweenTexturesInSeconds: 0.7
+        loopsAllowed: true
+        interruptionAllowed: true
 
   - name: enemy
     animations:
@@ -16,8 +20,12 @@ multipleFilesAnimators:
         firstTexturePath: resources/Enemy/Idle/idle-with-weapon-1.png
         numberOfTextures: 3
         timeBetweenTexturesInSeconds: 0.4
+        loopsAllowed: true
+        interruptionAllowed: true
       - type: walk
         firstTexturePath: resources/Enemy/Walk/walk-with-weapon-1.png
         numberOfTextures: 2
         timeBetweenTexturesInSeconds: 0.8
+        loopsAllowed: true
+        interruptionAllowed: true
 

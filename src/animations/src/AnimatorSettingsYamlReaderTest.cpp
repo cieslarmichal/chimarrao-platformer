@@ -23,6 +23,10 @@ const std::string configWithAnimatorWithoutAnimationTypeField{
     testDirectory + "configWithAnimatorWithoutAnimationTypeField.yaml"};
 const std::string configWithAnimatorWithoutAnimatorNameField{
     testDirectory + "configWithAnimatorWithoutAnimatorNameField.yaml"};
+const std::string configWithAnimatorWithoutLoopsAllowedField{
+    testDirectory + "configWithAnimatorWithoutLoopsAllowedField.yaml"};
+const std::string configWithAnimatorWithoutInterruptionAllowedField{
+    testDirectory + "configWithAnimatorWithoutInterruptionAllowedField.yaml"};
 const std::string configWithAnimatorWithoutNumberOfAnimationTexturesField{
     testDirectory + "configWithAnimatorWithoutNumberOfAnimationTexturesField.yaml"};
 const std::string configWithAnimatorWithoutTimeBetweenTexturesField{
@@ -36,15 +40,15 @@ const std::string validPathWithSingleFileAnimatorWithMissingFields{
     testDirectory + "validConfigWithSingleFileAnimatorWithMissingFields.yaml"};
 
 const MultipleFilesAnimationSettings playerMultipleFilesAnimationSettings1{
-    "idle", "resources/Player/Idle/idle-with-weapon-1.png", 6, 0.3f};
+    "idle", "resources/Player/Idle/idle-with-weapon-1.png", 6, 0.3f,true, true};
 const MultipleFilesAnimationSettings playerMultipleFilesAnimationSettings2{
-    "walk", "resources/Player/Walk/walk-with-weapon-1.png", 11, 0.7f};
+    "walk", "resources/Player/Walk/walk-with-weapon-1.png", 11, 0.7f, true, true};
 const std::vector<MultipleFilesAnimationSettings> playerMultipleFilesAnimationsSettings{
     playerMultipleFilesAnimationSettings1, playerMultipleFilesAnimationSettings2};
 const MultipleFilesAnimationSettings enemyMultipleFilesAnimationSettings1{
-    "idle", "resources/Enemy/Idle/idle-with-weapon-1.png", 3, 0.4f};
+    "idle", "resources/Enemy/Idle/idle-with-weapon-1.png", 3, 0.4f,true, true};
 const MultipleFilesAnimationSettings enemyMultipleFilesAnimationSettings2{
-    "walk", "resources/Enemy/Walk/walk-with-weapon-1.png", 2, 0.8f};
+    "walk", "resources/Enemy/Walk/walk-with-weapon-1.png", 2, 0.8f,true, true};
 const std::vector<MultipleFilesAnimationSettings> enemyMultipleFilesAnimationsSettings{
     enemyMultipleFilesAnimationSettings1, enemyMultipleFilesAnimationSettings2};
 const AnimatorsSettings animatorsSettings1{{}, {{"player", playerMultipleFilesAnimationsSettings}}};
@@ -55,7 +59,7 @@ const SingleFileAnimationSettings bunnySingleFileAnimationSettings{"idle",
                                                                    utils::Vector2u{192u, 128u},
                                                                    utils::IntRect{48, 85, 48, 43},
                                                                    1,
-                                                                   0.1f};
+                                                                   0.1f, true, true};
 const std::vector<SingleFileAnimationSettings> bunnySingleFileAnimationsSettings{
     bunnySingleFileAnimationSettings};
 const AnimatorsSettings bunnyAnimatorsSettings{{{"bunny", bunnySingleFileAnimationsSettings}}, {}};
@@ -121,6 +125,22 @@ TEST_F(AnimatorSettingsYamlReaderTest,
 {
     ASSERT_THROW(
         animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutAnimationTexturePathField),
+        exceptions::InvalidAnimatorsConfigFile);
+}
+
+TEST_F(AnimatorSettingsYamlReaderTest,
+       givenConfigFileWithAnimationsWithoutInterruptionAllowedField_shouldThrowInvalidAnimatorsConfigFile)
+{
+    ASSERT_THROW(
+        animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutInterruptionAllowedField),
+        exceptions::InvalidAnimatorsConfigFile);
+}
+
+TEST_F(AnimatorSettingsYamlReaderTest,
+       givenConfigFileWithAnimationsWithoutLoopsAllowedField_shouldThrowInvalidAnimatorsConfigFile)
+{
+    ASSERT_THROW(
+        animatorsSettingsReader.readAnimatorsSettings(configWithAnimatorWithoutLoopsAllowedField),
         exceptions::InvalidAnimatorsConfigFile);
 }
 
