@@ -17,7 +17,8 @@ public:
 
 TEST_F(AnimationTest, creationOfAnimationWithEmptyTextures_shouldThrowTexturesNotInitialized)
 {
-    ASSERT_THROW(Animation(emptyTextureRects, timeBetweenTextures, false, false), exceptions::TexturesNotInitialized);
+    ASSERT_THROW(Animation(emptyTextureRects, timeBetweenTextures, false, false),
+                 exceptions::TexturesNotInitialized);
 }
 
 TEST_F(AnimationTest, newAnimationShouldReturnFirstFrame)
@@ -108,4 +109,3 @@ TEST_F(AnimationTest, areInterruptionsAllowed)
     ASSERT_TRUE(animationWithInterruptionsAllowed.areInterruptionsAllowed());
     ASSERT_FALSE(animationWithInterruptionsNotAllowed.areInterruptionsAllowed());
 }
-

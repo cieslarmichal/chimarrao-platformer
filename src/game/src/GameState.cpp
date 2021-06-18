@@ -31,9 +31,9 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
-    auto player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10}, "player");
+    auto player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10.f, 10.f}, "player");
     auto graphicsComponent = player->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{6., 3.75}, utils::Vector2f{10, 10}, graphics::Color::White,
+        rendererPool, utils::Vector2f{6.f, 3.75f}, utils::Vector2f{10.f, 10.f}, graphics::Color::White,
         graphics::VisibilityLayer::Second);
     auto graphicsId = graphicsComponent->getGraphicsId();
     player->addComponent<components::core::KeyboardMovementComponent>();
@@ -84,10 +84,10 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     componentOwnersManager->add(rightMapBorder);
     componentOwnersManager->add(bottomMapBorder);
 
-    timer = utils::TimerFactory::createTimer();
-
     componentOwnersManager->add(player);
     componentOwnersManager->processNewObjects();
+
+    timer = utils::TimerFactory::createTimer();
 }
 
 NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Input& input)

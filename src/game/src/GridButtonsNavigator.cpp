@@ -138,7 +138,7 @@ void GridButtonsNavigator::changeSelectedButtonUp()
     currentButtonIndex.x = 0;
 
     bool selectedButtonChanged = false;
-    for (const auto & horizontalButton : gridButtonsInfo[currentButtonIndex.y])
+    for (const auto& horizontalButton : gridButtonsInfo[currentButtonIndex.y])
     {
         if (horizontalButton.verticalMoveKeepButtonSelected)
         {
@@ -171,7 +171,7 @@ void GridButtonsNavigator::changeSelectedButtonDown()
     currentButtonIndex.x = 0;
 
     bool selectedButtonChanged = false;
-    for (const auto & horizontalButton : gridButtonsInfo[currentButtonIndex.y])
+    for (const auto& horizontalButton : gridButtonsInfo[currentButtonIndex.y])
     {
         if (horizontalButton.verticalMoveKeepButtonSelected)
         {
