@@ -20,7 +20,16 @@ const auto arrowButtonSize = utils::Vector2f{8.f, 3.f};
 const auto arrowButtonFontSize{20};
 const auto firstMapButtonPosition = utils::Vector2f{33.5f, 15.f};
 const auto mapButtonSize = utils::Vector2f{15.f, 4.f};
+const auto iconSize = utils::Vector2f{4, 4};
 }
+
+const std::vector<std::string> ChooseMapStateUIConfigBuilder::mapButtonsUniqueNames{
+    "chooseMap1MapButton", "chooseMap2MapButton", "chooseMap3MapButton", "chooseMap4MapButton",
+    "chooseMap5MapButton"};
+
+const std::vector<std::string> ChooseMapStateUIConfigBuilder::iconNames{
+    "chooseMapIcon1Image", "chooseMapIcon2Image", "chooseMapIcon3Image",
+    "chooseMapIcon4Image", "chooseMapIcon5Image", "chooseMapIcon6Image"};
 
 std::unique_ptr<components::ui::UIConfig>
 ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(ChooseMapState* chooseMapState)
@@ -29,6 +38,18 @@ ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(ChooseMapState* chooseMap
         createBackgroundConfig(chooseMapState), createButtonConfigs(chooseMapState),
         createCheckBoxConfigs(chooseMapState), createLabelConfigs(chooseMapState),
         createTextFieldConfigs(chooseMapState), createImageConfigs(chooseMapState));
+}
+
+std::vector<std::string> ChooseMapStateUIConfigBuilder::getNonNavigationButtonNames()
+{
+    auto buttonNames = mapButtonsUniqueNames;
+    buttonNames.emplace_back("chooseMapBackToMenuButton");
+    return buttonNames;
+}
+
+std::vector<std::string> ChooseMapStateUIConfigBuilder::getIconNames()
+{
+    return iconNames;
 }
 
 std::unique_ptr<components::ui::BackgroundConfig>
@@ -46,9 +67,15 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
 
     const auto backToMenuButtonSize = utils::Vector2f{13.f, 5.f};
     const auto backToMenuButtonOnMouseOver = [=]
-    { chooseMapState->uiManager->setColor("chooseMapBackToMenuButton", buttonHoverColor); };
+    {
+        chooseMapState->buttonsNavigator->setFocusOnButton("chooseMapBackToMenuButton");
+        chooseMapState->uiManager->setColor("chooseMapBackToMenuButton", buttonHoverColor);
+    };
     const auto backToMenuButtonOnMouseOut = [=]
-    { chooseMapState->uiManager->setColor("chooseMapBackToMenuButton", buttonColor); };
+    {
+        chooseMapState->buttonsNavigator->loseFocus();
+        chooseMapState->uiManager->setColor("chooseMapBackToMenuButton", buttonColor);
+    };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
     auto backToMenuClickAction = [=] { chooseMapState->shouldBackToMenu = true; };
@@ -64,7 +91,7 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
     { chooseMapState->uiManager->setColor("chooseMapRightButton", buttonColor); };
     auto rightButtonMouseOverActions =
         components::ui::MouseOverActions{rightButtonOnMouseOver, rightButtonOnMouseOut};
-    auto rightButtonClickAction = [=] { chooseMapState->showNextMaps(); };
+    auto rightButtonClickAction = [=] { chooseMapState->buttonsNavigator->changePageToRight(); };
     auto rightButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "chooseMapRightButton", rightArrowButtonPosition, arrowButtonSize, buttonColor, "->",
         graphics::Color::Black, arrowButtonFontSize, fontPath, utils::Vector2f{3.0f, 0.2f},
@@ -77,24 +104,30 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
     { chooseMapState->uiManager->setColor("chooseMapLeftButton", buttonColor); };
     auto leftButtonMouseOverActions =
         components::ui::MouseOverActions{leftButtonOnMouseOver, leftButtonOnMouseOut};
-    auto leftButtonClickAction = [=] { chooseMapState->showPreviousMaps(); };
+    auto leftButtonClickAction = [=] { chooseMapState->buttonsNavigator->changePageToLeft(); };
     auto leftButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "chooseMapLeftButton", leftArrowButtonPosition, arrowButtonSize, buttonColor, "<-",
         graphics::Color::Black, arrowButtonFontSize, fontPath, utils::Vector2f{3.0f, 0.2f},
         leftButtonClickAction, leftButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(leftButtonConfig));
 
-    for (std::size_t mapIndex = 0; mapIndex < chooseMapState->mapButtonsUniqueNames.size(); mapIndex++)
+    for (std::size_t mapIndex = 0; mapIndex < mapButtonsUniqueNames.size(); mapIndex++)
     {
-        const auto& buttonUniqueName = chooseMapState->mapButtonsUniqueNames[mapIndex];
+        const auto& buttonUniqueName = mapButtonsUniqueNames[mapIndex];
         auto& mapNameToDisplay = chooseMapState->mapNames[mapIndex];
         auto& mapFilePath = chooseMapState->mapFilePaths[mapIndex];
         const auto buttonPosition =
             firstMapButtonPosition + utils::Vector2f{0.f, static_cast<float>(mapIndex) * 6.f};
         const auto mapButtonOnMouseOver = [=]
-        { chooseMapState->uiManager->setColor(buttonUniqueName, buttonHoverColor); };
+        {
+            chooseMapState->buttonsNavigator->setFocusOnButton(buttonUniqueName);
+            chooseMapState->uiManager->setColor(buttonUniqueName, buttonHoverColor);
+        };
         const auto mapButtonOnMouseOut = [=]
-        { chooseMapState->uiManager->setColor(buttonUniqueName, buttonColor); };
+        {
+            chooseMapState->buttonsNavigator->loseFocus();
+            chooseMapState->uiManager->setColor(buttonUniqueName, buttonColor);
+        };
         auto mapButtonMouseOverActions =
             components::ui::MouseOverActions{mapButtonOnMouseOver, mapButtonOnMouseOut};
         auto mapButtonClickAction = [=, &mapFilePath]
@@ -140,7 +173,25 @@ ChooseMapStateUIConfigBuilder::createTextFieldConfigs(ChooseMapState*)
 std::vector<std::unique_ptr<components::ui::ImageConfig>>
 ChooseMapStateUIConfigBuilder::createImageConfigs(ChooseMapState*)
 {
-    return {};
+    std::vector<std::unique_ptr<components::ui::ImageConfig>> imagesConfig;
+
+    for (std::size_t iconIndex = 0; iconIndex < iconNames.size(); iconIndex++)
+    {
+        auto iconPosition =
+            utils::Vector2f{firstMapButtonPosition.x + mapButtonSize.x,
+                            firstMapButtonPosition.y + static_cast<float>(iconIndex) * 6.f - 0.5f};
+        if (iconIndex == iconNames.size() - 1)
+        {
+            iconPosition.x -= 1.f;
+            iconPosition.y += 3.5f;
+        }
+
+        auto imageConfig = std::make_unique<components::ui::ImageConfig>(
+            iconNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First, iconPath);
+        imagesConfig.push_back(std::move(imageConfig));
+    }
+
+    return imagesConfig;
 }
 
 }

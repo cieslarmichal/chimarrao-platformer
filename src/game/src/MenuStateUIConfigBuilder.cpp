@@ -36,9 +36,16 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
         createLabelConfigs(menuState), createTextFieldConfigs(menuState), createImageConfigs(menuState));
 }
 
-std::vector<std::string> MenuStateUIConfigBuilder::getButtonNames()
+std::vector<std::vector<GridButtonInfo>> MenuStateUIConfigBuilder::getGridButtonsInfo()
 {
-    return buttonNames;
+    std::vector<std::vector<GridButtonInfo>> gridButtonsInfo{
+        {GridButtonInfo{"menuPlayButton", 0, false, false}},
+        {GridButtonInfo{"menuMapEditorButton", 1, false, false}},
+        {GridButtonInfo{"menuControlsButton", 2, false, false}},
+        {GridButtonInfo{"menuSettingsButton", 3, false, false}},
+        {GridButtonInfo{"menuExitButton", 4, false, false}}};
+
+    return gridButtonsInfo;
 }
 
 std::vector<std::string> MenuStateUIConfigBuilder::getIconNames()
@@ -197,7 +204,6 @@ MenuStateUIConfigBuilder::createImageConfigs(MenuState*)
     {
         const auto iconPosition =
             utils::Vector2f{buttonsPositions[iconIndex].x + buttonSize.x, buttonsPositions[iconIndex].y + 1};
-
         auto imageConfig = std::make_unique<components::ui::ImageConfig>(
             iconNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First, iconPath);
         imagesConfig.push_back(std::move(imageConfig));

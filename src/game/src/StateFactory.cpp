@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "ChooseMapState.h"
+#include "ChooseMapStateUIConfigBuilder.h"
 #include "ControlsState.h"
 #include "DefaultComponentOwnersManager.h"
 #include "EditorMenuState.h"
@@ -21,14 +22,6 @@
 
 namespace game
 {
-
-namespace
-{
-const auto menuButtonColor = graphics::Color(251, 190, 102);
-const auto menuButtonHoverColor = graphics::Color(205, 128, 66);
-const auto settingsButtonColor = menuButtonColor;
-const auto settingsButtonHoverColor = menuButtonHoverColor;
-}
 
 StateFactory::StateFactory(std::shared_ptr<window::Window> windowInit,
                            std::shared_ptr<graphics::RendererPool> rendererPoolInit,
@@ -76,12 +69,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     case StateType::Menu:
     {
         auto uiManager = std::make_shared<components::ui::DefaultUIManager>(rendererPool);
-        auto buttonsNavigator = std::make_unique<PaginatedButtonsNavigator>(
-            uiManager, MenuStateUIConfigBuilder::getButtonNames(), MenuStateUIConfigBuilder::getIconNames(),
-            menuButtonColor, menuButtonHoverColor, utils::TimerFactory::createTimer(),
-            utils::TimerFactory::createTimer());
-        return std::make_unique<MenuState>(window, rendererPool, fileAccess, states, uiManager,
-                                           std::move(buttonsNavigator));
+        return std::make_unique<MenuState>(window, rendererPool, fileAccess, states, uiManager);
     }
     case StateType::Pause:
     {
@@ -97,19 +85,13 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     case StateType::Settings:
     {
         auto uiManager = std::make_shared<components::ui::DefaultUIManager>(rendererPool);
-        auto buttonsNavigator = std::make_unique<GridButtonsNavigator>(
-            uiManager, SettingsStateUIConfigBuilder::getGridButtonsInfo(),
-            SettingsStateUIConfigBuilder::getIconNames(), settingsButtonColor, settingsButtonHoverColor,
-            utils::TimerFactory::createTimer(), utils::TimerFactory::createTimer());
-        return std::make_unique<SettingsState>(window, rendererPool, fileAccess, states, uiManager,
-                                               std::move(buttonsNavigator));
+        return std::make_unique<SettingsState>(window, rendererPool, fileAccess, states, uiManager);
     }
     case StateType::ChooseMap:
     {
-        return std::make_unique<ChooseMapState>(
-            window, rendererPool, fileAccess, states,
-            std::make_unique<components::ui::DefaultUIManager>(rendererPool),
-            std::make_unique<FileSystemMapsReader>(fileAccess), tileMap);
+        auto uiManager = std::make_shared<components::ui::DefaultUIManager>(rendererPool);
+        return std::make_unique<ChooseMapState>(window, rendererPool, fileAccess, states, uiManager, tileMap,
+                                                std::make_unique<FileSystemMapsReader>(fileAccess));
     }
     default:
     {

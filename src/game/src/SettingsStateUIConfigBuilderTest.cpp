@@ -2,7 +2,6 @@
 
 #include "gtest/gtest.h"
 
-#include "ButtonsNavigatorMock.h"
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
@@ -44,11 +43,7 @@ public:
     StrictMock<StatesMock> states;
     std::shared_ptr<components::ui::UIManagerMock> uiManager{
         std::make_shared<NiceMock<components::ui::UIManagerMock>>()};
-    std::unique_ptr<NiceMock<ButtonsNavigatorMock>> buttonsNavigatorInit{
-        std::make_unique<NiceMock<ButtonsNavigatorMock>>()};
-    NiceMock<ButtonsNavigatorMock>* buttonsNavigator = buttonsNavigatorInit.get();
-    SettingsState settingsState{window, rendererPool, fileAccess,
-                                states, uiManager,    std::move(buttonsNavigatorInit)};
+    SettingsState settingsState{window, rendererPool, fileAccess, states, uiManager};
 };
 
 TEST_F(SettingsStateUIConfigBuilderTest, createSettingsUI)

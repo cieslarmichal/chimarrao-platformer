@@ -1,44 +1,54 @@
 #include "ChooseMapState.h"
 
-#include <cmath>
+#include <utility>
 
 #include "ChooseMapStateUIConfigBuilder.h"
+#include "TimerFactory.h"
 
 namespace game
 {
+namespace
+{
+const auto buttonColor = graphics::Color(251, 190, 102);
+const auto buttonHoverColor = graphics::Color(205, 128, 66);
+}
+
 ChooseMapState::ChooseMapState(const std::shared_ptr<window::Window>& windowInit,
                                const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                                std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                                std::shared_ptr<components::ui::UIManager> uiManagerInit,
-                               std::unique_ptr<MapsReader> mapsReaderInit,
-                               std::shared_ptr<TileMap> tileMapInit)
+                               std::shared_ptr<TileMap> tileMapInit, std::unique_ptr<MapsReader> mapsReader)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       uiManager{std::move(uiManagerInit)},
-      mapsReader{std::move(mapsReaderInit)},
       shouldBackToMenu{false},
-      mapsCurrentPage{1},
-      tileMap{tileMapInit}
+      tileMap{std::move(tileMapInit)},
+      mapsReader{std::move(mapsReader)},
+      mapFilePaths{this->mapsReader->readMapFilePaths()},
+      mapNames{this->mapsReader->readMapNames()},
+      paginatedButtonActionForButtonIndex{[&](int index)
+                                          {
+                                              const auto& mapPath = mapFilePaths[index];
+                                              tileMap->loadFromFile(mapPath);
+                                              states.deactivateCurrentState();
+                                              states.addNextState(StateType::Game);
+                                          }},
+      buttonsNavigator{std::make_unique<PaginatedButtonsNavigator>(
+          uiManager, ChooseMapStateUIConfigBuilder::getNonNavigationButtonNames(),
+          ChooseMapStateUIConfigBuilder::getIconNames(), mapNames, paginatedButtonActionForButtonIndex, 5,
+          buttonColor, buttonHoverColor, utils::TimerFactory::createTimer(),
+          utils::TimerFactory::createTimer())}
 {
-    mapFilePaths = mapsReader->readMapFilePaths();
-    std::sort(mapFilePaths.begin(), mapFilePaths.end());
-    std::transform(mapFilePaths.begin(), mapFilePaths.end(), std::back_inserter(mapNames),
-                   [&](const std::string& mapFile)
-                   { return fileAccess->getFileNameWithoutExtension(mapFile); });
-
-    for (int mapIndex = 0; mapIndex < mapFilePaths.size() && mapIndex < maximumNumberOfMapsToDisplay;
-         mapIndex++)
-    {
-        mapButtonsUniqueNames.push_back("chooseMap" + std::to_string(mapIndex + 1) + "MapButton");
-    }
-
-    mapsPages = static_cast<unsigned int>(
-        std::ceil(static_cast<float>(mapNames.size()) / static_cast<float>(maximumNumberOfMapsToDisplay)));
-
-    uiManager->createUI(ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(this));
+    this->uiManager->createUI(ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(this));
+    buttonsNavigator->initialize();
 }
 
 NextState ChooseMapState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
+    if (const auto nextState = buttonsNavigator->update(deltaTime, input); nextState == NextState::Previous)
+    {
+        return NextState::Previous;
+    }
+
     if (shouldBackToMenu)
     {
         return NextState::Menu;
@@ -64,71 +74,12 @@ void ChooseMapState::activate()
 {
     active = true;
     uiManager->activate();
+    buttonsNavigator->activate();
 }
 
 void ChooseMapState::deactivate()
 {
     active = false;
     uiManager->deactivate();
-}
-
-void ChooseMapState::showNextMaps()
-{
-    if (mapsCurrentPage < mapsPages)
-    {
-        const auto numberOfMapsRemaining = mapNames.size() - mapsCurrentPage * maximumNumberOfMapsToDisplay;
-
-        for (auto uniqueMapIndex = 0;
-             uniqueMapIndex < numberOfMapsRemaining && uniqueMapIndex < maximumNumberOfMapsToDisplay;
-             uniqueMapIndex++)
-        {
-            const auto currentMapNameIndex = mapsCurrentPage * maximumNumberOfMapsToDisplay + uniqueMapIndex;
-            const auto& mapName = mapNames[currentMapNameIndex];
-            const auto& mapPath = mapFilePaths[currentMapNameIndex];
-            uiManager->setText(mapButtonsUniqueNames[uniqueMapIndex], mapName);
-            auto loadMap = [&]
-            {
-                tileMap->loadFromFile(mapPath);
-                states.deactivateCurrentState();
-                states.addNextState(StateType::Game);
-            };
-            components::core::KeyAction loadMapKeyAction{input::InputKey::MouseLeft, loadMap};
-            uiManager->changeClickAction(mapButtonsUniqueNames[uniqueMapIndex], {loadMapKeyAction});
-        }
-
-        if (numberOfMapsRemaining < maximumNumberOfMapsToDisplay)
-        {
-            for (auto mapIndex = numberOfMapsRemaining; mapIndex < maximumNumberOfMapsToDisplay; mapIndex++)
-            {
-                uiManager->deactivateComponent(mapButtonsUniqueNames[mapIndex]);
-            }
-        }
-        mapsCurrentPage++;
-    }
-}
-
-void ChooseMapState::showPreviousMaps()
-{
-    if (mapsCurrentPage > 1)
-    {
-        for (auto mapIndex = 0; mapIndex < maximumNumberOfMapsToDisplay; mapIndex++)
-        {
-            const auto currentMapNameIndex = (mapsCurrentPage - 2) * maximumNumberOfMapsToDisplay + mapIndex;
-            const auto& mapName = mapNames[currentMapNameIndex];
-            const auto& mapPath = mapFilePaths[currentMapNameIndex];
-            uiManager->activateComponent(mapButtonsUniqueNames[mapIndex]);
-            uiManager->setText(mapButtonsUniqueNames[mapIndex], mapName);
-            auto loadMap = [&]
-            {
-                tileMap->loadFromFile(mapPath);
-                states.deactivateCurrentState();
-                states.addNextState(StateType::Game);
-            };
-            components::core::KeyAction loadMapKeyAction{input::InputKey::MouseLeft, loadMap};
-            uiManager->changeClickAction(mapButtonsUniqueNames[mapIndex], {loadMapKeyAction});
-        }
-
-        mapsCurrentPage--;
-    }
 }
 }

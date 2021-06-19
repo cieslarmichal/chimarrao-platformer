@@ -22,6 +22,8 @@ class ChooseMapStateUIConfigBuilder
 {
 public:
     static std::unique_ptr<components::ui::UIConfig> createChooseMapUIConfig(ChooseMapState*);
+    static std::vector<std::string> getNonNavigationButtonNames();
+    static std::vector<std::string> getIconNames();
 
 private:
     static std::unique_ptr<components::ui::BackgroundConfig> createBackgroundConfig(ChooseMapState*);
@@ -32,5 +34,8 @@ private:
     static std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
     createTextFieldConfigs(ChooseMapState*);
     static std::vector<std::unique_ptr<components::ui::ImageConfig>> createImageConfigs(ChooseMapState*);
+
+    static const std::vector<std::string> mapButtonsUniqueNames;
+    static const std::vector<std::string> iconNames;
 };
 }

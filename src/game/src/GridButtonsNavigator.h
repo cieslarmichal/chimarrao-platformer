@@ -1,6 +1,5 @@
 #pragma once
 
-#include "ButtonsNavigator.h"
 #include "GridButtonInfo.h"
 #include "NextState.h"
 #include "Timer.h"
@@ -8,7 +7,7 @@
 
 namespace game
 {
-class GridButtonsNavigator : public ButtonsNavigator
+class GridButtonsNavigator
 {
 public:
     explicit GridButtonsNavigator(std::shared_ptr<components::ui::UIManager>,
@@ -18,11 +17,11 @@ public:
                                   std::unique_ptr<utils::Timer> moveTimer,
                                   std::unique_ptr<utils::Timer> actionTimer);
 
-    void initialize() override;
-    NextState update(const utils::DeltaTime&, const input::Input&) override;
-    void activate() override;
-    void setFocusOnButton(const std::string& buttonName) override;
-    void loseFocus() override;
+    void initialize();
+    NextState update(const utils::DeltaTime&, const input::Input&);
+    void activate();
+    void setFocusOnButton(const std::string& buttonName);
+    void loseFocus();
 
 private:
     std::unordered_map<std::string, utils::Vector2u> getButtonNamesWithIndices();

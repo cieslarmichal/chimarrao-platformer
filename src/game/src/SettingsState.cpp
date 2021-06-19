@@ -4,6 +4,7 @@
 
 #include "ProjectPathReader.h"
 #include "SettingsStateUIConfigBuilder.h"
+#include "TimerFactory.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
@@ -17,15 +18,17 @@ const auto buttonHoverColor = graphics::Color(205, 128, 66);
 SettingsState::SettingsState(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                              std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                             std::shared_ptr<components::ui::UIManager> uiManagerInit,
-                             std::unique_ptr<ButtonsNavigator> buttonsNavigator)
+                             std::shared_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       shouldBackToMenu{false},
       uiManager{std::move(uiManagerInit)},
-      buttonsNavigator{std::move(buttonsNavigator)}
+      buttonsNavigator{std::make_unique<GridButtonsNavigator>(
+          uiManager, SettingsStateUIConfigBuilder::getGridButtonsInfo(),
+          SettingsStateUIConfigBuilder::getIconNames(), buttonColor, buttonHoverColor,
+          utils::TimerFactory::createTimer(), utils::TimerFactory::createTimer())}
 {
     uiManager->createUI(SettingsStateUIConfigBuilder::createSettingsUIConfig(this));
-    this->buttonsNavigator->initialize();
+    buttonsNavigator->initialize();
 
     supportedResolutions = window->getSupportedResolutions();
     supportedFrameLimits = window->getSupportedFrameLimits();
