@@ -63,7 +63,7 @@ EditorMenuStateUIConfigBuilder::createBackgroundConfig(EditorMenuState*)
 {
     const auto backgroundColor = graphics::Color{172};
     return std::make_unique<components::ui::BackgroundConfig>(
-        "editorMenuBackground", utils::Vector2f{22.f, 5.f}, utils::Vector2f{36.f, 50.f},
+        "editorMenuBackground", utils::Vector2f{22.f, 5.f}, utils::Vector2f{37.f, 50.f},
         graphics::VisibilityLayer::Second, backgroundColor);
 }
 

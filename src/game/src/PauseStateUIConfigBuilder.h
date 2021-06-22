@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include "GridButtonInfo.h"
 
 namespace components::ui
 {
@@ -22,6 +23,8 @@ class PauseStateUIConfigBuilder
 {
 public:
     static std::unique_ptr<components::ui::UIConfig> createPauseUIConfig(PauseState*);
+    static std::vector<std::vector<GridButtonInfo>> getGridButtonsInfo();
+    static std::vector<std::string> getIconNames();
 
 private:
     static std::unique_ptr<components::ui::BackgroundConfig> createBackgroundConfig(PauseState*);
@@ -30,5 +33,7 @@ private:
     static std::vector<std::unique_ptr<components::ui::LabelConfig>> createLabelConfigs(PauseState*);
     static std::vector<std::unique_ptr<components::ui::TextFieldConfig>> createTextFieldConfigs(PauseState*);
     static std::vector<std::unique_ptr<components::ui::ImageConfig>> createImageConfigs(PauseState*);
+
+    static std::vector<std::string> iconNames;
 };
 }

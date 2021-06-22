@@ -20,7 +20,6 @@ EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowIn
                                  std::shared_ptr<components::ui::UIManager> uiManagerInit,
                                  std::shared_ptr<TileMap> tileMapInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
-      timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditor{false},
       shouldBackToMenu{false},
       uiManager{std::move(uiManagerInit)},
@@ -32,7 +31,6 @@ EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowIn
 {
     uiManager->createUI(EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(this));
     buttonsNavigator->initialize();
-    possibleLeaveFromStateTimer = utils::TimerFactory::createTimer();
 }
 
 NextState EditorMenuState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
@@ -73,7 +71,6 @@ void EditorMenuState::activate()
     active = true;
     uiManager->activate();
     buttonsNavigator->activate();
-    possibleLeaveFromStateTimer->restart();
 }
 
 void EditorMenuState::deactivate()

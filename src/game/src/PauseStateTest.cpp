@@ -13,6 +13,12 @@ using namespace game;
 using namespace components::ui;
 using namespace ::testing;
 
+namespace
+{
+const auto buttonColor = graphics::Color{65, 105, 200};
+const auto buttonHoverColor = graphics::Color(4, 8, 97);
+}
+
 class PauseStateTest_Base : public Test
 {
 public:
@@ -21,6 +27,15 @@ public:
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
+        expectHideAllIcons();
+        EXPECT_CALL(*uiManager, activateComponent("pauseIcon1Image"));
+        EXPECT_CALL(*uiManager, setColor("pauseBackToGameButton", buttonHoverColor));
+    }
+
+    void expectHideAllIcons()
+    {
+        EXPECT_CALL(*uiManager, deactivateComponent("pauseIcon1Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("pauseIcon2Image"));
     }
 
     std::shared_ptr<StrictMock<window::WindowMock>> window =
@@ -45,6 +60,8 @@ public:
 TEST_F(PauseStateTest, activate_shouldActivateUI)
 {
     EXPECT_CALL(*uiManager, activate());
+    expectHideAllIcons();
+    EXPECT_CALL(*uiManager, activateComponent("pauseIcon1Image"));
 
     pauseState.activate();
 }

@@ -30,8 +30,6 @@ public:
     void deactivate() override;
 
 private:
-    std::unique_ptr<utils::Timer> possibleLeaveFromStateTimer;
-    const float timeAfterLeaveStateIsPossible;
     bool shouldBackToEditor;
     bool shouldBackToMenu;
     std::shared_ptr<components::ui::UIManager> uiManager;

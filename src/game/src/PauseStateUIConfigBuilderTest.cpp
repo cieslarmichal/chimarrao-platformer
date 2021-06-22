@@ -18,8 +18,8 @@ using namespace ::testing;
 namespace
 {
 const std::vector<std::string> expectedLabelNames{"pauseTitleLabel"};
-
 const std::vector<std::string> expectedButtonNames{"pauseBackToGameButton", "pauseBackToMenuButton"};
+const std::vector<std::string> expectedImagesNames{"pauseIcon1Image", "pauseIcon2Image"};
 }
 class PauseStateUIConfigBuilderTest : public Test
 {
@@ -49,10 +49,34 @@ TEST_F(PauseStateUIConfigBuilderTest, createPauseUI)
                    std::back_inserter(actualButtonsNames),
                    [](const auto& buttonConfig) { return buttonConfig->uniqueName; });
 
+    std::vector<std::string> actualImageNames;
+    std::transform(pauseUI->imagesConfig.begin(), pauseUI->imagesConfig.end(),
+                   std::back_inserter(actualImageNames),
+                   [](const auto& imageConfig) { return imageConfig->uniqueName; });
+
     ASSERT_EQ(pauseUI->backgroundConfig->uniqueName, "pauseBackground");
     ASSERT_TRUE(compareVectors(actualLabelNames, expectedLabelNames));
     ASSERT_TRUE(compareVectors(actualButtonsNames, expectedButtonNames));
     ASSERT_TRUE(pauseUI->checkBoxesConfig.empty());
     ASSERT_TRUE(pauseUI->textFieldsConfig.empty());
-    ASSERT_TRUE(pauseUI->imagesConfig.empty());
+    ASSERT_TRUE(compareVectors(actualImageNames, expectedImagesNames));
+}
+
+
+TEST_F(PauseStateUIConfigBuilderTest, getGridButtonNames)
+{
+    const std::vector<std::vector<GridButtonInfo>> expectedGridButtonsInfo{
+        {GridButtonInfo{"pauseBackToGameButton", 0, false, false}},
+        {GridButtonInfo{"pauseBackToMenuButton", 1, false, false}}};
+
+    const auto actualGridButtonsInfo = PauseStateUIConfigBuilder::getGridButtonsInfo();
+
+    ASSERT_EQ(actualGridButtonsInfo, expectedGridButtonsInfo);
+}
+
+TEST_F(PauseStateUIConfigBuilderTest, getIconNames)
+{
+    const auto actualIconNames = PauseStateUIConfigBuilder::getIconNames();
+
+    ASSERT_EQ(actualIconNames, expectedImagesNames);
 }

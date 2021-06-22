@@ -22,7 +22,7 @@ const std::vector<std::string> expectedLabelNames{"editorMenuTitleLabel"};
 const std::vector<std::string> expectedButtonNames{"editorMenuBackToEditorButton", "editorMenuLoadMapButton",
                                                    "editorMenuNewMapButton", "editorMenuSaveMapButton",
                                                    "editorMenuBackToMenuButton"};
-std::vector<std::string> expectedImagesNames{"editorMenuIcon1Image", "editorMenuIcon2Image",
+const std::vector<std::string> expectedImagesNames{"editorMenuIcon1Image", "editorMenuIcon2Image",
                                              "editorMenuIcon3Image", "editorMenuIcon4Image",
                                              "editorMenuIcon5Image"};
 }
