@@ -41,7 +41,11 @@ const auto ctrlDescriptionPosition =
     utils::Vector2f{ctrlButtonPosition.x + controlButtonSize.x + descriptionOffset, ctrlButtonPosition.y};
 const auto eDescriptionPosition =
     utils::Vector2f{eButtonPosition.x + controlButtonSize.x + descriptionOffset, eButtonPosition.y};
+const auto iconSize = utils::Vector2f{4, 4};
+const std::vector<utils::Vector2f> iconPositions{backToMenuButtonPosition};
 }
+
+std::vector<std::string> ControlsStateUIConfigBuilder::iconNames{"controlsIcon1Image"};
 
 std::unique_ptr<components::ui::UIConfig>
 ControlsStateUIConfigBuilder::createControlsUIConfig(ControlsState* controlsState)
@@ -50,6 +54,19 @@ ControlsStateUIConfigBuilder::createControlsUIConfig(ControlsState* controlsStat
         createBackgroundConfig(controlsState), createButtonConfigs(controlsState),
         createCheckBoxConfigs(controlsState), createLabelConfigs(controlsState),
         createTextFieldConfigs(controlsState), createImageConfigs(controlsState));
+}
+
+std::vector<std::vector<GridButtonInfo>> ControlsStateUIConfigBuilder::getGridButtonsInfo()
+{
+    std::vector<std::vector<GridButtonInfo>> gridButtonsInfo{
+        {GridButtonInfo{"controlsBackToMenuButton", 0, false, false}}};
+
+    return gridButtonsInfo;
+}
+
+std::vector<std::string> ControlsStateUIConfigBuilder::getIconNames()
+{
+    return iconNames;
 }
 
 std::unique_ptr<components::ui::BackgroundConfig>
@@ -67,9 +84,16 @@ ControlsStateUIConfigBuilder::createButtonConfigs(ControlsState* controlsState)
 
     const auto backToMenuButtonSize = utils::Vector2f{13.f, 5.f};
     const auto backToMenuButtonOnMouseOver = [=]
-    { controlsState->uiManager->setColor("controlsBackToMenuButton", buttonHoverColor); };
+    {
+        controlsState->buttonsNavigator->setFocusOnButton("controlsBackToMenuButton");
+
+        controlsState->uiManager->setColor("controlsBackToMenuButton", buttonHoverColor);
+    };
     const auto backToMenuButtonOnMouseOut = [=]
-    { controlsState->uiManager->setColor("controlsBackToMenuButton", buttonColor); };
+    {
+        controlsState->buttonsNavigator->loseFocus();
+        controlsState->uiManager->setColor("controlsBackToMenuButton", buttonColor);
+    };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
     auto backToMenuClickAction = [=] { controlsState->shouldBackToMenu = true; };
@@ -189,6 +213,17 @@ ControlsStateUIConfigBuilder::createTextFieldConfigs(ControlsState*)
 std::vector<std::unique_ptr<components::ui::ImageConfig>>
 ControlsStateUIConfigBuilder::createImageConfigs(ControlsState*)
 {
-    return {};
+    std::vector<std::unique_ptr<components::ui::ImageConfig>> imagesConfig;
+
+    for (std::size_t iconIndex = 0; iconIndex < iconNames.size(); iconIndex++)
+    {
+        const auto iconPosition = utils::Vector2f{iconPositions[iconIndex].x - iconSize.x - 0.25f,
+                                                  iconPositions[iconIndex].y + 0.4f};
+        auto imageConfig = std::make_unique<components::ui::ImageConfig>(
+            iconNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First, iconPath);
+        imagesConfig.push_back(std::move(imageConfig));
+    }
+
+    return imagesConfig;
 }
 }

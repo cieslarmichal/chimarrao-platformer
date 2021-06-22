@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include "GridButtonInfo.h"
 
 namespace components::ui
 {
@@ -22,6 +23,8 @@ class ControlsStateUIConfigBuilder
 {
 public:
     static std::unique_ptr<components::ui::UIConfig> createControlsUIConfig(ControlsState*);
+    static std::vector<std::vector<GridButtonInfo>> getGridButtonsInfo();
+    static std::vector<std::string> getIconNames();
 
 private:
     static std::unique_ptr<components::ui::BackgroundConfig> createBackgroundConfig(ControlsState*);
@@ -31,5 +34,7 @@ private:
     static std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
     createTextFieldConfigs(ControlsState*);
     static std::vector<std::unique_ptr<components::ui::ImageConfig>> createImageConfigs(ControlsState*);
+
+    static std::vector<std::string> iconNames;
 };
 }

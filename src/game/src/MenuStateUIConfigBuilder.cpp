@@ -24,8 +24,6 @@ const auto buttonSize = utils::Vector2f{23, 6};
 const auto iconSize = utils::Vector2f{4, 4};
 }
 
-std::vector<std::string> MenuStateUIConfigBuilder::buttonNames{
-    "menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton", "menuExitButton"};
 std::vector<std::string> MenuStateUIConfigBuilder::iconNames{
     "menuIcon1Image", "menuIcon2Image", "menuIcon3Image", "menuIcon4Image", "menuIcon5Image"};
 

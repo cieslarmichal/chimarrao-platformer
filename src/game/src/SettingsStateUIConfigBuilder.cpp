@@ -42,9 +42,12 @@ const auto frameLimitIncreaseButtonPosition =
 const auto backToMenuButtonPosition = utils::Vector2f{34.5f, 48.f};
 const auto applyChangesButtonPosition = utils::Vector2f{55.f, 48.f};
 const auto iconSize = utils::Vector2f{4, 4};
-const std::vector<utils::Vector2f> sectionPositions{displayModeSectionPosition, resolutionSectionPosition,
-                                                    vsyncSectionPosition,       frameLimitSectionPosition,
-                                                    backToMenuButtonPosition,   applyChangesButtonPosition};
+const std::vector<utils::Vector2f> iconsPositions{displayModeSectionPosition,
+                                                  resolutionSectionPosition,
+                                                  vsyncSectionPosition,
+                                                  frameLimitSectionPosition,
+                                                  backToMenuButtonPosition + utils::Vector2f{0, 1},
+                                                  applyChangesButtonPosition + utils::Vector2f{0, 1}};
 }
 
 std::vector<std::string> SettingsStateUIConfigBuilder::iconNames{"settingsIcon1Image", "settingsIcon2Image",
@@ -318,7 +321,7 @@ SettingsStateUIConfigBuilder::createImageConfigs(SettingsState*)
     for (std::size_t iconIndex = 0; iconIndex < iconNames.size(); iconIndex++)
     {
         const auto iconPosition =
-            utils::Vector2f{sectionPositions[iconIndex].x - 4.f, sectionPositions[iconIndex].y - 0.5f};
+            utils::Vector2f{iconsPositions[iconIndex].x - 4.f, iconsPositions[iconIndex].y - 0.5f};
 
         auto imageConfig = std::make_unique<components::ui::ImageConfig>(
             iconNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First, iconPath);

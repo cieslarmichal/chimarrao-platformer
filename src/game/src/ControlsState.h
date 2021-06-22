@@ -3,6 +3,7 @@
 #include "State.h"
 #include "ui/UIConfig.h"
 #include "ui/UIManager.h"
+#include "GridButtonsNavigator.h"
 
 namespace game
 {
@@ -27,5 +28,6 @@ public:
 private:
     bool shouldBackToMenu;
     std::shared_ptr<components::ui::UIManager> uiManager;
+    std::unique_ptr<GridButtonsNavigator> buttonsNavigator;
 };
 }

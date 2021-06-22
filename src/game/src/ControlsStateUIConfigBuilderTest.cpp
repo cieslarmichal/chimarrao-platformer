@@ -31,6 +31,7 @@ const std::vector<std::string> expectedButtonNames{
     "controlsBackToMenuButton", "controlsUpButton",   "controlsDownButton",
     "controlsRightButton",      "controlsLeftButton", "controlsSpaceButton",
     "controlsShiftButton",      "controlsCtrlButton", "controlsEButton"};
+const std::vector<std::string> expectedImagesNames{"controlsIcon1Image"};
 }
 
 class ControlsStateUIConfigBuilderTest : public Test
@@ -61,10 +62,32 @@ TEST_F(ControlsStateUIConfigBuilderTest, createControlsUI)
                    std::back_inserter(actualButtonsNames),
                    [](const auto& buttonConfig) { return buttonConfig->uniqueName; });
 
+    std::vector<std::string> actualImageNames;
+    std::transform(controlsUI->imagesConfig.begin(), controlsUI->imagesConfig.end(),
+                   std::back_inserter(actualImageNames),
+                   [](const auto& imageConfig) { return imageConfig->uniqueName; });
+
     ASSERT_EQ(controlsUI->backgroundConfig->uniqueName, "controlsBackground");
     ASSERT_TRUE(compareVectors(actualLabelNames, expectedLabelNames));
     ASSERT_TRUE(compareVectors(actualButtonsNames, expectedButtonNames));
     ASSERT_TRUE(controlsUI->checkBoxesConfig.empty());
     ASSERT_TRUE(controlsUI->textFieldsConfig.empty());
-    ASSERT_TRUE(controlsUI->imagesConfig.empty());
+    ASSERT_TRUE(compareVectors(actualImageNames, expectedImagesNames));
+}
+
+TEST_F(ControlsStateUIConfigBuilderTest, getGridButtonNames)
+{
+    std::vector<std::vector<GridButtonInfo>> expectedGridButtonsInfo{
+        {GridButtonInfo{"controlsBackToMenuButton", 0, false, false}}};
+
+    const auto actualGridButtonsInfo = ControlsStateUIConfigBuilder::getGridButtonsInfo();
+
+    ASSERT_EQ(actualGridButtonsInfo, expectedGridButtonsInfo);
+}
+
+TEST_F(ControlsStateUIConfigBuilderTest, getIconNames)
+{
+    const auto actualIconNames = ControlsStateUIConfigBuilder::getIconNames();
+
+    ASSERT_EQ(actualIconNames, expectedImagesNames);
 }

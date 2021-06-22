@@ -36,7 +36,6 @@ private:
     static std::vector<std::unique_ptr<components::ui::TextFieldConfig>> createTextFieldConfigs(MenuState*);
     static std::vector<std::unique_ptr<components::ui::ImageConfig>> createImageConfigs(MenuState*);
 
-    static std::vector<std::string> buttonNames;
     static std::vector<std::string> iconNames;
 };
 }
