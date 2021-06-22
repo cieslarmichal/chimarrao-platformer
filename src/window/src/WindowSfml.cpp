@@ -66,10 +66,18 @@ bool WindowSfml::pollEvent(sf::Event& event) const
     return window->pollEvent(event);
 }
 
-utils::Vector2f WindowSfml::getMousePosition() const
+utils::Vector2f WindowSfml::getMousePosition(bool relative) const
 {
     const sf::Vector2i windowCoordinates = sf::Mouse::getPosition(*window);
     const sf::Vector2f worldCoordinates = window->mapPixelToCoords(windowCoordinates);
+    if(relative)
+    {
+        auto viewCenter = window->getView().getCenter();
+        auto viewSize = window->getView().getSize();
+        auto relativeOffset = viewCenter - viewSize / 2.0f;
+
+        return worldCoordinates - relativeOffset;
+    }
     return worldCoordinates;
 }
 

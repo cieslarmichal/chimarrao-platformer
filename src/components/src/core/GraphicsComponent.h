@@ -15,11 +15,13 @@ class GraphicsComponent : public Component
 public:
     GraphicsComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>, const utils::Vector2f& size,
                       const utils::Vector2f& position, const graphics::Color&,
-                      graphics::VisibilityLayer = graphics::VisibilityLayer::First);
+                      graphics::VisibilityLayer = graphics::VisibilityLayer::First,
+                      bool relativeRendering = false);
 
     GraphicsComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>, const utils::Vector2f& size,
                       const utils::Vector2f& position, const graphics::TexturePath&,
-                      graphics::VisibilityLayer = graphics::VisibilityLayer::First);
+                      graphics::VisibilityLayer = graphics::VisibilityLayer::First,
+                      bool relativeRendering = false);
     ~GraphicsComponent();
 
     void lateUpdate(utils::DeltaTime, const input::Input& input) override;

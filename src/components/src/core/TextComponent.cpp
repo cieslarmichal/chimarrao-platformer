@@ -9,13 +9,14 @@ TextComponent::TextComponent(ComponentOwner* ownerInit,
                              std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                              const utils::Vector2f& position, const std::string& text,
                              const graphics::FontPath& fontPath, unsigned characterSize,
-                             const graphics::Color& color, const utils::Vector2f& offset)
+                             const graphics::Color& color, const utils::Vector2f& offset,
+                             bool relativeRendering)
     : Component{ownerInit},
       rendererPool{std::move(rendererPoolInit)},
       transformOffset{offset},
       visibilityLayer{graphics::VisibilityLayer::First}
 {
-    id = rendererPool->acquireText(position, text, fontPath, characterSize, visibilityLayer, color);
+    id = rendererPool->acquireText(position, text, fontPath, characterSize, visibilityLayer, color, relativeRendering);
 }
 
 TextComponent::~TextComponent()

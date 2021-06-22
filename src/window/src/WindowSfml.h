@@ -23,7 +23,7 @@ public:
     void close() override;
     void setView(const sf::View&) override;
     bool pollEvent(sf::Event& event) const override;
-    utils::Vector2f getMousePosition() const override;
+    utils::Vector2f getMousePosition(bool = false) const override;
     WindowSettings getWindowSettings() const override;
     bool setDisplayMode(DisplayMode) override;
     bool setVerticalSync(bool vsyncEnabled) override;

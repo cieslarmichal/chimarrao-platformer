@@ -16,7 +16,10 @@ public:
     virtual void clear(const Color&) = 0;
     virtual void draw(const sf::Drawable&) = 0;
     virtual void setView() = 0;
+    virtual utils::Vector2f getViewSize() = 0;
     virtual void setViewSize(const utils::Vector2u& windowsSize) = 0;
     virtual void synchronizeViewSize() = 0;
+    virtual void setCenter(const utils::Vector2f&) = 0;
+    virtual const utils::Vector2f& getCenter() const = 0;
 };
 }

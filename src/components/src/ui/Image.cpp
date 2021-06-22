@@ -18,7 +18,7 @@ Image::Image(const std::shared_ptr<graphics::RendererPool>& rendererPool,
     coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(imageConfig->position, name);
     coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
         rendererPool, imageConfig->size, imageConfig->position, imageConfig->texturePath,
-        imageConfig->visibilityLayer);
+        imageConfig->visibilityLayer, true);
 
     coreComponentsOwner->loadDependentComponents();
 }

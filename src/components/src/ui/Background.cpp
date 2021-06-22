@@ -30,13 +30,13 @@ Background::Background(const std::shared_ptr<graphics::RendererPool>& rendererPo
     {
         coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
             rendererPool, backgroundConfig->size, backgroundConfig->position, *backgroundConfig->texturePath,
-            backgroundConfig->visibilityLayer);
+            backgroundConfig->visibilityLayer, true);
     }
     else
     {
         coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
             rendererPool, backgroundConfig->size, backgroundConfig->position, *backgroundConfig->color,
-            backgroundConfig->visibilityLayer);
+            backgroundConfig->visibilityLayer, true);
     }
 
     if (not backgroundConfig->keyActions.empty())

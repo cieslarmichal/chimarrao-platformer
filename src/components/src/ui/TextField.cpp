@@ -23,10 +23,10 @@ TextField::TextField(const std::shared_ptr<graphics::RendererPool>& rendererPool
     coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(textFieldConfig->position, name);
     coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
         rendererPool, textFieldConfig->size, textFieldConfig->position, textFieldConfig->color,
-        graphics::VisibilityLayer::First);
+        graphics::VisibilityLayer::First, true);
     coreComponentsOwner->addComponent<components::core::TextComponent>(
         rendererPool, textFieldConfig->size, "", textFieldConfig->fontPath, textFieldConfig->fontSize,
-        graphics::Color::White, textFieldConfig->textOffset);
+        graphics::Color::White, textFieldConfig->textOffset, true);
     coreComponentsOwner->addComponent<components::core::BoxColliderComponent>(textFieldConfig->size);
 
     clickInsideFieldAction = textFieldConfig->clickInFieldAction;

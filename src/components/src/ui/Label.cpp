@@ -17,7 +17,7 @@ Label::Label(const std::shared_ptr<graphics::RendererPool>& rendererPool,
     coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(labelConfig->position, name);
     coreComponentsOwner->addComponent<components::core::TextComponent>(
         rendererPool, labelConfig->position, labelConfig->text, labelConfig->fontPath, labelConfig->fontSize,
-        labelConfig->color);
+        labelConfig->color, utils::Vector2f{0, 0}, true);
 
     coreComponentsOwner->loadDependentComponents();
 }

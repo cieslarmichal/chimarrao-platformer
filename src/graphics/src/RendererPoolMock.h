@@ -29,5 +29,8 @@ public:
     MOCK_METHOD(void, setOutline, (const GraphicsId&, float, const Color&));
     MOCK_METHOD(void, setRenderingSize, (const utils::Vector2u&));
     MOCK_METHOD(void, synchronizeRenderingSize, ());
+    MOCK_METHOD(void, setCenter, (const utils::Vector2f&));
+    MOCK_METHOD(const utils::Vector2f&, getCenter, ());
+    MOCK_METHOD(const utils::Vector2f&, getViewSize, ());
 };
 }

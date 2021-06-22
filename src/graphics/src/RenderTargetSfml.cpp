@@ -11,7 +11,8 @@ sf::View getLetterboxView(sf::View view, unsigned windowWidth, unsigned windowHe
 
 RenderTargetSfml::RenderTargetSfml(std::shared_ptr<window::Window> windowInit,
                                    const utils::Vector2u& windowSizeInit, const utils::Vector2u& areaSizeInit)
-    : window{std::move(windowInit)}, windowSize{windowSizeInit}, areaSize{areaSizeInit}
+    : window{std::move(windowInit)}, windowSize{windowSizeInit}, areaSize{areaSizeInit},
+      center{boost::numeric_cast<float>(areaSize.x) / 2, boost::numeric_cast<float>(areaSize.y) / 2}
 {
 }
 
@@ -33,7 +34,7 @@ void RenderTargetSfml::draw(const sf::Drawable& drawable)
 void RenderTargetSfml::setView()
 {
     view.setSize(boost::numeric_cast<float>(areaSize.x), boost::numeric_cast<float>(areaSize.y));
-    view.setCenter(view.getSize().x / 2, view.getSize().y / 2);
+    view.setCenter(center);
     view = getLetterboxView(view, windowSize.x, windowSize.y);
     window->setView(view);
 
@@ -59,6 +60,21 @@ sf::Vector2u RenderTargetSfml::getSize() const
 bool RenderTargetSfml::setActive(bool)
 {
     return true;
+}
+
+void RenderTargetSfml::setCenter(const utils::Vector2f& center)
+{
+    this->center = center;
+}
+
+const utils::Vector2f& RenderTargetSfml::getCenter() const
+{
+    return center;
+}
+
+utils::Vector2f RenderTargetSfml::getViewSize()
+{
+    return view.getSize();
 }
 
 namespace

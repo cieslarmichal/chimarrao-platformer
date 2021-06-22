@@ -19,7 +19,7 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
                         static_cast<float>(position.y) * sizeInit.y},
         tileTypeToPathTexture(TileType::Grass),
         tileMap.getTile(position)->type ? graphics::VisibilityLayer::Second :
-                                          graphics::VisibilityLayer::Invisible);
+                                          graphics::VisibilityLayer::Invisible, true);
     graphicsComponent->setTexture(tileTypeToPathTexture(
         tileMap.getTile(position)->type ? *tileMap.getTile(position)->type : currentTileType));
     componentOwner->addComponent<components::core::BoxColliderComponent>(sizeInit);
