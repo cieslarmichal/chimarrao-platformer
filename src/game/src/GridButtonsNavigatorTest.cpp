@@ -161,6 +161,7 @@ TEST_F(
     expectHideAllIcons();
     EXPECT_CALL(*uiManager, activateComponent("settingsIcon1Image"));
     EXPECT_CALL(*uiManager, invokeClickAction("settingsFullscreenModeButton", input::InputKey::MouseLeft));
+    EXPECT_CALL(*uiManager, invokeMouseOutAction("settingsWindowModeButton"));
 
     const auto nextState = gridButtonsNavigator.update(deltaTime, input);
 
@@ -182,6 +183,7 @@ TEST_F(GridButtonsNavigatorTest,
     EXPECT_CALL(*uiManager, setColor("settingsApplyChangesButton", buttonHoverColor));
     expectHideAllIcons();
     EXPECT_CALL(*uiManager, activateComponent("settingsIcon5Image"));
+    EXPECT_CALL(*uiManager, invokeMouseOutAction("settingsBackToMenuButton"));
 
     const auto nextState = gridButtonsNavigator.update(deltaTime, input);
 
@@ -204,6 +206,7 @@ TEST_F(
     expectHideAllIcons();
     EXPECT_CALL(*uiManager, activateComponent("settingsIcon1Image"));
     EXPECT_CALL(*uiManager, invokeClickAction("settingsWindowModeButton", input::InputKey::MouseLeft));
+    EXPECT_CALL(*uiManager, invokeMouseOutAction("settingsFullscreenModeButton"));
 
     const auto nextState = gridButtonsNavigator.update(deltaTime, input);
 
@@ -225,6 +228,7 @@ TEST_F(
     EXPECT_CALL(*uiManager, setColor("settingsBackToMenuButton", buttonHoverColor));
     expectHideAllIcons();
     EXPECT_CALL(*uiManager, activateComponent("settingsIcon5Image"));
+    EXPECT_CALL(*uiManager, invokeMouseOutAction("settingsApplyChangesButton"));
 
     const auto nextState = gridButtonsNavigator.update(deltaTime, input);
 
@@ -241,6 +245,7 @@ TEST_F(GridButtonsNavigatorTest, update_withUpArrowClicked_shouldMoveToTheButton
     EXPECT_CALL(*uiManager, setColor("settingsBackToMenuButton", buttonHoverColor));
     expectHideAllIcons();
     EXPECT_CALL(*uiManager, activateComponent("settingsIcon5Image"));
+    EXPECT_CALL(*uiManager, invokeMouseOutAction("settingsWindowModeButton"));
 
     const auto nextState = gridButtonsNavigator.update(deltaTime, input);
 
@@ -258,6 +263,7 @@ TEST_F(GridButtonsNavigatorTest, update_withDownArrowClicked_shouldMoveToTheButt
     EXPECT_CALL(*uiManager, setColor("settingsResolutionDecreaseButton", buttonHoverColor));
     expectHideAllIcons();
     EXPECT_CALL(*uiManager, activateComponent("settingsIcon2Image"));
+    EXPECT_CALL(*uiManager, invokeMouseOutAction("settingsWindowModeButton"));
 
     const auto nextState = gridButtonsNavigator.update(deltaTime, input);
 

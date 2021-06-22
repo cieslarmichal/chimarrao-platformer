@@ -24,6 +24,9 @@ public:
     void setColor(graphics::Color);
     bool isActive() const override;
     void setText(const std::string&);
+    std::string getText() const;
+    void select();
+    void invokeMouseOutAction();
 
 private:
     std::string name;
@@ -35,5 +38,6 @@ private:
     std::unique_ptr<utils::Timer> deleteCharactersTimer;
     std::function<void()> clickInsideFieldAction;
     std::function<void(std::string)> clickOutsideFieldAction;
+    std::function<void()> mouseOutFieldAction;
 };
 }

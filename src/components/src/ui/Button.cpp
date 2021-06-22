@@ -92,6 +92,11 @@ void Button::setText(const std::string& text)
     coreComponentsOwner->getComponent<components::core::TextComponent>()->setText(text);
 }
 
+std::string Button::getText() const
+{
+    return coreComponentsOwner->getComponent<components::core::TextComponent>()->getText();
+}
+
 void Button::setClickAction(const std::vector<core::KeyAction>& keyActions)
 {
     if (auto clickableComponent = coreComponentsOwner->getComponent<components::core::ClickableComponent>())

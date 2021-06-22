@@ -27,7 +27,9 @@ public:
     void changeClickAction(const std::string& componentName, const std::vector<core::KeyAction>&) override;
     void invokeClickAction(const std::string& componentName,
                            input::InputKey keyAssignedToClickAction) override;
+    void invokeMouseOutAction(const std::string& componentName) override;
     void setText(const std::string& componentName, const std::string& text) override;
+    boost::optional<std::string> getText(const std::string& componentName) const override;
     void setChecked(const std::string& componentName, bool checked) override;
     void activateComponent(const std::string& componentName) override;
     void deactivateComponent(const std::string& componentName) override;

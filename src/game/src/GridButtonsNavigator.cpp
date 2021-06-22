@@ -35,8 +35,12 @@ GridButtonsNavigator::GridButtonsNavigator(std::shared_ptr<components::ui::UIMan
 
 void GridButtonsNavigator::initialize()
 {
-    uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
-                        buttonsHoverColor);
+    if (gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].highlightsWhenSelected)
+    {
+        uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                            buttonsHoverColor);
+    }
+
     setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
@@ -124,6 +128,8 @@ std::unordered_map<std::string, utils::Vector2u> GridButtonsNavigator::getButton
 
 void GridButtonsNavigator::changeSelectedButtonUp()
 {
+    const auto previousButtonName = gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName;
+
     unselectAllButtons();
 
     if (currentButtonIndex.y == 0)
@@ -147,10 +153,18 @@ void GridButtonsNavigator::changeSelectedButtonUp()
         }
     }
 
-    if (not selectedButtonChanged)
+    if (not selectedButtonChanged &&
+        gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].highlightsWhenSelected)
     {
         uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
                             buttonsHoverColor);
+    }
+
+    const auto currentButtonName = gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName;
+
+    if (previousButtonName != currentButtonName)
+    {
+        uiManager->invokeMouseOutAction(previousButtonName);
     }
 
     setIconAssociatedWithButtonVisible(currentButtonIndex);
@@ -158,6 +172,8 @@ void GridButtonsNavigator::changeSelectedButtonUp()
 
 void GridButtonsNavigator::changeSelectedButtonDown()
 {
+    const auto previousButtonName = gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName;
+
     unselectAllButtons();
 
     if (currentButtonIndex.y == gridButtonsInfo.size() - 1)
@@ -180,16 +196,27 @@ void GridButtonsNavigator::changeSelectedButtonDown()
         }
     }
 
-    if (not selectedButtonChanged)
+    if (not selectedButtonChanged &&
+        gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].highlightsWhenSelected)
     {
         uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
                             buttonsHoverColor);
     }
+
+    const auto currentButtonName = gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName;
+
+    if (previousButtonName != currentButtonName)
+    {
+        uiManager->invokeMouseOutAction(previousButtonName);
+    }
+
     setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
 void GridButtonsNavigator::changeSelectedButtonLeft()
 {
+    const auto previousButtonName = gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName;
+
     if (currentButtonIndex.x == 0)
     {
         if (gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].horizontalMoveCauseAction)
@@ -216,13 +243,27 @@ void GridButtonsNavigator::changeSelectedButtonLeft()
     }
 
     unselectAllButtons();
-    uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
-                        buttonsHoverColor);
+
+    if (gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].highlightsWhenSelected)
+    {
+        uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                            buttonsHoverColor);
+    }
+
+    const auto currentButtonName = gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName;
+
+    if (previousButtonName != currentButtonName)
+    {
+        uiManager->invokeMouseOutAction(previousButtonName);
+    }
+
     setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 
 void GridButtonsNavigator::changeSelectedButtonRight()
 {
+    const auto previousButtonName = gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName;
+
     if (currentButtonIndex.x == gridButtonsInfo[currentButtonIndex.y].size() - 1)
     {
         if (gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].horizontalMoveCauseAction)
@@ -248,8 +289,20 @@ void GridButtonsNavigator::changeSelectedButtonRight()
     }
 
     unselectAllButtons();
-    uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
-                        buttonsHoverColor);
+
+    if (gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].highlightsWhenSelected)
+    {
+        uiManager->setColor(gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName,
+                            buttonsHoverColor);
+    }
+
+    const auto currentButtonName = gridButtonsInfo[currentButtonIndex.y][currentButtonIndex.x].buttonName;
+
+    if (previousButtonName != currentButtonName)
+    {
+        uiManager->invokeMouseOutAction(previousButtonName);
+    }
+
     setIconAssociatedWithButtonVisible(currentButtonIndex);
 }
 

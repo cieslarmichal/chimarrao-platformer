@@ -17,6 +17,8 @@ public:
     void update(utils::DeltaTime, const input::Input&) override;
     void enable() override;
     void disable() override;
+    void invokeMouseOverAction();
+    void invokeMouseOutAction();
 
 private:
     std::shared_ptr<BoxColliderComponent> boxCollider;

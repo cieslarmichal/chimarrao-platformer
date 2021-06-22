@@ -57,9 +57,15 @@ PauseStateUIConfigBuilder::createButtonConfigs(PauseState* pauseState)
     std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
 
     const auto backToGameButtonOnMouseOver = [=]
-    { pauseState->uiManager->setColor("pauseBackToGameButton", buttonHoverColor); };
+    {
+        pauseState->buttonsNavigator->setFocusOnButton("pauseBackToGameButton");
+        pauseState->uiManager->setColor("pauseBackToGameButton", buttonHoverColor);
+    };
     const auto backToGameButtonOnMouseOut = [=]
-    { pauseState->uiManager->setColor("pauseBackToGameButton", buttonColor); };
+    {
+        pauseState->buttonsNavigator->loseFocus();
+        pauseState->uiManager->setColor("pauseBackToGameButton", buttonColor);
+    };
     auto backToGameButtonMouseOverActions =
         components::ui::MouseOverActions{backToGameButtonOnMouseOver, backToGameButtonOnMouseOut};
     auto backToGameClickAction = [=] { pauseState->shouldBackToGame = true; };
@@ -69,9 +75,15 @@ PauseStateUIConfigBuilder::createButtonConfigs(PauseState* pauseState)
     buttonsConfig.emplace_back(std::move(backToGameButtonConfig));
 
     const auto backToMenuButtonOnMouseOver = [=]
-    { pauseState->uiManager->setColor("pauseBackToMenuButton", buttonHoverColor); };
+    {
+        pauseState->buttonsNavigator->setFocusOnButton("pauseBackToMenuButton");
+        pauseState->uiManager->setColor("pauseBackToMenuButton", buttonHoverColor);
+    };
     const auto backToMenuButtonOnMouseOut = [=]
-    { pauseState->uiManager->setColor("pauseBackToMenuButton", buttonColor); };
+    {
+        pauseState->buttonsNavigator->loseFocus();
+        pauseState->uiManager->setColor("pauseBackToMenuButton", buttonColor);
+    };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
     auto backToMenuClickAction = [=] { pauseState->shouldBackToMenu = true; };

@@ -202,3 +202,23 @@ TEST_F(MouseOverComponentTest,
     ASSERT_TRUE(mouseWasOut(1));
     ASSERT_TRUE(mouseWasOver(1));
 }
+
+TEST_F(MouseOverComponentTest, shouldInvokeMouseOverAction)
+{
+    MouseOverComponent mouseOverComponent{&componentOwner, [this] { mouseOverAction(); },
+                                          [this] { mouseOutAction(); }};
+
+    mouseOverComponent.invokeMouseOverAction();
+
+    ASSERT_TRUE(mouseWasOver(1));
+}
+
+TEST_F(MouseOverComponentTest, shouldInvokeMouseOutAction)
+{
+    MouseOverComponent mouseOverComponent{&componentOwner, [this] { mouseOverAction(); },
+                                          [this] { mouseOutAction(); }};
+
+    mouseOverComponent.invokeMouseOutAction();
+
+    ASSERT_TRUE(mouseWasOut(1));
+}

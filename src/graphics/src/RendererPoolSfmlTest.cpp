@@ -408,3 +408,23 @@ TEST_F(RendererPoolSfmlTest, synchronizeRenderingSize)
 
     rendererPool.synchronizeRenderingSize();
 }
+
+TEST_F(RendererPoolSfmlTest, givenShape_getTextShouldReturnNone)
+{
+    EXPECT_CALL(*textureStorage, getTexture(validTextureRect)).WillOnce(ReturnRef(texture));
+    const auto shapeId = rendererPool.acquire(size1, position, validTexturePath);
+
+    const auto actualText = rendererPool.getText(shapeId);
+
+    ASSERT_EQ(actualText, boost::none);
+}
+
+TEST_F(RendererPoolSfmlTest, givenText_getTextShouldReturnTextValue)
+{
+    EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
+    const auto textId = rendererPool.acquireText(position, exampleText, validFontPath, characterSize);
+
+    const auto actualText = rendererPool.getText(textId);
+
+    ASSERT_EQ(*actualText, exampleText);
+}

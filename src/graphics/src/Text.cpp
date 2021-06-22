@@ -21,4 +21,9 @@ GraphicsId Text::getGraphicsId() const
     return id;
 }
 
+std::string Text::getText() const
+{
+    return getString();
+}
+
 }

@@ -7,6 +7,11 @@
 
 namespace game
 {
+namespace
+{
+const auto buttonColor = graphics::Color{65, 105, 200};
+const auto buttonHoverColor = graphics::Color(4, 8, 97);
+}
 
 SaveMapState::SaveMapState(const std::shared_ptr<window::Window>& windowInit,
                            const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
@@ -14,20 +19,27 @@ SaveMapState::SaveMapState(const std::shared_ptr<window::Window>& windowInit,
                            std::shared_ptr<components::ui::UIManager> uiManagerInit,
                            std::shared_ptr<TileMap> tileMapInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
-      timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditorMenu{false},
       uiManager{std::move(uiManagerInit)},
-      tileMap{std::move(tileMapInit)}
+      tileMap{std::move(tileMapInit)},
+      buttonsNavigator{std::make_unique<GridButtonsNavigator>(
+          uiManager, SaveMapStateUIConfigBuilder::getGridButtonsInfo(),
+          SaveMapStateUIConfigBuilder::getIconNames(), buttonColor, buttonHoverColor,
+          utils::TimerFactory::createTimer(), utils::TimerFactory::createTimer())}
 {
     uiManager->createUI(SaveMapStateUIConfigBuilder::createSaveMapUIConfig(this));
+    buttonsNavigator->initialize();
     uiManager->setText("saveMapNameTextField", tileMap->getName());
-    possibleLeaveFromStateTimer = utils::TimerFactory::createTimer();
 }
 
 NextState SaveMapState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    if (possibleLeaveFromStateTimer->getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
-        (input.isKeyPressed(input::InputKey::Escape) || shouldBackToEditorMenu))
+    if (const auto nextState = buttonsNavigator->update(deltaTime, input); nextState == NextState::Previous)
+    {
+        return NextState::Previous;
+    }
+
+    if (shouldBackToEditorMenu)
     {
         return NextState::Previous;
     }
@@ -51,8 +63,7 @@ StateType SaveMapState::getType() const
 void SaveMapState::activate()
 {
     active = true;
-
-    possibleLeaveFromStateTimer->restart();
+    buttonsNavigator->activate();
     uiManager->activate();
 }
 

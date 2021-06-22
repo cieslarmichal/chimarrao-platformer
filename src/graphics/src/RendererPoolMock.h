@@ -24,6 +24,7 @@ public:
     MOCK_METHOD(boost::optional<utils::Vector2f>, getPosition, (const GraphicsId&));
     MOCK_METHOD(void, setTexture, (const GraphicsId&, const TextureRect&, const utils::Vector2f&));
     MOCK_METHOD(void, setText, (const GraphicsId&, const std::string&));
+    MOCK_METHOD(boost::optional<std::string>, getText, (const GraphicsId&), (const override));
     MOCK_METHOD(void, setVisibility, (const GraphicsId&, VisibilityLayer));
     MOCK_METHOD(void, setColor, (const GraphicsId&, const Color&));
     MOCK_METHOD(void, setOutline, (const GraphicsId&, float, const Color&));

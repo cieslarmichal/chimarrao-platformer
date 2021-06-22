@@ -33,6 +33,7 @@ TextField::TextField(const std::shared_ptr<graphics::RendererPool>& rendererPool
 
     clickInsideFieldAction = textFieldConfig->clickInFieldAction;
     clickOutsideFieldAction = textFieldConfig->clickOutsideFieldAction;
+    mouseOutFieldAction = textFieldConfig->mouseOverActions->mouseOutAction;
 
     auto textFieldClickedAction = [&]
     {
@@ -42,6 +43,18 @@ TextField::TextField(const std::shared_ptr<graphics::RendererPool>& rendererPool
 
     coreComponentsOwner->addComponent<components::core::ClickableComponent>(
         std::move(textFieldClickedAction));
+
+    auto mouseOutAction = [&]
+    {
+        textFieldClicked = false;
+        mouseOutFieldAction();
+    };
+
+    if (textFieldConfig->mouseOverActions)
+    {
+        coreComponentsOwner->addComponent<components::core::MouseOverComponent>(
+            textFieldConfig->mouseOverActions->mouseOverAction, mouseOutAction);
+    }
 
     coreComponentsOwner->loadDependentComponents();
 }
@@ -124,9 +137,27 @@ void TextField::setText(const std::string& text)
     inputBuffer = text;
 }
 
+std::string TextField::getText() const
+{
+    return inputBuffer;
+}
+
 bool TextField::isActive() const
 {
     return coreComponentsOwner->areComponentEnabled();
+}
+
+void TextField::select()
+{
+    if (auto clickableComponent = coreComponentsOwner->getComponent<components::core::ClickableComponent>())
+    {
+        clickableComponent->invokeKeyAction(input::InputKey::MouseLeft);
+    }
+}
+
+void TextField::invokeMouseOutAction()
+{
+    textFieldClicked = false;
 }
 
 }

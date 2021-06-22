@@ -19,6 +19,8 @@ using namespace ::testing;
 namespace
 {
 const std::string mapName{"name"};
+const auto buttonColor = graphics::Color{65, 105, 200};
+const auto buttonHoverColor = graphics::Color(4, 8, 97);
 }
 
 class SaveMapStateTest_Base : public Test
@@ -31,6 +33,15 @@ public:
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
         EXPECT_CALL(*uiManager, setText("saveMapNameTextField", mapName));
+        expectHideAllIcons();
+        EXPECT_CALL(*uiManager, activateComponent("saveMapIcon1Image"));
+    }
+
+    void expectHideAllIcons()
+    {
+        EXPECT_CALL(*uiManager, deactivateComponent("saveMapIcon1Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("saveMapIcon2Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("saveMapIcon3Image"));
     }
 
     std::shared_ptr<StrictMock<window::WindowMock>> window =
@@ -56,6 +67,8 @@ public:
 TEST_F(SaveMapStateTest, activate_shouldActivateUI)
 {
     EXPECT_CALL(*uiManager, activate());
+    expectHideAllIcons();
+    EXPECT_CALL(*uiManager, activateComponent("saveMapIcon1Image"));
 
     saveMapState.activate();
 }

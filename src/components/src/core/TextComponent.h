@@ -23,6 +23,7 @@ public:
     const graphics::GraphicsId& getGraphicsId();
     void setColor(const graphics::Color&);
     void setText(const std::string&);
+    std::string getText() const;
     void enable() override;
     void disable() override;
 

@@ -45,6 +45,7 @@ public:
     const utils::Vector2f position2{12, 2};
     const FontPath fontPath{"fontPath"};
     const std::string text{"text"};
+    boost::optional<std::string> textFromRendererPool{text};
     const std::string updatedText{"wowow"};
     const unsigned characterSize{15};
     const Color color1{Color::Black};
@@ -166,5 +167,18 @@ TEST_F(TextComponentTest, shouldSetText)
     EXPECT_CALL(*rendererPool, setText(textComponent->getGraphicsId(), updatedText));
 
     textComponent->setText(updatedText);
+    expectReleaseGraphicsId();
+}
+
+TEST_F(TextComponentTest, getText)
+{
+    expectCreateTextComponent();
+    const auto textComponent = createTextComponent();
+    EXPECT_CALL(*rendererPool, getText(textComponent->getGraphicsId()))
+        .WillOnce(Return(textFromRendererPool));
+
+    const auto actualText = textComponent->getText();
+
+    ASSERT_EQ(actualText, text);
     expectReleaseGraphicsId();
 }

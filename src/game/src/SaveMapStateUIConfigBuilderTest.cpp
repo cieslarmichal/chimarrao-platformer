@@ -22,6 +22,8 @@ const std::vector<std::string> expectedLabelNames{"saveMapTitleLabel", "saveMapM
 const std::vector<std::string> expectedButtonNames{"saveMapCancelButton", "saveMapSaveButton"};
 const std::vector<std::string> expectedTextFieldsNames{"saveMapNameTextField"};
 const std::string name{"name"};
+const std::vector<std::string> expectedImagesNames{"saveMapIcon1Image", "saveMapIcon2Image",
+                                                   "saveMapIcon3Image"};
 }
 
 class SaveMapStateUIConfigBuilderTest_Base : public Test
@@ -69,10 +71,34 @@ TEST_F(SaveMapStateUIConfigBuilderTest, createSaveMapUI)
                    std::back_inserter(actualTextFieldsNames),
                    [](const auto& textFieldConfig) { return textFieldConfig->uniqueName; });
 
+    std::vector<std::string> actualImageNames;
+    std::transform(saveMapUI->imagesConfig.begin(), saveMapUI->imagesConfig.end(),
+                   std::back_inserter(actualImageNames),
+                   [](const auto& imageConfig) { return imageConfig->uniqueName; });
+
     ASSERT_EQ(saveMapUI->backgroundConfig->uniqueName, "saveMapBackground");
     ASSERT_TRUE(compareVectors(actualLabelNames, expectedLabelNames));
     ASSERT_TRUE(compareVectors(actualButtonsNames, expectedButtonNames));
     ASSERT_TRUE(saveMapUI->checkBoxesConfig.empty());
     ASSERT_TRUE(compareVectors(actualTextFieldsNames, expectedTextFieldsNames));
-    ASSERT_TRUE(saveMapUI->imagesConfig.empty());
+    ASSERT_TRUE(compareVectors(actualImageNames, expectedImagesNames));
+}
+
+TEST_F(SaveMapStateUIConfigBuilderTest, getGridButtonNames)
+{
+    const std::vector<std::vector<GridButtonInfo>> expectedGridButtonsInfo{
+        {GridButtonInfo{"saveMapNameTextField", 0, false, false, false}},
+        {GridButtonInfo{"saveMapCancelButton", 1, false, false},
+         {GridButtonInfo{"saveMapSaveButton", 2, false, false}}}};
+
+    const auto actualGridButtonsInfo = SaveMapStateUIConfigBuilder::getGridButtonsInfo();
+
+    ASSERT_EQ(actualGridButtonsInfo, expectedGridButtonsInfo);
+}
+
+TEST_F(SaveMapStateUIConfigBuilderTest, getIconNames)
+{
+    const auto actualIconNames = SaveMapStateUIConfigBuilder::getIconNames();
+
+    ASSERT_EQ(actualIconNames, expectedImagesNames);
 }

@@ -16,6 +16,7 @@ public:
          unsigned characterSize, const Color&);
 
     GraphicsId getGraphicsId() const;
+    std::string getText() const;
 
 private:
     GraphicsId id;

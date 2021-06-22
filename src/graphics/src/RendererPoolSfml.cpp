@@ -21,6 +21,13 @@ static auto& getLayeredTextByPosition(std::vector<LayeredText>& layeredTexts,
     const auto distance = std::vector<LayeredText>::size_type(std::distance(layeredTexts.cbegin(), position));
     return layeredTexts.at(distance);
 }
+
+static auto& getLayeredTextByPosition(const std::vector<LayeredText>& layeredTexts,
+                                      std::vector<LayeredText>::const_iterator position)
+{
+    const auto distance = std::vector<LayeredText>::size_type(std::distance(layeredTexts.cbegin(), position));
+    return layeredTexts.at(distance);
+}
 }
 
 RendererPoolSfml::RendererPoolSfml(std::unique_ptr<ContextRenderer> contextRendererInit,
@@ -155,6 +162,17 @@ void RendererPoolSfml::setText(const GraphicsId& id, const std::string& text)
         auto& layeredText = getLayeredTextByPosition(layeredTexts, layeredTextIter);
         layeredText.text.setString(text);
     }
+}
+
+boost::optional<std::string> RendererPoolSfml::getText(const GraphicsId& id) const
+{
+    if (const auto layeredTextIter = findLayeredTextPosition(id); layeredTextIter != layeredTexts.end())
+    {
+        const auto& layeredText = getLayeredTextByPosition(layeredTexts, layeredTextIter);
+        return layeredText.text.getText();
+    }
+
+    return boost::none;
 }
 
 void RendererPoolSfml::setVisibility(const GraphicsId& id, VisibilityLayer layer)

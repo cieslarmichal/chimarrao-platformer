@@ -60,4 +60,14 @@ void MouseOverComponent::disable()
     }
 }
 
+void MouseOverComponent::invokeMouseOverAction()
+{
+    mouseOverAction();
+}
+
+void MouseOverComponent::invokeMouseOutAction()
+{
+    mouseOutAction();
+}
+
 }

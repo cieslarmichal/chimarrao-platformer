@@ -23,8 +23,8 @@ const std::vector<std::string> expectedButtonNames{"editorMenuBackToEditorButton
                                                    "editorMenuNewMapButton", "editorMenuSaveMapButton",
                                                    "editorMenuBackToMenuButton"};
 const std::vector<std::string> expectedImagesNames{"editorMenuIcon1Image", "editorMenuIcon2Image",
-                                             "editorMenuIcon3Image", "editorMenuIcon4Image",
-                                             "editorMenuIcon5Image"};
+                                                   "editorMenuIcon3Image", "editorMenuIcon4Image",
+                                                   "editorMenuIcon5Image"};
 }
 class EditorMenuStateUIConfigBuilderTest : public Test
 {

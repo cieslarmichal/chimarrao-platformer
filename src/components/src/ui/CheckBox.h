@@ -24,6 +24,8 @@ public:
     void setColor(graphics::Color);
     void setChecked(bool isChecked);
     void toggle();
+    void invokeMouseOverAction();
+    void invokeMouseOutAction();
     bool isActive() const override;
 
 private:

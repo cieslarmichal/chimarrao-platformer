@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GridButtonsNavigator.h"
 #include "State.h"
 #include "Timer.h"
 #include "editor/TileMap.h"
@@ -30,11 +31,10 @@ public:
 private:
     void saveMap();
 
-    std::unique_ptr<utils::Timer> possibleLeaveFromStateTimer;
-    const float timeAfterLeaveStateIsPossible;
     bool shouldBackToEditorMenu;
     std::string currentMapName;
     std::shared_ptr<components::ui::UIManager> uiManager;
     std::shared_ptr<TileMap> tileMap;
+    std::unique_ptr<GridButtonsNavigator> buttonsNavigator;
 };
 }

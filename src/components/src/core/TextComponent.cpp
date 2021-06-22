@@ -47,6 +47,11 @@ void TextComponent::setText(const std::string& text)
     rendererPool->setText(id, text);
 }
 
+std::string TextComponent::getText() const
+{
+    return *rendererPool->getText(id);
+}
+
 void TextComponent::enable()
 {
     Component::enable();

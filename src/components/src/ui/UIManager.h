@@ -24,7 +24,9 @@ public:
     virtual void changeClickAction(const std::string& componentName, const std::vector<core::KeyAction>&) = 0;
     virtual void invokeClickAction(const std::string& componentName,
                                    input::InputKey keyAssignedToClickAction) = 0;
+    virtual void invokeMouseOutAction(const std::string& componentName) = 0;
     virtual void setText(const std::string& componentName, const std::string& text) = 0;
+    virtual boost::optional<std::string> getText(const std::string& componentName) const = 0;
     virtual void setChecked(const std::string& componentName, bool checked) = 0;
     virtual void activateComponent(const std::string& componentName) = 0;
     virtual void deactivateComponent(const std::string& componentName) = 0;

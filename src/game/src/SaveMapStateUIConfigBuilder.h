@@ -3,6 +3,8 @@
 #include <memory>
 #include <vector>
 
+#include "GridButtonInfo.h"
+
 namespace components::ui
 {
 struct UIConfig;
@@ -22,6 +24,8 @@ class SaveMapStateUIConfigBuilder
 {
 public:
     static std::unique_ptr<components::ui::UIConfig> createSaveMapUIConfig(SaveMapState*);
+    static std::vector<std::vector<GridButtonInfo>> getGridButtonsInfo();
+    static std::vector<std::string> getIconNames();
 
 private:
     static std::unique_ptr<components::ui::BackgroundConfig> createBackgroundConfig(SaveMapState*);
@@ -31,5 +35,7 @@ private:
     static std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
     createTextFieldConfigs(SaveMapState*);
     static std::vector<std::unique_ptr<components::ui::ImageConfig>> createImageConfigs(SaveMapState*);
+
+    static std::vector<std::string> iconNames;
 };
 }

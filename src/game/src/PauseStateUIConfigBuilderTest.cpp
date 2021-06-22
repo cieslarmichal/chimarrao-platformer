@@ -62,7 +62,6 @@ TEST_F(PauseStateUIConfigBuilderTest, createPauseUI)
     ASSERT_TRUE(compareVectors(actualImageNames, expectedImagesNames));
 }
 
-
 TEST_F(PauseStateUIConfigBuilderTest, getGridButtonNames)
 {
     const std::vector<std::vector<GridButtonInfo>> expectedGridButtonsInfo{

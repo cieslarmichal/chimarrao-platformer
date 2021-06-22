@@ -177,6 +177,20 @@ void DefaultUIManager::invokeClickAction(const std::string& componentName,
         auto& checkBox = tryToGetComponentByName(checkBoxes, componentName);
         checkBox->toggle();
     }
+    else if (getComponentType(componentName) == UIComponentType::TextField)
+    {
+        auto& textField = tryToGetComponentByName(textFields, componentName);
+        textField->select();
+    }
+}
+
+void DefaultUIManager::invokeMouseOutAction(const std::string& componentName)
+{
+    if (getComponentType(componentName) == UIComponentType::TextField)
+    {
+        auto& textField = tryToGetComponentByName(textFields, componentName);
+        textField->invokeMouseOutAction();
+    }
 }
 
 void DefaultUIManager::setText(const std::string& componentName, const std::string& text)
@@ -204,6 +218,32 @@ void DefaultUIManager::setText(const std::string& componentName, const std::stri
     default:
         break;
     }
+}
+
+boost::optional<std::string> DefaultUIManager::getText(const std::string& componentName) const
+{
+    switch (getComponentType(componentName))
+    {
+    case UIComponentType::Button:
+    {
+        const auto& button = tryToGetComponentByName(buttons, componentName);
+        return button->getText();
+    }
+    case UIComponentType::Label:
+    {
+        const auto& label = tryToGetComponentByName(labels, componentName);
+        return label->getText();
+    }
+    case UIComponentType::TextField:
+    {
+        const auto& textField = tryToGetComponentByName(textFields, componentName);
+        return textField->getText();
+    }
+    default:
+        break;
+    }
+
+    return boost::none;
 }
 
 void DefaultUIManager::setChecked(const std::string& componentName, bool checked)
