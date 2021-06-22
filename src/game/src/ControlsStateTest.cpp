@@ -13,6 +13,12 @@ using namespace game;
 using namespace components::ui;
 using namespace ::testing;
 
+namespace
+{
+const auto buttonColor = graphics::Color(251, 190, 102);
+const auto buttonHoverColor = graphics::Color(205, 128, 66);
+}
+
 class ControlsStateTest_Base : public Test
 {
 public:
@@ -21,8 +27,15 @@ public:
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
+        expectHideAllIcons();
+        EXPECT_CALL(*uiManager, activateComponent("controlsIcon1Image"));
+        EXPECT_CALL(*uiManager, setColor("controlsBackToMenuButton", buttonHoverColor));
     }
 
+    void expectHideAllIcons()
+    {
+        EXPECT_CALL(*uiManager, deactivateComponent("controlsIcon1Image"));
+    }
     std::shared_ptr<StrictMock<window::WindowMock>> window =
         std::make_shared<StrictMock<window::WindowMock>>();
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
@@ -45,6 +58,8 @@ public:
 TEST_F(ControlsStateTest, activate_shouldActivateUI)
 {
     EXPECT_CALL(*uiManager, activate());
+    expectHideAllIcons();
+    EXPECT_CALL(*uiManager, activateComponent("controlsIcon1Image"));
 
     controlsState.activate();
 }
