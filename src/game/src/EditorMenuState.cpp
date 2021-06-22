@@ -8,6 +8,11 @@
 
 namespace game
 {
+namespace
+{
+const auto buttonColor = graphics::Color{65, 105, 200};
+const auto buttonHoverColor = graphics::Color(4, 8, 97);
+}
 
 EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowInit,
                                  const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
@@ -18,19 +23,23 @@ EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowIn
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditor{false},
       shouldBackToMenu{false},
+      uiManager{std::move(uiManagerInit)},
       tileMap{std::move(tileMapInit)},
-      uiManager{std::move(uiManagerInit)}
+      buttonsNavigator{std::make_unique<GridButtonsNavigator>(
+          uiManager, EditorMenuStateUIConfigBuilder::getGridButtonsInfo(),
+          EditorMenuStateUIConfigBuilder::getIconNames(), buttonColor, buttonHoverColor,
+          utils::TimerFactory::createTimer(), utils::TimerFactory::createTimer())}
 {
     uiManager->createUI(EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(this));
+    buttonsNavigator->initialize();
     possibleLeaveFromStateTimer = utils::TimerFactory::createTimer();
 }
 
 NextState EditorMenuState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    if (possibleLeaveFromStateTimer->getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
-        input.isKeyPressed(input::InputKey::Escape))
+    if (const auto nextState = buttonsNavigator->update(deltaTime, input); nextState == NextState::Previous)
     {
-        shouldBackToEditor = true;
+        return NextState::Previous;
     }
 
     if (shouldBackToEditor)
@@ -63,6 +72,7 @@ void EditorMenuState::activate()
 {
     active = true;
     uiManager->activate();
+    buttonsNavigator->activate();
     possibleLeaveFromStateTimer->restart();
 }
 

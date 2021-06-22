@@ -1,5 +1,6 @@
 #pragma once
 
+#include "GridButtonsNavigator.h"
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
@@ -35,5 +36,6 @@ private:
     bool shouldBackToMenu;
     std::shared_ptr<components::ui::UIManager> uiManager;
     std::shared_ptr<TileMap> tileMap;
+    std::unique_ptr<GridButtonsNavigator> buttonsNavigator;
 };
 }

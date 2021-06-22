@@ -33,7 +33,7 @@ NextState ControlsState::update(const utils::DeltaTime& deltaTime, const input::
 {
     if (const auto nextState = buttonsNavigator->update(deltaTime, input); nextState == NextState::Previous)
     {
-        return NextState::Exit;
+        return NextState::Previous;
     }
 
     if (shouldBackToMenu)

@@ -15,10 +15,23 @@ const auto buttonColor = graphics::Color{65, 105, 200};
 const auto buttonHoverColor = graphics::Color(4, 8, 97);
 const auto textColor = graphics::Color(200, 200, 200);
 const auto buttonSize = utils::Vector2f{25.f, 5.f};
+const auto backToEditorButtonPosition = utils::Vector2f{28.f, 15.f};
+const auto loadMapButtonPosition = utils::Vector2f{28.f, 23.f};
+const auto newMapButtonPosition = utils::Vector2f{28.f, 31.f};
+const auto saveMapButtonPosition = utils::Vector2f{28.f, 39.f};
+const auto backToMenuButtonPosition = utils::Vector2f{28.f, 47.f};
+const std::vector<utils::Vector2f> iconsPositions{backToEditorButtonPosition, loadMapButtonPosition,
+                                                  newMapButtonPosition, saveMapButtonPosition,
+                                                  backToMenuButtonPosition};
+const auto iconSize = utils::Vector2f{4, 4};
 }
 
 namespace game
 {
+std::vector<std::string> EditorMenuStateUIConfigBuilder::iconNames{
+    "editorMenuIcon1Image", "editorMenuIcon2Image", "editorMenuIcon3Image", "editorMenuIcon4Image",
+    "editorMenuIcon5Image"};
+
 std::unique_ptr<components::ui::UIConfig>
 EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(EditorMenuState* editorMenuState)
 {
@@ -28,12 +41,29 @@ EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(EditorMenuState* editor
         createTextFieldConfigs(editorMenuState), createImageConfigs(editorMenuState));
 }
 
+std::vector<std::vector<GridButtonInfo>> EditorMenuStateUIConfigBuilder::getGridButtonsInfo()
+{
+    std::vector<std::vector<GridButtonInfo>> gridButtonsInfo{
+        {GridButtonInfo{"editorMenuBackToEditorButton", 0, false, false}},
+        {GridButtonInfo{"editorMenuLoadMapButton", 1, false, false}},
+        {GridButtonInfo{"editorMenuNewMapButton", 2, false, false}},
+        {GridButtonInfo{"editorMenuSaveMapButton", 3, false, false}},
+        {GridButtonInfo{"editorMenuBackToMenuButton", 4, false, false}}};
+
+    return gridButtonsInfo;
+}
+
+std::vector<std::string> EditorMenuStateUIConfigBuilder::getIconNames()
+{
+    return iconNames;
+}
+
 std::unique_ptr<components::ui::BackgroundConfig>
 EditorMenuStateUIConfigBuilder::createBackgroundConfig(EditorMenuState*)
 {
     const auto backgroundColor = graphics::Color{172};
     return std::make_unique<components::ui::BackgroundConfig>(
-        "editorMenuBackground", utils::Vector2f{25.f, 5.f}, utils::Vector2f{31.f, 50.f},
+        "editorMenuBackground", utils::Vector2f{22.f, 5.f}, utils::Vector2f{36.f, 50.f},
         graphics::VisibilityLayer::Second, backgroundColor);
 }
 
@@ -42,11 +72,16 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
 {
     std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
 
-    const auto backToEditorButtonPosition = utils::Vector2f{28.f, 15.f};
     const auto backToEditorButtonOnMouseOver = [=]
-    { editorMenuState->uiManager->setColor("editorMenuBackToEditorButton", buttonHoverColor); };
+    {
+        editorMenuState->buttonsNavigator->setFocusOnButton("editorMenuBackToEditorButton");
+        editorMenuState->uiManager->setColor("editorMenuBackToEditorButton", buttonHoverColor);
+    };
     const auto backToEditorButtonOnMouseOut = [=]
-    { editorMenuState->uiManager->setColor("editorMenuBackToEditorButton", buttonColor); };
+    {
+        editorMenuState->buttonsNavigator->loseFocus();
+        editorMenuState->uiManager->setColor("editorMenuBackToEditorButton", buttonColor);
+    };
     auto backToEditorButtonMouseOverActions =
         components::ui::MouseOverActions{backToEditorButtonOnMouseOver, backToEditorButtonOnMouseOut};
     auto backToEditorClickAction = [=] { editorMenuState->shouldBackToEditor = true; };
@@ -56,11 +91,16 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
         backToEditorButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(backToEditorButtonConfig));
 
-    const auto loadMapButtonPosition = utils::Vector2f{28.f, 23.f};
     const auto loadMapButtonOnMouseOver = [=]
-    { editorMenuState->uiManager->setColor("editorMenuLoadMapButton", buttonHoverColor); };
+    {
+        editorMenuState->buttonsNavigator->setFocusOnButton("editorMenuLoadMapButton");
+        editorMenuState->uiManager->setColor("editorMenuLoadMapButton", buttonHoverColor);
+    };
     const auto loadMapButtonOnMouseOut = [=]
-    { editorMenuState->uiManager->setColor("editorMenuLoadMapButton", buttonColor); };
+    {
+        editorMenuState->buttonsNavigator->loseFocus();
+        editorMenuState->uiManager->setColor("editorMenuLoadMapButton", buttonColor);
+    };
     auto loadMapButtonMouseOverActions =
         components::ui::MouseOverActions{loadMapButtonOnMouseOver, loadMapButtonOnMouseOut};
     auto loadMapClickAction = [=]
@@ -78,11 +118,16 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
         fontPath, utils::Vector2f{7.f, 0.75f}, loadMapClickAction, loadMapButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(loadMapButtonConfig));
 
-    const auto newMapButtonPosition = utils::Vector2f{28.f, 31.f};
     const auto newMapButtonOnMouseOver = [=]
-    { editorMenuState->uiManager->setColor("editorMenuNewMapButton", buttonHoverColor); };
+    {
+        editorMenuState->buttonsNavigator->setFocusOnButton("editorMenuNewMapButton");
+        editorMenuState->uiManager->setColor("editorMenuNewMapButton", buttonHoverColor);
+    };
     const auto newMapButtonOnMouseOut = [=]
-    { editorMenuState->uiManager->setColor("editorMenuNewMapButton", buttonColor); };
+    {
+        editorMenuState->buttonsNavigator->loseFocus();
+        editorMenuState->uiManager->setColor("editorMenuNewMapButton", buttonColor);
+    };
     auto newMapButtonMouseOverActions =
         components::ui::MouseOverActions{newMapButtonOnMouseOver, newMapButtonOnMouseOut};
     auto newMapClickAction = [=]
@@ -97,11 +142,16 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
         fontPath, utils::Vector2f{7.f, 0.75f}, newMapClickAction, newMapButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(newMapButtonConfig));
 
-    const auto saveMapButtonPosition = utils::Vector2f{28.f, 39.f};
     const auto saveMapButtonOnMouseOver = [=]
-    { editorMenuState->uiManager->setColor("editorMenuSaveMapButton", buttonHoverColor); };
+    {
+        editorMenuState->buttonsNavigator->setFocusOnButton("editorMenuSaveMapButton");
+        editorMenuState->uiManager->setColor("editorMenuSaveMapButton", buttonHoverColor);
+    };
     const auto saveMapButtonOnMouseOut = [=]
-    { editorMenuState->uiManager->setColor("editorMenuSaveMapButton", buttonColor); };
+    {
+        editorMenuState->buttonsNavigator->loseFocus();
+        editorMenuState->uiManager->setColor("editorMenuSaveMapButton", buttonColor);
+    };
     auto saveMapButtonMouseOverActions =
         components::ui::MouseOverActions{saveMapButtonOnMouseOver, saveMapButtonOnMouseOut};
     auto saveMapClickAction = [=]
@@ -114,11 +164,16 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
         fontPath, utils::Vector2f{6.f, 0.75f}, saveMapClickAction, saveMapButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(saveMapButtonConfig));
 
-    const auto backToMenuButtonPosition = utils::Vector2f{28.f, 47.f};
     const auto backToMenuButtonOnMouseOver = [=]
-    { editorMenuState->uiManager->setColor("editorMenuBackToMenuButton", buttonHoverColor); };
+    {
+        editorMenuState->buttonsNavigator->setFocusOnButton("editorMenuBackToMenuButton");
+        editorMenuState->uiManager->setColor("editorMenuBackToMenuButton", buttonHoverColor);
+    };
     const auto backToMenuButtonOnMouseOut = [=]
-    { editorMenuState->uiManager->setColor("editorMenuBackToMenuButton", buttonColor); };
+    {
+        editorMenuState->buttonsNavigator->loseFocus();
+        editorMenuState->uiManager->setColor("editorMenuBackToMenuButton", buttonColor);
+    };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
     auto backToMenuClickAction = [=]
@@ -165,7 +220,18 @@ EditorMenuStateUIConfigBuilder::createTextFieldConfigs(EditorMenuState*)
 std::vector<std::unique_ptr<components::ui::ImageConfig>>
 EditorMenuStateUIConfigBuilder::createImageConfigs(EditorMenuState*)
 {
-    return {};
+    std::vector<std::unique_ptr<components::ui::ImageConfig>> imagesConfig;
+
+    for (std::size_t iconIndex = 0; iconIndex < iconNames.size(); iconIndex++)
+    {
+        const auto iconPosition = utils::Vector2f{iconsPositions[iconIndex].x - iconSize.x - 0.25f,
+                                                  iconsPositions[iconIndex].y + 0.4f};
+        auto imageConfig = std::make_unique<components::ui::ImageConfig>(
+            iconNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First, iconPath);
+        imagesConfig.push_back(std::move(imageConfig));
+    }
+
+    return imagesConfig;
 }
 
 }
