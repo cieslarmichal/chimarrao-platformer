@@ -81,7 +81,8 @@ TEST_F(WindowSfmlTest, givenSameDisplayMode_shouldNotSetDisplayMode)
 
 TEST_F(WindowSfmlTest, givenFullscreenDisplayMode_shouldSetDisplayModeAndSetHighestResolution)
 {
-    auto highestResolution = SupportedResolutionsRetriever::retrieveHighestResolution();
+    const auto highestResolution = SupportedResolutionsRetriever::retrieveHighestResolution();
+    std::cerr << highestResolution;
     const utils::Vector2u windowSizeWithHighestResolution{highestResolution.width, highestResolution.height};
     EXPECT_CALL(*observationHandler, notifyObservers(windowSizeWithHighestResolution));
 

@@ -28,7 +28,7 @@ public:
 
 private:
     std::shared_ptr<components::core::ComponentOwner> componentOwner;
-    utils::Timer freezeClickableTileTimer;
+    std::unique_ptr<utils::Timer> freezeClickableTileTimer;
     const float timeAfterTileCanBeClicked;
 };
 }

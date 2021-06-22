@@ -13,7 +13,6 @@
 #include "ui/UIManagerMock.h"
 
 #include "ProjectPathReader.h"
-#include "StlOperators.h"
 
 using namespace game;
 using namespace components::ui;
@@ -34,7 +33,7 @@ public:
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
-        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{3.800000, 3.800000}, utils::Vector2f{10, 10},
+        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{6.f, 3.75f}, utils::Vector2f{10, 10},
                                            graphics::Color::White, graphics::VisibilityLayer::Second));
         EXPECT_CALL(*componentOwnersManager, add(_)).Times(5);
         EXPECT_CALL(*componentOwnersManager, processNewObjects());

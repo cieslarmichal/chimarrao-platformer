@@ -2,7 +2,6 @@
 
 #include "gtest/gtest.h"
 
-#include "ButtonsNavigatorMock.h"
 #include "FileAccessMock.h"
 #include "InputMock.h"
 #include "RendererPoolMock.h"
@@ -39,11 +38,22 @@ public:
         EXPECT_CALL(*window, getSupportedResolutions()).WillOnce(Return(resolutions));
         EXPECT_CALL(*window, getSupportedFrameLimits()).WillOnce(Return(frameLimits));
         EXPECT_CALL(*window, getWindowSettings()).WillOnce(Return(windowSettings));
-        EXPECT_CALL(*uiManager, setColor("settingsWindowModeButton", buttonHoverColor));
+        EXPECT_CALL(*uiManager, setColor("settingsWindowModeButton", buttonHoverColor)).Times(2);
         EXPECT_CALL(*uiManager, setText("settingsResolutionValueLabel", toString(selectedResolution)));
         EXPECT_CALL(*uiManager, setText("settingsFrameLimitValueLabel", std::to_string(selectedFrameLimit)));
         EXPECT_CALL(*uiManager, setChecked("settingsVsyncCheckBox", true));
-        EXPECT_CALL(*buttonsNavigator, initialize());
+        expectHideAllIcons();
+        EXPECT_CALL(*uiManager, activateComponent("settingsIcon1Image"));
+    }
+
+    void expectHideAllIcons()
+    {
+        EXPECT_CALL(*uiManager, deactivateComponent("settingsIcon1Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("settingsIcon2Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("settingsIcon3Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("settingsIcon4Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("settingsIcon5Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("settingsIcon6Image"));
     }
 
     std::shared_ptr<StrictMock<window::WindowMock>> window =
@@ -55,9 +65,6 @@ public:
     StrictMock<StatesMock> states;
     std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
         std::make_shared<StrictMock<components::ui::UIManagerMock>>()};
-    std::unique_ptr<StrictMock<ButtonsNavigatorMock>> buttonsNavigatorInit{
-        std::make_unique<StrictMock<ButtonsNavigatorMock>>()};
-    StrictMock<ButtonsNavigatorMock>* buttonsNavigator = buttonsNavigatorInit.get();
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
 };
@@ -65,15 +72,15 @@ public:
 class SettingsStateTest : public SettingsStateTest_Base
 {
 public:
-    SettingsState settingsState{window, rendererPool, fileAccess,
-                                states, uiManager,    std::move(buttonsNavigatorInit)};
+    SettingsState settingsState{window, rendererPool, fileAccess, states, uiManager};
 };
 
 TEST_F(SettingsStateTest, activate_shouldActivateUI)
 {
     EXPECT_CALL(*uiManager, activate());
-    EXPECT_CALL(*buttonsNavigator, activate());
     EXPECT_CALL(*window, getWindowSettings()).WillOnce(Return(windowSettings));
+    expectHideAllIcons();
+    EXPECT_CALL(*uiManager, activateComponent("settingsIcon1Image"));
 
     settingsState.activate();
 }
@@ -99,7 +106,6 @@ TEST_F(SettingsStateTest, render_shouldRenderAllFromRendererPool)
 
 TEST_F(SettingsStateTest, update_shouldUpdateUI)
 {
-    EXPECT_CALL(*buttonsNavigator, update(deltaTime, Ref(input)));
     EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
 
     settingsState.update(deltaTime, input);

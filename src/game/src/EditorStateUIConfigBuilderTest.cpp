@@ -5,6 +5,7 @@
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
+#include "TimerMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapMock.h"
 #include "ui/UIManagerMock.h"
@@ -43,8 +44,11 @@ public:
     StrictMock<StatesMock> states;
     std::shared_ptr<components::ui::UIManagerMock> uiManager{
         std::make_shared<NiceMock<components::ui::UIManagerMock>>()};
+    std::unique_ptr<NiceMock<utils::TimerMock>> timerInit{std::make_unique<NiceMock<utils::TimerMock>>()};
+    NiceMock<utils::TimerMock>* timer{timerInit.get()};
 
-    EditorState editorState{window, rendererPool, fileAccess, states, uiManager, tileMap};
+    EditorState editorState{window,    rendererPool, fileAccess,          states,
+                            uiManager, tileMap,      std::move(timerInit)};
 };
 
 TEST_F(EditorStateUIConfigBuilderTest, createEditorUI)

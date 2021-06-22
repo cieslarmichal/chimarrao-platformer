@@ -4,7 +4,7 @@
 
 #include "EditorMenuState.h"
 #include "EditorStateUIConfigBuilder.h"
-#include "ProjectPathReader.h"
+#include "TimerFactory.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
@@ -21,46 +21,46 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                          const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                          std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                          std::shared_ptr<components::ui::UIManager> uiManagerInit,
-                         std::shared_ptr<TileMap> tileMapInit)
+                         std::shared_ptr<TileMap> tileMapInit, std::unique_ptr<utils::Timer> moveTimer)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
-      tileMap{std::move(tileMapInit)},
       paused{false},
+      moveTimer{std::move(moveTimer)},
       timeAfterStateCouldBePaused{0.5f},
-      timeAfterButtonsCanBeClicked{0.3f},
-      uiManager{std::move(uiManagerInit)},
       timeBetweenTileMoves{0.005f},
-      currentTileType{std::make_shared<TileType>(defaultTileType)}
+      currentTileType{std::make_shared<TileType>(defaultTileType)},
+      tileMap{std::move(tileMapInit)},
+      uiManager{std::move(uiManagerInit)}
 {
     uiManager->createUI(EditorStateUIConfigBuilder::createEditorUIConfig(this));
     currentTilePath = tileTypeToPathTexture(*(currentTileType));
     tileMap->setTileMapInfo(TileMapInfo{"", tileMap->getSize(), {}});
     setTileMap();
 
-    moveTimer.start();
+    pauseTimer = utils::TimerFactory::createTimer();
 }
 
 NextState EditorState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    if (pauseTimer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
+    if (pauseTimer->getElapsedSeconds() > timeAfterStateCouldBePaused &&
         input.isKeyPressed(input::InputKey::Escape))
     {
         pause();
     }
 
-    if (moveTimer.getElapsedSeconds() > timeBetweenTileMoves && input.isKeyPressed(input::InputKey::Left) &&
+    if (moveTimer->getElapsedSeconds() > timeBetweenTileMoves && input.isKeyPressed(input::InputKey::Left) &&
         layoutTileMap.front().getPosition().x < 0)
     {
-        moveTimer.restart();
+        moveTimer->restart();
         for (auto& layoutTile : layoutTileMap)
         {
             layoutTile.moveTile({.3f, 0.f});
         }
     }
-    else if (moveTimer.getElapsedSeconds() > timeBetweenTileMoves &&
+    else if (moveTimer->getElapsedSeconds() > timeBetweenTileMoves &&
              input.isKeyPressed(input::InputKey::Right) &&
              layoutTileMap.back().getPosition().x + tileSizeX > rendererPoolSizeX)
     {
-        moveTimer.restart();
+        moveTimer->restart();
         for (auto& layoutTile : layoutTileMap)
         {
             layoutTile.moveTile({-0.3f, 0.f});
@@ -104,8 +104,7 @@ void EditorState::activate()
 {
     active = true;
     paused = false;
-    freezeClickableButtonsTimer.restart();
-    pauseTimer.restart();
+    pauseTimer->restart();
 
     for (auto& layoutTile : layoutTileMap)
     {
@@ -119,7 +118,7 @@ void EditorState::activate()
 void EditorState::deactivate()
 {
     active = false;
-    pauseTimer.restart();
+    pauseTimer->restart();
     for (auto& layoutTile : layoutTileMap)
     {
         layoutTile.deactivate();
@@ -130,7 +129,6 @@ void EditorState::deactivate()
 void EditorState::pause()
 {
     paused = true;
-    buttonsActionsFrozen = true;
 
     for (auto& layoutTile : layoutTileMap)
     {

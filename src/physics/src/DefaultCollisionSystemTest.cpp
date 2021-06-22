@@ -158,8 +158,7 @@ TEST_F(DefaultCollisionSystemTest,
                 canMoveUp(componentOwnerWithDefaultCollider1));
 }
 
-TEST_F(DefaultCollisionSystemTest,
-       defaultColliderIntersectingWithTileCollider_shouldNotBlockAnyMovements)
+TEST_F(DefaultCollisionSystemTest, defaultColliderIntersectingWithTileCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithDefaultCollider1,
                                                                  componentOwnerWithTileCollider2};
@@ -171,8 +170,7 @@ TEST_F(DefaultCollisionSystemTest,
                 canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
 }
 
-TEST_F(DefaultCollisionSystemTest,
-       defaultColliderIntersectingWithPlayerCollider_shouldNotBlockAnyMovements)
+TEST_F(DefaultCollisionSystemTest, defaultColliderIntersectingWithPlayerCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithDefaultCollider1,
                                                                  componentOwnerWithPlayerCollider2};
@@ -184,8 +182,7 @@ TEST_F(DefaultCollisionSystemTest,
                 canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
 }
 
-TEST_F(DefaultCollisionSystemTest,
-       tileColliderIntersectingWithDefaultCollider_shouldNotBlockAnyMovements)
+TEST_F(DefaultCollisionSystemTest, tileColliderIntersectingWithDefaultCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithTileCollider1,
                                                                  componentOwnerWithDefaultCollider2};
@@ -197,8 +194,7 @@ TEST_F(DefaultCollisionSystemTest,
                 canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
 }
 
-TEST_F(DefaultCollisionSystemTest,
-       tileColliderIntersectingWithTileCollider_shouldNotBlockAnyMovements)
+TEST_F(DefaultCollisionSystemTest, tileColliderIntersectingWithTileCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithTileCollider1,
                                                                  componentOwnerWithTileCollider2};
@@ -210,8 +206,7 @@ TEST_F(DefaultCollisionSystemTest,
                 canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
 }
 
-TEST_F(DefaultCollisionSystemTest,
-       tileColliderIntersectingWithPlayerCollider_shouldNotBlockAnyMovements)
+TEST_F(DefaultCollisionSystemTest, tileColliderIntersectingWithPlayerCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithTileCollider1,
                                                                  componentOwnerWithPlayerCollider2};
@@ -238,8 +233,7 @@ TEST_F(DefaultCollisionSystemTest,
                 canMoveUp(componentOwnerWithPlayerCollider1));
 }
 
-TEST_F(DefaultCollisionSystemTest,
-       playerColliderIntersectingWithTileCollider_shouldNotBlockAnyMovements)
+TEST_F(DefaultCollisionSystemTest, playerColliderIntersectingWithTileCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithPlayerCollider1,
                                                                  componentOwnerWithTileCollider2};
@@ -253,8 +247,7 @@ TEST_F(DefaultCollisionSystemTest,
                 canMoveUp(componentOwnerWithPlayerCollider1));
 }
 
-TEST_F(DefaultCollisionSystemTest,
-       playerColliderIntersectingWithPlayerCollider_shouldNotBlockAnyMovements)
+TEST_F(DefaultCollisionSystemTest, playerColliderIntersectingWithPlayerCollider_shouldNotBlockAnyMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithPlayerCollider1,
                                                                  componentOwnerWithPlayerCollider2};

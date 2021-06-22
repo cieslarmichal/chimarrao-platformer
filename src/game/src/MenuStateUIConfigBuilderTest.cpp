@@ -2,7 +2,6 @@
 
 #include "gtest/gtest.h"
 
-#include "ButtonsNavigatorMock.h"
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
@@ -22,6 +21,12 @@ const std::vector<std::string> expectedButtonNames{
     "menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton", "menuExitButton"};
 const std::vector<std::string> expectedImagesNames{"menuIcon1Image", "menuIcon2Image", "menuIcon3Image",
                                                    "menuIcon4Image", "menuIcon5Image"};
+const std::vector<std::vector<GridButtonInfo>> expectedGridButtonsInfo{
+    {GridButtonInfo{"menuPlayButton", 0, false, false}},
+    {GridButtonInfo{"menuMapEditorButton", 1, false, false}},
+    {GridButtonInfo{"menuControlsButton", 2, false, false}},
+    {GridButtonInfo{"menuSettingsButton", 3, false, false}},
+    {GridButtonInfo{"menuExitButton", 4, false, false}}};
 }
 class MenuStateUIConfigBuilderTest : public Test
 {
@@ -34,10 +39,7 @@ public:
     NiceMock<StatesMock> states;
     std::shared_ptr<components::ui::UIManagerMock> uiManager{
         std::make_shared<NiceMock<components::ui::UIManagerMock>>()};
-    std::unique_ptr<NiceMock<ButtonsNavigatorMock>> buttonsNavigatorInit{
-        std::make_unique<NiceMock<ButtonsNavigatorMock>>()};
-    NiceMock<ButtonsNavigatorMock>* buttonsNavigator = buttonsNavigatorInit.get();
-    MenuState menuState{window, rendererPool, fileAccess, states, uiManager, std::move(buttonsNavigatorInit)};
+    MenuState menuState{window, rendererPool, fileAccess, states, uiManager};
 };
 
 TEST_F(MenuStateUIConfigBuilderTest, createMenuUI)
@@ -64,9 +66,9 @@ TEST_F(MenuStateUIConfigBuilderTest, createMenuUI)
 
 TEST_F(MenuStateUIConfigBuilderTest, getGridButtonNames)
 {
-    const auto actualButtonNames = MenuStateUIConfigBuilder::getButtonNames();
+    const auto actualGridButtonsInfo = MenuStateUIConfigBuilder::getGridButtonsInfo();
 
-    ASSERT_EQ(actualButtonNames, expectedButtonNames);
+    ASSERT_EQ(actualGridButtonsInfo, expectedGridButtonsInfo);
 }
 
 TEST_F(MenuStateUIConfigBuilderTest, getIconNames)

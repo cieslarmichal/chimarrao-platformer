@@ -3,7 +3,7 @@
 #include <utility>
 
 #include "EditorMenuStateUIConfigBuilder.h"
-#include "ProjectPathReader.h"
+#include "TimerFactory.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
@@ -18,16 +18,16 @@ EditorMenuState::EditorMenuState(const std::shared_ptr<window::Window>& windowIn
       timeAfterLeaveStateIsPossible{0.5f},
       shouldBackToEditor{false},
       shouldBackToMenu{false},
-      uiManager{std::move(uiManagerInit)},
-      tileMap{tileMapInit}
+      tileMap{std::move(tileMapInit)},
+      uiManager{std::move(uiManagerInit)}
 {
     uiManager->createUI(EditorMenuStateUIConfigBuilder::createEditorMenuUIConfig(this));
-    possibleLeaveFromStateTimer.start();
+    possibleLeaveFromStateTimer = utils::TimerFactory::createTimer();
 }
 
 NextState EditorMenuState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    if (possibleLeaveFromStateTimer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
+    if (possibleLeaveFromStateTimer->getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
         input.isKeyPressed(input::InputKey::Escape))
     {
         shouldBackToEditor = true;
@@ -63,7 +63,7 @@ void EditorMenuState::activate()
 {
     active = true;
     uiManager->activate();
-    possibleLeaveFromStateTimer.restart();
+    possibleLeaveFromStateTimer->restart();
 }
 
 void EditorMenuState::deactivate()

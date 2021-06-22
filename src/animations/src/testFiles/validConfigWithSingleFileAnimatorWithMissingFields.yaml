@@ -10,3 +10,5 @@ singleFileAnimators:
         startYPosition: 85
         numberOfTextures: 1
         timeBetweenTexturesInSeconds: 0.1
+        loopsAllowed: true
+        interruptionAllowed: true

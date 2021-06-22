@@ -10,7 +10,6 @@ Game::Game(std::shared_ptr<window::Window> windowInit, std::shared_ptr<input::In
            std::unique_ptr<States> statesInit)
     : window{std::move(windowInit)}, inputManager{std::move(inputManagerInit)}, states{std::move(statesInit)}
 {
-    timer.start();
     states->addNextState(StateType::Menu);
 }
 

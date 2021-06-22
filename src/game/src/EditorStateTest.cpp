@@ -8,6 +8,7 @@
 #include "InputMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
+#include "TimerMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapMock.h"
 #include "ui/UIManagerMock.h"
@@ -24,7 +25,6 @@ const utils::Vector2f size{0, 0};
 const utils::Vector2f offset{1, 1};
 const utils::Vector2f newPosition{1, 1};
 std::shared_ptr<Tile> tile = std::make_shared<Tile>();
-
 const std::string mapName{"name"};
 const utils::Vector2i mapSize{1, 1};
 const auto grassTexturePath = utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/2.png";
@@ -53,6 +53,8 @@ public:
     std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
         std::make_shared<StrictMock<components::ui::UIManagerMock>>()};
     std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
+    std::unique_ptr<StrictMock<utils::TimerMock>> timerInit{std::make_unique<StrictMock<utils::TimerMock>>()};
+    StrictMock<utils::TimerMock>* timer{timerInit.get()};
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
 };
@@ -60,7 +62,8 @@ public:
 class EditorStateTest : public EditorStateTest_Base
 {
 public:
-    EditorState editorState{window, rendererPool, fileAccess, states, uiManager, tileMap};
+    EditorState editorState{window,    rendererPool, fileAccess,          states,
+                            uiManager, tileMap,      std::move(timerInit)};
 };
 
 TEST_F(EditorStateTest, activate_shouldActivateUI)
@@ -88,6 +91,8 @@ TEST_F(EditorStateTest, render_shouldRenderAllFromRendererPool)
 
     editorState.render();
 }
+
+// TODO: uncomment
 
 // TEST_F(EditorStateTest, update_shouldUpdateUI)
 //{

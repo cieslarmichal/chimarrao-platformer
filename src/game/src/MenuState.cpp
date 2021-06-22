@@ -4,27 +4,39 @@
 
 #include "MenuStateUIConfigBuilder.h"
 #include "PaginatedButtonsNavigator.h"
+#include "TimerFactory.h"
 
 namespace game
 {
+namespace
+{
+const auto buttonColor = graphics::Color(251, 190, 102);
+const auto buttonHoverColor = graphics::Color(205, 128, 66);
+}
 
 MenuState::MenuState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                      std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                     std::shared_ptr<components::ui::UIManager> uiManagerInit,
-                     std::unique_ptr<ButtonsNavigator> buttonsNavigator)
+                     std::shared_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       uiManager{std::move(uiManagerInit)},
-      buttonsNavigator{std::move(buttonsNavigator)},
+      buttonsNavigator{std::make_unique<GridButtonsNavigator>(
+          uiManager, MenuStateUIConfigBuilder::getGridButtonsInfo(), MenuStateUIConfigBuilder::getIconNames(),
+          buttonColor, buttonHoverColor, utils::TimerFactory::createTimer(),
+          utils::TimerFactory::createTimer())},
       shouldExit{false}
 {
     uiManager->createUI(MenuStateUIConfigBuilder::createMenuUIConfig(this));
-    this->buttonsNavigator->initialize();
+    buttonsNavigator->initialize();
 }
 
 NextState MenuState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    buttonsNavigator->update(deltaTime, input);
+    if (const auto nextState = buttonsNavigator->update(deltaTime, input); nextState == NextState::Previous)
+    {
+        return NextState::Exit;
+    }
+
     uiManager->update(deltaTime, input);
 
     if (shouldExit)

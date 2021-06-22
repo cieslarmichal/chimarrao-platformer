@@ -12,7 +12,7 @@ class AnimationsFromSettingsLoaderTest : public Test
 {
 public:
     std::vector<graphics::TextureRect> textureRects{{"1"}, {"2"}, {"3"}};
-    const Animation animation{textureRects, 60};
+    const Animation animation{textureRects, 60, false, false};
     std::unordered_map<AnimationType, Animation> nonEmptyAnimations{{AnimationType::Jump, animation}};
     std::unordered_map<AnimationType, Animation> animations;
     const std::vector<MultipleFilesAnimationSettings> emptyAnimationsSettings{};

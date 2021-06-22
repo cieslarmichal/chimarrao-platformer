@@ -2,7 +2,6 @@
 
 #include "gtest/gtest.h"
 
-#include "ButtonsNavigatorMock.h"
 #include "FileAccessMock.h"
 #include "InputMock.h"
 #include "RendererPoolMock.h"
@@ -30,7 +29,18 @@ public:
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
-        EXPECT_CALL(*buttonsNavigator, initialize());
+        expectHideAllIcons();
+        EXPECT_CALL(*uiManager, activateComponent("menuIcon1Image"));
+        EXPECT_CALL(*uiManager, setColor("menuPlayButton", buttonHoverColor));
+    }
+
+    void expectHideAllIcons()
+    {
+        EXPECT_CALL(*uiManager, deactivateComponent("menuIcon1Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("menuIcon2Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("menuIcon3Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("menuIcon4Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("menuIcon5Image"));
     }
 
     std::shared_ptr<StrictMock<window::WindowMock>> window =
@@ -42,22 +52,20 @@ public:
     StrictMock<StatesMock> states;
     std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
         std::make_shared<StrictMock<components::ui::UIManagerMock>>()};
-    std::unique_ptr<StrictMock<ButtonsNavigatorMock>> buttonsNavigatorInit{
-        std::make_unique<StrictMock<ButtonsNavigatorMock>>()};
-    StrictMock<ButtonsNavigatorMock>* buttonsNavigator = buttonsNavigatorInit.get();
     StrictMock<input::InputMock> input;
 };
 
 class MenuStateTest : public MenuStateTest_Base
 {
 public:
-    MenuState menuState{window, rendererPool, fileAccess, states, uiManager, std::move(buttonsNavigatorInit)};
+    MenuState menuState{window, rendererPool, fileAccess, states, uiManager};
 };
 
 TEST_F(MenuStateTest, activate_shouldActivateUI)
 {
     EXPECT_CALL(*uiManager, activate());
-    EXPECT_CALL(*buttonsNavigator, activate());
+    expectHideAllIcons();
+    EXPECT_CALL(*uiManager, activateComponent("menuIcon1Image"));
 
     menuState.activate();
 }
@@ -83,7 +91,6 @@ TEST_F(MenuStateTest, render_shouldRenderAllFromRendererPool)
 
 TEST_F(MenuStateTest, update_shouldUpdateUI)
 {
-    EXPECT_CALL(*buttonsNavigator, update(deltaTime, Ref(input)));
     EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
 
     menuState.update(deltaTime, input);

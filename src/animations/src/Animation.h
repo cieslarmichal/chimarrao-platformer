@@ -13,11 +13,14 @@ using TextureRectChanged = bool;
 class Animation
 {
 public:
-    explicit Animation(std::vector<graphics::TextureRect> consecutiveTextureRects, float timeBetweenTextures);
+    explicit Animation(std::vector<graphics::TextureRect> consecutiveTextureRects, float timeBetweenTextures,
+                       bool loopsAllowed, bool interruptionAllowed);
 
     TextureRectChanged update(const utils::DeltaTime&);
     void reset();
-    [[nodiscard]] const graphics::TextureRect& getCurrentTextureRect() const;
+    const graphics::TextureRect& getCurrentTextureRect() const;
+    bool hasAnimationFinished();
+    bool areInterruptionsAllowed();
 
 private:
     void moveToNextTextureRect();
@@ -26,5 +29,7 @@ private:
     std::vector<graphics::TextureRect>::iterator currentTextureRectIter;
     float timeBetweenTextures;
     float timeUntilNextTexture;
+    bool loopsAllowed;
+    bool interruptionAllowed;
 };
 }

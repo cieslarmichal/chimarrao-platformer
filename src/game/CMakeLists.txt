@@ -1,4 +1,5 @@
 set(SOURCES
+        src/GameTimer.cpp
         src/Game.cpp
         src/State.cpp
         src/GameState.cpp
@@ -33,6 +34,7 @@ set(SOURCES
 
 
 set(UT_SOURCES
+        src/GameTimerTest.cpp
         src/GameTest.cpp
         src/GameStateTest.cpp
         src/MenuStateTest.cpp

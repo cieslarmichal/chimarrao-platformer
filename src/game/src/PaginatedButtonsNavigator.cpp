@@ -1,32 +1,54 @@
 #include "PaginatedButtonsNavigator.h"
 
+#include <cmath>
+#include <utility>
+
 namespace game
 {
 
-PaginatedButtonsNavigator::PaginatedButtonsNavigator(std::shared_ptr<components::ui::UIManager> uiManager,
-                                                     const std::vector<std::string>& buttonNames,
-                                                     const std::vector<std::string>& iconNames,
-                                                     graphics::Color buttonsDefaultColor,
-                                                     graphics::Color buttonsHoverColor)
+PaginatedButtonsNavigator::PaginatedButtonsNavigator(
+    std::shared_ptr<components::ui::UIManager> uiManager, const std::vector<std::string>& uniqueButtonNames,
+    const std::vector<std::string>& iconNames, const std::vector<std::string>& itemsToPaginate,
+    std::function<void(int)> paginatedIndexAction, std::size_t maximumNumberOfItemsToDisplay,
+    graphics::Color buttonsDefaultColor, graphics::Color buttonsHoverColor,
+    std::unique_ptr<utils::Timer> moveTimer, std::unique_ptr<utils::Timer> actionTimer)
     : uiManager{std::move(uiManager)},
-      buttonNames{buttonNames},
-      buttonNamesWithIndices{getButtonNamesWithIndices()},
+      uniqueButtonNames{uniqueButtonNames},
       iconNames{iconNames},
-      timeAfterButtonCanBeSwitched{0.1f},
+      itemsToPaginate{itemsToPaginate},
+      paginatedIndexAction{std::move(paginatedIndexAction)},
+      buttonNamesWithIndices{getButtonNamesWithIndices()},
       buttonsDefaultColor{buttonsDefaultColor},
-      buttonsHoverColor{buttonsHoverColor}
+      buttonsHoverColor{buttonsHoverColor},
+      timeAfterButtonCanBeSwitched{0.1f},
+      timeAfterActionCanBeExecuted{0.1f},
+      switchButtonTimer{std::move(moveTimer)},
+      actionTimer{std::move(actionTimer)},
+      maximumNumberOfItemsToDisplay{maximumNumberOfItemsToDisplay},
+      currentPage{1},
+      numberOfPages{static_cast<unsigned int>(std::ceil(static_cast<float>(itemsToPaginate.size()) /
+                                                        static_cast<float>(maximumNumberOfItemsToDisplay)))}
 {
+    if (uniqueButtonNames.size() != iconNames.size())
+    {
+        throw std::runtime_error{"Icons size is not equal buttons size"};
+    }
+
+    if (numberOfPages == 0)
+    {
+        throw std::runtime_error{"No items to paginate"};
+    }
 }
 
 void PaginatedButtonsNavigator::initialize()
 {
-    uiManager->setColor(buttonNames.at(currentItemIndex), buttonsHoverColor);
+    uiManager->setColor(uniqueButtonNames.at(currentItemIndex), buttonsHoverColor);
     setIconVisible(currentItemIndex);
 }
 
-void PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input::Input& input)
+NextState PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input::Input& input)
 {
-    if (switchItemTimer.getElapsedSeconds() > timeAfterButtonCanBeSwitched)
+    if (switchButtonTimer->getElapsedSeconds() > timeAfterButtonCanBeSwitched)
     {
         if (input.isKeyPressed(input::InputKey::Up))
         {
@@ -36,18 +58,94 @@ void PaginatedButtonsNavigator::update(const utils::DeltaTime&, const input::Inp
         {
             changeSelectedButtonDown();
         }
-        switchItemTimer.restart();
+        else if (input.isKeyPressed(input::InputKey::Left))
+        {
+            changePageToLeft();
+        }
+        else if (input.isKeyPressed(input::InputKey::Right))
+        {
+            changePageToRight();
+        }
+
+        switchButtonTimer->restart();
     }
 
-    if (input.isKeyPressed(input::InputKey::Enter))
+    if (actionTimer->getElapsedSeconds() > timeAfterActionCanBeExecuted)
     {
-        uiManager->invokeClickAction(buttonNames.at(currentItemIndex), input::InputKey::MouseLeft);
+        if (input.isKeyPressed(input::InputKey::Enter))
+        {
+            uiManager->invokeClickAction(uniqueButtonNames.at(currentItemIndex), input::InputKey::MouseLeft);
+        }
+        else if (input.isKeyPressed(input::InputKey::Escape))
+        {
+            return NextState::Previous;
+        }
+
+        actionTimer->restart();
+    }
+
+    return NextState::Same;
+}
+
+void PaginatedButtonsNavigator::changePageToRight()
+{
+    if (currentPage < numberOfPages)
+    {
+        const auto numberOfItemsRemaining =
+            itemsToPaginate.size() - currentPage * maximumNumberOfItemsToDisplay;
+
+        for (std::size_t itemIndex = 0;
+             itemIndex < numberOfItemsRemaining && itemIndex < maximumNumberOfItemsToDisplay; itemIndex++)
+        {
+            const auto paginatedItemIndex = currentPage * maximumNumberOfItemsToDisplay + itemIndex;
+            const auto& paginatedItem = itemsToPaginate[paginatedItemIndex];
+            uiManager->setText(uniqueButtonNames[itemIndex], paginatedItem);
+            const auto paginatedIndexActionCopy = paginatedIndexAction;
+            auto overriddenAction = [paginatedIndexActionCopy, paginatedItemIndex]
+            { paginatedIndexActionCopy(paginatedItemIndex); };
+            components::core::KeyAction loadMapKeyAction{input::InputKey::MouseLeft, overriddenAction};
+            uiManager->changeClickAction(uniqueButtonNames[itemIndex], {loadMapKeyAction});
+        }
+
+        if (numberOfItemsRemaining < maximumNumberOfItemsToDisplay)
+        {
+            for (auto itemIndex = numberOfItemsRemaining; itemIndex < maximumNumberOfItemsToDisplay;
+                 itemIndex++)
+            {
+                uiManager->deactivateComponent(uniqueButtonNames[itemIndex]);
+            }
+        }
+        setFocusOnButton(uniqueButtonNames.front());
+        currentPage++;
+    }
+}
+
+void PaginatedButtonsNavigator::changePageToLeft()
+{
+    if (currentPage > 1)
+    {
+        for (std::size_t itemIndex = 0; itemIndex < maximumNumberOfItemsToDisplay; itemIndex++)
+        {
+            const auto paginatedItemIndex = (currentPage - 2) * maximumNumberOfItemsToDisplay + itemIndex;
+            const auto& paginatedItem = itemsToPaginate[paginatedItemIndex];
+            uiManager->activateComponent(uniqueButtonNames[itemIndex]);
+            uiManager->setText(uniqueButtonNames[itemIndex], paginatedItem);
+            const auto paginatedIndexActionCopy = paginatedIndexAction;
+            auto overriddenAction = [paginatedIndexActionCopy, paginatedItemIndex]
+            { paginatedIndexActionCopy(paginatedItemIndex); };
+            components::core::KeyAction loadMapKeyAction{input::InputKey::MouseLeft, overriddenAction};
+            uiManager->changeClickAction(uniqueButtonNames[itemIndex], {loadMapKeyAction});
+        }
+        setFocusOnButton(uniqueButtonNames.front());
+        currentPage--;
     }
 }
 
 void PaginatedButtonsNavigator::activate()
 {
     setIconVisible(currentItemIndex);
+    switchButtonTimer->restart();
+    actionTimer->restart();
 }
 
 void PaginatedButtonsNavigator::setFocusOnButton(const std::string& buttonName)
@@ -56,6 +154,7 @@ void PaginatedButtonsNavigator::setFocusOnButton(const std::string& buttonName)
     {
         unselectAllButtons();
         changeSelectedButton(buttonNamesWithIndices.at(buttonName));
+        uiManager->setColor(buttonName, buttonsHoverColor);
     }
 }
 
@@ -69,9 +168,9 @@ std::unordered_map<std::string, unsigned> PaginatedButtonsNavigator::getButtonNa
 {
     std::unordered_map<std::string, unsigned> buttonNamesWithIndicesInit;
 
-    for (std::size_t index = 0; index < buttonNames.size(); ++index)
+    for (std::size_t index = 0; index < uniqueButtonNames.size(); ++index)
     {
-        buttonNamesWithIndicesInit.insert({buttonNames[index], index});
+        buttonNamesWithIndicesInit.insert({uniqueButtonNames[index], index});
     }
     return buttonNamesWithIndicesInit;
 }
@@ -82,14 +181,22 @@ void PaginatedButtonsNavigator::changeSelectedButtonUp()
 
     if (currentItemIndex == 0)
     {
-        currentItemIndex = static_cast<unsigned int>(buttonNames.size() - 1);
+        currentItemIndex = static_cast<unsigned int>(uniqueButtonNames.size() - 1);
     }
     else
     {
-        currentItemIndex--;
+        if (currentItemIndex == uniqueButtonNames.size() - 1)
+        {
+            const auto numberOfItemsOnPage = getNumberOfItemsOnPage();
+            currentItemIndex = numberOfItemsOnPage - 1;
+        }
+        else
+        {
+            --currentItemIndex;
+        }
     }
 
-    uiManager->setColor(buttonNames.at(currentItemIndex), buttonsHoverColor);
+    uiManager->setColor(uniqueButtonNames.at(currentItemIndex), buttonsHoverColor);
     setIconVisible(currentItemIndex);
 }
 
@@ -97,15 +204,23 @@ void PaginatedButtonsNavigator::changeSelectedButtonDown()
 {
     unselectAllButtons();
 
-    if (currentItemIndex == buttonNames.size() - 1)
+    if (currentItemIndex == uniqueButtonNames.size() - 1)
     {
         currentItemIndex = 0;
     }
     else
     {
-        currentItemIndex++;
+        if (const auto numberOfItemsOnPage = getNumberOfItemsOnPage();
+            (currentItemIndex + 1) % maximumNumberOfItemsToDisplay >= numberOfItemsOnPage)
+        {
+            currentItemIndex = uniqueButtonNames.size() - 1;
+        }
+        else
+        {
+            ++currentItemIndex;
+        }
     }
-    uiManager->setColor(buttonNames.at(currentItemIndex), buttonsHoverColor);
+    uiManager->setColor(uniqueButtonNames.at(currentItemIndex), buttonsHoverColor);
     setIconVisible(currentItemIndex);
 }
 
@@ -117,7 +232,7 @@ void PaginatedButtonsNavigator::changeSelectedButton(unsigned int buttonIndex)
 
 void PaginatedButtonsNavigator::unselectAllButtons()
 {
-    for (const auto& buttonName : buttonNames)
+    for (const auto& buttonName : uniqueButtonNames)
     {
         uiManager->setColor(buttonName, buttonsDefaultColor);
     }
@@ -135,6 +250,16 @@ void PaginatedButtonsNavigator::hideIcons()
     {
         uiManager->deactivateComponent(iconName);
     }
+}
+
+unsigned PaginatedButtonsNavigator::getNumberOfItemsOnPage() const
+{
+    if (static_cast<int>(itemsToPaginate.size() / (currentPage * maximumNumberOfItemsToDisplay)) > 0)
+    {
+        return maximumNumberOfItemsToDisplay;
+    }
+
+    return itemsToPaginate.size() % maximumNumberOfItemsToDisplay;
 }
 
 }

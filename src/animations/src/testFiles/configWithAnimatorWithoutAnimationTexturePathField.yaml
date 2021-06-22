@@ -4,3 +4,5 @@ multipleFilesAnimators:
       - type: idle
         numberOfTextures: 6
         timeBetweenTexturesInSeconds: 0.3
+        loopsAllowed: true
+        interruptionAllowed: true

@@ -1,27 +1,13 @@
 #pragma once
 
-#include <SFML/System/Clock.hpp>
-#include <chrono>
-
-#include "DeltaTime.h"
-#include "UtilsApi.h"
-
 namespace utils
 {
-class UTILS_API Timer
+class Timer
 {
 public:
-    Timer();
+    virtual ~Timer() = default;
 
-    void start();
-    void restart();
-    utils::DeltaTime getDurationFromLastUpdate();
-    float getElapsedSeconds();
-    float getElapsedAndRestart();
-
-private:
-    utils::TimePoint timeOfPreviousUpdate;
-    sf::Clock clock;
-    sf::Time elapsed;
+    virtual void restart() = 0;
+    virtual float getElapsedSeconds() const = 0;
 };
 }

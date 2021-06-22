@@ -1,6 +1,7 @@
 #pragma once
 
 #include "MapsReader.h"
+#include "PaginatedButtonsNavigator.h"
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
@@ -20,8 +21,8 @@ public:
     explicit ChooseMapState(const std::shared_ptr<window::Window>&,
                             const std::shared_ptr<graphics::RendererPool>&,
                             std::shared_ptr<utils::FileAccess>, States&,
-                            std::shared_ptr<components::ui::UIManager>, std::unique_ptr<MapsReader>,
-                            std::shared_ptr<TileMap>);
+                            std::shared_ptr<components::ui::UIManager>, std::shared_ptr<TileMap>,
+                            std::unique_ptr<MapsReader>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -31,18 +32,13 @@ public:
     void deactivate() override;
 
 private:
-    void showNextMaps();
-    void showPreviousMaps();
-
     std::shared_ptr<components::ui::UIManager> uiManager;
-    std::unique_ptr<MapsReader> mapsReader;
     bool shouldBackToMenu;
+    std::shared_ptr<TileMap> tileMap;
+    std::unique_ptr<MapsReader> mapsReader;
     std::vector<std::string> mapFilePaths;
     std::vector<std::string> mapNames;
-    unsigned int mapsCurrentPage;
-    unsigned int mapsPages;
-    const int maximumNumberOfMapsToDisplay = 5;
-    std::vector<std::string> mapButtonsUniqueNames;
-    std::shared_ptr<TileMap> tileMap;
+    std::function<void(int)> paginatedButtonActionForButtonIndex;
+    std::unique_ptr<PaginatedButtonsNavigator> buttonsNavigator;
 };
 }

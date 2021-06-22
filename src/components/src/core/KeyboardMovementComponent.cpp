@@ -1,7 +1,6 @@
 #include "KeyboardMovementComponent.h"
 
 #include "AnimationComponent.h"
-#include "BoxColliderComponent.h"
 #include "exceptions/DependentComponentNotFound.h"
 
 namespace components::core
@@ -38,19 +37,50 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
 
     auto currentMovementSpeed = velocityComponent->getVelocity();
 
-    if (input.isKeyPressed(input::InputKey::Left))
+    if (input.isKeyPressed(input::InputKey::Left) &&
+        (animation->getAnimationDirection() != animations::AnimationDirection::Right ||
+         animation->getAnimationType() != animations::AnimationType::Roll))
     {
-        currentMovementSpeed.x = -movementSpeed;
         animation->setAnimationDirection(animations::AnimationDirection::Left);
+        if (input.isKeyPressed(input::InputKey::Down) ||
+            animation->getAnimationType() == animations::AnimationType::Roll)
+        {
+            animation->setAnimation(animations::AnimationType::Roll);
+            currentMovementSpeed.x = -1.5f * movementSpeed;
+        }
+        else
+        {
+            if (animation->getAnimationType() != animations::AnimationType::Roll)
+            {
+                currentMovementSpeed.x = -movementSpeed;
+            }
+        }
     }
-    else if (input.isKeyPressed(input::InputKey::Right))
+    else if (input.isKeyPressed(input::InputKey::Right) &&
+             (animation->getAnimationDirection() != animations::AnimationDirection::Left ||
+              animation->getAnimationType() != animations::AnimationType::Roll))
     {
-        currentMovementSpeed.x = movementSpeed;
         animation->setAnimationDirection(animations::AnimationDirection::Right);
+        if (input.isKeyPressed(input::InputKey::Down) ||
+            animation->getAnimationType() == animations::AnimationType::Roll)
+        {
+            animation->setAnimation(animations::AnimationType::Roll);
+            currentMovementSpeed.x = 1.5f * movementSpeed;
+        }
+        else
+        {
+            if (animation->getAnimationType() != animations::AnimationType::Roll)
+            {
+                currentMovementSpeed.x = movementSpeed;
+            }
+        }
     }
     else
     {
-        currentMovementSpeed.x = 0.f;
+        if (animation->getAnimationType() != animations::AnimationType::Roll)
+        {
+            currentMovementSpeed.x = 0.f;
+        }
     }
 
     if (not canMoveDown)
@@ -65,7 +95,8 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
         }
     }
 
-    if (input.isKeyPressed(input::InputKey::Up) && not canMoveDown && canMoveUp)
+    if (input.isKeyPressed(input::InputKey::Up) && not canMoveDown && canMoveUp &&
+        animation->getAnimationType() != animations::AnimationType::Roll)
     {
         currentMovementSpeed.y = -3.4f * 5.f;
         animation->setAnimation(animations::AnimationType::Jump);
@@ -73,6 +104,11 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
     else
     {
         currentMovementSpeed.y += 25.f * deltaTime.count();
+    }
+
+    if (input.isKeyPressed(input::InputKey::Space))
+    {
+        animation->setAnimation(animations::AnimationType::Attack);
     }
 
     velocityComponent->setVelocity(currentMovementSpeed);

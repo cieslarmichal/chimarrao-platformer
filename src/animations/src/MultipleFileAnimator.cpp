@@ -77,28 +77,30 @@ void MultipleFileAnimator::setAnimation(AnimationType animationType, AnimationDi
                                                     " is not supported in " + animatorName};
     }
 
-    if (currentAnimationType != animationType)
+    auto& currentAnimation = animations.at(currentAnimationType);
+    if (currentAnimation.hasAnimationFinished() || currentAnimation.areInterruptionsAllowed())
     {
-        currentAnimationType = animationType;
-        animations.at(currentAnimationType).reset();
-        newAnimationTypeIsSet = true;
-    }
+        if (currentAnimationType != animationType)
+        {
+            currentAnimationType = animationType;
+            animations.at(currentAnimationType).reset();
+            newAnimationTypeIsSet = true;
+        }
 
-    if (currentAnimationDirection != animationDirection)
-    {
-        currentAnimationDirection = animationDirection;
-        animations.at(currentAnimationType).reset();
-        newAnimationDirectionIsSet = true;
+        setAnimationDirection(animationDirection);
     }
 }
 
 void MultipleFileAnimator::setAnimationDirection(AnimationDirection animationDirection)
 {
-    if (currentAnimationDirection != animationDirection)
+    auto& currentAnimation = animations.at(currentAnimationType);
+    if (currentAnimation.hasAnimationFinished() || currentAnimation.areInterruptionsAllowed())
     {
-        currentAnimationDirection = animationDirection;
-        animations.at(currentAnimationType).reset();
-        newAnimationDirectionIsSet = true;
+        if (currentAnimationDirection != animationDirection)
+        {
+            currentAnimationDirection = animationDirection;
+            newAnimationDirectionIsSet = true;
+        }
     }
 }
 
@@ -121,7 +123,7 @@ void MultipleFileAnimator::initializeAnimations(
 
 bool MultipleFileAnimator::containsAnimation(const AnimationType& animationType) const
 {
-    return animations.count(animationType);
+    return animations.contains(animationType);
 }
 
 bool MultipleFileAnimator::animationChanged(TextureRectChanged textureChanged) const

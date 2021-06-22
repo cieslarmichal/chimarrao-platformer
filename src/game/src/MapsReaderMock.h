@@ -10,5 +10,6 @@ class MapsReaderMock : public MapsReader
 {
 public:
     MOCK_METHOD(std::vector<std::string>, readMapFilePaths, (), (override));
+    MOCK_METHOD(std::vector<std::string>, readMapNames, (), (override));
 };
 }

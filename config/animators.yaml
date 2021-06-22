@@ -5,24 +5,46 @@ multipleFilesAnimators:
         firstTexturePath: resources/Player/Idle/idle-with-weapon-1.png
         numberOfTextures: 6
         timeBetweenTexturesInSeconds: 0.3
+        loopsAllowed: true
+        interruptionAllowed: true
       - type: walk
         firstTexturePath: resources/Player/Walk/walk-with-weapon-1.png
         numberOfTextures: 11
         timeBetweenTexturesInSeconds: 0.1
+        loopsAllowed: true
+        interruptionAllowed: true
       - type: jump
         firstTexturePath: resources/Player/Jump/jump-1.png
         numberOfTextures: 14
-        timeBetweenTexturesInSeconds: 0.05
+        timeBetweenTexturesInSeconds: 0.075
+        loopsAllowed: false
+        interruptionAllowed: true
+      - type: attack
+        firstTexturePath: resources/Player/Attacks/attack-A1.png
+        numberOfTextures: 7
+        timeBetweenTexturesInSeconds: 0.15
+        loopsAllowed: false
+        interruptionAllowed: false
+      - type: roll
+        firstTexturePath: resources/Player/Roll/roll-1.png
+        numberOfTextures: 14
+        timeBetweenTexturesInSeconds: 0.095
+        loopsAllowed: false
+        interruptionAllowed: false
   - name: druid
     animations:
       - type: idle
         firstTexturePath: resources/DRUIDS/1/IDLE_0.png
         numberOfTextures: 5
         timeBetweenTexturesInSeconds: 0.2
+        loopsAllowed: true
+        interruptionAllowed: true
       - type: walk
         firstTexturePath: resources/DRUIDS/1/WALK_0.png
         numberOfTextures: 4
         timeBetweenTexturesInSeconds: 0.14
+        loopsAllowed: true
+        interruptionAllowed: true
 
 singleFileAnimators:
   - name: bunny
@@ -37,6 +59,8 @@ singleFileAnimators:
         rectToCutHeightInPixels: 32
         numberOfTextures: 1
         timeBetweenTexturesInSeconds: 0.14
+        loopsAllowed: true
+        interruptionAllowed: true
       - type: walk
         texturePath: resources/bunny-hop-spritesheet.png
         textureWidthInPixels: 192
@@ -47,3 +71,5 @@ singleFileAnimators:
         rectToCutHeightInPixels: 32
         numberOfTextures: 4
         timeBetweenTexturesInSeconds: 0.1
+        loopsAllowed: true
+        interruptionAllowed: true

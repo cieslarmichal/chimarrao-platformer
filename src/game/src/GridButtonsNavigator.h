@@ -1,33 +1,27 @@
 #pragma once
 
-#include "ButtonsNavigator.h"
 #include "GridButtonInfo.h"
+#include "NextState.h"
 #include "Timer.h"
 #include "ui/UIManager.h"
 
 namespace game
 {
-struct ButtonIndexHash
-{
-    std::size_t operator()(const utils::Vector2u& vec) const
-    {
-        return std::hash<std::string>()(toString(vec));
-    };
-};
-
-class GridButtonsNavigator : public ButtonsNavigator
+class GridButtonsNavigator
 {
 public:
     explicit GridButtonsNavigator(std::shared_ptr<components::ui::UIManager>,
                                   const std::vector<std::vector<GridButtonInfo>>& gridButtonsInfo,
                                   const std::vector<std::string>& iconNames,
-                                  graphics::Color buttonsDefaultColor, graphics::Color buttonsHoverColor);
+                                  graphics::Color buttonsDefaultColor, graphics::Color buttonsHoverColor,
+                                  std::unique_ptr<utils::Timer> moveTimer,
+                                  std::unique_ptr<utils::Timer> actionTimer);
 
-    void initialize() override;
-    void update(const utils::DeltaTime&, const input::Input&) override;
-    void activate() override;
-    void setFocusOnButton(const std::string& buttonName) override;
-    void loseFocus() override;
+    void initialize();
+    NextState update(const utils::DeltaTime&, const input::Input&);
+    void activate();
+    void setFocusOnButton(const std::string& buttonName);
+    void loseFocus();
 
 private:
     std::unordered_map<std::string, utils::Vector2u> getButtonNamesWithIndices();
@@ -45,9 +39,11 @@ private:
     const std::unordered_map<std::string, utils::Vector2u> buttonNamesWithIndices;
     const std::vector<std::string> iconNames;
     utils::Vector2u currentButtonIndex{0, 0};
-    utils::Timer switchButtonTimer;
-    const float timeAfterButtonCanBeSwitched;
     const graphics::Color buttonsDefaultColor;
     const graphics::Color buttonsHoverColor;
+    const float timeAfterButtonCanBeSwitched;
+    const float timeAfterActionCanBeExecuted;
+    std::unique_ptr<utils::Timer> switchButtonTimer;
+    std::unique_ptr<utils::Timer> actionTimer;
 };
 }

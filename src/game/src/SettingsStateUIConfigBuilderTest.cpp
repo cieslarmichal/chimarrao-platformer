@@ -2,7 +2,6 @@
 
 #include "gtest/gtest.h"
 
-#include "ButtonsNavigatorMock.h"
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
@@ -31,7 +30,7 @@ const std::vector<std::string> expectedButtonNames{
 const std::vector<std::string> expectedCheckBoxesNames{"settingsVsyncCheckBox"};
 const std::vector<std::string> expectedIconNames{"settingsIcon1Image", "settingsIcon2Image",
                                                  "settingsIcon3Image", "settingsIcon4Image",
-                                                 "settingsIcon5Image"};
+                                                 "settingsIcon5Image", "settingsIcon6Image"};
 }
 class SettingsStateUIConfigBuilderTest : public Test
 {
@@ -44,11 +43,7 @@ public:
     StrictMock<StatesMock> states;
     std::shared_ptr<components::ui::UIManagerMock> uiManager{
         std::make_shared<NiceMock<components::ui::UIManagerMock>>()};
-    std::unique_ptr<NiceMock<ButtonsNavigatorMock>> buttonsNavigatorInit{
-        std::make_unique<NiceMock<ButtonsNavigatorMock>>()};
-    NiceMock<ButtonsNavigatorMock>* buttonsNavigator = buttonsNavigatorInit.get();
-    SettingsState settingsState{window, rendererPool, fileAccess,
-                                states, uiManager,    std::move(buttonsNavigatorInit)};
+    SettingsState settingsState{window, rendererPool, fileAccess, states, uiManager};
 };
 
 TEST_F(SettingsStateUIConfigBuilderTest, createSettingsUI)
@@ -86,14 +81,15 @@ TEST_F(SettingsStateUIConfigBuilderTest, createSettingsUI)
 TEST_F(SettingsStateUIConfigBuilderTest, getGridButtonsInfo)
 {
     const std::vector<std::vector<GridButtonInfo>> expectedGridButtonsInfo{
-        {GridButtonInfo{"settingsWindowModeButton", 0, true},
-         GridButtonInfo{"settingsFullscreenModeButton", 0, true}},
-        {GridButtonInfo{"settingsResolutionDecreaseButton", 1, true},
-         GridButtonInfo{"settingsResolutionIncreaseButton", 1, true}},
-        {GridButtonInfo{"settingsFrameLimitDecreaseButton", 3, true},
-         GridButtonInfo{"settingsFrameLimitIncreaseButton", 3, true}},
-        {GridButtonInfo{"settingsBackToMenuButton", 4, false},
-         GridButtonInfo{"settingsApplyChangesButton", 4, false}}};
+        {GridButtonInfo{"settingsWindowModeButton", 0, true, true},
+         GridButtonInfo{"settingsFullscreenModeButton", 0, true, true}},
+        {GridButtonInfo{"settingsResolutionDecreaseButton", 1, true, false},
+         GridButtonInfo{"settingsResolutionIncreaseButton", 1, true, false}},
+        {GridButtonInfo{"settingsVsyncCheckBox", 2, false, false}},
+        {GridButtonInfo{"settingsFrameLimitDecreaseButton", 3, true, false},
+         GridButtonInfo{"settingsFrameLimitIncreaseButton", 3, true, false}},
+        {GridButtonInfo{"settingsBackToMenuButton", 4, false, false},
+         GridButtonInfo{"settingsApplyChangesButton", 5, false, false}}};
 
     const auto actualGridButtonsInfo = SettingsStateUIConfigBuilder::getGridButtonsInfo();
 

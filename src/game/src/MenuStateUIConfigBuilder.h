@@ -1,8 +1,10 @@
 #pragma once
 
 #include <memory>
-#include <vector>
 #include <string>
+#include <vector>
+
+#include "GridButtonInfo.h"
 
 namespace components::ui
 {
@@ -23,7 +25,7 @@ class MenuStateUIConfigBuilder
 {
 public:
     static std::unique_ptr<components::ui::UIConfig> createMenuUIConfig(MenuState*);
-    static std::vector<std::string> getButtonNames();
+    static std::vector<std::vector<GridButtonInfo>> getGridButtonsInfo();
     static std::vector<std::string> getIconNames();
 
 private:

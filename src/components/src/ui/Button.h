@@ -15,7 +15,8 @@ namespace components::ui
 class Button : public UIComponent
 {
 public:
-    Button(const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<ButtonConfig>);
+    Button(const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<ButtonConfig>,
+           std::unique_ptr<utils::Timer>);
 
     void update(utils::DeltaTime, const input::Input&) override;
     std::string getName() const override;
@@ -32,7 +33,7 @@ private:
     std::string name;
     std::unique_ptr<components::core::ComponentOwner> coreComponentsOwner;
     bool buttonClickActionFrozen = true;
-    utils::Timer freezeClickableButtonTimer;
     const float timeAfterButtonCanBeClicked;
+    std::unique_ptr<utils::Timer> freezeClickableButtonTimer;
 };
 }

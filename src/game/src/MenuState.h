@@ -1,6 +1,6 @@
 #pragma once
 
-#include "PaginatedButtonsNavigator.h"
+#include "GridButtonsNavigator.h"
 #include "State.h"
 #include "Timer.h"
 #include "Window.h"
@@ -19,7 +19,7 @@ public:
 
     explicit MenuState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
                        std::shared_ptr<utils::FileAccess>, States&,
-                       std::shared_ptr<components::ui::UIManager>, std::unique_ptr<ButtonsNavigator>);
+                       std::shared_ptr<components::ui::UIManager>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -31,7 +31,7 @@ public:
 
 private:
     std::shared_ptr<components::ui::UIManager> uiManager;
-    std::unique_ptr<ButtonsNavigator> buttonsNavigator;
+    std::unique_ptr<GridButtonsNavigator> buttonsNavigator;
     bool shouldExit;
 };
 }

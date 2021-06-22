@@ -29,7 +29,7 @@ private:
     void pause();
 
     bool paused;
-    utils::Timer timer;
+    std::unique_ptr<utils::Timer> timer;
     const float timeAfterStateCouldBePaused;
     std::shared_ptr<components::ui::UIManager> uiManager;
     std::unique_ptr<ComponentOwnersManager> componentOwnersManager;

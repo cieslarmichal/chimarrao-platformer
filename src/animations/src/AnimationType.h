@@ -12,13 +12,18 @@ enum class AnimationType
 {
     Idle,
     Walk,
-    Jump
+    Jump,
+    Attack,
+    Roll
 };
 
 inline std::string toString(AnimationType animationType)
 {
-    std::unordered_map<AnimationType, std::string> animationTypeToString{
-        {AnimationType::Idle, "Idle"}, {AnimationType::Walk, "Walk"}, {AnimationType::Jump, "Jump"}};
+    std::unordered_map<AnimationType, std::string> animationTypeToString{{AnimationType::Idle, "Idle"},
+                                                                         {AnimationType::Walk, "Walk"},
+                                                                         {AnimationType::Jump, "Jump"},
+                                                                         {AnimationType::Attack, "Attack"},
+                                                                         {AnimationType::Roll, "Roll"}};
 
     try
     {
@@ -34,8 +39,11 @@ inline AnimationType toAnimationType(const std::string& animationTypeAsString)
 {
     const auto animationTypeLowerString = utils::StringHelper::getLowerCases(animationTypeAsString);
 
-    std::unordered_map<std::string, AnimationType> stringToAnimationType{
-        {"idle", AnimationType::Idle}, {"walk", AnimationType::Walk}, {"jump", AnimationType::Jump}};
+    std::unordered_map<std::string, AnimationType> stringToAnimationType{{"idle", AnimationType::Idle},
+                                                                         {"walk", AnimationType::Walk},
+                                                                         {"jump", AnimationType::Jump},
+                                                                         {"attack", AnimationType::Attack},
+                                                                         {"roll", AnimationType::Roll}};
 
     try
     {

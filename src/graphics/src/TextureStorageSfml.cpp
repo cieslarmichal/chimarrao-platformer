@@ -35,6 +35,6 @@ void TextureStorageSfml::loadTexture(const TextureRect& textureRect)
 
 bool TextureStorageSfml::textureInStorage(const TextureRect& textureRect)
 {
-    return textures.count(textureRect) == 1;
+    return textures.contains(textureRect);
 }
 }

@@ -159,7 +159,7 @@ void RendererPoolSfml::setTexture(const GraphicsId& id, const TextureRect& textu
     {
         auto& layeredShape = getLayeredShapeByPosition(layeredShapes, layeredShapeIter);
         const sf::Texture& texture = textureStorage->getTexture(textureRect);
-        layeredShape.shape.setTexture(&texture);
+        layeredShape.shape.setTexture(&texture, true);
         layeredShape.shape.setScale(scale);
         if (scale.x < 0)
         {

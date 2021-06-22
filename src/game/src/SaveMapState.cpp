@@ -3,6 +3,7 @@
 #include <utility>
 
 #include "SaveMapStateUIConfigBuilder.h"
+#include "TimerFactory.h"
 
 namespace game
 {
@@ -20,12 +21,12 @@ SaveMapState::SaveMapState(const std::shared_ptr<window::Window>& windowInit,
 {
     uiManager->createUI(SaveMapStateUIConfigBuilder::createSaveMapUIConfig(this));
     uiManager->setText("saveMapNameTextField", tileMap->getName());
-    possibleLeaveFromStateTimer.start();
+    possibleLeaveFromStateTimer = utils::TimerFactory::createTimer();
 }
 
 NextState SaveMapState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    if (possibleLeaveFromStateTimer.getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
+    if (possibleLeaveFromStateTimer->getElapsedSeconds() > timeAfterLeaveStateIsPossible &&
         (input.isKeyPressed(input::InputKey::Escape) || shouldBackToEditorMenu))
     {
         return NextState::Previous;
@@ -51,7 +52,7 @@ void SaveMapState::activate()
 {
     active = true;
 
-    possibleLeaveFromStateTimer.restart();
+    possibleLeaveFromStateTimer->restart();
     uiManager->activate();
 }
 

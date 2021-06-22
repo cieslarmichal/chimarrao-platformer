@@ -3,11 +3,9 @@
 #include <string>
 #include <vector>
 
-#include "UtilsApi.h"
-
 namespace utils
 {
-class UTILS_API StringHelper
+class StringHelper
 {
 public:
     static std::string join(const std::vector<std::string>& contentWithLines,

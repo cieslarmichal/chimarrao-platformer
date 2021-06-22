@@ -19,6 +19,8 @@ const auto animationTypeField{"type"};
 const auto firstTexturePathField{"firstTexturePath"};
 const auto numberOfTexturesField{"numberOfTextures"};
 const auto timeBetweenTexturesInSecondsField{"timeBetweenTexturesInSeconds"};
+const auto loopsAllowedField{"loopsAllowed"};
+const auto interruptionAllowedField{"interruptionAllowed"};
 const auto texturePathField{"texturePath"};
 const auto textureWidthInPixelsField{"textureWidthInPixels"};
 const auto textureHeightInPixelsField{"textureHeightInPixels"};
@@ -110,15 +112,19 @@ AnimatorSettingsYamlReader::readMultipleFilesAnimationsSettings(const YAML::Node
         const auto firstTexturePath = animation[firstTexturePathField];
         const auto numberOfTextures = animation[numberOfTexturesField];
         const auto timeBetweenTexturesInSeconds = animation[timeBetweenTexturesInSecondsField];
+        const auto loopsAllowed = animation[loopsAllowedField];
+        const auto interruptionAllowed = animation[interruptionAllowedField];
 
-        if (not type || not firstTexturePath || not numberOfTextures || not timeBetweenTexturesInSeconds)
+        if (not type || not firstTexturePath || not numberOfTextures || not timeBetweenTexturesInSeconds ||
+            not loopsAllowed || not interruptionAllowed)
         {
             auto errorMessage = "Missing fields in animations";
             std::cerr << errorMessage << "\n";
             throw exceptions::InvalidAnimatorsConfigFile{errorMessage};
         }
         animationsSettings.push_back({type.as<std::string>(), firstTexturePath.as<std::string>(),
-                                      numberOfTextures.as<int>(), timeBetweenTexturesInSeconds.as<float>()});
+                                      numberOfTextures.as<int>(), timeBetweenTexturesInSeconds.as<float>(),
+                                      loopsAllowed.as<bool>(), interruptionAllowed.as<bool>()});
     }
 
     return animationsSettings;
@@ -163,10 +169,13 @@ AnimatorSettingsYamlReader::readSingleFileAnimationsSettings(const YAML::Node& a
         const auto startYPosition = animation[startYPositionField];
         const auto numberOfTextures = animation[numberOfTexturesField];
         const auto timeBetweenTexturesInSeconds = animation[timeBetweenTexturesInSecondsField];
+        const auto loopsAllowed = animation[loopsAllowedField];
+        const auto interruptionAllowed = animation[interruptionAllowedField];
 
         if (not type || not texturePath || not textureWidthInPixels || not textureHeightInPixels ||
             not rectToCutWidthInPixels || not rectToCutHeightInPixels || not startXPosition ||
-            not startYPosition || not numberOfTextures || not timeBetweenTexturesInSeconds)
+            not startYPosition || not numberOfTextures || not timeBetweenTexturesInSeconds ||
+            not loopsAllowed)
         {
             auto errorMessage = "Missing fields in animations";
             std::cerr << errorMessage << "\n";
@@ -177,7 +186,8 @@ AnimatorSettingsYamlReader::readSingleFileAnimationsSettings(const YAML::Node& a
              utils::Vector2u{textureWidthInPixels.as<unsigned>(), textureHeightInPixels.as<unsigned>()},
              utils::IntRect{startXPosition.as<int>(), startYPosition.as<int>(),
                             rectToCutWidthInPixels.as<int>(), rectToCutHeightInPixels.as<int>()},
-             numberOfTextures.as<int>(), timeBetweenTexturesInSeconds.as<float>()});
+             numberOfTextures.as<int>(), timeBetweenTexturesInSeconds.as<float>(), loopsAllowed.as<bool>(),
+             interruptionAllowed.as<bool>()});
     }
 
     return animationsSettings;

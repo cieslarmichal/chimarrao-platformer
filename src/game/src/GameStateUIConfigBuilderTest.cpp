@@ -29,11 +29,8 @@ class GameStateUIConfigBuilderTest : public Test
 public:
     GameStateUIConfigBuilderTest()
     {
-        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{3.8f, 3.8f}, utils::Vector2f{10, 10},
+        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{6.f, 3.75f}, utils::Vector2f{10, 10},
                                            graphics::Color::White, graphics::VisibilityLayer::Second));
-        //        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{5.f, 5.f}, utils::Vector2f{30, 30},
-        //        brickTexturePath,
-        //                                           graphics::VisibilityLayer::Second));
         EXPECT_CALL(*componentOwnersManager, add(_)).Times(5);
         EXPECT_CALL(*componentOwnersManager, processNewObjects());
         EXPECT_CALL(*rendererPool, release(_));

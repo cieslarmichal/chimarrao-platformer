@@ -6,6 +6,7 @@
 #include "AnimatorFactory.h"
 #include "GameStateUIConfigBuilder.h"
 #include "ProjectPathReader.h"
+#include "TimerFactory.h"
 #include "core/AnimationComponent.h"
 #include "core/BoxColliderComponent.h"
 #include "core/GraphicsComponent.h"
@@ -31,17 +32,17 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
-    auto player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10, 10}, "player");
+    auto player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10.f, 10.f}, "player");
     auto graphicsComponent = player->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{3.8, 3.8}, utils::Vector2f{10, 10}, graphics::Color::White,
+        rendererPool, utils::Vector2f{6.f, 3.75f}, utils::Vector2f{10.f, 10.f}, graphics::Color::White,
         graphics::VisibilityLayer::Second);
     auto graphicsId = graphicsComponent->getGraphicsId();
     player->addComponent<components::core::KeyboardMovementComponent>();
     auto animatorsFactory = animations::AnimatorFactory::createAnimatorFactory(rendererPool);
     std::shared_ptr<animations::Animator> druidAnimator = animatorsFactory->createPlayerAnimator(graphicsId);
     player->addComponent<components::core::AnimationComponent>(druidAnimator);
-    player->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{3.75, 3.75},
-                                                                 components::core::CollisionLayer::Player);
+    player->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{2.f, 3.75f}, components::core::CollisionLayer::Player, utils::Vector2f{2.f, -0.1f});
     player->addComponent<components::core::VelocityComponent>();
     player->addComponent<components::core::CameraComponent>(
         rendererPool, utils::FloatRect{0, 0, tileMap->getSize().x * 4.f, tileMap->getSize().y * 4.f});
@@ -86,15 +87,15 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     componentOwnersManager->add(rightMapBorder);
     componentOwnersManager->add(bottomMapBorder);
 
-    timer.start();
-
     componentOwnersManager->add(player);
     componentOwnersManager->processNewObjects();
+
+    timer = utils::TimerFactory::createTimer();
 }
 
 NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    if (timer.getElapsedSeconds() > timeAfterStateCouldBePaused &&
+    if (timer->getElapsedSeconds() > timeAfterStateCouldBePaused &&
         input.isKeyPressed(input::InputKey::Escape))
     {
         pause();
@@ -125,7 +126,7 @@ void GameState::activate()
 {
     active = true;
     paused = false;
-    timer.restart();
+    timer->restart();
     componentOwnersManager->activate();
     uiManager->activate();
 }
@@ -133,7 +134,7 @@ void GameState::activate()
 void GameState::deactivate()
 {
     active = false;
-    timer.restart();
+    timer->restart();
     componentOwnersManager->deactivate();
     uiManager->deactivate();
 }
