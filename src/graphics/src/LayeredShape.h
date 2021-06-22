@@ -5,13 +5,14 @@
 
 namespace graphics
 {
-struct LayeredShape
+struct ShapeRenderingInfo
 {
     VisibilityLayer layer;
     RectangleShape shape;
+    bool relativeRendering = false;
 };
 
-inline bool operator<(const LayeredShape& lhs, const LayeredShape& rhs)
+inline bool operator<(const ShapeRenderingInfo& lhs, const ShapeRenderingInfo& rhs)
 {
     return lhs.layer > rhs.layer;
 }

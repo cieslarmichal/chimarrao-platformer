@@ -19,7 +19,7 @@ set(SOURCES
         src/ui/Image.cpp
         src/ui/DefaultUIManager.cpp
         src/ui/UIComponentFactory.cpp
-        )
+        src/core/CameraComponent.cpp)
 
 set(UT_SOURCES
         src/core/ComponentOwnerTest.cpp

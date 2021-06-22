@@ -23,10 +23,10 @@ Button::Button(const std::shared_ptr<graphics::RendererPool>& rendererPool,
     coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(buttonConfig->position, name);
     coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
         rendererPool, buttonConfig->size, buttonConfig->position, buttonConfig->buttonColor,
-        graphics::VisibilityLayer::First);
+        graphics::VisibilityLayer::First, true);
     coreComponentsOwner->addComponent<components::core::TextComponent>(
         rendererPool, buttonConfig->position, buttonConfig->text, buttonConfig->fontPath,
-        buttonConfig->fontSize, buttonConfig->textColor, buttonConfig->textOffset);
+        buttonConfig->fontSize, buttonConfig->textColor, buttonConfig->textOffset, true);
     coreComponentsOwner->addComponent<components::core::BoxColliderComponent>(buttonConfig->size);
 
     if (buttonConfig->clickAction)

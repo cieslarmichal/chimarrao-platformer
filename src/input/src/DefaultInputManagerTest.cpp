@@ -28,7 +28,7 @@ TEST_F(DefaultInputManagerTest, readInput_shouldReadMousePositionFromWindow)
 {
     EXPECT_CALL(*input, clearPressedKeys());
     EXPECT_CALL(*input, setReleasedKeys());
-    EXPECT_CALL(*window, getMousePosition()).WillOnce(Return(mousePosition));
+    EXPECT_CALL(*window, getMousePosition(_)).WillOnce(Return(mousePosition));
     EXPECT_CALL(*input, setMousePosition(mousePosition));
 
     inputManager.readInput();

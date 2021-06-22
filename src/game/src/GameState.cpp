@@ -1,5 +1,6 @@
 #include "GameState.h"
 
+#include <core/CameraComponent.h>
 #include <utility>
 
 #include "AnimatorFactory.h"
@@ -43,6 +44,8 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     player->addComponent<components::core::BoxColliderComponent>(
         utils::Vector2f{2.f, 3.75f}, components::core::CollisionLayer::Player, utils::Vector2f{2.f, -0.1f});
     player->addComponent<components::core::VelocityComponent>();
+    player->addComponent<components::core::CameraComponent>(
+        rendererPool, utils::FloatRect{0, 0, tileMap->getSize().x * 4.f, tileMap->getSize().y * 4.f});
 
     for (int x = 0; x < tileMap->getSize().x; x++)
     {

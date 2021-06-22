@@ -16,7 +16,8 @@ public:
     TextComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>, const utils::Vector2f& position,
                   const std::string& text, const graphics::FontPath&, unsigned characterSize,
                   const graphics::Color& = graphics::Color::Black,
-                  const utils::Vector2f& transformOffset = utils::Vector2f{0, 0});
+                  const utils::Vector2f& transformOffset = utils::Vector2f{0, 0},
+                  bool relativeRendering = false);
     ~TextComponent();
 
     void lateUpdate(utils::DeltaTime, const input::Input& input) override;

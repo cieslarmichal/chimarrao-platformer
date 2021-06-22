@@ -9,20 +9,22 @@ namespace components::core
 GraphicsComponent::GraphicsComponent(ComponentOwner* ownerInit,
                                      std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                                      const utils::Vector2f& size, const utils::Vector2f& position,
-                                     const graphics::Color& color, graphics::VisibilityLayer layer)
+                                     const graphics::Color& color, graphics::VisibilityLayer layer,
+                                     bool relativeRendering)
     : Component{ownerInit}, rendererPool{std::move(rendererPoolInit)}, visibilityLayer{layer}
 {
-    id = rendererPool->acquire(size, position, color, layer);
+    id = rendererPool->acquire(size, position, color, layer, relativeRendering);
 }
 
 GraphicsComponent::GraphicsComponent(ComponentOwner* owner,
                                      std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                                      const utils::Vector2f& size, const utils::Vector2f& position,
                                      const graphics::TexturePath& texturePath,
-                                     graphics::VisibilityLayer layer)
+                                     graphics::VisibilityLayer layer,
+                                     bool relativeRendering)
     : Component{owner}, rendererPool{std::move(rendererPoolInit)}, visibilityLayer{layer}
 {
-    id = rendererPool->acquire(size, position, texturePath, layer);
+    id = rendererPool->acquire(size, position, texturePath, layer, relativeRendering);
 }
 
 GraphicsComponent::~GraphicsComponent()

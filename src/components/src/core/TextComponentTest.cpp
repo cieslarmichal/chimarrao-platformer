@@ -19,7 +19,7 @@ public:
     void expectCreateTextComponent()
     {
         EXPECT_CALL(*rendererPool,
-                    acquireText(position1, text, fontPath, characterSize, initialVisibility, color1))
+                    acquireText(position1, text, fontPath, characterSize, initialVisibility, color1, _))
             .WillOnce(Return(graphicsId));
     }
 
@@ -63,7 +63,7 @@ public:
 TEST_F(TextComponentTest, createTextComponent_shouldCreateGraphicsObject)
 {
     EXPECT_CALL(*rendererPool,
-                acquireText(position1, text, fontPath, characterSize, initialVisibility, color1))
+                acquireText(position1, text, fontPath, characterSize, initialVisibility, color1, _))
         .WillOnce(Return(graphicsId));
 
     const auto textComponent = createTextComponent();

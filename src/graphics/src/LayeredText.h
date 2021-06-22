@@ -5,13 +5,14 @@
 
 namespace graphics
 {
-struct LayeredText
+struct TextRenderingInfo
 {
     VisibilityLayer layer;
     Text text;
+    bool relativeRendering = false;
 };
 
-inline bool operator<(const LayeredText& lhs, const LayeredText& rhs)
+inline bool operator<(const TextRenderingInfo& lhs, const TextRenderingInfo& rhs)
 {
     return lhs.layer > rhs.layer;
 }

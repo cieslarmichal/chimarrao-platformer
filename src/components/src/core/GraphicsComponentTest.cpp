@@ -18,7 +18,7 @@ class GraphicsComponentTest : public Test
 public:
     void expectCreateGraphicsComponent()
     {
-        EXPECT_CALL(*rendererPool, acquire(size, position1, color1, initialVisibility))
+        EXPECT_CALL(*rendererPool, acquire(size, position1, color1, initialVisibility, _))
             .WillOnce(Return(graphicsId));
     }
 
@@ -57,7 +57,7 @@ public:
 
 TEST_F(GraphicsComponentTest, createGraphicsComponent_shouldCreateGraphicsShape)
 {
-    EXPECT_CALL(*rendererPool, acquire(size, position1, color1, VisibilityLayer::First))
+    EXPECT_CALL(*rendererPool, acquire(size, position1, color1, VisibilityLayer::First, _))
         .WillOnce(Return(graphicsId));
 
     const auto graphicsComponent = createGraphicsComponent();
@@ -67,7 +67,7 @@ TEST_F(GraphicsComponentTest, createGraphicsComponent_shouldCreateGraphicsShape)
 
 TEST_F(GraphicsComponentTest, createGraphicsComponent_shouldCreateGraphicsShapeWithTexturePath)
 {
-    EXPECT_CALL(*rendererPool, acquire(size, position1, texturePath, VisibilityLayer::First))
+    EXPECT_CALL(*rendererPool, acquire(size, position1, texturePath, VisibilityLayer::First, _))
         .WillOnce(Return(graphicsId));
 
     const auto graphicsComponent = createGraphicsComponentWithTexturePath();

@@ -42,4 +42,9 @@ inline std::ostream& operator<<(std::ostream& os, const utils::Vector2u& vec)
 {
     return os << toString(vec);
 }
+
+inline sf::Vector2f operator/(const sf::Vector2f& vec, const float divider)
+{
+    return {vec.x / divider, vec.y / divider};
+}
 }
