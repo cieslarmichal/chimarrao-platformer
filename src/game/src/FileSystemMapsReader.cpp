@@ -1,8 +1,8 @@
 #include "FileSystemMapsReader.h"
 
-#include "ProjectPathReader.h"
-
 #include <algorithm>
+
+#include "ProjectPathReader.h"
 
 namespace game
 {

@@ -42,7 +42,7 @@ public:
     void setOutline(const GraphicsId&, float thickness, const Color&) override;
     void setRenderingSize(const utils::Vector2u& renderingSize) override;
     void synchronizeRenderingSize() override;
-    void setCenter(const utils::Vector2f &) override;
+    void setCenter(const utils::Vector2f&) override;
     const utils::Vector2f& getCenter() const override;
 
 private:

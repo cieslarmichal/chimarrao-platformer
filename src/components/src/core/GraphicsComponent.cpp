@@ -20,8 +20,7 @@ GraphicsComponent::GraphicsComponent(ComponentOwner* owner,
                                      std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                                      const utils::Vector2f& size, const utils::Vector2f& position,
                                      const graphics::TexturePath& texturePath,
-                                     graphics::VisibilityLayer layer,
-                                     bool relativeRendering)
+                                     graphics::VisibilityLayer layer, bool relativeRendering)
     : Component{owner}, rendererPool{std::move(rendererPoolInit)}, visibilityLayer{layer}
 {
     id = rendererPool->acquire(size, position, texturePath, layer, relativeRendering);

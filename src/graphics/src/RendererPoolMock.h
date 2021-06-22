@@ -10,8 +10,8 @@ class RendererPoolMock : public RendererPool
 {
 public:
     MOCK_METHOD(GraphicsId, acquire,
-                (const utils::Vector2f& size, const utils::Vector2f& position, const Color&,
-                 VisibilityLayer, bool relativeRendering));
+                (const utils::Vector2f& size, const utils::Vector2f& position, const Color&, VisibilityLayer,
+                 bool relativeRendering));
     MOCK_METHOD(GraphicsId, acquire,
                 (const utils::Vector2f& size, const utils::Vector2f& position, const TexturePath&,
                  VisibilityLayer, bool relativeRendering));

@@ -23,10 +23,11 @@ static auto& getLayeredTextByPosition(std::vector<TextRenderingInfo>& texts,
     return texts.at(distance);
 }
 
-static auto& getLayeredTextByPosition(const std::vector<LayeredText>& layeredTexts,
-                                      std::vector<LayeredText>::const_iterator position)
+static auto& getLayeredTextByPosition(const std::vector<TextRenderingInfo>& layeredTexts,
+                                      std::vector<TextRenderingInfo>::const_iterator position)
 {
-    const auto distance = std::vector<LayeredText>::size_type(std::distance(layeredTexts.cbegin(), position));
+    const auto distance =
+        std::vector<TextRenderingInfo>::size_type(std::distance(layeredTexts.cbegin(), position));
     return layeredTexts.at(distance);
 }
 }
@@ -95,7 +96,7 @@ void RendererPoolSfml::renderAll()
     {
         if (layeredShape.layer != VisibilityLayer::Invisible)
         {
-            if(layeredShape.relativeRendering)
+            if (layeredShape.relativeRendering)
             {
                 layeredShape.shape.move(relativeOffset);
                 contextRenderer->draw(layeredShape.shape);
@@ -112,7 +113,7 @@ void RendererPoolSfml::renderAll()
     {
         if (layeredText.layer != VisibilityLayer::Invisible)
         {
-            if(layeredText.relativeRendering)
+            if (layeredText.relativeRendering)
             {
                 layeredText.text.move(relativeOffset);
                 contextRenderer->draw(layeredText.text);

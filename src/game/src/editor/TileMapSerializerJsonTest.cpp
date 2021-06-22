@@ -82,9 +82,9 @@ TEST_F(TileMapSerializerJsonTest, giveValidTileMapJson_shouldReturnDeserializedT
 
     EXPECT_EQ(validTileMapInfo.name, deserializedTileMapInfo.name);
     EXPECT_EQ(validTileMapInfo.mapSize, deserializedTileMapInfo.mapSize);
-    for (int y = 0; y < validTileMapInfo.tiles.size(); y++)
+    for (std::size_t y = 0; y < validTileMapInfo.tiles.size(); y++)
     {
-        for (int x = 0; x < validTileMapInfo.tiles[y].size(); x++)
+        for (std::size_t x = 0; x < validTileMapInfo.tiles[y].size(); x++)
         {
             EXPECT_EQ(validTileMapInfo.tiles[x][y]->type, deserializedTileMapInfo.tiles[x][y]->type);
         }

@@ -23,7 +23,7 @@ public:
     void setView() override;
     void setViewSize(const utils::Vector2u& windowsSize) override;
     void synchronizeViewSize() override;
-    utils::Vector2f getViewSize() override;
+    const utils::Vector2f& getViewSize() override;
     sf::Vector2u getSize() const override;
     bool setActive(bool active) override;
     void setCenter(const utils::Vector2f&) override;

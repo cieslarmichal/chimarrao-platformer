@@ -14,8 +14,8 @@ struct MultipleFilesAnimationSettings
     graphics::TexturePath firstTexturePath;
     int numberOfTextures;
     float timeBetweenTexturesInSeconds;
-    bool loopsAllowed;
-    bool interruptionAllowed;
+    bool loopsAllowed{true};
+    bool interruptionAllowed{true};
 };
 
 inline bool operator==(const MultipleFilesAnimationSettings& lhs, const MultipleFilesAnimationSettings& rhs)

@@ -10,7 +10,7 @@ namespace graphics
 struct TextureRect
 {
     std::string texturePath;
-    std::optional<utils::IntRect> rectToCutTexture;
+    std::optional<utils::IntRect> rectToCutTexture{std::nullopt};
 };
 
 inline bool operator==(const TextureRect& lhs, const TextureRect& rhs)

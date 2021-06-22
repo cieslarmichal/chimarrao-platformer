@@ -16,7 +16,8 @@ TextComponent::TextComponent(ComponentOwner* ownerInit,
       transformOffset{offset},
       visibilityLayer{graphics::VisibilityLayer::First}
 {
-    id = rendererPool->acquireText(position, text, fontPath, characterSize, visibilityLayer, color, relativeRendering);
+    id = rendererPool->acquireText(position, text, fontPath, characterSize, visibilityLayer, color,
+                                   relativeRendering);
 }
 
 TextComponent::~TextComponent()
