@@ -2,6 +2,8 @@
 
 #include "ProjectPathReader.h"
 
+#include <algorithm>
+
 namespace game
 {
 

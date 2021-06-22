@@ -32,7 +32,7 @@ public:
     {
         EXPECT_CALL(*tileMap, getTile(positionInit)).WillRepeatedly(ReturnRef(tile));
         EXPECT_CALL(*rendererPool, acquire(size, utils::Vector2f(position), grassTexturePath,
-                                           graphics::VisibilityLayer::Invisible));
+                                           graphics::VisibilityLayer::Invisible, _));
         EXPECT_CALL(*rendererPool, setTexture(_, _, _));
         EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::Invisible)).Times(2);
         EXPECT_CALL(*rendererPool, release(_));

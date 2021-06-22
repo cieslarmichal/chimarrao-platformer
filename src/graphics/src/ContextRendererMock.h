@@ -17,6 +17,6 @@ public:
     MOCK_METHOD(void, setViewSize, (const utils::Vector2u& windowsSize));
     MOCK_METHOD(void, synchronizeViewSize, ());
     MOCK_METHOD(void, setCenter, (const utils::Vector2f&));
-    MOCK_METHOD(const utils::Vector2f&, getCenter, ());
+    MOCK_METHOD(const utils::Vector2f&, getCenter, (), (const));
 };
 }

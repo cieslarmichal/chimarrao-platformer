@@ -11,13 +11,13 @@ class RendererPoolMock : public RendererPool
 public:
     MOCK_METHOD(GraphicsId, acquire,
                 (const utils::Vector2f& size, const utils::Vector2f& position, const Color&,
-                 VisibilityLayer));
+                 VisibilityLayer, bool relativeRendering));
     MOCK_METHOD(GraphicsId, acquire,
                 (const utils::Vector2f& size, const utils::Vector2f& position, const TexturePath&,
-                 VisibilityLayer));
+                 VisibilityLayer, bool relativeRendering));
     MOCK_METHOD(GraphicsId, acquireText,
                 (const utils::Vector2f& position, const std::string& text, const FontPath&,
-                 unsigned characterSize, VisibilityLayer, const Color&));
+                 unsigned characterSize, VisibilityLayer, const Color&, bool relativeRendering));
     MOCK_METHOD(void, release, (const GraphicsId&));
     MOCK_METHOD(void, renderAll, ());
     MOCK_METHOD(void, setPosition, (const GraphicsId&, const utils::Vector2f&));
@@ -30,7 +30,7 @@ public:
     MOCK_METHOD(void, setRenderingSize, (const utils::Vector2u&));
     MOCK_METHOD(void, synchronizeRenderingSize, ());
     MOCK_METHOD(void, setCenter, (const utils::Vector2f&));
-    MOCK_METHOD(const utils::Vector2f&, getCenter, ());
-    MOCK_METHOD(const utils::Vector2f&, getViewSize, ());
+    MOCK_METHOD(const utils::Vector2f&, getCenter, (), (const));
+    MOCK_METHOD(const utils::Vector2f&, getViewSize, (), (const));
 };
 }
