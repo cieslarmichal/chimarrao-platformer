@@ -82,4 +82,10 @@ void ChooseMapState::deactivate()
     active = false;
     uiManager->deactivate();
 }
+
+void ChooseMapState::backToMenu()
+{
+    shouldBackToMenu = true;
+}
+
 }

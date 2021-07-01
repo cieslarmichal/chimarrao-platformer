@@ -32,6 +32,8 @@ public:
     void deactivate() override;
 
 private:
+    void backToMenu();
+
     std::shared_ptr<components::ui::UIManager> uiManager;
     bool shouldBackToMenu;
     std::shared_ptr<TileMap> tileMap;

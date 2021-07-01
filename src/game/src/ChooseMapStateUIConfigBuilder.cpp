@@ -78,7 +78,7 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
     };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
-    auto backToMenuClickAction = [=] { chooseMapState->shouldBackToMenu = true; };
+    auto backToMenuClickAction = [=] { chooseMapState->backToMenu(); };
     auto backToMenuButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "chooseMapBackToMenuButton", backToMenuButtonPosition, backToMenuButtonSize, buttonColor, "Back",
         graphics::Color::Black, 37, fontPath, utils::Vector2f{2.0f, 0.0f}, backToMenuClickAction,
