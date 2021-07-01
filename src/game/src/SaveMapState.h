@@ -29,6 +29,7 @@ public:
     void deactivate() override;
 
 private:
+    void backToEditorMenu();
     void saveMap();
 
     bool shouldBackToEditorMenu;

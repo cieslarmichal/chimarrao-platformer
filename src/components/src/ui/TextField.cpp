@@ -32,7 +32,6 @@ TextField::TextField(const std::shared_ptr<graphics::RendererPool>& rendererPool
     coreComponentsOwner->addComponent<components::core::BoxColliderComponent>(textFieldConfig->size);
 
     clickInsideFieldAction = textFieldConfig->clickInFieldAction;
-    clickOutsideFieldAction = textFieldConfig->clickOutsideFieldAction;
     mouseOutFieldAction = textFieldConfig->mouseOverActions->mouseOutAction;
 
     auto textFieldClickedAction = [&]
@@ -69,7 +68,7 @@ void TextField::update(utils::DeltaTime deltaTime, const input::Input& input)
             if (not textFieldHitBox->intersects(input.getMousePosition()))
             {
                 textFieldClicked = false;
-                clickOutsideFieldAction(inputBuffer);
+                mouseOutFieldAction();
             }
         }
     }

@@ -37,7 +37,6 @@ private:
     const float timeAfterNextLetterCanBeDeleted;
     std::unique_ptr<utils::Timer> deleteCharactersTimer;
     std::function<void()> clickInsideFieldAction;
-    std::function<void(std::string)> clickOutsideFieldAction;
     std::function<void()> mouseOutFieldAction;
 };
 }

@@ -4,8 +4,8 @@
 
 #include "EditorMenuStateUIConfigBuilder.h"
 #include "TimerFactory.h"
-#include "ui/DefaultUIManager.h"
 #include "nfd.hpp"
+#include "ui/DefaultUIManager.h"
 
 namespace game
 {
@@ -128,7 +128,6 @@ std::optional<std::string> getPathToMap()
     if (result == NFD_OKAY)
     {
         auto pathToMap = std::string(outPath);
-        std::cout << "Path to map: " << pathToMap << std::endl;
         NFD_FreePath(outPath);
         NFD_Quit();
         return pathToMap;

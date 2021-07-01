@@ -16,7 +16,7 @@ struct TextFieldConfig
                     graphics::Color colorInit, const std::string& textInit, unsigned int fontSizeInit,
                     const std::string& fontPathInit, utils::Vector2f textOffsetInit,
                     std::function<void(void)> clickInFieldActionInit,
-                    std::function<void(std::string)> clickOutsideFieldActionInit)
+                    std::function<void(void)> clickOutsideFieldActionInit)
         : uniqueName{uniqueNameInit},
           position{positionInit},
           size{sizeInit},
@@ -35,7 +35,7 @@ struct TextFieldConfig
                     graphics::Color colorInit, const std::string& textInit, unsigned int fontSizeInit,
                     const std::string& fontPathInit, utils::Vector2f textOffsetInit,
                     std::function<void(void)> clickInFieldActionInit,
-                    std::function<void(std::string)> clickOutsideFieldActionInit,
+                    std::function<void(void)> clickOutsideFieldActionInit,
                     const MouseOverActions& mouseOverActionsInit)
         : uniqueName{uniqueNameInit},
           position{positionInit},
@@ -60,7 +60,7 @@ struct TextFieldConfig
     const std::string fontPath;
     const utils::Vector2f textOffset;
     const std::function<void(void)> clickInFieldAction;
-    const std::function<void(std::string)> clickOutsideFieldAction;
+    const std::function<void(void)> clickOutsideFieldAction;
     const boost::optional<MouseOverActions> mouseOverActions;
 };
 }

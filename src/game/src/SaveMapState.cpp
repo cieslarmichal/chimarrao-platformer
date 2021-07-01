@@ -73,13 +73,15 @@ void SaveMapState::deactivate()
     uiManager->deactivate();
 }
 
+void SaveMapState::backToEditorMenu()
+{
+    shouldBackToEditorMenu = true;
+}
+
 void SaveMapState::saveMap()
 {
     tileMap->setName(currentMapName);
     tileMap->saveToFile();
-    std::cout << tileMap->getName() << std::endl;
-    std::cout << tileMap->getPath() << std::endl;
     shouldBackToEditorMenu = true;
 }
-
 }

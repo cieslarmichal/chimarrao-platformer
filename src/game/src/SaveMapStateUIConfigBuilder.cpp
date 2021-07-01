@@ -76,7 +76,7 @@ SaveMapStateUIConfigBuilder::createButtonConfigs(SaveMapState* saveMapState)
     };
     auto cancelButtonMouseOverActions =
         components::ui::MouseOverActions{cancelButtonOnMouseOver, cancelButtonOnMouseOut};
-    auto cancelClickAction = [=] { saveMapState->shouldBackToEditorMenu = true; };
+    auto cancelClickAction = [=] { saveMapState->backToEditorMenu(); };
     auto cancelButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "saveMapCancelButton", cancelButtonPosition, smallButtonSize, buttonColor, "Cancel", textColor, 20,
         fontPath, utils::Vector2f{0.5f, 0.5f}, cancelClickAction, cancelButtonMouseOverActions);
@@ -143,8 +143,7 @@ SaveMapStateUIConfigBuilder::createTextFieldConfigs(SaveMapState* saveMapState)
         components::ui::MouseOverActions{mapNameTextFieldOnMouseOver, mapNameTextFieldOnMouseOut};
     const auto mapNameTextFieldClickInsideAction = [=]
     { saveMapState->uiManager->setColor("saveMapNameTextField", buttonHoverColor); };
-    auto mapNameTextFieldClickOutsideAction = [=](std::string inputBuffer)
-    { saveMapState->currentMapName = std::move(inputBuffer); };
+    auto mapNameTextFieldClickOutsideAction = [=]() {};
     auto mapNameTextFieldConfig = std::make_unique<components::ui::TextFieldConfig>(
         "saveMapNameTextField", mapNamingPromptPosition, buttonSize, buttonColor, "", 20, fontPath,
         utils::Vector2f{0.75f, 0.4f}, mapNameTextFieldClickInsideAction, mapNameTextFieldClickOutsideAction,

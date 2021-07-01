@@ -74,10 +74,7 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     };
     auto playButtonMouseOverActions =
         components::ui::MouseOverActions{playButtonOnMouseOver, playButtonOnMouseOut};
-    const auto playButtonClickAction = [=]
-    {
-        menuState->runGame();
-    };
+    const auto playButtonClickAction = [=] { menuState->runGame(); };
     auto playButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuPlayButton", gameButtonPosition, buttonSize, buttonColor, "Play", graphics::Color::Black, 35,
         fontPath, utils::Vector2f{7, 1}, playButtonClickAction, playButtonMouseOverActions);
@@ -95,10 +92,7 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     };
     auto mapEditorButtonMouseOverActions =
         components::ui::MouseOverActions{mapEditorButtonOnMouseOver, mapEditorButtonOnMouseOut};
-    const auto mapEditorButtonClickAction = [=]
-    {
-        menuState->runMapEditor();
-    };
+    const auto mapEditorButtonClickAction = [=] { menuState->runMapEditor(); };
     auto mapEditorButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuMapEditorButton", mapEditorButtonPosition, buttonSize, buttonColor, "Map Editor",
         graphics::Color::Black, 35, fontPath, utils::Vector2f{1, 1}, mapEditorButtonClickAction,
@@ -117,10 +111,7 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     };
     auto controlsButtonMouseOverActions =
         components::ui::MouseOverActions{controlsButtonOnMouseOver, controlsButtonOnMouseOut};
-    const auto controlsButtonClickAction = [=]
-    {
-        menuState->runControls();
-    };
+    const auto controlsButtonClickAction = [=] { menuState->runControls(); };
     auto controlsButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuControlsButton", controlsButtonPosition, buttonSize, buttonColor, "Controls",
         graphics::Color::Black, 35, fontPath, utils::Vector2f{3, 1}, controlsButtonClickAction,
@@ -139,10 +130,7 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     };
     auto settingsButtonMouseOverActions =
         components::ui::MouseOverActions{settingsButtonOnMouseOver, settingsButtonOnMouseOut};
-    const auto settingsButtonClickAction = [=]
-    {
-        menuState->runSettings();
-    };
+    const auto settingsButtonClickAction = [=] { menuState->runSettings(); };
     auto settingsButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuSettingsButton", settingsButtonPosition, buttonSize, buttonColor, "Settings",
         graphics::Color::Black, 35, fontPath, utils::Vector2f{3, 1}, settingsButtonClickAction,
