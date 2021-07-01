@@ -21,7 +21,7 @@ public:
     void run();
 
 private:
-    void update();
+    StatesStatus update();
     void render();
 
     GameTimer timer;

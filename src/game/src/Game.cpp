@@ -18,21 +18,21 @@ void Game::run()
     while (window->isOpen())
     {
         std::this_thread::sleep_for(std::chrono::duration<double, std::nano>(1));
-        update();
+        if (const auto gameState = update(); gameState == StatesStatus::Exit)
+        {
+            window->close();
+            break;
+        }
         render();
     }
 }
 
-void Game::update()
+StatesStatus Game::update()
 {
-    auto deltaTime = timer.getDurationFromLastUpdate();
-
+    const auto deltaTime = timer.getDurationFromLastUpdate();
     const auto& input = inputManager->readInput();
     const auto statesStatus = states->updateCurrentState(deltaTime, input);
-    if (statesStatus == StatesStatus::Exit)
-    {
-        window->close();
-    }
+    return statesStatus;
 }
 
 void Game::render()
