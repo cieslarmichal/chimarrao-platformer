@@ -28,6 +28,7 @@ public:
     void deactivate() override;
 
 private:
+    void backToMenu();
     void synchronizeWindowSettings();
     void applyWindowSettingsChanges();
     void refreshWindowSettingsUI();

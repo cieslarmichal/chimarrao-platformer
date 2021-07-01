@@ -80,6 +80,11 @@ void SettingsState::deactivate()
     uiManager->deactivate();
 }
 
+void SettingsState::backToMenu()
+{
+    shouldBackToMenu = true;
+}
+
 void SettingsState::synchronizeWindowSettings()
 {
     selectedWindowsSettings = window->getWindowSettings();
@@ -122,6 +127,7 @@ void SettingsState::applyWindowSettingsChanges()
 
     synchronizeWindowSettings();
     refreshWindowSettingsUI();
+    shouldBackToMenu = true;
 }
 
 void SettingsState::refreshWindowSettingsUI()
