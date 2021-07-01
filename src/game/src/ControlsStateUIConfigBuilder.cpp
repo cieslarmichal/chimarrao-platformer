@@ -96,7 +96,7 @@ ControlsStateUIConfigBuilder::createButtonConfigs(ControlsState* controlsState)
     };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
-    auto backToMenuClickAction = [=] { controlsState->shouldBackToMenu = true; };
+    auto backToMenuClickAction = [=] { controlsState->backToMenu(); };
     auto backToMenuButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "controlsBackToMenuButton", backToMenuButtonPosition, backToMenuButtonSize, buttonColor, "Back",
         graphics::Color::Black, 37, fontPath, utils::Vector2f{2.0f, 0.0f}, backToMenuClickAction,

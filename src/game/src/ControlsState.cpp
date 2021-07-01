@@ -70,4 +70,9 @@ void ControlsState::deactivate()
     uiManager->deactivate();
 }
 
+void ControlsState::backToMenu()
+{
+    shouldBackToMenu = true;
+}
+
 }

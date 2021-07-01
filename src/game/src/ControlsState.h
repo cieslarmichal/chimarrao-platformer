@@ -26,6 +26,8 @@ public:
     void deactivate() override;
 
 private:
+    void backToMenu();
+
     bool shouldBackToMenu;
     std::shared_ptr<components::ui::UIManager> uiManager;
     std::unique_ptr<GridButtonsNavigator> buttonsNavigator;
