@@ -6,7 +6,6 @@
 
 namespace game
 {
-
 namespace
 {
 const auto buttonColor = graphics::Color{65, 105, 200};
@@ -68,7 +67,7 @@ PauseStateUIConfigBuilder::createButtonConfigs(PauseState* pauseState)
     };
     auto backToGameButtonMouseOverActions =
         components::ui::MouseOverActions{backToGameButtonOnMouseOver, backToGameButtonOnMouseOut};
-    auto backToGameClickAction = [=] { pauseState->shouldBackToGame = true; };
+    auto backToGameClickAction = [=] { pauseState->backToGame(); };
     auto backToGameButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "pauseBackToGameButton", backToGameButtonPosition, buttonSize, buttonColor, "Back to game", textColor,
         30, fontPath, utils::Vector2f{2, 0.5}, backToGameClickAction, backToGameButtonMouseOverActions);
@@ -86,7 +85,7 @@ PauseStateUIConfigBuilder::createButtonConfigs(PauseState* pauseState)
     };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
-    auto backToMenuClickAction = [=] { pauseState->shouldBackToMenu = true; };
+    auto backToMenuClickAction = [=] { pauseState->backToMenu(); };
     auto backToMenuButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "pauseBackToMenuButton", backToMenuButtonPosition, buttonSize, buttonColor, "Back to menu", textColor,
         30, fontPath, utils::Vector2f{2, 0.5}, backToMenuClickAction, backToMenuButtonMouseOverActions);

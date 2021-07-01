@@ -25,6 +25,9 @@ public:
     void deactivate() override;
 
 private:
+    void backToGame();
+    void backToMenu();
+
     bool shouldBackToGame;
     bool shouldBackToMenu;
     std::shared_ptr<components::ui::UIManager> uiManager;

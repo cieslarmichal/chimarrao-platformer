@@ -78,4 +78,14 @@ void PauseState::deactivate()
     uiManager->deactivate();
 }
 
+void PauseState::backToGame()
+{
+    shouldBackToGame = true;
+}
+
+void PauseState::backToMenu()
+{
+    shouldBackToMenu = true;
+}
+
 }
