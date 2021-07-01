@@ -78,4 +78,33 @@ void MenuState::handleWindowSizeChange(const utils::Vector2u& windowSize)
     uiManager->freezeAllButtons();
 }
 
+void MenuState::runGame()
+{
+    states.deactivateCurrentState();
+    states.addNextState(StateType::ChooseMap);
+}
+
+void MenuState::runMapEditor()
+{
+    states.deactivateCurrentState();
+    states.addNextState(StateType::Editor);
+}
+
+void MenuState::runControls()
+{
+    states.deactivateCurrentState();
+    states.addNextState(StateType::Controls);
+}
+
+void MenuState::runSettings()
+{
+    states.deactivateCurrentState();
+    states.addNextState(StateType::Settings);
+}
+
+void MenuState::exit()
+{
+    shouldExit = true;
+}
+
 }

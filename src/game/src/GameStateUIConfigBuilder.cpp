@@ -2,7 +2,6 @@
 
 #include "CommonUIConfigElements.h"
 #include "GameState.h"
-#include "ProjectPathReader.h"
 
 namespace game
 {

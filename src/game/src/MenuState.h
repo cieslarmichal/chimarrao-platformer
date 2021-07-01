@@ -30,6 +30,12 @@ public:
     void handleWindowSizeChange(const utils::Vector2u& windowSize) override;
 
 private:
+    void runGame();
+    void runMapEditor();
+    void runControls();
+    void runSettings();
+    void exit();
+
     std::shared_ptr<components::ui::UIManager> uiManager;
     std::unique_ptr<GridButtonsNavigator> buttonsNavigator;
     bool shouldExit;

@@ -21,7 +21,7 @@ std::unique_ptr<components::ui::UIConfig>
 EditorStateUIConfigBuilder::createEditorUIConfig(EditorState* editorState)
 {
     return std::make_unique<components::ui::UIConfig>(
-        createBackgroundConfig(editorState), std::move(createButtonConfigs(editorState)),
+        createBackgroundConfig(editorState), createButtonConfigs(editorState),
         createCheckBoxConfigs(editorState), createLabelConfigs(editorState),
         createTextFieldConfigs(editorState), createImageConfigs(editorState));
 }
@@ -32,7 +32,9 @@ EditorStateUIConfigBuilder::createBackgroundConfig(EditorState* editorState)
     const auto changeBlockAction = [=]()
     {
         editorState->currentTileId =
-            editorState->currentTileId + 1 < tilesTextureVector.size() ? editorState->currentTileId + 1 : 0;
+            editorState->currentTileId + 1 < static_cast<int>(tilesTextureVector.size()) ?
+                editorState->currentTileId + 1 :
+                0;
         editorState->currentTilePath = tilesTextureVector[editorState->currentTileId];
     };
     const auto keyActions = std::vector<components::core::KeyAction>{

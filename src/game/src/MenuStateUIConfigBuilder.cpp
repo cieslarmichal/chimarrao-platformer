@@ -1,7 +1,6 @@
 #include "MenuStateUIConfigBuilder.h"
 
 #include "CommonUIConfigElements.h"
-#include "ControlsState.h"
 #include "MenuState.h"
 #include "PaginatedButtonsNavigator.h"
 #include "ProjectPathReader.h"
@@ -75,14 +74,13 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     };
     auto playButtonMouseOverActions =
         components::ui::MouseOverActions{playButtonOnMouseOver, playButtonOnMouseOut};
-    const auto runGame = [=]
+    const auto playButtonClickAction = [=]
     {
-        menuState->states.deactivateCurrentState();
-        menuState->states.addNextState(StateType::ChooseMap);
+        menuState->runGame();
     };
     auto playButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuPlayButton", gameButtonPosition, buttonSize, buttonColor, "Play", graphics::Color::Black, 35,
-        fontPath, utils::Vector2f{7, 1}, runGame, playButtonMouseOverActions);
+        fontPath, utils::Vector2f{7, 1}, playButtonClickAction, playButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(playButtonConfig));
 
     const auto mapEditorButtonOnMouseOver = [=]
@@ -97,14 +95,13 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     };
     auto mapEditorButtonMouseOverActions =
         components::ui::MouseOverActions{mapEditorButtonOnMouseOver, mapEditorButtonOnMouseOut};
-    const auto runMapEditor = [=]
+    const auto mapEditorButtonClickAction = [=]
     {
-        menuState->states.deactivateCurrentState();
-        menuState->states.addNextState(StateType::Editor);
+        menuState->runMapEditor();
     };
     auto mapEditorButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuMapEditorButton", mapEditorButtonPosition, buttonSize, buttonColor, "Map Editor",
-        graphics::Color::Black, 35, fontPath, utils::Vector2f{1, 1}, runMapEditor,
+        graphics::Color::Black, 35, fontPath, utils::Vector2f{1, 1}, mapEditorButtonClickAction,
         mapEditorButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(mapEditorButtonConfig));
 
@@ -120,14 +117,13 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     };
     auto controlsButtonMouseOverActions =
         components::ui::MouseOverActions{controlsButtonOnMouseOver, controlsButtonOnMouseOut};
-    const auto runControls = [=]
+    const auto controlsButtonClickAction = [=]
     {
-        menuState->states.deactivateCurrentState();
-        menuState->states.addNextState(StateType::Controls);
+        menuState->runControls();
     };
     auto controlsButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuControlsButton", controlsButtonPosition, buttonSize, buttonColor, "Controls",
-        graphics::Color::Black, 35, fontPath, utils::Vector2f{3, 1}, runControls,
+        graphics::Color::Black, 35, fontPath, utils::Vector2f{3, 1}, controlsButtonClickAction,
         controlsButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(controlsButtonConfig));
 
@@ -143,14 +139,13 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     };
     auto settingsButtonMouseOverActions =
         components::ui::MouseOverActions{settingsButtonOnMouseOver, settingsButtonOnMouseOut};
-    const auto runSettings = [=]
+    const auto settingsButtonClickAction = [=]
     {
-        menuState->states.deactivateCurrentState();
-        menuState->states.addNextState(StateType::Settings);
+        menuState->runSettings();
     };
     auto settingsButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuSettingsButton", settingsButtonPosition, buttonSize, buttonColor, "Settings",
-        graphics::Color::Black, 35, fontPath, utils::Vector2f{3, 1}, runSettings,
+        graphics::Color::Black, 35, fontPath, utils::Vector2f{3, 1}, settingsButtonClickAction,
         settingsButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(settingsButtonConfig));
 
@@ -166,10 +161,10 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     };
     auto exitButtonMouseOverActions =
         components::ui::MouseOverActions{exitButtonOnMouseOver, exitButtonOnMouseOut};
-    const auto exit = [=] { menuState->shouldExit = true; };
+    const auto exitButtonClickAction = [=] { menuState->exit(); };
     auto exitButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuExitButton", exitButtonPosition, buttonSize, buttonColor, "Exit", graphics::Color::Black, 35,
-        fontPath, utils::Vector2f{7, 1}, exit, exitButtonMouseOverActions);
+        fontPath, utils::Vector2f{7, 1}, exitButtonClickAction, exitButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(exitButtonConfig));
 
     return buttonsConfig;
