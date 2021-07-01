@@ -30,6 +30,12 @@ public:
     void deactivate() override;
 
 private:
+    void backToEditor();
+    void backToMenu();
+    void saveMap();
+    void createNewMap();
+    void loadMap();
+
     bool shouldBackToEditor;
     bool shouldBackToMenu;
     std::shared_ptr<components::ui::UIManager> uiManager;

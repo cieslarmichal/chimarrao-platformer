@@ -5,12 +5,9 @@
 #include "EditorMenuState.h"
 #include "ProjectPathReader.h"
 #include "Vector.h"
-#include "nfd.hpp"
 
 namespace
 {
-std::optional<std::string> getPathToMap();
-
 const auto buttonColor = graphics::Color{65, 105, 200};
 const auto buttonHoverColor = graphics::Color(4, 8, 97);
 const auto textColor = graphics::Color(200, 200, 200);
@@ -84,7 +81,7 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
     };
     auto backToEditorButtonMouseOverActions =
         components::ui::MouseOverActions{backToEditorButtonOnMouseOver, backToEditorButtonOnMouseOut};
-    auto backToEditorClickAction = [=] { editorMenuState->shouldBackToEditor = true; };
+    auto backToEditorClickAction = [=] { editorMenuState->backToEditor(); };
     auto backToEditorButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "editorMenuBackToEditorButton", backToEditorButtonPosition, buttonSize, buttonColor, "Back to editor",
         textColor, 27, fontPath, utils::Vector2f{1.5f, 0.75f}, backToEditorClickAction,
@@ -103,16 +100,7 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
     };
     auto loadMapButtonMouseOverActions =
         components::ui::MouseOverActions{loadMapButtonOnMouseOver, loadMapButtonOnMouseOut};
-    auto loadMapClickAction = [=]
-    {
-        auto pathToMapFile = getPathToMap();
-        if (not pathToMapFile)
-        {
-            return;
-        }
-        editorMenuState->tileMap->loadFromFile(*pathToMapFile);
-        editorMenuState->shouldBackToEditor = true;
-    };
+    auto loadMapClickAction = [=] { editorMenuState->loadMap(); };
     auto loadMapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "editorMenuLoadMapButton", loadMapButtonPosition, buttonSize, buttonColor, "Load map", textColor, 27,
         fontPath, utils::Vector2f{7.f, 0.75f}, loadMapClickAction, loadMapButtonMouseOverActions);
@@ -130,13 +118,7 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
     };
     auto newMapButtonMouseOverActions =
         components::ui::MouseOverActions{newMapButtonOnMouseOver, newMapButtonOnMouseOut};
-    auto newMapClickAction = [=]
-    {
-        std::cout << "new map\n";
-        TileMapInfo tileMapInfo = TileMapInfo{"", {40, 15}, {}};
-        editorMenuState->tileMap->setTileMapInfo(tileMapInfo);
-        editorMenuState->shouldBackToEditor = true;
-    };
+    auto newMapClickAction = [=] { editorMenuState->createNewMap(); };
     auto newMapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "editorMenuNewMapButton", newMapButtonPosition, buttonSize, buttonColor, "New map", textColor, 27,
         fontPath, utils::Vector2f{7.f, 0.75f}, newMapClickAction, newMapButtonMouseOverActions);
@@ -154,11 +136,7 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
     };
     auto saveMapButtonMouseOverActions =
         components::ui::MouseOverActions{saveMapButtonOnMouseOver, saveMapButtonOnMouseOut};
-    auto saveMapClickAction = [=]
-    {
-        editorMenuState->states.deactivateCurrentState();
-        editorMenuState->states.addNextState(StateType::SaveMap);
-    };
+    auto saveMapClickAction = [=] { editorMenuState->saveMap(); };
     auto saveMapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "editorMenuSaveMapButton", saveMapButtonPosition, buttonSize, buttonColor, "Save map", textColor, 27,
         fontPath, utils::Vector2f{6.f, 0.75f}, saveMapClickAction, saveMapButtonMouseOverActions);
@@ -176,13 +154,7 @@ EditorMenuStateUIConfigBuilder::createButtonConfigs(EditorMenuState* editorMenuS
     };
     auto backToMenuButtonMouseOverActions =
         components::ui::MouseOverActions{backToMenuButtonOnMouseOver, backToMenuButtonOnMouseOut};
-    auto backToMenuClickAction = [=]
-    {
-        editorMenuState->shouldBackToMenu = true;
-        TileMapInfo tileMapInfo = TileMapInfo{"", {40, 15}, {}};
-        editorMenuState->tileMap->setTileMapInfo(tileMapInfo);
-        editorMenuState->shouldBackToMenu = true;
-    };
+    auto backToMenuClickAction = [=] { editorMenuState->backToMenu(); };
     auto backToMenuButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "editorMenuBackToMenuButton", backToMenuButtonPosition, buttonSize, buttonColor, "Back to menu",
         textColor, 27, fontPath, utils::Vector2f{2.75f, 0.75f}, backToMenuClickAction,
@@ -234,29 +206,4 @@ EditorMenuStateUIConfigBuilder::createImageConfigs(EditorMenuState*)
     return imagesConfig;
 }
 
-}
-
-namespace
-{
-std::optional<std::string> getPathToMap()
-{
-    NFD_Init();
-    nfdchar_t* outPath;
-    auto mapsPath = utils::ProjectPathReader::getProjectRootPath() + "maps";
-    nfdfilteritem_t filterItem[1] = {{"Map File", "map"}};
-    nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 1, mapsPath.c_str());
-    if (result == NFD_OKAY)
-    {
-        auto pathToMap = std::string(outPath);
-        std::cout << "Path to map: " << pathToMap << std::endl;
-        NFD_FreePath(outPath);
-        NFD_Quit();
-        return pathToMap;
-    }
-    else
-    {
-        NFD_Quit();
-        return std::nullopt;
-    }
-}
 }

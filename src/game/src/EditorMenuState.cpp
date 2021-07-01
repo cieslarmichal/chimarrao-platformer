@@ -5,11 +5,14 @@
 #include "EditorMenuStateUIConfigBuilder.h"
 #include "TimerFactory.h"
 #include "ui/DefaultUIManager.h"
+#include "nfd.hpp"
 
 namespace game
 {
 namespace
 {
+std::optional<std::string> getPathToMap();
+
 const auto buttonColor = graphics::Color{65, 105, 200};
 const auto buttonHoverColor = graphics::Color(4, 8, 97);
 }
@@ -79,4 +82,62 @@ void EditorMenuState::deactivate()
     uiManager->deactivate();
 }
 
+void EditorMenuState::backToEditor()
+{
+    shouldBackToEditor = true;
+}
+
+void EditorMenuState::backToMenu()
+{
+    const auto tileMapInfo = TileMapInfo{"", {40, 15}, {}};
+    tileMap->setTileMapInfo(tileMapInfo);
+    shouldBackToMenu = true;
+}
+
+void EditorMenuState::saveMap()
+{
+    states.deactivateCurrentState();
+    states.addNextState(StateType::SaveMap);
+}
+
+void EditorMenuState::createNewMap()
+{
+    const auto tileMapInfo = TileMapInfo{"", {40, 15}, {}};
+    tileMap->setTileMapInfo(tileMapInfo);
+    shouldBackToEditor = true;
+}
+
+void EditorMenuState::loadMap()
+{
+    if (const auto pathToMapFile = getPathToMap())
+    {
+        tileMap->loadFromFile(*pathToMapFile);
+        shouldBackToEditor = true;
+    }
+}
+
+namespace
+{
+std::optional<std::string> getPathToMap()
+{
+    NFD_Init();
+    nfdchar_t* outPath;
+    auto mapsPath = utils::ProjectPathReader::getProjectRootPath() + "maps";
+    nfdfilteritem_t filterItem[1] = {{"Map File", "map"}};
+    nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 1, mapsPath.c_str());
+    if (result == NFD_OKAY)
+    {
+        auto pathToMap = std::string(outPath);
+        std::cout << "Path to map: " << pathToMap << std::endl;
+        NFD_FreePath(outPath);
+        NFD_Quit();
+        return pathToMap;
+    }
+    else
+    {
+        NFD_Quit();
+        return std::nullopt;
+    }
+}
+}
 }
