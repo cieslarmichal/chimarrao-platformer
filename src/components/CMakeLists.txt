@@ -35,6 +35,7 @@ set(UT_SOURCES
         src/core/BoxColliderComponentTest.cpp
         src/core/IdComponentTest.cpp
         src/core/VelocityComponentTest.cpp
+        src/core/CameraComponentTest.cpp
         src/ui/DefaultUIManagerTest.cpp
         src/ui/BackgroundTest.cpp
         src/ui/ButtonTest.cpp

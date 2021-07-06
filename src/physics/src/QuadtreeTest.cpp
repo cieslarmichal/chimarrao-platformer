@@ -207,7 +207,7 @@ TEST_F(QuadtreeTest, shouldReturnDefaultNodeBounds)
 
     const auto nodeBounds = quadtree.getNodeBounds();
 
-    ASSERT_EQ(nodeBounds, utils::FloatRect(0, 0, 80, 60));
+    ASSERT_EQ(nodeBounds, utils::FloatRect(0, 0, 160, 60));
 }
 
 TEST_F(QuadtreeTest, shouldReturnNodeBoundsSetInContructor)

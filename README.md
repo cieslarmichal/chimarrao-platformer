@@ -19,6 +19,10 @@
 
        git submodule update --init --recursive
 
+6. To run tests use CMAKE flag:
+   
+       -Dgtest_force_shared_crt=ON
+
 
 ## Setup on Ubuntu 20.04
 1. Install SFML:
