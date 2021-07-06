@@ -21,7 +21,7 @@ set(UT_SOURCES
         src/RendererPoolSfmlTest.cpp
         src/TextTest.cpp
         src/VisibilityLayerTest.cpp
-        )
+        src/RenderTargetSfmlTest.cpp)
 
 add_library(graphics SHARED ${SOURCES})
 target_link_libraries(graphics PUBLIC utils window)

@@ -20,6 +20,9 @@ const utils::Vector2f size1{20, 30};
 const utils::Vector2f size2{100, 100};
 const utils::Vector2f position{0, 10};
 const utils::Vector2f newPosition{42, 42};
+const utils::Vector2f center{40, 30};
+const utils::Vector2f newCenter{30, 40};
+const utils::Vector2f viewSize{80, 60};
 const Color color{Color::Black};
 const TexturePath validTexturePath{"validTexturePath"};
 const TexturePath validTexturePath2{"validTexturePath2"};
@@ -143,9 +146,9 @@ TEST_F(RendererPoolSfmlTest, renderShape)
     rendererPool.acquire(size1, position, color);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
-    auto center = utils::Vector2f{0,0};
+    auto center = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
-    auto size = utils::Vector2f{0,0};
+    auto size = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_));
 
@@ -158,9 +161,9 @@ TEST_F(RendererPoolSfmlTest, renderText)
     rendererPool.acquireText(position, exampleText, validFontPath, characterSize);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
-    auto center = utils::Vector2f{0,0};
+    auto center = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
-    auto size = utils::Vector2f{0,0};
+    auto size = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_));
 
@@ -175,9 +178,9 @@ TEST_F(RendererPoolSfmlTest, renderShapesAndTexts)
     rendererPool.acquire(size1, position, color);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
-    auto center = utils::Vector2f{0,0};
+    auto center = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
-    auto size = utils::Vector2f{0,0};
+    auto size = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).Times(3);
 
@@ -212,9 +215,9 @@ TEST_F(RendererPoolSfmlTest, renderShapesInLayers)
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
-    auto center = utils::Vector2f{0,0};
+    auto center = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
-    auto size = utils::Vector2f{0,0};
+    auto size = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).Times(4).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
 
@@ -240,9 +243,9 @@ TEST_F(RendererPoolSfmlTest, setShapeVisibility_shouldChangeOrderOfShapes)
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
-    auto center = utils::Vector2f{0,0};
+    auto center = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
-    auto size = utils::Vector2f{0,0};
+    auto size = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).Times(3).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
     rendererPool.renderAll();
@@ -263,9 +266,9 @@ TEST_F(RendererPoolSfmlTest, setVisibilityLayerToInvisibility_shuldNotRenderThis
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
-    auto center = utils::Vector2f{0,0};
+    auto center = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
-    auto size = utils::Vector2f{0,0};
+    auto size = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
     rendererPool.renderAll();
@@ -286,9 +289,9 @@ TEST_F(RendererPoolSfmlTest, renderTextsInLayers)
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
-    auto center = utils::Vector2f{0,0};
+    auto center = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
-    auto size = utils::Vector2f{0,0};
+    auto size = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).Times(4).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
 
@@ -315,9 +318,9 @@ TEST_F(RendererPoolSfmlTest, setTextVisibility_shouldChangeOrderOfTexts)
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
-    auto center = utils::Vector2f{0,0};
+    auto center = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
-    auto size = utils::Vector2f{0,0};
+    auto size = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).Times(3).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
     rendererPool.renderAll();
@@ -339,9 +342,9 @@ TEST_F(RendererPoolSfmlTest, setVisibilityLayerToInvisibility_shuldNotRenderThis
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
-    auto center = utils::Vector2f{0,0};
+    auto center = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
-    auto size = utils::Vector2f{0,0};
+    auto size = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
     rendererPool.renderAll();
@@ -362,9 +365,9 @@ TEST_F(RendererPoolSfmlTest, shapesShouldBeRenderedBeforeTexts)
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
-    auto center = utils::Vector2f{0,0};
+    auto center = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
-    auto size = utils::Vector2f{0,0};
+    auto size = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).Times(4).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
 
@@ -387,9 +390,9 @@ TEST_F(RendererPoolSfmlTest, releasedShape_shouldNotBeRendered)
     rendererPool.release(id);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
-    auto center = utils::Vector2f{0,0};
+    auto center = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
-    auto size = utils::Vector2f{0,0};
+    auto size = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
 
     rendererPool.renderAll();
@@ -402,9 +405,9 @@ TEST_F(RendererPoolSfmlTest, releasedText_shouldNotBeRendered)
     rendererPool.release(id);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
-    auto center = utils::Vector2f{0,0};
+    auto center = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
-    auto size = utils::Vector2f{0,0};
+    auto size = utils::Vector2f{0, 0};
     EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
 
     rendererPool.renderAll();
@@ -475,4 +478,29 @@ TEST_F(RendererPoolSfmlTest, givenText_getTextShouldReturnTextValue)
     const auto actualText = rendererPool.getText(textId);
 
     ASSERT_EQ(*actualText, exampleText);
+}
+
+TEST_F(RendererPoolSfmlTest, getCenter_shouldReturnValueFromContextRenderer)
+{
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+
+    auto rendererPoolCenter = rendererPool.getCenter();
+
+    ASSERT_EQ(rendererPoolCenter, center);
+}
+
+TEST_F(RendererPoolSfmlTest, setCenter_shouldPassValueToContextRenderer)
+{
+    EXPECT_CALL(*contextRenderer, setCenter(newCenter));
+
+    rendererPool.setCenter(newCenter);
+}
+
+TEST_F(RendererPoolSfmlTest, getViewSize_shouldReturnValueFromContextRenderer)
+{
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(viewSize));
+
+    auto rendererPoolViewSize = rendererPool.getViewSize();
+
+    ASSERT_EQ(rendererPoolViewSize, viewSize);
 }

@@ -20,12 +20,12 @@ RenderTargetSfml::RenderTargetSfml(std::shared_ptr<window::Window> windowInit,
 
 void RenderTargetSfml::initialize()
 {
-    RenderTarget::initialize();
+    sf::RenderTarget::initialize();
 }
 
 void RenderTargetSfml::clear(const Color& color)
 {
-    RenderTarget::clear(color);
+    sf::RenderTarget::clear(color);
 }
 
 void RenderTargetSfml::draw(const sf::Drawable& drawable)
