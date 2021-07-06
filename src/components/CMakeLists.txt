@@ -37,6 +37,7 @@ set(UT_SOURCES
         src/core/VelocityComponentTest.cpp
         src/ui/DefaultUIManagerTest.cpp
         src/ui/BackgroundTest.cpp
+        src/ui/ButtonTest.cpp
         )
 
 add_library(components ${SOURCES})
