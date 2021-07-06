@@ -40,6 +40,7 @@ set(UT_SOURCES
         src/ui/ButtonTest.cpp
         src/ui/CheckBoxTest.cpp
         src/ui/ImageTest.cpp
+        src/ui/LabelTest.cpp
         )
 
 add_library(components ${SOURCES})

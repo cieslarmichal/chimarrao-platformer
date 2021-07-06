@@ -97,7 +97,7 @@ TEST_F(CheckBoxTest, setColor)
     checkBox.setColor(dummyColor);
 }
 
-TEST_F(CheckBoxTest, setText)
+TEST_F(CheckBoxTest, setChecked)
 {
     auto checkBox = CheckBox(rendererPool, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(*rendererPool, setText(_, "X"));
