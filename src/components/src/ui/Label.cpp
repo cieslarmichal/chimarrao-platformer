@@ -46,7 +46,7 @@ void Label::setText(const std::string& text)
 
 std::string Label::getText() const
 {
-    coreComponentsOwner->getComponent<components::core::TextComponent>()->getText();
+    return coreComponentsOwner->getComponent<components::core::TextComponent>()->getText();
 }
 
 void Label::setColor(graphics::Color color)

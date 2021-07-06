@@ -420,6 +420,11 @@ void DefaultUIManager::createUIComponents(std::unique_ptr<UIConfig> uiConfig)
 
 UIComponentType DefaultUIManager::getComponentType(const std::string& componentName) const
 {
+    if (not componentsRegistry.contains(componentName))
+    {
+        throw exceptions::UIComponentNotFound{"Component with name: " + componentName + " not found"};
+    }
+
     return componentsRegistry.at(componentName);
 }
 

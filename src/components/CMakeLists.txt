@@ -19,7 +19,8 @@ set(SOURCES
         src/ui/Image.cpp
         src/ui/DefaultUIManager.cpp
         src/ui/UIComponentFactory.cpp
-        src/core/CameraComponent.cpp)
+        src/core/CameraComponent.cpp
+        )
 
 set(UT_SOURCES
         src/core/ComponentOwnerTest.cpp
@@ -34,6 +35,7 @@ set(UT_SOURCES
         src/core/BoxColliderComponentTest.cpp
         src/core/IdComponentTest.cpp
         src/core/VelocityComponentTest.cpp
+        src/ui/DefaultUIManagerTest.cpp
         )
 
 add_library(components ${SOURCES})
