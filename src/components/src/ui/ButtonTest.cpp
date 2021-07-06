@@ -3,7 +3,6 @@
 #include "gtest/gtest.h"
 
 #include "RendererPoolMock.h"
-#include "exceptions/InvalidUIComponentConfig.h"
 #include "exceptions/UIComponentConfigNotFound.h"
 #include "TimerMock.h"
 #include "ProjectPathReader.h"
