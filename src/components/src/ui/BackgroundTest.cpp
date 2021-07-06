@@ -3,9 +3,10 @@
 #include "gtest/gtest.h"
 
 #include "RendererPoolMock.h"
+
+#include "ProjectPathReader.h"
 #include "exceptions/InvalidUIComponentConfig.h"
 #include "exceptions/UIComponentConfigNotFound.h"
-#include "ProjectPathReader.h"
 
 using namespace components::ui;
 using namespace ::testing;
@@ -27,9 +28,9 @@ std::unique_ptr<components::ui::BackgroundConfig> createValidConfig()
 
 std::unique_ptr<components::ui::BackgroundConfig> createInvalidConfig()
 {
-    return std::make_unique<components::ui::BackgroundConfig>(
-        backgroundName, utils::Vector2f{0.f, 0.f}, utils::Vector2f{80.f, 60.f},
-        graphics::VisibilityLayer::Background, "");
+    return std::make_unique<components::ui::BackgroundConfig>(backgroundName, utils::Vector2f{0.f, 0.f},
+                                                              utils::Vector2f{80.f, 60.f},
+                                                              graphics::VisibilityLayer::Background, "");
 }
 }
 

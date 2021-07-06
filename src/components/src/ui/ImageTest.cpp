@@ -3,8 +3,9 @@
 #include "gtest/gtest.h"
 
 #include "RendererPoolMock.h"
-#include "exceptions/UIComponentConfigNotFound.h"
+
 #include "ProjectPathReader.h"
+#include "exceptions/UIComponentConfigNotFound.h"
 
 using namespace components::ui;
 using namespace ::testing;
@@ -21,8 +22,8 @@ const auto imagePath = projectPath + "resources/BG/menu_background.jpg";
 
 std::unique_ptr<components::ui::ImageConfig> createValidConfig()
 {
-    return std::make_unique<components::ui::ImageConfig>(
-        imageName, dummyPosition, dummySize, graphics::VisibilityLayer::First, imagePath);
+    return std::make_unique<components::ui::ImageConfig>(imageName, dummyPosition, dummySize,
+                                                         graphics::VisibilityLayer::First, imagePath);
 }
 }
 

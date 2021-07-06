@@ -2,11 +2,12 @@
 
 #include "gtest/gtest.h"
 
-#include "RendererPoolMock.h"
-#include "exceptions/UIComponentConfigNotFound.h"
-#include "TimerMock.h"
-#include "ProjectPathReader.h"
 #include "InputMock.h"
+#include "RendererPoolMock.h"
+#include "TimerMock.h"
+
+#include "ProjectPathReader.h"
+#include "exceptions/UIComponentConfigNotFound.h"
 
 using namespace components::ui;
 using namespace ::testing;
@@ -26,8 +27,8 @@ const auto labelName = "dummyLabel";
 
 std::unique_ptr<components::ui::LabelConfig> createValidConfig()
 {
-    return std::make_unique<components::ui::LabelConfig>(
-        labelName, dummyPosition, dummyColor, dummyText, dummyFontSize, fontPath);
+    return std::make_unique<components::ui::LabelConfig>(labelName, dummyPosition, dummyColor, dummyText,
+                                                         dummyFontSize, fontPath);
 }
 }
 

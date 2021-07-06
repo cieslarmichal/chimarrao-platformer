@@ -2,11 +2,12 @@
 
 #include "gtest/gtest.h"
 
-#include "RendererPoolMock.h"
-#include "exceptions/UIComponentConfigNotFound.h"
-#include "TimerMock.h"
-#include "ProjectPathReader.h"
 #include "InputMock.h"
+#include "RendererPoolMock.h"
+#include "TimerMock.h"
+
+#include "ProjectPathReader.h"
+#include "exceptions/UIComponentConfigNotFound.h"
 
 using namespace components::ui;
 using namespace ::testing;
@@ -43,8 +44,7 @@ class ButtonTest : public Test
 public:
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
-    std::unique_ptr<NiceMock<utils::TimerMock>> timerInit =
-        std::make_unique<NiceMock<utils::TimerMock>>();
+    std::unique_ptr<NiceMock<utils::TimerMock>> timerInit = std::make_unique<NiceMock<utils::TimerMock>>();
     NiceMock<utils::TimerMock>* timer = timerInit.get();
     NiceMock<input::InputMock> input;
 };

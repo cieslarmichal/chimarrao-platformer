@@ -312,7 +312,8 @@ TEST_F(DefaultUIManagerTest, invokeClickActionWithNonExistingUIComponent_shouldT
 {
     uiManager.createUI(createUIConfig());
 
-    ASSERT_THROW(uiManager.invokeClickAction(nonExistingComponent, input::InputKey::MouseLeft), exceptions::UIComponentNotFound);
+    ASSERT_THROW(uiManager.invokeClickAction(nonExistingComponent, input::InputKey::MouseLeft),
+                 exceptions::UIComponentNotFound);
 }
 
 TEST_F(DefaultUIManagerTest, invokeClickActionWithExistingUIComponent_shouldNoThrow)

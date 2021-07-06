@@ -1,5 +1,7 @@
 #include "TextField.h"
 
+#include <algorithm>
+
 #include "gtest/gtest.h"
 
 #include "InputMock.h"
@@ -8,7 +10,6 @@
 
 #include "ProjectPathReader.h"
 #include "exceptions/UIComponentConfigNotFound.h"
-#include <algorithm>
 
 using namespace components::ui;
 using namespace ::testing;
@@ -45,7 +46,8 @@ std::unique_ptr<components::ui::TextFieldConfig> createValidConfig()
 class TextFieldTest : public Test
 {
 public:
-    void expectReadAllAlphanumericalButtonsAsNonPressedExceptOfGivenButtons(const std::vector<input::InputKey>& pressedButtons)
+    void expectReadAllAlphanumericalButtonsAsNonPressedExceptOfGivenButtons(
+        const std::vector<input::InputKey>& pressedButtons)
     {
         const std::vector<input::InputKey> alphaNumericalButtons{
             input::InputKey::Number0, input::InputKey::Number1, input::InputKey::Number2,
@@ -61,9 +63,10 @@ public:
             input::InputKey::X,       input::InputKey::C,       input::InputKey::V,
             input::InputKey::B,       input::InputKey::N,       input::InputKey::M};
 
-        for (const auto& button: alphaNumericalButtons)
+        for (const auto& button : alphaNumericalButtons)
         {
-            if (std::any_of(pressedButtons.begin(), pressedButtons.end(), [&](input::InputKey pressedKey){return button == pressedKey;}))
+            if (std::any_of(pressedButtons.begin(), pressedButtons.end(),
+                            [&](input::InputKey pressedKey) { return button == pressedKey; }))
             {
                 EXPECT_CALL(input, isKeyReleased(button)).WillOnce(Return(true));
             }
@@ -72,7 +75,6 @@ public:
                 EXPECT_CALL(input, isKeyReleased(button)).WillOnce(Return(false));
             }
         }
-
     }
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
@@ -142,7 +144,8 @@ TEST_F(TextFieldTest, update_withKeyboardCharactersInput_shouldAppendThemToText)
     auto textField = TextField(rendererPool, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::MouseLeft)).WillOnce(Return(true));
     EXPECT_CALL(input, getMousePosition()).WillRepeatedly(Return(utils::Vector2f{26, 6}));
-    expectReadAllAlphanumericalButtonsAsNonPressedExceptOfGivenButtons({input::InputKey::A, input::InputKey::B});
+    expectReadAllAlphanumericalButtonsAsNonPressedExceptOfGivenButtons(
+        {input::InputKey::A, input::InputKey::B});
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Backspace)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyReleased(input::InputKey::MouseLeft)).WillOnce(Return(true));
 
@@ -156,7 +159,8 @@ TEST_F(TextFieldTest, update_withKeyboardCharactersInputAndDeleteKeypress_should
     auto textField = TextField(rendererPool, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::MouseLeft)).WillOnce(Return(true));
     EXPECT_CALL(input, getMousePosition()).WillRepeatedly(Return(utils::Vector2f{26, 6}));
-    expectReadAllAlphanumericalButtonsAsNonPressedExceptOfGivenButtons({input::InputKey::A, input::InputKey::B});
+    expectReadAllAlphanumericalButtonsAsNonPressedExceptOfGivenButtons(
+        {input::InputKey::A, input::InputKey::B});
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Backspace)).WillOnce(Return(true));
     EXPECT_CALL(input, isKeyReleased(input::InputKey::MouseLeft)).WillOnce(Return(true));
     EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1));
