@@ -17,7 +17,8 @@ Background::Background(const std::shared_ptr<graphics::RendererPool>& rendererPo
         throw exceptions::UIComponentConfigNotFound{"Background config not found"};
     }
 
-    if (not backgroundConfig->texturePath && not backgroundConfig->color)
+    if ((not backgroundConfig->texturePath or backgroundConfig->texturePath->empty()) and
+        not backgroundConfig->color)
     {
         throw exceptions::InvalidUIComponentConfig{"No background filling found"};
     }
