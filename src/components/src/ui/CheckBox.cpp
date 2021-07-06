@@ -111,14 +111,6 @@ void CheckBox::toggle()
     }
 }
 
-void CheckBox::invokeMouseOverAction()
-{
-    if (auto mouseOverComponent = coreComponentsOwner->getComponent<components::core::MouseOverComponent>())
-    {
-        mouseOverComponent->invokeMouseOverAction();
-    }
-}
-
 void CheckBox::invokeMouseOutAction()
 {
     if (auto mouseOverComponent = coreComponentsOwner->getComponent<components::core::MouseOverComponent>())

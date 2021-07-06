@@ -17,7 +17,7 @@ namespace components::ui
 class DefaultUIManager : public UIManager
 {
 public:
-    DefaultUIManager(const std::shared_ptr<graphics::RendererPool>&);
+    explicit DefaultUIManager(const std::shared_ptr<graphics::RendererPool>&);
 
     void createUI(std::unique_ptr<UIConfig>) override;
     void update(utils::DeltaTime, const input::Input&) override;
