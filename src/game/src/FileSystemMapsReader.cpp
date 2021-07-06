@@ -1,6 +1,7 @@
 #include "FileSystemMapsReader.h"
 
 #include <algorithm>
+#include <iterator>
 
 #include "ProjectPathReader.h"
 

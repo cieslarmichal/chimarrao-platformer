@@ -143,6 +143,10 @@ TEST_F(RendererPoolSfmlTest, renderShape)
     rendererPool.acquire(size1, position, color);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
+    auto center = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+    auto size = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_));
 
     rendererPool.renderAll();
@@ -154,6 +158,10 @@ TEST_F(RendererPoolSfmlTest, renderText)
     rendererPool.acquireText(position, exampleText, validFontPath, characterSize);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
+    auto center = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+    auto size = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_));
 
     rendererPool.renderAll();
@@ -167,6 +175,10 @@ TEST_F(RendererPoolSfmlTest, renderShapesAndTexts)
     rendererPool.acquire(size1, position, color);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
+    auto center = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+    auto size = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).Times(3);
 
     rendererPool.renderAll();
@@ -200,6 +212,10 @@ TEST_F(RendererPoolSfmlTest, renderShapesInLayers)
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
+    auto center = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+    auto size = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).Times(4).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
 
     rendererPool.renderAll();
@@ -224,6 +240,10 @@ TEST_F(RendererPoolSfmlTest, setShapeVisibility_shouldChangeOrderOfShapes)
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
+    auto center = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+    auto size = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).Times(3).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
     rendererPool.renderAll();
     EXPECT_EQ(graphicsIds[0], backgroundGraphicsId);
@@ -243,6 +263,10 @@ TEST_F(RendererPoolSfmlTest, setVisibilityLayerToInvisibility_shuldNotRenderThis
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
+    auto center = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+    auto size = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
     rendererPool.renderAll();
     EXPECT_EQ(graphicsIds[0], backgroundGraphicsId);
@@ -262,6 +286,10 @@ TEST_F(RendererPoolSfmlTest, renderTextsInLayers)
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
+    auto center = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+    auto size = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).Times(4).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
 
     rendererPool.renderAll();
@@ -287,6 +315,10 @@ TEST_F(RendererPoolSfmlTest, setTextVisibility_shouldChangeOrderOfTexts)
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
+    auto center = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+    auto size = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).Times(3).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
     rendererPool.renderAll();
     EXPECT_EQ(graphicsIds[0], backgroundGraphicsId);
@@ -307,6 +339,10 @@ TEST_F(RendererPoolSfmlTest, setVisibilityLayerToInvisibility_shuldNotRenderThis
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
+    auto center = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+    auto size = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
     rendererPool.renderAll();
     EXPECT_EQ(graphicsIds[0], backgroundGraphicsId);
@@ -326,6 +362,10 @@ TEST_F(RendererPoolSfmlTest, shapesShouldBeRenderedBeforeTexts)
     std::vector<GraphicsId> graphicsIds;
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
+    auto center = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+    auto size = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
     EXPECT_CALL(*contextRenderer, draw(_)).Times(4).WillRepeatedly(addGraphicsIdToVector(&graphicsIds));
 
     rendererPool.renderAll();
@@ -347,6 +387,10 @@ TEST_F(RendererPoolSfmlTest, releasedShape_shouldNotBeRendered)
     rendererPool.release(id);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
+    auto center = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+    auto size = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
 
     rendererPool.renderAll();
 }
@@ -358,6 +402,10 @@ TEST_F(RendererPoolSfmlTest, releasedText_shouldNotBeRendered)
     rendererPool.release(id);
     EXPECT_CALL(*contextRenderer, clear(sf::Color::White));
     EXPECT_CALL(*contextRenderer, setView());
+    auto center = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getCenter()).WillOnce(ReturnRef(center));
+    auto size = utils::Vector2f{0,0};
+    EXPECT_CALL(*contextRenderer, getViewSize()).WillOnce(ReturnRef(size));
 
     rendererPool.renderAll();
 }

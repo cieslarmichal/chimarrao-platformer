@@ -34,7 +34,7 @@ set(UT_SOURCES
         src/core/BoxColliderComponentTest.cpp
         src/core/IdComponentTest.cpp
         src/core/VelocityComponentTest.cpp
-        )
+        src/core/CameraComponentTest.cpp)
 
 add_library(components ${SOURCES})
 target_link_libraries(components PUBLIC utils graphics animations input)
