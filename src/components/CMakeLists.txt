@@ -20,6 +20,8 @@ set(SOURCES
         src/ui/DefaultUIManager.cpp
         src/ui/UIComponentFactory.cpp
         src/core/CameraComponent.cpp
+        src/core/FollowerComponent.cpp
+        src/core/MovementComponent.cpp
         )
 
 set(UT_SOURCES
@@ -36,6 +38,8 @@ set(UT_SOURCES
         src/core/IdComponentTest.cpp
         src/core/VelocityComponentTest.cpp
         src/core/CameraComponentTest.cpp
+        src/core/FollowerComponentTest.cpp
+        src/core/MovementComponentTest.cpp
         src/ui/DefaultUIManagerTest.cpp
         src/ui/BackgroundTest.cpp
         src/ui/ButtonTest.cpp

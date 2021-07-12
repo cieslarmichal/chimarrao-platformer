@@ -7,6 +7,7 @@
 
 #include "AnimationComponent.h"
 #include "DeltaTime.h"
+#include "KeyboardMovementComponent.h"
 
 using namespace components::core;
 using namespace ::testing;
@@ -24,22 +25,22 @@ public:
 
     bool canMoveLeft() const
     {
-        return movementComponent->canMoveLeft;
+        return movementComponent->isAllowedToMoveLeft();
     }
 
     bool canMoveRight() const
     {
-        return movementComponent->canMoveRight;
+        return movementComponent->isAllowedToMoveRight();
     }
 
     bool canMoveUp() const
     {
-        return movementComponent->canMoveUp;
+        return movementComponent->isAllowedToMoveUp();
     }
 
     bool canMoveDown() const
     {
-        return movementComponent->canMoveDown;
+        return movementComponent->isAllowedToMoveDown();
     }
 
     const utils::Vector2f size{5, 5};

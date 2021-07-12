@@ -2,6 +2,9 @@
 
 #include <cmath>
 
+#include "FollowerComponent.h"
+#include "KeyboardMovementComponent.h"
+
 namespace components::core
 {
 
@@ -23,6 +26,10 @@ void BoxColliderComponent::update(utils::DeltaTime deltaTime, const input::Input
 void BoxColliderComponent::loadDependentComponents()
 {
     movementComponent = owner->getComponent<KeyboardMovementComponent>();
+    if (not movementComponent)
+    {
+        movementComponent = owner->getComponent<FollowerComponent>();
+    }
     velocityComponent = owner->getComponent<VelocityComponent>();
 }
 
@@ -77,11 +84,11 @@ void BoxColliderComponent::resolveOverlapX(const utils::FloatRect& otherRect)
 
     if (left < right)
     {
-        movementComponent->canMoveLeft = false;
+        movementComponent->blockMoveLeft();
     }
     else
     {
-        movementComponent->canMoveRight = false;
+        movementComponent->blockMoveRight();
     }
 }
 
@@ -98,11 +105,11 @@ void BoxColliderComponent::resolveOverlapY(const utils::FloatRect& otherRect)
 
     if (top < bot)
     {
-        movementComponent->canMoveUp = false;
+        movementComponent->blockMoveUp();
     }
     else
     {
-        movementComponent->canMoveDown = false;
+        movementComponent->blockMoveDown();
     }
 }
 
@@ -118,10 +125,10 @@ void BoxColliderComponent::setAvailableMovementDirections()
 {
     if (movementComponent)
     {
-        movementComponent->canMoveRight = true;
-        movementComponent->canMoveLeft = true;
-        movementComponent->canMoveUp = true;
-        movementComponent->canMoveDown = true;
+        movementComponent->allowMoveRight();
+        movementComponent->allowMoveLeft();
+        movementComponent->allowMoveUp();
+        movementComponent->allowMoveDown();
     }
 }
 

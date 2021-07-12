@@ -6,6 +6,7 @@
 
 #include "StlOperators.h"
 #include "core/AnimationComponent.h"
+#include "core/KeyboardMovementComponent.h"
 
 using namespace physics;
 using namespace components::core;
@@ -57,28 +58,28 @@ public:
         componentOwnerWitStaticTransform->loadDependentComponents();
     }
 
-    bool canMoveLeft(std::shared_ptr<ComponentOwner> componentOwner) const
+    bool canMoveLeft(const std::shared_ptr<ComponentOwner>& componentOwner) const
     {
         auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
-        return movementComponent->canMoveLeft;
+        return movementComponent->isAllowedToMoveLeft();
     }
 
-    bool canMoveRight(std::shared_ptr<ComponentOwner> componentOwner) const
+    bool canMoveRight(const std::shared_ptr<ComponentOwner>& componentOwner) const
     {
         auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
-        return movementComponent->canMoveRight;
+        return movementComponent->isAllowedToMoveRight();
     }
 
-    bool canMoveUp(std::shared_ptr<ComponentOwner> componentOwner) const
+    bool canMoveUp(const std::shared_ptr<ComponentOwner>& componentOwner) const
     {
         auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
-        return movementComponent->canMoveUp;
+        return movementComponent->isAllowedToMoveUp();
     }
 
-    bool canMoveDown(std::shared_ptr<ComponentOwner> componentOwner) const
+    bool canMoveDown(const std::shared_ptr<ComponentOwner>& componentOwner) const
     {
         auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
-        return movementComponent->canMoveDown;
+        return movementComponent->isAllowedToMoveDown();
     }
 
     const utils::Vector2f size{5, 5};
@@ -247,7 +248,8 @@ TEST_F(DefaultCollisionSystemTest, playerColliderIntersectingWithTileCollider_sh
                 canMoveUp(componentOwnerWithPlayerCollider1));
 }
 
-TEST_F(DefaultCollisionSystemTest, playerColliderIntersectingWithPlayerCollider_shouldNotBlockAnyMovements)
+TEST_F(DefaultCollisionSystemTest,
+       playerColliderIntersectingWithPlayerCollider_shouldBlockRightAndDownMovements)
 {
     std::vector<std::shared_ptr<ComponentOwner>> componentOwners{componentOwnerWithPlayerCollider1,
                                                                  componentOwnerWithPlayerCollider2};
@@ -255,8 +257,10 @@ TEST_F(DefaultCollisionSystemTest, playerColliderIntersectingWithPlayerCollider_
 
     collisionSystem.update();
 
-    ASSERT_TRUE(canMoveLeft(componentOwners[0]) && canMoveUp(componentOwners[0]) &&
-                canMoveRight(componentOwners[0]) && canMoveDown(componentOwners[0]));
+    ASSERT_FALSE(canMoveRight(componentOwnerWithPlayerCollider1) &&
+                 canMoveDown(componentOwnerWithPlayerCollider1));
+    ASSERT_TRUE(canMoveLeft(componentOwnerWithPlayerCollider1) &&
+                canMoveUp(componentOwnerWithPlayerCollider1));
 }
 
 TEST_F(DefaultCollisionSystemTest,

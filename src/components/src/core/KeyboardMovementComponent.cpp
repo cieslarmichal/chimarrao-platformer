@@ -7,7 +7,7 @@ namespace components::core
 {
 
 KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* ownerInit)
-    : Component{ownerInit}, movementSpeed{6.f}
+    : MovementComponent{ownerInit, 6.f}
 {
 }
 
@@ -144,15 +144,5 @@ void KeyboardMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const inp
     const float xFrameMove = currentMovementSpeed.x * deltaTime.count();
     const float yFrameMove = currentMovementSpeed.y * deltaTime.count();
     owner->transform->addPosition(xFrameMove, yFrameMove);
-}
-
-void KeyboardMovementComponent::setMovementSpeed(float speed)
-{
-    movementSpeed = speed;
-}
-
-float KeyboardMovementComponent::getMovementSpeed() const
-{
-    return movementSpeed;
 }
 }

@@ -1,5 +1,8 @@
 #include "DefaultCollisionSystem.h"
 
+#include "core/FollowerComponent.h"
+#include "core/KeyboardMovementComponent.h"
+
 namespace physics
 {
 using namespace components::core;
@@ -16,6 +19,7 @@ DefaultCollisionSystem::DefaultCollisionSystem()
     utils::Bitmask playerCollisions{};
     playerCollisions.setBit(toInt(CollisionLayer::Default));
     playerCollisions.setBit(toInt(CollisionLayer::Tile));
+    playerCollisions.setBit(toInt(CollisionLayer::Player));
     possibleCollisionsInLayers.insert(std::make_pair(CollisionLayer::Player, playerCollisions));
 }
 
@@ -76,7 +80,8 @@ void DefaultCollisionSystem::resolve()
 
         for (const auto& collider : collidersInCollisionLayer)
         {
-            if (not collider->getOwner().getComponent<components::core::KeyboardMovementComponent>())
+            if (not collider->getOwner().getComponent<components::core::KeyboardMovementComponent>() and
+                not collider->getOwner().getComponent<components::core::FollowerComponent>())
             {
                 continue;
             }

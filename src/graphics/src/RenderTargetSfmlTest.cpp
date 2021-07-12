@@ -12,7 +12,7 @@ namespace
 const utils::Vector2u windowSize{800, 600};
 const utils::Vector2u newWindowSize{1280, 720};
 const utils::Vector2u areaSize{80, 60};
-const utils::Vector2f center{45,25};
+const utils::Vector2f center{45, 25};
 }
 
 class RendererTargetSfmlTest : public Test
@@ -22,21 +22,21 @@ public:
         : window{std::make_shared<StrictMock<window::WindowMock>>()},
           renderTargetSfml{window, windowSize, areaSize}
     {
-
     }
 
     std::shared_ptr<StrictMock<window::WindowMock>> window;
     RenderTargetSfml renderTargetSfml;
-
 };
 
-TEST_F(RendererTargetSfmlTest, setView_shouldNotThrow) {
+TEST_F(RendererTargetSfmlTest, setView_shouldNotThrow)
+{
     EXPECT_CALL(*window, setView(_));
 
     EXPECT_NO_THROW(renderTargetSfml.setView());
 }
 
-TEST_F(RendererTargetSfmlTest, setCenter_getterShouldReturnSameValue) {
+TEST_F(RendererTargetSfmlTest, setCenter_getterShouldReturnSameValue)
+{
     renderTargetSfml.setCenter(center);
 
     EXPECT_EQ(renderTargetSfml.getCenter(), center);

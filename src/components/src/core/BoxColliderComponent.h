@@ -3,7 +3,7 @@
 #include <optional>
 
 #include "CollisionLayer.h"
-#include "KeyboardMovementComponent.h"
+#include "MovementComponent.h"
 #include "Rect.h"
 #include "VelocityComponent.h"
 
@@ -44,7 +44,7 @@ private:
     const sf::Vector2f offset;
     utils::FloatRect collisionBoundaries;
     utils::FloatRect nextFrameCollisionBoundaries;
-    std::shared_ptr<KeyboardMovementComponent> movementComponent;
+    std::shared_ptr<MovementComponent> movementComponent;
     std::shared_ptr<VelocityComponent> velocityComponent;
     utils::Vector2f size;
     utils::DeltaTime currentDeltaTime;

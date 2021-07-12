@@ -13,18 +13,18 @@ using namespace ::testing;
 
 namespace
 {
-utils::FloatRect mapRect{0, 0, 160, 120};
-utils::Vector2f viewSize{80, 60};
-utils::Vector2f positionOnLeftMapBoundary = {3, 60};
-utils::Vector2f cameraPositionWhenOwnerOnLeftBoundary = {40, 60};
-utils::Vector2f positionOnTopMapBoundary = {80, 7};
-utils::Vector2f cameraPositionWhenOwnerOnTopBoundary = {80, 30};
-utils::Vector2f positionOnRightMapBoundary = {154, 60};
-utils::Vector2f cameraPositionWhenOwnerOnRightBoundary = {120, 60};
-utils::Vector2f positionOnBottomMapBoundary = {80, 111};
-utils::Vector2f cameraPositionWhenOwnerOnBottomBoundary = {80, 90};
-utils::Vector2f positionAtMapCenter = {87, 68};
-utils::Vector2f cameraPositionWhenOwnerAtMapCenter = {87, 68};
+const utils::FloatRect mapRect{0, 0, 160, 120};
+const utils::Vector2f viewSize{80, 60};
+const utils::Vector2f positionOnLeftMapBoundary{3, 60};
+const utils::Vector2f cameraPositionWhenOwnerOnLeftBoundary{40, 60};
+const utils::Vector2f positionOnTopMapBoundary{80, 7};
+const utils::Vector2f cameraPositionWhenOwnerOnTopBoundary{80, 30};
+const utils::Vector2f positionOnRightMapBoundary{154, 60};
+const utils::Vector2f cameraPositionWhenOwnerOnRightBoundary{120, 60};
+const utils::Vector2f positionOnBottomMapBoundary{80, 111};
+const utils::Vector2f cameraPositionWhenOwnerOnBottomBoundary{80, 90};
+const utils::Vector2f positionAtMapCenter{87, 68};
+const utils::Vector2f cameraPositionWhenOwnerAtMapCenter{87, 68};
 }
 
 class CameraComponentTest : public Test
