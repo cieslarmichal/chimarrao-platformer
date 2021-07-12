@@ -25,7 +25,7 @@ void FollowerComponent::loadDependentComponents()
     }
 }
 
-void FollowerComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
+void FollowerComponent::update(utils::DeltaTime deltaTime, const input::Input&)
 {
     if (not enabled)
     {
@@ -65,7 +65,7 @@ void FollowerComponent::update(utils::DeltaTime deltaTime, const input::Input& i
     velocityComponent->setVelocity(currentMovementSpeed);
 }
 
-void FollowerComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input& input)
+void FollowerComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input&)
 {
     if (not enabled)
     {
