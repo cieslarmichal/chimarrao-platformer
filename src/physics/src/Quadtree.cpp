@@ -106,8 +106,7 @@ Quadtree::getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) co
                 distance != 0.0)
             {
                 collidersIntersectingWithArea.emplace_back(
-                    std::shared_ptr<components::core::BoxColliderComponent>(
-                        possibleCollider));
+                    std::shared_ptr<components::core::BoxColliderComponent>(possibleCollider));
             }
         }
     }
@@ -132,8 +131,7 @@ Quadtree::getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) co
                 distance != 0.0)
             {
                 collidersIntersectingWithArea.emplace_back(
-                    std::shared_ptr<components::core::BoxColliderComponent>(
-                        possibleCollider));
+                    std::shared_ptr<components::core::BoxColliderComponent>(possibleCollider));
             }
         }
     }
