@@ -94,8 +94,7 @@ Quadtree::getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) co
 {
     const auto possibleColliders = getAllCollidersFromQuadtreeNodesIntersectingWithArea(area);
 
-    std::vector<std::pair<std::shared_ptr<components::core::BoxColliderComponent>, double>>
-        collidersIntersectingWithAreaAndDistance;
+    std::vector<std::shared_ptr<components::core::BoxColliderComponent>> collidersIntersectingWithArea;
 
     for (const auto& possibleCollider : possibleColliders)
     {
@@ -106,14 +105,14 @@ Quadtree::getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) co
             if (const auto distance = calculateDistanceBetweenRect(area, possibleColliderBox);
                 distance != 0.0)
             {
-                collidersIntersectingWithAreaAndDistance.emplace_back(
-                    std::pair<std::shared_ptr<components::core::BoxColliderComponent>, double>(
-                        possibleCollider, distance));
+                collidersIntersectingWithArea.emplace_back(
+                    std::shared_ptr<components::core::BoxColliderComponent>(
+                        possibleCollider));
             }
         }
     }
 
-    return getNearestColliders(collidersIntersectingWithAreaAndDistance);
+    return collidersIntersectingWithArea;
 }
 
 std::vector<std::shared_ptr<components::core::BoxColliderComponent>>
@@ -121,26 +120,25 @@ Quadtree::getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) co
 {
     const auto possibleColliders = getAllCollidersFromQuadtreeNodesIntersectingWithArea(area);
 
-    std::vector<std::pair<std::shared_ptr<components::core::BoxColliderComponent>, double>>
-        collidersIntersectingWithAreaAndDistance;
+    std::vector<std::shared_ptr<components::core::BoxColliderComponent>> collidersIntersectingWithArea;
 
     for (const auto& possibleCollider : possibleColliders)
     {
-        const auto& possibleColliderBox = possibleCollider->getNextFrameYCollisionBox();
+        auto& possibleColliderBox = possibleCollider->getNextFrameYCollisionBox();
 
         if (area.intersects(possibleColliderBox))
         {
             if (const auto distance = calculateDistanceBetweenRect(area, possibleColliderBox);
                 distance != 0.0)
             {
-                collidersIntersectingWithAreaAndDistance.emplace_back(
-                    std::pair<std::shared_ptr<components::core::BoxColliderComponent>, double>(
-                        possibleCollider, distance));
+                collidersIntersectingWithArea.emplace_back(
+                    std::shared_ptr<components::core::BoxColliderComponent>(
+                        possibleCollider));
             }
         }
     }
 
-    return getNearestColliders(collidersIntersectingWithAreaAndDistance);
+    return collidersIntersectingWithArea;
 }
 
 const utils::FloatRect& Quadtree::getNodeBounds() const
@@ -236,30 +234,6 @@ void Quadtree::splitIntoChildNodes()
     children[childSouthEastIndex] = std::make_shared<Quadtree>(
         maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left + childWidth, nodeBounds.top + childHeight, childWidth, childHeight));
-}
-std::vector<std::shared_ptr<components::core::BoxColliderComponent>> Quadtree::getNearestColliders(
-    std::vector<std::pair<std::shared_ptr<components::core::BoxColliderComponent>, double>>
-        collidersIntersectingWithAreaAndDistance)
-{
-    if (collidersIntersectingWithAreaAndDistance.empty())
-    {
-        return {};
-    }
-
-    double minDistance = std::min_element(collidersIntersectingWithAreaAndDistance.begin(),
-                                          collidersIntersectingWithAreaAndDistance.end(),
-                                          [](auto lhs, auto rhs) { return lhs.second < rhs.second; })
-                             ->second;
-
-    std::vector<std::shared_ptr<components::core::BoxColliderComponent>> collidersIntersectingWithArea;
-    for (const auto& pair : collidersIntersectingWithAreaAndDistance)
-    {
-        if (pair.second / minDistance < 1.3f)
-        {
-            collidersIntersectingWithArea.push_back(pair.first);
-        }
-    }
-    return collidersIntersectingWithArea;
 }
 
 double Quadtree::calculateDistanceBetweenRect(const utils::FloatRect& lhs, const utils::FloatRect& rhs)
