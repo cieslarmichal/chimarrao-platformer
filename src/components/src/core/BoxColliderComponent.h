@@ -9,15 +9,6 @@
 
 namespace components::core
 {
-enum class CollisionSource
-{
-    Left,
-    Right,
-    Above,
-    Below,
-    None
-};
-
 class BoxColliderComponent : public Component
 {
 public:

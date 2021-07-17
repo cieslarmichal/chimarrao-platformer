@@ -10,6 +10,7 @@ class MovementComponent : public Component
 {
 public:
     MovementComponent(ComponentOwner*, float movementSpeed);
+    virtual ~MovementComponent() = default;
 
     void setMovementSpeed(float speed);
     float getMovementSpeed() const;

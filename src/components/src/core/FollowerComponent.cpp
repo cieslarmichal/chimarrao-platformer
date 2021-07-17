@@ -34,12 +34,12 @@ void FollowerComponent::update(utils::DeltaTime deltaTime, const input::Input&)
 
     auto currentMovementSpeed = velocityComponent->getVelocity();
 
-    if (followedOwner->transform->getPosition().x < owner->transform->getPosition().x)
+    if (followedOwner->transform->getPosition().x - owner->transform->getPosition().x < -2.f)
     {
         animation->setAnimationDirection(animations::AnimationDirection::Left);
         currentMovementSpeed.x = -movementSpeed;
     }
-    else
+    else if (followedOwner->transform->getPosition().x - owner->transform->getPosition().x > 2.f)
     {
         animation->setAnimationDirection(animations::AnimationDirection::Right);
         currentMovementSpeed.x = movementSpeed;
@@ -59,7 +59,7 @@ void FollowerComponent::update(utils::DeltaTime deltaTime, const input::Input&)
 
     if (canMoveDown)
     {
-        currentMovementSpeed.y += 15.f * deltaTime.count();
+        currentMovementSpeed.y += 25.f * deltaTime.count();
     }
 
     velocityComponent->setVelocity(currentMovementSpeed);
@@ -91,6 +91,7 @@ void FollowerComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Inpu
         currentMovementSpeed.y = 0;
     }
 
+    velocityComponent->setVelocity(currentMovementSpeed);
     const float xFrameMove = currentMovementSpeed.x * deltaTime.count();
     const float yFrameMove = currentMovementSpeed.y * deltaTime.count();
     owner->transform->addPosition(xFrameMove, yFrameMove);

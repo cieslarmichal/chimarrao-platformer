@@ -91,19 +91,19 @@ void DefaultCollisionSystem::resolve()
             const auto xCollisions =
                 collisionTree.getCollidersIntersectingWithAreaFromX(collider->getNextFrameXCollisionBox());
 
-            for (const auto& collision : xCollisions)
+            for (const auto& xCollision : xCollisions)
             {
-                if (collider->getOwnerId() == collision->getOwnerId())
+                if (collider->getOwnerId() == xCollision->getOwnerId())
                 {
                     continue;
                 }
 
                 const auto layersCollide = possibleCollisionsInLayers[collider->getCollisionLayer()].isBitSet(
-                    (toInt(collision->getCollisionLayer())));
+                    (toInt(xCollision->getCollisionLayer())));
 
                 if (layersCollide)
                 {
-                    if (const auto otherRect = collider->intersectsX(collision); otherRect)
+                    if (const auto otherRect = collider->intersectsX(xCollision); otherRect)
                     {
                         collider->resolveOverlapX(otherRect.value());
                     }
@@ -113,19 +113,19 @@ void DefaultCollisionSystem::resolve()
             const auto yCollisions =
                 collisionTree.getCollidersIntersectingWithAreaFromY(collider->getNextFrameYCollisionBox());
 
-            for (const auto& collision : yCollisions)
+            for (const auto& yCollision : yCollisions)
             {
-                if (collider->getOwnerId() == collision->getOwnerId())
+                if (collider->getOwnerId() == yCollision->getOwnerId())
                 {
                     continue;
                 }
 
                 const auto layersCollide = possibleCollisionsInLayers[collider->getCollisionLayer()].isBitSet(
-                    (toInt(collision->getCollisionLayer())));
+                    (toInt(yCollision->getCollisionLayer())));
 
                 if (layersCollide)
                 {
-                    if (const auto otherRect = collider->intersectsY(collision); otherRect)
+                    if (const auto otherRect = collider->intersectsY(yCollision); otherRect)
                     {
                         collider->resolveOverlapY(otherRect.value());
                     }
