@@ -30,7 +30,6 @@ void HealthBarComponent::loadDependentComponents()
 void HealthBarComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
     bar->update(deltaTime, input);
-    health->loseHealthPoints(1);
 }
 
 void HealthBarComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input& input)
@@ -38,9 +37,13 @@ void HealthBarComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Inp
     const auto currentBarSize = bar->getSize();
     const auto currentHealth = health->getCurrentHealth();
     const auto maximumHealth = health->getMaximumHealth();
-    const auto barSizeScaledByCurrentHealth =
-        currentBarSize * (static_cast<float>(currentHealth) / static_cast<float>(maximumHealth));
-    bar->setSize(barSizeScaledByCurrentHealth);
+    const auto barSizeScaledByCurrentHealth = utils::Vector2f{
+        currentBarSize.x * (static_cast<float>(currentHealth) / static_cast<float>(maximumHealth)),
+        currentBarSize.y};
+    if (barSizeScaledByCurrentHealth != currentBarSize)
+    {
+        bar->setSize(barSizeScaledByCurrentHealth);
+    }
     bar->lateUpdate(deltaTime, input);
 }
 }

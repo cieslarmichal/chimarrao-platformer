@@ -85,7 +85,7 @@ TEST_F(ComponentOwnerTest, givenEnabledComponents_shouldReturnTrue)
 {
     componentOwner.addComponent<BoxColliderComponent>(utils::Vector2f{3, 0});
 
-    ASSERT_TRUE(componentOwner.areComponentEnabled());
+    ASSERT_TRUE(componentOwner.areComponentsEnabled());
 }
 
 TEST_F(ComponentOwnerTest, givenDisabledComponents_shouldReturnFalse)
@@ -94,7 +94,7 @@ TEST_F(ComponentOwnerTest, givenDisabledComponents_shouldReturnFalse)
         componentOwner.addComponent<BoxColliderComponent>(utils::Vector2f{3, 0});
     boxColliderComponent->disable();
 
-    ASSERT_FALSE(componentOwner.areComponentEnabled());
+    ASSERT_FALSE(componentOwner.areComponentsEnabled());
 }
 
 TEST_F(ComponentOwnerTest, defaultComponentOwner_shouldNotBeSetToRemoval)

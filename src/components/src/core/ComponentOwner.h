@@ -25,7 +25,7 @@ public:
     void disable();
     std::string getName() const;
     unsigned int getId() const;
-    bool areComponentEnabled() const;
+    bool areComponentsEnabled() const;
     void remove();
     bool shouldBeRemoved() const;
 

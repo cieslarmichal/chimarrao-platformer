@@ -4,6 +4,7 @@
 
 #include "InputMock.h"
 #include "RendererPoolMock.h"
+#include "HealthComponent.h"
 
 #include "ComponentOwner.h"
 #include "GraphicsIdGenerator.h"
@@ -27,6 +28,7 @@ public:
     }
 
     const utils::Vector2f size{3.f, 0.5f};
+    const utils::Vector2f sizeAfterLostHealth{1.5f, 0.5f};
     const graphics::Color color{graphics::Color::Red};
     const graphics::VisibilityLayer initialVisibility{graphics::VisibilityLayer::First};
     const utils::DeltaTime deltaTime{3};
@@ -35,6 +37,7 @@ public:
     StrictMock<input::InputMock> input;
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
+    ComponentOwner componentOwner{position, "healthBarComponentTest"};
 };
 
 TEST_F(HealthBarComponentTest,
@@ -46,5 +49,37 @@ TEST_F(HealthBarComponentTest,
 
     ASSERT_THROW(healthBarComponentWithoutHealth.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
+    expectReleaseGraphicsId();
+}
+
+TEST_F(HealthBarComponentTest, healthNotChanged_barShouldNotBeUpdated)
+{
+    expectCreateGraphicsComponent();
+    HealthBarComponent healthBarComponent{&componentOwner, rendererPool};
+    componentOwner.addComponent<HealthComponent>(100);
+    healthBarComponent.loadDependentComponents();
+    EXPECT_CALL(*rendererPool, getSize(graphicsId)).WillOnce(Return(size));
+    EXPECT_CALL(*rendererPool, setPosition(graphicsId, _));
+
+    healthBarComponent.update(deltaTime, input);
+    healthBarComponent.lateUpdate(deltaTime, input);
+
+    expectReleaseGraphicsId();
+}
+
+TEST_F(HealthBarComponentTest, healthChanged_barShouldBeUpdated)
+{
+    expectCreateGraphicsComponent();
+    HealthBarComponent healthBarComponent{&componentOwner, rendererPool};
+    auto health = componentOwner.addComponent<HealthComponent>(100);
+    healthBarComponent.loadDependentComponents();
+    health->loseHealthPoints(50);
+    EXPECT_CALL(*rendererPool, getSize(graphicsId)).WillOnce(Return(size));
+    EXPECT_CALL(*rendererPool, setSize(graphicsId, sizeAfterLostHealth));
+    EXPECT_CALL(*rendererPool, setPosition(graphicsId, _));
+
+    healthBarComponent.update(deltaTime, input);
+    healthBarComponent.lateUpdate(deltaTime, input);
+
     expectReleaseGraphicsId();
 }

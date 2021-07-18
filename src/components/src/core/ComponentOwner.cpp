@@ -86,7 +86,7 @@ unsigned int ComponentOwner::getId() const
     return id->getId();
 }
 
-bool ComponentOwner::areComponentEnabled() const
+bool ComponentOwner::areComponentsEnabled() const
 {
     return std::all_of(components.begin(), components.end(),
                        [](const auto& component) { return component->isEnabled(); });

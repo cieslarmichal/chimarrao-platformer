@@ -143,7 +143,7 @@ std::string TextField::getText() const
 
 bool TextField::isActive() const
 {
-    return coreComponentsOwner->areComponentEnabled();
+    return coreComponentsOwner->areComponentsEnabled();
 }
 
 void TextField::select()

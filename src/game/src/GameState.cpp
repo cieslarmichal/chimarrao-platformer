@@ -50,12 +50,12 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     player->addComponent<components::core::VelocityComponent>();
     player->addComponent<components::core::CameraComponent>(
         rendererPool, utils::FloatRect{0, 0, tileMap->getSize().x * 4.f, tileMap->getSize().y * 4.f});
-    player->addComponent<components::core::HealthComponent>(10000);
+    player->addComponent<components::core::HealthComponent>(1000);
     player->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{1.5, -1});
 
     auto enemy = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{2.f, 10.f}, "enemy");
     auto enemyGraphicsComponent =
-        enemy->addGraphicsComponent(rendererPool, utils::Vector2f{3.f, 3.f}, utils::Vector2f{2.f, 10.f},
+        enemy->addGraphicsComponent(rendererPool, utils::Vector2f{2.f, 2.f}, utils::Vector2f{2.f, 10.f},
                                     graphics::Color::White, graphics::VisibilityLayer::Second);
     auto enemyGraphicsId = enemyGraphicsComponent->getGraphicsId();
     enemy->addComponent<components::core::FollowerComponent>(player.get());
@@ -63,7 +63,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
         animatorsFactory->createBunnyAnimator(enemyGraphicsId);
     enemy->addComponent<components::core::AnimationComponent>(bunnyAnimator);
     enemy->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{3.f, 3.f}, components::core::CollisionLayer::Player, utils::Vector2f{0.f, 0.f});
+        utils::Vector2f{2.f, 2.f}, components::core::CollisionLayer::Player, utils::Vector2f{0.f, 0.f});
     enemy->addComponent<components::core::VelocityComponent>();
 
     for (int x = 0; x < tileMap->getSize().x; x++)

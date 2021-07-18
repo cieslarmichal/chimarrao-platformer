@@ -56,6 +56,6 @@ void Label::setColor(graphics::Color color)
 
 bool Label::isActive() const
 {
-    return coreComponentsOwner->areComponentEnabled();
+    return coreComponentsOwner->areComponentsEnabled();
 }
 }

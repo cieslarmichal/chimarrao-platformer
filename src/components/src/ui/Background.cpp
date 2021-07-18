@@ -77,7 +77,7 @@ void Background::setColor(graphics::Color color)
 
 bool Background::isActive() const
 {
-    return coreComponentsOwner->areComponentEnabled();
+    return coreComponentsOwner->areComponentsEnabled();
 }
 
 }

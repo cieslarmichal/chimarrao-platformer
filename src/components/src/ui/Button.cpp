@@ -115,7 +115,7 @@ void Button::invokeClickAction(input::InputKey inputKey)
 
 bool Button::isActive() const
 {
-    return coreComponentsOwner->areComponentEnabled();
+    return coreComponentsOwner->areComponentsEnabled();
 }
 
 void Button::restartClickActionFreezeTimer()

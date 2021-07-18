@@ -46,6 +46,6 @@ void Image::deactivate()
 
 bool Image::isActive() const
 {
-    return coreComponentsOwner->areComponentEnabled();
+    return coreComponentsOwner->areComponentsEnabled();
 }
 }
