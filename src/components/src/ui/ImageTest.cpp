@@ -4,7 +4,9 @@
 
 #include "RendererPoolMock.h"
 
+#include "GraphicsIdGenerator.h"
 #include "ProjectPathReader.h"
+#include "exceptions/InvalidUIComponentConfig.h"
 #include "exceptions/UIComponentConfigNotFound.h"
 
 using namespace components::ui;
@@ -14,6 +16,7 @@ namespace
 {
 const auto projectPath = utils::ProjectPathReader::getProjectRootPath();
 const auto dummySize = utils::Vector2f{25.f, 5.f};
+const auto changedSize = utils::Vector2f{10.f, 5.f};
 const auto dummyPosition = utils::Vector2f{25.f, 5.f};
 const auto dummyFontSize = 4;
 const auto fontPath = projectPath + "resources/fonts/VeraMono.ttf";
@@ -25,48 +28,101 @@ std::unique_ptr<components::ui::ImageConfig> createValidConfig()
     return std::make_unique<components::ui::ImageConfig>(imageName, dummyPosition, dummySize,
                                                          graphics::VisibilityLayer::First, imagePath);
 }
+
+std::unique_ptr<components::ui::ImageConfig> createInvalidConfig()
+{
+    return std::make_unique<components::ui::ImageConfig>(imageName, dummyPosition, dummySize,
+                                                         graphics::VisibilityLayer::First, "");
+}
 }
 
 class ImageTest : public Test
 {
 public:
-    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
-        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    void expectCreateGraphicsComponent()
+    {
+        EXPECT_CALL(*rendererPool,
+                    acquire(dummySize, dummyPosition, imagePath, graphics::VisibilityLayer::First, _))
+            .WillOnce(Return(graphicsId));
+    }
+
+    void expectReleaseGraphicsId()
+    {
+        EXPECT_CALL(*rendererPool, release(graphicsId));
+    }
+
+    const graphics::GraphicsId graphicsId = graphics::GraphicsIdGenerator::generateId();
+    std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<StrictMock<graphics::RendererPoolMock>>();
 };
 
-TEST_F(ImageTest, createBackgroundWithoutConfig_shouldThrowUIComponentConfigNotFound)
+TEST_F(ImageTest, createImageWithoutConfig_shouldThrowUIComponentConfigNotFound)
 {
     ASSERT_THROW(Image(rendererPool, nullptr), exceptions::UIComponentConfigNotFound);
 }
 
-TEST_F(ImageTest, createBackgroundWithValidConfig_shouldNoThrow)
+TEST_F(ImageTest, createImageWithConfigWithoutColorNorTexture_shouldThrowInvalidUIConfig)
 {
-    ASSERT_NO_THROW(Image(rendererPool, createValidConfig()));
+    ASSERT_THROW(Image(rendererPool, createInvalidConfig()), exceptions::InvalidUIComponentConfig);
 }
 
 TEST_F(ImageTest, activate_shouldActivateAfterSomeTime)
 {
-    auto image = Image(rendererPool, createValidConfig());
+    expectCreateGraphicsComponent();
+    auto image = Image{rendererPool, createValidConfig()};
+    EXPECT_CALL(*rendererPool, setVisibility(_, _));
 
     image.activate();
 
     ASSERT_TRUE(image.isActive());
+    expectReleaseGraphicsId();
 }
 
 TEST_F(ImageTest, deactivate)
 {
-    auto image = Image(rendererPool, createValidConfig());
+    expectCreateGraphicsComponent();
+    auto image = Image{rendererPool, createValidConfig()};
+    EXPECT_CALL(*rendererPool, setVisibility(_, _));
 
     image.deactivate();
 
     ASSERT_FALSE(image.isActive());
+    expectReleaseGraphicsId();
 }
 
 TEST_F(ImageTest, getName)
 {
-    auto image = Image(rendererPool, createValidConfig());
+    expectCreateGraphicsComponent();
+    auto image = Image{rendererPool, createValidConfig()};
 
     const auto actualName = image.getName();
 
     ASSERT_EQ(actualName, imageName);
+    expectReleaseGraphicsId();
+}
+
+TEST_F(ImageTest, initialSize_shouldMatchWithTheOnceFromConstructor)
+{
+    expectCreateGraphicsComponent();
+    auto image = Image{rendererPool, createValidConfig()};
+    EXPECT_CALL(*rendererPool, getSize(_)).WillOnce(Return(dummySize));
+
+    const auto actualSize = image.getSize();
+
+    ASSERT_EQ(actualSize, dummySize);
+    expectReleaseGraphicsId();
+}
+
+TEST_F(ImageTest, setSize)
+{
+    expectCreateGraphicsComponent();
+    auto image = Image{rendererPool, createValidConfig()};
+    EXPECT_CALL(*rendererPool, setSize(_, changedSize));
+    EXPECT_CALL(*rendererPool, getSize(_)).WillOnce(Return(changedSize));
+
+    image.setSize(changedSize);
+
+    const auto actualSize = image.getSize();
+    ASSERT_EQ(actualSize, changedSize);
+    expectReleaseGraphicsId();
 }

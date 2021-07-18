@@ -4,10 +4,10 @@
 
 #include "InputMock.h"
 #include "RendererPoolMock.h"
-#include "HealthComponent.h"
 
 #include "ComponentOwner.h"
 #include "GraphicsIdGenerator.h"
+#include "HealthComponent.h"
 #include "exceptions/DependentComponentNotFound.h"
 
 using namespace components::core;

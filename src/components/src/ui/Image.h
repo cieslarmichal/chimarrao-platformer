@@ -20,6 +20,8 @@ public:
     void activate() override;
     void deactivate() override;
     bool isActive() const override;
+    utils::Vector2f getSize() const;
+    void setSize(const utils::Vector2f&);
 
 private:
     std::string name;

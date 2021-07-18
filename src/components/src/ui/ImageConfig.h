@@ -20,7 +20,19 @@ struct ImageConfig
           position{positionInit},
           size{sizeInit},
           visibilityLayer{visibilityLayerInit},
-          texturePath{std::move(texturePathInit)}
+          texturePath{std::move(texturePathInit)},
+          color{boost::none}
+    {
+    }
+
+    ImageConfig(std::string uniqueNameInit, utils::Vector2f positionInit, utils::Vector2f sizeInit,
+                graphics::VisibilityLayer visibilityLayerInit, graphics::Color color)
+        : uniqueName{std::move(uniqueNameInit)},
+          position{positionInit},
+          size{sizeInit},
+          visibilityLayer{visibilityLayerInit},
+          texturePath{boost::none},
+          color{color}
     {
     }
 
@@ -28,6 +40,7 @@ struct ImageConfig
     const utils::Vector2f position;
     const utils::Vector2f size;
     const graphics::VisibilityLayer visibilityLayer;
-    const std::string texturePath;
+    const boost::optional<std::string> texturePath;
+    const boost::optional<graphics::Color> color;
 };
 }

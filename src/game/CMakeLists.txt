@@ -30,6 +30,8 @@ set(SOURCES
         src/DefaultComponentOwnersManager.cpp
         src/PaginatedButtonsNavigator.cpp
         src/GridButtonsNavigator.cpp
+        src/HeadsUpDisplay.cpp
+        src/HeadsUpDisplayUIConfigBuilder.cpp
         )
 
 
@@ -62,6 +64,8 @@ set(UT_SOURCES
         src/DefaultComponentOwnersManagerTest.cpp
         src/PaginatedButtonsNavigatorTest.cpp
         src/GridButtonsNavigatorTest.cpp
+        src/HeadsUpDisplayTest.cpp
+        src/HeadsUpDisplayUIConfigBuilderTest.cpp
         )
 
 add_library(game ${SOURCES})

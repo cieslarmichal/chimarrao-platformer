@@ -33,6 +33,7 @@ public:
     std::shared_ptr<T> addComponent(Args... args)
     {
         static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
+        static_assert(!std::is_same<GraphicsComponent, T>::value, "T cannot be graphics");
 
         for (auto& existingComponent : components)
         {
@@ -61,6 +62,7 @@ public:
     std::shared_ptr<T> getComponent() const
     {
         static_assert(std::is_base_of<Component, T>::value, "T must derive from Component");
+        static_assert(!std::is_same<GraphicsComponent, T>::value, "T cannot be graphics");
 
         for (auto& existingComponent : components)
         {
