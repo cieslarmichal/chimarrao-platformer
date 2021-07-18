@@ -17,6 +17,11 @@ void ComponentOwner::loadDependentComponents()
     {
         components[i]->loadDependentComponents();
     }
+
+    for (auto& graphics : allGraphics)
+    {
+        graphics->loadDependentComponents();
+    }
 }
 
 void ComponentOwner::update(utils::DeltaTime deltaTime, const input::Input& input)
@@ -24,6 +29,11 @@ void ComponentOwner::update(utils::DeltaTime deltaTime, const input::Input& inpu
     for (int i = static_cast<int>(components.size() - 1); i >= 0; i--)
     {
         components[i]->update(deltaTime, input);
+    }
+
+    for (auto& graphics : allGraphics)
+    {
+        graphics->update(deltaTime, input);
     }
 }
 
@@ -33,6 +43,11 @@ void ComponentOwner::lateUpdate(utils::DeltaTime deltaTime, const input::Input& 
     {
         components[i]->lateUpdate(deltaTime, input);
     }
+
+    for (auto& graphics : allGraphics)
+    {
+        graphics->lateUpdate(deltaTime, input);
+    }
 }
 
 void ComponentOwner::enable()
@@ -41,6 +56,11 @@ void ComponentOwner::enable()
     {
         component->enable();
     }
+
+    for (auto& graphics : allGraphics)
+    {
+        graphics->enable();
+    }
 }
 
 void ComponentOwner::disable()
@@ -48,6 +68,11 @@ void ComponentOwner::disable()
     for (auto& component : components)
     {
         component->disable();
+    }
+
+    for (auto& graphics : allGraphics)
+    {
+        graphics->disable();
     }
 }
 

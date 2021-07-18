@@ -10,8 +10,8 @@ GraphicsComponent::GraphicsComponent(ComponentOwner* ownerInit,
                                      std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                                      const utils::Vector2f& size, const utils::Vector2f& position,
                                      const graphics::Color& color, graphics::VisibilityLayer layer,
-                                     bool relativeRendering)
-    : Component{ownerInit}, rendererPool{std::move(rendererPoolInit)}, visibilityLayer{layer}
+                                     const utils::Vector2f& offset, bool relativeRendering)
+    : Component{ownerInit}, rendererPool{std::move(rendererPoolInit)}, visibilityLayer{layer}, offset{offset}
 {
     id = rendererPool->acquire(size, position, color, layer, relativeRendering);
 }
@@ -20,8 +20,9 @@ GraphicsComponent::GraphicsComponent(ComponentOwner* owner,
                                      std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                                      const utils::Vector2f& size, const utils::Vector2f& position,
                                      const graphics::TexturePath& texturePath,
-                                     graphics::VisibilityLayer layer, bool relativeRendering)
-    : Component{owner}, rendererPool{std::move(rendererPoolInit)}, visibilityLayer{layer}
+                                     graphics::VisibilityLayer layer, const utils::Vector2f& offset,
+                                     bool relativeRendering)
+    : Component{owner}, rendererPool{std::move(rendererPoolInit)}, visibilityLayer{layer}, offset{offset}
 {
     id = rendererPool->acquire(size, position, texturePath, layer, relativeRendering);
 }
@@ -35,7 +36,7 @@ void GraphicsComponent::lateUpdate(utils::DeltaTime, const input::Input&)
 {
     if (enabled)
     {
-        rendererPool->setPosition(id, owner->transform->getPosition());
+        rendererPool->setPosition(id, owner->transform->getPosition() + offset);
     }
 }
 
@@ -53,6 +54,16 @@ void GraphicsComponent::setVisibility(graphics::VisibilityLayer layer)
 {
     rendererPool->setVisibility(id, layer);
     visibilityLayer = layer;
+}
+
+utils::Vector2f GraphicsComponent::getSize() const
+{
+    return rendererPool->getSize(id);
+}
+
+void GraphicsComponent::setSize(const utils::Vector2f& size)
+{
+    rendererPool->setSize(id, size);
 }
 
 void GraphicsComponent::enable()

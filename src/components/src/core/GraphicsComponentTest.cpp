@@ -39,6 +39,7 @@ public:
     }
 
     const utils::Vector2f size{0, 10};
+    const utils::Vector2f size2{20, 20};
     const utils::Vector2f position1{0, 10};
     const utils::Vector2f position2{12, 2};
     const Color color1{Color::Red};
@@ -156,5 +157,18 @@ TEST_F(GraphicsComponentTest, enableDisabledComponent_shouldSetInitialVisibility
     graphicsComponent->enable();
 
     EXPECT_TRUE(graphicsComponent->isEnabled());
+    expectReleaseGraphicsId();
+}
+
+TEST_F(GraphicsComponentTest, shouldSetSize)
+{
+    expectCreateGraphicsComponent();
+    const auto graphicsComponent = createGraphicsComponent();
+    EXPECT_CALL(*rendererPool, setSize(graphicsId, size2));
+    EXPECT_CALL(*rendererPool, getSize(graphicsId)).WillOnce(Return(size2));
+
+    graphicsComponent->setSize(size2);
+
+    ASSERT_EQ(graphicsComponent->getSize(), size2);
     expectReleaseGraphicsId();
 }

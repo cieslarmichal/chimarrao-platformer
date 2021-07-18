@@ -8,6 +8,7 @@
 #include "AnimationComponent.h"
 #include "ComponentOwner.h"
 #include "VelocityComponent.h"
+#include "exceptions/DependentComponentNotFound.h"
 
 using namespace components::core;
 using namespace animations;
@@ -44,6 +45,28 @@ public:
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
     StrictMock<input::InputMock> input;
 };
+
+TEST_F(FollowerComponentTest,
+       loadDependentComponentsWithoutAnimatorComponent_shouldThrowDependentComponentNotFound)
+{
+    ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator"};
+    FollowerComponent followerComponentWithoutAnimator{&componentOwnerWithoutAnimator, &followedOwner1};
+    componentOwnerWithoutAnimator.addComponent<VelocityComponent>();
+
+    ASSERT_THROW(followerComponentWithoutAnimator.loadDependentComponents(),
+                 components::core::exceptions::DependentComponentNotFound);
+}
+
+TEST_F(FollowerComponentTest,
+       loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
+{
+    ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity"};
+    FollowerComponent followerComponentWithoutVelocity{&componentOwnerWithoutVelocity, &followedOwner1};
+    componentOwnerWithoutVelocity.addComponent<AnimationComponent>(animator);
+
+    ASSERT_THROW(followerComponentWithoutVelocity.loadDependentComponents(),
+                 components::core::exceptions::DependentComponentNotFound);
+}
 
 TEST_F(FollowerComponentTest, followedTargetOnLeft_shouldMoveLeft)
 {

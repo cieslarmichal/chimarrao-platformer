@@ -39,6 +39,8 @@ public:
     virtual void setRenderingSize(const utils::Vector2u&) = 0;
     virtual void synchronizeRenderingSize() = 0;
     virtual void setCenter(const utils::Vector2f&) = 0;
+    virtual void setSize(const GraphicsId&, const utils::Vector2f&) = 0;
+    virtual utils::Vector2f getSize(const GraphicsId&) const = 0;
     virtual const utils::Vector2f& getCenter() const = 0;
     virtual const utils::Vector2f& getViewSize() const = 0;
 };

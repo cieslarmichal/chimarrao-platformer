@@ -16,6 +16,14 @@ static auto& getLayeredShapeByPosition(std::vector<ShapeRenderingInfo>& shapes,
     return shapes.at(distance);
 }
 
+static auto& getLayeredShapeByPosition(const std::vector<ShapeRenderingInfo>& shapes,
+                                       std::vector<ShapeRenderingInfo>::const_iterator position)
+{
+    const auto distance =
+        std::vector<ShapeRenderingInfo>::size_type(std::distance(shapes.cbegin(), position));
+    return shapes.at(distance);
+}
+
 static auto& getLayeredTextByPosition(std::vector<TextRenderingInfo>& texts,
                                       std::vector<TextRenderingInfo>::const_iterator position)
 {
@@ -265,6 +273,41 @@ void RendererPoolSfml::synchronizeRenderingSize()
     contextRenderer->synchronizeViewSize();
 }
 
+void RendererPoolSfml::setCenter(const utils::Vector2f& movement)
+{
+    contextRenderer->setCenter(movement);
+}
+
+utils::Vector2f RendererPoolSfml::getSize(const GraphicsId& id) const
+{
+    if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
+    {
+        auto& layeredShape = getLayeredShapeByPosition(layeredShapes, layeredShapeIter);
+        return layeredShape.shape.getSize();
+    }
+
+    throw std::runtime_error{"cant get size"};
+}
+
+void RendererPoolSfml::setSize(const GraphicsId& id, const utils::Vector2f& size)
+{
+    if (const auto layeredShapeIter = findLayeredShapePosition(id); layeredShapeIter != layeredShapes.end())
+    {
+        auto& layeredShape = getLayeredShapeByPosition(layeredShapes, layeredShapeIter);
+        layeredShape.shape.setSize(size);
+        return;
+    }
+}
+
+const utils::Vector2f& RendererPoolSfml::getCenter() const
+{
+    return contextRenderer->getCenter();
+}
+const utils::Vector2f& RendererPoolSfml::getViewSize() const
+{
+    return contextRenderer->getViewSize();
+}
+
 void RendererPoolSfml::cleanUnusedShapes()
 {
     layeredShapes.erase(
@@ -296,19 +339,5 @@ RendererPoolSfml::findLayeredTextPosition(const GraphicsId& graphicsIdToFind) co
     return std::find_if(layeredTexts.begin(), layeredTexts.end(),
                         [&graphicsIdToFind](const TextRenderingInfo& layeredText)
                         { return layeredText.text.getGraphicsId() == graphicsIdToFind; });
-}
-
-void RendererPoolSfml::setCenter(const utils::Vector2f& movement)
-{
-    contextRenderer->setCenter(movement);
-}
-
-const utils::Vector2f& RendererPoolSfml::getCenter() const
-{
-    return contextRenderer->getCenter();
-}
-const utils::Vector2f& RendererPoolSfml::getViewSize() const
-{
-    return contextRenderer->getViewSize();
 }
 }

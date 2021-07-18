@@ -11,7 +11,8 @@ public:
 
     void gainHealthPoints(unsigned int points);
     void loseHealthPoints(unsigned int points);
-    unsigned int getHealth() const;
+    unsigned int getCurrentHealth() const;
+    unsigned int getMaximumHealth() const;
     bool isDead() const;
 
 private:

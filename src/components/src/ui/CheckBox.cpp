@@ -21,9 +21,9 @@ CheckBox::CheckBox(const std::shared_ptr<graphics::RendererPool>& rendererPool,
 
     name = checkBoxConfig->uniqueName;
     coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(checkBoxConfig->position, name);
-    coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
-        rendererPool, checkBoxConfig->size, checkBoxConfig->position, checkBoxConfig->color,
-        graphics::VisibilityLayer::First, true);
+    coreComponentsOwner->addGraphicsComponent(rendererPool, checkBoxConfig->size, checkBoxConfig->position,
+                                              checkBoxConfig->color, graphics::VisibilityLayer::First,
+                                              utils::Vector2f{0, 0}, true);
     const auto text = checkBoxConfig->checked ? "X" : "";
     coreComponentsOwner->addComponent<components::core::TextComponent>(
         rendererPool, checkBoxConfig->position, text, checkBoxConfig->fontPath, checkBoxConfig->fontSize,
@@ -84,7 +84,7 @@ void CheckBox::deactivate()
 
 void CheckBox::setColor(graphics::Color color)
 {
-    coreComponentsOwner->getComponent<components::core::GraphicsComponent>()->setColor(color);
+    coreComponentsOwner->getMainGraphicsComponent()->setColor(color);
 }
 
 void CheckBox::setChecked(bool isChecked)

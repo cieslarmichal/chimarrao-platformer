@@ -11,6 +11,8 @@
 #include "core/CameraComponent.h"
 #include "core/FollowerComponent.h"
 #include "core/GraphicsComponent.h"
+#include "core/HealthBarComponent.h"
+#include "core/HealthComponent.h"
 #include "core/KeyboardMovementComponent.h"
 #include "core/VelocityComponent.h"
 #include "ui/DefaultUIManager.h"
@@ -34,9 +36,9 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
     auto player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10.f, 10.f}, "player");
-    auto graphicsComponent = player->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{6.f, 3.75f}, utils::Vector2f{10.f, 10.f}, graphics::Color::White,
-        graphics::VisibilityLayer::Second);
+    auto graphicsComponent =
+        player->addGraphicsComponent(rendererPool, utils::Vector2f{6.f, 3.75f}, utils::Vector2f{10.f, 10.f},
+                                     graphics::Color::White, graphics::VisibilityLayer::Second);
     auto graphicsId = graphicsComponent->getGraphicsId();
     player->addComponent<components::core::KeyboardMovementComponent>();
     auto animatorsFactory = animations::AnimatorFactory::createAnimatorFactory(rendererPool);
@@ -48,11 +50,13 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     player->addComponent<components::core::VelocityComponent>();
     player->addComponent<components::core::CameraComponent>(
         rendererPool, utils::FloatRect{0, 0, tileMap->getSize().x * 4.f, tileMap->getSize().y * 4.f});
+    player->addComponent<components::core::HealthComponent>(10000);
+    player->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{1.5, -1});
 
     auto enemy = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{2.f, 10.f}, "enemy");
-    auto enemyGraphicsComponent = enemy->addComponent<components::core::GraphicsComponent>(
-        rendererPool, utils::Vector2f{3.f, 3.f}, utils::Vector2f{2.f, 10.f}, graphics::Color::White,
-        graphics::VisibilityLayer::Second);
+    auto enemyGraphicsComponent =
+        enemy->addGraphicsComponent(rendererPool, utils::Vector2f{3.f, 3.f}, utils::Vector2f{2.f, 10.f},
+                                    graphics::Color::White, graphics::VisibilityLayer::Second);
     auto enemyGraphicsId = enemyGraphicsComponent->getGraphicsId();
     enemy->addComponent<components::core::FollowerComponent>(player.get());
     const std::shared_ptr<animations::Animator> bunnyAnimator =
@@ -71,7 +75,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                 auto obstacle = std::make_shared<components::core::ComponentOwner>(
                     utils::Vector2f{x * 4.f, y * 4.f},
                     "obstacle" + std::to_string(x) + std::to_string(y) + std::to_string(y));
-                obstacle->addComponent<components::core::GraphicsComponent>(
+                obstacle->addGraphicsComponent(
                     rendererPool, utils::Vector2f{4, 4}, utils::Vector2f{x * 4.f, y * 4.f},
                     tileTypeToPathTexture(*(tileMap->getTile(utils::Vector2i{x, y})->type)),
                     graphics::VisibilityLayer::Second);

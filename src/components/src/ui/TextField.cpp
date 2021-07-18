@@ -23,9 +23,9 @@ TextField::TextField(const std::shared_ptr<graphics::RendererPool>& rendererPool
 
     name = textFieldConfig->uniqueName;
     coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(textFieldConfig->position, name);
-    coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
-        rendererPool, textFieldConfig->size, textFieldConfig->position, textFieldConfig->color,
-        graphics::VisibilityLayer::First, true);
+    coreComponentsOwner->addGraphicsComponent(rendererPool, textFieldConfig->size, textFieldConfig->position,
+                                              textFieldConfig->color, graphics::VisibilityLayer::First,
+                                              utils::Vector2f{0, 0}, true);
     coreComponentsOwner->addComponent<components::core::TextComponent>(
         rendererPool, textFieldConfig->size, "", textFieldConfig->fontPath, textFieldConfig->fontSize,
         graphics::Color::White, textFieldConfig->textOffset, true);
@@ -127,7 +127,7 @@ void TextField::deactivate()
 
 void TextField::setColor(graphics::Color color)
 {
-    coreComponentsOwner->getComponent<components::core::GraphicsComponent>()->setColor(color);
+    coreComponentsOwner->getMainGraphicsComponent()->setColor(color);
 }
 
 void TextField::setText(const std::string& text)

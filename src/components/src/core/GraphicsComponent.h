@@ -16,12 +16,12 @@ public:
     GraphicsComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>, const utils::Vector2f& size,
                       const utils::Vector2f& position, const graphics::Color&,
                       graphics::VisibilityLayer = graphics::VisibilityLayer::First,
-                      bool relativeRendering = false);
+                      const utils::Vector2f& offset = {0, 0}, bool relativeRendering = false);
 
     GraphicsComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>, const utils::Vector2f& size,
                       const utils::Vector2f& position, const graphics::TexturePath&,
                       graphics::VisibilityLayer = graphics::VisibilityLayer::First,
-                      bool relativeRendering = false);
+                      const utils::Vector2f& offset = {0, 0}, bool relativeRendering = false);
     ~GraphicsComponent();
 
     void lateUpdate(utils::DeltaTime, const input::Input& input) override;
@@ -30,6 +30,8 @@ public:
     void setVisibility(graphics::VisibilityLayer);
     void setOutline(float thickness, const sf::Color& color);
     void setTexture(const std::string& texturePath);
+    utils::Vector2f getSize() const;
+    void setSize(const utils::Vector2f& size);
     void enable() override;
     void disable() override;
 
@@ -37,5 +39,6 @@ private:
     std::shared_ptr<graphics::RendererPool> rendererPool;
     graphics::GraphicsId id;
     graphics::VisibilityLayer visibilityLayer;
+    const utils::Vector2f offset;
 };
 }

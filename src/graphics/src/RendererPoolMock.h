@@ -31,6 +31,8 @@ public:
     MOCK_METHOD(void, setRenderingSize, (const utils::Vector2u&));
     MOCK_METHOD(void, synchronizeRenderingSize, ());
     MOCK_METHOD(void, setCenter, (const utils::Vector2f&));
+    MOCK_METHOD(utils::Vector2f, getSize, (const GraphicsId&), (const override));
+    MOCK_METHOD(void, setSize, (const GraphicsId&, const utils::Vector2f&));
     MOCK_METHOD(const utils::Vector2f&, getCenter, (), (const));
     MOCK_METHOD(const utils::Vector2f&, getViewSize, (), (const));
 };

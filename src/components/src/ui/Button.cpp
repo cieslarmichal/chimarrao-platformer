@@ -21,9 +21,9 @@ Button::Button(const std::shared_ptr<graphics::RendererPool>& rendererPool,
 
     name = buttonConfig->uniqueName;
     coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(buttonConfig->position, name);
-    coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
-        rendererPool, buttonConfig->size, buttonConfig->position, buttonConfig->buttonColor,
-        graphics::VisibilityLayer::First, true);
+    coreComponentsOwner->addGraphicsComponent(rendererPool, buttonConfig->size, buttonConfig->position,
+                                              buttonConfig->buttonColor, graphics::VisibilityLayer::First,
+                                              utils::Vector2f{0, 0}, true);
     coreComponentsOwner->addComponent<components::core::TextComponent>(
         rendererPool, buttonConfig->position, buttonConfig->text, buttonConfig->fontPath,
         buttonConfig->fontSize, buttonConfig->textColor, buttonConfig->textOffset, true);
@@ -84,7 +84,7 @@ void Button::deactivate()
 
 void Button::setColor(graphics::Color color)
 {
-    coreComponentsOwner->getComponent<components::core::GraphicsComponent>()->setColor(color);
+    coreComponentsOwner->getMainGraphicsComponent()->setColor(color);
 }
 
 void Button::setText(const std::string& text)

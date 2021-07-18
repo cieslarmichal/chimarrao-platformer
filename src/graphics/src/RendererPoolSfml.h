@@ -43,15 +43,13 @@ public:
     void setRenderingSize(const utils::Vector2u& renderingSize) override;
     void synchronizeRenderingSize() override;
     void setCenter(const utils::Vector2f&) override;
+    utils::Vector2f getSize(const GraphicsId&) const override;
+    void setSize(const GraphicsId&, const utils::Vector2f&) override;
     const utils::Vector2f& getCenter() const override;
-
-private:
-    void cleanUnusedShapes();
-
-public:
     const utils::Vector2f& getViewSize() const override;
 
 private:
+    void cleanUnusedShapes();
     std::vector<ShapeRenderingInfo>::const_iterator findLayeredShapePosition(const GraphicsId&) const;
     std::vector<TextRenderingInfo>::const_iterator findLayeredTextPosition(const GraphicsId&) const;
 

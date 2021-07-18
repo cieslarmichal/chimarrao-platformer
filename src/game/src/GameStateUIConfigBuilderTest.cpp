@@ -33,9 +33,11 @@ public:
                                            graphics::Color::White, graphics::VisibilityLayer::Second, _));
         EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{3.f, 3.f}, utils::Vector2f{2, 10},
                                            graphics::Color::White, graphics::VisibilityLayer::Second, _));
+        EXPECT_CALL(*rendererPool, acquire(utils::Vector2f{3.f, 0.5f}, utils::Vector2f{10, 10},
+                                           graphics::Color::Red, graphics::VisibilityLayer::First, _));
         EXPECT_CALL(*componentOwnersManager, add(_)).Times(6);
         EXPECT_CALL(*componentOwnersManager, processNewObjects());
-        EXPECT_CALL(*rendererPool, release(_)).Times(2);
+        EXPECT_CALL(*rendererPool, release(_)).Times(3);
         EXPECT_CALL(*tileMap, getSize()).WillRepeatedly(Return(utils::Vector2i{1, 1}));
         EXPECT_CALL(*tileMap, getTile(utils::Vector2i{0, 0})).WillRepeatedly(ReturnRef(tile));
     }

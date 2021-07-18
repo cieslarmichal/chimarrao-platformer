@@ -32,9 +32,14 @@ void HealthComponent::loseHealthPoints(unsigned int points)
     }
 }
 
-unsigned int HealthComponent::getHealth() const
+unsigned int HealthComponent::getCurrentHealth() const
 {
     return currentHealthPoints;
+}
+
+unsigned int HealthComponent::getMaximumHealth() const
+{
+    return maximumHealthPoints;
 }
 
 bool HealthComponent::isDead() const

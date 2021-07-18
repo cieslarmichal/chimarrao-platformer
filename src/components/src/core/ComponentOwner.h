@@ -5,6 +5,7 @@
 
 #include "Component.h"
 #include "DeltaTime.h"
+#include "GraphicsComponent.h"
 #include "IdComponent.h"
 #include "Input.h"
 #include "TransformComponent.h"
@@ -47,6 +48,15 @@ public:
         return newComponent;
     }
 
+    template <typename... Args>
+    std::shared_ptr<GraphicsComponent> addGraphicsComponent(Args... args)
+    {
+        std::shared_ptr<GraphicsComponent> newGraphicsComponent =
+            std::make_shared<GraphicsComponent>(this, args...);
+        allGraphics.push_back(newGraphicsComponent);
+        return newGraphicsComponent;
+    }
+
     template <typename T>
     std::shared_ptr<T> getComponent() const
     {
@@ -63,7 +73,17 @@ public:
         return nullptr;
     }
 
+    std::shared_ptr<GraphicsComponent> getMainGraphicsComponent() const
+    {
+        if (not allGraphics.empty())
+        {
+            return allGraphics.at(0);
+        }
+        return nullptr;
+    }
+
     std::shared_ptr<TransformComponent> transform;
+    std::vector<std::shared_ptr<GraphicsComponent>> allGraphics;
     std::shared_ptr<IdComponent> id;
 
 protected:

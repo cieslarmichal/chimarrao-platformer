@@ -14,14 +14,14 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
         utils::Vector2f{static_cast<float>(position.x) * sizeInit.x,
                         static_cast<float>(position.y) * sizeInit.y},
         std::to_string(position.x) + std::to_string(position.y) + std::to_string(position.y));
-    const auto& graphicsComponent = componentOwner->addComponent<components::core::GraphicsComponent>(
+    const auto& graphicsComponent = componentOwner->addGraphicsComponent(
         rendererPool, sizeInit,
         utils::Vector2f{static_cast<float>(position.x) * sizeInit.x,
                         static_cast<float>(position.y) * sizeInit.y},
         tileTypeToPathTexture(TileType::Grass),
         tileMap.getTile(position)->type ? graphics::VisibilityLayer::Second :
                                           graphics::VisibilityLayer::Invisible,
-        true);
+        utils::Vector2f{0, 0}, true);
     graphicsComponent->setTexture(tileTypeToPathTexture(
         tileMap.getTile(position)->type ? *tileMap.getTile(position)->type : currentTileType));
     componentOwner->addComponent<components::core::BoxColliderComponent>(sizeInit);
@@ -121,7 +121,7 @@ void LayoutTile::deactivate()
 void LayoutTile::pause()
 {
     componentOwner->disable();
-    if (auto graphicsComponent = componentOwner->getComponent<components::core::GraphicsComponent>())
+    if (auto graphicsComponent = componentOwner->getMainGraphicsComponent())
     {
         graphicsComponent->enable();
     }

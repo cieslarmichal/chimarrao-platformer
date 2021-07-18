@@ -23,6 +23,7 @@ set(SOURCES
         src/core/FollowerComponent.cpp
         src/core/MovementComponent.cpp
         src/core/HealthComponent.cpp
+        src/core/HealthBarComponent.cpp
         )
 
 set(UT_SOURCES
@@ -42,6 +43,7 @@ set(UT_SOURCES
         src/core/FollowerComponentTest.cpp
         src/core/MovementComponentTest.cpp
         src/core/HealthComponentTest.cpp
+        src/core/HealthBarComponentTest.cpp
         src/ui/DefaultUIManagerTest.cpp
         src/ui/BackgroundTest.cpp
         src/ui/ButtonTest.cpp

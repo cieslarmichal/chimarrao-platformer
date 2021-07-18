@@ -504,3 +504,22 @@ TEST_F(RendererPoolSfmlTest, getViewSize_shouldReturnValueFromContextRenderer)
 
     ASSERT_EQ(rendererPoolViewSize, viewSize);
 }
+
+TEST_F(RendererPoolSfmlTest, setSizeOfShapeShouldSetSize)
+{
+    const auto shapeGraphicsId = rendererPool.acquire(size1, position, Color::Red, VisibilityLayer::First);
+
+    rendererPool.setSize(shapeGraphicsId, size2);
+
+    ASSERT_EQ(rendererPool.getSize(shapeGraphicsId), size2);
+}
+
+TEST_F(RendererPoolSfmlTest, setSizeOfTextShouldThrow)
+{
+    EXPECT_CALL(*fontStorage, getFont(validFontPath)).WillOnce(ReturnRef(font));
+    const auto textId = rendererPool.acquireText(position, exampleText, validFontPath, characterSize);
+
+    rendererPool.setSize(textId, size2);
+
+    ASSERT_THROW(rendererPool.getSize(textId), std::runtime_error);
+}

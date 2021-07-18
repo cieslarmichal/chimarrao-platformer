@@ -69,7 +69,7 @@ void DefaultComponentOwnersManager::deactivate()
     for (auto& componentOwner : componentOwners)
     {
         componentOwner->disable();
-        if (auto graphics = componentOwner->getComponent<components::core::GraphicsComponent>())
+        for (auto& graphics : componentOwner->allGraphics)
         {
             graphics->enable();
         }

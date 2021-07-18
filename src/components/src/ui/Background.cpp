@@ -29,15 +29,15 @@ Background::Background(const std::shared_ptr<graphics::RendererPool>& rendererPo
 
     if (backgroundConfig->texturePath)
     {
-        coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
+        coreComponentsOwner->addGraphicsComponent(
             rendererPool, backgroundConfig->size, backgroundConfig->position, *backgroundConfig->texturePath,
-            backgroundConfig->visibilityLayer, true);
+            backgroundConfig->visibilityLayer, utils::Vector2f{0, 0}, true);
     }
     else
     {
-        coreComponentsOwner->addComponent<components::core::GraphicsComponent>(
+        coreComponentsOwner->addGraphicsComponent(
             rendererPool, backgroundConfig->size, backgroundConfig->position, *backgroundConfig->color,
-            backgroundConfig->visibilityLayer, true);
+            backgroundConfig->visibilityLayer, utils::Vector2f{0, 0}, true);
     }
 
     if (not backgroundConfig->keyActions.empty())
@@ -72,7 +72,7 @@ void Background::deactivate()
 
 void Background::setColor(graphics::Color color)
 {
-    coreComponentsOwner->getComponent<components::core::GraphicsComponent>()->setColor(color);
+    coreComponentsOwner->getMainGraphicsComponent()->setColor(color);
 }
 
 bool Background::isActive() const

@@ -20,7 +20,8 @@ public:
 
 TEST_F(HealthComponentTest, initialHealthPoints_shouldMatchWithGivenOne)
 {
-    ASSERT_EQ(healthComponent.getHealth(), initialHealthPoints);
+    ASSERT_EQ(healthComponent.getCurrentHealth(), initialHealthPoints);
+    ASSERT_EQ(healthComponent.getMaximumHealth(), initialHealthPoints);
     ASSERT_FALSE(healthComponent.isDead());
 }
 
@@ -31,7 +32,7 @@ TEST_F(HealthComponentTest,
 
     healthComponent.gainHealthPoints(pointsToAdd1);
 
-    ASSERT_EQ(healthComponent.getHealth(), 70);
+    ASSERT_EQ(healthComponent.getCurrentHealth(), 70);
 }
 
 TEST_F(HealthComponentTest,
@@ -41,14 +42,14 @@ TEST_F(HealthComponentTest,
 
     healthComponent.gainHealthPoints(pointsToAdd2);
 
-    ASSERT_EQ(healthComponent.getHealth(), initialHealthPoints);
+    ASSERT_EQ(healthComponent.getCurrentHealth(), initialHealthPoints);
 }
 
 TEST_F(HealthComponentTest, lostPointsWithCurrentHealthAreLowerThanZero_shouldSetCurrentHealthPointsToZero)
 {
     healthComponent.loseHealthPoints(120);
 
-    ASSERT_EQ(healthComponent.getHealth(), 0);
+    ASSERT_EQ(healthComponent.getCurrentHealth(), 0);
 }
 
 TEST_F(HealthComponentTest,
@@ -56,7 +57,7 @@ TEST_F(HealthComponentTest,
 {
     healthComponent.loseHealthPoints(20);
 
-    ASSERT_EQ(healthComponent.getHealth(), 80);
+    ASSERT_EQ(healthComponent.getCurrentHealth(), 80);
 }
 
 TEST_F(HealthComponentTest, givenCurrentHealthEqualZero_shouldReturnDead)
