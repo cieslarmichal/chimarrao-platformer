@@ -5,7 +5,6 @@
 #include "HeadsUpDisplayUIConfigBuilder.h"
 #include "core/HealthComponent.h"
 #include "ui/Image.h"
-#include "ui/Label.h"
 #include "ui/UIComponentFactory.h"
 #include "ui/UIConfig.h"
 
@@ -21,6 +20,8 @@ HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner>
       active{false}
 {
     createUIComponents(std::move(uiConfig));
+    auto& healthBarFrame = images[HeadsUpDisplayUIConfigBuilder::getHealthBarFrameId()];
+    healthBarFrame->setOutline(0.15, graphics::Color::Black);
 }
 
 void HeadsUpDisplay::update()

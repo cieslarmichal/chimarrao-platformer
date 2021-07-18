@@ -2,6 +2,7 @@
 
 #include "CollisionSystem.h"
 #include "ComponentOwnersManager.h"
+#include "HeadsUpDisplay.h"
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
@@ -33,7 +34,7 @@ private:
     const float timeAfterStateCouldBePaused;
     std::shared_ptr<components::ui::UIManager> uiManager;
     std::unique_ptr<ComponentOwnersManager> componentOwnersManager;
-
     std::shared_ptr<TileMap> tileMap;
+    std::unique_ptr<HeadsUpDisplay> hud;
 };
 }

@@ -22,6 +22,7 @@ const auto dummyFontSize = 4;
 const auto fontPath = projectPath + "resources/fonts/VeraMono.ttf";
 const auto imageName = "dummyImage";
 const auto imagePath = projectPath + "resources/BG/menu_background.jpg";
+const auto thickness = 2.f;
 
 std::unique_ptr<components::ui::ImageConfig> createValidConfig()
 {
@@ -124,5 +125,16 @@ TEST_F(ImageTest, setSize)
 
     const auto actualSize = image.getSize();
     ASSERT_EQ(actualSize, changedSize);
+    expectReleaseGraphicsId();
+}
+
+TEST_F(ImageTest, setOutline)
+{
+    expectCreateGraphicsComponent();
+    auto image = Image{rendererPool, createValidConfig()};
+    EXPECT_CALL(*rendererPool, setOutline(_, thickness, graphics::Color::Black));
+
+    image.setOutline(thickness, graphics::Color::Black);
+
     expectReleaseGraphicsId();
 }

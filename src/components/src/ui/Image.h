@@ -22,6 +22,7 @@ public:
     bool isActive() const override;
     utils::Vector2f getSize() const;
     void setSize(const utils::Vector2f&);
+    void setOutline(float thickness, const sf::Color& color);
 
 private:
     std::string name;

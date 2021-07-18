@@ -4,6 +4,7 @@
 
 #include "AnimatorFactory.h"
 #include "GameStateUIConfigBuilder.h"
+#include "HeadsUpDisplayUIConfigBuilder.h"
 #include "ProjectPathReader.h"
 #include "TimerFactory.h"
 #include "core/AnimationComponent.h"
@@ -52,6 +53,9 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
         rendererPool, utils::FloatRect{0, 0, tileMap->getSize().x * 4.f, tileMap->getSize().y * 4.f});
     player->addComponent<components::core::HealthComponent>(1000);
     player->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{1.5, -1});
+
+    hud = std::make_unique<HeadsUpDisplay>(player, rendererPool,
+                                           HeadsUpDisplayUIConfigBuilder::createUIConfig());
 
     auto enemy = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{2.f, 10.f}, "enemy");
     auto enemyGraphicsComponent =
@@ -127,6 +131,7 @@ NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Inpu
     {
         componentOwnersManager->update(deltaTime, input);
         uiManager->update(deltaTime, input);
+        hud->update();
     }
 
     return NextState::Same;

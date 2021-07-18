@@ -73,4 +73,9 @@ void Image::setSize(const utils::Vector2f& size)
 {
     return coreComponentsOwner->getMainGraphicsComponent()->setSize(size);
 }
+
+void Image::setOutline(float thickness, const sf::Color& color)
+{
+    coreComponentsOwner->getMainGraphicsComponent()->setOutline(thickness, color);
+}
 }

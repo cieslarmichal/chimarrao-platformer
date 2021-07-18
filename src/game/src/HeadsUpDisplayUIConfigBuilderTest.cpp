@@ -12,7 +12,7 @@ class HeadsUpDisplayUIConfigBuilderTest : public Test
 {
 public:
     const std::vector<std::string> expectedLabelsNames{"hudHealthPointsLabel"};
-    const std::vector<std::string> expectedImagesNames{"hudHealthPointsBar"};
+    const std::vector<std::string> expectedImagesNames{"hudHealthPointsBar", "hudHealthPointsBarFrame"};
 };
 
 TEST_F(HeadsUpDisplayUIConfigBuilderTest, createMenuUI)
@@ -40,4 +40,9 @@ TEST_F(HeadsUpDisplayUIConfigBuilderTest, createMenuUI)
 TEST_F(HeadsUpDisplayUIConfigBuilderTest, getHealthBarId)
 {
     ASSERT_EQ(HeadsUpDisplayUIConfigBuilder::getHealthBarId(), "hudHealthPointsBar");
+}
+
+TEST_F(HeadsUpDisplayUIConfigBuilderTest, getHealthBarFrameId)
+{
+    ASSERT_EQ(HeadsUpDisplayUIConfigBuilder::getHealthBarFrameId(), "hudHealthPointsBarFrame");
 }

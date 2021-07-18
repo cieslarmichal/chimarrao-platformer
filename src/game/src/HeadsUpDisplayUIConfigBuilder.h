@@ -23,6 +23,7 @@ class HeadsUpDisplayUIConfigBuilder
 public:
     static std::unique_ptr<components::ui::UIConfig> createUIConfig();
     static std::string getHealthBarId();
+    static std::string getHealthBarFrameId();
 
 private:
     static std::unique_ptr<components::ui::BackgroundConfig> createBackgroundConfig();
