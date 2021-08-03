@@ -24,6 +24,7 @@ set(SOURCES
         src/core/MovementComponent.cpp
         src/core/HealthComponent.cpp
         src/core/HealthBarComponent.cpp
+        src/core/DirectionComponent.cpp
         )
 
 set(UT_SOURCES
@@ -51,6 +52,7 @@ set(UT_SOURCES
         src/ui/ImageTest.cpp
         src/ui/LabelTest.cpp
         src/ui/TextFieldTest.cpp
+        src/core/DirectionComponentTest.cpp
         )
 
 add_library(components ${SOURCES})
