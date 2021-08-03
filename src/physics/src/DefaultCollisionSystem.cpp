@@ -103,9 +103,9 @@ void DefaultCollisionSystem::resolve()
 
                 if (layersCollide)
                 {
-                    if (const auto otherRect = collider->intersectsX(xCollision); otherRect)
+                    if (collider->intersectsX(xCollision))
                     {
-                        collider->resolveOverlapX(otherRect.value());
+                        collider->resolveOverlapX(xCollision);
                     }
                 }
             }
@@ -125,9 +125,9 @@ void DefaultCollisionSystem::resolve()
 
                 if (layersCollide)
                 {
-                    if (const auto otherRect = collider->intersectsY(yCollision); otherRect)
+                    if (collider->intersectsY(yCollision))
                     {
-                        collider->resolveOverlapY(otherRect.value());
+                        collider->resolveOverlapY(yCollision);
                     }
                 }
             }
