@@ -55,6 +55,18 @@ TEST_F(KeyboardMovementComponentTest,
                  components::core::exceptions::DependentComponentNotFound);
 }
 
+TEST_F(KeyboardMovementComponentTest,
+       loadDependentComponentsWithoutAttackComponent_shouldThrowDependentComponentNotFound)
+{
+    ComponentOwner componentOwnerWithoutAttack{position, "componentOwnerWithoutAttack"};
+    KeyboardMovementComponent keyboardMovementComponentWithoutAttack{&componentOwnerWithoutAttack};
+    componentOwnerWithoutAttack.addComponent<VelocityComponent>();
+    componentOwnerWithoutAttack.addComponent<AnimationComponent>(animator);
+
+    ASSERT_THROW(keyboardMovementComponentWithoutAttack.loadDependentComponents(),
+                 components::core::exceptions::DependentComponentNotFound);
+}
+
 TEST_F(KeyboardMovementComponentTest, givenInputStatusWithNoKeyPressed_shouldSetAnimationTypeToIdle)
 {
     keyboardMovementComponent.blockMoveDown();

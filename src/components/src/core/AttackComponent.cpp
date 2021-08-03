@@ -22,7 +22,7 @@ bool AttackComponent::isThereAttemptToAttack()
     return attemptToAttackSomething;
 }
 
-void AttackComponent::attack(ComponentOwner& otherOwner)
+void AttackComponent::attack(const ComponentOwner& otherOwner)
 {
     if (!isThereAttemptToAttack())
     {

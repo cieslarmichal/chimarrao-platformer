@@ -2,6 +2,8 @@
 
 #include <cmath>
 
+#include "AttackComponent.h"
+#include "DirectionComponent.h"
 #include "FollowerComponent.h"
 #include "KeyboardMovementComponent.h"
 
@@ -89,6 +91,22 @@ void BoxColliderComponent::resolveOverlapX(const std::shared_ptr<BoxColliderComp
     else
     {
         movementComponent->blockMoveRight();
+    }
+
+    auto& owner = getOwner();
+    auto attackComponent = owner.getComponent<AttackComponent>();
+    if (attackComponent && attackComponent->isThereAttemptToAttack())
+    {
+        std::cout<< "AAAAAAAAAAAA";
+        auto directionComponent = owner.getComponent<DirectionComponent>();
+        const auto expectedAttackDirection = otherRect.left < nextFrameCollisionBoundaries.left ?
+                                             animations::AnimationDirection::Left :
+                                             animations::AnimationDirection::Right;
+
+        if (directionComponent->getDirection() == expectedAttackDirection)
+        {
+            attackComponent->attack(other->getOwner());
+        }
     }
 }
 

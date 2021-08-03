@@ -3,6 +3,7 @@
 #include "MovementComponent.h"
 #include "Vector.h"
 #include "VelocityComponent.h"
+#include "AttackComponent.h"
 
 namespace components::core
 {
@@ -20,5 +21,6 @@ public:
 private:
     std::shared_ptr<AnimationComponent> animation;
     std::shared_ptr<VelocityComponent> velocityComponent;
+    std::shared_ptr<AttackComponent> attackComponent;
 };
 }

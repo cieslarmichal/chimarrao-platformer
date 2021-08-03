@@ -12,7 +12,7 @@ public:
     void setAttemptToAttack();
     void resetAttemptToAttack();
     bool isThereAttemptToAttack();
-    void attack(ComponentOwner&);
+    void attack(const ComponentOwner&);
 
 private:
     bool attemptToAttackSomething{false};

@@ -17,6 +17,8 @@
 #include "core/KeyboardMovementComponent.h"
 #include "core/VelocityComponent.h"
 #include "ui/DefaultUIManager.h"
+#include "core/DirectionComponent.h"
+#include "core/AttackComponent.h"
 
 namespace game
 {
@@ -52,6 +54,8 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     player->addComponent<components::core::CameraComponent>(
         rendererPool, utils::FloatRect{0, 0, tileMap->getSize().x * 4.f, tileMap->getSize().y * 4.f});
     player->addComponent<components::core::HealthComponent>(1000);
+    player->addComponent<components::core::DirectionComponent>();
+    player->addComponent<components::core::AttackComponent>();
     player->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{1.5, -1});
 
     hud = std::make_unique<HeadsUpDisplay>(player, rendererPool,
