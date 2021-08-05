@@ -44,7 +44,7 @@ bool Component::shouldBeRemoved() const
     return owner->shouldBeRemoved();
 }
 
-const ComponentOwner& Component::getOwner() const
+ComponentOwner& Component::getOwner() const
 {
     return *owner;
 }

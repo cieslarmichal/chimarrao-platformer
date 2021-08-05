@@ -1,5 +1,6 @@
 set(SOURCES
         src/Quadtree.cpp
+        src/RayCast.cpp
         src/DefaultCollisionSystem.cpp
         src/CollisionSystemFactory.cpp
         src/DefaultCollisionSystemFactory.cpp
@@ -7,6 +8,7 @@ set(SOURCES
 
 set(UT_SOURCES
         src/QuadtreeTest.cpp
+        src/RayCastTest.cpp
         src/DefaultCollisionSystemTest.cpp
         )
 

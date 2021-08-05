@@ -24,7 +24,7 @@ public:
     std::string getOwnerName() const;
     unsigned int getOwnerId() const;
     bool shouldBeRemoved() const;
-    const ComponentOwner& getOwner() const;
+    ComponentOwner& getOwner() const;
 
 protected:
     ComponentOwner* owner;
