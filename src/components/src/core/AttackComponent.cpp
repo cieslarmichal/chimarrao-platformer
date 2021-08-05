@@ -65,8 +65,10 @@ void AttackComponent::attack() const
 
     if (result.collision)
     {
-        auto health = result.collision->getComponent<HealthComponent>();
-        health->loseHealthPoints(damage);
+        if (auto health = result.collision->getComponent<HealthComponent>())
+        {
+            health->loseHealthPoints(damage);
+        }
     }
 }
 
