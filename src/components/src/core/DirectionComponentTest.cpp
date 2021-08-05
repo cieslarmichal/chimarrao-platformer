@@ -2,6 +2,8 @@
 
 #include "gtest/gtest.h"
 
+#include "AnimatorMock.h"
+
 #include "core/exceptions/DependentComponentNotFound.h"
 
 using namespace ::testing;
@@ -13,6 +15,7 @@ public:
     DirectionComponentTest()
     {
         velocityComponent = componentOwner.addComponent<VelocityComponent>();
+        componentOwner.addComponent<AnimationComponent>(animator);
         directionComponent.loadDependentComponents();
     }
 
@@ -23,14 +26,27 @@ public:
     const utils::Vector2f velocityDirectedLeft{-10.0, 0};
     ComponentOwner componentOwner{position1, "DirectionComponentTest"};
     std::shared_ptr<VelocityComponent> velocityComponent;
+    std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
+        std::make_shared<StrictMock<animations::AnimatorMock>>();
     DirectionComponent directionComponent{&componentOwner};
 };
+
+TEST_F(DirectionComponentTest,
+       loadDependentComponentsWithoutAnimationComponent_shouldThrowDependentComponentNotFound)
+{
+    ComponentOwner componentOwnerWithoutAnimation{position1, "componentOwnerWithoutAnimation"};
+    DirectionComponent directionComponentWithoutAnimation{&componentOwnerWithoutAnimation};
+
+    ASSERT_THROW(directionComponentWithoutAnimation.loadDependentComponents(),
+                 components::core::exceptions::DependentComponentNotFound);
+}
 
 TEST_F(DirectionComponentTest,
        loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutVelocity{position1, "componentOwnerWithoutVelocity"};
     DirectionComponent directionComponentWithoutVelocity{&componentOwnerWithoutVelocity};
+    componentOwnerWithoutVelocity.addComponent<AnimationComponent>(animator);
 
     ASSERT_THROW(directionComponentWithoutVelocity.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);

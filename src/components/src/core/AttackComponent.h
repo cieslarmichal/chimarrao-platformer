@@ -1,9 +1,10 @@
 #pragma once
 
-#include "ComponentOwner.h"
-#include "RayCast.h"
-#include "DirectionComponent.h"
 #include "BoxColliderComponent.h"
+#include "ComponentOwner.h"
+#include "DirectionComponent.h"
+#include "RayCast.h"
+#include "Timer.h"
 
 namespace components::core
 {
@@ -17,6 +18,7 @@ public:
 
 private:
     std::shared_ptr<physics::RayCast> rayCast;
+    std::shared_ptr<AnimationComponent> animationComponent;
     std::shared_ptr<DirectionComponent> directionComponent;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     float range{4};

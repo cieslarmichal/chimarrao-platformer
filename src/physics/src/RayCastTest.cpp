@@ -41,7 +41,8 @@ TEST_F(RayCastTest, givenOneNotInRange_shouldReturnNoObject)
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponent4);
 
-    const auto rayCastResult = rayCast.cast(position1Center, targetPoint1, boxColliderComponent1->getOwnerId());
+    const auto rayCastResult =
+        rayCast.cast(position1Center, targetPoint1, boxColliderComponent1->getOwnerId());
 
     ASSERT_FALSE(rayCastResult.collision);
 }
@@ -51,7 +52,8 @@ TEST_F(RayCastTest, givenOneObjectInRangeOnRight_shouldReturnIntersectedObject)
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponent2);
 
-    const auto rayCastResult = rayCast.cast(position1Center, targetPoint1, boxColliderComponent1->getOwnerId());
+    const auto rayCastResult =
+        rayCast.cast(position1Center, targetPoint1, boxColliderComponent1->getOwnerId());
 
     ASSERT_EQ(rayCastResult.collision, &(boxColliderComponent2->getOwner()));
 }
@@ -62,7 +64,8 @@ TEST_F(RayCastTest, givenTwoObjectsInRangeOnRight_shouldReturnFirstIntersectingO
     quadtree->insertCollider(boxColliderComponent2);
     quadtree->insertCollider(boxColliderComponent3);
 
-    const auto rayCastResult = rayCast.cast(position1Center, targetPoint2, boxColliderComponent1->getOwnerId());
+    const auto rayCastResult =
+        rayCast.cast(position1Center, targetPoint2, boxColliderComponent1->getOwnerId());
 
     ASSERT_EQ(rayCastResult.collision, &(boxColliderComponent2->getOwner()));
 }

@@ -74,7 +74,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     enemy->addComponent<components::core::BoxColliderComponent>(
         utils::Vector2f{2.f, 2.f}, components::core::CollisionLayer::Player, utils::Vector2f{0.f, 0.f});
     enemy->addComponent<components::core::VelocityComponent>();
-    enemy->addComponent<components::core::HealthComponent>(100);
+    enemy->addComponent<components::core::HealthComponent>(50);
     enemy->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{0, -1});
 
     for (int x = 0; x < tileMap->getSize().x; x++)

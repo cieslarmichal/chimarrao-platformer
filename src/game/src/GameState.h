@@ -3,12 +3,12 @@
 #include "CollisionSystem.h"
 #include "ComponentOwnersManager.h"
 #include "HeadsUpDisplay.h"
+#include "RayCast.h"
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
 #include "editor/TileMap.h"
 #include "ui/UIManager.h"
-#include "RayCast.h"
 
 namespace game
 {

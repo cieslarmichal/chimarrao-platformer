@@ -1,9 +1,9 @@
 #pragma once
 
+#include "AttackComponent.h"
 #include "MovementComponent.h"
 #include "Vector.h"
 #include "VelocityComponent.h"
-#include "AttackComponent.h"
 
 namespace components::core
 {

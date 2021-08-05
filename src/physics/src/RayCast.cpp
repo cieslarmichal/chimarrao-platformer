@@ -36,7 +36,7 @@ RayCastResult RayCast::cast(const utils::Vector2f& from, const utils::Vector2f& 
                 continue;
             }
 
-            const auto entityRect = collider->getNextFrameXCollisionBox();
+            const auto entityRect = collider->getCollisionBox();
             if (entityRect.contains(linePoint))
             {
                 RayCastResult result{};

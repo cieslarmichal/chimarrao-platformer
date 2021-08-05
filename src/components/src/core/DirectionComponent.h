@@ -1,5 +1,6 @@
 #pragma once
 
+#include "AnimationComponent.h"
 #include "AnimationDirection.h"
 #include "ComponentOwner.h"
 #include "VelocityComponent.h"
@@ -16,6 +17,7 @@ public:
     sf::Vector2i getHeading() const;
 
 private:
+    std::shared_ptr<AnimationComponent> animationComponent;
     std::shared_ptr<VelocityComponent> velocityComponent;
 };
 }

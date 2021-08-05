@@ -33,7 +33,6 @@ void Game::run()
         std::cerr << error.what();
         abort();
     }
-
 }
 
 StatesStatus Game::update()

@@ -27,5 +27,6 @@ public:
 protected:
     std::shared_ptr<GraphicsComponent> bar;
     std::shared_ptr<HealthComponent> health;
+    utils::Vector2f maximumSize{3.f, 0.5f};
 };
 }

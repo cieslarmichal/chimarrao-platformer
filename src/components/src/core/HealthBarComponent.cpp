@@ -38,12 +38,13 @@ void HealthBarComponent::update(utils::DeltaTime deltaTime, const input::Input& 
 
 void HealthBarComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input& input)
 {
-    const auto currentBarSize = bar->getSize();
     const auto currentHealth = health->getCurrentHealth();
     const auto maximumHealth = health->getMaximumHealth();
     const auto barSizeScaledByCurrentHealth = utils::Vector2f{
-        currentBarSize.x * (static_cast<float>(currentHealth) / static_cast<float>(maximumHealth)),
-        currentBarSize.y};
+        maximumSize.x * (static_cast<float>(currentHealth) / static_cast<float>(maximumHealth)),
+        maximumSize.y};
+
+    const auto currentBarSize = bar->getSize();
     if (barSizeScaledByCurrentHealth != currentBarSize)
     {
         bar->setSize(barSizeScaledByCurrentHealth);

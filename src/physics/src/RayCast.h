@@ -16,7 +16,7 @@ public:
     explicit RayCast(std::shared_ptr<Quadtree>);
 
     RayCastResult cast(const utils::Vector2f& from, const utils::Vector2f& to, unsigned int exclusionID = -1,
-                       float lineWidth = 0.5f) const;
+                       float lineWidth = 0.2f) const;
 
 private:
     sf::FloatRect buildRect(const utils::Vector2f& lineOne, const utils::Vector2f& lineTwo,
