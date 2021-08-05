@@ -27,6 +27,7 @@ public:
     const utils::FloatRect& getCollisionBox();
     const utils::FloatRect& getNextFrameXCollisionBox();
     const utils::FloatRect& getNextFrameYCollisionBox();
+    utils::Vector2f getSize() const;
     CollisionLayer getCollisionLayer() const;
     void setCollisionLayer(CollisionLayer layer);
 

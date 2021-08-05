@@ -8,6 +8,7 @@
 #include "core/ComponentOwner.h"
 #include "editor/TileMap.h"
 #include "ui/UIManager.h"
+#include "RayCast.h"
 
 namespace game
 {
@@ -17,7 +18,7 @@ public:
     explicit GameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
                        std::shared_ptr<utils::FileAccess>, States&,
                        std::shared_ptr<components::ui::UIManager>, std::unique_ptr<ComponentOwnersManager>,
-                       std::shared_ptr<TileMap>);
+                       std::shared_ptr<TileMap>, std::shared_ptr<physics::RayCast>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -36,5 +37,6 @@ private:
     std::unique_ptr<ComponentOwnersManager> componentOwnersManager;
     std::shared_ptr<TileMap> tileMap;
     std::unique_ptr<HeadsUpDisplay> hud;
+    std::shared_ptr<physics::RayCast> rayCast;
 };
 }

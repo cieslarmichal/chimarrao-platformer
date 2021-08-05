@@ -2,8 +2,8 @@ set(SOURCES
         src/Quadtree.cpp
         src/RayCast.cpp
         src/DefaultCollisionSystem.cpp
-        src/CollisionSystemFactory.cpp
-        src/DefaultCollisionSystemFactory.cpp
+        src/PhysicsFactory.cpp
+        src/DefaultPhysicsFactory.cpp
         )
 
 set(UT_SOURCES
@@ -12,7 +12,7 @@ set(UT_SOURCES
         src/DefaultCollisionSystemTest.cpp
         )
 
-add_library(physics SHARED ${SOURCES})
+add_library(physics ${SOURCES})
 target_link_libraries(physics PUBLIC components utils)
 target_include_directories(physics PUBLIC src)
 target_compile_options(physics PUBLIC ${FLAGS})

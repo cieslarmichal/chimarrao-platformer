@@ -13,13 +13,21 @@ FollowerComponent::FollowerComponent(ComponentOwner* owner, ComponentOwner* foll
 void FollowerComponent::loadDependentComponents()
 {
     animation = owner->getComponent<AnimationComponent>();
-    if (not animation)
+    if (animation)
+    {
+        animation->loadDependentComponents();
+    }
+    else
     {
         throw exceptions::DependentComponentNotFound{"FollowerComponent: Animation component not found"};
     }
 
     velocityComponent = owner->getComponent<VelocityComponent>();
-    if (not velocityComponent)
+    if (velocityComponent)
+    {
+        velocityComponent->loadDependentComponents();
+    }
+    else
     {
         throw exceptions::DependentComponentNotFound{"FollowerComponent: Velocity component not found"};
     }

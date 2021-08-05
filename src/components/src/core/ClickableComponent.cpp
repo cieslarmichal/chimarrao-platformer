@@ -25,7 +25,11 @@ ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
 void ClickableComponent::loadDependentComponents()
 {
     boxCollider = owner->getComponent<BoxColliderComponent>();
-    if (not boxCollider)
+    if (boxCollider)
+    {
+        boxCollider->loadDependentComponents();
+    }
+    else
     {
         throw exceptions::DependentComponentNotFound{"ClickableComponent: BoxColliderComponent not found"};
     }

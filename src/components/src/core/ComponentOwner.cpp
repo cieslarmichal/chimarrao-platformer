@@ -13,9 +13,9 @@ ComponentOwner::ComponentOwner(const utils::Vector2f& position, const std::strin
 
 void ComponentOwner::loadDependentComponents()
 {
-    for (int i = static_cast<int>(components.size() - 1); i >= 0; i--)
+    for (auto& component : components)
     {
-        components[i]->loadDependentComponents();
+        component->loadDependentComponents();
     }
 
     for (auto& graphics : allGraphics)

@@ -30,9 +30,9 @@ TEST_F(DirectionComponentTest,
        loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutVelocity{position1, "componentOwnerWithoutVelocity"};
-    DirectionComponent directionComponentWithoutAnimator{&componentOwnerWithoutVelocity};
+    DirectionComponent directionComponentWithoutVelocity{&componentOwnerWithoutVelocity};
 
-    ASSERT_THROW(directionComponentWithoutAnimator.loadDependentComponents(),
+    ASSERT_THROW(directionComponentWithoutVelocity.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
 }
 
@@ -43,9 +43,29 @@ TEST_F(DirectionComponentTest, givenVelocityGoingRight_shouldReturnRightDirectio
     ASSERT_EQ(directionComponent.getDirection(), animations::AnimationDirection::Right);
 }
 
-TEST_F(DirectionComponentTest, givenVelocityGoingRight_shouldReturnLeftDirection)
+TEST_F(DirectionComponentTest, givenVelocityGoingLeft_shouldReturnLeftDirection)
 {
     velocityComponent->setVelocity(velocityDirectedLeft);
 
     ASSERT_EQ(directionComponent.getDirection(), animations::AnimationDirection::Left);
+}
+
+TEST_F(DirectionComponentTest, givenVelocityGoingRight_shouldReturnPositiveXHeading)
+{
+    velocityComponent->setVelocity(velocityDirectedRight);
+    const auto expectedHeading = utils::Vector2i{1, 1};
+
+    const auto actualHeading = directionComponent.getHeading();
+
+    ASSERT_EQ(actualHeading, expectedHeading);
+}
+
+TEST_F(DirectionComponentTest, givenVelocityGoingLeft_shouldReturnPositiveXHeading)
+{
+    velocityComponent->setVelocity(velocityDirectedLeft);
+    const auto expectedHeading = utils::Vector2i{-1, 1};
+
+    const auto actualHeading = directionComponent.getHeading();
+
+    ASSERT_EQ(actualHeading, expectedHeading);
 }

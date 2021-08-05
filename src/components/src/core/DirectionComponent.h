@@ -9,10 +9,11 @@ namespace components::core
 class DirectionComponent : public Component
 {
 public:
-    DirectionComponent(ComponentOwner* owner);
+    explicit DirectionComponent(ComponentOwner*);
 
     void loadDependentComponents() override;
     animations::AnimationDirection getDirection() const;
+    sf::Vector2i getHeading() const;
 
 private:
     std::shared_ptr<VelocityComponent> velocityComponent;

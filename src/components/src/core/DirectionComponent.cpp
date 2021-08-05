@@ -10,7 +10,11 @@ DirectionComponent::DirectionComponent(ComponentOwner* owner) : Component{owner}
 void DirectionComponent::loadDependentComponents()
 {
     velocityComponent = owner->getComponent<VelocityComponent>();
-    if (not velocityComponent)
+    if (velocityComponent)
+    {
+        velocityComponent->loadDependentComponents();
+    }
+    else
     {
         throw exceptions::DependentComponentNotFound{"DirectionComponent: VelocityComponent not found"};
     }
@@ -25,5 +29,23 @@ animations::AnimationDirection DirectionComponent::getDirection() const
     }
 
     return animations::AnimationDirection::Left;
+}
+
+sf::Vector2i DirectionComponent::getHeading() const
+{
+    const auto direction = getDirection();
+
+    sf::Vector2i heading{1, 1};
+
+    if(direction == animations::AnimationDirection::Right)
+    {
+        heading.x = 1;
+    }
+    else
+    {
+        heading.x = -1;
+    }
+
+    return heading;
 }
 }

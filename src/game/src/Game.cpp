@@ -15,16 +15,25 @@ Game::Game(std::shared_ptr<window::Window> windowInit, std::shared_ptr<input::In
 
 void Game::run()
 {
-    while (window->isOpen())
+    try
     {
-        std::this_thread::sleep_for(std::chrono::duration<double, std::nano>(1));
-        if (const auto gameState = update(); gameState == StatesStatus::Exit)
+        while (window->isOpen())
         {
-            window->close();
-            break;
+            std::this_thread::sleep_for(std::chrono::duration<double, std::nano>(1));
+            if (const auto gameState = update(); gameState == StatesStatus::Exit)
+            {
+                window->close();
+                break;
+            }
+            render();
         }
-        render();
     }
+    catch (const std::exception& error)
+    {
+        std::cerr << error.what();
+        abort();
+    }
+
 }
 
 StatesStatus Game::update()

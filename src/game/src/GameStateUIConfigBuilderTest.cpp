@@ -47,12 +47,14 @@ public:
         std::make_unique<StrictMock<ComponentOwnersManagerMock>>()};
     StrictMock<ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
     std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
+    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
+    std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
 };
 
 TEST_F(GameStateUIConfigBuilderTest, createGameUI)
 {
     GameState gameState{
-        window, rendererPool, fileAccess, states, uiManager, std::move(componentOwnersManagerInit), tileMap};
+        window, rendererPool, fileAccess, states, uiManager, std::move(componentOwnersManagerInit), tileMap, rayCast};
     const auto gameUI = GameStateUIConfigBuilder::createGameUIConfig(&gameState);
 
     ASSERT_EQ(gameUI->backgroundConfig->uniqueName, "gameBackground");

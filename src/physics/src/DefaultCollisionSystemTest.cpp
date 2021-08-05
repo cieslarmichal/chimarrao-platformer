@@ -33,14 +33,6 @@ public:
         componentOwnerWithPlayerCollider2->addComponent<AnimationComponent>(animator);
         componentOwnerWitStaticTransform->addComponent<AnimationComponent>(animator);
 
-        componentOwnerWithDefaultCollider1->addComponent<KeyboardMovementComponent>();
-        componentOwnerWithDefaultCollider2->addComponent<KeyboardMovementComponent>();
-        componentOwnerWithTileCollider1->addComponent<KeyboardMovementComponent>();
-        componentOwnerWithTileCollider2->addComponent<KeyboardMovementComponent>();
-        componentOwnerWithPlayerCollider1->addComponent<KeyboardMovementComponent>();
-        componentOwnerWithPlayerCollider2->addComponent<KeyboardMovementComponent>();
-        componentOwnerWitStaticTransform->addComponent<KeyboardMovementComponent>();
-
         componentOwnerWithDefaultCollider1->addComponent<VelocityComponent>();
         componentOwnerWithDefaultCollider2->addComponent<VelocityComponent>();
         componentOwnerWithTileCollider1->addComponent<VelocityComponent>();
@@ -48,6 +40,30 @@ public:
         componentOwnerWithPlayerCollider1->addComponent<VelocityComponent>();
         componentOwnerWithPlayerCollider2->addComponent<VelocityComponent>();
         componentOwnerWitStaticTransform->addComponent<VelocityComponent>();
+
+        componentOwnerWithDefaultCollider1->addComponent<DirectionComponent>();
+        componentOwnerWithDefaultCollider2->addComponent<DirectionComponent>();
+        componentOwnerWithTileCollider1->addComponent<DirectionComponent>();
+        componentOwnerWithTileCollider2->addComponent<DirectionComponent>();
+        componentOwnerWithPlayerCollider1->addComponent<DirectionComponent>();
+        componentOwnerWithPlayerCollider2->addComponent<DirectionComponent>();
+        componentOwnerWitStaticTransform->addComponent<DirectionComponent>();
+
+        componentOwnerWithDefaultCollider1->addComponent<AttackComponent>(rayCast);
+        componentOwnerWithDefaultCollider2->addComponent<AttackComponent>(rayCast);
+        componentOwnerWithTileCollider1->addComponent<AttackComponent>(rayCast);
+        componentOwnerWithTileCollider2->addComponent<AttackComponent>(rayCast);
+        componentOwnerWithPlayerCollider1->addComponent<AttackComponent>(rayCast);
+        componentOwnerWithPlayerCollider2->addComponent<AttackComponent>(rayCast);
+        componentOwnerWitStaticTransform->addComponent<AttackComponent>(rayCast);
+
+        componentOwnerWithDefaultCollider1->addComponent<KeyboardMovementComponent>();
+        componentOwnerWithDefaultCollider2->addComponent<KeyboardMovementComponent>();
+        componentOwnerWithTileCollider1->addComponent<KeyboardMovementComponent>();
+        componentOwnerWithTileCollider2->addComponent<KeyboardMovementComponent>();
+        componentOwnerWithPlayerCollider1->addComponent<KeyboardMovementComponent>();
+        componentOwnerWithPlayerCollider2->addComponent<KeyboardMovementComponent>();
+        componentOwnerWitStaticTransform->addComponent<KeyboardMovementComponent>();
 
         componentOwnerWithDefaultCollider1->loadDependentComponents();
         componentOwnerWithDefaultCollider2->loadDependentComponents();
@@ -104,7 +120,9 @@ public:
     std::shared_ptr<NiceMock<animations::AnimatorMock>> animator =
         std::make_shared<NiceMock<animations::AnimatorMock>>();
 
-    DefaultCollisionSystem collisionSystem{};
+    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
+    std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
+    DefaultCollisionSystem collisionSystem{quadtree};
 };
 
 TEST_F(DefaultCollisionSystemTest, addOwnersWithoutColliderComponent_shouldNotThrow)

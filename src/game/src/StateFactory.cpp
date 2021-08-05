@@ -32,7 +32,7 @@ StateFactory::StateFactory(std::shared_ptr<window::Window> windowInit,
       fileAccess{std::move(fileAccessInit)},
       states{statesInit},
       tileMap{std::move(tileMapInit)},
-      collisionSystemFactory{physics::CollisionSystemFactory::createCollisionSystemFactory()}
+      collisionSystemFactory{physics::PhysicsFactory::createCollisionSystemFactory()}
 {
 }
 
@@ -64,7 +64,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
             window, rendererPool, fileAccess, states,
             std::make_unique<components::ui::DefaultUIManager>(rendererPool),
             std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()),
-            tileMap);
+            tileMap, collisionSystemFactory->createRayCast());
     }
     case StateType::Menu:
     {

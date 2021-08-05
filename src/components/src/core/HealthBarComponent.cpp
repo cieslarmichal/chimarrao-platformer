@@ -21,7 +21,11 @@ HealthBarComponent::HealthBarComponent(ComponentOwner* owner,
 void HealthBarComponent::loadDependentComponents()
 {
     health = owner->getComponent<HealthComponent>();
-    if (not health)
+    if (health)
+    {
+        health->loadDependentComponents();
+    }
+    else
     {
         throw exceptions::DependentComponentNotFound{"HealthBarComponent: Health component not found"};
     }

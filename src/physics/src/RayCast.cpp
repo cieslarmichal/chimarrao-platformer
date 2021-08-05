@@ -7,17 +7,18 @@
 namespace physics
 {
 
-RayCast::RayCast(Quadtree& quadtree) : collisions{quadtree} {}
+RayCast::RayCast(std::shared_ptr<Quadtree> quadtree) : collisions{std::move(quadtree)} {}
 
-RayCastResult RayCast::cast(const utils::Vector2f& from, const utils::Vector2f& to, unsigned int exclusionID)
+RayCastResult RayCast::cast(const utils::Vector2f& from, const utils::Vector2f& to, unsigned int exclusionID,
+                            float lineWidth) const
 {
     if (from == to)
     {
         return {};
     }
 
-    const auto collisionArea = buildRect(from, to);
-    const auto colliders = collisions.getCollidersIntersectingWithAreaFromX(collisionArea);
+    const auto collisionArea = buildRect(from, to, lineWidth);
+    const auto colliders = collisions->getCollidersIntersectingWithAreaFromX(collisionArea);
 
     if (colliders.empty())
     {
@@ -48,9 +49,10 @@ RayCastResult RayCast::cast(const utils::Vector2f& from, const utils::Vector2f& 
     return {};
 }
 
-sf::FloatRect RayCast::buildRect(const utils::Vector2f& lineOne, const utils::Vector2f& lineTwo)
+sf::FloatRect RayCast::buildRect(const utils::Vector2f& lineOne, const utils::Vector2f& lineTwo,
+                                 float lineWidth) const
 {
-    const float rectWidth = 0.2f;
+    const float rectWidth = lineWidth;
     const float halfWidth = rectWidth * 0.5f;
 
     float left, top, width, height;
@@ -73,7 +75,8 @@ sf::FloatRect RayCast::buildRect(const utils::Vector2f& lineOne, const utils::Ve
     return sf::FloatRect(left, top, width, height);
 }
 
-std::vector<sf::Vector2f> RayCast::buildLinePoints(const utils::Vector2f& from, const utils::Vector2f& to)
+std::vector<sf::Vector2f> RayCast::buildLinePoints(const utils::Vector2f& from,
+                                                   const utils::Vector2f& to) const
 {
     std::vector<sf::Vector2f> result;
 

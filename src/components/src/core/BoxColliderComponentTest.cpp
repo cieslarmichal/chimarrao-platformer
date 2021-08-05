@@ -206,3 +206,8 @@ TEST_F(BoxColliderComponentTest, resolveOverlapWithCollisionFromBelow_shouldBloc
     ASSERT_FALSE(canMoveDown());
     ASSERT_TRUE(canMoveLeft() && canMoveRight() && canMoveUp());
 }
+
+TEST_F(BoxColliderComponentTest, getSize)
+{
+    ASSERT_EQ(boxColliderComponentWithMovement.getSize(), size);
+}

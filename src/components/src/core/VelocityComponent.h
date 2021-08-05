@@ -7,7 +7,7 @@ namespace components::core
 class VelocityComponent : public Component
 {
 public:
-    VelocityComponent(ComponentOwner* owner);
+    explicit VelocityComponent(ComponentOwner* owner);
 
     void setVelocity(const sf::Vector2f& vel);
     void setVelocity(float x, float y);

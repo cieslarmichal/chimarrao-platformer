@@ -19,7 +19,11 @@ MouseOverComponent::MouseOverComponent(ComponentOwner* ownerInit,
 void MouseOverComponent::loadDependentComponents()
 {
     boxCollider = owner->getComponent<BoxColliderComponent>();
-    if (not boxCollider)
+    if (boxCollider)
+    {
+        boxCollider->loadDependentComponents();
+    }
+    else
     {
         throw exceptions::DependentComponentNotFound{"MouseOverComponent: BoxColliderComponent not found"};
     }

@@ -31,14 +31,15 @@ public:
         std::make_shared<BoxColliderComponent>(&componentOwner3, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent4 =
         std::make_shared<BoxColliderComponent>(&componentOwner4, size);
-    Quadtree quadtree;
+
+    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
     RayCast rayCast{quadtree};
 };
 
 TEST_F(RayCastTest, givenOneNotInRange_shouldReturnNoObject)
 {
-    quadtree.insertCollider(boxColliderComponent1);
-    quadtree.insertCollider(boxColliderComponent4);
+    quadtree->insertCollider(boxColliderComponent1);
+    quadtree->insertCollider(boxColliderComponent4);
 
     const auto rayCastResult = rayCast.cast(position1Center, targetPoint1, boxColliderComponent1->getOwnerId());
 
@@ -47,8 +48,8 @@ TEST_F(RayCastTest, givenOneNotInRange_shouldReturnNoObject)
 
 TEST_F(RayCastTest, givenOneObjectInRangeOnRight_shouldReturnIntersectedObject)
 {
-    quadtree.insertCollider(boxColliderComponent1);
-    quadtree.insertCollider(boxColliderComponent2);
+    quadtree->insertCollider(boxColliderComponent1);
+    quadtree->insertCollider(boxColliderComponent2);
 
     const auto rayCastResult = rayCast.cast(position1Center, targetPoint1, boxColliderComponent1->getOwnerId());
 
@@ -57,9 +58,9 @@ TEST_F(RayCastTest, givenOneObjectInRangeOnRight_shouldReturnIntersectedObject)
 
 TEST_F(RayCastTest, givenTwoObjectsInRangeOnRight_shouldReturnFirstIntersectingOne)
 {
-    quadtree.insertCollider(boxColliderComponent1);
-    quadtree.insertCollider(boxColliderComponent2);
-    quadtree.insertCollider(boxColliderComponent3);
+    quadtree->insertCollider(boxColliderComponent1);
+    quadtree->insertCollider(boxColliderComponent2);
+    quadtree->insertCollider(boxColliderComponent3);
 
     const auto rayCastResult = rayCast.cast(position1Center, targetPoint2, boxColliderComponent1->getOwnerId());
 

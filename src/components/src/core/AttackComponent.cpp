@@ -1,36 +1,57 @@
 #include "AttackComponent.h"
 
+#include "exceptions/DependentComponentNotFound.h"
+
 #include "HealthComponent.h"
 
 namespace components::core
 {
 
-AttackComponent::AttackComponent(ComponentOwner* owner) : Component{owner} {}
-
-void AttackComponent::setAttemptToAttack()
+AttackComponent::AttackComponent(ComponentOwner* owner, std::shared_ptr<physics::RayCast> rayCast)
+    : Component{owner}, rayCast{std::move(rayCast)}
 {
-    attemptToAttackSomething = true;
 }
 
-void AttackComponent::resetAttemptToAttack()
+void AttackComponent::loadDependentComponents()
 {
-    attemptToAttackSomething = false;
-}
-
-bool AttackComponent::isThereAttemptToAttack()
-{
-    return attemptToAttackSomething;
-}
-
-void AttackComponent::attack(const ComponentOwner& otherOwner)
-{
-    if (!isThereAttemptToAttack())
+    directionComponent = owner->getComponent<DirectionComponent>();
+    if (directionComponent)
     {
-        return;
+        directionComponent->loadDependentComponents();
+    }
+    else
+    {
+        throw exceptions::DependentComponentNotFound{"AttackComponent: DirectionComponent not found"};
     }
 
-    if (auto health = otherOwner.getComponent<HealthComponent>())
+    boxColliderComponent = owner->getComponent<BoxColliderComponent>();
+    if (boxColliderComponent)
     {
+        boxColliderComponent->loadDependentComponents();
+    }
+    else
+    {
+        throw exceptions::DependentComponentNotFound{"AttackComponent: BoxColliderComponent not found"};
+    }
+
+}
+
+void AttackComponent::attack() const
+{
+    const auto heading = directionComponent->getHeading();
+    const auto& startPoint = owner->transform->getPosition();
+    const auto size = boxColliderComponent->getSize();
+
+    sf::Vector2f endPoint;
+
+    endPoint.x = startPoint.x + (size.x/2.f) + (static_cast<float>(heading.x) * range);
+    endPoint.y = startPoint.y + (size.y/2.f);
+
+    const auto result = rayCast->cast(startPoint, endPoint, owner->getId(), 2);
+
+    if (result.collision)
+    {
+        auto health =  result.collision->getComponent<HealthComponent>();
         health->loseHealthPoints(damage);
     }
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "CollisionSystemFactory.h"
+#include "PhysicsFactory.h"
 #include "RendererPool.h"
 #include "State.h"
 #include "States.h"
@@ -24,6 +24,6 @@ private:
     std::shared_ptr<utils::FileAccess> fileAccess;
     States& states;
     std::shared_ptr<TileMap> tileMap;
-    std::unique_ptr<physics::CollisionSystemFactory> collisionSystemFactory;
+    std::unique_ptr<physics::PhysicsFactory> collisionSystemFactory;
 };
 }

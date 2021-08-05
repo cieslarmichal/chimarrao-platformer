@@ -7,7 +7,8 @@ namespace physics
 {
 using namespace components::core;
 
-DefaultCollisionSystem::DefaultCollisionSystem()
+DefaultCollisionSystem::DefaultCollisionSystem(std::shared_ptr<Quadtree> quadtree)
+    : collisionTree{std::move(quadtree)}
 {
     utils::Bitmask defaultCollisions{};
     defaultCollisions.setBit(toInt(CollisionLayer::Default));
@@ -56,13 +57,13 @@ void DefaultCollisionSystem::processRemovals()
 
 void DefaultCollisionSystem::update()
 {
-    collisionTree.clearAllColliders();
+    collisionTree->clearAllColliders();
 
     for (const auto& [_, collidersInCollisionLayer] : collidersPerLayers)
     {
         for (const auto& colliderInCollisionLayer : collidersInCollisionLayer)
         {
-            collisionTree.insertCollider(colliderInCollisionLayer);
+            collisionTree->insertCollider(colliderInCollisionLayer);
         }
     }
 
@@ -89,7 +90,7 @@ void DefaultCollisionSystem::resolve()
             collider->setAvailableMovementDirections();
 
             const auto xCollisions =
-                collisionTree.getCollidersIntersectingWithAreaFromX(collider->getNextFrameXCollisionBox());
+                collisionTree->getCollidersIntersectingWithAreaFromX(collider->getNextFrameXCollisionBox());
 
             for (const auto& xCollision : xCollisions)
             {
@@ -111,7 +112,7 @@ void DefaultCollisionSystem::resolve()
             }
 
             const auto yCollisions =
-                collisionTree.getCollidersIntersectingWithAreaFromY(collider->getNextFrameYCollisionBox());
+                collisionTree->getCollidersIntersectingWithAreaFromY(collider->getNextFrameYCollisionBox());
 
             for (const auto& yCollision : yCollisions)
             {

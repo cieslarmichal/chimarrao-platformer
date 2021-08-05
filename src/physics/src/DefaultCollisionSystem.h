@@ -15,7 +15,7 @@ namespace physics
 class DefaultCollisionSystem : public CollisionSystem
 {
 public:
-    DefaultCollisionSystem();
+    explicit DefaultCollisionSystem(std::shared_ptr<Quadtree>);
 
     void add(std::vector<std::shared_ptr<components::core::ComponentOwner>>&) override;
     void processRemovals() override;
@@ -28,6 +28,6 @@ private:
     std::map<components::core::CollisionLayer,
              std::vector<std::shared_ptr<components::core::BoxColliderComponent>>>
         collidersPerLayers;
-    Quadtree collisionTree;
+    std::shared_ptr<Quadtree> collisionTree;
 };
 }

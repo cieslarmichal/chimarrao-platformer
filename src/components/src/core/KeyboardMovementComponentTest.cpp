@@ -20,16 +20,21 @@ public:
     KeyboardMovementComponentTest()
     {
         componentOwner.addComponent<AnimationComponent>(animator);
+        componentOwner.addComponent<BoxColliderComponent>(size);
+        componentOwner.addComponent<DirectionComponent>();
         componentOwner.addComponent<VelocityComponent>();
+        componentOwner.addComponent<AttackComponent>(rayCast);
         keyboardMovementComponent.loadDependentComponents();
     }
 
     const utils::DeltaTime deltaTime{3};
     const utils::Vector2f position{0.0, 11.0};
+    const utils::Vector2f size{5, 5};
     ComponentOwner componentOwner{position, "keyboardMovementComponentTest"};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
     StrictMock<input::InputMock> input;
-
+    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
+    std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
     KeyboardMovementComponent keyboardMovementComponent{&componentOwner};
 };
 

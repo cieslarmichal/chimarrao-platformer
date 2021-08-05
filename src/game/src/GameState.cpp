@@ -8,8 +8,10 @@
 #include "ProjectPathReader.h"
 #include "TimerFactory.h"
 #include "core/AnimationComponent.h"
+#include "core/AttackComponent.h"
 #include "core/BoxColliderComponent.h"
 #include "core/CameraComponent.h"
+#include "core/DirectionComponent.h"
 #include "core/FollowerComponent.h"
 #include "core/GraphicsComponent.h"
 #include "core/HealthBarComponent.h"
@@ -17,8 +19,6 @@
 #include "core/KeyboardMovementComponent.h"
 #include "core/VelocityComponent.h"
 #include "ui/DefaultUIManager.h"
-#include "core/DirectionComponent.h"
-#include "core/AttackComponent.h"
 
 namespace game
 {
@@ -28,13 +28,14 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                      std::shared_ptr<components::ui::UIManager> uiManagerInit,
                      std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit,
-                     std::shared_ptr<TileMap> tileMapInit)
+                     std::shared_ptr<TileMap> tileMapInit, std::shared_ptr<physics::RayCast> rayCastInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
       uiManager{std::move(uiManagerInit)},
       componentOwnersManager{std::move(componentOwnersManagerInit)},
-      tileMap{std::move(tileMapInit)}
+      tileMap{std::move(tileMapInit)},
+      rayCast{std::move(rayCastInit)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
@@ -55,7 +56,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
         rendererPool, utils::FloatRect{0, 0, tileMap->getSize().x * 4.f, tileMap->getSize().y * 4.f});
     player->addComponent<components::core::HealthComponent>(1000);
     player->addComponent<components::core::DirectionComponent>();
-    player->addComponent<components::core::AttackComponent>();
+    player->addComponent<components::core::AttackComponent>(rayCast);
     player->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{1.5, -1});
 
     hud = std::make_unique<HeadsUpDisplay>(player, rendererPool,

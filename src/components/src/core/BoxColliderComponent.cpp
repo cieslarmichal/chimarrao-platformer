@@ -2,8 +2,6 @@
 
 #include <cmath>
 
-#include "AttackComponent.h"
-#include "DirectionComponent.h"
 #include "FollowerComponent.h"
 #include "KeyboardMovementComponent.h"
 
@@ -13,7 +11,7 @@ namespace components::core
 BoxColliderComponent::BoxColliderComponent(ComponentOwner* owner, const utils::Vector2f& sizeInit,
                                            CollisionLayer collisionLayerInit,
                                            const utils::Vector2f& offsetInit)
-    : Component{owner}, collisionLayer{collisionLayerInit}, offset{offsetInit}
+    : Component{owner}, collisionLayer{collisionLayerInit}, offset{offsetInit}, size{sizeInit}
 {
     collisionBoundaries.width = sizeInit.x;
     collisionBoundaries.height = sizeInit.y;
@@ -32,7 +30,14 @@ void BoxColliderComponent::loadDependentComponents()
     {
         movementComponent = owner->getComponent<FollowerComponent>();
     }
+
+    // not loading movement component dependent components because of circular dependency
+
     velocityComponent = owner->getComponent<VelocityComponent>();
+    if (velocityComponent)
+    {
+        velocityComponent->loadDependentComponents();
+    }
 }
 
 bool BoxColliderComponent::intersects(const utils::Vector2f& point)
@@ -92,22 +97,6 @@ void BoxColliderComponent::resolveOverlapX(const std::shared_ptr<BoxColliderComp
     {
         movementComponent->blockMoveRight();
     }
-
-    auto& owner = getOwner();
-    auto attackComponent = owner.getComponent<AttackComponent>();
-    if (attackComponent && attackComponent->isThereAttemptToAttack())
-    {
-        std::cout<< "AAAAAAAAAAAA";
-        auto directionComponent = owner.getComponent<DirectionComponent>();
-        const auto expectedAttackDirection = otherRect.left < nextFrameCollisionBoundaries.left ?
-                                             animations::AnimationDirection::Left :
-                                             animations::AnimationDirection::Right;
-
-        if (directionComponent->getDirection() == expectedAttackDirection)
-        {
-            attackComponent->attack(other->getOwner());
-        }
-    }
 }
 
 void BoxColliderComponent::resolveOverlapY(const std::shared_ptr<BoxColliderComponent>& other)
@@ -150,6 +139,11 @@ void BoxColliderComponent::setAvailableMovementDirections()
         movementComponent->allowMoveUp();
         movementComponent->allowMoveDown();
     }
+}
+
+utils::Vector2f BoxColliderComponent::getSize() const
+{
+    return size;
 }
 
 CollisionLayer BoxColliderComponent::getCollisionLayer() const
