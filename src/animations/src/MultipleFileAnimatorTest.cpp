@@ -210,3 +210,8 @@ TEST_F(MultipleFileAnimatorTest,
     ASSERT_EQ(multipleFileAnimator.getAnimationType(), supportedAnimationType);
     ASSERT_EQ(multipleFileAnimator.getAnimationDirection(), AnimationDirection::Right);
 }
+
+TEST_F(MultipleFileAnimatorTest, getCurrentAnimationProgress)
+{
+    ASSERT_EQ(multipleFileAnimator.getCurrentAnimationProgressInPercents(), 33);
+}

@@ -8,6 +8,7 @@ namespace animations
 Animation::Animation(std::vector<graphics::TextureRect> consecutiveTextureRectsInit,
                      float timeBetweenTexturesInit, bool loopsAllowed, bool interruptionAllowed)
     : consecutiveTextureRects{std::move(consecutiveTextureRectsInit)},
+      numberOfTextureRects{consecutiveTextureRects.size()},
       timeBetweenTextures{timeBetweenTexturesInit},
       timeUntilNextTexture{timeBetweenTextures},
       loopsAllowed{loopsAllowed},
@@ -66,6 +67,13 @@ void Animation::reset()
 {
     timeUntilNextTexture = timeBetweenTextures;
     currentTextureRectIter = consecutiveTextureRects.begin();
+}
+
+unsigned int Animation::getProgressInPercents()
+{
+    const auto currentFrameNumber =
+        std::distance(consecutiveTextureRects.begin(), currentTextureRectIter) + 1;
+    return 100 * currentFrameNumber / numberOfTextureRects;
 }
 
 }

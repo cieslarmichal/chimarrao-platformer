@@ -16,6 +16,7 @@ public:
     void setAnimationDirection(animations::AnimationDirection);
     animations::AnimationType getAnimationType() const;
     animations::AnimationDirection getAnimationDirection() const;
+    unsigned int getCurrentAnimationProgressInPercents();
 
 private:
     std::shared_ptr<animations::Animator> animator;

@@ -27,6 +27,7 @@ public:
     void setAnimationDirection(AnimationDirection) override;
     AnimationType getAnimationType() const override;
     AnimationDirection getAnimationDirection() const override;
+    unsigned int getCurrentAnimationProgressInPercents() override;
 
 private:
     void initializeAnimations(const std::vector<SingleFileAnimationSettings>&);

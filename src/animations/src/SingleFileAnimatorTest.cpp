@@ -229,3 +229,10 @@ TEST_F(SingleFileAnimatorTest,
     ASSERT_EQ(singleFileAnimator.getAnimationType(), supportedAnimationType);
     ASSERT_EQ(singleFileAnimator.getAnimationDirection(), AnimationDirection::Right);
 }
+
+TEST_F(SingleFileAnimatorTest, getCurrentAnimationProgress)
+{
+    singleFileAnimator.setAnimation(AnimationType::Walk);
+
+    ASSERT_EQ(singleFileAnimator.getCurrentAnimationProgressInPercents(), 25);
+}

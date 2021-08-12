@@ -129,4 +129,9 @@ bool SingleFileAnimator::animationChanged(TextureRectChanged textureChanged) con
     return textureChanged || newAnimationTypeIsSet || newAnimationDirectionIsSet;
 }
 
+unsigned int SingleFileAnimator::getCurrentAnimationProgressInPercents()
+{
+    return animations.at(currentAnimationType).getProgressInPercents();
+}
+
 }

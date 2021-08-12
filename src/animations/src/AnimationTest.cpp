@@ -12,7 +12,7 @@ class AnimationTest : public Test
 public:
     std::vector<graphics::TextureRect> textureRects{{"1"}, {"2"}, {"3"}};
     std::vector<graphics::TextureRect> emptyTextureRects{};
-    float timeBetweenTextures = 60;
+    const float timeBetweenTextures = 60;
 };
 
 TEST_F(AnimationTest, creationOfAnimationWithEmptyTextures_shouldThrowTexturesNotInitialized)
@@ -108,4 +108,34 @@ TEST_F(AnimationTest, areInterruptionsAllowed)
 
     ASSERT_TRUE(animationWithInterruptionsAllowed.areInterruptionsAllowed());
     ASSERT_FALSE(animationWithInterruptionsNotAllowed.areInterruptionsAllowed());
+}
+
+TEST_F(AnimationTest, givenFirstTexture_shouldReturnProgressAs33Percents)
+{
+    Animation animation{textureRects, timeBetweenTextures, false, false};
+
+    const auto actualAnimationProgress = animation.getProgressInPercents();
+
+    ASSERT_EQ(actualAnimationProgress, 33);
+}
+
+TEST_F(AnimationTest, givenSecondTexture_shouldReturnProgressAs66Percents)
+{
+    Animation animation{textureRects, timeBetweenTextures, false, false};
+    animation.update(utils::DeltaTime(timeBetweenTextures + 1));
+
+    const auto actualAnimationProgress = animation.getProgressInPercents();
+
+    ASSERT_EQ(actualAnimationProgress, 66);
+}
+
+TEST_F(AnimationTest, givenSecondTexture_shouldReturnProgressAs100Percents)
+{
+    Animation animation{textureRects, timeBetweenTextures, false, false};
+    animation.update(utils::DeltaTime(timeBetweenTextures + 1));
+    animation.update(utils::DeltaTime(timeBetweenTextures + 1));
+
+    const auto actualAnimationProgress = animation.getProgressInPercents();
+
+    ASSERT_EQ(actualAnimationProgress, 100);
 }

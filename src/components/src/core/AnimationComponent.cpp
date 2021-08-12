@@ -39,4 +39,9 @@ animations::AnimationDirection AnimationComponent::getAnimationDirection() const
     return animator->getAnimationDirection();
 }
 
+unsigned int AnimationComponent::getCurrentAnimationProgressInPercents()
+{
+    return animator->getCurrentAnimationProgressInPercents();
+}
+
 }

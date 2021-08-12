@@ -70,3 +70,11 @@ TEST_F(AnimationComponentTest, getAnimationDirection)
 
     ASSERT_EQ(actualAnimationDirection, animationDirection);
 }
+
+TEST_F(AnimationComponentTest, getAnimationProgressInPercents)
+{
+    const unsigned int dummyPercents = 50;
+    EXPECT_CALL(*animator, getCurrentAnimationProgressInPercents()).WillOnce(Return(dummyPercents));
+
+    ASSERT_EQ(animationComponent.getCurrentAnimationProgressInPercents(), dummyPercents);
+}

@@ -130,4 +130,9 @@ bool MultipleFileAnimator::animationChanged(TextureRectChanged textureChanged) c
 {
     return textureChanged || newAnimationTypeIsSet || newAnimationDirectionIsSet;
 }
+
+unsigned int MultipleFileAnimator::getCurrentAnimationProgressInPercents()
+{
+    return animations.at(currentAnimationType).getProgressInPercents();
+}
 }
