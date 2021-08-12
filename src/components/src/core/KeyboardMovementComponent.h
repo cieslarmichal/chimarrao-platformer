@@ -12,13 +12,14 @@ class AnimationComponent;
 class KeyboardMovementComponent : public MovementComponent
 {
 public:
-    KeyboardMovementComponent(ComponentOwner*);
+    explicit KeyboardMovementComponent(ComponentOwner*);
 
     void loadDependentComponents() override;
     void update(utils::DeltaTime time, const input::Input& input) override;
     void lateUpdate(utils::DeltaTime time, const input::Input& input) override;
 
 private:
+    bool attemptToAttack{false};
     std::shared_ptr<AnimationComponent> animation;
     std::shared_ptr<VelocityComponent> velocityComponent;
     std::shared_ptr<AttackComponent> attackComponent;

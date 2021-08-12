@@ -71,18 +71,6 @@ TEST_F(AttackComponentTest,
 }
 
 TEST_F(AttackComponentTest,
-       loadDependentComponentsWithoutAnimationComponent_shouldThrowDependentComponentNotFound)
-{
-    ComponentOwner componentOwnerWithoutAnimation{position1, "componentOwnerWithoutAnimation"};
-    componentOwnerWithoutAnimation.addComponent<VelocityComponent>();
-    componentOwnerWithoutAnimation.addComponent<DirectionComponent>();
-    AttackComponent attackComponentWithoutAnimation{&componentOwnerWithoutAnimation, rayCast};
-
-    ASSERT_THROW(attackComponentWithoutAnimation.loadDependentComponents(),
-                 components::core::exceptions::DependentComponentNotFound);
-}
-
-TEST_F(AttackComponentTest,
        loadDependentComponentsWithoutBoxColliderComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider"};
@@ -100,7 +88,6 @@ TEST_F(AttackComponentTest, givenTargetInAttackRangeOnRight_shouldDealDamageToTa
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnRightInRange);
     EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Right));
-    EXPECT_CALL(*animator, getAnimationType()).WillOnce(Return(animations::AnimationType::Idle));
 
     attackComponent.attack();
 
@@ -112,7 +99,6 @@ TEST_F(AttackComponentTest, givenTargetOutOfAttackRangeOnRight_shouldNotDealAnyD
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnRightOutOfRange);
     EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Right));
-    EXPECT_CALL(*animator, getAnimationType()).WillOnce(Return(animations::AnimationType::Idle));
 
     attackComponent.attack();
 
@@ -124,7 +110,6 @@ TEST_F(AttackComponentTest, givenTargetInAttackRangeOnLeft_shouldDealDamageToTar
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnLeftInRange);
     EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Left));
-    EXPECT_CALL(*animator, getAnimationType()).WillOnce(Return(animations::AnimationType::Idle));
 
     attackComponent.attack();
 
@@ -136,7 +121,6 @@ TEST_F(AttackComponentTest, givenTargetOutOfAttackRangeOnLeft_shouldNotDealAnyDa
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnLeftOutOfRange);
     EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Left));
-    EXPECT_CALL(*animator, getAnimationType()).WillOnce(Return(animations::AnimationType::Idle));
 
     attackComponent.attack();
 

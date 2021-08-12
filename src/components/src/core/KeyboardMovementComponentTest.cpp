@@ -305,3 +305,16 @@ TEST_F(KeyboardMovementComponentTest, givenLeftAndDownKeysPressed_update_shouldR
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
+
+TEST_F(KeyboardMovementComponentTest, givenSpacePressed_update_shouldSetAttackAnimation)
+{
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(true));
+    EXPECT_CALL(*animator, getAnimationType()).WillRepeatedly(Return(AnimationType::Idle));
+    EXPECT_CALL(*animator, setAnimation(AnimationType::Attack));
+    EXPECT_CALL(*animator, getCurrentAnimationProgressInPercents()).WillOnce(Return(50));
+
+    keyboardMovementComponent.update(deltaTime, input);
+}

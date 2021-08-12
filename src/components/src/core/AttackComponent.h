@@ -18,7 +18,6 @@ public:
 
 private:
     std::shared_ptr<physics::RayCast> rayCast;
-    std::shared_ptr<AnimationComponent> animationComponent;
     std::shared_ptr<DirectionComponent> directionComponent;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     float range{4};

@@ -24,16 +24,6 @@ void AttackComponent::loadDependentComponents()
         throw exceptions::DependentComponentNotFound{"AttackComponent: DirectionComponent not found"};
     }
 
-    animationComponent = owner->getComponent<AnimationComponent>();
-    if (animationComponent)
-    {
-        animationComponent->loadDependentComponents();
-    }
-    else
-    {
-        throw exceptions::DependentComponentNotFound{"AttackComponent: AnimationComponent not found"};
-    }
-
     boxColliderComponent = owner->getComponent<BoxColliderComponent>();
     if (boxColliderComponent)
     {
@@ -47,11 +37,6 @@ void AttackComponent::loadDependentComponents()
 
 void AttackComponent::attack() const
 {
-    if (animationComponent->getAnimationType() == animations::AnimationType::Attack)
-    {
-        return;
-    }
-
     const auto heading = directionComponent->getHeading();
     const auto& ownerPosition = owner->transform->getPosition();
     const auto size = boxColliderComponent->getSize();
