@@ -73,3 +73,41 @@ singleFileAnimators:
         timeBetweenTexturesInSeconds: 0.1
         loopsAllowed: true
         interruptionAllowed: true
+  - name: bandit
+    animations:
+      - type: idle
+        texturePath: resources/Bandits/Bandit_Leader.png
+        textureWidthInPixels: 256
+        textureHeightInPixels: 160
+        startXPosition: 0
+        startYPosition: 0
+        rectToCutWidthInPixels: 32
+        rectToCutHeightInPixels: 32
+        numberOfTextures: 4
+        timeBetweenTexturesInSeconds: 0.14
+        loopsAllowed: true
+        interruptionAllowed: true
+      - type: walk
+        texturePath: resources/Bandits/Bandit_Leader.png
+        textureWidthInPixels: 256
+        textureHeightInPixels: 160
+        startXPosition: 0
+        startYPosition: 32
+        rectToCutWidthInPixels: 32
+        rectToCutHeightInPixels: 32
+        numberOfTextures: 8
+        timeBetweenTexturesInSeconds: 0.1
+        loopsAllowed: true
+        interruptionAllowed: true
+      - type: attack
+        texturePath: resources/Bandits/Bandit_Leader.png
+        textureWidthInPixels: 256
+        textureHeightInPixels: 160
+        startXPosition: 0
+        startYPosition: 64
+        rectToCutWidthInPixels: 32
+        rectToCutHeightInPixels: 32
+        numberOfTextures: 5
+        timeBetweenTexturesInSeconds: 0.1
+        loopsAllowed: false
+        interruptionAllowed: false

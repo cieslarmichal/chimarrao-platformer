@@ -6,7 +6,7 @@ namespace components::core
 {
 
 FollowerComponent::FollowerComponent(ComponentOwner* owner, ComponentOwner* followedOwner)
-    : MovementComponent{owner, 4.5f}, followedOwner{followedOwner}
+    : MovementComponent{owner, 5.25f}, followedOwner{followedOwner}
 {
 }
 

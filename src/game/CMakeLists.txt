@@ -32,6 +32,7 @@ set(SOURCES
         src/GridButtonsNavigator.cpp
         src/HeadsUpDisplay.cpp
         src/HeadsUpDisplayUIConfigBuilder.cpp
+        src/CharacterFactory.cpp
         )
 
 

@@ -63,20 +63,20 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     hud = std::make_unique<HeadsUpDisplay>(player, rendererPool,
                                            HeadsUpDisplayUIConfigBuilder::createUIConfig());
 
-    auto enemy = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{2.f, 10.f}, "enemy");
-    auto enemyGraphicsComponent =
-        enemy->addGraphicsComponent(rendererPool, utils::Vector2f{2.f, 2.f}, utils::Vector2f{2.f, 10.f},
+    auto follower = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{2.f, 10.f}, "follower");
+    auto followerGraphicsComponent =
+        follower->addGraphicsComponent(rendererPool, utils::Vector2f{2.f, 2.f}, utils::Vector2f{2.f, 10.f},
                                     graphics::Color::White, graphics::VisibilityLayer::Second);
-    auto enemyGraphicsId = enemyGraphicsComponent->getGraphicsId();
-    enemy->addComponent<components::core::FollowerComponent>(player.get());
+    auto followerGraphicsId = followerGraphicsComponent->getGraphicsId();
+    follower->addComponent<components::core::FollowerComponent>(player.get());
     const std::shared_ptr<animations::Animator> bunnyAnimator =
-        animatorsFactory->createBunnyAnimator(enemyGraphicsId);
-    enemy->addComponent<components::core::AnimationComponent>(bunnyAnimator);
-    enemy->addComponent<components::core::BoxColliderComponent>(
+        animatorsFactory->createBunnyAnimator(followerGraphicsId);
+    follower->addComponent<components::core::AnimationComponent>(bunnyAnimator);
+    follower->addComponent<components::core::BoxColliderComponent>(
         utils::Vector2f{2.f, 2.f}, components::core::CollisionLayer::Player, utils::Vector2f{0.f, 0.f});
-    enemy->addComponent<components::core::VelocityComponent>();
-    enemy->addComponent<components::core::HealthComponent>(50);
-    enemy->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{0, -1});
+    follower->addComponent<components::core::VelocityComponent>();
+    follower->addComponent<components::core::HealthComponent>(50);
+    follower->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{0, -1});
 
     auto npc = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{35.f, 10.f}, "npc");
     auto npcGraphicsComponent =
@@ -90,6 +90,21 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
         utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f});
     npc->addComponent<components::core::VelocityComponent>();
     npc->addComponent<components::core::IdleNpcMovementComponent>(player.get());
+
+    auto enemy = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{40.f, 10.f}, "enemy");
+    auto enemyGraphicsComponent =
+        enemy->addGraphicsComponent(rendererPool, utils::Vector2f{3.5f, 3.75f}, utils::Vector2f{40.f, 10.f},
+                                       graphics::Color::White, graphics::VisibilityLayer::Second);
+    auto enemyGraphicsId = enemyGraphicsComponent->getGraphicsId();
+    enemy->addComponent<components::core::FollowerComponent>(player.get());
+    const std::shared_ptr<animations::Animator> banditAnimator =
+        animatorsFactory->createBanditAnimator(enemyGraphicsId);
+    enemy->addComponent<components::core::AnimationComponent>(banditAnimator);
+    enemy->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{2.f, 2.95f}, components::core::CollisionLayer::Player, utils::Vector2f{0.7f, 0.8f});
+    enemy->addComponent<components::core::VelocityComponent>();
+    enemy->addComponent<components::core::HealthComponent>(50);
+    enemy->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{0.6, -1});
 
     for (int x = 0; x < tileMap->getSize().x; x++)
     {
@@ -132,8 +147,9 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     componentOwnersManager->add(bottomMapBorder);
 
     componentOwnersManager->add(player);
-    componentOwnersManager->add(enemy);
+    componentOwnersManager->add(follower);
     componentOwnersManager->add(npc);
+    componentOwnersManager->add(enemy);
     componentOwnersManager->processNewObjects();
 
     timer = utils::TimerFactory::createTimer();
