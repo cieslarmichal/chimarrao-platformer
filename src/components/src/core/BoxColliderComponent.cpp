@@ -4,6 +4,7 @@
 
 #include "FollowerComponent.h"
 #include "KeyboardMovementComponent.h"
+#include "IdleNpcMovementComponent.h"
 
 namespace components::core
 {
@@ -29,6 +30,11 @@ void BoxColliderComponent::loadDependentComponents()
     if (not movementComponent)
     {
         movementComponent = owner->getComponent<FollowerComponent>();
+    }
+
+    if (not movementComponent)
+    {
+        movementComponent = owner->getComponent<IdleNpcMovementComponent>();
     }
 
     // not loading movement component dependent components because of circular dependency

@@ -166,6 +166,8 @@ void KeyboardMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const inp
         currentMovementSpeed.y = 0;
     }
 
+    std::cerr<<canMoveLeft<<canMoveRight<<std::endl;
+
     velocityComponent->setVelocity(currentMovementSpeed);
     const float xFrameMove = currentMovementSpeed.x * deltaTime.count();
     const float yFrameMove = currentMovementSpeed.y * deltaTime.count();

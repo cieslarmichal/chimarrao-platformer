@@ -18,23 +18,18 @@ using namespace game;
 using namespace components::ui;
 using namespace ::testing;
 
-namespace
-{
-const auto brickTexturePath = utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/brick.png";
-std::shared_ptr<Tile> tile = std::make_shared<Tile>();
-}
-
 class GameStateUIConfigBuilderTest : public Test
 {
 public:
     GameStateUIConfigBuilderTest()
     {
-        EXPECT_CALL(*componentOwnersManager, add(_)).Times(6);
+        EXPECT_CALL(*componentOwnersManager, add(_)).Times(7);
         EXPECT_CALL(*componentOwnersManager, processNewObjects());
         EXPECT_CALL(*tileMap, getSize()).WillRepeatedly(Return(utils::Vector2i{1, 1}));
         EXPECT_CALL(*tileMap, getTile(utils::Vector2i{0, 0})).WillRepeatedly(ReturnRef(tile));
     }
 
+    std::shared_ptr<Tile> tile = std::make_shared<Tile>();
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();

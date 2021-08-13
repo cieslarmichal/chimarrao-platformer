@@ -36,7 +36,7 @@ multipleFilesAnimators:
       - type: idle
         firstTexturePath: resources/DRUIDS/1/IDLE_0.png
         numberOfTextures: 5
-        timeBetweenTexturesInSeconds: 0.2
+        timeBetweenTexturesInSeconds: 0.3
         loopsAllowed: true
         interruptionAllowed: true
       - type: walk

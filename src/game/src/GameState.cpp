@@ -16,6 +16,7 @@
 #include "core/GraphicsComponent.h"
 #include "core/HealthBarComponent.h"
 #include "core/HealthComponent.h"
+#include "core/IdleNpcMovementComponent.h"
 #include "core/KeyboardMovementComponent.h"
 #include "core/VelocityComponent.h"
 #include "ui/DefaultUIManager.h"
@@ -77,6 +78,19 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     enemy->addComponent<components::core::HealthComponent>(50);
     enemy->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{0, -1});
 
+    auto npc = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{35.f, 10.f}, "npc");
+    auto npcGraphicsComponent =
+        npc->addGraphicsComponent(rendererPool, utils::Vector2f{3.f, 3.5f}, utils::Vector2f{35.f, 10.f},
+                                  graphics::Color::White, graphics::VisibilityLayer::Second);
+    auto npcGraphicsId = npcGraphicsComponent->getGraphicsId();
+    const std::shared_ptr<animations::Animator> druidAnimator =
+        animatorsFactory->createDruidAnimator(npcGraphicsId);
+    npc->addComponent<components::core::AnimationComponent>(druidAnimator);
+    npc->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f});
+    npc->addComponent<components::core::VelocityComponent>();
+    npc->addComponent<components::core::IdleNpcMovementComponent>(player.get());
+
     for (int x = 0; x < tileMap->getSize().x; x++)
     {
         for (int y = 0; y < tileMap->getSize().y; y++)
@@ -119,6 +133,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
 
     componentOwnersManager->add(player);
     componentOwnersManager->add(enemy);
+    componentOwnersManager->add(npc);
     componentOwnersManager->processNewObjects();
 
     timer = utils::TimerFactory::createTimer();
