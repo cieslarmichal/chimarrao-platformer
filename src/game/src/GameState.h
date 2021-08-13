@@ -1,5 +1,6 @@
 #pragma once
 
+#include "CharacterFactory.h"
 #include "CollisionSystem.h"
 #include "ComponentOwnersManager.h"
 #include "HeadsUpDisplay.h"
@@ -38,5 +39,6 @@ private:
     std::shared_ptr<TileMap> tileMap;
     std::unique_ptr<HeadsUpDisplay> hud;
     std::shared_ptr<physics::RayCast> rayCast;
+    std::unique_ptr<CharacterFactory> characterFactory;
 };
 }

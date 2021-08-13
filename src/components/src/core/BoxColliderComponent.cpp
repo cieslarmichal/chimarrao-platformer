@@ -3,8 +3,8 @@
 #include <cmath>
 
 #include "FollowerComponent.h"
-#include "KeyboardMovementComponent.h"
 #include "IdleNpcMovementComponent.h"
+#include "KeyboardMovementComponent.h"
 
 namespace components::core
 {

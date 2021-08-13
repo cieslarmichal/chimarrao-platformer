@@ -1,4 +1,5 @@
 #include "HealthComponent.h"
+
 #include "ComponentOwner.h"
 
 namespace components::core

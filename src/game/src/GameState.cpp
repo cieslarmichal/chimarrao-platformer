@@ -2,23 +2,10 @@
 
 #include <utility>
 
-#include "AnimatorFactory.h"
 #include "GameStateUIConfigBuilder.h"
 #include "HeadsUpDisplayUIConfigBuilder.h"
 #include "ProjectPathReader.h"
 #include "TimerFactory.h"
-#include "core/AnimationComponent.h"
-#include "core/AttackComponent.h"
-#include "core/BoxColliderComponent.h"
-#include "core/CameraComponent.h"
-#include "core/DirectionComponent.h"
-#include "core/FollowerComponent.h"
-#include "core/GraphicsComponent.h"
-#include "core/HealthBarComponent.h"
-#include "core/HealthComponent.h"
-#include "core/IdleNpcMovementComponent.h"
-#include "core/KeyboardMovementComponent.h"
-#include "core/VelocityComponent.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
@@ -36,75 +23,26 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
       uiManager{std::move(uiManagerInit)},
       componentOwnersManager{std::move(componentOwnersManagerInit)},
       tileMap{std::move(tileMapInit)},
-      rayCast{std::move(rayCastInit)}
+      rayCast{std::move(rayCastInit)},
+      characterFactory{std::make_unique<CharacterFactory>(rendererPool, tileMap, rayCast)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
-    auto player = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{10.f, 10.f}, "player");
-    auto graphicsComponent =
-        player->addGraphicsComponent(rendererPool, utils::Vector2f{6.f, 3.75f}, utils::Vector2f{10.f, 10.f},
-                                     graphics::Color::White, graphics::VisibilityLayer::Second);
-    auto graphicsId = graphicsComponent->getGraphicsId();
-    player->addComponent<components::core::KeyboardMovementComponent>();
-    auto animatorsFactory = animations::AnimatorFactory::createAnimatorFactory(rendererPool);
-    const std::shared_ptr<animations::Animator> playerAnimator =
-        animatorsFactory->createPlayerAnimator(graphicsId);
-    player->addComponent<components::core::AnimationComponent>(playerAnimator);
-    player->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{2.f, 3.75f}, components::core::CollisionLayer::Player, utils::Vector2f{2.f, -0.1f});
-    player->addComponent<components::core::VelocityComponent>();
-    player->addComponent<components::core::CameraComponent>(
-        rendererPool, utils::FloatRect{0, 0, tileMap->getSize().x * 4.f, tileMap->getSize().y * 4.f});
-    player->addComponent<components::core::HealthComponent>(1000);
-    player->addComponent<components::core::DirectionComponent>();
-    player->addComponent<components::core::AttackComponent>(rayCast);
-    player->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{1.5, -1});
+    const auto playerPosition = utils::Vector2f{10.f, 10.f};
+    auto player = characterFactory->createPlayer(playerPosition);
+
+    const auto rabbitFollowerPosition = utils::Vector2f{2.f, 10.f};
+    auto follower = characterFactory->createRabbitFollower(player, rabbitFollowerPosition);
+
+    const auto npcPosition = utils::Vector2f{40.f, 20.f};
+    auto npc = characterFactory->createDruidNpc(player, npcPosition);
+
+    const auto enemy1Name = "enemy1";
+    const auto enemy1BanditPosition = utils::Vector2f{60.f, 30.f};
+    auto enemy = characterFactory->createBanditEnemy(enemy1Name, player, enemy1BanditPosition);
 
     hud = std::make_unique<HeadsUpDisplay>(player, rendererPool,
                                            HeadsUpDisplayUIConfigBuilder::createUIConfig());
-
-    auto follower = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{2.f, 10.f}, "follower");
-    auto followerGraphicsComponent =
-        follower->addGraphicsComponent(rendererPool, utils::Vector2f{2.f, 2.f}, utils::Vector2f{2.f, 10.f},
-                                    graphics::Color::White, graphics::VisibilityLayer::Second);
-    auto followerGraphicsId = followerGraphicsComponent->getGraphicsId();
-    follower->addComponent<components::core::FollowerComponent>(player.get());
-    const std::shared_ptr<animations::Animator> bunnyAnimator =
-        animatorsFactory->createBunnyAnimator(followerGraphicsId);
-    follower->addComponent<components::core::AnimationComponent>(bunnyAnimator);
-    follower->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{2.f, 2.f}, components::core::CollisionLayer::Player, utils::Vector2f{0.f, 0.f});
-    follower->addComponent<components::core::VelocityComponent>();
-    follower->addComponent<components::core::HealthComponent>(50);
-    follower->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{0, -1});
-
-    auto npc = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{35.f, 10.f}, "npc");
-    auto npcGraphicsComponent =
-        npc->addGraphicsComponent(rendererPool, utils::Vector2f{3.f, 3.5f}, utils::Vector2f{35.f, 10.f},
-                                  graphics::Color::White, graphics::VisibilityLayer::Second);
-    auto npcGraphicsId = npcGraphicsComponent->getGraphicsId();
-    const std::shared_ptr<animations::Animator> druidAnimator =
-        animatorsFactory->createDruidAnimator(npcGraphicsId);
-    npc->addComponent<components::core::AnimationComponent>(druidAnimator);
-    npc->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f});
-    npc->addComponent<components::core::VelocityComponent>();
-    npc->addComponent<components::core::IdleNpcMovementComponent>(player.get());
-
-    auto enemy = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{40.f, 10.f}, "enemy");
-    auto enemyGraphicsComponent =
-        enemy->addGraphicsComponent(rendererPool, utils::Vector2f{3.5f, 3.75f}, utils::Vector2f{40.f, 10.f},
-                                       graphics::Color::White, graphics::VisibilityLayer::Second);
-    auto enemyGraphicsId = enemyGraphicsComponent->getGraphicsId();
-    enemy->addComponent<components::core::FollowerComponent>(player.get());
-    const std::shared_ptr<animations::Animator> banditAnimator =
-        animatorsFactory->createBanditAnimator(enemyGraphicsId);
-    enemy->addComponent<components::core::AnimationComponent>(banditAnimator);
-    enemy->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{2.f, 2.95f}, components::core::CollisionLayer::Player, utils::Vector2f{0.7f, 0.8f});
-    enemy->addComponent<components::core::VelocityComponent>();
-    enemy->addComponent<components::core::HealthComponent>(50);
-    enemy->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{0.6, -1});
 
     for (int x = 0; x < tileMap->getSize().x; x++)
     {
