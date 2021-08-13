@@ -95,6 +95,7 @@ TEST_F(GameStateTest, render_shouldRenderAllFromRendererPool)
 TEST_F(GameStateTest, update_shouldUpdateUIAndOwners)
 {
     EXPECT_CALL(*componentOwnersManager, update(deltaTime, Ref(input)));
+    EXPECT_CALL(*componentOwnersManager, processRemovals());
     EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
 
     gameState.update(deltaTime, input);

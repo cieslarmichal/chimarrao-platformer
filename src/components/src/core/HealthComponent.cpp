@@ -1,4 +1,5 @@
 #include "HealthComponent.h"
+#include "ComponentOwner.h"
 
 namespace components::core
 {
@@ -29,6 +30,11 @@ void HealthComponent::loseHealthPoints(unsigned int points)
     else
     {
         currentHealthPoints = 0;
+    }
+
+    if (currentHealthPoints == 0)
+    {
+        getOwner().remove();
     }
 }
 

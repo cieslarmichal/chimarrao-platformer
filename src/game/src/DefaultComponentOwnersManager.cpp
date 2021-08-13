@@ -41,7 +41,7 @@ void DefaultComponentOwnersManager::processNewObjects()
         }
 
         componentOwners.insert(componentOwners.end(), newComponentOwners.begin(), newComponentOwners.end());
-        collisionSystem->add(newComponentOwners);
+        collisionSystem->add(componentOwners);
         newComponentOwners.clear();
     }
 }

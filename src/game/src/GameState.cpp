@@ -154,6 +154,8 @@ NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Inpu
         hud->update();
     }
 
+    componentOwnersManager->processRemovals();
+
     return NextState::Same;
 }
 

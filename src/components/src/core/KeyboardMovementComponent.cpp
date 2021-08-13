@@ -131,7 +131,8 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
         attemptToAttack = true;
     }
 
-    if (attemptToAttack and animation->getCurrentAnimationProgressInPercents() >= 60)
+    if (attemptToAttack and animation->getAnimationType() == animations::AnimationType::Attack &&
+        animation->getCurrentAnimationProgressInPercents() >= 60)
     {
         attackComponent->attack();
         attemptToAttack = false;
@@ -165,8 +166,6 @@ void KeyboardMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const inp
     {
         currentMovementSpeed.y = 0;
     }
-
-    std::cerr<<canMoveLeft<<canMoveRight<<std::endl;
 
     velocityComponent->setVelocity(currentMovementSpeed);
     const float xFrameMove = currentMovementSpeed.x * deltaTime.count();

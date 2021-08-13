@@ -314,7 +314,6 @@ TEST_F(KeyboardMovementComponentTest, givenSpacePressed_update_shouldSetAttackAn
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(true));
     EXPECT_CALL(*animator, getAnimationType()).WillRepeatedly(Return(AnimationType::Idle));
     EXPECT_CALL(*animator, setAnimation(AnimationType::Attack));
-    EXPECT_CALL(*animator, getCurrentAnimationProgressInPercents()).WillOnce(Return(50));
 
     keyboardMovementComponent.update(deltaTime, input);
 }
