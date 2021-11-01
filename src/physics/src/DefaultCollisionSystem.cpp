@@ -91,6 +91,11 @@ void DefaultCollisionSystem::resolve()
                 continue;
             }
 
+            if (not collider->isEnabled())
+            {
+                continue;
+            }
+
             collider->setAvailableMovementDirections();
 
             const auto xCollisions =
@@ -98,7 +103,7 @@ void DefaultCollisionSystem::resolve()
 
             for (const auto& xCollision : xCollisions)
             {
-                if (collider->getOwnerId() == xCollision->getOwnerId())
+                if (collider->getOwnerId() == xCollision->getOwnerId() or not xCollision->isEnabled())
                 {
                     continue;
                 }
@@ -120,7 +125,7 @@ void DefaultCollisionSystem::resolve()
 
             for (const auto& yCollision : yCollisions)
             {
-                if (collider->getOwnerId() == yCollision->getOwnerId())
+                if (collider->getOwnerId() == yCollision->getOwnerId() or not yCollision->isEnabled())
                 {
                     continue;
                 }
