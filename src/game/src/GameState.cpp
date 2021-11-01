@@ -6,6 +6,7 @@
 #include "HeadsUpDisplayUIConfigBuilder.h"
 #include "ProjectPathReader.h"
 #include "TimerFactory.h"
+#include "core/FreeFallMovementComponent.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
@@ -37,22 +38,22 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     const auto npcPosition = utils::Vector2f{40.f, 20.f};
     auto npc = characterFactory->createDruidNpc(player, npcPosition);
 
-//    const auto enemy1Name = "enemy1";
-//    const auto enemy1BanditPosition = utils::Vector2f{60.f, 30.f};
-//    auto enemy = characterFactory->createBanditEnemy(enemy1Name, player, enemy1BanditPosition);
+    //    const auto enemy1Name = "enemy1";
+    //    const auto enemy1BanditPosition = utils::Vector2f{60.f, 30.f};
+    //    auto enemy = characterFactory->createBanditEnemy(enemy1Name, player, enemy1BanditPosition);
 
     hud = std::make_unique<HeadsUpDisplay>(player, rendererPool,
                                            HeadsUpDisplayUIConfigBuilder::createUIConfig());
 
     auto yerbaItem = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{30, 25}, "yerbaItem");
-    yerbaItem->addGraphicsComponent(
-        rendererPool, utils::Vector2f{2, 2},utils::Vector2f{30, 25},
-        utils::ProjectPathReader::getProjectRootPath() + "resources/yerba_item.png",
-        graphics::VisibilityLayer::Second);
-    yerbaItem->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{2, 2}, components::core::CollisionLayer::Tile);
-    npc->addComponent<components::core::VelocityComponent>();
-//    npc->addComponent<components::core::FreeFallMovementComponent>(player.get());
+    yerbaItem->addGraphicsComponent(rendererPool, utils::Vector2f{2, 2}, utils::Vector2f{30, 25},
+                                    utils::ProjectPathReader::getProjectRootPath() +
+                                        "resources/yerba_item.png",
+                                    graphics::VisibilityLayer::Second);
+    yerbaItem->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{2, 2},
+                                                                    components::core::CollisionLayer::Player);
+    yerbaItem->addComponent<components::core::VelocityComponent>();
+    yerbaItem->addComponent<components::core::FreeFallMovementComponent>();
     componentOwnersManager->add(yerbaItem);
 
     for (int x = 0; x < tileMap->getSize().x; x++)
@@ -99,7 +100,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     componentOwnersManager->add(player);
     componentOwnersManager->add(follower);
     componentOwnersManager->add(npc);
-//    componentOwnersManager->add(enemy);
+    //    componentOwnersManager->add(enemy);
     componentOwnersManager->processNewObjects();
 
     timer = utils::TimerFactory::createTimer();
