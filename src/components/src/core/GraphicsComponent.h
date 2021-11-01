@@ -34,11 +34,13 @@ public:
     void setSize(const utils::Vector2f& size);
     void enable() override;
     void disable() override;
+    boost::optional<graphics::TexturePath> getTexturePath() const;
 
 private:
     std::shared_ptr<graphics::RendererPool> rendererPool;
     graphics::GraphicsId id;
     graphics::VisibilityLayer visibilityLayer;
     const utils::Vector2f offset;
+    const boost::optional<graphics::TexturePath> texturePath;
 };
 }

@@ -172,3 +172,27 @@ TEST_F(GraphicsComponentTest, shouldSetSize)
     ASSERT_EQ(graphicsComponent->getSize(), size2);
     expectReleaseGraphicsId();
 }
+
+TEST_F(GraphicsComponentTest, graphicsComponentWithColor_shouldReturnNoneTexturePath)
+{
+    EXPECT_CALL(*rendererPool, acquire(size, position1, color1, VisibilityLayer::First, _))
+        .WillOnce(Return(graphicsId));
+    const auto graphicsComponent = createGraphicsComponent();
+
+    const auto actualTexturePath = graphicsComponent->getTexturePath();
+
+    ASSERT_EQ(actualTexturePath, boost::none);
+    expectReleaseGraphicsId();
+}
+
+TEST_F(GraphicsComponentTest, graphicsComponentWithTexture_shouldReturnTexturePath)
+{
+    EXPECT_CALL(*rendererPool, acquire(size, position1, texturePath, VisibilityLayer::First, _))
+        .WillOnce(Return(graphicsId));
+    const auto graphicsComponent = createGraphicsComponentWithTexturePath();
+
+    const auto actualTexturePath = graphicsComponent->getTexturePath();
+
+    ASSERT_EQ(actualTexturePath, texturePath);
+    expectReleaseGraphicsId();
+}

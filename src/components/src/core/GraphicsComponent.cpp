@@ -11,7 +11,11 @@ GraphicsComponent::GraphicsComponent(ComponentOwner* ownerInit,
                                      const utils::Vector2f& size, const utils::Vector2f& position,
                                      const graphics::Color& color, graphics::VisibilityLayer layer,
                                      const utils::Vector2f& offset, bool relativeRendering)
-    : Component{ownerInit}, rendererPool{std::move(rendererPoolInit)}, visibilityLayer{layer}, offset{offset}
+    : Component{ownerInit},
+      rendererPool{std::move(rendererPoolInit)},
+      visibilityLayer{layer},
+      offset{offset},
+      texturePath{boost::none}
 {
     id = rendererPool->acquire(size, position, color, layer, relativeRendering);
 }
@@ -22,7 +26,11 @@ GraphicsComponent::GraphicsComponent(ComponentOwner* owner,
                                      const graphics::TexturePath& texturePath,
                                      graphics::VisibilityLayer layer, const utils::Vector2f& offset,
                                      bool relativeRendering)
-    : Component{owner}, rendererPool{std::move(rendererPoolInit)}, visibilityLayer{layer}, offset{offset}
+    : Component{owner},
+      rendererPool{std::move(rendererPoolInit)},
+      visibilityLayer{layer},
+      offset{offset},
+      texturePath{texturePath}
 {
     id = rendererPool->acquire(size, position, texturePath, layer, relativeRendering);
 }
@@ -83,8 +91,13 @@ void GraphicsComponent::setOutline(float thickness, const sf::Color& color)
     rendererPool->setOutline(id, thickness, color);
 }
 
-void GraphicsComponent::setTexture(const std::string& texturePath)
+void GraphicsComponent::setTexture(const std::string& texture)
 {
-    rendererPool->setTexture(id, graphics::TextureRect{texturePath});
+    rendererPool->setTexture(id, graphics::TextureRect{texture});
+}
+
+boost::optional<graphics::TexturePath> GraphicsComponent::getTexturePath() const
+{
+    return texturePath;
 }
 }
