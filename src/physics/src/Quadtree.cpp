@@ -237,8 +237,8 @@ void Quadtree::splitIntoChildNodes()
 double Quadtree::calculateDistanceBetweenRect(const utils::FloatRect& lhs, const utils::FloatRect& rhs)
 {
     constexpr auto square = [](const double number) { return number * number; };
-    return square((lhs.top + lhs.height / 2) - (rhs.top + rhs.height / 2)) *
-           square((lhs.left + lhs.width / 2) - (rhs.left + rhs.width / 2));
+    return sqrt(square((lhs.top + lhs.height / 2) - (rhs.top + rhs.height / 2)) +
+           square((lhs.left + lhs.width / 2) - (rhs.left + rhs.width / 2)));
 }
 
 }

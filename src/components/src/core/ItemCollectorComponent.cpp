@@ -10,7 +10,7 @@ namespace components::core
 namespace
 {
 const auto distance = [](const utils::Vector2f& v1, const utils::Vector2f& v2)
-{ return std::pow(std::sqrt(v2.x - v1.x) + std::sqrt(v2.y - v1.y), 2); };
+{ return std::sqrt(std::pow(v2.x - v1.x, 2) + std::pow(v2.y - v1.y, 2)); };
 }
 
 ItemCollectorComponent::ItemCollectorComponent(ComponentOwner* owner,
@@ -29,7 +29,7 @@ void ItemCollectorComponent::loadDependentComponents()
     }
     else
     {
-        throw exceptions::DependentComponentNotFound{"AttackComponent: DirectionComponent not found"};
+        throw exceptions::DependentComponentNotFound{"ItemCollectorComponent: DirectionComponent not found"};
     }
 
     boxColliderComponent = owner->getComponent<BoxColliderComponent>();
@@ -39,7 +39,7 @@ void ItemCollectorComponent::loadDependentComponents()
     }
     else
     {
-        throw exceptions::DependentComponentNotFound{"AttackComponent: BoxColliderComponent not found"};
+        throw exceptions::DependentComponentNotFound{"ItemCollectorComponent: BoxColliderComponent not found"};
     }
 }
 
@@ -51,8 +51,11 @@ void ItemCollectorComponent::collectNearestItem()
     }
 
     const auto closestItem = findNearestItem();
-    closestItem->collectBy(owner);
-    items.push_back(closestItem);
+    if (closestItem)
+    {
+        closestItem->collectBy(owner);
+        items.push_back(closestItem);
+    }
 }
 
 void ItemCollectorComponent::drop(const std::string& itemName)
