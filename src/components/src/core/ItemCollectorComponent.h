@@ -1,18 +1,19 @@
 #pragma once
 
 #include "BoxColliderComponent.h"
+#include "CollectableItemComponent.h"
 #include "ComponentOwner.h"
 #include "DirectionComponent.h"
-#include "RayCast.h"
-#include "CollectableItemComponent.h"
 #include "Quadtree.h"
+#include "RayCast.h"
 
 namespace components::core
 {
 class ItemCollectorComponent : public Component
 {
 public:
-    ItemCollectorComponent(ComponentOwner* owner, std::shared_ptr<physics::Quadtree>, std::shared_ptr<physics::RayCast>);
+    ItemCollectorComponent(ComponentOwner* owner, std::shared_ptr<physics::Quadtree>,
+                           std::shared_ptr<physics::RayCast>);
 
     void loadDependentComponents() override;
     void collectNearestItem();
@@ -21,7 +22,10 @@ public:
     std::vector<std::shared_ptr<CollectableItemComponent>> getItems() const;
 
 private:
+    std::shared_ptr<CollectableItemComponent> findNearestItem() const;
     boost::optional<utils::Vector2f> calculateDropItemPlace() const;
+    std::vector<std::shared_ptr<CollectableItemComponent>>::const_iterator
+    findItemByName(const std::string& itemName) const;
 
     std::shared_ptr<physics::Quadtree> collisions;
     std::shared_ptr<physics::RayCast> rayCast;

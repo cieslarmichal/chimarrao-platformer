@@ -50,6 +50,49 @@ void ItemCollectorComponent::collectNearestItem()
         return;
     }
 
+    const auto closestItem = findNearestItem();
+    closestItem->collectBy(owner);
+    items.push_back(closestItem);
+}
+
+void ItemCollectorComponent::drop(const std::string& itemName)
+{
+    const auto foundItem = findItemByName(itemName);
+    if (foundItem == items.end())
+    {
+        return;
+    }
+
+    const auto placeToDropItem = calculateDropItemPlace();
+    if (not placeToDropItem)
+    {
+        return;
+    }
+
+    foundItem->get()->getOwner().transform->setPosition(*placeToDropItem);
+    foundItem->get()->drop();
+    items.erase(foundItem);
+}
+
+void ItemCollectorComponent::use(const std::string& itemName)
+{
+    const auto foundItem = findItemByName(itemName);
+    if (foundItem == items.end())
+    {
+        return;
+    }
+
+    foundItem->get()->use();
+    items.erase(foundItem);
+}
+
+std::vector<std::shared_ptr<CollectableItemComponent>> ItemCollectorComponent::getItems() const
+{
+    return items;
+}
+
+std::shared_ptr<CollectableItemComponent> ItemCollectorComponent::findNearestItem() const
+{
     const auto& ownerPosition = owner->transform->getPosition();
     const auto ownerSize = boxColliderComponent->getSize();
 
@@ -78,48 +121,7 @@ void ItemCollectorComponent::collectNearestItem()
         }
     }
 
-    closestItem->collectBy(owner);
-    items.push_back(closestItem);
-}
-
-void ItemCollectorComponent::drop(const std::string& itemName)
-{
-    const auto foundItem = std::find_if(items.begin(), items.end(),
-                                        [&](const std::shared_ptr<CollectableItemComponent>& item)
-                                        { return item->getName() == itemName; });
-    if (foundItem == items.end())
-    {
-        return;
-    }
-
-    const auto placeToDropItem = calculateDropItemPlace();
-    if (not placeToDropItem)
-    {
-        return;
-    }
-
-    foundItem->get()->getOwner().transform->setPosition(*placeToDropItem);
-    foundItem->get()->drop();
-    items.erase(foundItem);
-}
-
-void ItemCollectorComponent::use(const std::string& itemName)
-{
-    const auto foundItem = std::find_if(items.begin(), items.end(),
-                                        [&](const std::shared_ptr<CollectableItemComponent>& item)
-                                        { return item->getName() == itemName; });
-    if (foundItem == items.end())
-    {
-        return;
-    }
-
-    foundItem->get()->use();
-    items.erase(foundItem);
-}
-
-std::vector<std::shared_ptr<CollectableItemComponent>> ItemCollectorComponent::getItems() const
-{
-    return items;
+    return closestItem;
 }
 
 boost::optional<utils::Vector2f> ItemCollectorComponent::calculateDropItemPlace() const
@@ -141,6 +143,14 @@ boost::optional<utils::Vector2f> ItemCollectorComponent::calculateDropItemPlace(
     }
 
     return endPoint;
+}
+
+std::vector<std::shared_ptr<CollectableItemComponent>>::const_iterator
+ItemCollectorComponent::findItemByName(const std::string& itemName) const
+{
+    return std::find_if(items.begin(), items.end(),
+                        [&](const std::shared_ptr<CollectableItemComponent>& item)
+                        { return item->getName() == itemName; });
 }
 
 }
