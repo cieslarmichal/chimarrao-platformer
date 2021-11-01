@@ -4,6 +4,16 @@
 
 namespace physics
 {
+namespace
+{
+double calculateDistanceBetweenRects(const utils::FloatRect& lhs, const utils::FloatRect& rhs)
+{
+    constexpr auto square = [](const double number) { return number * number; };
+    return std::sqrt(square((lhs.top + lhs.height / 2) - (rhs.top + rhs.height / 2)) +
+                     square((lhs.left + lhs.width / 2) - (rhs.left + rhs.width / 2)));
+}
+}
+
 Quadtree::Quadtree() : Quadtree{5, 5, 0, {0, 0, 160, 60}} {}
 
 Quadtree::Quadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsInit, int treeDepthLevelInit,
@@ -102,7 +112,7 @@ Quadtree::getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) co
 
         if (area.intersects(possibleColliderBox))
         {
-            if (const auto distance = calculateDistanceBetweenRect(area, possibleColliderBox);
+            if (const auto distance = calculateDistanceBetweenRects(area, possibleColliderBox);
                 distance != 0.0)
             {
                 collidersIntersectingWithArea.emplace_back(
@@ -127,7 +137,7 @@ Quadtree::getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) co
 
         if (area.intersects(possibleColliderBox))
         {
-            if (const auto distance = calculateDistanceBetweenRect(area, possibleColliderBox);
+            if (const auto distance = calculateDistanceBetweenRects(area, possibleColliderBox);
                 distance != 0.0)
             {
                 collidersIntersectingWithArea.emplace_back(
@@ -232,13 +242,6 @@ void Quadtree::splitIntoChildNodes()
     children[childSouthEastIndex] = std::make_shared<Quadtree>(
         maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left + childWidth, nodeBounds.top + childHeight, childWidth, childHeight));
-}
-
-double Quadtree::calculateDistanceBetweenRect(const utils::FloatRect& lhs, const utils::FloatRect& rhs)
-{
-    constexpr auto square = [](const double number) { return number * number; };
-    return sqrt(square((lhs.top + lhs.height / 2) - (rhs.top + rhs.height / 2)) +
-           square((lhs.left + lhs.width / 2) - (rhs.left + rhs.width / 2)));
 }
 
 }

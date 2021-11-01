@@ -39,7 +39,8 @@ void ItemCollectorComponent::loadDependentComponents()
     }
     else
     {
-        throw exceptions::DependentComponentNotFound{"ItemCollectorComponent: BoxColliderComponent not found"};
+        throw exceptions::DependentComponentNotFound{
+            "ItemCollectorComponent: BoxColliderComponent not found"};
     }
 }
 

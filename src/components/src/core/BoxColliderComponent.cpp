@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include "FollowerComponent.h"
+#include "FreeFallMovementComponent.h"
 #include "IdleNpcMovementComponent.h"
 #include "KeyboardMovementComponent.h"
 
@@ -35,6 +36,11 @@ void BoxColliderComponent::loadDependentComponents()
     if (not movementComponent)
     {
         movementComponent = owner->getComponent<IdleNpcMovementComponent>();
+    }
+
+    if (not movementComponent)
+    {
+        movementComponent = owner->getComponent<FreeFallMovementComponent>();
     }
 
     // not loading movement component dependent components because of circular dependency
