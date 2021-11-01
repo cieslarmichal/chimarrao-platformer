@@ -58,7 +58,7 @@ set(UT_SOURCES
         src/core/DirectionComponentTest.cpp
         src/core/AttackComponentTest.cpp
         src/core/IdleNpcMovementComponentTest.cpp
-        src/core/FreeFallMovementComponent.cpp
+        src/core/FreeFallMovementComponentTest.cpp
         )
 
 add_library(components ${SOURCES})
