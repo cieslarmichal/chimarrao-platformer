@@ -6,7 +6,7 @@
 namespace components::core
 {
 CollectableItemComponent::CollectableItemComponent(ComponentOwner* owner, const std::string& name)
-    : Component(owner), uniqueName{name}
+    : Component(owner), collector{nullptr}, uniqueName{name}
 {
 }
 
@@ -35,6 +35,8 @@ void CollectableItemComponent::use()
     }
 
     collector->getComponent<components::core::HealthComponent>()->gainHealthPoints(1);
+
+    owner->remove();
 }
 
 std::string CollectableItemComponent::getName() const
