@@ -24,6 +24,7 @@ void CollectableItemComponent::drop()
         return;
     }
 
+    collector = nullptr;
     owner->enable();
 }
 
