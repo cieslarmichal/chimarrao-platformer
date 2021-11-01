@@ -37,12 +37,23 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     const auto npcPosition = utils::Vector2f{40.f, 20.f};
     auto npc = characterFactory->createDruidNpc(player, npcPosition);
 
-    const auto enemy1Name = "enemy1";
-    const auto enemy1BanditPosition = utils::Vector2f{60.f, 30.f};
-    auto enemy = characterFactory->createBanditEnemy(enemy1Name, player, enemy1BanditPosition);
+//    const auto enemy1Name = "enemy1";
+//    const auto enemy1BanditPosition = utils::Vector2f{60.f, 30.f};
+//    auto enemy = characterFactory->createBanditEnemy(enemy1Name, player, enemy1BanditPosition);
 
     hud = std::make_unique<HeadsUpDisplay>(player, rendererPool,
                                            HeadsUpDisplayUIConfigBuilder::createUIConfig());
+
+    auto yerbaItem = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{30, 25}, "yerbaItem");
+    yerbaItem->addGraphicsComponent(
+        rendererPool, utils::Vector2f{2, 2},utils::Vector2f{30, 25},
+        utils::ProjectPathReader::getProjectRootPath() + "resources/yerba_item.png",
+        graphics::VisibilityLayer::Second);
+    yerbaItem->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{2, 2}, components::core::CollisionLayer::Tile);
+    npc->addComponent<components::core::VelocityComponent>();
+//    npc->addComponent<components::core::FreeFallMovementComponent>(player.get());
+    componentOwnersManager->add(yerbaItem);
 
     for (int x = 0; x < tileMap->getSize().x; x++)
     {
@@ -51,10 +62,11 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
             if (tileMap->getTile(utils::Vector2i{x, y})->type)
             {
                 auto obstacle = std::make_shared<components::core::ComponentOwner>(
-                    utils::Vector2f{x * 4.f, y * 4.f},
+                    utils::Vector2f{static_cast<float>(x) * 4.f, static_cast<float>(y) * 4.f},
                     "obstacle" + std::to_string(x) + std::to_string(y) + std::to_string(y));
                 obstacle->addGraphicsComponent(
-                    rendererPool, utils::Vector2f{4, 4}, utils::Vector2f{x * 4.f, y * 4.f},
+                    rendererPool, utils::Vector2f{4, 4},
+                    utils::Vector2f{static_cast<float>(x) * 4.f, static_cast<float>(y) * 4.f},
                     tileTypeToPathTexture(*(tileMap->getTile(utils::Vector2i{x, y})->type)),
                     graphics::VisibilityLayer::Second);
                 obstacle->addComponent<components::core::BoxColliderComponent>(
@@ -87,7 +99,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     componentOwnersManager->add(player);
     componentOwnersManager->add(follower);
     componentOwnersManager->add(npc);
-    componentOwnersManager->add(enemy);
+//    componentOwnersManager->add(enemy);
     componentOwnersManager->processNewObjects();
 
     timer = utils::TimerFactory::createTimer();
