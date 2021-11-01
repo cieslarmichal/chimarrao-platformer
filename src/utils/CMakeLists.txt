@@ -10,6 +10,7 @@ set(SOURCES
         src/DefaultFileAccessFactory.cpp
         src/FileAccessFactory.cpp
         src/TimerFactory.cpp
+        src/UniqueIdGenerator.cpp
         )
 
 set(UT_SOURCES

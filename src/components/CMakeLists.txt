@@ -28,7 +28,8 @@ set(SOURCES
         src/core/AttackComponent.cpp
         src/core/IdleNpcMovementComponent.cpp
         src/core/FreeFallMovementComponent.cpp
-        src/core/CollectableComponent.cpp
+        src/core/CollectableItemComponent.cpp
+        src/core/ItemCollectorComponent.cpp
         )
 
 set(UT_SOURCES
@@ -60,7 +61,8 @@ set(UT_SOURCES
         src/core/AttackComponentTest.cpp
         src/core/IdleNpcMovementComponentTest.cpp
         src/core/FreeFallMovementComponentTest.cpp
-        src/core/CollectableComponentTest.cpp
+        src/core/CollectableItemComponentTest.cpp
+        src/core/ItemCollectorComponentTest.cpp
         )
 
 add_library(components ${SOURCES})
