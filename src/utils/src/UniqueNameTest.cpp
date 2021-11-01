@@ -20,3 +20,10 @@ TEST(UniqueNameTest, destructedName_shouldBeAccessibleAgain)
     }
     ASSERT_NO_THROW(UniqueName{"name"});
 }
+
+TEST(UniqueNameTest, createWithDefaultConstructor_shouldGenerateId)
+{
+    const auto name = UniqueName{};
+
+    ASSERT_FALSE(name.getName().empty());
+}

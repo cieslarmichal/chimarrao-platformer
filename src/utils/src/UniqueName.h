@@ -8,7 +8,8 @@ namespace utils
 class UniqueName
 {
 public:
-    UniqueName(std::string);
+    explicit UniqueName(std::string);
+    explicit UniqueName();
     ~UniqueName();
 
     UniqueName(const UniqueName&) = delete;
@@ -17,6 +18,8 @@ public:
     std::string getName() const;
 
 private:
+    std::string getIdFromGenerator();
+
     std::string name;
     static std::unordered_set<std::string> uniqueNames;
 };
