@@ -22,7 +22,8 @@ public:
         itemCollectorOwner.addComponent<DirectionComponent>();
         itemCollectorOwner.addComponent<AnimationComponent>(animator);
         boxColliderComponent = itemCollectorOwner.addComponent<BoxColliderComponent>(size);
-        itemCollector.loadDependentComponents();
+        itemCollectorWithOneCapacity.loadDependentComponents();
+        itemCollectorWithTwoCapacity.loadDependentComponents();
 
         boxColliderComponent1 = itemOwner1.addComponent<BoxColliderComponent>(size);
         itemOwner1.addComponent<CollectableItemComponent>(itemName1);
@@ -64,7 +65,8 @@ public:
         std::make_shared<StrictMock<animations::AnimatorMock>>();
     std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
-    ItemCollectorComponent itemCollector{&itemCollectorOwner, quadtree, rayCast, capacity1};
+    ItemCollectorComponent itemCollectorWithOneCapacity{&itemCollectorOwner, quadtree, rayCast, capacity1};
+    ItemCollectorComponent itemCollectorWithTwoCapacity{&itemCollectorOwner, quadtree, rayCast, capacity2};
 };
 
 TEST_F(ItemCollectorComponentTest, givenZeroCapacity_shouldThrowInvalidCapacityException)
@@ -102,22 +104,38 @@ TEST_F(ItemCollectorComponentTest, givenItemOutOfRange_shouldNotCollectItem)
     quadtree->insertCollider(boxColliderComponent);
     quadtree->insertCollider(boxColliderComponent1);
 
-    itemCollector.collectNearestItem();
+    itemCollectorWithOneCapacity.collectNearestItem();
 
-    ASSERT_TRUE(itemCollector.getItems().empty());
+    ASSERT_TRUE(itemCollectorWithOneCapacity.getItems().empty());
 }
 
-TEST_F(ItemCollectorComponentTest, givenItems_shouldCollectClosestItem)
+TEST_F(ItemCollectorComponentTest, givenTwoItemsToCollectAndOnlyOneCollectorCapacity_shouldCollectOnlyOneItem)
 {
     quadtree->insertCollider(boxColliderComponent);
     quadtree->insertCollider(boxColliderComponent2);
     quadtree->insertCollider(boxColliderComponent3);
 
-    itemCollector.collectNearestItem();
+    itemCollectorWithOneCapacity.collectNearestItem();
+    itemCollectorWithOneCapacity.collectNearestItem();
 
-    const auto items = itemCollector.getItems();
+    const auto items = itemCollectorWithOneCapacity.getItems();
     ASSERT_EQ(items.size(), 1);
     ASSERT_EQ(items[0]->getName(), itemName2);
+}
+
+TEST_F(ItemCollectorComponentTest, givenItems_shouldCollectTwoClosestItems)
+{
+    quadtree->insertCollider(boxColliderComponent);
+    quadtree->insertCollider(boxColliderComponent2);
+    quadtree->insertCollider(boxColliderComponent3);
+
+    itemCollectorWithTwoCapacity.collectNearestItem();
+    itemCollectorWithTwoCapacity.collectNearestItem();
+
+    const auto items = itemCollectorWithTwoCapacity.getItems();
+    ASSERT_EQ(items.size(), 2);
+    ASSERT_EQ(items[0]->getName(), itemName2);
+    ASSERT_EQ(items[1]->getName(), itemName3);
 }
 //
 // TEST_F(ItemCollectorComponentTest, drop_shouldEnableComponentsGraphicAndPhysics)
