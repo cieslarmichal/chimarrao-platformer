@@ -19,7 +19,7 @@ public:
                             const std::shared_ptr<graphics::RendererPool>& rendererPool,
                             std::unique_ptr<components::ui::UIConfig>);
 
-    void update();
+    void update(const utils::DeltaTime&, const input::Input&);
     void activate();
     void deactivate();
 

@@ -118,7 +118,7 @@ NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Inpu
     {
         componentOwnersManager->update(deltaTime, input);
         uiManager->update(deltaTime, input);
-        hud->update();
+        hud->update(deltaTime, input);
     }
 
     componentOwnersManager->processRemovals();

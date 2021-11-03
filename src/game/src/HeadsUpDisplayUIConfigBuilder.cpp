@@ -74,6 +74,19 @@ std::vector<std::unique_ptr<components::ui::ImageConfig>> HeadsUpDisplayUIConfig
         graphics::VisibilityLayer::First, graphics::Color::Transparent);
     imagesConfig.push_back(std::move(healthBarFrameImageConfig));
 
+    const auto equipmentSlotsPositions = std::vector<utils::Vector2f>{
+        {4, 6}, {6.25, 6}, {8.5, 6}, {10.75, 6}, {4, 8.25}, {6.25, 8.25}, {8.5, 8.25}, {10.75, 8.25}};
+    const auto slotSize = utils::Vector2f{2, 2};
+
+    int index = 1;
+    for (const auto& slotPosition : equipmentSlotsPositions)
+    {
+        auto slotConfig = std::make_unique<components::ui::ImageConfig>(
+            "slotConfig" + std::to_string(index++), slotPosition, slotSize, graphics::VisibilityLayer::First,
+            graphics::Color(152, 152, 152, 152));
+        imagesConfig.push_back(std::move(slotConfig));
+    }
+
     return imagesConfig;
 }
 }

@@ -24,7 +24,7 @@ HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner>
     healthBarFrame->setOutline(0.15, graphics::Color::Black);
 }
 
-void HeadsUpDisplay::update()
+void HeadsUpDisplay::update(const utils::DeltaTime&, const input::Input&)
 {
     auto healthComponent = player->getComponent<components::core::HealthComponent>();
     auto& healthBar = images[healthBarId];
