@@ -116,11 +116,6 @@ std::shared_ptr<CollectableItemComponent> ItemCollectorComponent::findNearestIte
 
     for (const auto& collider : colliders)
     {
-        if (not collider->isEnabled())
-        {
-            continue;
-        }
-
         const auto itemCollider = collider->getOwner().getComponent<CollectableItemComponent>();
         if (not itemCollider)
         {

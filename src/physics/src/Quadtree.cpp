@@ -184,6 +184,12 @@ Quadtree::getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRe
         }
     }
 
+    possibleColliders.erase(
+        std::remove_if(possibleColliders.begin(), possibleColliders.end(),
+                       [](const std::shared_ptr<components::core::BoxColliderComponent>& collider)
+                       { return !collider->isEnabled(); }),
+        possibleColliders.end());
+
     return possibleColliders;
 }
 

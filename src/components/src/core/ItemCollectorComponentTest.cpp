@@ -18,7 +18,8 @@ public:
     ItemCollectorComponentTest()
     {
         itemCollectorOwner.addComponent<HealthComponent>(initialHealthPoints);
-        itemCollectorOwner.addComponent<VelocityComponent>();
+        const auto velocity = itemCollectorOwner.addComponent<VelocityComponent>();
+        velocity->setVelocity(5,0);
         itemCollectorOwner.addComponent<DirectionComponent>();
         itemCollectorOwner.addComponent<AnimationComponent>(animator);
         boxColliderComponent = itemCollectorOwner.addComponent<BoxColliderComponent>(size);
@@ -44,19 +45,17 @@ public:
     const utils::Vector2f size{4, 4};
     const utils::Vector2f position{0, 0};
     const utils::Vector2f position1{5, 0};
-    const utils::Vector2f position2{4, 0};
-    const utils::Vector2f position3{4.5, 0};
+    const utils::Vector2f position2{2, 0};
+    const utils::Vector2f position3{3, 0};
     const std::string itemName1{"item1"};
     const std::string itemName2{"item2"};
     const std::string itemName3{"item3"};
+    const std::string nonExistingItemName{"nonExistingItemName"};
     ComponentOwner itemCollectorOwner{position, "ItemCollectorComponentTest1"};
     const unsigned int initialHealthPoints{100};
     ComponentOwner itemOwner1{position1, "ItemCollectorComponentTest2"};
     ComponentOwner itemOwner2{position2, "ItemCollectorComponentTest3"};
     ComponentOwner itemOwner3{position3, "ItemCollectorComponentTest4"};
-    std::shared_ptr<CollectableItemComponent> collectableItem1;
-    std::shared_ptr<CollectableItemComponent> collectableItem2;
-    std::shared_ptr<CollectableItemComponent> collectableItem3;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent1;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent2;
@@ -137,28 +136,50 @@ TEST_F(ItemCollectorComponentTest, givenItems_shouldCollectTwoClosestItems)
     ASSERT_EQ(items[0]->getName(), itemName2);
     ASSERT_EQ(items[1]->getName(), itemName3);
 }
-//
-// TEST_F(ItemCollectorComponentTest, drop_shouldEnableComponentsGraphicAndPhysics)
-//{
-//     collectableItem.drop();
-//
-//     ASSERT_TRUE(owner.areComponentsEnabled());
-// }
-//
-// TEST_F(ItemCollectorComponentTest, use_shouldGive1HealthPointToCollectorAndRemoveItself)
-//{
-//     const auto health = collector.getComponent<HealthComponent>();
-//     const auto lostHealthPoints = 5;
-//     health->loseHealthPoints(lostHealthPoints);
-//     collectableItem.collectBy(&collector);
-//
-//     collectableItem.use();
-//
-//     ASSERT_TRUE(owner.shouldBeRemoved());
-//     ASSERT_EQ(health->getCurrentHealth(), initialHealthPoints - lostHealthPoints + 1);
-// }
-//
-// TEST_F(ItemCollectorComponentTest, shouldReturnName)
-//{
-//     ASSERT_EQ(collectableItem.getName(), itemName);
-// }
+
+TEST_F(ItemCollectorComponentTest, givenNonExisitingItemName_shouldNotDropAnyItem)
+{
+    quadtree->insertCollider(boxColliderComponent);
+    quadtree->insertCollider(boxColliderComponent2);
+    quadtree->insertCollider(boxColliderComponent3);
+    itemCollectorWithTwoCapacity.collectNearestItem();
+    itemCollectorWithTwoCapacity.collectNearestItem();
+
+    itemCollectorWithTwoCapacity.drop(nonExistingItemName);
+
+    const auto items = itemCollectorWithTwoCapacity.getItems();
+    ASSERT_EQ(items.size(), 2);
+}
+
+TEST_F(ItemCollectorComponentTest, givenExistingItemButNoPlaceToDropItem_shouldNotDropItem)
+{
+    quadtree->insertCollider(boxColliderComponent);
+    quadtree->insertCollider(boxColliderComponent2);
+    quadtree->insertCollider(boxColliderComponent3);
+    itemCollectorWithTwoCapacity.collectNearestItem();
+
+    itemCollectorWithTwoCapacity.drop(itemName2);
+
+    const auto items = itemCollectorWithTwoCapacity.getItems();
+    ASSERT_EQ(items.size(), 1);
+}
+
+TEST_F(ItemCollectorComponentTest,
+       givenExistingItemAndValidPlaceToDropItem_shouldSetDropPositionToItemAndDeleteItemFromCollection)
+{
+    const utils::Vector2f expectedDropPlace{6, 2};
+    quadtree->insertCollider(boxColliderComponent);
+    quadtree->insertCollider(boxColliderComponent2);
+    itemCollectorWithTwoCapacity.collectNearestItem();
+
+    itemCollectorWithTwoCapacity.drop(itemName2);
+
+    const auto items = itemCollectorWithTwoCapacity.getItems();
+    ASSERT_EQ(items.size(), 0);
+    ASSERT_EQ(itemOwner2.transform->getPosition(), expectedDropPlace);
+}
+
+TEST_F(ItemCollectorComponentTest, givenNonExisitingItemName_shouldNotUseAnyItem) {}
+
+TEST_F(ItemCollectorComponentTest, givenExistingItem_shouldInvokeItemEffectAndDeleteItemFromCollection) {}
+
