@@ -179,7 +179,29 @@ TEST_F(ItemCollectorComponentTest,
     ASSERT_EQ(itemOwner2.transform->getPosition(), expectedDropPlace);
 }
 
-TEST_F(ItemCollectorComponentTest, givenNonExisitingItemName_shouldNotUseAnyItem) {}
+TEST_F(ItemCollectorComponentTest, givenNonExisitingItemName_shouldNotUseAnyItem)
+{
+    quadtree->insertCollider(boxColliderComponent);
+    quadtree->insertCollider(boxColliderComponent2);
+    quadtree->insertCollider(boxColliderComponent3);
+    itemCollectorWithTwoCapacity.collectNearestItem();
+    itemCollectorWithTwoCapacity.collectNearestItem();
 
-TEST_F(ItemCollectorComponentTest, givenExistingItem_shouldInvokeItemEffectAndDeleteItemFromCollection) {}
+    itemCollectorWithTwoCapacity.use(nonExistingItemName);
+
+    const auto items = itemCollectorWithTwoCapacity.getItems();
+    ASSERT_EQ(items.size(), 2);
+}
+
+TEST_F(ItemCollectorComponentTest, givenExistingItem_shouldInvokeItemEffectAndDeleteItemFromCollection)
+{
+    quadtree->insertCollider(boxColliderComponent);
+    quadtree->insertCollider(boxColliderComponent2);
+    itemCollectorWithTwoCapacity.collectNearestItem();
+
+    itemCollectorWithTwoCapacity.use(itemName2);
+
+    const auto items = itemCollectorWithTwoCapacity.getItems();
+    ASSERT_EQ(items.size(), 0);
+}
 
