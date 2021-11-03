@@ -30,6 +30,7 @@ set(SOURCES
         src/core/FreeFallMovementComponent.cpp
         src/core/CollectableItemComponent.cpp
         src/core/ItemCollectorComponent.cpp
+        src/core/ItemHealEffect.cpp
         )
 
 set(UT_SOURCES
@@ -63,6 +64,7 @@ set(UT_SOURCES
         src/core/FreeFallMovementComponentTest.cpp
         src/core/CollectableItemComponentTest.cpp
         src/core/ItemCollectorComponentTest.cpp
+        src/core/ItemHealEffectTest.cpp
         )
 
 add_library(components ${SOURCES})
