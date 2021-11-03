@@ -5,8 +5,9 @@
 
 namespace components::core
 {
-CollectableItemComponent::CollectableItemComponent(ComponentOwner* owner, const std::string& name)
-    : Component(owner), collector{nullptr}, uniqueName{name}
+CollectableItemComponent::CollectableItemComponent(ComponentOwner* owner, const std::string& name,
+                                                   std::shared_ptr<ItemEffect> effect)
+    : Component(owner), collector{nullptr}, uniqueName{name}, effect{std::move(effect)}
 {
 }
 
@@ -35,8 +36,7 @@ void CollectableItemComponent::use()
         return;
     }
 
-    collector->getComponent<components::core::HealthComponent>()->gainHealthPoints(1);
-
+    effect->affect(collector);
     owner->remove();
 }
 

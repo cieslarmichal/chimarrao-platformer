@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
+#include "ItemEffectMock.h"
 
 #include "ComponentOwner.h"
 #include "HealthComponent.h"
@@ -27,15 +28,15 @@ public:
         itemCollectorWithTwoCapacity.loadDependentComponents();
 
         boxColliderComponent1 = itemOwner1.addComponent<BoxColliderComponent>(size);
-        itemOwner1.addComponent<CollectableItemComponent>(itemName1);
+        itemOwner1.addComponent<CollectableItemComponent>(itemName1, itemEffect);
         itemOwner1.loadDependentComponents();
 
         boxColliderComponent2 = itemOwner2.addComponent<BoxColliderComponent>(size);
-        itemOwner2.addComponent<CollectableItemComponent>(itemName2);
+        itemOwner2.addComponent<CollectableItemComponent>(itemName2, itemEffect);
         itemOwner2.loadDependentComponents();
 
         boxColliderComponent3 = itemOwner3.addComponent<BoxColliderComponent>(size);
-        itemOwner3.addComponent<CollectableItemComponent>(itemName3);
+        itemOwner3.addComponent<CollectableItemComponent>(itemName3, itemEffect);
         itemOwner3.loadDependentComponents();
     }
 
@@ -62,6 +63,7 @@ public:
     std::shared_ptr<BoxColliderComponent> boxColliderComponent3;
     std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
         std::make_shared<StrictMock<animations::AnimatorMock>>();
+    std::shared_ptr<StrictMock<ItemEffectMock>> itemEffect = std::make_shared<StrictMock<ItemEffectMock>>();
     std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
     ItemCollectorComponent itemCollectorWithOneCapacity{&itemCollectorOwner, quadtree, rayCast, capacity1};
@@ -198,6 +200,7 @@ TEST_F(ItemCollectorComponentTest, givenExistingItem_shouldInvokeItemEffectAndDe
     quadtree->insertCollider(boxColliderComponent);
     quadtree->insertCollider(boxColliderComponent2);
     itemCollectorWithTwoCapacity.collectNearestItem();
+    EXPECT_CALL(*itemEffect, affect(&itemCollectorOwner));
 
     itemCollectorWithTwoCapacity.use(itemName2);
 
