@@ -1,10 +1,13 @@
 #include "HeadsUpDisplayUIConfigBuilder.h"
 
 #include "CommonUIConfigElements.h"
+#include "HeadsUpDisplay.h"
 #include "ui/UIConfig.h"
 
 namespace game
 {
+
+std::size_t HeadsUpDisplayUIConfigBuilder::numberOfSlots = 8;
 
 std::unique_ptr<components::ui::UIConfig> HeadsUpDisplayUIConfigBuilder::createUIConfig()
 {
@@ -21,6 +24,18 @@ std::string HeadsUpDisplayUIConfigBuilder::getHealthBarId()
 std::string HeadsUpDisplayUIConfigBuilder::getHealthBarFrameId()
 {
     return "hudHealthPointsBarFrame";
+}
+
+std::vector<std::string> HeadsUpDisplayUIConfigBuilder::getSlotIds()
+{
+    std::vector<std::string> slotIds;
+
+    for (std::size_t i = 1; i <= numberOfSlots; i++)
+    {
+        slotIds.push_back("slotConfig" + std::to_string(i));
+    }
+
+    return slotIds;
 }
 
 std::unique_ptr<components::ui::BackgroundConfig> HeadsUpDisplayUIConfigBuilder::createBackgroundConfig()
@@ -45,9 +60,14 @@ std::vector<std::unique_ptr<components::ui::LabelConfig>> HeadsUpDisplayUIConfig
     std::vector<std::unique_ptr<components::ui::LabelConfig>> labelsConfig;
 
     const auto healthPointsLabelPosition = utils::Vector2f{0.5, 0.5};
-    auto titleLabelConfig = std::make_unique<components::ui::LabelConfig>(
+    auto healthPointsLabelConfig = std::make_unique<components::ui::LabelConfig>(
         "hudHealthPointsLabel", healthPointsLabelPosition, graphics::Color::Red, "HP", 20, fontPath);
-    labelsConfig.emplace_back(std::move(titleLabelConfig));
+    labelsConfig.emplace_back(std::move(healthPointsLabelConfig));
+
+    const auto itemsLabelPosition = utils::Vector2f{0.5, 3};
+    auto itemsLabelConfig = std::make_unique<components::ui::LabelConfig>(
+        "hudItemsLabel", itemsLabelPosition, graphics::Color::Black, "ITEMS", 20, fontPath);
+    labelsConfig.emplace_back(std::move(itemsLabelConfig));
 
     return labelsConfig;
 }
@@ -74,19 +94,39 @@ std::vector<std::unique_ptr<components::ui::ImageConfig>> HeadsUpDisplayUIConfig
         graphics::VisibilityLayer::First, graphics::Color::Transparent);
     imagesConfig.push_back(std::move(healthBarFrameImageConfig));
 
-    const auto equipmentSlotsPositions = std::vector<utils::Vector2f>{
-        {4, 6}, {6.25, 6}, {8.5, 6}, {10.75, 6}, {4, 8.25}, {6.25, 8.25}, {8.5, 8.25}, {10.75, 8.25}};
     const auto slotSize = utils::Vector2f{2, 2};
+    const auto offset = 0.3f;
+    const auto firstRowStartPosition = utils::Vector2f{0.5, 6};
+    std::vector<utils::Vector2f> slotsPositions;
+    for (int i = 0; i < 4; i++)
+    {
+        const auto slotPosition = utils::Vector2f{
+            firstRowStartPosition.x + slotSize.x * static_cast<float>(i) + offset * static_cast<float>(i),
+            firstRowStartPosition.y};
+        slotsPositions.push_back(slotPosition);
+    }
 
-    int index = 1;
-    for (const auto& slotPosition : equipmentSlotsPositions)
+    const auto secondRowStartPosition =
+        utils::Vector2f{firstRowStartPosition.x, firstRowStartPosition.y + slotSize.y + offset};
+    for (int i = 0; i < 4; i++)
+    {
+        const auto slotPosition = utils::Vector2f{
+            secondRowStartPosition.x + slotSize.x * static_cast<float>(i) + offset * static_cast<float>(i),
+            secondRowStartPosition.y};
+        slotsPositions.push_back(slotPosition);
+    }
+
+    const auto slotIds = getSlotIds();
+    for (std::size_t i = 0; i < slotsPositions.size(); i++)
     {
         auto slotConfig = std::make_unique<components::ui::ImageConfig>(
-            "slotConfig" + std::to_string(index++), slotPosition, slotSize, graphics::VisibilityLayer::First,
+            slotIds[i], slotsPositions[i], slotSize, graphics::VisibilityLayer::First,
             graphics::Color(152, 152, 152, 152));
+
         imagesConfig.push_back(std::move(slotConfig));
     }
 
     return imagesConfig;
 }
+
 }

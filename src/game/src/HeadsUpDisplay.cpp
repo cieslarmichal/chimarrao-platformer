@@ -22,6 +22,12 @@ HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner>
     createUIComponents(std::move(uiConfig));
     auto& healthBarFrame = images[HeadsUpDisplayUIConfigBuilder::getHealthBarFrameId()];
     healthBarFrame->setOutline(0.15, graphics::Color::Black);
+
+    for (const auto& slotId : HeadsUpDisplayUIConfigBuilder::getSlotIds())
+    {
+        auto& slot = images[slotId];
+        slot->setOutline(0.1, graphics::Color::Black);
+    }
 }
 
 void HeadsUpDisplay::update(const utils::DeltaTime&, const input::Input&)

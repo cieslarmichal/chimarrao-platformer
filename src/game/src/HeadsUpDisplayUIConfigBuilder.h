@@ -24,6 +24,7 @@ public:
     static std::unique_ptr<components::ui::UIConfig> createUIConfig();
     static std::string getHealthBarId();
     static std::string getHealthBarFrameId();
+    static std::vector<std::string> getSlotIds();
 
 private:
     static std::unique_ptr<components::ui::BackgroundConfig> createBackgroundConfig();
@@ -32,5 +33,7 @@ private:
     static std::vector<std::unique_ptr<components::ui::LabelConfig>> createLabelConfigs();
     static std::vector<std::unique_ptr<components::ui::TextFieldConfig>> createTextFieldConfigs();
     static std::vector<std::unique_ptr<components::ui::ImageConfig>> createImageConfigs();
+
+    static std::size_t numberOfSlots;
 };
 }
