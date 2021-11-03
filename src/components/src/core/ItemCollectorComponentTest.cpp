@@ -7,6 +7,7 @@
 #include "ComponentOwner.h"
 #include "HealthComponent.h"
 #include "core/exceptions/DependentComponentNotFound.h"
+#include "core/exceptions/InvalidCapacity.h"
 
 using namespace components::core;
 using namespace ::testing;
@@ -36,6 +37,9 @@ public:
         itemOwner3.loadDependentComponents();
     }
 
+    const unsigned emptyCapacity{0};
+    const unsigned capacity1{1};
+    const unsigned capacity2{2};
     const utils::Vector2f size{4, 4};
     const utils::Vector2f position{0, 0};
     const utils::Vector2f position1{5, 0};
@@ -60,14 +64,21 @@ public:
         std::make_shared<StrictMock<animations::AnimatorMock>>();
     std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
-    ItemCollectorComponent itemCollector{&itemCollectorOwner, quadtree, rayCast};
+    ItemCollectorComponent itemCollector{&itemCollectorOwner, quadtree, rayCast, capacity1};
 };
+
+TEST_F(ItemCollectorComponentTest, givenZeroCapacity_shouldThrowInvalidCapacityException)
+{
+    ASSERT_THROW(ItemCollectorComponent(&itemCollectorOwner, quadtree, rayCast, emptyCapacity),
+                 exceptions::InvalidCapacity);
+}
 
 TEST_F(ItemCollectorComponentTest,
        loadDependentComponentsWithoutDirectionComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutDirection{position, "componentOwnerWithoutDirection"};
-    ItemCollectorComponent itemCollectorWithoutDirection{&componentOwnerWithoutDirection, quadtree, rayCast};
+    ItemCollectorComponent itemCollectorWithoutDirection{&componentOwnerWithoutDirection, quadtree, rayCast,
+                                                         capacity1};
 
     ASSERT_THROW(itemCollectorWithoutDirection.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
@@ -80,7 +91,7 @@ TEST_F(ItemCollectorComponentTest,
     componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>();
     componentOwnerWithoutBoxCollider.addComponent<DirectionComponent>();
     ItemCollectorComponent itemCollectorWithoutBoxCollider{&componentOwnerWithoutBoxCollider, quadtree,
-                                                           rayCast};
+                                                           rayCast, capacity1};
 
     ASSERT_THROW(itemCollectorWithoutBoxCollider.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
@@ -96,7 +107,7 @@ TEST_F(ItemCollectorComponentTest, givenItemOutOfRange_shouldNotCollectItem)
     ASSERT_TRUE(itemCollector.getItems().empty());
 }
 
- TEST_F(ItemCollectorComponentTest, givenItems_shouldCollectClosestItem)
+TEST_F(ItemCollectorComponentTest, givenItems_shouldCollectClosestItem)
 {
     quadtree->insertCollider(boxColliderComponent);
     quadtree->insertCollider(boxColliderComponent2);
@@ -107,7 +118,7 @@ TEST_F(ItemCollectorComponentTest, givenItemOutOfRange_shouldNotCollectItem)
     const auto items = itemCollector.getItems();
     ASSERT_EQ(items.size(), 1);
     ASSERT_EQ(items[0]->getName(), itemName2);
- }
+}
 //
 // TEST_F(ItemCollectorComponentTest, drop_shouldEnableComponentsGraphicAndPhysics)
 //{

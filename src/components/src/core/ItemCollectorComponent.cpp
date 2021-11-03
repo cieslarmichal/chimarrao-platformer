@@ -4,6 +4,7 @@
 #include <utility>
 
 #include "core/exceptions/DependentComponentNotFound.h"
+#include "core/exceptions/InvalidCapacity.h"
 
 namespace components::core
 {
@@ -15,9 +16,13 @@ const auto distance = [](const utils::Vector2f& v1, const utils::Vector2f& v2)
 
 ItemCollectorComponent::ItemCollectorComponent(ComponentOwner* owner,
                                                std::shared_ptr<physics::Quadtree> quadtree,
-                                               std::shared_ptr<physics::RayCast> rayCast)
-    : Component(owner), collisions{std::move(quadtree)}, rayCast{std::move(rayCast)}
+                                               std::shared_ptr<physics::RayCast> rayCast, unsigned capacity)
+    : Component(owner), collisions{std::move(quadtree)}, rayCast{std::move(rayCast)}, capacity{capacity}
 {
+    if (capacity == 0)
+    {
+        throw exceptions::InvalidCapacity{"Capacity can not be 0"};
+    }
 }
 
 void ItemCollectorComponent::loadDependentComponents()

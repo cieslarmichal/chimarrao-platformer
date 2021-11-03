@@ -13,7 +13,7 @@ class ItemCollectorComponent : public Component
 {
 public:
     ItemCollectorComponent(ComponentOwner* owner, std::shared_ptr<physics::Quadtree>,
-                           std::shared_ptr<physics::RayCast>);
+                           std::shared_ptr<physics::RayCast>, unsigned capacity);
 
     void loadDependentComponents() override;
     void collectNearestItem();
@@ -32,7 +32,7 @@ private:
     std::shared_ptr<DirectionComponent> directionComponent;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     std::vector<std::shared_ptr<CollectableItemComponent>> items;
-    const unsigned capacity = 8;
+    const unsigned capacity;
     const float dropRange{4};
 };
 }
