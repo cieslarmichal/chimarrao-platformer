@@ -11,8 +11,14 @@ using namespace ::testing;
 class HeadsUpDisplayUIConfigBuilderTest : public Test
 {
 public:
-    const std::vector<std::string> expectedLabelsNames{"hudHealthPointsLabel"};
-    const std::vector<std::string> expectedImagesNames{"hudHealthPointsBar", "hudHealthPointsBarFrame"};
+    const std::vector<std::string> expectedLabelsNames{"hudHealthPointsLabel", "hudItemsLabel"};
+    const std::vector<std::string> expectedImagesNames{"hudHealthPointsBar", "hudHealthPointsBarFrame",
+                                                       "slotConfig1",        "slotConfig2",
+                                                       "slotConfig3",        "slotConfig4",
+                                                       "slotConfig5",        "slotConfig6",
+                                                       "slotConfig7",        "slotConfig8"};
+    const std::vector<std::string> slotsId{"slotConfig1", "slotConfig2", "slotConfig3", "slotConfig4",
+                                           "slotConfig5", "slotConfig6", "slotConfig7", "slotConfig8"};
 };
 
 TEST_F(HeadsUpDisplayUIConfigBuilderTest, createMenuUI)
@@ -45,4 +51,9 @@ TEST_F(HeadsUpDisplayUIConfigBuilderTest, getHealthBarId)
 TEST_F(HeadsUpDisplayUIConfigBuilderTest, getHealthBarFrameId)
 {
     ASSERT_EQ(HeadsUpDisplayUIConfigBuilder::getHealthBarFrameId(), "hudHealthPointsBarFrame");
+}
+
+TEST_F(HeadsUpDisplayUIConfigBuilderTest, getSlotIds)
+{
+    ASSERT_EQ(HeadsUpDisplayUIConfigBuilder::getSlotIds(), slotsId);
 }
