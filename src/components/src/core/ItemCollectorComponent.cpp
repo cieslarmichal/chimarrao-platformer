@@ -95,9 +95,14 @@ void ItemCollectorComponent::use(const std::string& itemName)
     items.erase(foundItem);
 }
 
-std::vector<std::shared_ptr<CollectableItemComponent>> ItemCollectorComponent::getItems() const
+std::vector<ItemInfo> ItemCollectorComponent::getItemsInfo() const
 {
-    return items;
+    std::vector<ItemInfo> itemsInfo;
+    for (const auto& item : items)
+    {
+        itemsInfo.push_back({item->getName(), item->getType()});
+    }
+    return itemsInfo;
 }
 
 std::shared_ptr<CollectableItemComponent> ItemCollectorComponent::findNearestItem() const

@@ -6,6 +6,7 @@
 #include "DirectionComponent.h"
 #include "Quadtree.h"
 #include "RayCast.h"
+#include "ItemInfo.h"
 
 namespace components::core
 {

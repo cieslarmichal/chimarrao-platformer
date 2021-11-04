@@ -108,7 +108,7 @@ TEST_F(ItemCollectorComponentTest, givenItemOutOfRange_shouldNotCollectItem)
 
     itemCollectorWithOneCapacity.collectNearestItem();
 
-    ASSERT_TRUE(itemCollectorWithOneCapacity.getItems().empty());
+    ASSERT_TRUE(itemCollectorWithOneCapacity.getItemsInfo().empty());
 }
 
 TEST_F(ItemCollectorComponentTest, givenTwoItemsToCollectAndOnlyOneCollectorCapacity_shouldCollectOnlyOneItem)
@@ -120,9 +120,9 @@ TEST_F(ItemCollectorComponentTest, givenTwoItemsToCollectAndOnlyOneCollectorCapa
     itemCollectorWithOneCapacity.collectNearestItem();
     itemCollectorWithOneCapacity.collectNearestItem();
 
-    const auto items = itemCollectorWithOneCapacity.getItems();
+    const auto items = itemCollectorWithOneCapacity.getItemsInfo();
     ASSERT_EQ(items.size(), 1);
-    ASSERT_EQ(items[0]->getName(), itemName2);
+    ASSERT_EQ(items[0].name, itemName2);
 }
 
 TEST_F(ItemCollectorComponentTest, givenItems_shouldCollectTwoClosestItems)
@@ -134,10 +134,10 @@ TEST_F(ItemCollectorComponentTest, givenItems_shouldCollectTwoClosestItems)
     itemCollectorWithTwoCapacity.collectNearestItem();
     itemCollectorWithTwoCapacity.collectNearestItem();
 
-    const auto items = itemCollectorWithTwoCapacity.getItems();
+    const auto items = itemCollectorWithTwoCapacity.getItemsInfo();
     ASSERT_EQ(items.size(), 2);
-    ASSERT_EQ(items[0]->getName(), itemName2);
-    ASSERT_EQ(items[1]->getName(), itemName3);
+    ASSERT_EQ(items[0].name, itemName2);
+    ASSERT_EQ(items[1].name, itemName3);
 }
 
 TEST_F(ItemCollectorComponentTest, givenNonExisitingItemName_shouldNotDropAnyItem)
@@ -150,7 +150,7 @@ TEST_F(ItemCollectorComponentTest, givenNonExisitingItemName_shouldNotDropAnyIte
 
     itemCollectorWithTwoCapacity.drop(nonExistingItemName);
 
-    const auto items = itemCollectorWithTwoCapacity.getItems();
+    const auto items = itemCollectorWithTwoCapacity.getItemsInfo();
     ASSERT_EQ(items.size(), 2);
 }
 
@@ -163,7 +163,7 @@ TEST_F(ItemCollectorComponentTest, givenExistingItemButNoPlaceToDropItem_shouldN
 
     itemCollectorWithTwoCapacity.drop(itemName2);
 
-    const auto items = itemCollectorWithTwoCapacity.getItems();
+    const auto items = itemCollectorWithTwoCapacity.getItemsInfo();
     ASSERT_EQ(items.size(), 1);
 }
 
@@ -177,7 +177,7 @@ TEST_F(ItemCollectorComponentTest,
 
     itemCollectorWithTwoCapacity.drop(itemName2);
 
-    const auto items = itemCollectorWithTwoCapacity.getItems();
+    const auto items = itemCollectorWithTwoCapacity.getItemsInfo();
     ASSERT_EQ(items.size(), 0);
     ASSERT_EQ(itemOwner2.transform->getPosition(), expectedDropPlace);
 }
@@ -192,7 +192,7 @@ TEST_F(ItemCollectorComponentTest, givenNonExisitingItemName_shouldNotUseAnyItem
 
     itemCollectorWithTwoCapacity.use(nonExistingItemName);
 
-    const auto items = itemCollectorWithTwoCapacity.getItems();
+    const auto items = itemCollectorWithTwoCapacity.getItemsInfo();
     ASSERT_EQ(items.size(), 2);
 }
 
@@ -205,7 +205,20 @@ TEST_F(ItemCollectorComponentTest, givenExistingItem_shouldInvokeItemEffectAndDe
 
     itemCollectorWithTwoCapacity.use(itemName2);
 
-    const auto items = itemCollectorWithTwoCapacity.getItems();
+    const auto items = itemCollectorWithTwoCapacity.getItemsInfo();
     ASSERT_EQ(items.size(), 0);
+}
+
+TEST_F(ItemCollectorComponentTest, getItemsInfo_shouldReturnCorrectNameAndType)
+{
+    quadtree->insertCollider(boxColliderComponent);
+    quadtree->insertCollider(boxColliderComponent2);
+    itemCollectorWithTwoCapacity.collectNearestItem();
+
+    const auto items = itemCollectorWithTwoCapacity.getItemsInfo();
+
+    ASSERT_EQ(items.size(), 1);
+    ASSERT_EQ(items[0].name, itemName2);
+    ASSERT_EQ(items[0].type, itemType);
 }
 

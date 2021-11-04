@@ -21,7 +21,7 @@ inline bool operator==(const ItemInfo& lhs, const ItemInfo& rhs)
 
 inline std::string toString(const ItemInfo& itemInfo)
 {
-    return "name: " + itemInfo.name + " type: " + itemInfo.type;
+    return "name: " + itemInfo.name + " type: " + toString(itemInfo.type);
 }
 
 inline std::ostream& operator<<(std::ostream& os, const ItemInfo& itemInfo)
