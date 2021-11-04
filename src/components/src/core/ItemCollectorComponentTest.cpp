@@ -28,15 +28,15 @@ public:
         itemCollectorWithTwoCapacity.loadDependentComponents();
 
         boxColliderComponent1 = itemOwner1.addComponent<BoxColliderComponent>(size);
-        itemOwner1.addComponent<CollectableItemComponent>(itemName1, itemEffect);
+        itemOwner1.addComponent<CollectableItemComponent>(itemName1, itemType, itemEffect);
         itemOwner1.loadDependentComponents();
 
         boxColliderComponent2 = itemOwner2.addComponent<BoxColliderComponent>(size);
-        itemOwner2.addComponent<CollectableItemComponent>(itemName2, itemEffect);
+        itemOwner2.addComponent<CollectableItemComponent>(itemName2, itemType, itemEffect);
         itemOwner2.loadDependentComponents();
 
         boxColliderComponent3 = itemOwner3.addComponent<BoxColliderComponent>(size);
-        itemOwner3.addComponent<CollectableItemComponent>(itemName3, itemEffect);
+        itemOwner3.addComponent<CollectableItemComponent>(itemName3, itemType, itemEffect);
         itemOwner3.loadDependentComponents();
     }
 
@@ -51,6 +51,7 @@ public:
     const std::string itemName1{"item1"};
     const std::string itemName2{"item2"};
     const std::string itemName3{"item3"};
+    const ItemType itemType{ItemType::Apple};
     const std::string nonExistingItemName{"nonExistingItemName"};
     ComponentOwner itemCollectorOwner{position, "ItemCollectorComponentTest1"};
     const unsigned int initialHealthPoints{100};

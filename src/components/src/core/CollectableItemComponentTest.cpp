@@ -15,10 +15,11 @@ class CollectableItemComponentTest : public Test
 public:
     const utils::Vector2f position{20, 20};
     const std::string itemName{"name"};
+    const ItemType itemType{ItemType::Apple};
     ComponentOwner owner{position, "CollectableItemComponentTest1"};
     ComponentOwner collector{position, "CollectableItemComponentTest2"};
     std::shared_ptr<StrictMock<ItemEffectMock>> itemEffect = std::make_shared<StrictMock<ItemEffectMock>>();
-    CollectableItemComponent collectableItem{&owner, itemName, itemEffect};
+    CollectableItemComponent collectableItem{&owner, itemName, itemType, itemEffect};
 };
 
 TEST_F(CollectableItemComponentTest, collect_shouldDisableComponents)
@@ -49,3 +50,9 @@ TEST_F(CollectableItemComponentTest, shouldReturnName)
 {
     ASSERT_EQ(collectableItem.getName(), itemName);
 }
+
+TEST_F(CollectableItemComponentTest, shouldReturnItemType)
+{
+    ASSERT_EQ(collectableItem.getType(), itemType);
+}
+
