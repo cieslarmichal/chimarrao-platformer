@@ -4,6 +4,8 @@
 
 #include "HeadsUpDisplayUIConfigBuilder.h"
 #include "core/HealthComponent.h"
+#include "core/ItemCollectorComponent.h"
+#include "core/exceptions/DependentComponentNotFound.h"
 #include "ui/Image.h"
 #include "ui/UIComponentFactory.h"
 #include "ui/UIConfig.h"
@@ -19,6 +21,19 @@ HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner>
       healthBarId{HeadsUpDisplayUIConfigBuilder::getHealthBarId()},
       active{false}
 {
+    const auto healthComponent = player->getComponent<components::core::HealthComponent>();
+    if (not healthComponent)
+    {
+        throw components::core::exceptions::DependentComponentNotFound{"HUD: health component not found"};
+    }
+
+    const auto collectorComponent = player->getComponent<components::core::ItemCollectorComponent>();
+    if (not collectorComponent)
+    {
+        throw components::core::exceptions::DependentComponentNotFound{
+            "HUD: item collector component not found"};
+    }
+
     createUIComponents(std::move(uiConfig));
     auto& healthBarFrame = images[HeadsUpDisplayUIConfigBuilder::getHealthBarFrameId()];
     healthBarFrame->setOutline(0.15, graphics::Color::Black);
@@ -44,6 +59,9 @@ void HeadsUpDisplay::update(const utils::DeltaTime&, const input::Input&)
     {
         healthBar->setSize(barSizeScaledByCurrentHealth);
     }
+
+    const auto collectorComponent = player->getComponent<components::core::ItemCollectorComponent>();
+//    const auto items = collectorComponent->getItems();
 }
 
 void HeadsUpDisplay::activate()

@@ -19,7 +19,7 @@ public:
     void collectNearestItem();
     void drop(const std::string& itemName);
     void use(const std::string& itemName);
-    std::vector<std::shared_ptr<CollectableItemComponent>> getItems() const;
+    std::vector<ItemInfo> getItemsInfo() const;
 
 private:
     std::shared_ptr<CollectableItemComponent> findNearestItem() const;
