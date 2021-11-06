@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Quadtree.h"
+#include "DefaultQuadtree.h"
 #include "core/ComponentOwner.h"
 
 namespace physics
@@ -13,7 +13,7 @@ struct RayCastResult
 class RayCast
 {
 public:
-    explicit RayCast(std::shared_ptr<Quadtree>);
+    explicit RayCast(std::shared_ptr<DefaultQuadtree>);
 
     RayCastResult cast(const utils::Vector2f& from, const utils::Vector2f& to, unsigned int exclusionID = -1,
                        float lineWidth = 0.2f) const;
@@ -23,6 +23,6 @@ private:
                             float lineWidth) const;
     std::vector<sf::Vector2f> buildLinePoints(const utils::Vector2f& from, const utils::Vector2f& to) const;
 
-    std::shared_ptr<Quadtree> collisions;
+    std::shared_ptr<DefaultQuadtree> collisions;
 };
 }

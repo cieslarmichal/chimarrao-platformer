@@ -8,9 +8,9 @@
 #include "core/ItemEffectMock.h"
 
 #include "CommonUIConfigElements.h"
+#include "DefaultQuadtree.h"
 #include "GraphicsIdGenerator.h"
 #include "HeadsUpDisplayUIConfigBuilder.h"
-#include "Quadtree.h"
 #include "RayCast.h"
 #include "core/HealthComponent.h"
 #include "core/ItemCollectorComponent.h"
@@ -111,7 +111,7 @@ public:
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
-    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
+    std::shared_ptr<physics::DefaultQuadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
     std::shared_ptr<ComponentOwner> player{std::make_shared<ComponentOwner>(position, "headsUpDisplayTest")};
     std::shared_ptr<components::core::ItemCollectorComponent> itemCollector;

@@ -82,7 +82,7 @@ public:
     std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
         std::make_shared<StrictMock<animations::AnimatorMock>>();
     std::shared_ptr<StrictMock<ItemEffectMock>> itemEffect = std::make_shared<StrictMock<ItemEffectMock>>();
-    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
+    std::shared_ptr<physics::DefaultQuadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
     ItemCollectorComponent itemCollectorWithOneCapacity{&itemCollectorOwner, quadtree, rayCast, capacity1};
     ItemCollectorComponent itemCollectorWithTwoCapacity{&itemCollectorOwner, quadtree, rayCast, capacity2};

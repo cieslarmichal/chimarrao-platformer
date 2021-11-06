@@ -2,7 +2,7 @@
 
 #include "gtest/gtest.h"
 
-#include "Quadtree.h"
+#include "DefaultQuadtree.h"
 
 using namespace physics;
 using namespace components::core;
@@ -32,7 +32,7 @@ public:
     std::shared_ptr<BoxColliderComponent> boxColliderComponent4 =
         std::make_shared<BoxColliderComponent>(&componentOwner4, size);
 
-    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
+    std::shared_ptr<physics::DefaultQuadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
     RayCast rayCast{quadtree};
 };
 

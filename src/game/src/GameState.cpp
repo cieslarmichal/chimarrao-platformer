@@ -18,7 +18,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      std::shared_ptr<components::ui::UIManager> uiManagerInit,
                      std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit,
                      std::shared_ptr<TileMap> tileMapInit, std::shared_ptr<physics::RayCast> rayCastInit,
-                     std::shared_ptr<physics::Quadtree> quadtreeInit)
+                     std::shared_ptr<physics::DefaultQuadtree> quadtreeInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},

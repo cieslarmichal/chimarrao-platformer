@@ -1,7 +1,7 @@
 #pragma once
 
+#include "DefaultQuadtree.h"
 #include "PhysicsFactory.h"
-#include "Quadtree.h"
 #include "RayCast.h"
 
 namespace physics
@@ -13,9 +13,9 @@ public:
 
     std::unique_ptr<CollisionSystem> createCollisionSystem() const override;
     std::shared_ptr<RayCast> createRayCast() const override;
-    std::shared_ptr<Quadtree> getQuadTree() const override;
+    std::shared_ptr<DefaultQuadtree> getQuadTree() const override;
 
 private:
-    std::shared_ptr<Quadtree> quadtree;
+    std::shared_ptr<DefaultQuadtree> quadtree;
 };
 }

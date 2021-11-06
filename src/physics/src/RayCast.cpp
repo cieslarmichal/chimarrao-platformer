@@ -7,7 +7,7 @@
 namespace physics
 {
 
-RayCast::RayCast(std::shared_ptr<Quadtree> quadtree) : collisions{std::move(quadtree)} {}
+RayCast::RayCast(std::shared_ptr<DefaultQuadtree> quadtree) : collisions{std::move(quadtree)} {}
 
 RayCastResult RayCast::cast(const utils::Vector2f& from, const utils::Vector2f& to, unsigned int exclusionID,
                             float lineWidth) const

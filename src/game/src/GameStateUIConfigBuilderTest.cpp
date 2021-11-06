@@ -42,7 +42,7 @@ public:
         std::make_unique<StrictMock<ComponentOwnersManagerMock>>()};
     StrictMock<ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
     std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
-    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
+    std::shared_ptr<physics::DefaultQuadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
 };
 

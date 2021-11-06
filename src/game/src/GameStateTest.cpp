@@ -52,7 +52,7 @@ public:
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
     std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
-    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
+    std::shared_ptr<physics::DefaultQuadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
 };
 

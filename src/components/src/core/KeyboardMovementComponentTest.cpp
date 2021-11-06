@@ -33,7 +33,7 @@ public:
     ComponentOwner componentOwner{position, "keyboardMovementComponentTest"};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
     StrictMock<input::InputMock> input;
-    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::Quadtree>();
+    std::shared_ptr<physics::DefaultQuadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
     KeyboardMovementComponent keyboardMovementComponent{&componentOwner};
 };

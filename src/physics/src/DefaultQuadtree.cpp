@@ -1,4 +1,4 @@
-#include "Quadtree.h"
+#include "DefaultQuadtree.h"
 
 #include <cmath>
 
@@ -14,9 +14,9 @@ double calculateDistanceBetweenRects(const utils::FloatRect& lhs, const utils::F
 }
 }
 
-Quadtree::Quadtree() : Quadtree{5, 5, 0, {0, 0, 160, 60}} {}
+DefaultQuadtree::DefaultQuadtree() : DefaultQuadtree{5, 5, 0, {0, 0, 160, 60}} {}
 
-Quadtree::Quadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsInit, int treeDepthLevelInit,
+DefaultQuadtree::DefaultQuadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsInit, int treeDepthLevelInit,
                    utils::FloatRect boundsInit)
     : maxObjectsInNodeBeforeSplit{maxObjectsInNodeBeforeSplitInit},
       maxNumberOfSplits{maxNumberOfSplitsInit},
@@ -26,7 +26,7 @@ Quadtree::Quadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsIni
 {
 }
 
-void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxColliderComponent>& colliderToInsert)
+void DefaultQuadtree::insertCollider(const std::shared_ptr<components::core::BoxColliderComponent>& colliderToInsert)
 {
     if (children[0])
     {
@@ -69,7 +69,7 @@ void Quadtree::insertCollider(const std::shared_ptr<components::core::BoxCollide
     }
 }
 
-void Quadtree::removeCollider(const std::shared_ptr<components::core::BoxColliderComponent>& colliderToRemove)
+void DefaultQuadtree::removeCollider(const std::shared_ptr<components::core::BoxColliderComponent>& colliderToRemove)
 {
     const int index = getIndexIndicatingToWhichNodeColliderBelongs(colliderToRemove->getCollisionBox());
 
@@ -85,7 +85,7 @@ void Quadtree::removeCollider(const std::shared_ptr<components::core::BoxCollide
                     colliders.end());
 }
 
-void Quadtree::clearAllColliders()
+void DefaultQuadtree::clearAllColliders()
 {
     colliders.clear();
 
@@ -100,7 +100,7 @@ void Quadtree::clearAllColliders()
 }
 
 std::vector<std::shared_ptr<components::core::BoxColliderComponent>>
-Quadtree::getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) const
+DefaultQuadtree::getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) const
 {
     const auto possibleColliders = getAllCollidersFromQuadtreeNodesIntersectingWithArea(area);
 
@@ -125,7 +125,7 @@ Quadtree::getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) co
 }
 
 std::vector<std::shared_ptr<components::core::BoxColliderComponent>>
-Quadtree::getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) const
+DefaultQuadtree::getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) const
 {
     const auto possibleColliders = getAllCollidersFromQuadtreeNodesIntersectingWithArea(area);
 
@@ -149,13 +149,13 @@ Quadtree::getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) co
     return collidersIntersectingWithArea;
 }
 
-const utils::FloatRect& Quadtree::getNodeBounds() const
+const utils::FloatRect& DefaultQuadtree::getNodeBounds() const
 {
     return nodeBounds;
 }
 
 std::vector<std::shared_ptr<components::core::BoxColliderComponent>>
-Quadtree::getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRect& area) const
+DefaultQuadtree::getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRect& area) const
 {
     auto possibleColliders = colliders;
 
@@ -193,7 +193,7 @@ Quadtree::getAllCollidersFromQuadtreeNodesIntersectingWithArea(const sf::FloatRe
     return possibleColliders;
 }
 
-int Quadtree::getIndexIndicatingToWhichNodeColliderBelongs(const sf::FloatRect& objectBounds) const
+int DefaultQuadtree::getIndexIndicatingToWhichNodeColliderBelongs(const sf::FloatRect& objectBounds) const
 {
     const double verticalDividingLine = nodeBounds.left + nodeBounds.width * 0.5f;
     const double horizontalDividingLine = nodeBounds.top + nodeBounds.height * 0.5f;
@@ -231,21 +231,21 @@ int Quadtree::getIndexIndicatingToWhichNodeColliderBelongs(const sf::FloatRect& 
     return thisTreeIndex;
 }
 
-void Quadtree::splitIntoChildNodes()
+void DefaultQuadtree::splitIntoChildNodes()
 {
     const float childWidth = nodeBounds.width / 2.f;
     const float childHeight = nodeBounds.height / 2.f;
 
-    children[childNorthEastIndex] = std::make_shared<Quadtree>(
+    children[childNorthEastIndex] = std::make_shared<DefaultQuadtree>(
         maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left + childWidth, nodeBounds.top, childWidth, childHeight));
     children[childNorthWestIndex] =
-        std::make_shared<Quadtree>(maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
+        std::make_shared<DefaultQuadtree>(maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
                                    sf::FloatRect(nodeBounds.left, nodeBounds.top, childWidth, childHeight));
-    children[childSouthWestIndex] = std::make_shared<Quadtree>(
+    children[childSouthWestIndex] = std::make_shared<DefaultQuadtree>(
         maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left, nodeBounds.top + childHeight, childWidth, childHeight));
-    children[childSouthEastIndex] = std::make_shared<Quadtree>(
+    children[childSouthEastIndex] = std::make_shared<DefaultQuadtree>(
         maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left + childWidth, nodeBounds.top + childHeight, childWidth, childHeight));
 }

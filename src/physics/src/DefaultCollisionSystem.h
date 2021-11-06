@@ -6,7 +6,7 @@
 
 #include "Bitmask.h"
 #include "CollisionSystem.h"
-#include "Quadtree.h"
+#include "DefaultQuadtree.h"
 #include "core/BoxColliderComponent.h"
 #include "core/CollisionLayer.h"
 
@@ -15,7 +15,7 @@ namespace physics
 class DefaultCollisionSystem : public CollisionSystem
 {
 public:
-    explicit DefaultCollisionSystem(std::shared_ptr<Quadtree>);
+    explicit DefaultCollisionSystem(std::shared_ptr<DefaultQuadtree>);
 
     void add(std::vector<std::shared_ptr<components::core::ComponentOwner>>&) override;
     void processRemovals() override;
@@ -28,6 +28,6 @@ private:
     std::map<components::core::CollisionLayer,
              std::vector<std::shared_ptr<components::core::BoxColliderComponent>>>
         collidersPerLayers;
-    std::shared_ptr<Quadtree> collisionTree;
+    std::shared_ptr<DefaultQuadtree> collisionTree;
 };
 }
