@@ -1,5 +1,6 @@
 #include "HeadsUpDisplay.h"
 
+#include <unordered_map>
 #include <utility>
 
 #include "HeadsUpDisplayUIConfigBuilder.h"
@@ -19,7 +20,8 @@ HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner>
     : player{std::move(player)},
       uiComponentFactory{std::make_unique<components::ui::UIComponentFactory>(rendererPool)},
       healthBarId{HeadsUpDisplayUIConfigBuilder::getHealthBarId()},
-      active{false}
+      active{false},
+      slotIds{HeadsUpDisplayUIConfigBuilder::getSlotIds()}
 {
     const auto healthComponent = player->getComponent<components::core::HealthComponent>();
     if (not healthComponent)
@@ -38,7 +40,7 @@ HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner>
     auto& healthBarFrame = images[HeadsUpDisplayUIConfigBuilder::getHealthBarFrameId()];
     healthBarFrame->setOutline(0.15, graphics::Color::Black);
 
-    for (const auto& slotId : HeadsUpDisplayUIConfigBuilder::getSlotIds())
+    for (const auto& slotId : slotIds)
     {
         auto& slot = images[slotId];
         slot->setOutline(0.1, graphics::Color::Black);
@@ -61,7 +63,28 @@ void HeadsUpDisplay::update(const utils::DeltaTime&, const input::Input&)
     }
 
     const auto collectorComponent = player->getComponent<components::core::ItemCollectorComponent>();
-//    const auto items = collectorComponent->getItems();
+    const auto itemsInfo = collectorComponent->getItemsInfo();
+    if (displayedItemsInfo == itemsInfo)
+    {
+        return;
+    }
+
+    for (std::size_t slotIndex = 0; slotIndex < slotIds.size(); slotIndex++)
+    {
+        const auto& slotId = slotIds[slotIndex];
+        auto& slot = images[slotId];
+
+        if (slotIndex < itemsInfo.size())
+        {
+            slot->activate();
+            slot->setTexture(itemsInfo[slotIndex].texturePath);
+        }
+        else
+        {
+            slot->deactivate();
+        }
+
+    }
 }
 
 void HeadsUpDisplay::activate()

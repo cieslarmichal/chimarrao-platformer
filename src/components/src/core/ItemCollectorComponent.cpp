@@ -100,7 +100,11 @@ std::vector<ItemInfo> ItemCollectorComponent::getItemsInfo() const
     std::vector<ItemInfo> itemsInfo;
     for (const auto& item : items)
     {
-        itemsInfo.push_back({item->getName(), item->getType()});
+        const auto texturePath = item->getOwner().getMainGraphicsComponent()->getTexturePath();
+        if (texturePath)
+        {
+            itemsInfo.push_back({item->getName(), item->getType(), *texturePath});
+        }
     }
     return itemsInfo;
 }

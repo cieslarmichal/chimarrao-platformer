@@ -38,6 +38,18 @@ std::vector<std::string> HeadsUpDisplayUIConfigBuilder::getSlotIds()
     return slotIds;
 }
 
+std::vector<std::string> HeadsUpDisplayUIConfigBuilder::getSlotItemIds()
+{
+    std::vector<std::string> slotIds;
+
+    for (std::size_t i = 1; i <= numberOfSlots; i++)
+    {
+        slotIds.push_back("slotItemConfig" + std::to_string(i));
+    }
+
+    return slotIds;
+}
+
 std::unique_ptr<components::ui::BackgroundConfig> HeadsUpDisplayUIConfigBuilder::createBackgroundConfig()
 {
     return {};
@@ -122,6 +134,16 @@ std::vector<std::unique_ptr<components::ui::ImageConfig>> HeadsUpDisplayUIConfig
         auto slotConfig = std::make_unique<components::ui::ImageConfig>(
             slotIds[i], slotsPositions[i], slotSize, graphics::VisibilityLayer::First,
             graphics::Color(152, 152, 152, 152));
+
+        imagesConfig.push_back(std::move(slotConfig));
+    }
+
+    const auto slotItemIds = getSlotItemIds();
+    for (std::size_t i = 0; i < slotsPositions.size(); i++)
+    {
+        auto slotConfig = std::make_unique<components::ui::ImageConfig>(
+            slotItemIds[i], slotsPositions[i], slotSize, graphics::VisibilityLayer::First,
+            graphics::Color(152, 152, 152, 255));
 
         imagesConfig.push_back(std::move(slotConfig));
     }

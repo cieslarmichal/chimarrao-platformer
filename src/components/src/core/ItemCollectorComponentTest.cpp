@@ -4,14 +4,25 @@
 
 #include "AnimatorMock.h"
 #include "ItemEffectMock.h"
+#include "RendererPoolMock.h"
 
 #include "ComponentOwner.h"
 #include "HealthComponent.h"
+#include "ProjectPathReader.h"
 #include "core/exceptions/DependentComponentNotFound.h"
 #include "core/exceptions/InvalidCapacity.h"
 
 using namespace components::core;
 using namespace ::testing;
+
+namespace
+{
+const auto projectPath = utils::ProjectPathReader::getProjectRootPath();
+const auto dummySize = utils::Vector2f{25.f, 5.f};
+const auto changedSize = utils::Vector2f{10.f, 5.f};
+const auto dummyPosition = utils::Vector2f{0.f, 5.f};
+const auto imagePath = projectPath + "resources/BG/menu_background.jpg";
+}
 
 class ItemCollectorComponentTest : public Test
 {
@@ -20,7 +31,7 @@ public:
     {
         itemCollectorOwner.addComponent<HealthComponent>(initialHealthPoints);
         const auto velocity = itemCollectorOwner.addComponent<VelocityComponent>();
-        velocity->setVelocity(5,0);
+        velocity->setVelocity(5, 0);
         itemCollectorOwner.addComponent<DirectionComponent>();
         itemCollectorOwner.addComponent<AnimationComponent>(animator);
         boxColliderComponent = itemCollectorOwner.addComponent<BoxColliderComponent>(size);
@@ -29,14 +40,20 @@ public:
 
         boxColliderComponent1 = itemOwner1.addComponent<BoxColliderComponent>(size);
         itemOwner1.addComponent<CollectableItemComponent>(itemName1, itemType, itemEffect);
+        itemOwner1.addGraphicsComponent(rendererPool, dummySize, dummyPosition, imagePath,
+                                        graphics::VisibilityLayer::First, utils::Vector2f{0, 0}, true);
         itemOwner1.loadDependentComponents();
 
         boxColliderComponent2 = itemOwner2.addComponent<BoxColliderComponent>(size);
         itemOwner2.addComponent<CollectableItemComponent>(itemName2, itemType, itemEffect);
+        itemOwner2.addGraphicsComponent(rendererPool, dummySize, dummyPosition, imagePath,
+                                        graphics::VisibilityLayer::First, utils::Vector2f{0, 0}, true);
         itemOwner2.loadDependentComponents();
 
         boxColliderComponent3 = itemOwner3.addComponent<BoxColliderComponent>(size);
         itemOwner3.addComponent<CollectableItemComponent>(itemName3, itemType, itemEffect);
+        itemOwner3.addGraphicsComponent(rendererPool, dummySize, dummyPosition, imagePath,
+                                        graphics::VisibilityLayer::First, utils::Vector2f{0, 0}, true);
         itemOwner3.loadDependentComponents();
     }
 
@@ -69,6 +86,8 @@ public:
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
     ItemCollectorComponent itemCollectorWithOneCapacity{&itemCollectorOwner, quadtree, rayCast, capacity1};
     ItemCollectorComponent itemCollectorWithTwoCapacity{&itemCollectorOwner, quadtree, rayCast, capacity2};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
 };
 
 TEST_F(ItemCollectorComponentTest, givenZeroCapacity_shouldThrowInvalidCapacityException)
@@ -209,7 +228,7 @@ TEST_F(ItemCollectorComponentTest, givenExistingItem_shouldInvokeItemEffectAndDe
     ASSERT_EQ(items.size(), 0);
 }
 
-TEST_F(ItemCollectorComponentTest, getItemsInfo_shouldReturnCorrectNameAndType)
+TEST_F(ItemCollectorComponentTest, getItemsInfo_shouldReturnCorrectNameTypeAndTexturePath)
 {
     quadtree->insertCollider(boxColliderComponent);
     quadtree->insertCollider(boxColliderComponent2);
@@ -220,5 +239,5 @@ TEST_F(ItemCollectorComponentTest, getItemsInfo_shouldReturnCorrectNameAndType)
     ASSERT_EQ(items.size(), 1);
     ASSERT_EQ(items[0].name, itemName2);
     ASSERT_EQ(items[0].type, itemType);
+    ASSERT_EQ(items[0].texturePath, imagePath);
 }
-

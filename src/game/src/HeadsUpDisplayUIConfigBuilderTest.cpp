@@ -11,14 +11,19 @@ using namespace ::testing;
 class HeadsUpDisplayUIConfigBuilderTest : public Test
 {
 public:
+    HeadsUpDisplayUIConfigBuilderTest()
+    {
+        expectedImagesNames.insert(expectedImagesNames.begin(), slotIds.begin(), slotIds.end());
+        expectedImagesNames.insert(expectedImagesNames.begin(), slotItemsIds.begin(), slotItemsIds.end());
+    }
+
     const std::vector<std::string> expectedLabelsNames{"hudHealthPointsLabel", "hudItemsLabel"};
-    const std::vector<std::string> expectedImagesNames{"hudHealthPointsBar", "hudHealthPointsBarFrame",
-                                                       "slotConfig1",        "slotConfig2",
-                                                       "slotConfig3",        "slotConfig4",
-                                                       "slotConfig5",        "slotConfig6",
-                                                       "slotConfig7",        "slotConfig8"};
-    const std::vector<std::string> slotsId{"slotConfig1", "slotConfig2", "slotConfig3", "slotConfig4",
+    std::vector<std::string> expectedImagesNames{"hudHealthPointsBar", "hudHealthPointsBarFrame"};
+    const std::vector<std::string> slotIds{"slotConfig1", "slotConfig2", "slotConfig3", "slotConfig4",
                                            "slotConfig5", "slotConfig6", "slotConfig7", "slotConfig8"};
+    const std::vector<std::string> slotItemsIds{"slotItemConfig1", "slotItemConfig2", "slotItemConfig3",
+                                                "slotItemConfig4", "slotItemConfig5", "slotItemConfig6",
+                                                "slotItemConfig7", "slotItemConfig8"};
 };
 
 TEST_F(HeadsUpDisplayUIConfigBuilderTest, createMenuUI)
@@ -55,5 +60,10 @@ TEST_F(HeadsUpDisplayUIConfigBuilderTest, getHealthBarFrameId)
 
 TEST_F(HeadsUpDisplayUIConfigBuilderTest, getSlotIds)
 {
-    ASSERT_EQ(HeadsUpDisplayUIConfigBuilder::getSlotIds(), slotsId);
+    ASSERT_EQ(HeadsUpDisplayUIConfigBuilder::getSlotIds(), slotIds);
+}
+
+TEST_F(HeadsUpDisplayUIConfigBuilderTest, getSlotItemIds)
+{
+    ASSERT_EQ(HeadsUpDisplayUIConfigBuilder::getSlotItemIds(), slotItemsIds);
 }

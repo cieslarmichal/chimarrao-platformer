@@ -78,4 +78,9 @@ void Image::setOutline(float thickness, const sf::Color& color)
 {
     coreComponentsOwner->getMainGraphicsComponent()->setOutline(thickness, color);
 }
+
+void Image::setTexture(const graphics::TexturePath& texturePath)
+{
+    coreComponentsOwner->getMainGraphicsComponent()->setTexture(texturePath);
+}
 }

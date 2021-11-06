@@ -23,6 +23,7 @@ public:
     utils::Vector2f getSize() const;
     void setSize(const utils::Vector2f&);
     void setOutline(float thickness, const sf::Color& color);
+    void setTexture(const graphics::TexturePath&);
 
 private:
     std::string name;

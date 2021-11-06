@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/ComponentOwner.h"
+#include "core/ItemInfo.h"
 #include "ui/UIComponentFactory.h"
 
 namespace components::ui
@@ -32,5 +33,7 @@ private:
     std::unordered_map<std::string, std::unique_ptr<components::ui::Image>> images;
     const std::string healthBarId;
     bool active;
+    const std::vector<std::string> slotIds;
+    std::vector<components::core::ItemInfo> displayedItemsInfo;
 };
 }

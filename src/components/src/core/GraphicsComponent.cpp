@@ -93,6 +93,7 @@ void GraphicsComponent::setOutline(float thickness, const sf::Color& color)
 
 void GraphicsComponent::setTexture(const std::string& texture)
 {
+    texturePath = texture;
     rendererPool->setTexture(id, graphics::TextureRect{texture});
 }
 

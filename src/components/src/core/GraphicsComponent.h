@@ -41,6 +41,6 @@ private:
     graphics::GraphicsId id;
     graphics::VisibilityLayer visibilityLayer;
     const utils::Vector2f offset;
-    const boost::optional<graphics::TexturePath> texturePath;
+    boost::optional<graphics::TexturePath> texturePath;
 };
 }

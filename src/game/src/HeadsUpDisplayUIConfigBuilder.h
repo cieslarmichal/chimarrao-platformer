@@ -25,6 +25,7 @@ public:
     static std::string getHealthBarId();
     static std::string getHealthBarFrameId();
     static std::vector<std::string> getSlotIds();
+    static std::vector<std::string> getSlotItemIds();
 
 private:
     static std::unique_ptr<components::ui::BackgroundConfig> createBackgroundConfig();
