@@ -10,6 +10,8 @@ namespace physics
 class Quadtree
 {
 public:
+    virtual ~Quadtree() = default;
+
     virtual void insertCollider(const std::shared_ptr<components::core::BoxColliderComponent>&) = 0;
     virtual void removeCollider(const std::shared_ptr<components::core::BoxColliderComponent>&) = 0;
     virtual void clearAllColliders() = 0;

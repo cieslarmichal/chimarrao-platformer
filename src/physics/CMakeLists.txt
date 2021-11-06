@@ -1,6 +1,6 @@
 set(SOURCES
         src/DefaultQuadtree.cpp
-        src/RayCast.cpp
+        src/DefaultRayCast.cpp
         src/DefaultCollisionSystem.cpp
         src/PhysicsFactory.cpp
         src/DefaultPhysicsFactory.cpp
@@ -8,7 +8,7 @@ set(SOURCES
 
 set(UT_SOURCES
         src/DefaultQuadtreeTest.cpp
-        src/RayCastTest.cpp
+        src/DefaultRayCastTest.cpp
         src/DefaultCollisionSystemTest.cpp
         )
 

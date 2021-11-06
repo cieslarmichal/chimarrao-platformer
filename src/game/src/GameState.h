@@ -3,8 +3,8 @@
 #include "CharacterFactory.h"
 #include "CollisionSystem.h"
 #include "ComponentOwnersManager.h"
+#include "DefaultRayCast.h"
 #include "HeadsUpDisplay.h"
-#include "RayCast.h"
 #include "State.h"
 #include "Timer.h"
 #include "core/ComponentOwner.h"
@@ -19,7 +19,7 @@ public:
     explicit GameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
                        std::shared_ptr<utils::FileAccess>, States&,
                        std::shared_ptr<components::ui::UIManager>, std::unique_ptr<ComponentOwnersManager>,
-                       std::shared_ptr<TileMap>, std::shared_ptr<physics::RayCast>, std::shared_ptr<physics::DefaultQuadtree>);
+                       std::shared_ptr<TileMap>, std::shared_ptr<physics::DefaultRayCast>, std::shared_ptr<physics::DefaultQuadtree>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -38,7 +38,7 @@ private:
     std::unique_ptr<ComponentOwnersManager> componentOwnersManager;
     std::shared_ptr<TileMap> tileMap;
     std::unique_ptr<HeadsUpDisplay> hud;
-    std::shared_ptr<physics::RayCast> rayCast;
+    std::shared_ptr<physics::DefaultRayCast> rayCast;
     std::shared_ptr<physics::DefaultQuadtree> quadtree;
     std::unique_ptr<CharacterFactory> characterFactory;
 };

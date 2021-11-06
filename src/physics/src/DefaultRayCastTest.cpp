@@ -1,14 +1,13 @@
-#include "RayCast.h"
-
 #include "gtest/gtest.h"
 
 #include "DefaultQuadtree.h"
+#include "DefaultRayCast.h"
 
 using namespace physics;
 using namespace components::core;
 using namespace ::testing;
 
-class RayCastTest : public Test
+class DefaultRayCastTest : public Test
 {
 public:
     const utils::Vector2f size{5, 5};
@@ -33,10 +32,10 @@ public:
         std::make_shared<BoxColliderComponent>(&componentOwner4, size);
 
     std::shared_ptr<physics::DefaultQuadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
-    RayCast rayCast{quadtree};
+    DefaultRayCast rayCast{quadtree};
 };
 
-TEST_F(RayCastTest, givenOneNotInRange_shouldReturnNoObject)
+TEST_F(DefaultRayCastTest, givenOneNotInRange_shouldReturnNoObject)
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponent4);
@@ -47,7 +46,7 @@ TEST_F(RayCastTest, givenOneNotInRange_shouldReturnNoObject)
     ASSERT_FALSE(rayCastResult.collision);
 }
 
-TEST_F(RayCastTest, givenOneObjectInRangeOnRight_shouldReturnIntersectedObject)
+TEST_F(DefaultRayCastTest, givenOneObjectInRangeOnRight_shouldReturnIntersectedObject)
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponent2);
@@ -58,7 +57,7 @@ TEST_F(RayCastTest, givenOneObjectInRangeOnRight_shouldReturnIntersectedObject)
     ASSERT_EQ(rayCastResult.collision, &(boxColliderComponent2->getOwner()));
 }
 
-TEST_F(RayCastTest, givenTwoObjectsInRangeOnRight_shouldReturnFirstIntersectingOne)
+TEST_F(DefaultRayCastTest, givenTwoObjectsInRangeOnRight_shouldReturnFirstIntersectingOne)
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponent2);

@@ -1,4 +1,4 @@
-#include "RayCast.h"
+#include "DefaultRayCast.h"
 
 #include <cmath>
 
@@ -7,9 +7,9 @@
 namespace physics
 {
 
-RayCast::RayCast(std::shared_ptr<DefaultQuadtree> quadtree) : collisions{std::move(quadtree)} {}
+DefaultRayCast::DefaultRayCast(std::shared_ptr<DefaultQuadtree> quadtree) : collisions{std::move(quadtree)} {}
 
-RayCastResult RayCast::cast(const utils::Vector2f& from, const utils::Vector2f& to, unsigned int exclusionID,
+RayCastResult DefaultRayCast::cast(const utils::Vector2f& from, const utils::Vector2f& to, unsigned int exclusionID,
                             float lineWidth) const
 {
     if (from == to)
@@ -49,7 +49,7 @@ RayCastResult RayCast::cast(const utils::Vector2f& from, const utils::Vector2f& 
     return {};
 }
 
-sf::FloatRect RayCast::buildRect(const utils::Vector2f& lineOne, const utils::Vector2f& lineTwo,
+sf::FloatRect DefaultRayCast::buildRect(const utils::Vector2f& lineOne, const utils::Vector2f& lineTwo,
                                  float lineWidth) const
 {
     const float rectWidth = lineWidth;
@@ -75,7 +75,7 @@ sf::FloatRect RayCast::buildRect(const utils::Vector2f& lineOne, const utils::Ve
     return sf::FloatRect(left, top, width, height);
 }
 
-std::vector<sf::Vector2f> RayCast::buildLinePoints(const utils::Vector2f& from,
+std::vector<sf::Vector2f> DefaultRayCast::buildLinePoints(const utils::Vector2f& from,
                                                    const utils::Vector2f& to) const
 {
     std::vector<sf::Vector2f> result;

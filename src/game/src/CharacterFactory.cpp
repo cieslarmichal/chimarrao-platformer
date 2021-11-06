@@ -18,7 +18,7 @@ namespace game
 {
 CharacterFactory::CharacterFactory(std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                                    std::shared_ptr<TileMap> tileMapInit,
-                                   std::shared_ptr<physics::RayCast> rayCastInit,
+                                   std::shared_ptr<physics::DefaultRayCast> rayCastInit,
                                    std::shared_ptr<physics::DefaultQuadtree> quadtreeInit)
     : rendererPool{std::move(rendererPoolInit)},
       tileMap{std::move(tileMapInit)},

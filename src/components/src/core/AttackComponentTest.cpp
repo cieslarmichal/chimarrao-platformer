@@ -56,7 +56,7 @@ public:
     std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
         std::make_shared<StrictMock<animations::AnimatorMock>>();
     std::shared_ptr<physics::DefaultQuadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
-    std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::RayCast>(quadtree);
+    std::shared_ptr<physics::DefaultRayCast> rayCast = std::make_shared<physics::DefaultRayCast>(quadtree);
     AttackComponent attackComponent{&componentOwner1, rayCast};
 };
 

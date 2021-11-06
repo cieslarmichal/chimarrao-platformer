@@ -4,9 +4,9 @@
 #include "CollectableItemComponent.h"
 #include "ComponentOwner.h"
 #include "DefaultQuadtree.h"
+#include "DefaultRayCast.h"
 #include "DirectionComponent.h"
 #include "ItemInfo.h"
-#include "RayCast.h"
 
 namespace components::core
 {
@@ -14,7 +14,7 @@ class ItemCollectorComponent : public Component
 {
 public:
     ItemCollectorComponent(ComponentOwner* owner, std::shared_ptr<physics::DefaultQuadtree>,
-                           std::shared_ptr<physics::RayCast>, unsigned capacity);
+                           std::shared_ptr<physics::DefaultRayCast>, unsigned capacity);
 
     void loadDependentComponents() override;
     void collectNearestItem();
@@ -29,7 +29,7 @@ private:
     findItemByName(const std::string& itemName) const;
 
     std::shared_ptr<physics::DefaultQuadtree> collisions;
-    std::shared_ptr<physics::RayCast> rayCast;
+    std::shared_ptr<physics::DefaultRayCast> rayCast;
     std::shared_ptr<DirectionComponent> directionComponent;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     std::vector<std::shared_ptr<CollectableItemComponent>> items;
