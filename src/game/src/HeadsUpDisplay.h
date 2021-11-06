@@ -34,6 +34,7 @@ private:
     const std::string healthBarId;
     bool active;
     const std::vector<std::string> slotIds;
+    const std::vector<std::string> slotItemIds;
     std::vector<components::core::ItemInfo> displayedItemsInfo;
 };
 }

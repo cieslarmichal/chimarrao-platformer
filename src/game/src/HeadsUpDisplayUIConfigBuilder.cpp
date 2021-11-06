@@ -143,7 +143,7 @@ std::vector<std::unique_ptr<components::ui::ImageConfig>> HeadsUpDisplayUIConfig
     {
         auto slotConfig = std::make_unique<components::ui::ImageConfig>(
             slotItemIds[i], slotsPositions[i], slotSize, graphics::VisibilityLayer::First,
-            graphics::Color(152, 152, 152, 255));
+            graphics::Color::Transparent);
 
         imagesConfig.push_back(std::move(slotConfig));
     }

@@ -1,6 +1,6 @@
 #include "HeadsUpDisplay.h"
 
-#include <unordered_map>
+#include "ProjectPathReader.h"
 #include <utility>
 
 #include "HeadsUpDisplayUIConfigBuilder.h"
@@ -21,7 +21,8 @@ HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner>
       uiComponentFactory{std::make_unique<components::ui::UIComponentFactory>(rendererPool)},
       healthBarId{HeadsUpDisplayUIConfigBuilder::getHealthBarId()},
       active{false},
-      slotIds{HeadsUpDisplayUIConfigBuilder::getSlotIds()}
+      slotIds{HeadsUpDisplayUIConfigBuilder::getSlotIds()},
+      slotItemIds{HeadsUpDisplayUIConfigBuilder::getSlotItemIds()}
 {
     const auto healthComponent = player->getComponent<components::core::HealthComponent>();
     if (not healthComponent)
@@ -44,6 +45,12 @@ HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner>
     {
         auto& slot = images[slotId];
         slot->setOutline(0.1, graphics::Color::Black);
+    }
+
+    for (const auto& slotItemId : slotItemIds)
+    {
+        auto& slotItem = images[slotItemId];
+        slotItem->deactivate();
     }
 }
 
@@ -83,8 +90,9 @@ void HeadsUpDisplay::update(const utils::DeltaTime&, const input::Input&)
         {
             slot->deactivate();
         }
-
     }
+
+    displayedItemsInfo = itemsInfo;
 }
 
 void HeadsUpDisplay::activate()

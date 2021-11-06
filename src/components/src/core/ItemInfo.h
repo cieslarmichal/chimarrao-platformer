@@ -9,9 +9,9 @@ namespace components::core
 {
 struct ItemInfo
 {
-    const std::string name;
-    const ItemType type;
-    const graphics::TexturePath texturePath;
+    std::string name;
+    ItemType type;
+    graphics::TexturePath texturePath;
 };
 
 inline bool operator==(const ItemInfo& lhs, const ItemInfo& rhs)
