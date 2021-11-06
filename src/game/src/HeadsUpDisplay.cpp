@@ -14,10 +14,10 @@
 namespace game
 {
 
-HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner> player,
+HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner> playerInit,
                                const std::shared_ptr<graphics::RendererPool>& rendererPool,
                                std::unique_ptr<components::ui::UIConfig> uiConfig)
-    : player{std::move(player)},
+    : player{std::move(playerInit)},
       uiComponentFactory{std::make_unique<components::ui::UIComponentFactory>(rendererPool)},
       healthBarId{HeadsUpDisplayUIConfigBuilder::getHealthBarId()},
       active{false},

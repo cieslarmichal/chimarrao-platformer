@@ -3,8 +3,16 @@
 
 int main()
 {
-    auto game = game::GameFactory::createGame();
-    game->run();
+    try
+    {
+        auto game = game::GameFactory::createGame();
+        game->run();
+    }
+    catch (const std::exception& err)
+    {
+        std::cerr << err.what();
+    }
+
     return 0;
 }
 
