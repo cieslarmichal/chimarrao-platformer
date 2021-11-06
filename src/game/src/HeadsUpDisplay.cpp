@@ -1,6 +1,5 @@
 #include "HeadsUpDisplay.h"
 
-#include "ProjectPathReader.h"
 #include <utility>
 
 #include "HeadsUpDisplayUIConfigBuilder.h"

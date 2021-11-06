@@ -61,7 +61,7 @@ class GameStateTest : public GameStateTest_Base
 public:
     GameState gameState{window,  rendererPool, fileAccess,
                         states,  uiManager,    std::move(componentOwnersManagerInit),
-                        tileMap, rayCast};
+                        tileMap, rayCast, quadtree};
 };
 
 TEST_F(GameStateTest, activate_shouldActivateUIAndOwners)
