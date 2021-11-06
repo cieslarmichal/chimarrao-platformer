@@ -13,6 +13,7 @@ public:
 
     std::unique_ptr<CollisionSystem> createCollisionSystem() const override;
     std::shared_ptr<RayCast> createRayCast() const override;
+    std::shared_ptr<Quadtree> getQuadTree() const override;
 
 private:
     std::shared_ptr<Quadtree> quadtree;

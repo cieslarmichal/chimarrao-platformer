@@ -10,6 +10,7 @@
 #include "core/HealthBarComponent.h"
 #include "core/HealthComponent.h"
 #include "core/IdleNpcMovementComponent.h"
+#include "core/ItemCollectorComponent.h"
 #include "core/KeyboardMovementComponent.h"
 #include "core/VelocityComponent.h"
 
@@ -17,10 +18,12 @@ namespace game
 {
 CharacterFactory::CharacterFactory(std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                                    std::shared_ptr<TileMap> tileMapInit,
-                                   std::shared_ptr<physics::RayCast> rayCastInit)
+                                   std::shared_ptr<physics::RayCast> rayCastInit,
+                                   std::shared_ptr<physics::Quadtree> quadtreeInit)
     : rendererPool{std::move(rendererPoolInit)},
       tileMap{std::move(tileMapInit)},
       rayCast{std::move(rayCastInit)},
+      quadtree{std::move(quadtreeInit)},
       animatorFactory{animations::AnimatorFactory::createAnimatorFactory(rendererPool)}
 {
 }
@@ -46,6 +49,7 @@ CharacterFactory::createPlayer(const utils::Vector2f& position)
     player->addComponent<components::core::DirectionComponent>();
     player->addComponent<components::core::AttackComponent>(rayCast);
     player->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{1.5, -1});
+    player->addComponent<components::core::ItemCollectorComponent>(quadtree, rayCast, 8);
     return player;
 }
 

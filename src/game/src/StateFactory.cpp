@@ -64,7 +64,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
             window, rendererPool, fileAccess, states,
             std::make_unique<components::ui::DefaultUIManager>(rendererPool),
             std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()),
-            tileMap, collisionSystemFactory->createRayCast());
+            tileMap, collisionSystemFactory->createRayCast(), collisionSystemFactory->getQuadTree());
     }
     case StateType::Menu:
     {

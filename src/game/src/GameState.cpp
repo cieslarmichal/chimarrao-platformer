@@ -17,7 +17,8 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                      std::shared_ptr<components::ui::UIManager> uiManagerInit,
                      std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit,
-                     std::shared_ptr<TileMap> tileMapInit, std::shared_ptr<physics::RayCast> rayCastInit)
+                     std::shared_ptr<TileMap> tileMapInit, std::shared_ptr<physics::RayCast> rayCastInit,
+                     std::shared_ptr<physics::Quadtree> quadtreeInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
@@ -25,7 +26,8 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
       componentOwnersManager{std::move(componentOwnersManagerInit)},
       tileMap{std::move(tileMapInit)},
       rayCast{std::move(rayCastInit)},
-      characterFactory{std::make_unique<CharacterFactory>(rendererPool, tileMap, rayCast)}
+      quadtree{std::move(quadtreeInit)},
+      characterFactory{std::make_unique<CharacterFactory>(rendererPool, tileMap, rayCast, quadtree)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 

@@ -16,4 +16,9 @@ std::shared_ptr<RayCast> DefaultPhysicsFactory::createRayCast() const
 {
     return std::make_shared<RayCast>(quadtree);
 }
+
+std::shared_ptr<Quadtree> DefaultPhysicsFactory::getQuadTree() const
+{
+    return quadtree;
+}
 }

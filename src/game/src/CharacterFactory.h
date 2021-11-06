@@ -14,7 +14,8 @@ class CharacterFactory
 {
 public:
     CharacterFactory(std::shared_ptr<graphics::RendererPool>, std::shared_ptr<TileMap>,
-                     std::shared_ptr<physics::RayCast>);
+                     std::shared_ptr<physics::RayCast>,
+                     std::shared_ptr<physics::Quadtree>);
 
     std::shared_ptr<components::core::ComponentOwner> createPlayer(const utils::Vector2f& position);
     std::shared_ptr<components::core::ComponentOwner>
@@ -32,6 +33,7 @@ private:
     std::shared_ptr<graphics::RendererPool> rendererPool;
     std::shared_ptr<TileMap> tileMap;
     std::shared_ptr<physics::RayCast> rayCast;
+    std::shared_ptr<physics::Quadtree> quadtree;
     std::unique_ptr<animations::AnimatorFactory> animatorFactory;
 };
 }
