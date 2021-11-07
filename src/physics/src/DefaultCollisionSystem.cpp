@@ -9,7 +9,7 @@ namespace physics
 {
 using namespace components::core;
 
-DefaultCollisionSystem::DefaultCollisionSystem(std::shared_ptr<DefaultQuadtree> quadtree)
+DefaultCollisionSystem::DefaultCollisionSystem(std::shared_ptr<Quadtree> quadtree)
     : collisionTree{std::move(quadtree)}
 {
     utils::Bitmask defaultCollisions{};

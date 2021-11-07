@@ -12,8 +12,8 @@ public:
     DefaultPhysicsFactory();
 
     std::unique_ptr<CollisionSystem> createCollisionSystem() const override;
-    std::shared_ptr<DefaultRayCast> createRayCast() const override;
-    std::shared_ptr<DefaultQuadtree> getQuadTree() const override;
+    std::shared_ptr<RayCast> createRayCast() const override;
+    std::shared_ptr<Quadtree> getQuadTree() const override;
 
 private:
     std::shared_ptr<DefaultQuadtree> quadtree;

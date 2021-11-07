@@ -11,6 +11,8 @@
 #include "editor/TileMapMock.h"
 #include "editor/TileMapSerializerMock.h"
 #include "ui/UIManagerMock.h"
+#include "QuadtreeMock.h"
+#include "RayCastMock.h"
 
 #include "ProjectPathReader.h"
 
@@ -52,8 +54,8 @@ public:
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
     std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
-    std::shared_ptr<physics::DefaultQuadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
-    std::shared_ptr<physics::DefaultRayCast> rayCast = std::make_shared<physics::DefaultRayCast>(quadtree);
+    std::shared_ptr<StrictMock<physics::QuadtreeMock>> quadtree = std::make_shared<StrictMock<physics::QuadtreeMock>>();
+    std::shared_ptr<StrictMock<physics::RayCastMock>> rayCast = std::make_shared<StrictMock<physics::RayCastMock>>();
 };
 
 class GameStateTest : public GameStateTest_Base

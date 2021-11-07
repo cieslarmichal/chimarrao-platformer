@@ -4,6 +4,8 @@
 
 #include "AnimatorMock.h"
 
+#include "DefaultQuadtree.h"
+#include "DefaultRayCast.h"
 #include "StlOperators.h"
 #include "core/AnimationComponent.h"
 #include "core/KeyboardMovementComponent.h"
@@ -120,8 +122,8 @@ public:
     std::shared_ptr<NiceMock<animations::AnimatorMock>> animator =
         std::make_shared<NiceMock<animations::AnimatorMock>>();
 
-    std::shared_ptr<physics::DefaultQuadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
-    std::shared_ptr<physics::DefaultRayCast> rayCast = std::make_shared<physics::DefaultRayCast>(quadtree);
+    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
+    std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::DefaultRayCast>(quadtree);
     DefaultCollisionSystem collisionSystem{quadtree};
 };
 

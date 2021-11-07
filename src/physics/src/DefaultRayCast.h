@@ -1,19 +1,15 @@
 #pragma once
 
-#include "DefaultQuadtree.h"
+#include "Quadtree.h"
+#include "RayCast.h"
 #include "core/ComponentOwner.h"
 
 namespace physics
 {
-struct RayCastResult
-{
-    components::core::ComponentOwner* collision;
-};
-
-class DefaultRayCast
+class DefaultRayCast : public RayCast
 {
 public:
-    explicit DefaultRayCast(std::shared_ptr<DefaultQuadtree>);
+    explicit DefaultRayCast(std::shared_ptr<Quadtree>);
 
     RayCastResult cast(const utils::Vector2f& from, const utils::Vector2f& to, unsigned int exclusionID = -1,
                        float lineWidth = 0.2f) const;
@@ -23,6 +19,6 @@ private:
                             float lineWidth) const;
     std::vector<sf::Vector2f> buildLinePoints(const utils::Vector2f& from, const utils::Vector2f& to) const;
 
-    std::shared_ptr<DefaultQuadtree> collisions;
+    std::shared_ptr<Quadtree> collisions;
 };
 }

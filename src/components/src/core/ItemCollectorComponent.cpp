@@ -15,8 +15,8 @@ const auto distance = [](const utils::Vector2f& v1, const utils::Vector2f& v2)
 }
 
 ItemCollectorComponent::ItemCollectorComponent(ComponentOwner* owner,
-                                               std::shared_ptr<physics::DefaultQuadtree> quadtree,
-                                               std::shared_ptr<physics::DefaultRayCast> rayCast, unsigned capacity)
+                                               std::shared_ptr<physics::Quadtree> quadtree,
+                                               std::shared_ptr<physics::RayCast> rayCast, unsigned capacity)
     : Component(owner), collisions{std::move(quadtree)}, rayCast{std::move(rayCast)}, capacity{capacity}
 {
     if (capacity == 0)

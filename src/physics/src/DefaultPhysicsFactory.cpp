@@ -12,12 +12,12 @@ std::unique_ptr<CollisionSystem> DefaultPhysicsFactory::createCollisionSystem() 
     return std::make_unique<DefaultCollisionSystem>(quadtree);
 }
 
-std::shared_ptr<DefaultRayCast> DefaultPhysicsFactory::createRayCast() const
+std::shared_ptr<RayCast> DefaultPhysicsFactory::createRayCast() const
 {
     return std::make_shared<DefaultRayCast>(quadtree);
 }
 
-std::shared_ptr<DefaultQuadtree> DefaultPhysicsFactory::getQuadTree() const
+std::shared_ptr<Quadtree> DefaultPhysicsFactory::getQuadTree() const
 {
     return quadtree;
 }

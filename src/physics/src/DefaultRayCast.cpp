@@ -7,7 +7,7 @@
 namespace physics
 {
 
-DefaultRayCast::DefaultRayCast(std::shared_ptr<DefaultQuadtree> quadtree) : collisions{std::move(quadtree)} {}
+DefaultRayCast::DefaultRayCast(std::shared_ptr<Quadtree> quadtree) : collisions{std::move(quadtree)} {}
 
 RayCastResult DefaultRayCast::cast(const utils::Vector2f& from, const utils::Vector2f& to, unsigned int exclusionID,
                             float lineWidth) const
@@ -72,7 +72,7 @@ sf::FloatRect DefaultRayCast::buildRect(const utils::Vector2f& lineOne, const ut
         height = rectWidth;
     }
 
-    return sf::FloatRect(left, top, width, height);
+    return {left, top, width, height};
 }
 
 std::vector<sf::Vector2f> DefaultRayCast::buildLinePoints(const utils::Vector2f& from,

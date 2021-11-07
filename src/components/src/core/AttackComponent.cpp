@@ -6,7 +6,7 @@
 namespace components::core
 {
 
-AttackComponent::AttackComponent(ComponentOwner* owner, std::shared_ptr<physics::DefaultRayCast> rayCast)
+AttackComponent::AttackComponent(ComponentOwner* owner, std::shared_ptr<physics::RayCast> rayCast)
     : Component{owner}, rayCast{std::move(rayCast)}
 
 {

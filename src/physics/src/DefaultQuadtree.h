@@ -2,26 +2,25 @@
 
 #include <array>
 
-#include "core/BoxColliderComponent.h"
-#include "core/ComponentOwner.h"
+#include "Quadtree.h"
 
 namespace physics
 {
-class DefaultQuadtree
+class DefaultQuadtree : public Quadtree
 {
 public:
     DefaultQuadtree();
     DefaultQuadtree(int maxObjectsInNodeBeforeSplit, int maxNumberOfSplits, int currentTreeDepthLevel,
              utils::FloatRect bounds);
 
-    void insertCollider(const std::shared_ptr<components::core::BoxColliderComponent>&);
-    void removeCollider(const std::shared_ptr<components::core::BoxColliderComponent>&);
-    void clearAllColliders();
-    const utils::FloatRect& getNodeBounds() const;
+    void insertCollider(const std::shared_ptr<components::core::BoxColliderComponent>&) override;
+    void removeCollider(const std::shared_ptr<components::core::BoxColliderComponent>&) override;
+    void clearAllColliders() override;
+    const utils::FloatRect& getNodeBounds() const override;
     std::vector<std::shared_ptr<components::core::BoxColliderComponent>>
-    getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) const;
+    getCollidersIntersectingWithAreaFromX(const utils::FloatRect& area) const override;
     std::vector<std::shared_ptr<components::core::BoxColliderComponent>>
-    getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) const;
+    getCollidersIntersectingWithAreaFromY(const utils::FloatRect& area) const override;
 
 private:
     std::vector<std::shared_ptr<components::core::BoxColliderComponent>>

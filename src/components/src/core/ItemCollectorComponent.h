@@ -3,8 +3,8 @@
 #include "BoxColliderComponent.h"
 #include "CollectableItemComponent.h"
 #include "ComponentOwner.h"
-#include "DefaultQuadtree.h"
-#include "DefaultRayCast.h"
+#include "Quadtree.h"
+#include "RayCast.h"
 #include "DirectionComponent.h"
 #include "ItemInfo.h"
 
@@ -13,8 +13,8 @@ namespace components::core
 class ItemCollectorComponent : public Component
 {
 public:
-    ItemCollectorComponent(ComponentOwner* owner, std::shared_ptr<physics::DefaultQuadtree>,
-                           std::shared_ptr<physics::DefaultRayCast>, unsigned capacity);
+    ItemCollectorComponent(ComponentOwner* owner, std::shared_ptr<physics::Quadtree>,
+                           std::shared_ptr<physics::RayCast>, unsigned capacity);
 
     void loadDependentComponents() override;
     void collectNearestItem();
@@ -28,8 +28,8 @@ private:
     std::vector<std::shared_ptr<CollectableItemComponent>>::const_iterator
     findItemByName(const std::string& itemName) const;
 
-    std::shared_ptr<physics::DefaultQuadtree> collisions;
-    std::shared_ptr<physics::DefaultRayCast> rayCast;
+    std::shared_ptr<physics::Quadtree> collisions;
+    std::shared_ptr<physics::RayCast> rayCast;
     std::shared_ptr<DirectionComponent> directionComponent;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     std::vector<std::shared_ptr<CollectableItemComponent>> items;

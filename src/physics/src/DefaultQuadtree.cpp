@@ -18,11 +18,11 @@ DefaultQuadtree::DefaultQuadtree() : DefaultQuadtree{5, 5, 0, {0, 0, 160, 60}} {
 
 DefaultQuadtree::DefaultQuadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsInit, int treeDepthLevelInit,
                    utils::FloatRect boundsInit)
-    : maxObjectsInNodeBeforeSplit{maxObjectsInNodeBeforeSplitInit},
-      maxNumberOfSplits{maxNumberOfSplitsInit},
-      currentTreeDepthLevel{treeDepthLevelInit},
+    : children{nullptr, nullptr, nullptr, nullptr},
       nodeBounds{boundsInit},
-      children{nullptr, nullptr, nullptr, nullptr}
+      maxObjectsInNodeBeforeSplit{maxObjectsInNodeBeforeSplitInit},
+      maxNumberOfSplits{maxNumberOfSplitsInit},
+      currentTreeDepthLevel{treeDepthLevelInit}
 {
 }
 
