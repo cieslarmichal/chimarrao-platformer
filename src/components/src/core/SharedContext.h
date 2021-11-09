@@ -8,6 +8,7 @@ namespace components::core
 {
 struct SharedContext
 {
-    std::shared_ptr<graphics::RendererPool> rendererPool;
+    const std::shared_ptr<window::Window>& window;
+    const std::shared_ptr<graphics::RendererPool>& rendererPool;
 };
 }
