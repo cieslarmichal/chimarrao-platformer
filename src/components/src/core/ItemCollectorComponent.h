@@ -16,7 +16,7 @@ class ItemCollectorComponent : public Component
 public:
     ItemCollectorComponent(ComponentOwner* owner, std::shared_ptr<physics::Quadtree>,
                            std::shared_ptr<physics::RayCast>, unsigned capacity,
-                           std::unique_ptr<utils::Timer>);
+                           std::shared_ptr<utils::Timer>);
 
     void loadDependentComponents() override;
     void update(utils::DeltaTime, const input::Input&) override;
@@ -39,6 +39,6 @@ private:
     const unsigned capacity;
     const float dropRange{4};
     const float timeAfterNextItemCanBeCollected;
-    std::unique_ptr<utils::Timer> possibilityToCollectNextItemTimer;
+    std::shared_ptr<utils::Timer> possibilityToCollectNextItemTimer;
 };
 }

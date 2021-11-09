@@ -1,5 +1,6 @@
 #include "CharacterFactory.h"
 
+#include "TimerFactory.h"
 #include "core/AnimationComponent.h"
 #include "core/AttackComponent.h"
 #include "core/BoxColliderComponent.h"
@@ -49,7 +50,8 @@ CharacterFactory::createPlayer(const utils::Vector2f& position)
     player->addComponent<components::core::DirectionComponent>();
     player->addComponent<components::core::AttackComponent>(rayCast);
     player->addComponent<components::core::HealthBarComponent>(rendererPool, utils::Vector2f{1.5, -1});
-    player->addComponent<components::core::ItemCollectorComponent>(quadtree, rayCast, 8);
+    const std::shared_ptr<utils::Timer> itemCollectorTimer = utils::TimerFactory::createTimer();
+    player->addComponent<components::core::ItemCollectorComponent>(quadtree, rayCast, 8, itemCollectorTimer);
     return player;
 }
 

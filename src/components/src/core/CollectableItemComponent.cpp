@@ -37,6 +37,7 @@ void CollectableItemComponent::use()
     }
 
     effect->affect(collector);
+    collector = nullptr;
     owner->remove();
 }
 

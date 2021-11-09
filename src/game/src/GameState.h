@@ -41,5 +41,6 @@ private:
     std::shared_ptr<physics::RayCast> rayCast;
     std::shared_ptr<physics::Quadtree> quadtree;
     std::unique_ptr<CharacterFactory> characterFactory;
+    std::shared_ptr<components::core::ComponentOwner> yerbaItem;
 };
 }

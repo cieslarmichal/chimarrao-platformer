@@ -6,7 +6,9 @@
 #include "HeadsUpDisplayUIConfigBuilder.h"
 #include "ProjectPathReader.h"
 #include "TimerFactory.h"
+#include "core/CollectableItemComponent.h"
 #include "core/FreeFallMovementComponent.h"
+#include "core/ItemHealEffect.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
@@ -47,7 +49,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     hud = std::make_unique<HeadsUpDisplay>(player, rendererPool,
                                            HeadsUpDisplayUIConfigBuilder::createUIConfig());
 
-    auto yerbaItem = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{30, 25}, "yerbaItem");
+    yerbaItem = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{30, 25}, "yerbaItem");
     yerbaItem->addGraphicsComponent(rendererPool, utils::Vector2f{2, 2}, utils::Vector2f{30, 25},
                                     utils::ProjectPathReader::getProjectRootPath() +
                                         "resources/yerba_item.png",
@@ -56,6 +58,8 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                                                                     components::core::CollisionLayer::Player);
     yerbaItem->addComponent<components::core::VelocityComponent>();
     yerbaItem->addComponent<components::core::FreeFallMovementComponent>();
+    yerbaItem->addComponent<components::core::CollectableItemComponent>(
+        "yerba", components::core::ItemType::Yerba, std::make_shared<components::core::ItemHealEffect>(5));
     componentOwnersManager->add(yerbaItem);
 
     for (int x = 0; x < tileMap->getSize().x; x++)
@@ -121,6 +125,7 @@ NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Inpu
         componentOwnersManager->update(deltaTime, input);
         uiManager->update(deltaTime, input);
         hud->update(deltaTime, input);
+        std::cerr << yerbaItem->transform->getPosition() << std::endl;
     }
 
     componentOwnersManager->processRemovals();

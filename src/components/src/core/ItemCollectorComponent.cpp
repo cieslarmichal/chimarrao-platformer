@@ -17,7 +17,7 @@ const auto distance = [](const utils::Vector2f& v1, const utils::Vector2f& v2)
 ItemCollectorComponent::ItemCollectorComponent(ComponentOwner* owner,
                                                std::shared_ptr<physics::Quadtree> quadtree,
                                                std::shared_ptr<physics::RayCast> rayCast, unsigned capacity,
-                                               std::unique_ptr<utils::Timer> timer)
+                                               std::shared_ptr<utils::Timer> timer)
     : Component(owner),
       collisions{std::move(quadtree)},
       rayCast{std::move(rayCast)},
@@ -130,9 +130,9 @@ std::shared_ptr<CollectableItemComponent> ItemCollectorComponent::findNearestIte
     const auto& ownerPosition = owner->transform->getPosition();
     const auto ownerSize = boxColliderComponent->getSize();
 
-    const auto startPoint = utils::Vector2f{ownerPosition.x + (ownerSize.x / 2.f) - 3.f,
-                                            ownerPosition.y + (ownerSize.y / 2.f) - 3.f};
-    const auto searchSize = utils::Vector2f{6.f, 6.f};
+    const auto startPoint = utils::Vector2f{ownerPosition.x + (ownerSize.x / 2.f) - 5.f,
+                                            ownerPosition.y + (ownerSize.y / 2.f) - 5.f};
+    const auto searchSize = utils::Vector2f{10.f, 10.f};
     const auto collisionArea = utils::FloatRect{startPoint, searchSize};
     const auto colliders = collisions->getCollidersIntersectingWithAreaFromX(collisionArea);
 
