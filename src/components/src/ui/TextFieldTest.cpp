@@ -78,25 +78,27 @@ public:
     }
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
     std::unique_ptr<NiceMock<utils::TimerMock>> timerInit = std::make_unique<NiceMock<utils::TimerMock>>();
     NiceMock<utils::TimerMock>* timer = timerInit.get();
-    NiceMock<input::InputMock> input;
+    StrictMock<input::InputMock> input;
 };
 
 TEST_F(TextFieldTest, createBackgroundWithoutConfig_shouldThrowUIComponentConfigNotFound)
 {
-    ASSERT_THROW(TextField(rendererPool, nullptr, std::move(timerInit)),
+    ASSERT_THROW(TextField(sharedContext, nullptr, std::move(timerInit)),
                  exceptions::UIComponentConfigNotFound);
 }
 
 TEST_F(TextFieldTest, createBackgroundWithValidConfig_shouldNoThrow)
 {
-    ASSERT_NO_THROW(TextField(rendererPool, createValidConfig(), std::move(timerInit)));
+    ASSERT_NO_THROW(TextField(sharedContext, createValidConfig(), std::move(timerInit)));
 }
 
 TEST_F(TextFieldTest, activate_shouldActivateAfterSomeTime)
 {
-    auto textField = TextField(rendererPool, createValidConfig(), std::move(timerInit));
+    auto textField = TextField(sharedContext, createValidConfig(), std::move(timerInit));
 
     textField.activate();
 
@@ -105,7 +107,7 @@ TEST_F(TextFieldTest, activate_shouldActivateAfterSomeTime)
 
 TEST_F(TextFieldTest, deactivate)
 {
-    auto textField = TextField(rendererPool, createValidConfig(), std::move(timerInit));
+    auto textField = TextField(sharedContext, createValidConfig(), std::move(timerInit));
 
     textField.deactivate();
 
@@ -114,7 +116,7 @@ TEST_F(TextFieldTest, deactivate)
 
 TEST_F(TextFieldTest, getName)
 {
-    auto textField = TextField(rendererPool, createValidConfig(), std::move(timerInit));
+    auto textField = TextField(sharedContext, createValidConfig(), std::move(timerInit));
 
     const auto actualName = textField.getName();
 
@@ -123,7 +125,7 @@ TEST_F(TextFieldTest, getName)
 
 TEST_F(TextFieldTest, setColor)
 {
-    auto textField = TextField(rendererPool, createValidConfig(), std::move(timerInit));
+    auto textField = TextField(sharedContext, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(*rendererPool, setColor(_, dummyColor));
 
     textField.setColor(dummyColor);
@@ -131,7 +133,7 @@ TEST_F(TextFieldTest, setColor)
 
 TEST_F(TextFieldTest, setText)
 {
-    auto textField = TextField(rendererPool, createValidConfig(), std::move(timerInit));
+    auto textField = TextField(sharedContext, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(*rendererPool, setText(_, dummyText2));
 
     textField.setText(dummyText2);
@@ -141,7 +143,7 @@ TEST_F(TextFieldTest, setText)
 
 TEST_F(TextFieldTest, update_withKeyboardCharactersInput_shouldAppendThemToText)
 {
-    auto textField = TextField(rendererPool, createValidConfig(), std::move(timerInit));
+    auto textField = TextField(sharedContext, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::MouseLeft)).WillOnce(Return(true));
     EXPECT_CALL(input, getMousePosition()).WillRepeatedly(Return(utils::Vector2f{26, 6}));
     expectReadAllAlphanumericalButtonsAsNonPressedExceptOfGivenButtons(
@@ -156,7 +158,7 @@ TEST_F(TextFieldTest, update_withKeyboardCharactersInput_shouldAppendThemToText)
 
 TEST_F(TextFieldTest, update_withKeyboardCharactersInputAndDeleteKeypress_shouldAppendThemToTextAndDelete)
 {
-    auto textField = TextField(rendererPool, createValidConfig(), std::move(timerInit));
+    auto textField = TextField(sharedContext, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::MouseLeft)).WillOnce(Return(true));
     EXPECT_CALL(input, getMousePosition()).WillRepeatedly(Return(utils::Vector2f{26, 6}));
     expectReadAllAlphanumericalButtonsAsNonPressedExceptOfGivenButtons(

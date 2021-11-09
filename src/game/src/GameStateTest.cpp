@@ -43,6 +43,8 @@ public:
         std::make_shared<StrictMock<window::WindowMock>>();
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     std::shared_ptr<StrictMock<components::ui::UIManagerMock>> uiManager{
@@ -65,7 +67,7 @@ class GameStateTest : public GameStateTest_Base
 public:
     GameState gameState{window,  rendererPool, fileAccess,
                         states,  uiManager,    std::move(componentOwnersManagerInit),
-                        tileMap, rayCast,      quadtree};
+                        tileMap, rayCast,      quadtree, sharedContext};
 };
 
 TEST_F(GameStateTest, activate_shouldActivateUIAndOwners)

@@ -6,6 +6,7 @@
 #include "InputMock.h"
 #include "RendererPoolMock.h"
 #include "core/ItemEffectMock.h"
+#include "TimerMock.h"
 
 #include "CommonUIConfigElements.h"
 #include "DefaultQuadtree.h"
@@ -39,7 +40,7 @@ public:
         player->addComponent<DirectionComponent>();
         player->addComponent<AnimationComponent>(animator);
         boxColliderComponent = player->addComponent<BoxColliderComponent>(size);
-        itemCollector = player->addComponent<ItemCollectorComponent>(quadtree, rayCast, capacity);
+        itemCollector = player->addComponent<ItemCollectorComponent>(quadtree, rayCast, capacity, timer);
 
         EXPECT_CALL(*rendererPool,
                     acquire(dummySize, dummyPosition, imagePath, graphics::VisibilityLayer::First, _))
@@ -82,6 +83,8 @@ public:
         EXPECT_CALL(*rendererPool, release(_)).Times(21);
     }
 
+    std::shared_ptr<StrictMock<utils::TimerMock>> timer{
+        std::make_shared<StrictMock<utils::TimerMock>>()};
     const std::string itemName1{"item1"};
     const ItemType itemType{ItemType::Apple};
     std::shared_ptr<StrictMock<ItemEffectMock>> itemEffect = std::make_shared<StrictMock<ItemEffectMock>>();
@@ -104,16 +107,18 @@ public:
     const graphics::GraphicsId itemId = graphics::GraphicsIdGenerator::generateId();
     std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent1;
-    ComponentOwner itemOwner1{position1, "ItemCollectorComponentTest2"};
-    std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
-        std::make_shared<StrictMock<animations::AnimatorMock>>();
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner itemOwner1{position1, "ItemCollectorComponentTest2", sharedContext};
+    std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
+        std::make_shared<StrictMock<animations::AnimatorMock>>();
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
     std::shared_ptr<physics::DefaultQuadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
     std::shared_ptr<physics::DefaultRayCast> rayCast = std::make_shared<physics::DefaultRayCast>(quadtree);
-    std::shared_ptr<ComponentOwner> player{std::make_shared<ComponentOwner>(position, "headsUpDisplayTest")};
+    std::shared_ptr<ComponentOwner> player{std::make_shared<ComponentOwner>(position, "headsUpDisplayTest", sharedContext)};
     std::shared_ptr<components::core::ItemCollectorComponent> itemCollector;
 };
 
@@ -125,7 +130,7 @@ TEST_F(HeadsUpDisplayTest, healthNotChanged_barShouldNotBeUpdated)
     EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::Invisible)).Times(8);
     EXPECT_CALL(*rendererPool, setOutline(graphicsId3, 0.15, graphics::Color::Black));
     EXPECT_CALL(*rendererPool, setOutline(_, 0.1, graphics::Color::Black)).Times(8);
-    auto hud = HeadsUpDisplay{player, rendererPool, HeadsUpDisplayUIConfigBuilder::createUIConfig()};
+    auto hud = HeadsUpDisplay{player, sharedContext, HeadsUpDisplayUIConfigBuilder::createUIConfig()};
     EXPECT_CALL(*rendererPool, getSize(graphicsId1)).WillOnce(Return(healthPointsBarSize));
 
     hud.update(deltaTime, input);
@@ -142,7 +147,7 @@ TEST_F(HeadsUpDisplayTest, healthChanged_barShouldBeUpdated)
     EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::Invisible)).Times(8);
     EXPECT_CALL(*rendererPool, setOutline(graphicsId3, 0.15, graphics::Color::Black));
     EXPECT_CALL(*rendererPool, setOutline(_, 0.1, graphics::Color::Black)).Times(8);
-    auto hud = HeadsUpDisplay{player, rendererPool, HeadsUpDisplayUIConfigBuilder::createUIConfig()};
+    auto hud = HeadsUpDisplay{player, sharedContext, HeadsUpDisplayUIConfigBuilder::createUIConfig()};
     EXPECT_CALL(*rendererPool, getSize(graphicsId1)).WillOnce(Return(healthPointsBarSize));
     EXPECT_CALL(*rendererPool, setSize(graphicsId1, healthPointsBarSizeAfterChange));
 
@@ -158,7 +163,7 @@ TEST_F(HeadsUpDisplayTest, collectedItemsChanged_shouldLoadItemTexturesOnUpdate)
     EXPECT_CALL(*rendererPool, setOutline(graphicsId3, 0.15, graphics::Color::Black));
     EXPECT_CALL(*rendererPool, setOutline(_, 0.1, graphics::Color::Black)).Times(8);
     EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::Invisible)).Times(8);
-    auto hud = HeadsUpDisplay{player, rendererPool, HeadsUpDisplayUIConfigBuilder::createUIConfig()};
+    auto hud = HeadsUpDisplay{player, sharedContext, HeadsUpDisplayUIConfigBuilder::createUIConfig()};
     EXPECT_CALL(*rendererPool, getSize(graphicsId1)).WillOnce(Return(healthPointsBarSize));
     EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::First));
     EXPECT_CALL(*rendererPool, setTexture(_, graphics::TextureRect{imagePath}, utils::Vector2f{1, 1}));
@@ -179,7 +184,7 @@ TEST_F(HeadsUpDisplayTest, givenNoItems_shouldNotLoadAnyTexturesOnUpdate)
     EXPECT_CALL(*rendererPool, setOutline(graphicsId3, 0.15, graphics::Color::Black));
     EXPECT_CALL(*rendererPool, setOutline(_, 0.1, graphics::Color::Black)).Times(8);
     EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::Invisible)).Times(8);
-    auto hud = HeadsUpDisplay{player, rendererPool, HeadsUpDisplayUIConfigBuilder::createUIConfig()};
+    auto hud = HeadsUpDisplay{player, sharedContext, HeadsUpDisplayUIConfigBuilder::createUIConfig()};
     EXPECT_CALL(*rendererPool, getSize(graphicsId1)).WillOnce(Return(healthPointsBarSize));
 
     hud.update(deltaTime, input);
@@ -194,7 +199,7 @@ TEST_F(HeadsUpDisplayTest, collectedItemsNotChanged_shouldNotLoadItemTexturesOnS
     EXPECT_CALL(*rendererPool, setOutline(graphicsId3, 0.15, graphics::Color::Black));
     EXPECT_CALL(*rendererPool, setOutline(_, 0.1, graphics::Color::Black)).Times(8);
     EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::Invisible)).Times(8);
-    auto hud = HeadsUpDisplay{player, rendererPool, HeadsUpDisplayUIConfigBuilder::createUIConfig()};
+    auto hud = HeadsUpDisplay{player, sharedContext, HeadsUpDisplayUIConfigBuilder::createUIConfig()};
     EXPECT_CALL(*rendererPool, getSize(graphicsId1)).WillRepeatedly(Return(healthPointsBarSize));
     EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::First));
     EXPECT_CALL(*rendererPool, setTexture(_, graphics::TextureRect{imagePath}, utils::Vector2f{1, 1}));

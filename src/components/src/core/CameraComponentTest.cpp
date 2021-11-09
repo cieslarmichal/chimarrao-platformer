@@ -32,14 +32,16 @@ class CameraComponentTest : public Test
 public:
     CameraComponentTest()
     {
-        rendererPool = std::make_shared<StrictMock<graphics::RendererPoolMock>>();
         componentOwner.addComponent<CameraComponent>(rendererPool, mapRect);
         componentOwner.loadDependentComponents();
         EXPECT_CALL(*rendererPool, getViewSize()).WillOnce(ReturnRef(viewSize));
     }
 
-    std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool;
-    ComponentOwner componentOwner{{0, 0}, "owner"};
+    std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<StrictMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{{0, 0}, "owner", sharedContext};
     utils::DeltaTime deltaTime{1};
     StrictMock<input::InputMock> input;
 };

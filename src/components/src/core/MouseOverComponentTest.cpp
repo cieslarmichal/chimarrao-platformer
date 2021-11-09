@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "InputMock.h"
+#include "RendererPoolMock.h"
 
 #include "ComponentOwner.h"
 #include "exceptions/DependentComponentNotFound.h"
@@ -60,7 +61,11 @@ public:
     const utils::Vector2f positionInsideTarget2{23, 24};
     const utils::Vector2f positionOutsideTarget1{27, 21};
     const utils::Vector2f positionOutsideTarget2{27, 23};
-    ComponentOwner componentOwner{position1, "mouseOverComponentTest"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{position1, "mouseOverComponentTest", sharedContext};
     utils::DeltaTime deltaTime{1};
     std::unique_ptr<StrictMock<input::InputMock>> inputInit{std::make_unique<StrictMock<input::InputMock>>()};
     StrictMock<input::InputMock>* input{inputInit.get()};
@@ -69,7 +74,7 @@ public:
 TEST_F(MouseOverComponentTest,
        loadDependentComponentsWithoutBoxColliderComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider"};
+    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider", sharedContext};
     MouseOverComponent mouseOverComponentWithoutBoxCollider{
         &componentOwnerWithoutBoxCollider, [this] { mouseOverAction(); }, [this] { mouseOutAction(); }};
     ASSERT_THROW(mouseOverComponentWithoutBoxCollider.loadDependentComponents(),

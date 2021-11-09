@@ -39,26 +39,28 @@ class BackgroundTest : public Test
 public:
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
 };
 
 TEST_F(BackgroundTest, createBackgroundWithoutConfig_shouldThrowUIComponentConfigNotFound)
 {
-    ASSERT_THROW(Background(rendererPool, nullptr), exceptions::UIComponentConfigNotFound);
+    ASSERT_THROW(Background(sharedContext, nullptr), exceptions::UIComponentConfigNotFound);
 }
 
 TEST_F(BackgroundTest, createBackgroundWithConfigWithoutColorNorTexture_shouldThrowInvalidUIConfig)
 {
-    ASSERT_THROW(Background(rendererPool, createInvalidConfig()), exceptions::InvalidUIComponentConfig);
+    ASSERT_THROW(Background(sharedContext, createInvalidConfig()), exceptions::InvalidUIComponentConfig);
 }
 
 TEST_F(BackgroundTest, createBackgroundWithValidConfig_shouldNoThrow)
 {
-    ASSERT_NO_THROW(Background(rendererPool, createValidConfig()));
+    ASSERT_NO_THROW(Background(sharedContext, createValidConfig()));
 }
 
 TEST_F(BackgroundTest, activate)
 {
-    auto background = Background(rendererPool, createValidConfig());
+    auto background = Background(sharedContext, createValidConfig());
 
     background.activate();
 
@@ -67,7 +69,7 @@ TEST_F(BackgroundTest, activate)
 
 TEST_F(BackgroundTest, deactivate)
 {
-    auto background = Background(rendererPool, createValidConfig());
+    auto background = Background(sharedContext, createValidConfig());
 
     background.deactivate();
 
@@ -76,7 +78,7 @@ TEST_F(BackgroundTest, deactivate)
 
 TEST_F(BackgroundTest, getName)
 {
-    auto background = Background(rendererPool, createValidConfig());
+    auto background = Background(sharedContext, createValidConfig());
 
     const auto actualName = background.getName();
 
@@ -85,7 +87,7 @@ TEST_F(BackgroundTest, getName)
 
 TEST_F(BackgroundTest, setColor)
 {
-    auto background = Background(rendererPool, createValidConfig());
+    auto background = Background(sharedContext, createValidConfig());
     EXPECT_CALL(*rendererPool, setColor(_, dummyColor));
 
     background.setColor(dummyColor);

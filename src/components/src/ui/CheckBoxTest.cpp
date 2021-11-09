@@ -44,6 +44,8 @@ class CheckBoxTest : public Test
 public:
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
     std::unique_ptr<NiceMock<utils::TimerMock>> timerInit = std::make_unique<NiceMock<utils::TimerMock>>();
     NiceMock<utils::TimerMock>* timer = timerInit.get();
     NiceMock<input::InputMock> input;
@@ -51,18 +53,18 @@ public:
 
 TEST_F(CheckBoxTest, createBackgroundWithoutConfig_shouldThrowUIComponentConfigNotFound)
 {
-    ASSERT_THROW(CheckBox(rendererPool, nullptr, std::move(timerInit)),
+    ASSERT_THROW(CheckBox(sharedContext, nullptr, std::move(timerInit)),
                  exceptions::UIComponentConfigNotFound);
 }
 
 TEST_F(CheckBoxTest, createBackgroundWithValidConfig_shouldNoThrow)
 {
-    ASSERT_NO_THROW(CheckBox(rendererPool, createValidConfig(), std::move(timerInit)));
+    ASSERT_NO_THROW(CheckBox(sharedContext, createValidConfig(), std::move(timerInit)));
 }
 
 TEST_F(CheckBoxTest, activate_shouldActivateAfterSomeTime)
 {
-    auto checkBox = CheckBox(rendererPool, createValidConfig(), std::move(timerInit));
+    auto checkBox = CheckBox(sharedContext, createValidConfig(), std::move(timerInit));
 
     checkBox.activate();
     ASSERT_FALSE(checkBox.isActive());
@@ -74,7 +76,7 @@ TEST_F(CheckBoxTest, activate_shouldActivateAfterSomeTime)
 
 TEST_F(CheckBoxTest, deactivate)
 {
-    auto checkBox = CheckBox(rendererPool, createValidConfig(), std::move(timerInit));
+    auto checkBox = CheckBox(sharedContext, createValidConfig(), std::move(timerInit));
 
     checkBox.deactivate();
 
@@ -83,7 +85,7 @@ TEST_F(CheckBoxTest, deactivate)
 
 TEST_F(CheckBoxTest, getName)
 {
-    auto checkBox = CheckBox(rendererPool, createValidConfig(), std::move(timerInit));
+    auto checkBox = CheckBox(sharedContext, createValidConfig(), std::move(timerInit));
 
     const auto actualName = checkBox.getName();
 
@@ -92,7 +94,7 @@ TEST_F(CheckBoxTest, getName)
 
 TEST_F(CheckBoxTest, setColor)
 {
-    auto checkBox = CheckBox(rendererPool, createValidConfig(), std::move(timerInit));
+    auto checkBox = CheckBox(sharedContext, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(*rendererPool, setColor(_, dummyColor));
 
     checkBox.setColor(dummyColor);
@@ -100,7 +102,7 @@ TEST_F(CheckBoxTest, setColor)
 
 TEST_F(CheckBoxTest, setChecked)
 {
-    auto checkBox = CheckBox(rendererPool, createValidConfig(), std::move(timerInit));
+    auto checkBox = CheckBox(sharedContext, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(*rendererPool, setText(_, "X"));
 
     checkBox.setChecked(true);
@@ -108,7 +110,7 @@ TEST_F(CheckBoxTest, setChecked)
 
 TEST_F(CheckBoxTest, toggle)
 {
-    auto checkBox = CheckBox(rendererPool, createValidConfig(), std::move(timerInit));
+    auto checkBox = CheckBox(sharedContext, createValidConfig(), std::move(timerInit));
 
     EXPECT_CALL(*rendererPool, setText(_, "X"));
     checkBox.toggle();

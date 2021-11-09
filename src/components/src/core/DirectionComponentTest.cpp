@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
+#include "RendererPoolMock.h"
 
 #include "core/exceptions/DependentComponentNotFound.h"
 
@@ -24,7 +25,11 @@ public:
     const utils::Vector2f position1{0.0, 10.0};
     const utils::Vector2f velocityDirectedRight{10.0, 0};
     const utils::Vector2f velocityDirectedLeft{-10.0, 0};
-    ComponentOwner componentOwner{position1, "DirectionComponentTest"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{position1, "DirectionComponentTest", sharedContext};
     std::shared_ptr<VelocityComponent> velocityComponent;
     std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
         std::make_shared<StrictMock<animations::AnimatorMock>>();
@@ -34,7 +39,7 @@ public:
 TEST_F(DirectionComponentTest,
        loadDependentComponentsWithoutAnimationComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutAnimation{position1, "componentOwnerWithoutAnimation"};
+    ComponentOwner componentOwnerWithoutAnimation{position1, "componentOwnerWithoutAnimation", sharedContext};
     DirectionComponent directionComponentWithoutAnimation{&componentOwnerWithoutAnimation};
 
     ASSERT_THROW(directionComponentWithoutAnimation.loadDependentComponents(),
@@ -44,7 +49,7 @@ TEST_F(DirectionComponentTest,
 TEST_F(DirectionComponentTest,
        loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutVelocity{position1, "componentOwnerWithoutVelocity"};
+    ComponentOwner componentOwnerWithoutVelocity{position1, "componentOwnerWithoutVelocity", sharedContext};
     DirectionComponent directionComponentWithoutVelocity{&componentOwnerWithoutVelocity};
     componentOwnerWithoutVelocity.addComponent<AnimationComponent>(animator);
 

@@ -40,7 +40,8 @@ public:
 
     std::shared_ptr<graphics::RendererPoolMock> rendererPool =
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
-
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     std::unique_ptr<StrictMock<TileMapSerializerMock>> mapSerializerInit =
@@ -54,7 +55,7 @@ public:
 class LayoutTileTest : public LayoutTileTest_Base
 {
 public:
-    LayoutTile layoutTile{rendererPool, positionInit, size, currentTileType, *tileMap};
+    LayoutTile layoutTile{sharedContext, positionInit, size, currentTileType, *tileMap};
 };
 
 TEST_F(LayoutTileTest, isActive_shouldReturnTrue)

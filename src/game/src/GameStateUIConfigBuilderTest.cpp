@@ -35,6 +35,8 @@ public:
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
@@ -54,7 +56,7 @@ TEST_F(GameStateUIConfigBuilderTest, createGameUI)
 {
     GameState gameState{window,  rendererPool, fileAccess,
                         states,  uiManager,    std::move(componentOwnersManagerInit),
-                        tileMap, rayCast,      quadtree};
+                        tileMap, rayCast,      quadtree, sharedContext};
     const auto gameUI = GameStateUIConfigBuilder::createGameUIConfig(&gameState);
 
     ASSERT_EQ(gameUI->backgroundConfig->uniqueName, "gameBackground");

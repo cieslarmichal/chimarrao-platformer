@@ -28,7 +28,9 @@ public:
     const graphics::GraphicsId graphicsId2 = graphics::GraphicsIdGenerator::generateId();
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
-    ComponentOwner componentOwner{initialPosition, "componentOwnerTest"};
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{initialPosition, "componentOwnerTest", sharedContext};
 };
 
 TEST_F(ComponentOwnerTest, initialPosition_shouldBeSetFromConstructor)

@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "InputMock.h"
+#include "RendererPoolMock.h"
 
 #include "ComponentOwner.h"
 #include "VelocityComponent.h"
@@ -22,7 +23,11 @@ public:
 
     const utils::DeltaTime deltaTime{3};
     const utils::Vector2f position{50.0, 11.0};
-    ComponentOwner fallingOwner{position, "idleOwner1"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner fallingOwner{position, "idleOwner1", sharedContext};
     FreeFallMovementComponent freeFallMovementComponent{&fallingOwner};
     StrictMock<input::InputMock> input;
 };
@@ -30,7 +35,7 @@ public:
 TEST_F(FreeFallMovementTest,
        loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity"};
+    ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity", sharedContext};
     FreeFallMovementComponent freeFallComponentWithoutVelocity{&componentOwnerWithoutVelocity};
 
     ASSERT_THROW(freeFallComponentWithoutVelocity.loadDependentComponents(),

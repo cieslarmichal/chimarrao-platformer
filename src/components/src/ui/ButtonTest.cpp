@@ -44,6 +44,8 @@ class ButtonTest : public Test
 public:
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
     std::unique_ptr<NiceMock<utils::TimerMock>> timerInit = std::make_unique<NiceMock<utils::TimerMock>>();
     NiceMock<utils::TimerMock>* timer = timerInit.get();
     NiceMock<input::InputMock> input;
@@ -51,17 +53,17 @@ public:
 
 TEST_F(ButtonTest, createBackgroundWithoutConfig_shouldThrowUIComponentConfigNotFound)
 {
-    ASSERT_THROW(Button(rendererPool, nullptr, std::move(timerInit)), exceptions::UIComponentConfigNotFound);
+    ASSERT_THROW(Button(sharedContext, nullptr, std::move(timerInit)), exceptions::UIComponentConfigNotFound);
 }
 
 TEST_F(ButtonTest, createBackgroundWithValidConfig_shouldNoThrow)
 {
-    ASSERT_NO_THROW(Button(rendererPool, createValidConfig(), std::move(timerInit)));
+    ASSERT_NO_THROW(Button(sharedContext, createValidConfig(), std::move(timerInit)));
 }
 
 TEST_F(ButtonTest, activate_shouldActivateAfterSomeTime)
 {
-    auto button = Button(rendererPool, createValidConfig(), std::move(timerInit));
+    auto button = Button(sharedContext, createValidConfig(), std::move(timerInit));
 
     button.activate();
     ASSERT_FALSE(button.isActive());
@@ -73,7 +75,7 @@ TEST_F(ButtonTest, activate_shouldActivateAfterSomeTime)
 
 TEST_F(ButtonTest, deactivate)
 {
-    auto button = Button(rendererPool, createValidConfig(), std::move(timerInit));
+    auto button = Button(sharedContext, createValidConfig(), std::move(timerInit));
 
     button.deactivate();
 
@@ -82,7 +84,7 @@ TEST_F(ButtonTest, deactivate)
 
 TEST_F(ButtonTest, getName)
 {
-    auto button = Button(rendererPool, createValidConfig(), std::move(timerInit));
+    auto button = Button(sharedContext, createValidConfig(), std::move(timerInit));
 
     const auto actualName = button.getName();
 
@@ -91,7 +93,7 @@ TEST_F(ButtonTest, getName)
 
 TEST_F(ButtonTest, setColor)
 {
-    auto button = Button(rendererPool, createValidConfig(), std::move(timerInit));
+    auto button = Button(sharedContext, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(*rendererPool, setColor(_, dummyColor));
 
     button.setColor(dummyColor);
@@ -99,7 +101,7 @@ TEST_F(ButtonTest, setColor)
 
 TEST_F(ButtonTest, setText)
 {
-    auto button = Button(rendererPool, createValidConfig(), std::move(timerInit));
+    auto button = Button(sharedContext, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(*rendererPool, setText(_, dummyText2));
 
     button.setText(dummyText2);

@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "ComponentOwner.h"
+#include "RendererPoolMock.h"
 
 using namespace ::testing;
 using namespace components::core;
@@ -12,7 +13,11 @@ class ComponentTest : public Test
 public:
     const utils::Vector2f initialPosition{0.0, 11.0};
     const std::string ownerName{"componentTest"};
-    ComponentOwner componentOwner{initialPosition, ownerName};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{initialPosition, ownerName, sharedContext};
     Component component{&componentOwner};
 };
 

@@ -1,5 +1,5 @@
 #include "MovementComponent.h"
-
+#include "RendererPoolMock.h"
 #include "gtest/gtest.h"
 
 using namespace ::testing;
@@ -11,7 +11,11 @@ public:
     const float initialMovementSpeed{5.0};
     const float movementSpeed{10.0};
     const utils::Vector2f position{0.0, 11.0};
-    ComponentOwner componentOwner{position, "keyboardMovementComponentTest"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{position, "keyboardMovementComponentTest", sharedContext};
     MovementComponent movementComponent{&componentOwner, initialMovementSpeed};
 };
 

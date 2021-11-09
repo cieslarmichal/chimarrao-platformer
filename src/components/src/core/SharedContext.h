@@ -9,11 +9,11 @@ namespace components::core
 {
 struct SharedContext
 {
-    explicit SharedContext(const std::shared_ptr<graphics::RendererPool>& rendererPoolInit)
-        : rendererPool{rendererPoolInit}
+    explicit SharedContext(std::shared_ptr<graphics::RendererPool> rendererPoolInit)
+        : rendererPool{std::move(rendererPoolInit)}
     {
     }
 
-    const std::shared_ptr<graphics::RendererPool>& rendererPool;
+    std::shared_ptr<graphics::RendererPool> rendererPool;
 };
 }

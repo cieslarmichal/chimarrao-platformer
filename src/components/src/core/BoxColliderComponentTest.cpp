@@ -4,6 +4,7 @@
 
 #include "AnimatorMock.h"
 #include "InputMock.h"
+#include "RendererPoolMock.h"
 
 #include "AnimationComponent.h"
 #include "DeltaTime.h"
@@ -55,38 +56,44 @@ public:
     StrictMock<input::InputMock> input;
     std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
         std::make_shared<StrictMock<animations::AnimatorMock>>();
-    ComponentOwner componentOwnerWithoutMovementComponent{position2,
-                                                          "componentOwnerWithoutMovementComponent"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwnerWithoutMovementComponent{position2, "componentOwnerWithoutMovementComponent",
+                                                          sharedContext};
     BoxColliderComponent boxColliderComponentWithoutMovement{&componentOwnerWithoutMovementComponent, size,
                                                              CollisionLayer::Default};
 
-    ComponentOwner componentOwnerWithMovementComponent{position, "componentOwnerWithMovementComponent"};
+    ComponentOwner componentOwnerWithMovementComponent{position, "componentOwnerWithMovementComponent",
+                                                       sharedContext};
     BoxColliderComponent boxColliderComponentWithMovement{&componentOwnerWithMovementComponent, size,
                                                           CollisionLayer::Default};
     std::shared_ptr<KeyboardMovementComponent> movementComponent;
     std::shared_ptr<VelocityComponent> velocityComponent;
 
-    ComponentOwner componentOwnerNotIntersecting{positionOutsideTarget, "componentOwnerNotIntersecting"};
+    ComponentOwner componentOwnerNotIntersecting{positionOutsideTarget, "componentOwnerNotIntersecting",
+                                                 sharedContext};
     std::shared_ptr<BoxColliderComponent> boxColliderComponentNotIntersecting =
         std::make_shared<BoxColliderComponent>(&componentOwnerNotIntersecting, size);
 
     ComponentOwner componentOwnerIntersectingFromLeft{positionIntersectingFromLeft,
-                                                      "componentOwnerIntersectingFromLeft"};
+                                                      "componentOwnerIntersectingFromLeft", sharedContext};
     std::shared_ptr<BoxColliderComponent> boxColliderComponentIntersectingFromLeft =
         std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromLeft, size);
 
     ComponentOwner componentOwnerIntersectingFromRight{positionIntersectingFromRight,
-                                                       "componentOwnerIntersectingFromRight"};
+                                                       "componentOwnerIntersectingFromRight", sharedContext};
     std::shared_ptr<BoxColliderComponent> boxColliderComponentIntersectingFromRight =
         std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromRight, size);
 
     ComponentOwner componentOwnerIntersectingFromAbove{positionIntersectingFromAbove,
-                                                       "componentOwnerIntersectingFromAbove"};
+                                                       "componentOwnerIntersectingFromAbove", sharedContext};
     std::shared_ptr<BoxColliderComponent> boxColliderComponentIntersectingFromAbove =
         std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromAbove, size);
 
     ComponentOwner componentOwnerIntersectingFromBelow{positionIntersectingFromBelow,
-                                                       "componentOwnerIntersectingFromBelow"};
+                                                       "componentOwnerIntersectingFromBelow", sharedContext};
     std::shared_ptr<BoxColliderComponent> boxColliderComponentIntersectingFromBelow =
         std::make_shared<BoxColliderComponent>(&componentOwnerIntersectingFromBelow, size);
     utils::DeltaTime deltaTime{1};

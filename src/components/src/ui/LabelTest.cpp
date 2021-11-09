@@ -37,21 +37,23 @@ class LabelTest : public Test
 public:
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
 };
 
 TEST_F(LabelTest, createBackgroundWithoutConfig_shouldThrowUIComponentConfigNotFound)
 {
-    ASSERT_THROW(Label(rendererPool, nullptr), exceptions::UIComponentConfigNotFound);
+    ASSERT_THROW(Label(sharedContext, nullptr), exceptions::UIComponentConfigNotFound);
 }
 
 TEST_F(LabelTest, createBackgroundWithValidConfig_shouldNoThrow)
 {
-    ASSERT_NO_THROW(Label(rendererPool, createValidConfig()));
+    ASSERT_NO_THROW(Label(sharedContext, createValidConfig()));
 }
 
 TEST_F(LabelTest, activate_shouldActivateAfterSomeTime)
 {
-    auto label = Label(rendererPool, createValidConfig());
+    auto label = Label(sharedContext, createValidConfig());
 
     label.activate();
 
@@ -60,7 +62,7 @@ TEST_F(LabelTest, activate_shouldActivateAfterSomeTime)
 
 TEST_F(LabelTest, deactivate)
 {
-    auto label = Label(rendererPool, createValidConfig());
+    auto label = Label(sharedContext, createValidConfig());
 
     label.deactivate();
 
@@ -69,7 +71,7 @@ TEST_F(LabelTest, deactivate)
 
 TEST_F(LabelTest, getName)
 {
-    auto label = Label(rendererPool, createValidConfig());
+    auto label = Label(sharedContext, createValidConfig());
 
     const auto actualName = label.getName();
 
@@ -78,7 +80,7 @@ TEST_F(LabelTest, getName)
 
 TEST_F(LabelTest, setColor)
 {
-    auto label = Label(rendererPool, createValidConfig());
+    auto label = Label(sharedContext, createValidConfig());
     EXPECT_CALL(*rendererPool, setColor(_, dummyColor));
 
     label.setColor(dummyColor);
@@ -86,7 +88,7 @@ TEST_F(LabelTest, setColor)
 
 TEST_F(LabelTest, setText)
 {
-    auto label = Label(rendererPool, createValidConfig());
+    auto label = Label(sharedContext, createValidConfig());
     EXPECT_CALL(*rendererPool, setText(_, dummyText2));
 
     label.setText(dummyText2);

@@ -39,6 +39,8 @@ public:
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
@@ -48,7 +50,7 @@ public:
     NiceMock<utils::TimerMock>* timer{timerInit.get()};
 
     EditorState editorState{window,    rendererPool, fileAccess,          states,
-                            uiManager, tileMap,      std::move(timerInit)};
+                            uiManager, tileMap,      std::move(timerInit), sharedContext};
 };
 
 TEST_F(EditorStateUIConfigBuilderTest, createEditorUI)

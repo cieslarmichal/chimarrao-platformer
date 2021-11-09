@@ -1,6 +1,7 @@
 #include "VelocityComponent.h"
 
 #include "gtest/gtest.h"
+#include "RendererPoolMock.h"
 
 using namespace ::testing;
 using namespace components::core;
@@ -14,7 +15,11 @@ public:
     const utils::Vector2f velocity{10.0, 15.0};
     const utils::Vector2f maximalVelocity{100.f, 15.f};
     const utils::Vector2f velocityBiggerThanMaximal{150.0, 15.0};
-    ComponentOwner componentOwner{position1, "velocityComponentTest"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{position1, "velocityComponentTest", sharedContext};
     VelocityComponent velocityComponent{&componentOwner};
 };
 

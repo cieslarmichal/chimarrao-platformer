@@ -37,14 +37,16 @@ public:
     StrictMock<input::InputMock> input;
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
-    ComponentOwner componentOwner{position, "healthBarComponentTest"};
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{position, "healthBarComponentTest", sharedContext};
 };
 
 TEST_F(HealthBarComponentTest,
        loadDependentComponentsWithoutHealthComponent_shouldThrowDependentComponentNotFound)
 {
     expectCreateGraphicsComponent();
-    ComponentOwner componentOwnerWithoutHealth{position, "componentOwnerWithoutHealth"};
+    ComponentOwner componentOwnerWithoutHealth{position, "componentOwnerWithoutHealth", sharedContext};
     HealthBarComponent healthBarComponentWithoutHealth{&componentOwnerWithoutHealth, rendererPool};
 
     ASSERT_THROW(healthBarComponentWithoutHealth.loadDependentComponents(),

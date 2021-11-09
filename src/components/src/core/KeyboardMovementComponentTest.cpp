@@ -4,7 +4,7 @@
 
 #include "AnimatorMock.h"
 #include "InputMock.h"
-
+#include "RendererPoolMock.h"
 #include "AnimationComponent.h"
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
@@ -32,7 +32,11 @@ public:
     const utils::DeltaTime deltaTime{3};
     const utils::Vector2f position{0.0, 11.0};
     const utils::Vector2f size{5, 5};
-    ComponentOwner componentOwner{position, "keyboardMovementComponentTest"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{position, "keyboardMovementComponentTest", sharedContext};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
     StrictMock<input::InputMock> input;
     std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
@@ -43,7 +47,7 @@ public:
 TEST_F(KeyboardMovementComponentTest,
        loadDependentComponentsWithoutAnimatorComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator"};
+    ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator", sharedContext};
     KeyboardMovementComponent keyboardMovementComponentWithoutAnimator{&componentOwnerWithoutAnimator};
     componentOwnerWithoutAnimator.addComponent<VelocityComponent>();
 
@@ -54,7 +58,7 @@ TEST_F(KeyboardMovementComponentTest,
 TEST_F(KeyboardMovementComponentTest,
        loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity"};
+    ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity", sharedContext};
     KeyboardMovementComponent keyboardMovementComponentWithoutVelocity{&componentOwnerWithoutVelocity};
     componentOwnerWithoutVelocity.addComponent<AnimationComponent>(animator);
 
@@ -65,7 +69,7 @@ TEST_F(KeyboardMovementComponentTest,
 TEST_F(KeyboardMovementComponentTest,
        loadDependentComponentsWithoutAttackComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutAttack{position, "componentOwnerWithoutAttack"};
+    ComponentOwner componentOwnerWithoutAttack{position, "componentOwnerWithoutAttack", sharedContext};
     KeyboardMovementComponent keyboardMovementComponentWithoutAttack{&componentOwnerWithoutAttack};
     componentOwnerWithoutAttack.addComponent<VelocityComponent>();
     componentOwnerWithoutAttack.addComponent<AnimationComponent>(animator);

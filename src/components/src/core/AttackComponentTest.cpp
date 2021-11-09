@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
+#include "RendererPoolMock.h"
 
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
@@ -36,11 +37,15 @@ public:
     const utils::Vector2f positionOnRightOutOfRange{42, 20};
     const utils::Vector2f positionOnLeftInRange{17, 20};
     const utils::Vector2f positionOnLeftOutOfRange{10, 20};
-    ComponentOwner componentOwner1{position1, "AttackComponentTest1"};
-    ComponentOwner componentOwnerOnRightInRange{positionOnRightInRange, "AttackComponentTest2"};
-    ComponentOwner componentOwnerOnRightOutOfRange{positionOnRightOutOfRange, "AttackComponentTest3"};
-    ComponentOwner componentOwnerOnLeftInRange{positionOnLeftInRange, "AttackComponentTest4"};
-    ComponentOwner componentOwnerOnLeftOutOfRange{positionOnLeftOutOfRange, "AttackComponentTest5"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner1{position1, "AttackComponentTest1", sharedContext};
+    ComponentOwner componentOwnerOnRightInRange{positionOnRightInRange, "AttackComponentTest2", sharedContext};
+    ComponentOwner componentOwnerOnRightOutOfRange{positionOnRightOutOfRange, "AttackComponentTest3", sharedContext};
+    ComponentOwner componentOwnerOnLeftInRange{positionOnLeftInRange, "AttackComponentTest4", sharedContext};
+    ComponentOwner componentOwnerOnLeftOutOfRange{positionOnLeftOutOfRange, "AttackComponentTest5", sharedContext};
     std::shared_ptr<BoxColliderComponent> boxColliderComponent1 =
         std::make_shared<BoxColliderComponent>(&componentOwner1, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponentOnRightInRange =
@@ -65,7 +70,7 @@ public:
 TEST_F(AttackComponentTest,
        loadDependentComponentsWithoutDirectionComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutDirection{position1, "componentOwnerWithoutDirection"};
+    ComponentOwner componentOwnerWithoutDirection{position1, "componentOwnerWithoutDirection", sharedContext};
     AttackComponent attackComponentWithoutDirection{&componentOwnerWithoutDirection, rayCast};
 
     ASSERT_THROW(attackComponentWithoutDirection.loadDependentComponents(),
@@ -75,7 +80,7 @@ TEST_F(AttackComponentTest,
 TEST_F(AttackComponentTest,
        loadDependentComponentsWithoutBoxColliderComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider"};
+    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider", sharedContext};
     componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>();
     componentOwnerWithoutBoxCollider.addComponent<DirectionComponent>();
     componentOwnerWithoutBoxCollider.addComponent<AnimationComponent>(animator);

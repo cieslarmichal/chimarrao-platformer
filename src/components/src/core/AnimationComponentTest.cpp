@@ -4,6 +4,7 @@
 
 #include "AnimatorMock.h"
 #include "InputMock.h"
+#include "RendererPoolMock.h"
 
 #include "ComponentOwner.h"
 #include "DeltaTime.h"
@@ -19,7 +20,11 @@ public:
     const utils::Vector2f position{0.0, 11.0};
     const AnimationType animationType{AnimationType::Jump};
     const AnimationDirection animationDirection{AnimationDirection::Left};
-    ComponentOwner componentOwner{position, "animationComponentTest"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{position, "animationComponentTest", sharedContext};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
     StrictMock<input::InputMock> input;
     AnimationComponent animationComponent{&componentOwner, animator};

@@ -66,7 +66,7 @@ public:
     const unsigned capacity2{2};
     const utils::Vector2f size{4, 4};
     const utils::Vector2f position{0, 0};
-    const utils::Vector2f position1{5, 0};
+    const utils::Vector2f position1{8, 0};
     const utils::Vector2f position2{2, 0};
     const utils::Vector2f position3{3, 0};
     const std::string itemName1{"item1"};
@@ -74,11 +74,15 @@ public:
     const std::string itemName3{"item3"};
     const ItemType itemType{ItemType::Apple};
     const std::string nonExistingItemName{"nonExistingItemName"};
-    ComponentOwner itemCollectorOwner{position, "ItemCollectorComponentTest1"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner itemCollectorOwner{position, "ItemCollectorComponentTest1", sharedContext};
     const unsigned int initialHealthPoints{100};
-    ComponentOwner itemOwner1{position1, "ItemCollectorComponentTest2"};
-    ComponentOwner itemOwner2{position2, "ItemCollectorComponentTest3"};
-    ComponentOwner itemOwner3{position3, "ItemCollectorComponentTest4"};
+    ComponentOwner itemOwner1{position1, "ItemCollectorComponentTest2", sharedContext};
+    ComponentOwner itemOwner2{position2, "ItemCollectorComponentTest3", sharedContext};
+    ComponentOwner itemOwner3{position3, "ItemCollectorComponentTest4", sharedContext};
     std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent1;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent2;
@@ -88,8 +92,6 @@ public:
     std::shared_ptr<StrictMock<ItemEffectMock>> itemEffect = std::make_shared<StrictMock<ItemEffectMock>>();
     std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::DefaultRayCast>(quadtree);
-    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
-        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
     std::unique_ptr<StrictMock<utils::TimerMock>> timerInit{std::make_unique<StrictMock<utils::TimerMock>>()};
     StrictMock<utils::TimerMock>* timer{timerInit.get()};
     ItemCollectorComponent itemCollectorWithOneCapacity{&itemCollectorOwner, quadtree, rayCast, capacity1,
@@ -110,7 +112,7 @@ TEST_F(ItemCollectorComponentTest, givenZeroCapacity_shouldThrowInvalidCapacityE
 TEST_F(ItemCollectorComponentTest,
        loadDependentComponentsWithoutDirectionComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutDirection{position, "componentOwnerWithoutDirection"};
+    ComponentOwner componentOwnerWithoutDirection{position, "componentOwnerWithoutDirection", sharedContext};
     ItemCollectorComponent itemCollectorWithoutDirection{&componentOwnerWithoutDirection, quadtree, rayCast,
                                                          capacity1, std::move(timerInit)};
 
@@ -121,7 +123,7 @@ TEST_F(ItemCollectorComponentTest,
 TEST_F(ItemCollectorComponentTest,
        loadDependentComponentsWithoutBoxColliderComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutBoxCollider{position, "componentOwnerWithoutBoxCollider"};
+    ComponentOwner componentOwnerWithoutBoxCollider{position, "componentOwnerWithoutBoxCollider", sharedContext};
     componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>();
     componentOwnerWithoutBoxCollider.addComponent<DirectionComponent>();
     ItemCollectorComponent itemCollectorWithoutBoxCollider{&componentOwnerWithoutBoxCollider, quadtree,

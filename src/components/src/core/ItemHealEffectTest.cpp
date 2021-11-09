@@ -1,7 +1,7 @@
 #include "ItemHealEffect.h"
 
 #include "gtest/gtest.h"
-
+#include "RendererPoolMock.h"
 #include "ComponentOwner.h"
 #include "HealthComponent.h"
 #include "exceptions/DependentComponentNotFound.h"
@@ -21,8 +21,12 @@ public:
     const utils::Vector2f position{20, 20};
     const unsigned int initialHealthPoints{100};
     const unsigned int healthPointsToHeal{1};
-    ComponentOwner collector{position, "ItemHealEffectTest1"};
-    ComponentOwner collectorWithNoHealth{position, "ItemHealEffectTest2"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner collector{position, "ItemHealEffectTest1", sharedContext};
+    ComponentOwner collectorWithNoHealth{position, "ItemHealEffectTest2", sharedContext};
     ItemHealEffect itemHealEffect{healthPointsToHeal};
 };
 

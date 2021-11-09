@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
+#include "RendererPoolMock.h"
 
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
@@ -103,22 +104,26 @@ public:
     const utils::Vector2f size{5, 5};
     const utils::Vector2f position1{20, 20};
     const utils::Vector2f position2{24, 23};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
     std::shared_ptr<ComponentOwner> componentOwnerWithDefaultCollider1 =
-        std::make_shared<ComponentOwner>(position1, "collisionSystemTest1");
+        std::make_shared<ComponentOwner>(position1, "collisionSystemTest1", sharedContext);
     std::shared_ptr<ComponentOwner> componentOwnerWithDefaultCollider2 =
-        std::make_shared<ComponentOwner>(position2, "collisionSystemTest2");
+        std::make_shared<ComponentOwner>(position2, "collisionSystemTest2", sharedContext);
     std::shared_ptr<ComponentOwner> componentOwnerWithTileCollider1 =
-        std::make_shared<ComponentOwner>(position1, "collisionSystemTest3");
+        std::make_shared<ComponentOwner>(position1, "collisionSystemTest3", sharedContext);
     std::shared_ptr<ComponentOwner> componentOwnerWithTileCollider2 =
-        std::make_shared<ComponentOwner>(position2, "collisionSystemTest4");
+        std::make_shared<ComponentOwner>(position2, "collisionSystemTest4", sharedContext);
     std::shared_ptr<ComponentOwner> componentOwnerWithPlayerCollider1 =
-        std::make_shared<ComponentOwner>(position1, "collisionSystemTest5");
+        std::make_shared<ComponentOwner>(position1, "collisionSystemTest5", sharedContext);
     std::shared_ptr<ComponentOwner> componentOwnerWithPlayerCollider2 =
-        std::make_shared<ComponentOwner>(position2, "collisionSystemTest6");
+        std::make_shared<ComponentOwner>(position2, "collisionSystemTest6", sharedContext);
     std::shared_ptr<ComponentOwner> componentOwnerWithoutCollider =
-        std::make_shared<ComponentOwner>(position2, "collisionSystemTest7");
+        std::make_shared<ComponentOwner>(position2, "collisionSystemTest7", sharedContext);
     std::shared_ptr<ComponentOwner> componentOwnerWitStaticTransform =
-        std::make_shared<ComponentOwner>(position2, "collisionSystemTest8");
+        std::make_shared<ComponentOwner>(position2, "collisionSystemTest8", sharedContext);
     std::shared_ptr<NiceMock<animations::AnimatorMock>> animator =
         std::make_shared<NiceMock<animations::AnimatorMock>>();
 

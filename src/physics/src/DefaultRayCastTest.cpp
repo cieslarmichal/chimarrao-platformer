@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "DefaultQuadtree.h"
+#include "RendererPoolMock.h"
 
 using namespace physics;
 using namespace components::core;
@@ -19,10 +20,14 @@ public:
     const utils::Vector2f position2{26, 20};
     const utils::Vector2f position3{32, 20};
     const utils::Vector2f position4{40, 20};
-    ComponentOwner componentOwner1{position1, "RayCastTest1"};
-    ComponentOwner componentOwner2{position2, "RayCastTest2"};
-    ComponentOwner componentOwner3{position3, "RayCastTest3"};
-    ComponentOwner componentOwner4{position4, "RayCastTest4"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner1{position1, "RayCastTest1", sharedContext};
+    ComponentOwner componentOwner2{position2, "RayCastTest2", sharedContext};
+    ComponentOwner componentOwner3{position3, "RayCastTest3", sharedContext};
+    ComponentOwner componentOwner4{position4, "RayCastTest4", sharedContext};
     std::shared_ptr<BoxColliderComponent> boxColliderComponent1 =
         std::make_shared<BoxColliderComponent>(&componentOwner1, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent2 =

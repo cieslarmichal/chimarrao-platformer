@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "ComponentOwner.h"
+#include "RendererPoolMock.h"
 
 using namespace ::testing;
 using namespace components::core;
@@ -17,7 +18,11 @@ public:
     const utils::Vector2f position3{x, y};
     const utils::Vector2f sumPosition1{1.0, 12.0};
     const utils::Vector2f sumPosition2{12.0, 12.0};
-    ComponentOwner componentOwner{position1, "transformComponentTest"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{position1, "transformComponentTest", sharedContext};
     TransformComponent transformComponent{&componentOwner, position1};
 };
 

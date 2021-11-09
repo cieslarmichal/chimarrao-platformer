@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "ComponentOwner.h"
+#include "RendererPoolMock.h"
 
 using namespace ::testing;
 using namespace components::core;
@@ -11,7 +12,11 @@ class IdComponentTest : public Test
 {
 public:
     const utils::Vector2f position{0.0, 11.0};
-    ComponentOwner componentOwner{position, "idComponentTest"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{position, "idComponentTest", sharedContext};
 };
 
 TEST_F(IdComponentTest, createTwoComponents_shouldHaveDifferentConsecutiveId)

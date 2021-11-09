@@ -47,6 +47,8 @@ public:
         std::make_shared<StrictMock<window::WindowMock>>();
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
     StrictMock<StatesMock> states;
@@ -63,7 +65,7 @@ class EditorStateTest : public EditorStateTest_Base
 {
 public:
     EditorState editorState{window,    rendererPool, fileAccess,          states,
-                            uiManager, tileMap,      std::move(timerInit)};
+                            uiManager, tileMap,      std::move(timerInit), sharedContext};
 };
 
 TEST_F(EditorStateTest, activate_shouldActivateUI)

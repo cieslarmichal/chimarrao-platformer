@@ -4,6 +4,7 @@
 
 #include "AnimatorMock.h"
 #include "InputMock.h"
+#include "RendererPoolMock.h"
 
 #include "AnimationComponent.h"
 #include "ComponentOwner.h"
@@ -36,10 +37,14 @@ public:
 
     const utils::DeltaTime deltaTime{3};
     const utils::Vector2f position{50.0, 11.0};
-    ComponentOwner idleOwner1{position, "idleOwner1"};
-    ComponentOwner idleOwner2{position, "idleOwner2"};
-    ComponentOwner player1{positionOnLeft, "player1"};
-    ComponentOwner player2{positionOnRight, "player2"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner idleOwner1{position, "idleOwner1", sharedContext};
+    ComponentOwner idleOwner2{position, "idleOwner2", sharedContext};
+    ComponentOwner player1{positionOnLeft, "player1", sharedContext};
+    ComponentOwner player2{positionOnRight, "player2", sharedContext};
     IdleNpcMovementComponent idleNpcMovementComponent1{&idleOwner1, &player1};
     IdleNpcMovementComponent idleNpcMovementComponent2{&idleOwner2, &player2};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
@@ -49,7 +54,7 @@ public:
 TEST_F(IdleNpcMovementTest,
        loadDependentComponentsWithoutAnimatorComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator"};
+    ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator", sharedContext};
     IdleNpcMovementComponent idleComponentWithoutAnimator{&componentOwnerWithoutAnimator, &player1};
     componentOwnerWithoutAnimator.addComponent<VelocityComponent>();
 
@@ -60,7 +65,7 @@ TEST_F(IdleNpcMovementTest,
 TEST_F(IdleNpcMovementTest,
        loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity"};
+    ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity", sharedContext};
     IdleNpcMovementComponent idleComponentWithoutVelocity{&componentOwnerWithoutVelocity, &player1};
     componentOwnerWithoutVelocity.addComponent<AnimationComponent>(animator);
 

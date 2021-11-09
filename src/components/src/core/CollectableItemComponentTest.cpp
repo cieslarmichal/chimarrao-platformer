@@ -3,7 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "ItemEffectMock.h"
-
+#include "RendererPoolMock.h"
 #include "ComponentOwner.h"
 #include "HealthComponent.h"
 
@@ -16,8 +16,12 @@ public:
     const utils::Vector2f position{20, 20};
     const std::string itemName{"name"};
     const ItemType itemType{ItemType::Apple};
-    ComponentOwner owner{position, "CollectableItemComponentTest1"};
-    ComponentOwner collector{position, "CollectableItemComponentTest2"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner owner{position, "CollectableItemComponentTest1", sharedContext};
+    ComponentOwner collector{position, "CollectableItemComponentTest2", sharedContext};
     std::shared_ptr<StrictMock<ItemEffectMock>> itemEffect = std::make_shared<StrictMock<ItemEffectMock>>();
     CollectableItemComponent collectableItem{&owner, itemName, itemType, itemEffect};
 };

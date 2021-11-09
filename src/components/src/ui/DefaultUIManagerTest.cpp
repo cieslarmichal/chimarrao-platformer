@@ -134,8 +134,9 @@ class DefaultUIManagerTest : public Test
 public:
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
-
-    DefaultUIManager uiManager{rendererPool};
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    DefaultUIManager uiManager{sharedContext};
 };
 
 TEST_F(DefaultUIManagerTest, createUIWithoutUIConfig_shouldThrowUIConfigNotFound)

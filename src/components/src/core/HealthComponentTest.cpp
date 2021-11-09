@@ -1,6 +1,7 @@
 #include "HealthComponent.h"
 
 #include "gtest/gtest.h"
+#include "RendererPoolMock.h"
 
 #include "ComponentOwner.h"
 
@@ -14,7 +15,11 @@ public:
     const unsigned int initialHealthPoints{100};
     const unsigned int pointsToAdd1{20};
     const unsigned int pointsToAdd2{50};
-    ComponentOwner componentOwner{position, "healthComponentTest"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner{position, "healthComponentTest", sharedContext};
     HealthComponent healthComponent{&componentOwner, initialHealthPoints};
 };
 

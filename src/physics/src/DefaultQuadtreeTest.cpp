@@ -2,6 +2,8 @@
 
 #include "gtest/gtest.h"
 
+#include "RendererPoolMock.h"
+
 #include "StlOperators.h"
 
 using namespace physics;
@@ -29,20 +31,24 @@ public:
     const utils::FloatRect area1{18, 18, 5, 5};
     const utils::FloatRect area2{28, 28, 4, 4};
     const utils::FloatRect area3{60, 25, 10, 5};
-    ComponentOwner componentOwner1{position1, "quadtreeTest1"};
-    ComponentOwner componentOwner2{position2, "quadtreeTest2"};
-    ComponentOwner componentOwner3{position3, "quadtreeTest3"};
-    ComponentOwner componentOwner4{position4, "quadtreeTest4"};
-    ComponentOwner componentOwner5{position5, "quadtreeTest5"};
-    ComponentOwner componentOwner6{position6, "quadtreeTest6"};
-    ComponentOwner componentOwner7{position7, "quadtreeTest7"};
-    ComponentOwner componentOwner8{position8, "quadtreeTest8"};
-    ComponentOwner componentOwner9{position9, "quadtreeTest9"};
-    ComponentOwner componentOwner10{position10, "quadtreeTest10"};
-    ComponentOwner componentOwnerOnNorthEdge{positionOnNorthEdge, "componentOwnerOnNorthEdge"};
-    ComponentOwner componentOwnerOnEastEdge{positionOnEastEdge, "componentOwnerOnEastEdge"};
-    ComponentOwner componentOwnerOnSouthEdge{positionOnSouthEdge, "componentOwnerOnSouthEdge"};
-    ComponentOwner componentOwnerOnWestEdge{positionOnWestEdge, "componentOwnerOnWestEdge"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner componentOwner1{position1, "quadtreeTest1", sharedContext};
+    ComponentOwner componentOwner2{position2, "quadtreeTest2", sharedContext};
+    ComponentOwner componentOwner3{position3, "quadtreeTest3", sharedContext};
+    ComponentOwner componentOwner4{position4, "quadtreeTest4", sharedContext};
+    ComponentOwner componentOwner5{position5, "quadtreeTest5", sharedContext};
+    ComponentOwner componentOwner6{position6, "quadtreeTest6", sharedContext};
+    ComponentOwner componentOwner7{position7, "quadtreeTest7", sharedContext};
+    ComponentOwner componentOwner8{position8, "quadtreeTest8", sharedContext};
+    ComponentOwner componentOwner9{position9, "quadtreeTest9", sharedContext};
+    ComponentOwner componentOwner10{position10, "quadtreeTest10", sharedContext};
+    ComponentOwner componentOwnerOnNorthEdge{positionOnNorthEdge, "componentOwnerOnNorthEdge", sharedContext};
+    ComponentOwner componentOwnerOnEastEdge{positionOnEastEdge, "componentOwnerOnEastEdge", sharedContext};
+    ComponentOwner componentOwnerOnSouthEdge{positionOnSouthEdge, "componentOwnerOnSouthEdge", sharedContext};
+    ComponentOwner componentOwnerOnWestEdge{positionOnWestEdge, "componentOwnerOnWestEdge", sharedContext};
     std::shared_ptr<BoxColliderComponent> boxColliderComponent1 =
         std::make_shared<BoxColliderComponent>(&componentOwner1, size);
     std::shared_ptr<BoxColliderComponent> boxColliderComponent2 =

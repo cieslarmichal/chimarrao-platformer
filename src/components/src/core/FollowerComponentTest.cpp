@@ -4,6 +4,7 @@
 
 #include "AnimatorMock.h"
 #include "InputMock.h"
+#include "RendererPoolMock.h"
 
 #include "AnimationComponent.h"
 #include "ComponentOwner.h"
@@ -36,10 +37,14 @@ public:
 
     const utils::DeltaTime deltaTime{3};
     const utils::Vector2f position{50.0, 11.0};
-    ComponentOwner followerOwner1{position, "followerComponentTest1"};
-    ComponentOwner followerOwner2{position, "followerComponentTest2"};
-    ComponentOwner followedOwner1{positionOnLeft, "followerComponentTest3"};
-    ComponentOwner followedOwner2{positionOnRight, "followerComponentTest4"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner followerOwner1{position, "followerComponentTest1", sharedContext};
+    ComponentOwner followerOwner2{position, "followerComponentTest2", sharedContext};
+    ComponentOwner followedOwner1{positionOnLeft, "followerComponentTest3", sharedContext};
+    ComponentOwner followedOwner2{positionOnRight, "followerComponentTest4", sharedContext};
     FollowerComponent follower1{&followerOwner1, &followedOwner1};
     FollowerComponent follower2{&followerOwner2, &followedOwner2};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
@@ -49,7 +54,7 @@ public:
 TEST_F(FollowerComponentTest,
        loadDependentComponentsWithoutAnimatorComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator"};
+    ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator", sharedContext};
     FollowerComponent followerComponentWithoutAnimator{&componentOwnerWithoutAnimator, &followedOwner1};
     componentOwnerWithoutAnimator.addComponent<VelocityComponent>();
 
@@ -60,7 +65,7 @@ TEST_F(FollowerComponentTest,
 TEST_F(FollowerComponentTest,
        loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity"};
+    ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity", sharedContext};
     FollowerComponent followerComponentWithoutVelocity{&componentOwnerWithoutVelocity, &followedOwner1};
     componentOwnerWithoutVelocity.addComponent<AnimationComponent>(animator);
 

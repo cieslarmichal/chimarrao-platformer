@@ -55,22 +55,24 @@ public:
     const graphics::GraphicsId graphicsId = graphics::GraphicsIdGenerator::generateId();
     std::shared_ptr<StrictMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<StrictMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
 };
 
 TEST_F(ImageTest, createImageWithoutConfig_shouldThrowUIComponentConfigNotFound)
 {
-    ASSERT_THROW(Image(rendererPool, nullptr), exceptions::UIComponentConfigNotFound);
+    ASSERT_THROW(Image(sharedContext, nullptr), exceptions::UIComponentConfigNotFound);
 }
 
 TEST_F(ImageTest, createImageWithConfigWithoutColorNorTexture_shouldThrowInvalidUIConfig)
 {
-    ASSERT_THROW(Image(rendererPool, createInvalidConfig()), exceptions::InvalidUIComponentConfig);
+    ASSERT_THROW(Image(sharedContext, createInvalidConfig()), exceptions::InvalidUIComponentConfig);
 }
 
 TEST_F(ImageTest, activate_shouldActivateAfterSomeTime)
 {
     expectCreateGraphicsComponent();
-    auto image = Image{rendererPool, createValidConfig()};
+    auto image = Image{sharedContext, createValidConfig()};
     EXPECT_CALL(*rendererPool, setVisibility(_, _));
 
     image.activate();
@@ -82,7 +84,7 @@ TEST_F(ImageTest, activate_shouldActivateAfterSomeTime)
 TEST_F(ImageTest, deactivate)
 {
     expectCreateGraphicsComponent();
-    auto image = Image{rendererPool, createValidConfig()};
+    auto image = Image{sharedContext, createValidConfig()};
     EXPECT_CALL(*rendererPool, setVisibility(_, _));
 
     image.deactivate();
@@ -94,7 +96,7 @@ TEST_F(ImageTest, deactivate)
 TEST_F(ImageTest, getName)
 {
     expectCreateGraphicsComponent();
-    auto image = Image{rendererPool, createValidConfig()};
+    auto image = Image{sharedContext, createValidConfig()};
 
     const auto actualName = image.getName();
 
@@ -105,7 +107,7 @@ TEST_F(ImageTest, getName)
 TEST_F(ImageTest, initialSize_shouldMatchWithTheOnceFromConstructor)
 {
     expectCreateGraphicsComponent();
-    auto image = Image{rendererPool, createValidConfig()};
+    auto image = Image{sharedContext, createValidConfig()};
     EXPECT_CALL(*rendererPool, getSize(_)).WillOnce(Return(dummySize));
 
     const auto actualSize = image.getSize();
@@ -117,7 +119,7 @@ TEST_F(ImageTest, initialSize_shouldMatchWithTheOnceFromConstructor)
 TEST_F(ImageTest, setSize)
 {
     expectCreateGraphicsComponent();
-    auto image = Image{rendererPool, createValidConfig()};
+    auto image = Image{sharedContext, createValidConfig()};
     EXPECT_CALL(*rendererPool, setSize(_, changedSize));
     EXPECT_CALL(*rendererPool, getSize(_)).WillOnce(Return(changedSize));
 
@@ -131,7 +133,7 @@ TEST_F(ImageTest, setSize)
 TEST_F(ImageTest, setOutline)
 {
     expectCreateGraphicsComponent();
-    auto image = Image{rendererPool, createValidConfig()};
+    auto image = Image{sharedContext, createValidConfig()};
     EXPECT_CALL(*rendererPool, setOutline(_, thickness, graphics::Color::Black));
 
     image.setOutline(thickness, graphics::Color::Black);

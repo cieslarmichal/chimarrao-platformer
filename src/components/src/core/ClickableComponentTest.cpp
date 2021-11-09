@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "InputMock.h"
+#include "RendererPoolMock.h"
 
 #include "ComponentOwner.h"
 #include "exceptions/ActionForKeyAlreadyExists.h"
@@ -42,7 +43,11 @@ public:
     const utils::Vector2f position1{20, 20};
     const utils::Vector2f positionInsideTarget{21, 21};
     const utils::Vector2f positionOutsideTarget{27, 21};
-    ComponentOwner owner{position1, "clickableComponentOwnerTest"};
+    std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
+        std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::shared_ptr<components::core::SharedContext> sharedContext =
+        std::make_shared<components::core::SharedContext>(rendererPool);
+    ComponentOwner owner{position1, "clickableComponentOwnerTest", sharedContext};
     utils::DeltaTime deltaTime{1};
     StrictMock<input::InputMock> input;
     ClickableComponent clickableComponent{&owner, [this] { clickAction(actionVariable); }};
@@ -58,7 +63,7 @@ public:
 TEST_F(ClickableComponentTest,
        loadDependentComponentsWithoutBoxColliderComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider"};
+    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider", sharedContext};
     ClickableComponent clickableComponentWithoutBoxCollider{&componentOwnerWithoutBoxCollider,
                                                             validKeyActionVector};
 
@@ -124,7 +129,7 @@ TEST_F(ClickableComponentTest,
 TEST_F(ClickableComponentTest,
        givenMousePositionInsideHitboxRightAndLeftMouseKeyClicked_shouldCallBothActionAtOneUpdate)
 {
-    ComponentOwner localComponentOwner{position1, "clickableComponentOwner1"};
+    ComponentOwner localComponentOwner{position1, "clickableComponentOwner1", sharedContext};
     auto boxCollider =
         localComponentOwner.addComponent<BoxColliderComponent>(size, CollisionLayer::Default, offset);
     auto localClickableComponent = ClickableComponent(&localComponentOwner, validKeyActionVector);
@@ -142,7 +147,7 @@ TEST_F(ClickableComponentTest,
 TEST_F(ClickableComponentTest,
        givenMousePositionInsideHitboxRightMouseKeyClicked_shouldCallOnlyRightClickAction)
 {
-    ComponentOwner localComponentOwner{position1, "clickableComponentOwner2"};
+    ComponentOwner localComponentOwner{position1, "clickableComponentOwner2", sharedContext};
     auto boxCollider =
         localComponentOwner.addComponent<BoxColliderComponent>(size, CollisionLayer::Default, offset);
     auto localClickableComponent = ClickableComponent(&localComponentOwner, validKeyActionVector);
@@ -160,7 +165,7 @@ TEST_F(ClickableComponentTest,
 TEST_F(ClickableComponentTest,
        givenTwoKeyActions_thenChangeIntoOtherKeyAction_shouldBeAbleToOnlyPerformOtherOne)
 {
-    ComponentOwner localComponentOwner{position1, "clickableComponentOwner3"};
+    ComponentOwner localComponentOwner{position1, "clickableComponentOwner3", sharedContext};
     auto boxCollider =
         localComponentOwner.addComponent<BoxColliderComponent>(size, CollisionLayer::Default, offset);
     auto localClickableComponent = ClickableComponent(&localComponentOwner, validKeyActionVector);
