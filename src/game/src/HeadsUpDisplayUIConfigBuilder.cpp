@@ -1,12 +1,14 @@
 #include "HeadsUpDisplayUIConfigBuilder.h"
 
 #include "CommonUIConfigElements.h"
-#include "HeadsUpDisplay.h"
 #include "ui/UIConfig.h"
 
 namespace game
 {
-
+namespace
+{
+const auto initialTexturePath = utils::ProjectPathReader::getProjectRootPath() + "resources/yerba_item.png";
+}
 std::size_t HeadsUpDisplayUIConfigBuilder::numberOfSlots = 8;
 
 std::unique_ptr<components::ui::UIConfig> HeadsUpDisplayUIConfigBuilder::createUIConfig()
@@ -32,7 +34,7 @@ std::vector<std::string> HeadsUpDisplayUIConfigBuilder::getSlotIds()
 
     for (std::size_t i = 1; i <= numberOfSlots; i++)
     {
-        slotIds.push_back("slotConfig" + std::to_string(i));
+        slotIds.push_back("slot" + std::to_string(i));
     }
 
     return slotIds;
@@ -44,7 +46,7 @@ std::vector<std::string> HeadsUpDisplayUIConfigBuilder::getSlotItemIds()
 
     for (std::size_t i = 1; i <= numberOfSlots; i++)
     {
-        slotIds.push_back("slotItemConfig" + std::to_string(i));
+        slotIds.push_back("slotItem" + std::to_string(i));
     }
 
     return slotIds;
@@ -132,7 +134,7 @@ std::vector<std::unique_ptr<components::ui::ImageConfig>> HeadsUpDisplayUIConfig
     for (std::size_t i = 0; i < slotsPositions.size(); i++)
     {
         auto slotConfig = std::make_unique<components::ui::ImageConfig>(
-            slotIds[i], slotsPositions[i], slotSize, graphics::VisibilityLayer::First,
+            slotIds[i], slotsPositions[i], slotSize, graphics::VisibilityLayer::Second,
             graphics::Color(152, 152, 152, 152));
 
         imagesConfig.push_back(std::move(slotConfig));
@@ -143,7 +145,7 @@ std::vector<std::unique_ptr<components::ui::ImageConfig>> HeadsUpDisplayUIConfig
     {
         auto slotConfig = std::make_unique<components::ui::ImageConfig>(
             slotItemIds[i], slotsPositions[i], slotSize, graphics::VisibilityLayer::First,
-            graphics::Color::Transparent);
+            initialTexturePath);
 
         imagesConfig.push_back(std::move(slotConfig));
     }

@@ -19,11 +19,11 @@ public:
 
     const std::vector<std::string> expectedLabelsNames{"hudHealthPointsLabel", "hudItemsLabel"};
     std::vector<std::string> expectedImagesNames{"hudHealthPointsBar", "hudHealthPointsBarFrame"};
-    const std::vector<std::string> slotIds{"slotConfig1", "slotConfig2", "slotConfig3", "slotConfig4",
-                                           "slotConfig5", "slotConfig6", "slotConfig7", "slotConfig8"};
-    const std::vector<std::string> slotItemsIds{"slotItemConfig1", "slotItemConfig2", "slotItemConfig3",
-                                                "slotItemConfig4", "slotItemConfig5", "slotItemConfig6",
-                                                "slotItemConfig7", "slotItemConfig8"};
+    const std::vector<std::string> slotIds{"slot1", "slot2", "slot3", "slot4",
+                                           "slot5", "slot6", "slot7", "slot8"};
+    const std::vector<std::string> slotItemsIds{"slotItem1", "slotItem2", "slotItem3",
+                                                "slotItem4", "slotItem5", "slotItem6",
+                                                "slotItem7", "slotItem8"};
 };
 
 TEST_F(HeadsUpDisplayUIConfigBuilderTest, createMenuUI)

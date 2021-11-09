@@ -26,7 +26,7 @@ const auto projectPath = utils::ProjectPathReader::getProjectRootPath();
 const auto dummySize = utils::Vector2f{25.f, 5.f};
 const auto changedSize = utils::Vector2f{10.f, 5.f};
 const auto dummyPosition = utils::Vector2f{0.f, 5.f};
-const auto imagePath = projectPath + "resources/BG/menu_background.jpg";
+const auto initialTexturePath = utils::ProjectPathReader::getProjectRootPath() + "resources/yerba_item.png";
 }
 
 class HeadsUpDisplayTest : public Test
@@ -43,12 +43,12 @@ public:
         itemCollector = player->addComponent<ItemCollectorComponent>(quadtree, rayCast, capacity, timer);
 
         EXPECT_CALL(*rendererPool,
-                    acquire(dummySize, dummyPosition, imagePath, graphics::VisibilityLayer::First, _))
+                    acquire(dummySize, dummyPosition, initialTexturePath, graphics::VisibilityLayer::First, _))
             .WillOnce(Return(itemId));
 
         boxColliderComponent1 = itemOwner1.addComponent<BoxColliderComponent>(size);
         itemOwner1.addComponent<CollectableItemComponent>(itemName1, itemType, itemEffect);
-        itemOwner1.addGraphicsComponent(rendererPool, dummySize, dummyPosition, imagePath,
+        itemOwner1.addGraphicsComponent(rendererPool, dummySize, dummyPosition, initialTexturePath,
                                         graphics::VisibilityLayer::First, utils::Vector2f{0, 0}, true);
         itemOwner1.loadDependentComponents();
     }
@@ -62,11 +62,11 @@ public:
                                            graphics::Color::Transparent, graphics::VisibilityLayer::First, _))
             .WillOnce(Return(graphicsId3));
         EXPECT_CALL(*rendererPool, acquire(slotSize, _, graphics::Color(152, 152, 152, 152),
-                                           graphics::VisibilityLayer::First, _))
+                                           graphics::VisibilityLayer::Second, _))
             .Times(8)
             .WillRepeatedly(Return(graphics::GraphicsIdGenerator::generateId()));
         EXPECT_CALL(*rendererPool,
-                    acquire(slotSize, _, graphics::Color::Transparent, graphics::VisibilityLayer::First, _))
+                    acquire(slotSize, _, initialTexturePath, graphics::VisibilityLayer::First, _))
             .Times(8)
             .WillRepeatedly(Return(graphics::GraphicsIdGenerator::generateId()));
 
@@ -166,7 +166,7 @@ TEST_F(HeadsUpDisplayTest, collectedItemsChanged_shouldLoadItemTexturesOnUpdate)
     auto hud = HeadsUpDisplay{player, sharedContext, HeadsUpDisplayUIConfigBuilder::createUIConfig()};
     EXPECT_CALL(*rendererPool, getSize(graphicsId1)).WillOnce(Return(healthPointsBarSize));
     EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::First));
-    EXPECT_CALL(*rendererPool, setTexture(_, graphics::TextureRect{imagePath}, utils::Vector2f{1, 1}));
+    EXPECT_CALL(*rendererPool, setTexture(_, graphics::TextureRect{initialTexturePath}, utils::Vector2f{1, 1}));
     EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::Invisible)).Times(8);
     quadtree->insertCollider(boxColliderComponent);
     quadtree->insertCollider(boxColliderComponent1);
@@ -202,7 +202,7 @@ TEST_F(HeadsUpDisplayTest, collectedItemsNotChanged_shouldNotLoadItemTexturesOnS
     auto hud = HeadsUpDisplay{player, sharedContext, HeadsUpDisplayUIConfigBuilder::createUIConfig()};
     EXPECT_CALL(*rendererPool, getSize(graphicsId1)).WillRepeatedly(Return(healthPointsBarSize));
     EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::First));
-    EXPECT_CALL(*rendererPool, setTexture(_, graphics::TextureRect{imagePath}, utils::Vector2f{1, 1}));
+    EXPECT_CALL(*rendererPool, setTexture(_, graphics::TextureRect{initialTexturePath}, utils::Vector2f{1, 1}));
     EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::Invisible)).Times(8);
     quadtree->insertCollider(boxColliderComponent);
     quadtree->insertCollider(boxColliderComponent1);

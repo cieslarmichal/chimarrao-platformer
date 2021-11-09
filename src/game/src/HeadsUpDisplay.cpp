@@ -75,15 +75,15 @@ void HeadsUpDisplay::update(const utils::DeltaTime&, const input::Input&)
         return;
     }
 
-    for (std::size_t slotIndex = 0; slotIndex < slotIds.size(); slotIndex++)
+    for (std::size_t slotItemIndex = 0; slotItemIndex < slotItemIds.size(); slotItemIndex++)
     {
-        const auto& slotId = slotIds[slotIndex];
-        auto& slot = images[slotId];
+        const auto& slotItemId = slotItemIds[slotItemIndex];
+        auto& slot = images[slotItemId];
 
-        if (slotIndex < itemsInfo.size())
+        if (slotItemIndex < itemsInfo.size())
         {
             slot->activate();
-            slot->setTexture(itemsInfo[slotIndex].texturePath);
+            slot->setTexture(itemsInfo[slotItemIndex].texturePath);
         }
         else
         {
