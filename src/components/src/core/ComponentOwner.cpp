@@ -4,8 +4,11 @@
 
 namespace components::core
 {
-ComponentOwner::ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit)
-    : uniqueName{uniqueNameInit}
+
+ComponentOwner::ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit,
+                               SharedContext& sharedContext)
+    : uniqueName{uniqueNameInit}, sharedContext{sharedContext}
+
 {
     transform = addComponent<TransformComponent>(position);
     id = addComponent<IdComponent>();

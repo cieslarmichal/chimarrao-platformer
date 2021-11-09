@@ -13,10 +13,12 @@
 
 namespace components::core
 {
+class SharedContext;
+
 class ComponentOwner
 {
 public:
-    ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit);
+    ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit, SharedContext&);
 
     void loadDependentComponents();
     void update(utils::DeltaTime, const input::Input&);
@@ -87,6 +89,7 @@ public:
     std::shared_ptr<TransformComponent> transform;
     std::vector<std::shared_ptr<GraphicsComponent>> allGraphics;
     std::shared_ptr<IdComponent> id;
+    SharedContext& sharedContext;
 
 protected:
     std::vector<std::shared_ptr<Component>> components;

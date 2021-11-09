@@ -12,8 +12,8 @@ class ComponentOwner;
 class Component
 {
 public:
-    Component(ComponentOwner*);
-    virtual ~Component();
+    explicit Component(ComponentOwner*);
+    virtual ~Component() = default;
 
     virtual void loadDependentComponents();
     virtual void update(utils::DeltaTime, const input::Input&);
