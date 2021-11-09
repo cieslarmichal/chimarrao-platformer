@@ -3,10 +3,11 @@
 #include "BoxColliderComponent.h"
 #include "CollectableItemComponent.h"
 #include "ComponentOwner.h"
-#include "Quadtree.h"
-#include "RayCast.h"
 #include "DirectionComponent.h"
 #include "ItemInfo.h"
+#include "Quadtree.h"
+#include "RayCast.h"
+#include "Timer.h"
 
 namespace components::core
 {
@@ -14,9 +15,11 @@ class ItemCollectorComponent : public Component
 {
 public:
     ItemCollectorComponent(ComponentOwner* owner, std::shared_ptr<physics::Quadtree>,
-                           std::shared_ptr<physics::RayCast>, unsigned capacity);
+                           std::shared_ptr<physics::RayCast>, unsigned capacity,
+                           std::unique_ptr<utils::Timer>);
 
     void loadDependentComponents() override;
+    void update(utils::DeltaTime, const input::Input&) override;
     void collectNearestItem();
     void drop(const std::string& itemName);
     void use(const std::string& itemName);
@@ -35,5 +38,7 @@ private:
     std::vector<std::shared_ptr<CollectableItemComponent>> items;
     const unsigned capacity;
     const float dropRange{4};
+    const float timeAfterNextItemCanBeCollected;
+    std::unique_ptr<utils::Timer> possibilityToCollectNextItemTimer;
 };
 }

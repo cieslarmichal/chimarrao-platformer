@@ -3,12 +3,14 @@
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
+#include "InputMock.h"
 #include "ItemEffectMock.h"
 #include "RendererPoolMock.h"
+#include "TimerMock.h"
 
+#include "ComponentOwner.h"
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
-#include "ComponentOwner.h"
 #include "HealthComponent.h"
 #include "ProjectPathReader.h"
 #include "core/exceptions/DependentComponentNotFound.h"
@@ -86,16 +88,23 @@ public:
     std::shared_ptr<StrictMock<ItemEffectMock>> itemEffect = std::make_shared<StrictMock<ItemEffectMock>>();
     std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::DefaultRayCast>(quadtree);
-    ItemCollectorComponent itemCollectorWithOneCapacity{&itemCollectorOwner, quadtree, rayCast, capacity1};
-    ItemCollectorComponent itemCollectorWithTwoCapacity{&itemCollectorOwner, quadtree, rayCast, capacity2};
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
+    std::unique_ptr<StrictMock<utils::TimerMock>> timerInit{std::make_unique<StrictMock<utils::TimerMock>>()};
+    StrictMock<utils::TimerMock>* timer{timerInit.get()};
+    ItemCollectorComponent itemCollectorWithOneCapacity{&itemCollectorOwner, quadtree, rayCast, capacity1,
+                                                        std::move(timerInit)};
+    ItemCollectorComponent itemCollectorWithTwoCapacity{&itemCollectorOwner, quadtree, rayCast, capacity2,
+                                                        std::move(timerInit)};
+    StrictMock<input::InputMock> input;
+    const utils::DeltaTime deltaTime{1};
 };
 
 TEST_F(ItemCollectorComponentTest, givenZeroCapacity_shouldThrowInvalidCapacityException)
 {
-    ASSERT_THROW(ItemCollectorComponent(&itemCollectorOwner, quadtree, rayCast, emptyCapacity),
-                 exceptions::InvalidCapacity);
+    ASSERT_THROW(
+        ItemCollectorComponent(&itemCollectorOwner, quadtree, rayCast, emptyCapacity, std::move(timerInit)),
+        exceptions::InvalidCapacity);
 }
 
 TEST_F(ItemCollectorComponentTest,
@@ -103,7 +112,7 @@ TEST_F(ItemCollectorComponentTest,
 {
     ComponentOwner componentOwnerWithoutDirection{position, "componentOwnerWithoutDirection"};
     ItemCollectorComponent itemCollectorWithoutDirection{&componentOwnerWithoutDirection, quadtree, rayCast,
-                                                         capacity1};
+                                                         capacity1, std::move(timerInit)};
 
     ASSERT_THROW(itemCollectorWithoutDirection.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
@@ -116,10 +125,52 @@ TEST_F(ItemCollectorComponentTest,
     componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>();
     componentOwnerWithoutBoxCollider.addComponent<DirectionComponent>();
     ItemCollectorComponent itemCollectorWithoutBoxCollider{&componentOwnerWithoutBoxCollider, quadtree,
-                                                           rayCast, capacity1};
+                                                           rayCast, capacity1, std::move(timerInit)};
 
     ASSERT_THROW(itemCollectorWithoutBoxCollider.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
+}
+
+TEST_F(ItemCollectorComponentTest, givenTimeAfterNextItemCannotBeCollected_shouldNotCollectAnyItem)
+{
+    quadtree->insertCollider(boxColliderComponent);
+    quadtree->insertCollider(boxColliderComponent2);
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(0.1f));
+
+    itemCollectorWithOneCapacity.update(deltaTime, input);
+
+    const auto items = itemCollectorWithOneCapacity.getItemsInfo();
+    ASSERT_EQ(items.size(), 0);
+}
+
+TEST_F(
+    ItemCollectorComponentTest,
+    givenTimeAfterNextItemCanBeCollectedAndKeyCorrespondingToCollectingItemNotPressed_shouldNotCollectAnyItem)
+{
+    quadtree->insertCollider(boxColliderComponent);
+    quadtree->insertCollider(boxColliderComponent2);
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.0f));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::E)).WillOnce(Return(false));
+
+    itemCollectorWithOneCapacity.update(deltaTime, input);
+
+    const auto items = itemCollectorWithOneCapacity.getItemsInfo();
+    ASSERT_EQ(items.size(), 0);
+}
+
+TEST_F(ItemCollectorComponentTest,
+       givenTimeAfterNextItemCanBeCollectedAndKeyCorrespondingToCollectingItemPressed_shouldNotCollectAnyItem)
+{
+    quadtree->insertCollider(boxColliderComponent);
+    quadtree->insertCollider(boxColliderComponent2);
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.0f));
+    EXPECT_CALL(*timer, restart());
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::E)).WillOnce(Return(true));
+
+    itemCollectorWithOneCapacity.update(deltaTime, input);
+
+    const auto items = itemCollectorWithOneCapacity.getItemsInfo();
+    ASSERT_EQ(items.size(), 1);
 }
 
 TEST_F(ItemCollectorComponentTest, givenItemOutOfRange_shouldNotCollectItem)

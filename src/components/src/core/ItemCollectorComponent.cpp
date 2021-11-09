@@ -16,8 +16,14 @@ const auto distance = [](const utils::Vector2f& v1, const utils::Vector2f& v2)
 
 ItemCollectorComponent::ItemCollectorComponent(ComponentOwner* owner,
                                                std::shared_ptr<physics::Quadtree> quadtree,
-                                               std::shared_ptr<physics::RayCast> rayCast, unsigned capacity)
-    : Component(owner), collisions{std::move(quadtree)}, rayCast{std::move(rayCast)}, capacity{capacity}
+                                               std::shared_ptr<physics::RayCast> rayCast, unsigned capacity,
+                                               std::unique_ptr<utils::Timer> timer)
+    : Component(owner),
+      collisions{std::move(quadtree)},
+      rayCast{std::move(rayCast)},
+      capacity{capacity},
+      timeAfterNextItemCanBeCollected{0.25f},
+      possibilityToCollectNextItemTimer{std::move(timer)}
 {
     if (capacity == 0)
     {
@@ -46,6 +52,16 @@ void ItemCollectorComponent::loadDependentComponents()
     {
         throw exceptions::DependentComponentNotFound{
             "ItemCollectorComponent: BoxColliderComponent not found"};
+    }
+}
+
+void ItemCollectorComponent::update(utils::DeltaTime, const input::Input& input)
+{
+    if (possibilityToCollectNextItemTimer->getElapsedSeconds() > timeAfterNextItemCanBeCollected and
+        input.isKeyPressed(input::InputKey::E))
+    {
+        collectNearestItem();
+        possibilityToCollectNextItemTimer->restart();
     }
 }
 
