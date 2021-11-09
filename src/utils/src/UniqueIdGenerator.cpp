@@ -1,6 +1,6 @@
-#include <boost/uuid/uuid_generators.hpp>
-
 #include "UniqueIdGenerator.h"
+
+#include <boost/uuid/uuid_generators.hpp>
 
 namespace utils
 {

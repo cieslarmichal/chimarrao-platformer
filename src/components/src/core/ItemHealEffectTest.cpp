@@ -6,7 +6,6 @@
 #include "HealthComponent.h"
 #include "exceptions/DependentComponentNotFound.h"
 
-
 using namespace components::core;
 using namespace ::testing;
 

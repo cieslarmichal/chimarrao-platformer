@@ -35,7 +35,7 @@ void IdleNpcMovementComponent::loadDependentComponents()
     }
 }
 
-void IdleNpcMovementComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
+void IdleNpcMovementComponent::update(utils::DeltaTime deltaTime, const input::Input&)
 {
     if (not enabled)
     {
@@ -65,7 +65,7 @@ void IdleNpcMovementComponent::update(utils::DeltaTime deltaTime, const input::I
     velocityComponent->setVelocity(currentMovementSpeed);
 }
 
-void IdleNpcMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input& input)
+void IdleNpcMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input&)
 {
     if (not enabled)
     {

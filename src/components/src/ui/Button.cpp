@@ -10,7 +10,7 @@
 namespace components::ui
 {
 
-Button::Button(const std::shared_ptr<graphics::RendererPool>& rendererPool,
+Button::Button(const std::shared_ptr<core::SharedContext>& sharedContext,
                std::unique_ptr<ButtonConfig> buttonConfig, std::unique_ptr<utils::Timer> timer)
     : timeAfterButtonCanBeClicked{0.25f}, freezeClickableButtonTimer{std::move(timer)}
 {
@@ -20,12 +20,13 @@ Button::Button(const std::shared_ptr<graphics::RendererPool>& rendererPool,
     }
 
     name = buttonConfig->uniqueName;
-    coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(buttonConfig->position, name);
-    coreComponentsOwner->addGraphicsComponent(rendererPool, buttonConfig->size, buttonConfig->position,
-                                              buttonConfig->buttonColor, graphics::VisibilityLayer::First,
-                                              utils::Vector2f{0, 0}, true);
+    coreComponentsOwner =
+        std::make_unique<components::core::ComponentOwner>(buttonConfig->position, name, sharedContext);
+    coreComponentsOwner->addGraphicsComponent(sharedContext->rendererPool, buttonConfig->size,
+                                              buttonConfig->position, buttonConfig->buttonColor,
+                                              graphics::VisibilityLayer::First, utils::Vector2f{0, 0}, true);
     coreComponentsOwner->addComponent<components::core::TextComponent>(
-        rendererPool, buttonConfig->position, buttonConfig->text, buttonConfig->fontPath,
+        sharedContext->rendererPool, buttonConfig->position, buttonConfig->text, buttonConfig->fontPath,
         buttonConfig->fontSize, buttonConfig->textColor, buttonConfig->textOffset, true);
     coreComponentsOwner->addComponent<components::core::BoxColliderComponent>(buttonConfig->size);
 

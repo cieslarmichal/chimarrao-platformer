@@ -65,8 +65,9 @@ void deactivateComponents(std::vector<T>& uiComponents)
 }
 }
 
-DefaultUIManager::DefaultUIManager(const std::shared_ptr<graphics::RendererPool>& rendererPool)
-    : uiComponentFactory{std::make_unique<UIComponentFactory>(rendererPool)}
+DefaultUIManager::DefaultUIManager(const std::shared_ptr<core::SharedContext>& sharedContextInit)
+    : sharedContext{sharedContextInit},
+      uiComponentFactory{std::make_unique<UIComponentFactory>(sharedContext)}
 {
 }
 

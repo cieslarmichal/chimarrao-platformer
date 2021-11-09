@@ -15,7 +15,7 @@ namespace game
 class LayoutTile
 {
 public:
-    LayoutTile(const std::shared_ptr<graphics::RendererPool>&, const utils::Vector2i& position,
+    LayoutTile(const std::shared_ptr<components::core::SharedContext>&, const utils::Vector2i& position,
                const utils::Vector2f& size, TileType& currentTileType, TileMap& tileMap);
 
     void update(const utils::DeltaTime&, const input::Input&);

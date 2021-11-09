@@ -17,7 +17,7 @@ namespace components::ui
 class UIComponentFactory
 {
 public:
-    UIComponentFactory(std::shared_ptr<graphics::RendererPool>);
+    explicit UIComponentFactory(const std::shared_ptr<core::SharedContext>&);
 
     std::unique_ptr<Background> createBackground(std::unique_ptr<BackgroundConfig>) const;
     std::unique_ptr<Button> createButton(std::unique_ptr<ButtonConfig>) const;
@@ -27,6 +27,6 @@ public:
     std::unique_ptr<Image> createImage(std::unique_ptr<ImageConfig>) const;
 
 private:
-    std::shared_ptr<graphics::RendererPool> rendererPool;
+    const std::shared_ptr<core::SharedContext>& sharedContext;
 };
 }

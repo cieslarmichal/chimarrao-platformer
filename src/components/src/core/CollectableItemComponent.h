@@ -10,7 +10,8 @@ namespace components::core
 class CollectableItemComponent : public Component
 {
 public:
-    CollectableItemComponent(ComponentOwner* owner, const std::string& itemName, ItemType, std::shared_ptr<ItemEffect>);
+    CollectableItemComponent(ComponentOwner* owner, const std::string& itemName, ItemType,
+                             std::shared_ptr<ItemEffect>);
 
     void collectBy(ComponentOwner* newCollector);
     void drop();

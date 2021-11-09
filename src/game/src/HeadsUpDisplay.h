@@ -17,7 +17,7 @@ class HeadsUpDisplay
 {
 public:
     explicit HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner> player,
-                            const std::shared_ptr<graphics::RendererPool>& rendererPool,
+                            const std::shared_ptr<components::core::SharedContext>&,
                             std::unique_ptr<components::ui::UIConfig>);
 
     void update(const utils::DeltaTime&, const input::Input&);

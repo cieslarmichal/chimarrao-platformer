@@ -13,7 +13,7 @@ namespace components::ui
 class Image : public UIComponent
 {
 public:
-    Image(const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<ImageConfig>);
+    Image(const std::shared_ptr<core::SharedContext>&, std::unique_ptr<ImageConfig>);
 
     void update(utils::DeltaTime, const input::Input&) override;
     std::string getName() const override;

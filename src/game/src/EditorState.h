@@ -21,7 +21,8 @@ public:
     explicit EditorState(const std::shared_ptr<window::Window>&,
                          const std::shared_ptr<graphics::RendererPool>&, std::shared_ptr<utils::FileAccess>,
                          States&, std::shared_ptr<components::ui::UIManager>, std::shared_ptr<TileMap>,
-                         std::unique_ptr<utils::Timer>);
+                         std::unique_ptr<utils::Timer>,
+                         const std::shared_ptr<components::core::SharedContext>&);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -46,5 +47,6 @@ private:
     std::vector<LayoutTile> layoutTileMap;
     std::shared_ptr<TileMap> tileMap;
     std::shared_ptr<components::ui::UIManager> uiManager;
+    const std::shared_ptr<components::core::SharedContext>& sharedContext;
 };
 }

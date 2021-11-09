@@ -5,8 +5,8 @@
 
 namespace components::core
 {
-CollectableItemComponent::CollectableItemComponent(ComponentOwner* owner, const std::string& name, ItemType type,
-                                                   std::shared_ptr<ItemEffect> effect)
+CollectableItemComponent::CollectableItemComponent(ComponentOwner* owner, const std::string& name,
+                                                   ItemType type, std::shared_ptr<ItemEffect> effect)
     : Component(owner), collector{nullptr}, uniqueName{name}, type{type}, effect{std::move(effect)}
 {
 }

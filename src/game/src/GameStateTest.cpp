@@ -5,14 +5,14 @@
 #include "ComponentOwnersManagerMock.h"
 #include "FileAccessMock.h"
 #include "InputMock.h"
+#include "QuadtreeMock.h"
+#include "RayCastMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapMock.h"
 #include "editor/TileMapSerializerMock.h"
 #include "ui/UIManagerMock.h"
-#include "QuadtreeMock.h"
-#include "RayCastMock.h"
 
 #include "ProjectPathReader.h"
 
@@ -54,8 +54,10 @@ public:
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
     std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
-    std::shared_ptr<StrictMock<physics::QuadtreeMock>> quadtree = std::make_shared<StrictMock<physics::QuadtreeMock>>();
-    std::shared_ptr<StrictMock<physics::RayCastMock>> rayCast = std::make_shared<StrictMock<physics::RayCastMock>>();
+    std::shared_ptr<StrictMock<physics::QuadtreeMock>> quadtree =
+        std::make_shared<StrictMock<physics::QuadtreeMock>>();
+    std::shared_ptr<StrictMock<physics::RayCastMock>> rayCast =
+        std::make_shared<StrictMock<physics::RayCastMock>>();
 };
 
 class GameStateTest : public GameStateTest_Base
@@ -63,7 +65,7 @@ class GameStateTest : public GameStateTest_Base
 public:
     GameState gameState{window,  rendererPool, fileAccess,
                         states,  uiManager,    std::move(componentOwnersManagerInit),
-                        tileMap, rayCast, quadtree};
+                        tileMap, rayCast,      quadtree};
 };
 
 TEST_F(GameStateTest, activate_shouldActivateUIAndOwners)

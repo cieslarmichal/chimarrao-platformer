@@ -8,17 +8,17 @@
 #include "GraphicsComponent.h"
 #include "IdComponent.h"
 #include "Input.h"
+#include "SharedContext.h"
 #include "TransformComponent.h"
 #include "UniqueName.h"
 
 namespace components::core
 {
-class SharedContext;
-
 class ComponentOwner
 {
 public:
-    ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit, SharedContext&);
+    ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit,
+                   std::shared_ptr<SharedContext>);
 
     void loadDependentComponents();
     void update(utils::DeltaTime, const input::Input&);
@@ -89,7 +89,7 @@ public:
     std::shared_ptr<TransformComponent> transform;
     std::vector<std::shared_ptr<GraphicsComponent>> allGraphics;
     std::shared_ptr<IdComponent> id;
-    SharedContext& sharedContext;
+    std::shared_ptr<SharedContext> sharedContext;
 
 protected:
     std::vector<std::shared_ptr<Component>> components;

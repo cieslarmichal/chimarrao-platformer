@@ -6,7 +6,7 @@
 
 namespace components::ui
 {
-Image::Image(const std::shared_ptr<graphics::RendererPool>& rendererPool,
+Image::Image(const std::shared_ptr<core::SharedContext>& sharedContext,
              std::unique_ptr<ImageConfig> imageConfig)
 {
     if (not imageConfig)
@@ -20,19 +20,20 @@ Image::Image(const std::shared_ptr<graphics::RendererPool>& rendererPool,
     }
 
     name = imageConfig->uniqueName;
-    coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(imageConfig->position, name);
+    coreComponentsOwner =
+        std::make_unique<components::core::ComponentOwner>(imageConfig->position, name, sharedContext);
 
     if (imageConfig->texturePath)
     {
-        coreComponentsOwner->addGraphicsComponent(rendererPool, imageConfig->size, imageConfig->position,
-                                                  *imageConfig->texturePath, imageConfig->visibilityLayer,
-                                                  utils::Vector2f{0, 0}, true);
+        coreComponentsOwner->addGraphicsComponent(sharedContext->rendererPool, imageConfig->size,
+                                                  imageConfig->position, *imageConfig->texturePath,
+                                                  imageConfig->visibilityLayer, utils::Vector2f{0, 0}, true);
     }
     else
     {
-        coreComponentsOwner->addGraphicsComponent(rendererPool, imageConfig->size, imageConfig->position,
-                                                  *imageConfig->color, imageConfig->visibilityLayer,
-                                                  utils::Vector2f{0, 0}, true);
+        coreComponentsOwner->addGraphicsComponent(sharedContext->rendererPool, imageConfig->size,
+                                                  imageConfig->position, *imageConfig->color,
+                                                  imageConfig->visibilityLayer, utils::Vector2f{0, 0}, true);
     }
 
     coreComponentsOwner->loadDependentComponents();

@@ -15,7 +15,7 @@ namespace components::ui
 class Button : public UIComponent
 {
 public:
-    Button(const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<ButtonConfig>,
+    Button(const std::shared_ptr<core::SharedContext>&, std::unique_ptr<ButtonConfig>,
            std::unique_ptr<utils::Timer>);
 
     void update(utils::DeltaTime, const input::Input&) override;

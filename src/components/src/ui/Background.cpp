@@ -9,7 +9,7 @@
 namespace components::ui
 {
 
-Background::Background(const std::shared_ptr<graphics::RendererPool>& rendererPool,
+Background::Background(const std::shared_ptr<core::SharedContext>& sharedContext,
                        std::unique_ptr<BackgroundConfig> backgroundConfig)
 {
     if (not backgroundConfig)
@@ -25,19 +25,19 @@ Background::Background(const std::shared_ptr<graphics::RendererPool>& rendererPo
 
     name = backgroundConfig->uniqueName;
     coreComponentsOwner =
-        std::make_unique<components::core::ComponentOwner>(backgroundConfig->position, name);
+        std::make_unique<components::core::ComponentOwner>(backgroundConfig->position, name, sharedContext);
 
     if (backgroundConfig->texturePath)
     {
         coreComponentsOwner->addGraphicsComponent(
-            rendererPool, backgroundConfig->size, backgroundConfig->position, *backgroundConfig->texturePath,
-            backgroundConfig->visibilityLayer, utils::Vector2f{0, 0}, true);
+            sharedContext->rendererPool, backgroundConfig->size, backgroundConfig->position,
+            *backgroundConfig->texturePath, backgroundConfig->visibilityLayer, utils::Vector2f{0, 0}, true);
     }
     else
     {
         coreComponentsOwner->addGraphicsComponent(
-            rendererPool, backgroundConfig->size, backgroundConfig->position, *backgroundConfig->color,
-            backgroundConfig->visibilityLayer, utils::Vector2f{0, 0}, true);
+            sharedContext->rendererPool, backgroundConfig->size, backgroundConfig->position,
+            *backgroundConfig->color, backgroundConfig->visibilityLayer, utils::Vector2f{0, 0}, true);
     }
 
     if (not backgroundConfig->keyActions.empty())

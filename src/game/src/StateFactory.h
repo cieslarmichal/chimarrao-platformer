@@ -25,5 +25,6 @@ private:
     States& states;
     std::shared_ptr<TileMap> tileMap;
     std::unique_ptr<physics::PhysicsFactory> collisionSystemFactory;
+    std::shared_ptr<components::core::SharedContext> sharedContext;
 };
 }

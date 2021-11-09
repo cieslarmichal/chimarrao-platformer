@@ -32,7 +32,8 @@ StateFactory::StateFactory(std::shared_ptr<window::Window> windowInit,
       fileAccess{std::move(fileAccessInit)},
       states{statesInit},
       tileMap{std::move(tileMapInit)},
-      collisionSystemFactory{physics::PhysicsFactory::createCollisionSystemFactory()}
+      collisionSystemFactory{physics::PhysicsFactory::createCollisionSystemFactory()},
+      sharedContext{std::make_shared<components::core::SharedContext>(rendererPool)}
 {
 }
 
@@ -44,52 +45,55 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     {
         return std::make_unique<ControlsState>(
             window, rendererPool, fileAccess, states,
-            std::make_unique<components::ui::DefaultUIManager>(rendererPool));
+            std::make_unique<components::ui::DefaultUIManager>(sharedContext));
     }
     case StateType::EditorMenu:
     {
         return std::make_unique<EditorMenuState>(
             window, rendererPool, fileAccess, states,
-            std::make_unique<components::ui::DefaultUIManager>(rendererPool), tileMap);
+            std::make_unique<components::ui::DefaultUIManager>(sharedContext), tileMap);
     }
     case StateType::Editor:
     {
-        return std::make_unique<EditorState>(window, rendererPool, fileAccess, states,
-                                             std::make_unique<components::ui::DefaultUIManager>(rendererPool),
-                                             tileMap, utils::TimerFactory::createTimer());
+        return std::make_unique<EditorState>(
+            window, rendererPool, fileAccess, states,
+            std::make_unique<components::ui::DefaultUIManager>(sharedContext), tileMap,
+            utils::TimerFactory::createTimer(), sharedContext);
     }
     case StateType::Game:
     {
         return std::make_unique<GameState>(
             window, rendererPool, fileAccess, states,
-            std::make_unique<components::ui::DefaultUIManager>(rendererPool),
+            std::make_unique<components::ui::DefaultUIManager>(sharedContext),
             std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()),
-            tileMap, collisionSystemFactory->createRayCast(), collisionSystemFactory->getQuadTree());
+            tileMap, collisionSystemFactory->createRayCast(), collisionSystemFactory->getQuadTree(),
+            sharedContext);
     }
     case StateType::Menu:
     {
-        auto uiManager = std::make_shared<components::ui::DefaultUIManager>(rendererPool);
+        auto uiManager = std::make_shared<components::ui::DefaultUIManager>(sharedContext);
         return std::make_unique<MenuState>(window, rendererPool, fileAccess, states, uiManager);
     }
     case StateType::Pause:
     {
-        return std::make_unique<PauseState>(window, rendererPool, fileAccess, states,
-                                            std::make_unique<components::ui::DefaultUIManager>(rendererPool));
+        return std::make_unique<PauseState>(
+            window, rendererPool, fileAccess, states,
+            std::make_unique<components::ui::DefaultUIManager>(sharedContext));
     }
     case StateType::SaveMap:
     {
         return std::make_unique<SaveMapState>(
             window, rendererPool, fileAccess, states,
-            std::make_unique<components::ui::DefaultUIManager>(rendererPool), tileMap);
+            std::make_unique<components::ui::DefaultUIManager>(sharedContext), tileMap);
     }
     case StateType::Settings:
     {
-        auto uiManager = std::make_shared<components::ui::DefaultUIManager>(rendererPool);
+        auto uiManager = std::make_shared<components::ui::DefaultUIManager>(sharedContext);
         return std::make_unique<SettingsState>(window, rendererPool, fileAccess, states, uiManager);
     }
     case StateType::ChooseMap:
     {
-        auto uiManager = std::make_shared<components::ui::DefaultUIManager>(rendererPool);
+        auto uiManager = std::make_shared<components::ui::DefaultUIManager>(sharedContext);
         return std::make_unique<ChooseMapState>(window, rendererPool, fileAccess, states, uiManager, tileMap,
                                                 std::make_unique<FileSystemMapsReader>(fileAccess));
     }

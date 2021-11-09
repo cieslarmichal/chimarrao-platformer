@@ -1,7 +1,8 @@
+#include "DefaultRayCast.h"
+
 #include "gtest/gtest.h"
 
 #include "DefaultQuadtree.h"
-#include "DefaultRayCast.h"
 
 using namespace physics;
 using namespace components::core;

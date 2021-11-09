@@ -10,7 +10,7 @@
 namespace components::ui
 {
 
-CheckBox::CheckBox(const std::shared_ptr<graphics::RendererPool>& rendererPool,
+CheckBox::CheckBox(const std::shared_ptr<core::SharedContext>& sharedContext,
                    std::unique_ptr<CheckBoxConfig> checkBoxConfig, std::unique_ptr<utils::Timer> timer)
     : timeAfterCheckBoxCanBeClicked{0.25f}, freezeClickableCheckBoxTimer{std::move(timer)}
 {
@@ -20,14 +20,15 @@ CheckBox::CheckBox(const std::shared_ptr<graphics::RendererPool>& rendererPool,
     }
 
     name = checkBoxConfig->uniqueName;
-    coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(checkBoxConfig->position, name);
-    coreComponentsOwner->addGraphicsComponent(rendererPool, checkBoxConfig->size, checkBoxConfig->position,
-                                              checkBoxConfig->color, graphics::VisibilityLayer::First,
-                                              utils::Vector2f{0, 0}, true);
+    coreComponentsOwner =
+        std::make_unique<components::core::ComponentOwner>(checkBoxConfig->position, name, sharedContext);
+    coreComponentsOwner->addGraphicsComponent(sharedContext->rendererPool, checkBoxConfig->size,
+                                              checkBoxConfig->position, checkBoxConfig->color,
+                                              graphics::VisibilityLayer::First, utils::Vector2f{0, 0}, true);
     const auto text = checkBoxConfig->checked ? "X" : "";
     coreComponentsOwner->addComponent<components::core::TextComponent>(
-        rendererPool, checkBoxConfig->position, text, checkBoxConfig->fontPath, checkBoxConfig->fontSize,
-        graphics::Color::Black, checkBoxConfig->textOffset);
+        sharedContext->rendererPool, checkBoxConfig->position, text, checkBoxConfig->fontPath,
+        checkBoxConfig->fontSize, graphics::Color::Black, checkBoxConfig->textOffset);
     coreComponentsOwner->addComponent<components::core::BoxColliderComponent>(checkBoxConfig->size);
 
     auto clickAction = checkBoxConfig->clickAction;

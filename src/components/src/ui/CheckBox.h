@@ -14,7 +14,7 @@ namespace components::ui
 class CheckBox : public UIComponent
 {
 public:
-    CheckBox(const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<CheckBoxConfig>,
+    CheckBox(const std::shared_ptr<core::SharedContext>&, std::unique_ptr<CheckBoxConfig>,
              std::unique_ptr<utils::Timer>);
 
     void update(utils::DeltaTime, const input::Input&) override;

@@ -11,7 +11,7 @@ class DefaultQuadtree : public Quadtree
 public:
     DefaultQuadtree();
     DefaultQuadtree(int maxObjectsInNodeBeforeSplit, int maxNumberOfSplits, int currentTreeDepthLevel,
-             utils::FloatRect bounds);
+                    utils::FloatRect bounds);
 
     void insertCollider(const std::shared_ptr<components::core::BoxColliderComponent>&) override;
     void removeCollider(const std::shared_ptr<components::core::BoxColliderComponent>&) override;

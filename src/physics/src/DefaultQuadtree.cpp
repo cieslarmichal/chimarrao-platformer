@@ -16,8 +16,8 @@ double calculateDistanceBetweenRects(const utils::FloatRect& lhs, const utils::F
 
 DefaultQuadtree::DefaultQuadtree() : DefaultQuadtree{5, 5, 0, {0, 0, 160, 60}} {}
 
-DefaultQuadtree::DefaultQuadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsInit, int treeDepthLevelInit,
-                   utils::FloatRect boundsInit)
+DefaultQuadtree::DefaultQuadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsInit,
+                                 int treeDepthLevelInit, utils::FloatRect boundsInit)
     : children{nullptr, nullptr, nullptr, nullptr},
       nodeBounds{boundsInit},
       maxObjectsInNodeBeforeSplit{maxObjectsInNodeBeforeSplitInit},
@@ -26,7 +26,8 @@ DefaultQuadtree::DefaultQuadtree(int maxObjectsInNodeBeforeSplitInit, int maxNum
 {
 }
 
-void DefaultQuadtree::insertCollider(const std::shared_ptr<components::core::BoxColliderComponent>& colliderToInsert)
+void DefaultQuadtree::insertCollider(
+    const std::shared_ptr<components::core::BoxColliderComponent>& colliderToInsert)
 {
     if (children[0])
     {
@@ -69,7 +70,8 @@ void DefaultQuadtree::insertCollider(const std::shared_ptr<components::core::Box
     }
 }
 
-void DefaultQuadtree::removeCollider(const std::shared_ptr<components::core::BoxColliderComponent>& colliderToRemove)
+void DefaultQuadtree::removeCollider(
+    const std::shared_ptr<components::core::BoxColliderComponent>& colliderToRemove)
 {
     const int index = getIndexIndicatingToWhichNodeColliderBelongs(colliderToRemove->getCollisionBox());
 
@@ -239,9 +241,9 @@ void DefaultQuadtree::splitIntoChildNodes()
     children[childNorthEastIndex] = std::make_shared<DefaultQuadtree>(
         maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left + childWidth, nodeBounds.top, childWidth, childHeight));
-    children[childNorthWestIndex] =
-        std::make_shared<DefaultQuadtree>(maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
-                                   sf::FloatRect(nodeBounds.left, nodeBounds.top, childWidth, childHeight));
+    children[childNorthWestIndex] = std::make_shared<DefaultQuadtree>(
+        maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
+        sf::FloatRect(nodeBounds.left, nodeBounds.top, childWidth, childHeight));
     children[childSouthWestIndex] = std::make_shared<DefaultQuadtree>(
         maxObjectsInNodeBeforeSplit, maxNumberOfSplits, currentTreeDepthLevel + 1,
         sf::FloatRect(nodeBounds.left, nodeBounds.top + childHeight, childWidth, childHeight));

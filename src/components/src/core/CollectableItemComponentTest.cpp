@@ -55,4 +55,3 @@ TEST_F(CollectableItemComponentTest, shouldReturnItemType)
 {
     ASSERT_EQ(collectableItem.getType(), itemType);
 }
-

@@ -17,9 +17,8 @@ enum class ItemType
 
 inline std::string toString(ItemType itemType)
 {
-    std::unordered_map<ItemType, std::string> itemTypeToString{{ItemType::Yerba, "Yerba"},
-                                                                         {ItemType::Blueberries, "Blueberries"},
-                                                                         {ItemType::Apple, "Apple"}};
+    std::unordered_map<ItemType, std::string> itemTypeToString{
+        {ItemType::Yerba, "Yerba"}, {ItemType::Blueberries, "Blueberries"}, {ItemType::Apple, "Apple"}};
 
     try
     {
@@ -35,9 +34,8 @@ inline ItemType toItemType(const std::string& itemTypeAsString)
 {
     const auto itemTypeLowerString = utils::StringHelper::getLowerCases(itemTypeAsString);
 
-    std::unordered_map<std::string, ItemType> stringToItemType{{"yerba", ItemType::Yerba},
-                                                                         {"blueberries", ItemType::Blueberries},
-                                                                         {"apple", ItemType::Apple}};
+    std::unordered_map<std::string, ItemType> stringToItemType{
+        {"yerba", ItemType::Yerba}, {"blueberries", ItemType::Blueberries}, {"apple", ItemType::Apple}};
 
     try
     {

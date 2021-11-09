@@ -1,13 +1,14 @@
 #include "ComponentOwner.h"
 
 #include <algorithm>
+#include <utility>
 
 namespace components::core
 {
 
 ComponentOwner::ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit,
-                               SharedContext& sharedContext)
-    : uniqueName{uniqueNameInit}, sharedContext{sharedContext}
+                               std::shared_ptr<SharedContext> sharedContext)
+    : sharedContext{std::move(sharedContext)}, uniqueName{uniqueNameInit}
 
 {
     transform = addComponent<TransformComponent>(position);

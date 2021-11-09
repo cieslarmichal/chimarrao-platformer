@@ -4,14 +4,14 @@
 
 #include "ComponentOwnersManagerMock.h"
 #include "FileAccessMock.h"
+#include "QuadtreeMock.h"
+#include "RayCastMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapMock.h"
 #include "editor/TileMapSerializerMock.h"
 #include "ui/UIManagerMock.h"
-#include "QuadtreeMock.h"
-#include "RayCastMock.h"
 
 #include "GameState.h"
 #include "ProjectPathReader.h"
@@ -44,15 +44,17 @@ public:
         std::make_unique<StrictMock<ComponentOwnersManagerMock>>()};
     StrictMock<ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
     std::shared_ptr<StrictMock<TileMapMock>> tileMap = std::make_shared<StrictMock<TileMapMock>>();
-    std::shared_ptr<StrictMock<physics::QuadtreeMock>> quadtree = std::make_shared<StrictMock<physics::QuadtreeMock>>();
-    std::shared_ptr<StrictMock<physics::RayCastMock>> rayCast = std::make_shared<StrictMock<physics::RayCastMock>>();
+    std::shared_ptr<StrictMock<physics::QuadtreeMock>> quadtree =
+        std::make_shared<StrictMock<physics::QuadtreeMock>>();
+    std::shared_ptr<StrictMock<physics::RayCastMock>> rayCast =
+        std::make_shared<StrictMock<physics::RayCastMock>>();
 };
 
 TEST_F(GameStateUIConfigBuilderTest, createGameUI)
 {
     GameState gameState{window,  rendererPool, fileAccess,
                         states,  uiManager,    std::move(componentOwnersManagerInit),
-                        tileMap, rayCast, quadtree};
+                        tileMap, rayCast,      quadtree};
     const auto gameUI = GameStateUIConfigBuilder::createGameUIConfig(&gameState);
 
     ASSERT_EQ(gameUI->backgroundConfig->uniqueName, "gameBackground");

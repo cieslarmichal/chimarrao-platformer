@@ -21,7 +21,8 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                          const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                          std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                          std::shared_ptr<components::ui::UIManager> uiManagerInit,
-                         std::shared_ptr<TileMap> tileMapInit, std::unique_ptr<utils::Timer> moveTimer)
+                         std::shared_ptr<TileMap> tileMapInit, std::unique_ptr<utils::Timer> moveTimer,
+                         const std::shared_ptr<components::core::SharedContext>& sharedContext)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       moveTimer{std::move(moveTimer)},
@@ -29,7 +30,8 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
       timeBetweenTileMoves{0.005f},
       currentTileType{std::make_shared<TileType>(defaultTileType)},
       tileMap{std::move(tileMapInit)},
-      uiManager{std::move(uiManagerInit)}
+      uiManager{std::move(uiManagerInit)},
+      sharedContext{sharedContext}
 {
     uiManager->createUI(EditorStateUIConfigBuilder::createEditorUIConfig(this));
     currentTilePath = tileTypeToPathTexture(*(currentTileType));
@@ -146,7 +148,7 @@ void EditorState::setTileMap()
     {
         for (int x = 0; x < rendererPoolSizeX / tileSizeX * 2; ++x)
         {
-            layoutTileMap.emplace_back(LayoutTile{rendererPool, utils::Vector2i{x, y},
+            layoutTileMap.emplace_back(LayoutTile{sharedContext, utils::Vector2i{x, y},
                                                   utils::Vector2f{tileSizeX, tileSizeY}, *currentTileType,
                                                   *tileMap});
         }

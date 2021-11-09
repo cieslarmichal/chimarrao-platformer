@@ -13,7 +13,7 @@ namespace components::ui
 class Label : public UIComponent
 {
 public:
-    Label(const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<LabelConfig>);
+    Label(const std::shared_ptr<core::SharedContext>&, std::unique_ptr<LabelConfig>);
 
     void update(utils::DeltaTime, const input::Input&) override;
     std::string getName() const override;

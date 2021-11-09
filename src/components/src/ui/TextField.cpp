@@ -10,7 +10,7 @@
 namespace components::ui
 {
 
-TextField::TextField(const std::shared_ptr<graphics::RendererPool>& rendererPool,
+TextField::TextField(const std::shared_ptr<core::SharedContext>& sharedContext,
                      std::unique_ptr<TextFieldConfig> textFieldConfig, std::unique_ptr<utils::Timer> timer)
     : inputBufferMaximumSize{15},
       timeAfterNextLetterCanBeDeleted{0.08f},
@@ -22,13 +22,14 @@ TextField::TextField(const std::shared_ptr<graphics::RendererPool>& rendererPool
     }
 
     name = textFieldConfig->uniqueName;
-    coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(textFieldConfig->position, name);
-    coreComponentsOwner->addGraphicsComponent(rendererPool, textFieldConfig->size, textFieldConfig->position,
-                                              textFieldConfig->color, graphics::VisibilityLayer::First,
-                                              utils::Vector2f{0, 0}, true);
+    coreComponentsOwner =
+        std::make_unique<components::core::ComponentOwner>(textFieldConfig->position, name, sharedContext);
+    coreComponentsOwner->addGraphicsComponent(sharedContext->rendererPool, textFieldConfig->size,
+                                              textFieldConfig->position, textFieldConfig->color,
+                                              graphics::VisibilityLayer::First, utils::Vector2f{0, 0}, true);
     coreComponentsOwner->addComponent<components::core::TextComponent>(
-        rendererPool, textFieldConfig->size, "", textFieldConfig->fontPath, textFieldConfig->fontSize,
-        graphics::Color::White, textFieldConfig->textOffset, true);
+        sharedContext->rendererPool, textFieldConfig->size, "", textFieldConfig->fontPath,
+        textFieldConfig->fontSize, graphics::Color::White, textFieldConfig->textOffset, true);
     coreComponentsOwner->addComponent<components::core::BoxColliderComponent>(textFieldConfig->size);
 
     clickInsideFieldAction = textFieldConfig->clickInFieldAction;

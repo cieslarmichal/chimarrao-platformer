@@ -17,7 +17,7 @@ namespace components::ui
 class DefaultUIManager : public UIManager
 {
 public:
-    explicit DefaultUIManager(const std::shared_ptr<graphics::RendererPool>&);
+    explicit DefaultUIManager(const std::shared_ptr<core::SharedContext>&);
 
     void createUI(std::unique_ptr<UIConfig>) override;
     void update(utils::DeltaTime, const input::Input&) override;
@@ -40,6 +40,7 @@ private:
     void createUIComponents(std::unique_ptr<UIConfig>);
     UIComponentType getComponentType(const std::string& componentName) const;
 
+    const std::shared_ptr<core::SharedContext>& sharedContext;
     std::unique_ptr<UIComponentFactory> uiComponentFactory;
     std::unique_ptr<Background> background;
     std::vector<std::unique_ptr<Button>> buttons;

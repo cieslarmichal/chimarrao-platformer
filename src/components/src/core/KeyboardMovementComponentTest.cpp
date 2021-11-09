@@ -5,9 +5,9 @@
 #include "AnimatorMock.h"
 #include "InputMock.h"
 
+#include "AnimationComponent.h"
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
-#include "AnimationComponent.h"
 #include "DeltaTime.h"
 #include "exceptions/DependentComponentNotFound.h"
 

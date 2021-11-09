@@ -5,7 +5,7 @@
 
 namespace components::ui
 {
-Label::Label(const std::shared_ptr<graphics::RendererPool>& rendererPool,
+Label::Label(const std::shared_ptr<core::SharedContext>& sharedContext,
              std::unique_ptr<LabelConfig> labelConfig)
 {
     if (not labelConfig)
@@ -14,10 +14,11 @@ Label::Label(const std::shared_ptr<graphics::RendererPool>& rendererPool,
     }
 
     name = labelConfig->uniqueName;
-    coreComponentsOwner = std::make_unique<components::core::ComponentOwner>(labelConfig->position, name);
+    coreComponentsOwner =
+        std::make_unique<components::core::ComponentOwner>(labelConfig->position, name, sharedContext);
     coreComponentsOwner->addComponent<components::core::TextComponent>(
-        rendererPool, labelConfig->position, labelConfig->text, labelConfig->fontPath, labelConfig->fontSize,
-        labelConfig->color, utils::Vector2f{0, 0}, true);
+        sharedContext->rendererPool, labelConfig->position, labelConfig->text, labelConfig->fontPath,
+        labelConfig->fontSize, labelConfig->color, utils::Vector2f{0, 0}, true);
 
     coreComponentsOwner->loadDependentComponents();
 }

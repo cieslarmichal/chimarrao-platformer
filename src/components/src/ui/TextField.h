@@ -14,7 +14,7 @@ namespace components::ui
 class TextField : public UIComponent
 {
 public:
-    TextField(const std::shared_ptr<graphics::RendererPool>&, std::unique_ptr<TextFieldConfig>,
+    TextField(const std::shared_ptr<core::SharedContext>&, std::unique_ptr<TextFieldConfig>,
               std::unique_ptr<utils::Timer>);
 
     void update(utils::DeltaTime, const input::Input&) override;

@@ -2,8 +2,8 @@
 
 #include "BoxColliderComponent.h"
 #include "ComponentOwner.h"
-#include "RayCast.h"
 #include "DirectionComponent.h"
+#include "RayCast.h"
 #include "Timer.h"
 
 namespace components::core

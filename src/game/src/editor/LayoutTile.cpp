@@ -5,7 +5,7 @@
 
 namespace game
 {
-LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPool,
+LayoutTile::LayoutTile(const std::shared_ptr<components::core::SharedContext>& sharedContext,
                        const utils::Vector2i& position, const utils::Vector2f& sizeInit,
                        TileType& currentTileType, TileMap& tileMap)
     : timeAfterTileCanBeClicked{0.25f}
@@ -13,9 +13,9 @@ LayoutTile::LayoutTile(const std::shared_ptr<graphics::RendererPool>& rendererPo
     componentOwner = std::make_shared<components::core::ComponentOwner>(
         utils::Vector2f{static_cast<float>(position.x) * sizeInit.x,
                         static_cast<float>(position.y) * sizeInit.y},
-        std::to_string(position.x) + std::to_string(position.y) + std::to_string(position.y));
+        std::to_string(position.x) + std::to_string(position.y) + std::to_string(position.y), sharedContext);
     const auto& graphicsComponent = componentOwner->addGraphicsComponent(
-        rendererPool, sizeInit,
+        sharedContext->rendererPool, sizeInit,
         utils::Vector2f{static_cast<float>(position.x) * sizeInit.x,
                         static_cast<float>(position.y) * sizeInit.y},
         tileTypeToPathTexture(TileType::Grass),

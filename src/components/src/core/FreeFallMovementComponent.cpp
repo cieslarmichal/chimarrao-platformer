@@ -21,7 +21,7 @@ void FreeFallMovementComponent::loadDependentComponents()
     }
 }
 
-void FreeFallMovementComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
+void FreeFallMovementComponent::update(utils::DeltaTime deltaTime, const input::Input&)
 {
     if (not enabled)
     {
@@ -38,7 +38,7 @@ void FreeFallMovementComponent::update(utils::DeltaTime deltaTime, const input::
     velocityComponent->setVelocity(currentMovementSpeed);
 }
 
-void FreeFallMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input& input)
+void FreeFallMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input&)
 {
     if (not enabled)
     {
