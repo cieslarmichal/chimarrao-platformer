@@ -15,13 +15,16 @@ namespace game
 
 HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner> playerInit,
                                const std::shared_ptr<components::core::SharedContext>& sharedContext,
-                               std::unique_ptr<components::ui::UIConfig> uiConfig)
+                               std::unique_ptr<components::ui::UIConfig> uiConfig,
+                               std::unique_ptr<utils::Timer> timer)
     : player{std::move(playerInit)},
       uiComponentFactory{std::make_unique<components::ui::UIComponentFactory>(sharedContext)},
       healthBarId{HeadsUpDisplayUIConfigBuilder::getHealthBarId()},
       active{false},
       slotIds{HeadsUpDisplayUIConfigBuilder::getSlotIds()},
-      slotItemIds{HeadsUpDisplayUIConfigBuilder::getSlotItemIds()}
+      slotItemIds{HeadsUpDisplayUIConfigBuilder::getSlotItemIds()},
+      timeAfterSelectedItemCanBeChanged{0.25f},
+      changeSelectedItemTimer{std::move(timer)}
 {
     const auto healthComponent = player->getComponent<components::core::HealthComponent>();
     if (not healthComponent)
@@ -40,10 +43,19 @@ HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner>
     auto& healthBarFrame = images[HeadsUpDisplayUIConfigBuilder::getHealthBarFrameId()];
     healthBarFrame->setOutline(0.15, graphics::Color::Black);
 
-    for (const auto& slotId : slotIds)
+    for (int slotIdIndex = 0; slotIdIndex < static_cast<int>(slotIds.size()); ++slotIdIndex)
     {
+        auto& slotId = slotIds[slotIdIndex];
         auto& slot = images[slotId];
-        slot->setOutline(0.1, graphics::Color::Black);
+
+        if (slotIdIndex == selectedItemIndex)
+        {
+            slot->setOutline(0.1, graphics::Color::Red);
+        }
+        else
+        {
+            slot->setOutline(0.1, graphics::Color::Black);
+        }
     }
 
     for (const auto& slotItemId : slotItemIds)
@@ -53,7 +65,7 @@ HeadsUpDisplay::HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner>
     }
 }
 
-void HeadsUpDisplay::update(const utils::DeltaTime&, const input::Input&)
+void HeadsUpDisplay::update(const utils::DeltaTime&, const input::Input& input)
 {
     auto healthComponent = player->getComponent<components::core::HealthComponent>();
     auto& healthBar = images[healthBarId];
@@ -70,6 +82,48 @@ void HeadsUpDisplay::update(const utils::DeltaTime&, const input::Input&)
 
     const auto collectorComponent = player->getComponent<components::core::ItemCollectorComponent>();
     const auto itemsInfo = collectorComponent->getItemsInfo();
+
+    if (changeSelectedItemTimer->getElapsedSeconds() > timeAfterSelectedItemCanBeChanged)
+    {
+        if (input.isKeyPressed(input::InputKey::Tab))
+        {
+            changeSelectedItem(itemsInfo);
+            changeSelectedItemTimer->restart();
+        }
+
+        if (input.isKeyPressed(input::InputKey::Q))
+        {
+            useSelectedItem(itemsInfo);
+            changeSelectedItemTimer->restart();
+        }
+
+        if (input.isKeyPressed(input::InputKey::X))
+        {
+            dropSelectedItem(itemsInfo);
+            changeSelectedItemTimer->restart();
+        }
+    }
+
+    if (selectedItemIndex != previouslySelectedItemIndex)
+    {
+        for (int slotIdIndex = 0; slotIdIndex < static_cast<int>(slotIds.size()); ++slotIdIndex)
+        {
+            auto& slotId = slotIds[slotIdIndex];
+            auto& slot = images[slotId];
+
+            if (slotIdIndex == selectedItemIndex)
+            {
+                slot->setOutline(0.1, graphics::Color::Red);
+            }
+            else
+            {
+                slot->setOutline(0.1, graphics::Color::Black);
+            }
+        }
+    }
+
+    previouslySelectedItemIndex = selectedItemIndex;
+
     if (displayedItemsInfo == itemsInfo)
     {
         return;
@@ -102,6 +156,62 @@ void HeadsUpDisplay::activate()
 void HeadsUpDisplay::deactivate()
 {
     active = false;
+}
+
+void HeadsUpDisplay::changeSelectedItem(const std::vector<components::core::ItemInfo>& itemsInfo)
+{
+    if (selectedItemIndex < static_cast<int>(itemsInfo.size()) - 1)
+    {
+        selectedItemIndex++;
+    }
+    else
+    {
+        selectedItemIndex = 0;
+    }
+}
+
+void HeadsUpDisplay::useSelectedItem(const std::vector<components::core::ItemInfo>& itemsInfo)
+{
+    if (selectedItemIndex >= static_cast<int>(itemsInfo.size()))
+    {
+        std::cerr << "Invalid selected item index";
+        return;
+    }
+
+    const auto collectorComponent = player->getComponent<components::core::ItemCollectorComponent>();
+
+    collectorComponent->use(itemsInfo[selectedItemIndex].name);
+
+    if (selectedItemIndex - 1 >= 0)
+    {
+        selectedItemIndex--;
+    }
+    else
+    {
+        selectedItemIndex = 0;
+    }
+}
+
+void HeadsUpDisplay::dropSelectedItem(const std::vector<components::core::ItemInfo>& itemsInfo)
+{
+    if (selectedItemIndex >= static_cast<int>(itemsInfo.size()))
+    {
+        std::cerr << "Invalid selected item index";
+        return;
+    }
+
+    const auto collectorComponent = player->getComponent<components::core::ItemCollectorComponent>();
+
+    collectorComponent->drop(itemsInfo[selectedItemIndex].name);
+
+    if (selectedItemIndex - 1 >= 0)
+    {
+        selectedItemIndex--;
+    }
+    else
+    {
+        selectedItemIndex = 0;
+    }
 }
 
 void HeadsUpDisplay::createUIComponents(std::unique_ptr<components::ui::UIConfig> uiConfig)

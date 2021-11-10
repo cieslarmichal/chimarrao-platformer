@@ -35,7 +35,8 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createYerba(const
     yerbaItem->addComponent<components::core::VelocityComponent>();
     yerbaItem->addComponent<components::core::FreeFallMovementComponent>();
     yerbaItem->addComponent<components::core::CollectableItemComponent>(
-        "yerba", components::core::ItemType::Yerba, std::make_shared<components::core::ItemHealEffect>(10));
+        "yerba" + std::to_string(numberOfYerbaItemsInGame), components::core::ItemType::Yerba,
+        std::make_shared<components::core::ItemHealEffect>(10));
     return yerbaItem;
 }
 
@@ -52,7 +53,8 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createApple(const
     appleItem->addComponent<components::core::VelocityComponent>();
     appleItem->addComponent<components::core::FreeFallMovementComponent>();
     appleItem->addComponent<components::core::CollectableItemComponent>(
-        "apple", components::core::ItemType::Apple, std::make_shared<components::core::ItemHealEffect>(5));
+        "apple" + std::to_string(numberOfAppleItemsInGame), components::core::ItemType::Apple,
+        std::make_shared<components::core::ItemHealEffect>(5));
     return appleItem;
 }
 
@@ -69,7 +71,8 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createMeat(const 
     meatItem->addComponent<components::core::VelocityComponent>();
     meatItem->addComponent<components::core::FreeFallMovementComponent>();
     meatItem->addComponent<components::core::CollectableItemComponent>(
-        "meat", components::core::ItemType::Meat, std::make_shared<components::core::ItemHealEffect>(5));
+        "meat" + std::to_string(numberOfMeatItemsInGame), components::core::ItemType::Meat,
+        std::make_shared<components::core::ItemHealEffect>(5));
     return meatItem;
 }
 }

@@ -147,8 +147,7 @@ inline std::string toString(InputKey inputKey)
                                                                {InputKey::B, "B"},
                                                                {InputKey::N, "N"},
                                                                {InputKey::M, "M"},
-                                                               InputKey::Tab,
-                                                               "Tab"};
+                                                               {InputKey::Tab, "Tab"}};
 
     try
     {

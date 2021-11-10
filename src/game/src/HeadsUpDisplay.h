@@ -18,13 +18,16 @@ class HeadsUpDisplay
 public:
     explicit HeadsUpDisplay(std::shared_ptr<components::core::ComponentOwner> player,
                             const std::shared_ptr<components::core::SharedContext>&,
-                            std::unique_ptr<components::ui::UIConfig>);
+                            std::unique_ptr<components::ui::UIConfig>, std::unique_ptr<utils::Timer>);
 
     void update(const utils::DeltaTime&, const input::Input&);
     void activate();
     void deactivate();
 
 private:
+    void changeSelectedItem(const std::vector<components::core::ItemInfo>&);
+    void useSelectedItem(const std::vector<components::core::ItemInfo>&);
+    void dropSelectedItem(const std::vector<components::core::ItemInfo>&);
     void createUIComponents(std::unique_ptr<components::ui::UIConfig>);
 
     std::shared_ptr<components::core::ComponentOwner> player;
@@ -36,5 +39,9 @@ private:
     const std::vector<std::string> slotIds;
     const std::vector<std::string> slotItemIds;
     std::vector<components::core::ItemInfo> displayedItemsInfo;
+    const float timeAfterSelectedItemCanBeChanged;
+    std::unique_ptr<utils::Timer> changeSelectedItemTimer;
+    int selectedItemIndex = 0;
+    int previouslySelectedItemIndex = 0;
 };
 }
