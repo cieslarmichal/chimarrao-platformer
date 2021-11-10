@@ -50,7 +50,8 @@ std::unordered_map<InputKey, sf::Keyboard::Key> InputKeySfmlMapper::keyboardKeys
     {InputKey::V, sf::Keyboard::V},
     {InputKey::B, sf::Keyboard::B},
     {InputKey::N, sf::Keyboard::N},
-    {InputKey::M, sf::Keyboard::M}};
+    {InputKey::M, sf::Keyboard::M},
+    {InputKey::Tab, sf::Keyboard::Tab}};
 
 std::unordered_map<InputKey, sf::Mouse::Button> InputKeySfmlMapper::mouseKeys{
     {InputKey::MouseRight, sf::Mouse::Right}, {InputKey::MouseLeft, sf::Mouse::Left}};
