@@ -45,8 +45,8 @@ CharacterFactory::createPlayer(const utils::Vector2f& position)
         utils::Vector2f{2.f, 3.75f}, components::core::CollisionLayer::Player, utils::Vector2f{2.f, -0.1f});
     player->addComponent<components::core::VelocityComponent>();
     player->addComponent<components::core::CameraComponent>(
-        sharedContext->rendererPool,
-        utils::FloatRect{0, 0, tileMap->getSize().x * 4.f, tileMap->getSize().y * 4.f});
+        sharedContext->rendererPool, utils::FloatRect{0, 0, static_cast<float>(tileMap->getSize().x) * 4.f,
+                                                      static_cast<float>(tileMap->getSize().y) * 4.f});
     player->addComponent<components::core::HealthComponent>(1000);
     player->addComponent<components::core::DirectionComponent>();
     player->addComponent<components::core::AttackComponent>(rayCast);
@@ -83,7 +83,10 @@ std::shared_ptr<components::core::ComponentOwner>
 CharacterFactory::createDruidNpc(const std::shared_ptr<components::core::ComponentOwner>& player,
                                  const utils::Vector2f& position)
 {
-    auto npc = std::make_shared<components::core::ComponentOwner>(position, "npc", sharedContext);
+    static int numberOfDruidsInGame = 0;
+    numberOfDruidsInGame++;
+    auto npc = std::make_shared<components::core::ComponentOwner>(
+        position, "npcDruid" + std::to_string(numberOfDruidsInGame), sharedContext);
     auto npcGraphicsComponent =
         npc->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{3.f, 3.5f}, position,
                                   graphics::Color::White, graphics::VisibilityLayer::Second);
@@ -99,11 +102,13 @@ CharacterFactory::createDruidNpc(const std::shared_ptr<components::core::Compone
 }
 
 std::shared_ptr<components::core::ComponentOwner>
-CharacterFactory::createBanditEnemy(const std::string& name,
-                                    const std::shared_ptr<components::core::ComponentOwner>& player,
+CharacterFactory::createBanditEnemy(const std::shared_ptr<components::core::ComponentOwner>& player,
                                     const utils::Vector2f& position)
 {
-    auto enemy = std::make_shared<components::core::ComponentOwner>(position, name, sharedContext);
+    static int numberOfBanditsInGame = 0;
+    numberOfBanditsInGame++;
+    auto enemy = std::make_shared<components::core::ComponentOwner>(
+        position, "bandit" + std::to_string(numberOfBanditsInGame), sharedContext);
     auto enemyGraphicsComponent =
         enemy->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{3.5f, 3.75f}, position,
                                     graphics::Color::White, graphics::VisibilityLayer::Second);

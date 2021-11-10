@@ -25,8 +25,7 @@ public:
     createDruidNpc(const std::shared_ptr<components::core::ComponentOwner>& player,
                    const utils::Vector2f& position);
     std::shared_ptr<components::core::ComponentOwner>
-    createBanditEnemy(const std::string& name,
-                      const std::shared_ptr<components::core::ComponentOwner>& player,
+    createBanditEnemy(const std::shared_ptr<components::core::ComponentOwner>& player,
                       const utils::Vector2f& position);
 
 private:
