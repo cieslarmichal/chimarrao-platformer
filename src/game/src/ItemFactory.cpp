@@ -24,7 +24,10 @@ ItemFactory::ItemFactory(const std::shared_ptr<components::core::SharedContext>&
 
 std::shared_ptr<components::core::ComponentOwner> ItemFactory::createYerba(const utils::Vector2f& position)
 {
-    auto yerbaItem = std::make_shared<components::core::ComponentOwner>(position, "yerbaItem", sharedContext);
+    static int numberOfYerbaItemsInGame = 0;
+    numberOfYerbaItemsInGame++;
+    auto yerbaItem = std::make_shared<components::core::ComponentOwner>(
+        position, "yerbaItem" + std::to_string(numberOfYerbaItemsInGame), sharedContext);
     yerbaItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
                                     yerbaTexturePath, graphics::VisibilityLayer::Second);
     yerbaItem->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{2, 2},
@@ -38,7 +41,10 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createYerba(const
 
 std::shared_ptr<components::core::ComponentOwner> ItemFactory::createApple(const utils::Vector2f& position)
 {
-    auto appleItem = std::make_shared<components::core::ComponentOwner>(position, "appleItem", sharedContext);
+    static int numberOfAppleItemsInGame = 0;
+    numberOfAppleItemsInGame++;
+    auto appleItem = std::make_shared<components::core::ComponentOwner>(
+        position, "appleItem" + std::to_string(numberOfAppleItemsInGame), sharedContext);
     appleItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
                                     appleTexturePath, graphics::VisibilityLayer::Second);
     appleItem->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{2, 2},
@@ -52,7 +58,10 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createApple(const
 
 std::shared_ptr<components::core::ComponentOwner> ItemFactory::createMeat(const utils::Vector2f& position)
 {
-    auto meatItem = std::make_shared<components::core::ComponentOwner>(position, "meatItem", sharedContext);
+    static int numberOfMeatItemsInGame = 0;
+    numberOfMeatItemsInGame++;
+    auto meatItem = std::make_shared<components::core::ComponentOwner>(
+        position, "meatItem" + std::to_string(numberOfMeatItemsInGame), sharedContext);
     meatItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
                                    meatTexturePath, graphics::VisibilityLayer::Second);
     meatItem->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{2, 2},
