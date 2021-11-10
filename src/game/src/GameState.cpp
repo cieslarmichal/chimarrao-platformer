@@ -5,6 +5,7 @@
 #include "GameStateUIConfigBuilder.h"
 #include "HeadsUpDisplayUIConfigBuilder.h"
 #include "ProjectPathReader.h"
+#include "TimerFactory.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game
@@ -27,7 +28,8 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
       rayCast{std::move(rayCastInit)},
       quadtree{std::move(quadtreeInit)},
       sharedContext{sharedContextInit},
-      characterFactory{std::make_unique<CharacterFactory>(sharedContext, tileMap, rayCast, quadtree)}
+      characterFactory{std::make_unique<CharacterFactory>(sharedContext, tileMap, rayCast, quadtree)},
+      itemFactory{std::make_unique<ItemFactory>(sharedContext)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
@@ -47,19 +49,8 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     hud = std::make_unique<HeadsUpDisplay>(player, sharedContext,
                                            HeadsUpDisplayUIConfigBuilder::createUIConfig());
 
-    auto yerbaItem = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{30, 25}, "yerbaItem",
-                                                                        sharedContext);
-    yerbaItem->addGraphicsComponent(rendererPool, utils::Vector2f{2, 2}, utils::Vector2f{30, 25},
-                                    utils::ProjectPathReader::getProjectRootPath() +
-                                        "resources/yerba_item.png",
-                                    graphics::VisibilityLayer::Second);
-    yerbaItem->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{2, 2},
-                                                                    components::core::CollisionLayer::Player);
-    yerbaItem->addComponent<components::core::VelocityComponent>();
-    yerbaItem->addComponent<components::core::FreeFallMovementComponent>();
-    yerbaItem->addComponent<components::core::CollectableItemComponent>(
-        "yerba", components::core::ItemType::Yerba, std::make_shared<components::core::ItemHealEffect>(5));
-    componentOwnersManager->add(yerbaItem);
+    const auto yerbaPosition = utils::Vector2f{30, 25};
+    auto yerbaItem = itemFactory->createYerba(yerbaPosition);
 
     for (int x = 0; x < tileMap->getSize().x; x++)
     {
@@ -109,6 +100,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     componentOwnersManager->add(player);
     componentOwnersManager->add(follower);
     componentOwnersManager->add(npc);
+    componentOwnersManager->add(yerbaItem);
     //    componentOwnersManager->add(enemy);
     componentOwnersManager->processNewObjects();
 

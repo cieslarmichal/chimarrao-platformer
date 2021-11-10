@@ -1,6 +1,7 @@
 #pragma once
 
 #include "CharacterFactory.h"
+#include "ItemFactory.h"
 #include "CollisionSystem.h"
 #include "ComponentOwnersManager.h"
 #include "HeadsUpDisplay.h"
@@ -44,5 +45,6 @@ private:
     std::shared_ptr<physics::Quadtree> quadtree;
     const std::shared_ptr<components::core::SharedContext>& sharedContext;
     std::unique_ptr<CharacterFactory> characterFactory;
+    std::unique_ptr<ItemFactory> itemFactory;
 };
 }

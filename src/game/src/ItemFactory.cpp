@@ -1,6 +1,8 @@
 #include "ItemFactory.h"
 
+#include "ProjectPathReader.h"
 #include "TimerFactory.h"
+#include "core/BoxColliderComponent.h"
 #include "core/CollectableItemComponent.h"
 #include "core/FreeFallMovementComponent.h"
 #include "core/ItemHealEffect.h"
@@ -15,13 +17,12 @@ const auto appleTexturePath = projectPath + "resources/Fantasy World/Food Icons/
 const auto meatTexturePath = projectPath + "resources/Fantasy World/Food Icons/PNG/Transparent/meat.png";
 }
 
-CharacterFactory::CharacterFactory(const std::shared_ptr<components::core::SharedContext>& sharedContext)
+ItemFactory::ItemFactory(const std::shared_ptr<components::core::SharedContext>& sharedContext)
     : sharedContext{sharedContext}
 {
 }
 
-std::shared_ptr<components::core::ComponentOwner>
-CharacterFactory::createYerba(const utils::Vector2f& position)
+std::shared_ptr<components::core::ComponentOwner> ItemFactory::createYerba(const utils::Vector2f& position)
 {
     auto yerbaItem = std::make_shared<components::core::ComponentOwner>(position, "yerbaItem", sharedContext);
     yerbaItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
@@ -35,8 +36,7 @@ CharacterFactory::createYerba(const utils::Vector2f& position)
     return yerbaItem;
 }
 
-std::shared_ptr<components::core::ComponentOwner>
-CharacterFactory::createApple(const utils::Vector2f& position)
+std::shared_ptr<components::core::ComponentOwner> ItemFactory::createApple(const utils::Vector2f& position)
 {
     auto appleItem = std::make_shared<components::core::ComponentOwner>(position, "appleItem", sharedContext);
     appleItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
@@ -50,13 +50,11 @@ CharacterFactory::createApple(const utils::Vector2f& position)
     return appleItem;
 }
 
-std::shared_ptr<components::core::ComponentOwner>
-CharacterFactory::createMeat(const utils::Vector2f& position)
+std::shared_ptr<components::core::ComponentOwner> ItemFactory::createMeat(const utils::Vector2f& position)
 {
     auto meatItem = std::make_shared<components::core::ComponentOwner>(position, "meatItem", sharedContext);
     meatItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
-                                   utils::ProjectPathReader::getProjectRootPath() + appleTexturePath,
-                                   graphics::VisibilityLayer::Second);
+                                   meatTexturePath, graphics::VisibilityLayer::Second);
     meatItem->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{2, 2},
                                                                    components::core::CollisionLayer::Player);
     meatItem->addComponent<components::core::VelocityComponent>();
