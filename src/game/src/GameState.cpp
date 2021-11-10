@@ -5,10 +5,6 @@
 #include "GameStateUIConfigBuilder.h"
 #include "HeadsUpDisplayUIConfigBuilder.h"
 #include "ProjectPathReader.h"
-#include "TimerFactory.h"
-#include "core/CollectableItemComponent.h"
-#include "core/FreeFallMovementComponent.h"
-#include "core/ItemHealEffect.h"
 #include "ui/DefaultUIManager.h"
 
 namespace game

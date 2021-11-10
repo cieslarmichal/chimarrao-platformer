@@ -33,6 +33,7 @@ set(SOURCES
         src/HeadsUpDisplay.cpp
         src/HeadsUpDisplayUIConfigBuilder.cpp
         src/CharacterFactory.cpp
+        src/ItemFactory.cpp
         )
 
 
