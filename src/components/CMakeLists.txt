@@ -32,6 +32,7 @@ set(SOURCES
         src/core/ItemCollectorComponent.cpp
         src/core/ItemHealEffect.cpp
         src/core/MeleeAttack.cpp
+        src/core/ArtificialIntelligenceAttackComponent.cpp
         )
 
 set(UT_SOURCES
@@ -67,6 +68,7 @@ set(UT_SOURCES
         src/core/ItemCollectorComponentTest.cpp
         src/core/ItemHealEffectTest.cpp
         src/core/MeleeAttackTest.cpp
+        src/core/ArtificialIntelligenceAttackComponentTest.cpp
         )
 
 add_library(components ${SOURCES})
