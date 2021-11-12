@@ -64,7 +64,7 @@ public:
 class EditorStateTest : public EditorStateTest_Base
 {
 public:
-    EditorState editorState{window,    rendererPool, fileAccess,          states,
+    EditorState editorState{window,    rendererPool, fileAccess,           states,
                             uiManager, tileMap,      std::move(timerInit), sharedContext};
 };
 

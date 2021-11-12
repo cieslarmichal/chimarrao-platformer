@@ -9,7 +9,8 @@ namespace components::core
 class ArtificialIntelligenceAttackComponent : public Component
 {
 public:
-    ArtificialIntelligenceAttackComponent(ComponentOwner* owner, ComponentOwner* target, std::shared_ptr<AttackStrategy>);
+    ArtificialIntelligenceAttackComponent(ComponentOwner* owner, ComponentOwner* target,
+                                          std::shared_ptr<AttackStrategy>);
 
     void loadDependentComponents() override;
     void update(utils::DeltaTime, const input::Input&) override;

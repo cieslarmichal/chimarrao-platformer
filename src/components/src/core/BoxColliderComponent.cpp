@@ -134,7 +134,8 @@ void BoxColliderComponent::resolveOverlapY(const std::shared_ptr<BoxColliderComp
     const auto bot =
         std::abs(otherRect.top - (nextFrameCollisionBoundaries.top + nextFrameCollisionBoundaries.height));
 
-    const auto collidesWithOtherColliderOnXAxis = colliderNamesWithDistancesOnXAxis.contains(other->getOwnerName());
+    const auto collidesWithOtherColliderOnXAxis =
+        colliderNamesWithDistancesOnXAxis.contains(other->getOwnerName());
 
     if (nextFrameCollisionBoundaries.top + nextFrameCollisionBoundaries.height / 2 <
             other->getOwner().transform->getPosition().y and

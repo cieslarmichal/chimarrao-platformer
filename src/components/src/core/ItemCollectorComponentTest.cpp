@@ -123,7 +123,8 @@ TEST_F(ItemCollectorComponentTest,
 TEST_F(ItemCollectorComponentTest,
        loadDependentComponentsWithoutBoxColliderComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutBoxCollider{position, "componentOwnerWithoutBoxCollider", sharedContext};
+    ComponentOwner componentOwnerWithoutBoxCollider{position, "componentOwnerWithoutBoxCollider",
+                                                    sharedContext};
     componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>();
     componentOwnerWithoutBoxCollider.addComponent<DirectionComponent>();
     ItemCollectorComponent itemCollectorWithoutBoxCollider{&componentOwnerWithoutBoxCollider, quadtree,

@@ -4,12 +4,12 @@
 
 #include "AnimatorMock.h"
 #include "RendererPoolMock.h"
-#include "core/DirectionComponent.h"
 
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
 #include "StlOperators.h"
 #include "core/AnimationComponent.h"
+#include "core/DirectionComponent.h"
 #include "core/KeyboardMovementComponent.h"
 
 using namespace physics;

@@ -1,10 +1,10 @@
 #pragma once
 
 #include "CharacterFactory.h"
-#include "ItemFactory.h"
 #include "CollisionSystem.h"
 #include "ComponentOwnersManager.h"
 #include "HeadsUpDisplay.h"
+#include "ItemFactory.h"
 #include "RayCast.h"
 #include "State.h"
 #include "Timer.h"

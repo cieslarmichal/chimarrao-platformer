@@ -1,6 +1,7 @@
 #include "VelocityComponent.h"
 
 #include "gtest/gtest.h"
+
 #include "RendererPoolMock.h"
 
 using namespace ::testing;

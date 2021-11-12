@@ -16,7 +16,8 @@ public:
     GraphicsComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>, const utils::Vector2f& size,
                       const utils::Vector2f& position, const graphics::Color&,
                       graphics::VisibilityLayer = graphics::VisibilityLayer::First,
-                      const utils::Vector2f& offset = {0, 0}, bool relativeRendering = false, bool updatesPosition = true);
+                      const utils::Vector2f& offset = {0, 0}, bool relativeRendering = false,
+                      bool updatesPosition = true);
 
     GraphicsComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>, const utils::Vector2f& size,
                       const utils::Vector2f& position, const graphics::TexturePath&,

@@ -1,6 +1,7 @@
 #include "HealthComponent.h"
 
 #include "gtest/gtest.h"
+
 #include "RendererPoolMock.h"
 
 #include "ComponentOwner.h"

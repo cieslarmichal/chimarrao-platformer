@@ -5,6 +5,7 @@
 #include "AnimatorMock.h"
 #include "InputMock.h"
 #include "RendererPoolMock.h"
+
 #include "AnimationComponent.h"
 #include "DeltaTime.h"
 #include "exceptions/DependentComponentNotFound.h"

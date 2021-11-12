@@ -1,7 +1,9 @@
 #include "ItemHealEffect.h"
 
 #include "gtest/gtest.h"
+
 #include "RendererPoolMock.h"
+
 #include "ComponentOwner.h"
 #include "HealthComponent.h"
 #include "exceptions/DependentComponentNotFound.h"

@@ -21,9 +21,8 @@ public:
     std::vector<std::string> expectedImagesNames{"hudHealthPointsBar", "hudHealthPointsBarFrame"};
     const std::vector<std::string> slotIds{"slot1", "slot2", "slot3", "slot4",
                                            "slot5", "slot6", "slot7", "slot8"};
-    const std::vector<std::string> slotItemsIds{"slotItem1", "slotItem2", "slotItem3",
-                                                "slotItem4", "slotItem5", "slotItem6",
-                                                "slotItem7", "slotItem8"};
+    const std::vector<std::string> slotItemsIds{"slotItem1", "slotItem2", "slotItem3", "slotItem4",
+                                                "slotItem5", "slotItem6", "slotItem7", "slotItem8"};
 };
 
 TEST_F(HeadsUpDisplayUIConfigBuilderTest, createMenuUI)

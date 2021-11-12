@@ -15,7 +15,7 @@ MeleeAttack::MeleeAttack(ComponentOwner* owner, std::shared_ptr<physics::RayCast
 
 void MeleeAttack::attack()
 {
-    std::call_once(componentsInitialized, [this] { loadDependentComponents();});
+    std::call_once(componentsInitialized, [this] { loadDependentComponents(); });
 
     const auto heading = directionComponent->getHeading();
     const auto& ownerPosition = owner->transform->getPosition();

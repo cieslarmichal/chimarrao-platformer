@@ -74,7 +74,8 @@ public:
 TEST_F(MouseOverComponentTest,
        loadDependentComponentsWithoutBoxColliderComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider", sharedContext};
+    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider",
+                                                    sharedContext};
     MouseOverComponent mouseOverComponentWithoutBoxCollider{
         &componentOwnerWithoutBoxCollider, [this] { mouseOverAction(); }, [this] { mouseOutAction(); }};
     ASSERT_THROW(mouseOverComponentWithoutBoxCollider.loadDependentComponents(),

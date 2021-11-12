@@ -54,9 +54,9 @@ public:
 
 TEST_F(GameStateUIConfigBuilderTest, createGameUI)
 {
-    GameState gameState{window,  rendererPool, fileAccess,
-                        states,  uiManager,    std::move(componentOwnersManagerInit),
-                        tileMap, rayCast,      quadtree, sharedContext};
+    GameState gameState{
+        window,  rendererPool, fileAccess, states,       uiManager, std::move(componentOwnersManagerInit),
+        tileMap, rayCast,      quadtree,   sharedContext};
     const auto gameUI = GameStateUIConfigBuilder::createGameUIConfig(&gameState);
 
     ASSERT_EQ(gameUI->backgroundConfig->uniqueName, "gameBackground");

@@ -2,8 +2,9 @@
 
 #include "gtest/gtest.h"
 
-#include "DefaultQuadtree.h"
 #include "RendererPoolMock.h"
+
+#include "DefaultQuadtree.h"
 
 using namespace physics;
 using namespace components::core;

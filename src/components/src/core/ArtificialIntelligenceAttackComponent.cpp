@@ -5,8 +5,8 @@
 namespace components::core
 {
 
-ArtificialIntelligenceAttackComponent::ArtificialIntelligenceAttackComponent(ComponentOwner* owner,ComponentOwner* target,
-                                                                             std::shared_ptr<AttackStrategy> attackStrategy)
+ArtificialIntelligenceAttackComponent::ArtificialIntelligenceAttackComponent(
+    ComponentOwner* owner, ComponentOwner* target, std::shared_ptr<AttackStrategy> attackStrategy)
     : Component{owner}, target{target}, attackStrategy{std::move(attackStrategy)}
 
 {

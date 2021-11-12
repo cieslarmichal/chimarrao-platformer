@@ -49,7 +49,7 @@ public:
     std::unique_ptr<NiceMock<utils::TimerMock>> timerInit{std::make_unique<NiceMock<utils::TimerMock>>()};
     NiceMock<utils::TimerMock>* timer{timerInit.get()};
 
-    EditorState editorState{window,    rendererPool, fileAccess,          states,
+    EditorState editorState{window,    rendererPool, fileAccess,           states,
                             uiManager, tileMap,      std::move(timerInit), sharedContext};
 };
 

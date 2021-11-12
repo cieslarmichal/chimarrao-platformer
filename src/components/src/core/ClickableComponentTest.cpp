@@ -63,7 +63,8 @@ public:
 TEST_F(ClickableComponentTest,
        loadDependentComponentsWithoutBoxColliderComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider", sharedContext};
+    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider",
+                                                    sharedContext};
     ClickableComponent clickableComponentWithoutBoxCollider{&componentOwnerWithoutBoxCollider,
                                                             validKeyActionVector};
 

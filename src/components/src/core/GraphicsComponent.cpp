@@ -10,7 +10,8 @@ GraphicsComponent::GraphicsComponent(ComponentOwner* ownerInit,
                                      std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                                      const utils::Vector2f& size, const utils::Vector2f& position,
                                      const graphics::Color& color, graphics::VisibilityLayer layer,
-                                     const utils::Vector2f& offset, bool relativeRendering, bool updatesPosition)
+                                     const utils::Vector2f& offset, bool relativeRendering,
+                                     bool updatesPosition)
     : Component{ownerInit},
       rendererPool{std::move(rendererPoolInit)},
       visibilityLayer{layer},

@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "core/SharedContext.h"
 #include "core/ComponentOwner.h"
+#include "core/SharedContext.h"
 
 namespace game
 {

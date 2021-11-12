@@ -1,6 +1,8 @@
 #include "MovementComponent.h"
-#include "RendererPoolMock.h"
+
 #include "gtest/gtest.h"
+
+#include "RendererPoolMock.h"
 
 using namespace ::testing;
 using namespace components::core;
