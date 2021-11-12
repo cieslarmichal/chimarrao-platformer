@@ -24,7 +24,8 @@ BoxColliderComponent::BoxColliderComponent(ComponentOwner* owner, const utils::V
         debugGraphics = owner->addGraphicsComponent(
             owner->sharedContext->rendererPool, size,
             utils::Vector2f{nextFrameCollisionBoundaries.left, nextFrameCollisionBoundaries.top},
-            graphics::Color::Transparent, graphics::VisibilityLayer::First, utils::Vector2f{0, 0}, false, false);
+            graphics::Color::Transparent, graphics::VisibilityLayer::First, utils::Vector2f{0, 0}, false,
+            false);
         debugGraphics->setOutline(0.1, graphics::Color::Red);
     }
 }
@@ -51,8 +52,6 @@ void BoxColliderComponent::loadDependentComponents()
     {
         movementComponent = owner->getComponent<FreeFallMovementComponent>();
     }
-
-    // not loading movement component dependent components because of circular dependency
 
     velocityComponent = owner->getComponent<VelocityComponent>();
     if (velocityComponent)
@@ -113,10 +112,12 @@ void BoxColliderComponent::resolveOverlapX(const std::shared_ptr<BoxColliderComp
     if (left < right)
     {
         movementComponent->blockMoveLeft();
+        colliderNamesWithDistancesOnXAxis[other->getOwnerName()] = Direction::Left;
     }
     else
     {
         movementComponent->blockMoveRight();
+        colliderNamesWithDistancesOnXAxis[other->getOwnerName()] = Direction::Right;
     }
 }
 
@@ -132,6 +133,22 @@ void BoxColliderComponent::resolveOverlapY(const std::shared_ptr<BoxColliderComp
     const auto top = std::abs(otherRect.top + otherRect.height - nextFrameCollisionBoundaries.top);
     const auto bot =
         std::abs(otherRect.top - (nextFrameCollisionBoundaries.top + nextFrameCollisionBoundaries.height));
+
+    const auto collidesWithOtherColliderOnXAxis = colliderNamesWithDistancesOnXAxis.contains(other->getOwnerName());
+
+    if (nextFrameCollisionBoundaries.top + nextFrameCollisionBoundaries.height / 2 <
+            other->getOwner().transform->getPosition().y and
+        collidesWithOtherColliderOnXAxis)
+    {
+        if (colliderNamesWithDistancesOnXAxis[other->getOwnerName()] == Direction::Left)
+        {
+            movementComponent->allowMoveLeft();
+        }
+        else
+        {
+            movementComponent->allowMoveRight();
+        }
+    }
 
     if (top < bot)
     {
@@ -155,6 +172,7 @@ void BoxColliderComponent::setAvailableMovementDirections()
 {
     if (movementComponent)
     {
+        colliderNamesWithDistancesOnXAxis.clear();
         movementComponent->allowMoveRight();
         movementComponent->allowMoveLeft();
         movementComponent->allowMoveUp();
@@ -214,7 +232,8 @@ const utils::FloatRect& BoxColliderComponent::getNextFrameYCollisionBox()
 
     if (collisionLayer == CollisionLayer::Player)
     {
-        debugGraphics->setPosition(utils::Vector2f{nextFrameCollisionBoundaries.left, nextFrameCollisionBoundaries.top});
+        debugGraphics->setPosition(
+            utils::Vector2f{nextFrameCollisionBoundaries.left, nextFrameCollisionBoundaries.top});
     }
 
     return nextFrameCollisionBoundaries;

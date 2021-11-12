@@ -9,6 +9,11 @@
 
 namespace components::core
 {
+enum class Direction
+{
+    Left,
+    Right
+};
 class BoxColliderComponent : public Component
 {
 public:
@@ -41,5 +46,6 @@ private:
     utils::Vector2f size;
     utils::DeltaTime currentDeltaTime;
     std::shared_ptr<GraphicsComponent> debugGraphics;
+    std::unordered_map<std::string, Direction> colliderNamesWithDistancesOnXAxis;
 };
 }
