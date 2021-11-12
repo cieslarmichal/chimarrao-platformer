@@ -20,8 +20,6 @@ public:
     KeyboardMovementComponentTest()
     {
         componentOwner.addComponent<AnimationComponent>(animator);
-        componentOwner.addComponent<BoxColliderComponent>(size);
-        componentOwner.addComponent<DirectionComponent>();
         componentOwner.addComponent<VelocityComponent>();
         keyboardMovementComponent.loadDependentComponents();
     }
@@ -58,18 +56,6 @@ TEST_F(KeyboardMovementComponentTest,
     componentOwnerWithoutVelocity.addComponent<AnimationComponent>(animator);
 
     ASSERT_THROW(keyboardMovementComponentWithoutVelocity.loadDependentComponents(),
-                 components::core::exceptions::DependentComponentNotFound);
-}
-
-TEST_F(KeyboardMovementComponentTest,
-       loadDependentComponentsWithoutAttackComponent_shouldThrowDependentComponentNotFound)
-{
-    ComponentOwner componentOwnerWithoutAttack{position, "componentOwnerWithoutAttack", sharedContext};
-    KeyboardMovementComponent keyboardMovementComponentWithoutAttack{&componentOwnerWithoutAttack};
-    componentOwnerWithoutAttack.addComponent<VelocityComponent>();
-    componentOwnerWithoutAttack.addComponent<AnimationComponent>(animator);
-
-    ASSERT_THROW(keyboardMovementComponentWithoutAttack.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
 }
 
@@ -305,16 +291,4 @@ TEST_F(KeyboardMovementComponentTest, givenLeftAndDownKeysPressed_update_shouldR
         utils::Vector2f{positionBeforeUpdate.x + positionChangeToLeft, positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
-}
-
-TEST_F(KeyboardMovementComponentTest, givenSpacePressed_update_shouldSetAttackAnimation)
-{
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Up)).WillOnce(Return(false));
-    EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(true));
-    EXPECT_CALL(*animator, getAnimationType()).WillRepeatedly(Return(AnimationType::Idle));
-    EXPECT_CALL(*animator, setAnimation(AnimationType::Attack));
-
-    keyboardMovementComponent.update(deltaTime, input);
 }

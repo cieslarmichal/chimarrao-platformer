@@ -1,12 +1,12 @@
+#include "KeyboardAttackComponent.h"
+
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
+#include "AttackStrategyMock.h"
+#include "InputMock.h"
 #include "RendererPoolMock.h"
 
-#include "DefaultQuadtree.h"
-#include "DefaultRayCast.h"
-#include "HealthComponent.h"
-#include "KeyboardAttackComponent.h"
 #include "core/exceptions/DependentComponentNotFound.h"
 
 using namespace ::testing;
@@ -17,17 +17,8 @@ class KeyboardAttackComponentTest : public Test
 public:
     KeyboardAttackComponentTest()
     {
-        componentOwner1.addComponent<VelocityComponent>();
-        componentOwner1.addComponent<DirectionComponent>();
-        componentOwner1.addComponent<AnimationComponent>(animator);
-        componentOwner1.addComponent<BoxColliderComponent>(size);
+        componentOwner.addComponent<AnimationComponent>(animator);
         attackComponent.loadDependentComponents();
-        targetHealthComponentOnRightInRange = componentOwnerOnRightInRange.addComponent<HealthComponent>(100);
-        targetHealthComponentOnRightOutOfRange =
-            componentOwnerOnRightOutOfRange.addComponent<HealthComponent>(100);
-        targetHealthComponentOnLeftInRange = componentOwnerOnLeftInRange.addComponent<HealthComponent>(100);
-        targetHealthComponentOnLeftOutOfRange =
-            componentOwnerOnLeftOutOfRange.addComponent<HealthComponent>(100);
     }
 
     const utils::Vector2f size{5, 5};
@@ -40,95 +31,69 @@ public:
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
     std::shared_ptr<components::core::SharedContext> sharedContext =
         std::make_shared<components::core::SharedContext>(rendererPool);
-    ComponentOwner componentOwner1{position1, "AttackComponentTest1", sharedContext};
-    ComponentOwner componentOwnerOnRightInRange{positionOnRightInRange, "AttackComponentTest2", sharedContext};
-    ComponentOwner componentOwnerOnRightOutOfRange{positionOnRightOutOfRange, "AttackComponentTest3", sharedContext};
-    ComponentOwner componentOwnerOnLeftInRange{positionOnLeftInRange, "AttackComponentTest4", sharedContext};
-    ComponentOwner componentOwnerOnLeftOutOfRange{positionOnLeftOutOfRange, "AttackComponentTest5", sharedContext};
-    std::shared_ptr<BoxColliderComponent> boxColliderComponent1 =
-        std::make_shared<BoxColliderComponent>(&componentOwner1, size);
-    std::shared_ptr<BoxColliderComponent> boxColliderComponentOnRightInRange =
-        std::make_shared<BoxColliderComponent>(&componentOwnerOnRightInRange, size);
-    std::shared_ptr<BoxColliderComponent> boxColliderComponentOnRightOutOfRange =
-        std::make_shared<BoxColliderComponent>(&componentOwnerOnRightOutOfRange, size);
-    std::shared_ptr<BoxColliderComponent> boxColliderComponentOnLeftInRange =
-        std::make_shared<BoxColliderComponent>(&componentOwnerOnLeftInRange, size);
-    std::shared_ptr<BoxColliderComponent> boxColliderComponentOnLeftOutOfRange =
-        std::make_shared<BoxColliderComponent>(&componentOwnerOnLeftOutOfRange, size);
-    std::shared_ptr<HealthComponent> targetHealthComponentOnRightInRange;
-    std::shared_ptr<HealthComponent> targetHealthComponentOnRightOutOfRange;
-    std::shared_ptr<HealthComponent> targetHealthComponentOnLeftInRange;
-    std::shared_ptr<HealthComponent> targetHealthComponentOnLeftOutOfRange;
+    ComponentOwner componentOwner{position1, "AttackComponentTest1", sharedContext};
+    StrictMock<input::InputMock> input;
+    const utils::DeltaTime deltaTime{3};
     std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
         std::make_shared<StrictMock<animations::AnimatorMock>>();
-    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
-    std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::DefaultRayCast>(quadtree);
-    KeyboardAttackComponent attackComponent{&componentOwner1, rayCast};
+    std::unique_ptr<StrictMock<AttackStrategyMock>> attackStrategyInit =
+        std::make_unique<StrictMock<AttackStrategyMock>>();
+    StrictMock<AttackStrategyMock>* attackStrategy = attackStrategyInit.get();
+    KeyboardAttackComponent attackComponent{&componentOwner, std::move(attackStrategyInit)};
 };
 
 TEST_F(KeyboardAttackComponentTest,
-       loadDependentComponentsWithoutDirectionComponent_shouldThrowDependentComponentNotFound)
+       loadDependentComponentsWithoutAnimationComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutDirection{position1, "componentOwnerWithoutDirection", sharedContext};
-    KeyboardAttackComponent attackComponentWithoutDirection{&componentOwnerWithoutDirection, rayCast};
-
-    ASSERT_THROW(attackComponentWithoutDirection.loadDependentComponents(),
-                 components::core::exceptions::DependentComponentNotFound);
-}
-
-TEST_F(KeyboardAttackComponentTest,
-       loadDependentComponentsWithoutBoxColliderComponent_shouldThrowDependentComponentNotFound)
-{
-    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider", sharedContext};
-    componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>();
-    componentOwnerWithoutBoxCollider.addComponent<DirectionComponent>();
-    componentOwnerWithoutBoxCollider.addComponent<AnimationComponent>(animator);
-    KeyboardAttackComponent attackComponentWithoutBoxCollider{&componentOwnerWithoutBoxCollider, rayCast};
+    ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider",
+                                                    sharedContext};
+    KeyboardAttackComponent attackComponentWithoutBoxCollider{&componentOwnerWithoutBoxCollider,
+                                                              std::move(attackStrategyInit)};
 
     ASSERT_THROW(attackComponentWithoutBoxCollider.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
 }
 
-TEST_F(KeyboardAttackComponentTest, givenTargetInAttackRangeOnRight_shouldDealDamageToTarget)
+TEST_F(KeyboardAttackComponentTest, givenSpaceNotPressed_shouldNotCallAttackStrategy)
 {
-    quadtree->insertCollider(boxColliderComponent1);
-    quadtree->insertCollider(boxColliderComponentOnRightInRange);
-    EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Right));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(false));
 
-    attackComponent.attack();
-
-    ASSERT_EQ(targetHealthComponentOnRightInRange->getCurrentHealth(), 90);
+    attackComponent.update(deltaTime, input);
 }
 
-TEST_F(KeyboardAttackComponentTest, givenTargetOutOfAttackRangeOnRight_shouldNotDealAnyDamageToTarget)
+TEST_F(KeyboardAttackComponentTest, givenSpacePressedAndAnimationIsAlreadyAttack_shouldNotCallAttackStrategy)
 {
-    quadtree->insertCollider(boxColliderComponent1);
-    quadtree->insertCollider(boxColliderComponentOnRightOutOfRange);
-    EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Right));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(true));
+    EXPECT_CALL(*animator, getAnimationType()).WillOnce(Return(animations::AnimationType::Attack));
 
-    attackComponent.attack();
-
-    ASSERT_EQ(targetHealthComponentOnRightOutOfRange->getCurrentHealth(), 100);
+    attackComponent.update(deltaTime, input);
 }
 
-TEST_F(KeyboardAttackComponentTest, givenTargetInAttackRangeOnLeft_shouldDealDamageToTarget)
+TEST_F(
+    KeyboardAttackComponentTest,
+    givenSpacePressedAndAnimationIsDifferentThanAttackAndAttackAnimationProgressInLessThan60Percents_shouldSetAnimationToAttackAndNotCallAttackStrategy)
 {
-    quadtree->insertCollider(boxColliderComponent1);
-    quadtree->insertCollider(boxColliderComponentOnLeftInRange);
-    EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Left));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(true));
+    EXPECT_CALL(*animator, getAnimationType())
+        .WillOnce(Return(animations::AnimationType::Idle))
+        .WillOnce(Return(animations::AnimationType::Attack));
+    EXPECT_CALL(*animator, setAnimation(animations::AnimationType::Attack));
+        EXPECT_CALL(*animator, getCurrentAnimationProgressInPercents()).WillOnce(Return(58));
 
-    attackComponent.attack();
-
-    ASSERT_EQ(targetHealthComponentOnLeftInRange->getCurrentHealth(), 90);
+    attackComponent.update(deltaTime, input);
 }
 
-TEST_F(KeyboardAttackComponentTest, givenTargetOutOfAttackRangeOnLeft_shouldNotDealAnyDamageToTarget)
+TEST_F(
+    KeyboardAttackComponentTest,
+    givenSpacePressedAndAnimationIsDifferentThanAttackAndAttackAnimationProgressInMoreThan60Percents_shouldSetAnimationToAttackAndCallAttackStrategy)
 {
-    quadtree->insertCollider(boxColliderComponent1);
-    quadtree->insertCollider(boxColliderComponentOnLeftOutOfRange);
-    EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Left));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(true));
+    EXPECT_CALL(*animator, getAnimationType())
+        .WillOnce(Return(animations::AnimationType::Idle))
+        .WillOnce(Return(animations::AnimationType::Attack));
+    EXPECT_CALL(*animator, setAnimation(animations::AnimationType::Attack));
+    EXPECT_CALL(*animator, getCurrentAnimationProgressInPercents()).WillOnce(Return(63));
+    EXPECT_CALL(*attackStrategy, attack());
 
-    attackComponent.attack();
-
-    ASSERT_EQ(targetHealthComponentOnLeftOutOfRange->getCurrentHealth(), 100);
+    attackComponent.update(deltaTime, input);
 }

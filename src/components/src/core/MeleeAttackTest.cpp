@@ -14,10 +14,10 @@
 using namespace ::testing;
 using namespace components::core;
 
-class KeyboardAttackComponentTest : public Test
+class MeleeAttackTest : public Test
 {
 public:
-    KeyboardAttackComponentTest()
+    MeleeAttackTest()
     {
         componentOwner1.addComponent<VelocityComponent>();
         componentOwner1.addComponent<DirectionComponent>();
@@ -68,7 +68,7 @@ public:
     MeleeAttack meleeAttack{&componentOwner1, rayCast};
 };
 
-TEST_F(KeyboardAttackComponentTest,
+TEST_F(MeleeAttackTest,
        givenComponentOwnerWithoutDirectionComponent_attack_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutDirection{position1, "componentOwnerWithoutDirection", sharedContext};
@@ -78,7 +78,7 @@ TEST_F(KeyboardAttackComponentTest,
                  components::core::exceptions::DependentComponentNotFound);
 }
 
-TEST_F(KeyboardAttackComponentTest,
+TEST_F(MeleeAttackTest,
        givenComponentOwnerWithoutBoxColliderComponent_attack_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider",
@@ -91,7 +91,7 @@ TEST_F(KeyboardAttackComponentTest,
                  components::core::exceptions::DependentComponentNotFound);
 }
 
-TEST_F(KeyboardAttackComponentTest, givenTargetInAttackRangeOnRight_shouldDealDamageToTarget)
+TEST_F(MeleeAttackTest, givenTargetInAttackRangeOnRight_shouldDealDamageToTarget)
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnRightInRange);
@@ -101,7 +101,7 @@ TEST_F(KeyboardAttackComponentTest, givenTargetInAttackRangeOnRight_shouldDealDa
     ASSERT_EQ(targetHealthComponentOnRightInRange->getCurrentHealth(), 90);
 }
 
-TEST_F(KeyboardAttackComponentTest, givenTargetOutOfAttackRangeOnRight_shouldNotDealAnyDamageToTarget)
+TEST_F(MeleeAttackTest, givenTargetOutOfAttackRangeOnRight_shouldNotDealAnyDamageToTarget)
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnRightOutOfRange);
@@ -111,7 +111,7 @@ TEST_F(KeyboardAttackComponentTest, givenTargetOutOfAttackRangeOnRight_shouldNot
     ASSERT_EQ(targetHealthComponentOnRightOutOfRange->getCurrentHealth(), 100);
 }
 
-TEST_F(KeyboardAttackComponentTest, givenTargetInAttackRangeOnLeft_shouldDealDamageToTarget)
+TEST_F(MeleeAttackTest, givenTargetInAttackRangeOnLeft_shouldDealDamageToTarget)
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnLeftInRange);
@@ -121,7 +121,7 @@ TEST_F(KeyboardAttackComponentTest, givenTargetInAttackRangeOnLeft_shouldDealDam
     ASSERT_EQ(targetHealthComponentOnLeftInRange->getCurrentHealth(), 90);
 }
 
-TEST_F(KeyboardAttackComponentTest, givenTargetOutOfAttackRangeOnLeft_shouldNotDealAnyDamageToTarget)
+TEST_F(MeleeAttackTest, givenTargetOutOfAttackRangeOnLeft_shouldNotDealAnyDamageToTarget)
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnLeftOutOfRange);
