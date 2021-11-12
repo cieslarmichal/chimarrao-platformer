@@ -2,7 +2,6 @@
 
 #include "TimerFactory.h"
 #include "core/AnimationComponent.h"
-#include "core/AttackComponent.h"
 #include "core/BoxColliderComponent.h"
 #include "core/CameraComponent.h"
 #include "core/DirectionComponent.h"
@@ -13,6 +12,7 @@
 #include "core/IdleNpcMovementComponent.h"
 #include "core/ItemCollectorComponent.h"
 #include "core/KeyboardMovementComponent.h"
+#include "core/MeleeAttackComponent.h"
 #include "core/VelocityComponent.h"
 
 namespace game
@@ -49,7 +49,7 @@ CharacterFactory::createPlayer(const utils::Vector2f& position)
                                                       static_cast<float>(tileMap->getSize().y) * 4.f});
     player->addComponent<components::core::HealthComponent>(1000);
     player->addComponent<components::core::DirectionComponent>();
-    player->addComponent<components::core::AttackComponent>(rayCast);
+    player->addComponent<components::core::MeleeAttackComponent>(rayCast);
     player->addComponent<components::core::HealthBarComponent>(sharedContext->rendererPool,
                                                                utils::Vector2f{1.5, -1});
     const std::shared_ptr<utils::Timer> itemCollectorTimer = utils::TimerFactory::createTimer();

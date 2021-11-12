@@ -34,16 +34,6 @@ void KeyboardMovementComponent::loadDependentComponents()
         throw exceptions::DependentComponentNotFound{
             "KeyboardMovementComponent: Velocity component not found"};
     }
-
-    attackComponent = owner->getComponent<AttackComponent>();
-    if (attackComponent)
-    {
-        attackComponent->loadDependentComponents();
-    }
-    else
-    {
-        throw exceptions::DependentComponentNotFound{"KeyboardMovementComponent: Attack component not found"};
-    }
 }
 
 void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
@@ -122,20 +112,6 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
     else
     {
         currentMovementSpeed.y += 25.f * deltaTime.count();
-    }
-
-    if (input.isKeyPressed(input::InputKey::Space) and
-        animation->getAnimationType() != animations::AnimationType::Attack)
-    {
-        animation->setAnimation(animations::AnimationType::Attack);
-        attemptToAttack = true;
-    }
-
-    if (attemptToAttack and animation->getAnimationType() == animations::AnimationType::Attack &&
-        animation->getCurrentAnimationProgressInPercents() >= 60)
-    {
-        attackComponent->attack();
-        attemptToAttack = false;
     }
 
     velocityComponent->setVelocity(currentMovementSpeed);

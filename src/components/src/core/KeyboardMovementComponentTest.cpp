@@ -25,7 +25,7 @@ public:
         componentOwner.addComponent<BoxColliderComponent>(size);
         componentOwner.addComponent<DirectionComponent>();
         componentOwner.addComponent<VelocityComponent>();
-        componentOwner.addComponent<AttackComponent>(rayCast);
+        componentOwner.addComponent<MeleeAttackComponent>(rayCast);
         keyboardMovementComponent.loadDependentComponents();
     }
 

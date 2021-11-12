@@ -1,5 +1,3 @@
-#include "AttackComponent.h"
-
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
@@ -8,15 +6,16 @@
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
 #include "HealthComponent.h"
+#include "MeleeAttackComponent.h"
 #include "core/exceptions/DependentComponentNotFound.h"
 
 using namespace ::testing;
 using namespace components::core;
 
-class AttackComponentTest : public Test
+class MeleeAttackComponentTest : public Test
 {
 public:
-    AttackComponentTest()
+    MeleeAttackComponentTest()
     {
         componentOwner1.addComponent<VelocityComponent>();
         componentOwner1.addComponent<DirectionComponent>();
@@ -64,33 +63,33 @@ public:
         std::make_shared<StrictMock<animations::AnimatorMock>>();
     std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::DefaultRayCast>(quadtree);
-    AttackComponent attackComponent{&componentOwner1, rayCast};
+    MeleeAttackComponent attackComponent{&componentOwner1, rayCast};
 };
 
-TEST_F(AttackComponentTest,
+TEST_F(MeleeAttackComponentTest,
        loadDependentComponentsWithoutDirectionComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutDirection{position1, "componentOwnerWithoutDirection", sharedContext};
-    AttackComponent attackComponentWithoutDirection{&componentOwnerWithoutDirection, rayCast};
+    MeleeAttackComponent attackComponentWithoutDirection{&componentOwnerWithoutDirection, rayCast};
 
     ASSERT_THROW(attackComponentWithoutDirection.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
 }
 
-TEST_F(AttackComponentTest,
+TEST_F(MeleeAttackComponentTest,
        loadDependentComponentsWithoutBoxColliderComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider", sharedContext};
     componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>();
     componentOwnerWithoutBoxCollider.addComponent<DirectionComponent>();
     componentOwnerWithoutBoxCollider.addComponent<AnimationComponent>(animator);
-    AttackComponent attackComponentWithoutBoxCollider{&componentOwnerWithoutBoxCollider, rayCast};
+    MeleeAttackComponent attackComponentWithoutBoxCollider{&componentOwnerWithoutBoxCollider, rayCast};
 
     ASSERT_THROW(attackComponentWithoutBoxCollider.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
 }
 
-TEST_F(AttackComponentTest, givenTargetInAttackRangeOnRight_shouldDealDamageToTarget)
+TEST_F(MeleeAttackComponentTest, givenTargetInAttackRangeOnRight_shouldDealDamageToTarget)
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnRightInRange);
@@ -101,7 +100,7 @@ TEST_F(AttackComponentTest, givenTargetInAttackRangeOnRight_shouldDealDamageToTa
     ASSERT_EQ(targetHealthComponentOnRightInRange->getCurrentHealth(), 90);
 }
 
-TEST_F(AttackComponentTest, givenTargetOutOfAttackRangeOnRight_shouldNotDealAnyDamageToTarget)
+TEST_F(MeleeAttackComponentTest, givenTargetOutOfAttackRangeOnRight_shouldNotDealAnyDamageToTarget)
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnRightOutOfRange);
@@ -112,7 +111,7 @@ TEST_F(AttackComponentTest, givenTargetOutOfAttackRangeOnRight_shouldNotDealAnyD
     ASSERT_EQ(targetHealthComponentOnRightOutOfRange->getCurrentHealth(), 100);
 }
 
-TEST_F(AttackComponentTest, givenTargetInAttackRangeOnLeft_shouldDealDamageToTarget)
+TEST_F(MeleeAttackComponentTest, givenTargetInAttackRangeOnLeft_shouldDealDamageToTarget)
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnLeftInRange);
@@ -123,7 +122,7 @@ TEST_F(AttackComponentTest, givenTargetInAttackRangeOnLeft_shouldDealDamageToTar
     ASSERT_EQ(targetHealthComponentOnLeftInRange->getCurrentHealth(), 90);
 }
 
-TEST_F(AttackComponentTest, givenTargetOutOfAttackRangeOnLeft_shouldNotDealAnyDamageToTarget)
+TEST_F(MeleeAttackComponentTest, givenTargetOutOfAttackRangeOnLeft_shouldNotDealAnyDamageToTarget)
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnLeftOutOfRange);

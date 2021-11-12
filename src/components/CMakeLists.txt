@@ -25,7 +25,7 @@ set(SOURCES
         src/core/HealthComponent.cpp
         src/core/HealthBarComponent.cpp
         src/core/DirectionComponent.cpp
-        src/core/AttackComponent.cpp
+        src/core/MeleeAttackComponent.cpp
         src/core/IdleNpcMovementComponent.cpp
         src/core/FreeFallMovementComponent.cpp
         src/core/CollectableItemComponent.cpp
@@ -59,7 +59,7 @@ set(UT_SOURCES
         src/ui/LabelTest.cpp
         src/ui/TextFieldTest.cpp
         src/core/DirectionComponentTest.cpp
-        src/core/AttackComponentTest.cpp
+        src/core/MeleeComponentTest.cpp
         src/core/IdleNpcMovementComponentTest.cpp
         src/core/FreeFallMovementComponentTest.cpp
         src/core/CollectableItemComponentTest.cpp
