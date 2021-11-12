@@ -21,6 +21,7 @@ public:
     {
         componentOwner1.addComponent<VelocityComponent>();
         componentOwner1.addComponent<DirectionComponent>();
+        componentOwner1.addComponent<AnimationComponent>(animator);
         componentOwner1.addComponent<BoxColliderComponent>(size);
         componentOwner1.loadDependentComponents();
         targetHealthComponentOnRightInRange = componentOwnerOnRightInRange.addComponent<HealthComponent>(100);
@@ -37,6 +38,8 @@ public:
     const utils::Vector2f positionOnRightOutOfRange{42, 20};
     const utils::Vector2f positionOnLeftInRange{17, 20};
     const utils::Vector2f positionOnLeftOutOfRange{10, 20};
+    std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
+        std::make_shared<StrictMock<animations::AnimatorMock>>();
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
     std::shared_ptr<components::core::SharedContext> sharedContext =
@@ -95,6 +98,7 @@ TEST_F(MeleeAttackTest, givenTargetInAttackRangeOnRight_shouldDealDamageToTarget
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnRightInRange);
+    EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Right));
 
     meleeAttack.attack();
 
@@ -105,6 +109,7 @@ TEST_F(MeleeAttackTest, givenTargetOutOfAttackRangeOnRight_shouldNotDealAnyDamag
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnRightOutOfRange);
+    EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Right));
 
     meleeAttack.attack();
 
@@ -115,6 +120,7 @@ TEST_F(MeleeAttackTest, givenTargetInAttackRangeOnLeft_shouldDealDamageToTarget)
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnLeftInRange);
+    EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Left));
 
     meleeAttack.attack();
 
@@ -125,6 +131,7 @@ TEST_F(MeleeAttackTest, givenTargetOutOfAttackRangeOnLeft_shouldNotDealAnyDamage
 {
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnLeftOutOfRange);
+    EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Left));
 
     meleeAttack.attack();
 

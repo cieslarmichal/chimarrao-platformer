@@ -23,10 +23,6 @@ public:
 
     const utils::Vector2f size{5, 5};
     const utils::Vector2f position1{20, 20};
-    const utils::Vector2f positionOnRightInRange{26, 20};
-    const utils::Vector2f positionOnRightOutOfRange{42, 20};
-    const utils::Vector2f positionOnLeftInRange{17, 20};
-    const utils::Vector2f positionOnLeftOutOfRange{10, 20};
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
     std::shared_ptr<components::core::SharedContext> sharedContext =
