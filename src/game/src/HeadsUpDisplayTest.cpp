@@ -225,3 +225,62 @@ TEST_F(HeadsUpDisplayTest, collectedItemsNotChanged_shouldNotLoadItemTexturesOnS
 
     expectReleaseGraphicsIds();
 }
+
+TEST_F(HeadsUpDisplayTest, givenKeyPressedAttemptingToDropItem_shouldDecreseNumberOfItemsInCollector)
+{
+    expectCreateGraphicsComponents();
+    player->loadDependentComponents();
+    EXPECT_CALL(*rendererPool, setOutline(graphicsId3, 0.15, graphics::Color::Black));
+    EXPECT_CALL(*rendererPool, setOutline(_, 0.1, graphics::Color::Black)).Times(7);
+    EXPECT_CALL(*rendererPool, setOutline(_, 0.1, graphics::Color::Red));
+    EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::Invisible)).Times(8);
+    auto hud = HeadsUpDisplay{player, sharedContext, HeadsUpDisplayUIConfigBuilder::createUIConfig(), std::move(timerInit)};
+    EXPECT_CALL(*rendererPool, getSize(graphicsId1)).WillOnce(Return(healthPointsBarSize));
+    EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::First)).Times(2);
+    EXPECT_CALL(*rendererPool, setTexture(_, graphics::TextureRect{initialTexturePath}, utils::Vector2f{1, 1}));
+    EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::Invisible)).Times(8);
+    quadtree->insertCollider(boxColliderComponent);
+    quadtree->insertCollider(boxColliderComponent1);
+    itemCollector->collectNearestItem();
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.0f));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Tab)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Q)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::X)).WillOnce(Return(true));
+    EXPECT_CALL(*timer, restart());
+
+    hud.update(deltaTime, input);
+
+    const auto items = itemCollector->getItemsInfo();
+    ASSERT_TRUE(items.empty());
+    expectReleaseGraphicsIds();
+}
+
+TEST_F(HeadsUpDisplayTest, givenKeyPressedAttemptingToUseItem_shouldDecreseNumberOfItemsInCollector)
+{
+    expectCreateGraphicsComponents();
+    player->loadDependentComponents();
+    EXPECT_CALL(*rendererPool, setOutline(graphicsId3, 0.15, graphics::Color::Black));
+    EXPECT_CALL(*rendererPool, setOutline(_, 0.1, graphics::Color::Black)).Times(7);
+    EXPECT_CALL(*rendererPool, setOutline(_, 0.1, graphics::Color::Red));
+    EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::Invisible)).Times(8);
+    auto hud = HeadsUpDisplay{player, sharedContext, HeadsUpDisplayUIConfigBuilder::createUIConfig(), std::move(timerInit)};
+    EXPECT_CALL(*rendererPool, getSize(graphicsId1)).WillOnce(Return(healthPointsBarSize));
+    EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::First));
+    EXPECT_CALL(*rendererPool, setTexture(_, graphics::TextureRect{initialTexturePath}, utils::Vector2f{1, 1}));
+    EXPECT_CALL(*rendererPool, setVisibility(_, graphics::VisibilityLayer::Invisible)).Times(8);
+    quadtree->insertCollider(boxColliderComponent);
+    quadtree->insertCollider(boxColliderComponent1);
+    itemCollector->collectNearestItem();
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(1.0f));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Tab)).WillOnce(Return(false));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::Q)).WillOnce(Return(true));
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::X)).WillOnce(Return(false));
+    EXPECT_CALL(*timer, restart());
+    EXPECT_CALL(*itemEffect, affect(player.get()));
+
+    hud.update(deltaTime, input);
+
+    const auto items = itemCollector->getItemsInfo();
+    ASSERT_TRUE(items.empty());
+    expectReleaseGraphicsIds();
+}
