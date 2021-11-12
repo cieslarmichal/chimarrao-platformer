@@ -35,7 +35,7 @@ public:
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
-        EXPECT_CALL(*componentOwnersManager, add(_)).Times(8);
+        EXPECT_CALL(*componentOwnersManager, add(_)).Times(9);
         EXPECT_CALL(*componentOwnersManager, processNewObjects());
     }
 
