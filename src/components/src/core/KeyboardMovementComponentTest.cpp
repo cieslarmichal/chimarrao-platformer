@@ -6,8 +6,6 @@
 #include "InputMock.h"
 #include "RendererPoolMock.h"
 #include "AnimationComponent.h"
-#include "DefaultQuadtree.h"
-#include "DefaultRayCast.h"
 #include "DeltaTime.h"
 #include "exceptions/DependentComponentNotFound.h"
 
@@ -25,7 +23,6 @@ public:
         componentOwner.addComponent<BoxColliderComponent>(size);
         componentOwner.addComponent<DirectionComponent>();
         componentOwner.addComponent<VelocityComponent>();
-        componentOwner.addComponent<MeleeAttackComponent>(rayCast);
         keyboardMovementComponent.loadDependentComponents();
     }
 
@@ -39,8 +36,6 @@ public:
     ComponentOwner componentOwner{position, "keyboardMovementComponentTest", sharedContext};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
     StrictMock<input::InputMock> input;
-    std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
-    std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::DefaultRayCast>(quadtree);
     KeyboardMovementComponent keyboardMovementComponent{&componentOwner};
 };
 

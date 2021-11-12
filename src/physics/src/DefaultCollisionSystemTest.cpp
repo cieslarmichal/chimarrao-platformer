@@ -52,13 +52,13 @@ public:
         componentOwnerWithPlayerCollider2->addComponent<DirectionComponent>();
         componentOwnerWitStaticTransform->addComponent<DirectionComponent>();
 
-        componentOwnerWithDefaultCollider1->addComponent<MeleeAttackComponent>(rayCast);
-        componentOwnerWithDefaultCollider2->addComponent<MeleeAttackComponent>(rayCast);
-        componentOwnerWithTileCollider1->addComponent<MeleeAttackComponent>(rayCast);
-        componentOwnerWithTileCollider2->addComponent<MeleeAttackComponent>(rayCast);
-        componentOwnerWithPlayerCollider1->addComponent<MeleeAttackComponent>(rayCast);
-        componentOwnerWithPlayerCollider2->addComponent<MeleeAttackComponent>(rayCast);
-        componentOwnerWitStaticTransform->addComponent<MeleeAttackComponent>(rayCast);
+        componentOwnerWithDefaultCollider1->addComponent<KeyboardAttackComponent>(rayCast);
+        componentOwnerWithDefaultCollider2->addComponent<KeyboardAttackComponent>(rayCast);
+        componentOwnerWithTileCollider1->addComponent<KeyboardAttackComponent>(rayCast);
+        componentOwnerWithTileCollider2->addComponent<KeyboardAttackComponent>(rayCast);
+        componentOwnerWithPlayerCollider1->addComponent<KeyboardAttackComponent>(rayCast);
+        componentOwnerWithPlayerCollider2->addComponent<KeyboardAttackComponent>(rayCast);
+        componentOwnerWitStaticTransform->addComponent<KeyboardAttackComponent>(rayCast);
 
         componentOwnerWithDefaultCollider1->addComponent<KeyboardMovementComponent>();
         componentOwnerWithDefaultCollider2->addComponent<KeyboardMovementComponent>();

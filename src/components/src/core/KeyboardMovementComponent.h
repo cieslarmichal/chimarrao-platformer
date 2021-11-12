@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MeleeAttackComponent.h"
 #include "MovementComponent.h"
 #include "Vector.h"
 #include "VelocityComponent.h"
@@ -21,6 +20,5 @@ public:
 private:
     std::shared_ptr<AnimationComponent> animation;
     std::shared_ptr<VelocityComponent> velocityComponent;
-    std::shared_ptr<MeleeAttackComponent> attackComponent;
 };
 }
