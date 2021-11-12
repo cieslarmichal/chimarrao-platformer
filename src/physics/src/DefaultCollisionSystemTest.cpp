@@ -4,6 +4,7 @@
 
 #include "AnimatorMock.h"
 #include "RendererPoolMock.h"
+#include "core/DirectionComponent.h"
 
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
@@ -52,14 +53,6 @@ public:
         componentOwnerWithPlayerCollider2->addComponent<DirectionComponent>();
         componentOwnerWitStaticTransform->addComponent<DirectionComponent>();
 
-        componentOwnerWithDefaultCollider1->addComponent<KeyboardAttackComponent>(rayCast);
-        componentOwnerWithDefaultCollider2->addComponent<KeyboardAttackComponent>(rayCast);
-        componentOwnerWithTileCollider1->addComponent<KeyboardAttackComponent>(rayCast);
-        componentOwnerWithTileCollider2->addComponent<KeyboardAttackComponent>(rayCast);
-        componentOwnerWithPlayerCollider1->addComponent<KeyboardAttackComponent>(rayCast);
-        componentOwnerWithPlayerCollider2->addComponent<KeyboardAttackComponent>(rayCast);
-        componentOwnerWitStaticTransform->addComponent<KeyboardAttackComponent>(rayCast);
-
         componentOwnerWithDefaultCollider1->addComponent<KeyboardMovementComponent>();
         componentOwnerWithDefaultCollider2->addComponent<KeyboardMovementComponent>();
         componentOwnerWithTileCollider1->addComponent<KeyboardMovementComponent>();
@@ -77,25 +70,25 @@ public:
         componentOwnerWitStaticTransform->loadDependentComponents();
     }
 
-    bool canMoveLeft(const std::shared_ptr<ComponentOwner>& componentOwner) const
+    static bool canMoveLeft(const std::shared_ptr<ComponentOwner>& componentOwner)
     {
         auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
         return movementComponent->isAllowedToMoveLeft();
     }
 
-    bool canMoveRight(const std::shared_ptr<ComponentOwner>& componentOwner) const
+    static bool canMoveRight(const std::shared_ptr<ComponentOwner>& componentOwner)
     {
         auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
         return movementComponent->isAllowedToMoveRight();
     }
 
-    bool canMoveUp(const std::shared_ptr<ComponentOwner>& componentOwner) const
+    static bool canMoveUp(const std::shared_ptr<ComponentOwner>& componentOwner)
     {
         auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
         return movementComponent->isAllowedToMoveUp();
     }
 
-    bool canMoveDown(const std::shared_ptr<ComponentOwner>& componentOwner) const
+    static bool canMoveDown(const std::shared_ptr<ComponentOwner>& componentOwner)
     {
         auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
         return movementComponent->isAllowedToMoveDown();

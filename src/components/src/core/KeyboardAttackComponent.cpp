@@ -7,7 +7,7 @@ namespace components::core
 {
 
 KeyboardAttackComponent::KeyboardAttackComponent(ComponentOwner* owner,
-                                                 std::unique_ptr<AttackStrategy> attackStrategy)
+                                                 std::shared_ptr<AttackStrategy> attackStrategy)
     : Component{owner}, attackStrategy{std::move(attackStrategy)}
 
 {

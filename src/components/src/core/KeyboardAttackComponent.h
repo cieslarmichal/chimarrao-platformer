@@ -9,7 +9,7 @@ namespace components::core
 class KeyboardAttackComponent : public Component
 {
 public:
-    KeyboardAttackComponent(ComponentOwner* owner, std::unique_ptr<AttackStrategy>);
+    KeyboardAttackComponent(ComponentOwner* owner, std::shared_ptr<AttackStrategy>);
 
     void loadDependentComponents() override;
     void update(utils::DeltaTime, const input::Input&) override;
@@ -17,6 +17,6 @@ public:
 private:
     bool attemptToAttack{false};
     std::shared_ptr<AnimationComponent> animation;
-    std::unique_ptr<AttackStrategy> attackStrategy;
+    std::shared_ptr<AttackStrategy> attackStrategy;
 };
 }

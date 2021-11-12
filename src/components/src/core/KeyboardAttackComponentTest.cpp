@@ -32,10 +32,9 @@ public:
     const utils::DeltaTime deltaTime{3};
     std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
         std::make_shared<StrictMock<animations::AnimatorMock>>();
-    std::unique_ptr<StrictMock<AttackStrategyMock>> attackStrategyInit =
-        std::make_unique<StrictMock<AttackStrategyMock>>();
-    StrictMock<AttackStrategyMock>* attackStrategy = attackStrategyInit.get();
-    KeyboardAttackComponent attackComponent{&componentOwner, std::move(attackStrategyInit)};
+    std::shared_ptr<StrictMock<AttackStrategyMock>> attackStrategy =
+        std::make_shared<StrictMock<AttackStrategyMock>>();
+    KeyboardAttackComponent attackComponent{&componentOwner, attackStrategy};
 };
 
 TEST_F(KeyboardAttackComponentTest,
@@ -44,7 +43,7 @@ TEST_F(KeyboardAttackComponentTest,
     ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider",
                                                     sharedContext};
     KeyboardAttackComponent attackComponentWithoutBoxCollider{&componentOwnerWithoutBoxCollider,
-                                                              std::move(attackStrategyInit)};
+                                                              attackStrategy};
 
     ASSERT_THROW(attackComponentWithoutBoxCollider.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
@@ -74,7 +73,7 @@ TEST_F(
         .WillOnce(Return(animations::AnimationType::Idle))
         .WillOnce(Return(animations::AnimationType::Attack));
     EXPECT_CALL(*animator, setAnimation(animations::AnimationType::Attack));
-        EXPECT_CALL(*animator, getCurrentAnimationProgressInPercents()).WillOnce(Return(58));
+    EXPECT_CALL(*animator, getCurrentAnimationProgressInPercents()).WillOnce(Return(58));
 
     attackComponent.update(deltaTime, input);
 }
