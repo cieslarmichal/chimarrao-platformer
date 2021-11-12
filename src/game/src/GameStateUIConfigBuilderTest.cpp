@@ -25,7 +25,7 @@ class GameStateUIConfigBuilderTest : public Test
 public:
     GameStateUIConfigBuilderTest()
     {
-        EXPECT_CALL(*componentOwnersManager, add(_)).Times(9);
+        EXPECT_CALL(*componentOwnersManager, add(_)).Times(8);
         EXPECT_CALL(*componentOwnersManager, processNewObjects());
         EXPECT_CALL(*tileMap, getSize()).WillRepeatedly(Return(utils::Vector2i{1, 1}));
         EXPECT_CALL(*tileMap, getTile(utils::Vector2i{0, 0})).WillRepeatedly(ReturnRef(tile));
