@@ -40,5 +40,6 @@ private:
     std::shared_ptr<VelocityComponent> velocityComponent;
     utils::Vector2f size;
     utils::DeltaTime currentDeltaTime;
+    std::shared_ptr<GraphicsComponent> debugGraphics;
 };
 }

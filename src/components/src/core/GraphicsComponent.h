@@ -16,7 +16,7 @@ public:
     GraphicsComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>, const utils::Vector2f& size,
                       const utils::Vector2f& position, const graphics::Color&,
                       graphics::VisibilityLayer = graphics::VisibilityLayer::First,
-                      const utils::Vector2f& offset = {0, 0}, bool relativeRendering = false);
+                      const utils::Vector2f& offset = {0, 0}, bool relativeRendering = false, bool updatesPosition = true);
 
     GraphicsComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>, const utils::Vector2f& size,
                       const utils::Vector2f& position, const graphics::TexturePath&,
@@ -32,6 +32,8 @@ public:
     void setTexture(const std::string& texturePath);
     utils::Vector2f getSize() const;
     void setSize(const utils::Vector2f& size);
+    boost::optional<utils::Vector2f> getPosition() const;
+    void setPosition(const utils::Vector2f& position);
     void enable() override;
     void disable() override;
     boost::optional<graphics::TexturePath> getTexturePath() const;
@@ -42,5 +44,6 @@ private:
     graphics::VisibilityLayer visibilityLayer;
     const utils::Vector2f offset;
     boost::optional<graphics::TexturePath> texturePath;
+    bool updatesPosition{true};
 };
 }

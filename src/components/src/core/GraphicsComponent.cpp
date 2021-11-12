@@ -10,12 +10,13 @@ GraphicsComponent::GraphicsComponent(ComponentOwner* ownerInit,
                                      std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                                      const utils::Vector2f& size, const utils::Vector2f& position,
                                      const graphics::Color& color, graphics::VisibilityLayer layer,
-                                     const utils::Vector2f& offset, bool relativeRendering)
+                                     const utils::Vector2f& offset, bool relativeRendering, bool updatesPosition)
     : Component{ownerInit},
       rendererPool{std::move(rendererPoolInit)},
       visibilityLayer{layer},
       offset{offset},
-      texturePath{boost::none}
+      texturePath{boost::none},
+      updatesPosition{updatesPosition}
 {
     id = rendererPool->acquire(size, position, color, layer, relativeRendering);
 }
@@ -42,7 +43,7 @@ GraphicsComponent::~GraphicsComponent()
 
 void GraphicsComponent::lateUpdate(utils::DeltaTime, const input::Input&)
 {
-    if (enabled)
+    if (enabled and updatesPosition)
     {
         rendererPool->setPosition(id, owner->transform->getPosition() + offset);
     }
@@ -72,6 +73,16 @@ utils::Vector2f GraphicsComponent::getSize() const
 void GraphicsComponent::setSize(const utils::Vector2f& size)
 {
     rendererPool->setSize(id, size);
+}
+
+boost::optional<utils::Vector2f> GraphicsComponent::getPosition() const
+{
+    return rendererPool->getPosition(id);
+}
+
+void GraphicsComponent::setPosition(const utils::Vector2f& position)
+{
+    rendererPool->setPosition(id, position);
 }
 
 void GraphicsComponent::enable()
