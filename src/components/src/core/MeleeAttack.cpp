@@ -18,7 +18,7 @@ void MeleeAttack::attack()
     std::call_once(componentsInitialized, [this] { loadDependentComponents(); });
 
     const auto heading = directionComponent->getHeading();
-    const auto& ownerPosition = owner->transform->getPosition();
+    const auto& ownerPosition = boxColliderComponent->getPosition();
     const auto size = boxColliderComponent->getSize();
 
     const auto startPoint =

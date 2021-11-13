@@ -186,6 +186,14 @@ utils::Vector2f BoxColliderComponent::getSize() const
     return size;
 }
 
+utils::Vector2f BoxColliderComponent::getPosition() const
+{
+    auto position = owner->transform->getPosition();
+    position.x += offset.x;
+    position.y += offset.y;
+    return position;
+}
+
 CollisionLayer BoxColliderComponent::getCollisionLayer() const
 {
     return collisionLayer;
