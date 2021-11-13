@@ -2,6 +2,7 @@
 
 #include "TimerFactory.h"
 #include "core/AnimationComponent.h"
+#include "core/ArtificialIntelligenceAttackComponent.h"
 #include "core/BoxColliderComponent.h"
 #include "core/CameraComponent.h"
 #include "core/DirectionComponent.h"
@@ -122,6 +123,9 @@ CharacterFactory::createBanditEnemy(const std::shared_ptr<components::core::Comp
     enemy->addComponent<components::core::BoxColliderComponent>(
         utils::Vector2f{2.f, 2.95f}, components::core::CollisionLayer::Player, utils::Vector2f{0.7f, 0.8f});
     enemy->addComponent<components::core::VelocityComponent>();
+    auto attackStrategy = std::make_shared<components::core::MeleeAttack>(player.get(), rayCast);
+    enemy->addComponent<components::core::ArtificialIntelligenceAttackComponent>(player.get(),
+                                                                                 attackStrategy);
     enemy->addComponent<components::core::HealthComponent>(50);
     enemy->addComponent<components::core::HealthBarComponent>(sharedContext->rendererPool,
                                                               utils::Vector2f{0.6, -1});

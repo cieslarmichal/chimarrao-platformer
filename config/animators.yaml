@@ -108,6 +108,6 @@ singleFileAnimators:
         rectToCutWidthInPixels: 32
         rectToCutHeightInPixels: 32
         numberOfTextures: 5
-        timeBetweenTexturesInSeconds: 0.1
+        timeBetweenTexturesInSeconds: 0.18
         loopsAllowed: false
         interruptionAllowed: false
