@@ -34,7 +34,6 @@ void ArtificialIntelligenceAttackComponent::update(utils::DeltaTime, const input
         attemptToAttack = true;
     }
 
-    std::cerr << animation->getAnimationType()<< " " <<animation->getCurrentAnimationProgressInPercents() << std::endl;
     if (attemptToAttack and animation->getAnimationType() == animations::AnimationType::Attack &&
         animation->getCurrentAnimationProgressInPercents() >= 60)
     {
