@@ -37,11 +37,6 @@ void HealthComponent::loseHealthPoints(unsigned int points)
     {
         getOwner().remove();
     }
-
-    if (getOwnerName() == "player")
-    {
-        std::cerr << currentHealthPoints;
-    }
 }
 
 unsigned int HealthComponent::getCurrentHealth() const

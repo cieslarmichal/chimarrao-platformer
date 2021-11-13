@@ -69,12 +69,13 @@ void HeadsUpDisplay::update(const utils::DeltaTime&, const input::Input& input)
 {
     auto healthComponent = player->getComponent<components::core::HealthComponent>();
     auto& healthBar = images[healthBarId];
+    const auto healthBarInitialSize = healthBar->getInitialSize();
     const auto currentBarSize = healthBar->getSize();
     const auto currentHealth = healthComponent->getCurrentHealth();
     const auto maximumHealth = healthComponent->getMaximumHealth();
     const auto barSizeScaledByCurrentHealth = utils::Vector2f{
-        currentBarSize.x * (static_cast<float>(currentHealth) / static_cast<float>(maximumHealth)),
-        currentBarSize.y};
+        healthBarInitialSize.x * (static_cast<float>(currentHealth) / static_cast<float>(maximumHealth)),
+        healthBarInitialSize.y};
     if (barSizeScaledByCurrentHealth != currentBarSize)
     {
         healthBar->setSize(barSizeScaledByCurrentHealth);

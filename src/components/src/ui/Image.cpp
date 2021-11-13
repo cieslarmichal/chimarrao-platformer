@@ -36,6 +36,8 @@ Image::Image(const std::shared_ptr<core::SharedContext>& sharedContext,
                                                   imageConfig->visibilityLayer, utils::Vector2f{0, 0}, true);
     }
 
+    initialSize = imageConfig->size;
+
     coreComponentsOwner->loadDependentComponents();
 }
 
@@ -83,5 +85,10 @@ void Image::setOutline(float thickness, const sf::Color& color)
 void Image::setTexture(const graphics::TexturePath& texturePath)
 {
     coreComponentsOwner->getMainGraphicsComponent()->setTexture(texturePath);
+}
+
+utils::Vector2f Image::getInitialSize() const
+{
+    return initialSize;
 }
 }

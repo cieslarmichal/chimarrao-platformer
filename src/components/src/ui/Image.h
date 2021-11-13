@@ -24,9 +24,11 @@ public:
     void setSize(const utils::Vector2f&);
     void setOutline(float thickness, const sf::Color& color);
     void setTexture(const graphics::TexturePath&);
+    utils::Vector2f getInitialSize() const;
 
 private:
     std::string name;
     std::unique_ptr<components::core::ComponentOwner> coreComponentsOwner;
+    utils::Vector2f initialSize;
 };
 }
