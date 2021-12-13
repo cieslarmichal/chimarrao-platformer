@@ -1,5 +1,6 @@
 set(SOURCES
         src/SfmlMusicManager.cpp
+        src/MusicIdGenerator.cpp
         )
 
 set(UT_SOURCES
