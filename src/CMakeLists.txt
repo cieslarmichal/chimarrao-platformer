@@ -6,6 +6,7 @@ add_subdirectory(components)
 add_subdirectory(physics)
 add_subdirectory(game)
 add_subdirectory(window)
+add_subdirectory(audio)
 
 #if (MSVC)
 #    add_executable(chimarrao-platformer WIN32 Main.cpp)
