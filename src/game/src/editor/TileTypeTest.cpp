@@ -5,11 +5,6 @@
 using namespace game;
 using namespace ::testing;
 
-namespace
-{
-
-}
-
 class TileTypeTest : public Test
 {
 public:

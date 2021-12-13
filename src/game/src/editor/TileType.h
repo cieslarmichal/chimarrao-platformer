@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "ProjectPathReader.h"
-#include "TexturePathForTileNotFound.h"
+#include "editor/exceptions/TexturePathForTileNotFound.h"
 
 namespace game
 {
