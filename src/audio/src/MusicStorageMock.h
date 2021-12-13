@@ -9,6 +9,6 @@ namespace audio
 class MusicStorageMock : public MusicStorage
 {
 public:
-    MOCK_METHOD(const sf::Music&, getMusic, (const MusicPath&));
+    MOCK_METHOD(sf::Music&, getMusic, (const MusicPath&));
 };
 }

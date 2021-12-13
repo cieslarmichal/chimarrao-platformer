@@ -6,6 +6,7 @@ set(SOURCES
         )
 
 set(UT_SOURCES
+        src/SfmlMusicManagerTest.cpp
         src/MusicLoaderTest.cpp
         src/SfmlMusicStorageTest.cpp
         )

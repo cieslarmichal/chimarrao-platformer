@@ -11,6 +11,6 @@ class MusicStorage
 public:
     virtual ~MusicStorage() = default;
 
-    virtual const sf::Music& getMusic(const MusicPath&) = 0;
+    virtual sf::Music& getMusic(const MusicPath&) = 0;
 };
 }
