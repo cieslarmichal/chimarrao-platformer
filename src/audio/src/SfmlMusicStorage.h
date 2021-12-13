@@ -9,7 +9,7 @@ namespace audio
 class SfmlMusicStorage : public MusicStorage
 {
 public:
-    const sf::Music& getMusic(const MusicPath&) override;
+    sf::Music& getMusic(const MusicPath&) override;
 
 private:
     void loadMusic(const MusicPath&);

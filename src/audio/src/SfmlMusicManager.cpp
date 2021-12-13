@@ -11,7 +11,6 @@ SfmlMusicManager::SfmlMusicManager(std::unique_ptr<MusicStorage> storage) : musi
 
 MusicId SfmlMusicManager::acquire(const MusicPath& musicPath)
 {
-    musicStorage->getMusic(musicPath);
     const auto musicId = MusicIdGenerator::generateId();
     musicIdsToPaths[musicId] = musicPath;
     return musicId;

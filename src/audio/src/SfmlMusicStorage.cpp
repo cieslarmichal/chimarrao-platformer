@@ -9,7 +9,7 @@
 namespace audio
 {
 
-const sf::Music& SfmlMusicStorage::getMusic(const MusicPath& path)
+sf::Music& SfmlMusicStorage::getMusic(const MusicPath& path)
 {
     if (not musicInStorage(path))
     {

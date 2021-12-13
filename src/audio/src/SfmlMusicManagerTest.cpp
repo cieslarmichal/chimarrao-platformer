@@ -1,14 +1,15 @@
-#include "SfmlMusicStorage.h"
-
+#include "MusicStorageMock.h"
+#include "SfmlMusicManager.h"
 #include "gtest/gtest.h"
 
 #include "ProjectPathReader.h"
-#include "exceptions/MusicNotAvailable.h"
+#include "MusicIdGenerator.h"
+#include "exceptions/MusicNotFound.h"
 
 using namespace audio;
 using namespace ::testing;
 
-class SfmlMusicStorageTest : public Test
+class SfmlMusicManagerTest : public Test
 {
 public:
     const std::string testDirectory{utils::ProjectPathReader::getProjectRootPath() +
@@ -16,24 +17,67 @@ public:
     const std::string nonExistingMusicPath{testDirectory + "nonExistingFile"};
     const std::string existingMusicPath{testDirectory + "test_music.wav"};
     sf::Music music;
+    const MusicId nonExistingId = MusicIdGenerator::generateId();
 
-    SfmlMusicStorage storage;
+    std::unique_ptr<StrictMock<MusicStorageMock>> musicStorageInit =
+        std::make_unique<StrictMock<MusicStorageMock>>();
+    StrictMock<MusicStorageMock>* musicStorage = musicStorageInit.get();
+    SfmlMusicManager musicManager{std::move(musicStorageInit)};
 };
 
-TEST_F(SfmlMusicStorageTest, getMusicWithExistingMusicPath_shouldNotThrow)
+TEST_F(SfmlMusicManagerTest, aquireMusic_shoulReturnIdAndNotThrow)
 {
-    ASSERT_NO_THROW(storage.getMusic(existingMusicPath));
+    ASSERT_NO_THROW(musicManager.acquire(existingMusicPath));
 }
 
-TEST_F(SfmlMusicStorageTest, getMusic_shouldRememberLoadedMusic)
+TEST_F(SfmlMusicManagerTest, release_givenNonExistingMusicId_shouldThrowMusicNotFound)
 {
-    const auto& font1 = storage.getMusic(existingMusicPath);
-    const auto& font2 = storage.getMusic(existingMusicPath);
-
-    ASSERT_EQ(&font1, &font2);
+    ASSERT_THROW(musicManager.release(nonExistingId), exceptions::MusicNotFound);
 }
 
-TEST_F(SfmlMusicStorageTest, getMusicWithNonExistingPath_shouldThrowMusicNotAvailable)
+TEST_F(SfmlMusicManagerTest, release_givenExistingMusicId_shouldNoThrow)
 {
-    ASSERT_THROW(storage.getMusic(nonExistingMusicPath), exceptions::MusicNotAvailable);
+    EXPECT_CALL(*musicStorage, getMusic(existingMusicPath)).WillRepeatedly(ReturnRef(music));
+    const auto musicId = musicManager.acquire(existingMusicPath);
+
+    ASSERT_NO_THROW(musicManager.release(musicId));
+}
+
+TEST_F(SfmlMusicManagerTest, play_givenNonExistingMusicId_shouldThrowMusicNotFound)
+{
+    ASSERT_THROW(musicManager.play(nonExistingId), exceptions::MusicNotFound);
+}
+
+TEST_F(SfmlMusicManagerTest, play_givenExistingMusicId_shouldNoThrow)
+{
+    EXPECT_CALL(*musicStorage, getMusic(existingMusicPath)).WillRepeatedly(ReturnRef(music));
+    const auto musicId = musicManager.acquire(existingMusicPath);
+
+    ASSERT_NO_THROW(musicManager.play(musicId));
+}
+
+TEST_F(SfmlMusicManagerTest, pause_givenNonExistingMusicId_shouldThrowMusicNotFound)
+{
+    ASSERT_THROW(musicManager.pause(nonExistingId), exceptions::MusicNotFound);
+}
+
+TEST_F(SfmlMusicManagerTest, pause_givenExistingMusicId_shouldNoThrow)
+{
+    EXPECT_CALL(*musicStorage, getMusic(existingMusicPath)).WillRepeatedly(ReturnRef(music));
+    const auto musicId = musicManager.acquire(existingMusicPath);
+
+    ASSERT_NO_THROW(musicManager.pause(musicId));
+}
+
+TEST_F(SfmlMusicManagerTest, stop_givenNonExistingMusicId_shouldThrowMusicNotFound)
+{
+    ASSERT_THROW(musicManager.stop(nonExistingId), exceptions::MusicNotFound);
+}
+
+TEST_F(SfmlMusicManagerTest, stop_givenExistingMusicId_shouldNoThrow)
+{
+    EXPECT_CALL(*musicStorage, getMusic(existingMusicPath)).WillRepeatedly(ReturnRef(music));
+    const auto musicId = musicManager.acquire(existingMusicPath);
+
+    ASSERT_NO_THROW(musicManager.stop(musicId));
 }
