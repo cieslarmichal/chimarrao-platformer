@@ -3,7 +3,7 @@
 namespace audio
 {
 
-MusicId SfmlMusicManager::acquire(const std::string& musicPath)
+MusicId SfmlMusicManager::acquire(const MusicPath& musicPath)
 {
     return audio::MusicId();
 }
