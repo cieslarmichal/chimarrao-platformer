@@ -11,18 +11,19 @@
 #include "core/ComponentOwner.h"
 #include "editor/TileMap.h"
 #include "ui/UIManager.h"
+#include "MusicManager.h"
 
 namespace game
 {
 class GameState : public State
 {
 public:
-    explicit GameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
+    GameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
                        std::shared_ptr<utils::FileAccess>, States&,
                        std::shared_ptr<components::ui::UIManager>, std::unique_ptr<ComponentOwnersManager>,
                        std::shared_ptr<TileMap>, std::shared_ptr<physics::RayCast>,
                        std::shared_ptr<physics::Quadtree>,
-                       const std::shared_ptr<components::core::SharedContext>&);
+                       const std::shared_ptr<components::core::SharedContext>&, std::shared_ptr<audio::MusicManager>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -46,5 +47,7 @@ private:
     const std::shared_ptr<components::core::SharedContext>& sharedContext;
     std::unique_ptr<CharacterFactory> characterFactory;
     std::unique_ptr<ItemFactory> itemFactory;
+    std::shared_ptr<audio::MusicManager> musicManager;
+    audio::MusicId musicId;
 };
 }

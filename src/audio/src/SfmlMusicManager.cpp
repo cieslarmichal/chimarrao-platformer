@@ -30,6 +30,7 @@ void SfmlMusicManager::play(const MusicId& musicId)
     const auto musicPath = musicIdsToPaths.at(musicId);
     auto& music = musicStorage->getMusic(musicPath);
 
+    music.setLoop(true);
     music.play();
 }
 

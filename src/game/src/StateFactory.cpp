@@ -26,14 +26,16 @@ namespace game
 StateFactory::StateFactory(std::shared_ptr<window::Window> windowInit,
                            std::shared_ptr<graphics::RendererPool> rendererPoolInit,
                            std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                           std::shared_ptr<TileMap> tileMapInit)
+                           std::shared_ptr<TileMap> tileMapInit,
+                           std::shared_ptr<audio::MusicManager> musicManagerInit)
     : window{std::move(windowInit)},
       rendererPool{std::move(rendererPoolInit)},
       fileAccess{std::move(fileAccessInit)},
       states{statesInit},
       tileMap{std::move(tileMapInit)},
       collisionSystemFactory{physics::PhysicsFactory::createCollisionSystemFactory()},
-      sharedContext{std::make_shared<components::core::SharedContext>(rendererPool)}
+      sharedContext{std::make_shared<components::core::SharedContext>(rendererPool)},
+      musicManager{std::move(musicManagerInit)}
 {
 }
 
@@ -67,7 +69,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
             std::make_unique<components::ui::DefaultUIManager>(sharedContext),
             std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()),
             tileMap, collisionSystemFactory->createRayCast(), collisionSystemFactory->getQuadTree(),
-            sharedContext);
+            sharedContext, musicManager);
     }
     case StateType::Menu:
     {

@@ -11,6 +11,12 @@
 namespace game
 {
 
+namespace
+{
+const auto projectPath = utils::ProjectPathReader::getProjectRootPath();
+const auto soundtrackPath = projectPath + "resources/game_music_loop.wav";
+}
+
 GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                      std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
@@ -18,7 +24,8 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit,
                      std::shared_ptr<TileMap> tileMapInit, std::shared_ptr<physics::RayCast> rayCastInit,
                      std::shared_ptr<physics::Quadtree> quadtreeInit,
-                     const std::shared_ptr<components::core::SharedContext>& sharedContextInit)
+                     const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
+                     std::shared_ptr<audio::MusicManager> musicManagerInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
@@ -29,7 +36,8 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
       quadtree{std::move(quadtreeInit)},
       sharedContext{sharedContextInit},
       characterFactory{std::make_unique<CharacterFactory>(sharedContext, tileMap, rayCast, quadtree)},
-      itemFactory{std::make_unique<ItemFactory>(sharedContext)}
+      itemFactory{std::make_unique<ItemFactory>(sharedContext)},
+      musicManager{std::move(musicManagerInit)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
@@ -109,6 +117,9 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     componentOwnersManager->processNewObjects();
 
     timer = utils::TimerFactory::createTimer();
+
+    musicId = musicManager->acquire(soundtrackPath);
+    musicManager->play(musicId);
 }
 
 NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
@@ -150,6 +161,7 @@ void GameState::activate()
     timer->restart();
     componentOwnersManager->activate();
     uiManager->activate();
+    musicManager->play(musicId);
 }
 
 void GameState::deactivate()
@@ -158,12 +170,14 @@ void GameState::deactivate()
     timer->restart();
     componentOwnersManager->deactivate();
     uiManager->deactivate();
+    musicManager->stop(musicId);
 }
 
 void GameState::pause()
 {
     paused = true;
     componentOwnersManager->deactivate();
+    musicManager->pause(musicId);
     states.addNextState(StateType::Pause);
 }
 
