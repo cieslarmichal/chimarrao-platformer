@@ -19,15 +19,15 @@ BoxColliderComponent::BoxColliderComponent(ComponentOwner* owner, const utils::V
     collisionBoundaries.height = sizeInit.y;
     nextFrameCollisionBoundaries = collisionBoundaries;
 
-    if (collisionLayerInit == CollisionLayer::Player)
-    {
-        debugGraphics = owner->addGraphicsComponent(
-            owner->sharedContext->rendererPool, size,
-            utils::Vector2f{nextFrameCollisionBoundaries.left, nextFrameCollisionBoundaries.top},
-            graphics::Color::Transparent, graphics::VisibilityLayer::First, utils::Vector2f{0, 0}, false,
-            false);
-        debugGraphics->setOutline(0.1, graphics::Color::Red);
-    }
+//    if (collisionLayerInit == CollisionLayer::Player)
+//    {
+//        debugGraphics = owner->addGraphicsComponent(
+//            owner->sharedContext->rendererPool, size,
+//            utils::Vector2f{nextFrameCollisionBoundaries.left, nextFrameCollisionBoundaries.top},
+//            graphics::Color::Transparent, graphics::VisibilityLayer::First, utils::Vector2f{0, 0}, false,
+//            false);
+//        debugGraphics->setOutline(0.1, graphics::Color::Red);
+//    }
 }
 
 void BoxColliderComponent::update(utils::DeltaTime deltaTime, const input::Input&)
@@ -217,11 +217,11 @@ const utils::FloatRect& BoxColliderComponent::getNextFrameXCollisionBox()
         collisionBoundaries.left + velocityComponent->getVelocity().x * currentDeltaTime.count();
     nextFrameCollisionBoundaries.top = collisionBoundaries.top;
 
-    if (collisionLayer == CollisionLayer::Player)
-    {
-        debugGraphics->setPosition(
-            utils::Vector2f{nextFrameCollisionBoundaries.left, nextFrameCollisionBoundaries.top});
-    }
+//    if (collisionLayer == CollisionLayer::Player)
+//    {
+//        debugGraphics->setPosition(
+//            utils::Vector2f{nextFrameCollisionBoundaries.left, nextFrameCollisionBoundaries.top});
+//    }
 
     return nextFrameCollisionBoundaries;
 }
@@ -239,11 +239,11 @@ const utils::FloatRect& BoxColliderComponent::getNextFrameYCollisionBox()
     nextFrameCollisionBoundaries.top =
         collisionBoundaries.top + velocityComponent->getVelocity().y * currentDeltaTime.count();
 
-    if (collisionLayer == CollisionLayer::Player)
-    {
-        debugGraphics->setPosition(
-            utils::Vector2f{nextFrameCollisionBoundaries.left, nextFrameCollisionBoundaries.top});
-    }
+//    if (collisionLayer == CollisionLayer::Player)
+//    {
+//        debugGraphics->setPosition(
+//            utils::Vector2f{nextFrameCollisionBoundaries.left, nextFrameCollisionBoundaries.top});
+//    }
 
     return nextFrameCollisionBoundaries;
 }
