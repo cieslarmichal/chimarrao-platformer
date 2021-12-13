@@ -3,6 +3,8 @@ set(SOURCES
         src/MusicIdGenerator.cpp
         src/MusicLoader.cpp
         src/SfmlMusicStorage.cpp
+        src/AudioFactory.cpp
+        src/DefaultAudioFactory.cpp
         )
 
 set(UT_SOURCES

@@ -1,9 +1,11 @@
-#include "MusicStorageMock.h"
 #include "SfmlMusicManager.h"
+
 #include "gtest/gtest.h"
 
-#include "ProjectPathReader.h"
+#include "MusicStorageMock.h"
+
 #include "MusicIdGenerator.h"
+#include "ProjectPathReader.h"
 #include "exceptions/MusicNotFound.h"
 
 using namespace audio;

@@ -1,9 +1,10 @@
 #pragma once
 
+#include <boost/functional/hash.hpp>
+#include <memory>
+
 #include "MusicManager.h"
 #include "MusicStorage.h"
-#include <memory>
-#include <boost/functional/hash.hpp>
 
 namespace audio
 {
@@ -15,7 +16,7 @@ public:
     MusicId acquire(const MusicPath&) override;
     void release(const MusicId&) override;
     void play(const MusicId&) override;
-    void pause(const MusicId&)  override;
+    void pause(const MusicId&) override;
     void stop(const MusicId&) override;
 
 private:
