@@ -21,7 +21,7 @@ set(GTEST_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/externals/googletest/googletest/inclu
 set(JSON_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/externals/json/include")
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules" ${CMAKE_MODULE_PATH})
-find_package(SFML ${SFML_MINIMAL_VERSION} COMPONENTS system graphics window REQUIRED)
+find_package(SFML ${SFML_MINIMAL_VERSION} COMPONENTS system graphics window audio REQUIRED)
 
 enable_testing()
 option(ENABLE_COVERAGE "Enable coverage reporting for gcc/clang" FALSE)
