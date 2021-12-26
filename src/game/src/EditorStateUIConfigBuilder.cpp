@@ -4,6 +4,7 @@
 #include "EditorState.h"
 #include "ProjectPathReader.h"
 #include "Vector.h"
+#include "editor/TileType.h"
 
 namespace game
 {
@@ -27,22 +28,11 @@ EditorStateUIConfigBuilder::createEditorUIConfig(EditorState* editorState)
 }
 
 std::unique_ptr<components::ui::BackgroundConfig>
-EditorStateUIConfigBuilder::createBackgroundConfig(EditorState* editorState)
+EditorStateUIConfigBuilder::createBackgroundConfig(EditorState*)
 {
-    const auto changeBlockAction = [=]()
-    {
-        editorState->currentTileId =
-            editorState->currentTileId + 1 < static_cast<int>(tilesTextureVector.size()) ?
-                editorState->currentTileId + 1 :
-                0;
-        editorState->currentTilePath = tilesTextureVector[editorState->currentTileId];
-    };
-    const auto keyActions = std::vector<components::core::KeyAction>{
-        components::core::KeyAction{input::InputKey::MouseRight, changeBlockAction}};
-
     return std::make_unique<components::ui::BackgroundConfig>(
         "editorBackground", utils::Vector2f{0, 0}, utils::Vector2f{rendererPoolSizeX, rendererPoolSizeY},
-        graphics::VisibilityLayer::Background, gameBackgroundPath, keyActions);
+        graphics::VisibilityLayer::Background, gameBackgroundPath);
 }
 
 std::vector<std::unique_ptr<components::ui::ButtonConfig>>

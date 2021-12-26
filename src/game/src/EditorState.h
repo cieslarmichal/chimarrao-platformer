@@ -40,8 +40,6 @@ private:
     std::unique_ptr<utils::Timer> moveTimer;
     const float timeAfterStateCouldBePaused;
     const float timeBetweenTileMoves;
-    int currentTileId;
-    std::string currentTilePath;
     std::vector<std::shared_ptr<components::core::ComponentOwner>> clickableTileMap;
     std::shared_ptr<TileType> currentTileType;
     std::vector<LayoutTile> layoutTileMap;

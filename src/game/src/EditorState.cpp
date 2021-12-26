@@ -34,7 +34,6 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
       sharedContext{sharedContext}
 {
     uiManager->createUI(EditorStateUIConfigBuilder::createEditorUIConfig(this));
-    currentTilePath = tileTypeToPathTexture(*(currentTileType));
     tileMap->setTileMapInfo(TileMapInfo{"", tileMap->getSize(), {}});
     setTileMap();
 
