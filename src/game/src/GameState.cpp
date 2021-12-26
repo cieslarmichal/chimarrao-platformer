@@ -57,11 +57,11 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                                            HeadsUpDisplayUIConfigBuilder::createUIConfig(),
                                            utils::TimerFactory::createTimer());
 
-        const auto yerbaPosition1 = utils::Vector2f{30, 25};
-        auto yerbaItem1 = itemFactory->createYerba(yerbaPosition1);
+    const auto yerbaPosition1 = utils::Vector2f{30, 25};
+    auto yerbaItem1 = itemFactory->createYerba(yerbaPosition1);
 
-        const auto yerbaPosition2 = utils::Vector2f{50, 25};
-        auto yerbaItem2 = itemFactory->createYerba(yerbaPosition2);
+    const auto yerbaPosition2 = utils::Vector2f{50, 25};
+    auto yerbaItem2 = itemFactory->createYerba(yerbaPosition2);
 
     for (int x = 0; x < tileMap->getSize().x; x++)
     {
@@ -111,8 +111,8 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     componentOwnersManager->add(player);
     componentOwnersManager->add(follower);
     componentOwnersManager->add(npc);
-        componentOwnersManager->add(yerbaItem1);
-        componentOwnersManager->add(yerbaItem2);
+    componentOwnersManager->add(yerbaItem1);
+    componentOwnersManager->add(yerbaItem2);
     componentOwnersManager->add(enemy);
     componentOwnersManager->processNewObjects();
 
