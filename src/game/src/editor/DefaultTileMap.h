@@ -28,6 +28,7 @@ public:
     void setTile(utils::Vector2i position, TileType value) override;
     std::shared_ptr<TileInfo>& getTile(utils::Vector2i position) override;
     utils::Vector2i getSize() const override;
+    void extend() override;
 
 private:
     TileMapInfo tileMapInfo;

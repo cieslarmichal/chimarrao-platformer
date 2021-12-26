@@ -18,5 +18,6 @@ public:
     MOCK_METHOD(void, setTile, (utils::Vector2i position, TileType value), (override));
     MOCK_METHOD(std::shared_ptr<TileInfo>&, getTile, (utils::Vector2i position), (override));
     MOCK_METHOD(utils::Vector2i, getSize, (), (const override));
+    MOCK_METHOD(void, extend, (), (override));
 };
 }

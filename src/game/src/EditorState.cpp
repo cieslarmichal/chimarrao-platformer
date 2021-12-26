@@ -54,17 +54,38 @@ NextState EditorState::update(const utils::DeltaTime& deltaTime, const input::In
         moveTimer->restart();
         for (auto& layoutTile : layoutTileMap)
         {
-            layoutTile.moveTile({.3f, 0.f});
+            layoutTile.moveTile({0.3f, 0.f});
         }
     }
     else if (moveTimer->getElapsedSeconds() > timeBetweenTileMoves &&
-             input.isKeyPressed(input::InputKey::Right) &&
-             layoutTileMap.back().getPosition().x + tileSizeX > rendererPoolSizeX)
+             input.isKeyPressed(input::InputKey::Right))
     {
-        moveTimer->restart();
-        for (auto& layoutTile : layoutTileMap)
+        if (layoutTileMap.back().getPosition().x + tileSizeX > rendererPoolSizeX)
         {
-            layoutTile.moveTile({-0.3f, 0.f});
+            moveTimer->restart();
+            for (auto& layoutTile : layoutTileMap)
+            {
+                layoutTile.moveTile({-0.3f, 0.f});
+            }
+        }
+        else
+        {
+            const auto tileMapSizeBeforeExtend = tileMap->getSize().x;
+
+            tileMap->extend();
+
+            for (int y = 0; y < tileMap->getSize().y; ++y)
+            {
+                for (int x = tileMapSizeBeforeExtend; x < tileMap->getSize().x; ++x)
+                {
+                    auto tileTypeOpt = tileMap->getTile(utils::Vector2i{x, y})->type;
+                    auto& tileType = tileTypeOpt ? *tileTypeOpt : *currentTileType;
+                    layoutTileMap.emplace_back(LayoutTile{sharedContext, utils::Vector2i{x, y},
+                                                          utils::Vector2f{tileSizeX, tileSizeY}, tileType,
+                                                          *tileMap});
+                }
+            }
+            auto x = 2;
         }
     }
 

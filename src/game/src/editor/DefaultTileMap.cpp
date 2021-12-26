@@ -82,4 +82,29 @@ utils::Vector2i DefaultTileMap::getSize() const
 {
     return tileMapInfo.mapSize;
 }
+
+void DefaultTileMap::extend()
+{
+    std::vector<std::vector<std::shared_ptr<TileInfo>>> extendedTiles;
+
+    for (int y = 0; y < tileMapInfo.mapSize.y; y++)
+    {
+        extendedTiles.emplace_back(tileMapInfo.mapSize.x * 2, nullptr);
+        for (auto& tile : extendedTiles[y])
+        {
+            tile = std::make_shared<TileInfo>();
+        }
+    }
+
+    for (int y = 0; y < tileMapInfo.mapSize.y; y++)
+    {
+        for (int x = 0; x < tileMapInfo.mapSize.x; x++)
+        {
+            extendedTiles[y][x] = tileMapInfo.tiles[y][x];
+        }
+    }
+
+    tileMapInfo.mapSize.x *= 2;
+    tileMapInfo.tiles = extendedTiles;
+}
 }

@@ -26,5 +26,6 @@ public:
     virtual void setTile(utils::Vector2i position, TileType value) = 0;
     virtual std::shared_ptr<TileInfo>& getTile(utils::Vector2i position) = 0;
     virtual utils::Vector2i getSize() const = 0;
+    virtual void extend() = 0;
 };
 }
