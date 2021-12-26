@@ -39,7 +39,7 @@ inline std::string tileTypeToPathTexture(TileType type)
         {TileType::Grass, utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/2.png"},
         {TileType::Tree, utils::ProjectPathReader::getProjectRootPath() + "resources/tree.png"},
         {TileType::Bush, utils::ProjectPathReader::getProjectRootPath() + "resources/bush.png"},
-        {TileType::Campfire, utils::ProjectPathReader::getProjectRootPath() + "resources/campfire.png"},
+        {TileType::Campfire, utils::ProjectPathReader::getProjectRootPath() + "resources/campfire_without_animation.png"},
         {TileType::Chest, utils::ProjectPathReader::getProjectRootPath() + "resources/chest.png"},
     };
 
