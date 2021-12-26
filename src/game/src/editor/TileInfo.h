@@ -6,7 +6,7 @@
 
 namespace game
 {
-struct Tile
+struct TileInfo
 {
     std::optional<TileType> type;
 };

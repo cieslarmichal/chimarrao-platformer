@@ -5,7 +5,7 @@
 #include <vector>
 
 #include "FileAccess.h"
-#include "Tile.h"
+#include "TileInfo.h"
 #include "TileMap.h"
 #include "TileMapInfo.h"
 #include "TileMapSerializer.h"
@@ -26,7 +26,7 @@ public:
     const std::string& getName() const override;
     std::string getPath() const override;
     void setTile(utils::Vector2i position, TileType value) override;
-    std::shared_ptr<Tile>& getTile(utils::Vector2i position) override;
+    std::shared_ptr<TileInfo>& getTile(utils::Vector2i position) override;
     utils::Vector2i getSize() const override;
 
 private:

@@ -5,7 +5,8 @@
 #include <vector>
 
 #include "ProjectPathReader.h"
-#include "editor/exceptions/TexturePathForTileNotFound.h"
+#include "exceptions/TexturePathForTileNotFound.h"
+#include "exceptions/TileTypeNotFound.h"
 
 namespace game
 {
@@ -51,4 +52,37 @@ inline std::string tileTypeToPathTexture(TileType type)
         throw exceptions::TexturePathForTileNotFound{e.what()};
     }
 }
+
+inline int tileTypeToInt(std::optional<TileType> type)
+{
+    const std::unordered_map<std::optional<TileType>, int> tileTypeToInt{
+        {std::nullopt, 0},   {TileType::Grass, 1},    {TileType::Brick, 2}, {TileType::Tree, 3},
+        {TileType::Bush, 4}, {TileType::Campfire, 5}, {TileType::Chest, 6}};
+
+    try
+    {
+        return tileTypeToInt.at(type);
+    }
+    catch (const std::out_of_range& e)
+    {
+        throw exceptions::TileTypeNotFound{e.what()};
+    }
+}
+
+inline std::optional<TileType> intToTileType(int tileTypeInt)
+{
+    const std::unordered_map<int, std::optional<TileType>> intToTileType{
+        {0, std::nullopt},   {1, TileType::Grass},    {2, TileType::Brick}, {3, TileType::Tree},
+        {4, TileType::Bush}, {5, TileType::Campfire}, {6, TileType::Chest}};
+
+    try
+    {
+        return intToTileType.at(tileTypeInt);
+    }
+    catch (const std::out_of_range& e)
+    {
+        throw exceptions::TileTypeNotFound{e.what()};
+    }
+}
+
 }

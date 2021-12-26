@@ -18,17 +18,17 @@ public:
     const TileMapInfo validTileMapInfo{
         "name",
         {3, 3},
-        {{std::make_shared<Tile>(Tile{std::nullopt}), std::make_shared<Tile>(Tile{std::nullopt}),
-          std::make_shared<Tile>(Tile{std::nullopt})},
-         {std::make_shared<Tile>(Tile{TileType::Grass}), std::make_shared<Tile>(Tile{TileType::Grass}),
-          std::make_shared<Tile>(Tile{TileType::Grass})},
-         {std::make_shared<Tile>(Tile{TileType::Brick}), std::make_shared<Tile>(Tile{TileType::Brick}),
-          std::make_shared<Tile>(Tile{TileType::Brick})}}};
+        {{std::make_shared<TileInfo>(Tile{std::nullopt}), std::make_shared<TileInfo>(Tile{std::nullopt}),
+          std::make_shared<TileInfo>(Tile{std::nullopt})},
+         {std::make_shared<TileInfo>(Tile{TileType::Grass}), std::make_shared<TileInfo>(Tile{TileType::Grass}),
+          std::make_shared<TileInfo>(Tile{TileType::Grass})},
+         {std::make_shared<TileInfo>(Tile{TileType::Brick}), std::make_shared<TileInfo>(Tile{TileType::Brick}),
+          std::make_shared<TileInfo>(Tile{TileType::Brick})}}};
     const std::string validTileMapInfoJson{
         R"({"data":{"tiles":[[0,0,0],[1,1,1],[2,2,2]]},"info":{"mapSize":{"x":3,"y":3},"name":"name"}})"};
-    const TileMapInfo invalidTileMapInfo_noName{"", {1, 1}, {{std::make_shared<Tile>(Tile{std::nullopt})}}};
+    const TileMapInfo invalidTileMapInfo_noName{"", {1, 1}, {{std::make_shared<TileInfo>(Tile{std::nullopt})}}};
     const TileMapInfo invalidTileMapInfo_wrongSize{
-        "name", {21, 37}, {{std::make_shared<Tile>(Tile{std::nullopt})}}};
+        "name", {21, 37}, {{std::make_shared<TileInfo>(Tile{std::nullopt})}}};
     const std::string invalidTileMapInfoJson_invalidJson{"there is no json"};
     const std::string invalidTileMapInfoJson_noInfo{R"({"data":{"tiles":[[0]]}})"};
     const std::string invalidTileMapInfoJson_noName{

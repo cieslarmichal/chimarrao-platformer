@@ -22,7 +22,7 @@ using namespace ::testing;
 
 namespace
 {
-std::shared_ptr<Tile> tile = std::make_shared<Tile>();
+std::shared_ptr<TileInfo> tile = std::make_shared<TileInfo>();
 }
 
 class GameStateTest_Base : public Test

@@ -3,7 +3,6 @@
 #include <utility>
 
 #include "ProjectPathReader.h"
-#include "TileMapSerializerJson.h"
 
 namespace game
 {
@@ -20,7 +19,7 @@ DefaultTileMap::DefaultTileMap(std::string name, utils::Vector2i mapSizeInit,
         tileMapInfo.tiles.emplace_back(tileMapInfo.mapSize.x, nullptr);
         for (auto& tile : tileMapInfo.tiles[y])
         {
-            tile = std::make_shared<Tile>();
+            tile = std::make_shared<TileInfo>();
         }
     }
 }
@@ -31,7 +30,7 @@ void DefaultTileMap::saveToFile()
     fileAccess->write(getPath(), serializedMapInfo);
 }
 
-std::shared_ptr<Tile>& DefaultTileMap::getTile(utils::Vector2i position)
+std::shared_ptr<TileInfo>& DefaultTileMap::getTile(utils::Vector2i position)
 {
     return tileMapInfo.tiles[position.y][position.x];
 }
@@ -66,7 +65,7 @@ void DefaultTileMap::setTileMapInfo(const TileMapInfo& newTileMapInfo)
             tileMapInfo.tiles.emplace_back(tileMapInfo.mapSize.x, nullptr);
             for (auto& tile : tileMapInfo.tiles[y])
             {
-                tile = std::make_shared<Tile>();
+                tile = std::make_shared<TileInfo>();
             }
         }
     }

@@ -18,7 +18,7 @@ const utils::Vector2f position{0, 0};
 const utils::Vector2f size{0, 0};
 const utils::Vector2f offset{1, 1};
 const utils::Vector2f newPosition{1, 1};
-std::shared_ptr<Tile> tile = std::make_shared<Tile>();
+std::shared_ptr<TileInfo> tile = std::make_shared<TileInfo>();
 
 const std::string mapName{"name"};
 const utils::Vector2i mapSize{1, 1};

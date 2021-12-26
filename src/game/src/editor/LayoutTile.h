@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "Tile.h"
+#include "TileInfo.h"
 #include "TileMap.h"
 #include "Timer.h"
 #include "core/ClickableComponent.h"

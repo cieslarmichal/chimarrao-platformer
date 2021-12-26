@@ -31,7 +31,7 @@ public:
         EXPECT_CALL(*tileMap, getTile(utils::Vector2i{0, 0})).WillRepeatedly(ReturnRef(tile));
     }
 
-    std::shared_ptr<Tile> tile = std::make_shared<Tile>();
+    std::shared_ptr<TileInfo> tile = std::make_shared<TileInfo>();
     std::shared_ptr<NiceMock<window::WindowMock>> window = std::make_shared<NiceMock<window::WindowMock>>();
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();

@@ -10,13 +10,6 @@
 
 namespace game
 {
-namespace
-{
-const std::unordered_map<std::optional<TileType>, int> tileTypeToInt{
-    {std::nullopt, 0}, {TileType::Grass, 1}, {TileType::Brick, 2}};
-const std::unordered_map<int, std::optional<TileType>> intToTileType{
-    {0, std::nullopt}, {1, TileType::Grass}, {2, TileType::Brick}};
-}
 
 std::string TileMapSerializerJson::serialize(const TileMapInfo& tileMapInfo) const
 {
@@ -30,7 +23,7 @@ std::string TileMapSerializerJson::serialize(const TileMapInfo& tileMapInfo) con
     {
         for (int y = 0; y < tileMapInfo.tiles[x].size(); y++)
         {
-            json["data"]["tiles"][x][y] = tileTypeToInt.at(tileMapInfo.tiles[x][y]->type);
+            json["data"]["tiles"][x][y] = tileTypeToInt(tileMapInfo.tiles[x][y]->type);
         }
     }
     return json.dump();
@@ -59,7 +52,7 @@ void TileMapSerializerJson::checkMapName(const std::string& name) const
 }
 
 void TileMapSerializerJson::checkMapSize(const utils::Vector2i& size,
-                                         const std::vector<std::vector<std::shared_ptr<Tile>>>& map) const
+                                         const std::vector<std::vector<std::shared_ptr<TileInfo>>>& map) const
 {
     if (size.y != map.size())
     {
@@ -136,7 +129,7 @@ utils::Vector2i TileMapSerializerJson::parseMapSize(const nlohmann::json& mapInf
     }
 }
 
-std::vector<std::vector<std::shared_ptr<Tile>>>
+std::vector<std::vector<std::shared_ptr<TileInfo>>>
 TileMapSerializerJson::parseTiles(const nlohmann::json& mapDataJson, utils::Vector2i size) const
 {
     if (not mapDataJson.contains("tiles"))
@@ -145,7 +138,7 @@ TileMapSerializerJson::parseTiles(const nlohmann::json& mapDataJson, utils::Vect
             R"(TileMapSerializerJson: Field "tiles" not found while deserialization)"};
     }
     auto tilesJson = mapDataJson["tiles"];
-    std::vector<std::vector<std::shared_ptr<Tile>>> tiles;
+    std::vector<std::vector<std::shared_ptr<TileInfo>>> tiles;
     tiles.resize(size.y);
     for (auto& row : tiles)
     {
@@ -176,7 +169,7 @@ TileMapSerializerJson::parseTiles(const nlohmann::json& mapDataJson, utils::Vect
         for (int xIter = 0; xIter < size.x; ++xIter)
         {
             tiles[yIter][xIter] =
-                std::make_shared<game::Tile>(game::Tile{intToTileType.at(rowJson[xIter].get<int>())});
+                std::make_shared<game::TileInfo>(TileInfo{intToTileType(rowJson[xIter].get<int>())});
         }
     }
     return tiles;
