@@ -85,7 +85,6 @@ NextState EditorState::update(const utils::DeltaTime& deltaTime, const input::In
                                                           *tileMap});
                 }
             }
-            auto x = 2;
         }
     }
 

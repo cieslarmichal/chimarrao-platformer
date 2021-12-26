@@ -13,7 +13,7 @@ LayoutTile::LayoutTile(const std::shared_ptr<components::core::SharedContext>& s
     componentOwner = std::make_shared<components::core::ComponentOwner>(
         utils::Vector2f{static_cast<float>(position.x) * sizeInit.x,
                         static_cast<float>(position.y) * sizeInit.y},
-        std::to_string(position.x) + std::to_string(position.y) + std::to_string(position.y), sharedContext);
+        "x" + std::to_string(position.x) + "y" + std::to_string(position.y), sharedContext);
     const auto& graphicsComponent = componentOwner->addGraphicsComponent(
         sharedContext->rendererPool, sizeInit,
         utils::Vector2f{static_cast<float>(position.x) * sizeInit.x,
