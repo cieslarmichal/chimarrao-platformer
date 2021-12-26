@@ -20,6 +20,7 @@ public:
     virtual std::unique_ptr<Animator> createPlayerAnimator(graphics::GraphicsId) const = 0;
     virtual std::unique_ptr<Animator> createDruidAnimator(graphics::GraphicsId) const = 0;
     virtual std::unique_ptr<Animator> createBanditAnimator(graphics::GraphicsId) const = 0;
+    virtual std::unique_ptr<Animator> createCampfireAnimator(graphics::GraphicsId) const = 0;
 
     static std::unique_ptr<AnimatorFactory>
     createAnimatorFactory(const std::shared_ptr<graphics::RendererPool>&);

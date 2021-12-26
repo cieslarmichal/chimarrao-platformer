@@ -37,4 +37,10 @@ std::unique_ptr<Animator> DefaultAnimatorFactory::createBanditAnimator(graphics:
     return std::make_unique<SingleFileAnimator>(graphicsId, rendererPool, animatorSettingsRepository,
                                                 "bandit", AnimationType::Idle);
 }
+
+std::unique_ptr<Animator> DefaultAnimatorFactory::createCampfireAnimator(graphics::GraphicsId graphicsId) const
+{
+    return std::make_unique<SingleFileAnimator>(graphicsId, rendererPool, animatorSettingsRepository, "campfire",
+                                                AnimationType::Idle);
+}
 }

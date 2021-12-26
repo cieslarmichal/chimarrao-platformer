@@ -14,6 +14,7 @@ public:
     std::unique_ptr<Animator> createPlayerAnimator(graphics::GraphicsId) const override;
     std::unique_ptr<Animator> createDruidAnimator(graphics::GraphicsId) const override;
     std::unique_ptr<Animator> createBanditAnimator(graphics::GraphicsId) const override;
+    std::unique_ptr<Animator> createCampfireAnimator(graphics::GraphicsId) const override;
 
 private:
     std::shared_ptr<graphics::RendererPool> rendererPool;

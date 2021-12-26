@@ -73,6 +73,20 @@ singleFileAnimators:
         timeBetweenTexturesInSeconds: 0.1
         loopsAllowed: true
         interruptionAllowed: true
+  - name: campfire
+    animations:
+      - type: idle
+        texturePath: resources/campfire_with_animation.png
+        textureWidthInPixels: 320
+        textureHeightInPixels: 64
+        startXPosition: 0
+        startYPosition: 0
+        rectToCutWidthInPixels: 64
+        rectToCutHeightInPixels: 64
+        numberOfTextures: 5
+        timeBetweenTexturesInSeconds: 0.2
+        loopsAllowed: true
+        interruptionAllowed: false
   - name: bandit
     animations:
       - type: idle
