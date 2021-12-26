@@ -12,6 +12,8 @@
 #include "editor/TileMap.h"
 #include "ui/UIManager.h"
 #include "MusicManager.h"
+#include "ObstacleFactory.h"
+#include "WorldBuilder.h"
 
 namespace game
 {
@@ -45,8 +47,10 @@ private:
     std::shared_ptr<physics::RayCast> rayCast;
     std::shared_ptr<physics::Quadtree> quadtree;
     const std::shared_ptr<components::core::SharedContext>& sharedContext;
-    std::unique_ptr<CharacterFactory> characterFactory;
-    std::unique_ptr<ItemFactory> itemFactory;
+    std::shared_ptr<CharacterFactory> characterFactory;
+    std::shared_ptr<ItemFactory> itemFactory;
+    std::shared_ptr<ObstacleFactory> obstacleFactory;
+    std::unique_ptr<WorldBuilder> worldBuilder;
     std::shared_ptr<audio::MusicManager> musicManager;
     audio::MusicId musicId;
 };

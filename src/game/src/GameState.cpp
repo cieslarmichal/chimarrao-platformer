@@ -35,85 +35,26 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
       rayCast{std::move(rayCastInit)},
       quadtree{std::move(quadtreeInit)},
       sharedContext{sharedContextInit},
-      characterFactory{std::make_unique<CharacterFactory>(sharedContext, tileMap, rayCast, quadtree)},
-      itemFactory{std::make_unique<ItemFactory>(sharedContext)},
+      characterFactory{std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadtree)},
+      itemFactory{std::make_shared<ItemFactory>(sharedContext)},
+      obstacleFactory{std::make_shared<ObstacleFactory>(sharedContext)},
+      worldBuilder{std::make_unique<WorldBuilder>(characterFactory, obstacleFactory, sharedContext)},
       musicManager{std::move(musicManagerInit)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 
-    const auto playerPosition = utils::Vector2f{10.f, 10.f};
-    auto player = characterFactory->createPlayer(playerPosition);
-
-    const auto rabbitFollowerPosition = utils::Vector2f{2.f, 10.f};
-    auto follower = characterFactory->createRabbitFollower(player, rabbitFollowerPosition);
-
-    const auto npcPosition = utils::Vector2f{40.f, 20.f};
-    auto npc = characterFactory->createDruidNpc(player, npcPosition);
-
-    const auto enemy1BanditPosition = utils::Vector2f{60.f, 30.f};
-    auto enemy = characterFactory->createBanditEnemy(player, enemy1BanditPosition);
+    const auto worldObjects = worldBuilder->buildWorldObjects(tileMap);
+    const auto player = worldBuilder->getPlayer();
 
     hud = std::make_unique<HeadsUpDisplay>(player, sharedContext,
                                            HeadsUpDisplayUIConfigBuilder::createUIConfig(),
                                            utils::TimerFactory::createTimer());
 
-    const auto yerbaPosition1 = utils::Vector2f{30, 25};
-    auto yerbaItem1 = itemFactory->createYerba(yerbaPosition1);
-
-    const auto yerbaPosition2 = utils::Vector2f{50, 25};
-    auto yerbaItem2 = itemFactory->createYerba(yerbaPosition2);
-
-    for (int x = 0; x < tileMap->getSize().x; x++)
+    for (const auto& worldObject : worldObjects)
     {
-        for (int y = 0; y < tileMap->getSize().y; y++)
-        {
-            if (tileMap->getTile(utils::Vector2i{x, y})->type)
-            {
-                auto obstacle = std::make_shared<components::core::ComponentOwner>(
-                    utils::Vector2f{static_cast<float>(x) * 4.f, static_cast<float>(y) * 4.f},
-                    "obstacle" + std::to_string(x) + std::to_string(y) + std::to_string(y), sharedContext);
-                obstacle->addGraphicsComponent(
-                    rendererPool, utils::Vector2f{4, 4},
-                    utils::Vector2f{static_cast<float>(x) * 4.f, static_cast<float>(y) * 4.f},
-                    tileTypeToPathTexture(*(tileMap->getTile(utils::Vector2i{x, y})->type)),
-                    graphics::VisibilityLayer::Second);
-                obstacle->addComponent<components::core::BoxColliderComponent>(
-                    utils::Vector2f{4, 4}, components::core::CollisionLayer::Tile);
-                componentOwnersManager->add(obstacle);
-            }
-        }
+        componentOwnersManager->add(worldObject);
     }
-    auto leftMapBorder = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{-1, 0},
-                                                                            "left border", sharedContext);
-    leftMapBorder->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{1, static_cast<float>(tileMap->getSize().y) * 4.f},
-        components::core::CollisionLayer::Default);
-    auto topMapBorder = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{0, -1},
-                                                                           "top border", sharedContext);
-    topMapBorder->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{static_cast<float>(tileMap->getSize().x) * 4.f, 1},
-        components::core::CollisionLayer::Default);
-    auto rightMapBorder = std::make_shared<components::core::ComponentOwner>(
-        utils::Vector2f{static_cast<float>(tileMap->getSize().x) * 4.f, 0}, "right border", sharedContext);
-    rightMapBorder->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{1, static_cast<float>(tileMap->getSize().y) * 4.f},
-        components::core::CollisionLayer::Default);
-    auto bottomMapBorder = std::make_shared<components::core::ComponentOwner>(
-        utils::Vector2f{0, static_cast<float>(tileMap->getSize().y) * 4.f}, "bottom border", sharedContext);
-    bottomMapBorder->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{static_cast<float>(tileMap->getSize().x) * 4.f, 1},
-        components::core::CollisionLayer::Default);
-    componentOwnersManager->add(leftMapBorder);
-    componentOwnersManager->add(topMapBorder);
-    componentOwnersManager->add(rightMapBorder);
-    componentOwnersManager->add(bottomMapBorder);
 
-    componentOwnersManager->add(player);
-    componentOwnersManager->add(follower);
-    componentOwnersManager->add(npc);
-    componentOwnersManager->add(yerbaItem1);
-    componentOwnersManager->add(yerbaItem2);
-    componentOwnersManager->add(enemy);
     componentOwnersManager->processNewObjects();
 
     timer = utils::TimerFactory::createTimer();

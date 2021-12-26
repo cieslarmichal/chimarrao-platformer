@@ -82,7 +82,7 @@ singleFileAnimators:
         startXPosition: 0
         startYPosition: 0
         rectToCutWidthInPixels: 64
-        rectToCutHeightInPixels: 64
+        rectToCutHeightInPixels: 54
         numberOfTextures: 5
         timeBetweenTexturesInSeconds: 0.2
         loopsAllowed: true

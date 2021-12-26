@@ -34,6 +34,8 @@ set(SOURCES
         src/HeadsUpDisplayUIConfigBuilder.cpp
         src/CharacterFactory.cpp
         src/ItemFactory.cpp
+        src/ObstacleFactory.cpp
+        src/WorldBuilder.cpp
         )
 
 
