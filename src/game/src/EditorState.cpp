@@ -15,8 +15,8 @@ const int rendererPoolSizeX = 80;
 const int rendererPoolSizeY = 60;
 const int tileSizeX = 4;
 const int tileSizeY = 4;
-
 }
+
 EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                          const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                          std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
@@ -83,6 +83,7 @@ NextState EditorState::update(const utils::DeltaTime& deltaTime, const input::In
                     layoutTileMap.emplace_back(LayoutTile{sharedContext, utils::Vector2i{x, y},
                                                           utils::Vector2f{tileSizeX, tileSizeY}, tileType,
                                                           *tileMap});
+                    layoutTileMap.back().moveTile({-80.f, 0.f});
                 }
             }
         }
@@ -163,9 +164,9 @@ void EditorState::setTileMap()
 {
     layoutTileMap.clear();
 
-    for (int y = 0; y < rendererPoolSizeY / tileSizeY; ++y)
+    for (int y = 0; y < tileMap->getSize().y; ++y)
     {
-        for (int x = 0; x < rendererPoolSizeX / tileSizeX * 2; ++x)
+        for (int x = 0; x < tileMap->getSize().x; ++x)
         {
             layoutTileMap.emplace_back(LayoutTile{sharedContext, utils::Vector2i{x, y},
                                                   utils::Vector2f{tileSizeX, tileSizeY}, *currentTileType,
