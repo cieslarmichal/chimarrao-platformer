@@ -7,8 +7,8 @@
 #include "RendererPool.h"
 #include "Timer.h"
 #include "UIComponent.h"
-#include "core/ComponentOwner.h"
-#include "core/KeyAction.h"
+#include "ComponentOwner.h"
+#include "KeyAction.h"
 
 namespace components::ui
 {

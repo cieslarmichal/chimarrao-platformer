@@ -3,12 +3,12 @@
 #include <utility>
 
 #include "HeadsUpDisplayUIConfigBuilder.h"
-#include "core/HealthComponent.h"
-#include "core/ItemCollectorComponent.h"
-#include "core/exceptions/DependentComponentNotFound.h"
-#include "ui/Image.h"
-#include "ui/UIComponentFactory.h"
-#include "ui/UIConfig.h"
+#include "HealthComponent.h"
+#include "ItemCollectorComponent.h"
+#include "exceptions/DependentComponentNotFound.h"
+#include "Image.h"
+#include "UIComponentFactory.h"
+#include "UIConfig.h"
 
 namespace game
 {

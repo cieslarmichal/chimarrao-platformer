@@ -2,8 +2,8 @@
 
 #include "GridButtonsNavigator.h"
 #include "State.h"
-#include "ui/UIConfig.h"
-#include "ui/UIManager.h"
+#include "UIConfig.h"
+#include "UIManager.h"
 
 namespace game
 {

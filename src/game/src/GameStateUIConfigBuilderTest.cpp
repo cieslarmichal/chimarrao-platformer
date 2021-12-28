@@ -4,14 +4,15 @@
 
 #include "ComponentOwnersManagerMock.h"
 #include "FileAccessMock.h"
+#include "MusicManagerMock.h"
 #include "QuadtreeMock.h"
 #include "RayCastMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
+#include "UIManagerMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapMock.h"
 #include "editor/TileMapSerializerMock.h"
-#include "ui/UIManagerMock.h"
 
 #include "GameState.h"
 #include "ProjectPathReader.h"
@@ -50,13 +51,15 @@ public:
         std::make_shared<StrictMock<physics::QuadtreeMock>>();
     std::shared_ptr<StrictMock<physics::RayCastMock>> rayCast =
         std::make_shared<StrictMock<physics::RayCastMock>>();
+    std::shared_ptr<StrictMock<audio::MusicManagerMock>> musicManager =
+        std::make_shared<StrictMock<audio::MusicManagerMock>>();
 };
 
 TEST_F(GameStateUIConfigBuilderTest, createGameUI)
 {
     GameState gameState{
-        window,  rendererPool, fileAccess, states,       uiManager, std::move(componentOwnersManagerInit),
-        tileMap, rayCast,      quadtree,   sharedContext};
+        window,  rendererPool, fileAccess, states,        uiManager,   std::move(componentOwnersManagerInit),
+        tileMap, rayCast,      quadtree,   sharedContext, musicManager};
     const auto gameUI = GameStateUIConfigBuilder::createGameUIConfig(&gameState);
 
     ASSERT_EQ(gameUI->backgroundConfig->uniqueName, "gameBackground");

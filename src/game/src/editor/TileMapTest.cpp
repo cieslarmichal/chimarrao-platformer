@@ -21,8 +21,8 @@ const utils::Vector2i positionOnNewMap{0, 1};
 const TileMapInfo newTileMapInfoWithTiles{
     newMapName,
     newMapSize,
-    {{std::make_shared<TileInfo>(Tile{std::nullopt}), std::make_shared<TileInfo>(Tile{std::nullopt})},
-     {std::make_shared<TileInfo>(Tile{TileType::Grass}), std::make_shared<TileInfo>(Tile{std::nullopt})}}};
+    {{std::make_shared<TileInfo>(std::optional<TileType>{std::nullopt}), std::make_shared<TileInfo>(std::optional<TileType>{std::nullopt})},
+     {std::make_shared<TileInfo>(std::optional<TileType>{TileType::Grass}), std::make_shared<TileInfo>(std::optional<TileType>{std::nullopt})}}};
 }
 
 class TileMapTest : public Test

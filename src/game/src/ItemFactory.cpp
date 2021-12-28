@@ -2,10 +2,10 @@
 
 #include "ProjectPathReader.h"
 #include "TimerFactory.h"
-#include "core/BoxColliderComponent.h"
-#include "core/CollectableItemComponent.h"
-#include "core/FreeFallMovementComponent.h"
-#include "core/ItemHealEffect.h"
+#include "BoxColliderComponent.h"
+#include "CollectableItemComponent.h"
+#include "FreeFallMovementComponent.h"
+#include "ItemHealEffect.h"
 
 namespace game
 {

@@ -4,9 +4,9 @@
 #include "State.h"
 #include "Timer.h"
 #include "editor/TileMap.h"
-#include "ui/DefaultUIManager.h"
-#include "ui/UIConfig.h"
-#include "ui/UIManager.h"
+#include "DefaultUIManager.h"
+#include "UIConfig.h"
+#include "UIManager.h"
 
 namespace game
 {

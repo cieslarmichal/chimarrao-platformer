@@ -3,7 +3,7 @@
 #include <memory>
 #include <vector>
 
-#include "core/ComponentOwner.h"
+#include "ComponentOwner.h"
 
 namespace physics
 {

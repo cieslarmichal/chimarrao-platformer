@@ -1,6 +1,6 @@
 #include "Label.h"
 
-#include "core/TextComponent.h"
+#include "TextComponent.h"
 #include "exceptions/UIComponentConfigNotFound.h"
 
 namespace components::ui

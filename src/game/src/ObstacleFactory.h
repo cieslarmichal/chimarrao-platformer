@@ -2,7 +2,7 @@
 
 #include "AnimatorFactory.h"
 #include "RendererPool.h"
-#include "core/ComponentOwner.h"
+#include "ComponentOwner.h"
 
 namespace game
 {

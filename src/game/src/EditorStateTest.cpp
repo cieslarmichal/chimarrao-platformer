@@ -11,7 +11,7 @@
 #include "TimerMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapMock.h"
-#include "ui/UIManagerMock.h"
+#include "UIManagerMock.h"
 
 using namespace game;
 using namespace components::ui;

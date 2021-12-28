@@ -7,7 +7,7 @@
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapMock.h"
-#include "ui/UIManagerMock.h"
+#include "UIManagerMock.h"
 
 #include "EditorMenuState.h"
 #include "StlOperators.h"

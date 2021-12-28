@@ -6,7 +6,7 @@
 #include "HeadsUpDisplayUIConfigBuilder.h"
 #include "ProjectPathReader.h"
 #include "TimerFactory.h"
-#include "ui/DefaultUIManager.h"
+#include "DefaultUIManager.h"
 
 namespace game
 {

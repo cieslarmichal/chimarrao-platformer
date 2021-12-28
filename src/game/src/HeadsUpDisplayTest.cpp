@@ -6,15 +6,15 @@
 #include "InputMock.h"
 #include "RendererPoolMock.h"
 #include "TimerMock.h"
-#include "core/ItemEffectMock.h"
+#include "ItemEffectMock.h"
 
 #include "CommonUIConfigElements.h"
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
 #include "GraphicsIdGenerator.h"
 #include "HeadsUpDisplayUIConfigBuilder.h"
-#include "core/HealthComponent.h"
-#include "core/ItemCollectorComponent.h"
+#include "health/HealthComponent.h"
+#include "ItemCollectorComponent.h"
 
 using namespace components::core;
 using namespace game;

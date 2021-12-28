@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include "HealthComponent.h"
+#include "health/HealthComponent.h"
 #include "exceptions/DependentComponentNotFound.h"
 
 namespace components::core

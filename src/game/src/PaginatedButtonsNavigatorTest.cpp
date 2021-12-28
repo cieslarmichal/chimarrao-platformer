@@ -4,7 +4,7 @@
 
 #include "InputMock.h"
 #include "TimerMock.h"
-#include "ui/UIManagerMock.h"
+#include "UIManagerMock.h"
 
 using namespace game;
 using namespace ::testing;

@@ -5,7 +5,7 @@
 #include "RendererPoolMock.h"
 
 #include "ComponentOwner.h"
-#include "HealthComponent.h"
+#include "health/HealthComponent.h"
 #include "exceptions/DependentComponentNotFound.h"
 
 using namespace components::core;

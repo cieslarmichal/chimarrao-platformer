@@ -2,8 +2,8 @@
 
 #include <array>
 
-#include "core/BoxColliderComponent.h"
-#include "core/ComponentOwner.h"
+#include "BoxColliderComponent.h"
+#include "ComponentOwner.h"
 
 namespace physics
 {

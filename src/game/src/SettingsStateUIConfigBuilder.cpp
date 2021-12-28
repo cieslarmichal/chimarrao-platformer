@@ -2,7 +2,7 @@
 
 #include "CommonUIConfigElements.h"
 #include "ProjectPathReader.h"
-#include "ui/DefaultUIManager.h"
+#include "DefaultUIManager.h"
 
 namespace game
 {

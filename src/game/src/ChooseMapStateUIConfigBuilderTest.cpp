@@ -8,7 +8,7 @@
 #include "StatesMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapMock.h"
-#include "ui/UIManagerMock.h"
+#include "UIManagerMock.h"
 
 #include "ChooseMapState.h"
 #include "ProjectPathReader.h"

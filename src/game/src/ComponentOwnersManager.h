@@ -5,7 +5,7 @@
 
 #include "DeltaTime.h"
 #include "Input.h"
-#include "core/ComponentOwner.h"
+#include "ComponentOwner.h"
 
 namespace game
 {

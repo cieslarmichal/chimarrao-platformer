@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/ComponentOwner.h"
+#include "ComponentOwner.h"
 
 namespace physics
 {

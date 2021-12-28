@@ -2,6 +2,7 @@
 
 #include "gtest/gtest.h"
 
+#include "TileInfo.h"
 #include "exceptions/InvalidField.h"
 #include "exceptions/InvalidMapName.h"
 #include "exceptions/InvalidMapRepresentation.h"
@@ -18,29 +19,23 @@ public:
     const TileMapInfo validTileMapInfo{
         "name",
         {3, 3},
-        {{std::make_shared<TileInfo>(Tile{std::nullopt}), std::make_shared<TileInfo>(Tile{std::nullopt}),
-          std::make_shared<TileInfo>(Tile{std::nullopt})},
-         {std::make_shared<TileInfo>(Tile{TileType::Grass}), std::make_shared<TileInfo>(Tile{TileType::Grass}),
-          std::make_shared<TileInfo>(Tile{TileType::Grass})},
-         {std::make_shared<TileInfo>(Tile{TileType::Brick}), std::make_shared<TileInfo>(Tile{TileType::Brick}),
-          std::make_shared<TileInfo>(Tile{TileType::Brick})}}};
+        {{std::make_shared<TileInfo>(std::optional<TileType>{std::nullopt}),
+          std::make_shared<TileInfo>(std::optional<TileType>{std::nullopt}),
+          std::make_shared<TileInfo>(std::optional<TileType>{std::nullopt})},
+         {std::make_shared<TileInfo>(std::optional<TileType>{TileType::Grass}),
+          std::make_shared<TileInfo>(std::optional<TileType>{TileType::Grass}),
+          std::make_shared<TileInfo>(std::optional<TileType>{TileType::Grass})},
+         {std::make_shared<TileInfo>(std::optional<TileType>{TileType::Brick}),
+          std::make_shared<TileInfo>(std::optional<TileType>{TileType::Brick}),
+          std::make_shared<TileInfo>(std::optional<TileType>{TileType::Brick})}}};
     const std::string validTileMapInfoJson{
         R"({"data":{"tiles":[[0,0,0],[1,1,1],[2,2,2]]},"info":{"mapSize":{"x":3,"y":3},"name":"name"}})"};
-    const TileMapInfo invalidTileMapInfo_noName{"", {1, 1}, {{std::make_shared<TileInfo>(Tile{std::nullopt})}}};
+    const TileMapInfo invalidTileMapInfo_noName{
+        "", {1, 1}, {{std::make_shared<TileInfo>(std::optional<TileType>(std::nullopt))}}};
     const TileMapInfo invalidTileMapInfo_wrongSize{
-        "name", {21, 37}, {{std::make_shared<TileInfo>(Tile{std::nullopt})}}};
+        "name", {21, 37}, {{std::make_shared<TileInfo>(std::optional<TileType>(std::nullopt))}}};
     const std::string invalidTileMapInfoJson_invalidJson{"there is no json"};
     const std::string invalidTileMapInfoJson_noInfo{R"({"data":{"tiles":[[0]]}})"};
-    const std::string invalidTileMapInfoJson_noName{
-        R"({"data":{"tiles":[[0]]},"info":{"mapSize":{"x":1,"y":1}}})"};
-    const std::string invalidTileMapInfoJson_invalidName{
-        R"({"data":{"tiles":[[0]]},"info":{"mapSize":{"x":1,"y":1},"name":{"x":1,"y":1}}})"};
-    const std::string invalidTileMapInfoJson_noMapSize{R"({"data":{"tiles":[[0]]},"info":{"name":"name"}})"};
-    const std::string invalidTileMapInfoJson_invalidMapSize{
-        R"({"data":{"tiles":[[0]]},"info":{"mapSize":"mapSize","name":"name"}})"};
-    const std::string invalidTileMapInfoJson_noData{R"({"info":{"mapSize":{"x":1,"y":1},"name":"name"}})"};
-    const std::string invalidTileMapInfoJson_differentMapSizes{
-        R"({"data":{"tiles":[[0]]},info":{"mapSize":{"x":21,"y":37},"name":"name"}})"};
 
     const std::string validTileMapInfo_realMap{
         "{\"data\":{\"tiles\":[[2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"

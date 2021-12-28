@@ -8,9 +8,9 @@
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
 #include "StlOperators.h"
-#include "core/AnimationComponent.h"
-#include "core/DirectionComponent.h"
-#include "core/KeyboardAnimatedMovementComponent.h"
+#include "AnimationComponent.h"
+#include "DirectionComponent.h"
+#include "KeyboardAnimatedMovementComponent.h"
 
 using namespace physics;
 using namespace components::core;

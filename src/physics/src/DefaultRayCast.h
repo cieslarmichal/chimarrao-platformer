@@ -2,7 +2,7 @@
 
 #include "Quadtree.h"
 #include "RayCast.h"
-#include "core/ComponentOwner.h"
+#include "ComponentOwner.h"
 
 namespace physics
 {

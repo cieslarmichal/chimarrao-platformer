@@ -3,8 +3,8 @@
 #include <cmath>
 #include <utility>
 
-#include "core/exceptions/DependentComponentNotFound.h"
-#include "core/exceptions/InvalidCapacity.h"
+#include "exceptions/DependentComponentNotFound.h"
+#include "exceptions/InvalidCapacity.h"
 
 namespace components::core
 {

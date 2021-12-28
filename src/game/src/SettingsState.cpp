@@ -5,7 +5,7 @@
 #include "ProjectPathReader.h"
 #include "SettingsStateUIConfigBuilder.h"
 #include "TimerFactory.h"
-#include "ui/DefaultUIManager.h"
+#include "DefaultUIManager.h"
 
 namespace game
 {

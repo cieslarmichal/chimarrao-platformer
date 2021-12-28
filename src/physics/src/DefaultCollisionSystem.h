@@ -7,8 +7,8 @@
 #include "Bitmask.h"
 #include "CollisionSystem.h"
 #include "Quadtree.h"
-#include "core/BoxColliderComponent.h"
-#include "core/CollisionLayer.h"
+#include "BoxColliderComponent.h"
+#include "CollisionLayer.h"
 
 namespace physics
 {

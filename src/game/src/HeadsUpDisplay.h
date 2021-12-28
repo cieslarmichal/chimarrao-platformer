@@ -1,8 +1,8 @@
 #pragma once
 
-#include "core/ComponentOwner.h"
-#include "core/ItemInfo.h"
-#include "ui/UIComponentFactory.h"
+#include "ComponentOwner.h"
+#include "ItemInfo.h"
+#include "UIComponentFactory.h"
 
 namespace components::ui
 {

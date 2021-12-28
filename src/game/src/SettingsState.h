@@ -3,9 +3,9 @@
 #include "GridButtonsNavigator.h"
 #include "State.h"
 #include "Timer.h"
-#include "core/ComponentOwner.h"
-#include "ui/UIConfig.h"
-#include "ui/UIManager.h"
+#include "ComponentOwner.h"
+#include "UIConfig.h"
+#include "UIManager.h"
 
 namespace game
 {

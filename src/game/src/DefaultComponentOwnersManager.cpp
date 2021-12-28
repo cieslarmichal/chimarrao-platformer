@@ -1,6 +1,6 @@
 #include "DefaultComponentOwnersManager.h"
 
-#include "core/GraphicsComponent.h"
+#include "GraphicsComponent.h"
 
 namespace game
 {

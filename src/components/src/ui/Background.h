@@ -6,7 +6,7 @@
 #include "InputManager.h"
 #include "RendererPool.h"
 #include "UIComponent.h"
-#include "core/ComponentOwner.h"
+#include "ComponentOwner.h"
 
 namespace components::ui
 {

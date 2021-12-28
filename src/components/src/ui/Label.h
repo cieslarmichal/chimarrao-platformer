@@ -6,7 +6,7 @@
 #include "RendererPool.h"
 #include "Timer.h"
 #include "UIComponent.h"
-#include "core/ComponentOwner.h"
+#include "ComponentOwner.h"
 
 namespace components::ui
 {

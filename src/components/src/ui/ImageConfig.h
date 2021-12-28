@@ -8,7 +8,7 @@
 #include "UniqueName.h"
 #include "Vector.h"
 #include "VisibilityLayer.h"
-#include "core/KeyAction.h"
+#include "KeyAction.h"
 
 namespace components::ui
 {

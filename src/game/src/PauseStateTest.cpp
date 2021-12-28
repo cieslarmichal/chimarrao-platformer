@@ -7,7 +7,7 @@
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "WindowMock.h"
-#include "ui/UIManagerMock.h"
+#include "UIManagerMock.h"
 
 using namespace game;
 using namespace components::ui;

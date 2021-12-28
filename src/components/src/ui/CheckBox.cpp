@@ -1,10 +1,10 @@
 #include "CheckBox.h"
 
-#include "core/BoxColliderComponent.h"
-#include "core/ClickableComponent.h"
-#include "core/GraphicsComponent.h"
-#include "core/MouseOverComponent.h"
-#include "core/TextComponent.h"
+#include "BoxColliderComponent.h"
+#include "ClickableComponent.h"
+#include "GraphicsComponent.h"
+#include "MouseOverComponent.h"
+#include "TextComponent.h"
 #include "exceptions/UIComponentConfigNotFound.h"
 
 namespace components::ui

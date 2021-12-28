@@ -3,15 +3,15 @@ set(SOURCES
         src/core/Component.cpp
         src/core/TransformComponent.cpp
         src/core/GraphicsComponent.cpp
-        src/core/KeyboardAnimatedMovementComponent.cpp
-        src/core/KeyboardHorizontalMovementComponent.cpp
+        src/core/movement/KeyboardAnimatedMovementComponent.cpp
+        src/core/movement/KeyboardHorizontalMovementComponent.cpp
         src/core/AnimationComponent.cpp
         src/core/TextComponent.cpp
         src/core/ClickableComponent.cpp
         src/core/MouseOverComponent.cpp
         src/core/BoxColliderComponent.cpp
         src/core/IdComponent.cpp
-        src/core/VelocityComponent.cpp
+        src/core/movement/VelocityComponent.cpp
         src/ui/Background.cpp
         src/ui/Button.cpp
         src/ui/CheckBox.cpp
@@ -21,19 +21,19 @@ set(SOURCES
         src/ui/DefaultUIManager.cpp
         src/ui/UIComponentFactory.cpp
         src/core/CameraComponent.cpp
-        src/core/FollowerComponent.cpp
-        src/core/MovementComponent.cpp
-        src/core/HealthComponent.cpp
-        src/core/HealthBarComponent.cpp
+        src/core/movement/FollowerComponent.cpp
+        src/core/movement/MovementComponent.cpp
+        src/core/health/HealthComponent.cpp
+        src/core/health/HealthBarComponent.cpp
         src/core/DirectionComponent.cpp
-        src/core/KeyboardAttackComponent.cpp
-        src/core/IdleNpcMovementComponent.cpp
-        src/core/FreeFallMovementComponent.cpp
-        src/core/CollectableItemComponent.cpp
-        src/core/ItemCollectorComponent.cpp
-        src/core/ItemHealEffect.cpp
-        src/core/MeleeAttack.cpp
-        src/core/ArtificialIntelligenceAttackComponent.cpp
+        src/core/attack/KeyboardAttackComponent.cpp
+        src/core/movement/IdleNpcMovementComponent.cpp
+        src/core/movement/FreeFallMovementComponent.cpp
+        src/core/items/CollectableItemComponent.cpp
+        src/core/items/ItemCollectorComponent.cpp
+        src/core/items/ItemHealEffect.cpp
+        src/core/attack/MeleeAttack.cpp
+        src/core/attack/ArtificialIntelligenceAttackComponent.cpp
         )
 
 set(UT_SOURCES
@@ -41,20 +41,20 @@ set(UT_SOURCES
         src/core/ComponentTest.cpp
         src/core/TransformComponentTest.cpp
         src/core/GraphicsComponentTest.cpp
-        src/core/KeyboardAnimatedMovementComponentTest.cpp
-        src/core/KeyboardHorizontalMovementComponentTest.cpp
+        src/core/movement/KeyboardAnimatedMovementComponentTest.cpp
+        src/core/movement/KeyboardHorizontalMovementComponentTest.cpp
         src/core/AnimationComponentTest.cpp
         src/core/TextComponentTest.cpp
         src/core/ClickableComponentTest.cpp
         src/core/MouseOverComponentTest.cpp
         src/core/BoxColliderComponentTest.cpp
         src/core/IdComponentTest.cpp
-        src/core/VelocityComponentTest.cpp
+        src/core/movement/VelocityComponentTest.cpp
         src/core/CameraComponentTest.cpp
-        src/core/FollowerComponentTest.cpp
-        src/core/MovementComponentTest.cpp
-        src/core/HealthComponentTest.cpp
-        src/core/HealthBarComponentTest.cpp
+        src/core/movement/FollowerComponentTest.cpp
+        src/core/movement/MovementComponentTest.cpp
+        src/core/health/HealthComponentTest.cpp
+        src/core/health/HealthBarComponentTest.cpp
         src/ui/DefaultUIManagerTest.cpp
         src/ui/BackgroundTest.cpp
         src/ui/ButtonTest.cpp
@@ -63,19 +63,19 @@ set(UT_SOURCES
         src/ui/LabelTest.cpp
         src/ui/TextFieldTest.cpp
         src/core/DirectionComponentTest.cpp
-        src/core/KeyboardAttackComponentTest.cpp
-        src/core/IdleNpcMovementComponentTest.cpp
-        src/core/FreeFallMovementComponentTest.cpp
-        src/core/CollectableItemComponentTest.cpp
-        src/core/ItemCollectorComponentTest.cpp
-        src/core/ItemHealEffectTest.cpp
-        src/core/MeleeAttackTest.cpp
-        src/core/ArtificialIntelligenceAttackComponentTest.cpp
+        src/core/attack/KeyboardAttackComponentTest.cpp
+        src/core/movement/IdleNpcMovementComponentTest.cpp
+        src/core/movement/FreeFallMovementComponentTest.cpp
+        src/core/items/CollectableItemComponentTest.cpp
+        src/core/items/ItemCollectorComponentTest.cpp
+        src/core/items/ItemHealEffectTest.cpp
+        src/core/attack/MeleeAttackTest.cpp
+        src/core/attack/ArtificialIntelligenceAttackComponentTest.cpp
         )
 
 add_library(components ${SOURCES})
 target_link_libraries(components PUBLIC utils graphics animations input physics)
-target_include_directories(components PUBLIC src)
+target_include_directories(components PUBLIC src/core src/ui src/core/attack src/core/health src/core/items src/core/movement)
 target_compile_options(components PUBLIC ${FLAGS})
 
 add_executable(componentsUT ${UT_SOURCES})

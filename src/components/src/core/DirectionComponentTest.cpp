@@ -5,7 +5,7 @@
 #include "AnimatorMock.h"
 #include "RendererPoolMock.h"
 
-#include "core/exceptions/DependentComponentNotFound.h"
+#include "exceptions/DependentComponentNotFound.h"
 
 using namespace ::testing;
 using namespace components::core;

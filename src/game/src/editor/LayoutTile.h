@@ -5,10 +5,10 @@
 #include "TileInfo.h"
 #include "TileMap.h"
 #include "Timer.h"
-#include "core/ClickableComponent.h"
-#include "core/ComponentOwner.h"
-#include "core/GraphicsComponent.h"
-#include "core/MouseOverComponent.h"
+#include "ClickableComponent.h"
+#include "ComponentOwner.h"
+#include "GraphicsComponent.h"
+#include "MouseOverComponent.h"
 
 namespace game
 {

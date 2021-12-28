@@ -1,7 +1,7 @@
 #include "CollectableItemComponent.h"
 
 #include "ComponentOwner.h"
-#include "HealthComponent.h"
+#include "health/HealthComponent.h"
 
 namespace components::core
 {

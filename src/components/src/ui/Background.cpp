@@ -1,8 +1,8 @@
 #include "Background.h"
 
-#include "core/BoxColliderComponent.h"
-#include "core/ClickableComponent.h"
-#include "core/GraphicsComponent.h"
+#include "BoxColliderComponent.h"
+#include "ClickableComponent.h"
+#include "GraphicsComponent.h"
 #include "exceptions/InvalidUIComponentConfig.h"
 #include "exceptions/UIComponentConfigNotFound.h"
 

@@ -1,7 +1,7 @@
 #include "HeadsUpDisplayUIConfigBuilder.h"
 
 #include "CommonUIConfigElements.h"
-#include "ui/UIConfig.h"
+#include "UIConfig.h"
 
 namespace game
 {

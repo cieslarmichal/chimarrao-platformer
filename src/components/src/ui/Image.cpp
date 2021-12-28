@@ -1,6 +1,6 @@
 #include "Image.h"
 
-#include "core/GraphicsComponent.h"
+#include "GraphicsComponent.h"
 #include "exceptions/InvalidUIComponentConfig.h"
 #include "exceptions/UIComponentConfigNotFound.h"
 

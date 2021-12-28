@@ -1,18 +1,19 @@
-#include "ArtificialIntelligenceAttackComponent.h"
+#include "KeyboardAttackComponent.h"
 
-#include "core/exceptions/DependentComponentNotFound.h"
+#include "HealthComponent.h"
+#include "exceptions/DependentComponentNotFound.h"
 
 namespace components::core
 {
 
-ArtificialIntelligenceAttackComponent::ArtificialIntelligenceAttackComponent(
-    ComponentOwner* owner, ComponentOwner* target, std::shared_ptr<AttackStrategy> attackStrategy)
-    : Component{owner}, target{target}, attackStrategy{std::move(attackStrategy)}
+KeyboardAttackComponent::KeyboardAttackComponent(ComponentOwner* owner,
+                                                 std::shared_ptr<AttackStrategy> attackStrategy)
+    : Component{owner}, attackStrategy{std::move(attackStrategy)}
 
 {
 }
 
-void ArtificialIntelligenceAttackComponent::loadDependentComponents()
+void KeyboardAttackComponent::loadDependentComponents()
 {
     animation = owner->getComponent<AnimationComponent>();
     if (animation)
@@ -25,9 +26,9 @@ void ArtificialIntelligenceAttackComponent::loadDependentComponents()
     }
 }
 
-void ArtificialIntelligenceAttackComponent::update(utils::DeltaTime, const input::Input&)
+void KeyboardAttackComponent::update(utils::DeltaTime, const input::Input& input)
 {
-    if (std::abs(target->transform->getPosition().x - owner->transform->getPosition().x) < 4.f and
+    if (input.isKeyPressed(input::InputKey::Space) and
         animation->getAnimationType() != animations::AnimationType::Attack)
     {
         animation->setAnimation(animations::AnimationType::Attack);
@@ -41,4 +42,5 @@ void ArtificialIntelligenceAttackComponent::update(utils::DeltaTime, const input
         attemptToAttack = false;
     }
 }
+
 }

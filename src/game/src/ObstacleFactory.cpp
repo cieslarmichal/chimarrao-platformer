@@ -1,8 +1,8 @@
 #include "ObstacleFactory.h"
 
-#include "core/BoxColliderComponent.h"
+#include "BoxColliderComponent.h"
 #include "editor/TileType.h"
-#include "core/AnimationComponent.h"
+#include "AnimationComponent.h"
 
 namespace game
 {

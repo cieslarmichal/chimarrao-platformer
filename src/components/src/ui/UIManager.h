@@ -7,7 +7,7 @@
 #include "Input.h"
 #include "UIComponentType.h"
 #include "UIConfig.h"
-#include "core/KeyAction.h"
+#include "KeyAction.h"
 
 namespace components::ui
 {

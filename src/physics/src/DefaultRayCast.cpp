@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "core/BoxColliderComponent.h"
+#include "BoxColliderComponent.h"
 
 namespace physics
 {

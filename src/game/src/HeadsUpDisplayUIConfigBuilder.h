@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "ui/UIConfig.h"
+#include "UIConfig.h"
 
 namespace components::ui
 {

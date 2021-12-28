@@ -6,7 +6,7 @@
 #include "Quadtree.h"
 #include "RayCast.h"
 #include "RendererPool.h"
-#include "core/ComponentOwner.h"
+#include "ComponentOwner.h"
 #include "editor/TileMap.h"
 
 namespace game

@@ -4,10 +4,10 @@
 #include "PaginatedButtonsNavigator.h"
 #include "State.h"
 #include "Timer.h"
-#include "core/ComponentOwner.h"
+#include "ComponentOwner.h"
 #include "editor/TileMap.h"
-#include "ui/UIConfig.h"
-#include "ui/UIManager.h"
+#include "UIConfig.h"
+#include "UIManager.h"
 
 namespace game
 {

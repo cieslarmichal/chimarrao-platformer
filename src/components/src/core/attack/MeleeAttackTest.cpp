@@ -8,8 +8,8 @@
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
 #include "DirectionComponent.h"
-#include "HealthComponent.h"
-#include "core/exceptions/DependentComponentNotFound.h"
+#include "health/HealthComponent.h"
+#include "exceptions/DependentComponentNotFound.h"
 
 using namespace ::testing;
 using namespace components::core;

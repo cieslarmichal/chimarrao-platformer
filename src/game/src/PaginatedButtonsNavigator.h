@@ -2,7 +2,7 @@
 
 #include "NextState.h"
 #include "Timer.h"
-#include "ui/UIManager.h"
+#include "UIManager.h"
 
 namespace game
 {

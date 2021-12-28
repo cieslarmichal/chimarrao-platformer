@@ -5,7 +5,7 @@
 #include "EditorMenuState.h"
 #include "EditorStateUIConfigBuilder.h"
 #include "TimerFactory.h"
-#include "ui/DefaultUIManager.h"
+#include "DefaultUIManager.h"
 
 namespace game
 {

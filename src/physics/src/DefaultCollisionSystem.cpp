@@ -1,9 +1,9 @@
 #include "DefaultCollisionSystem.h"
 
-#include "core/FollowerComponent.h"
-#include "core/FreeFallMovementComponent.h"
-#include "core/IdleNpcMovementComponent.h"
-#include "core/KeyboardAnimatedMovementComponent.h"
+#include "FollowerComponent.h"
+#include "FreeFallMovementComponent.h"
+#include "IdleNpcMovementComponent.h"
+#include "KeyboardAnimatedMovementComponent.h"
 
 namespace physics
 {
