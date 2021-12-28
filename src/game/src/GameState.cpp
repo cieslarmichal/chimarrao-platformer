@@ -38,7 +38,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
       characterFactory{std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadtree)},
       itemFactory{std::make_shared<ItemFactory>(sharedContext)},
       obstacleFactory{std::make_shared<ObstacleFactory>(sharedContext)},
-      worldBuilder{std::make_unique<WorldBuilder>(characterFactory, obstacleFactory, sharedContext)},
+      worldBuilder{std::make_unique<DefaultWorldBuilder>(characterFactory, obstacleFactory, sharedContext)},
       musicManager{std::move(musicManagerInit)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));

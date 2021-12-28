@@ -13,7 +13,7 @@
 #include "UIManager.h"
 #include "MusicManager.h"
 #include "ObstacleFactory.h"
-#include "WorldBuilder.h"
+#include "DefaultWorldBuilder.h"
 
 namespace game
 {
@@ -50,7 +50,7 @@ private:
     std::shared_ptr<CharacterFactory> characterFactory;
     std::shared_ptr<ItemFactory> itemFactory;
     std::shared_ptr<ObstacleFactory> obstacleFactory;
-    std::unique_ptr<WorldBuilder> worldBuilder;
+    std::unique_ptr<DefaultWorldBuilder> worldBuilder;
     std::shared_ptr<audio::MusicManager> musicManager;
     audio::MusicId musicId;
 };

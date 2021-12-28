@@ -1,11 +1,11 @@
-#include "WorldBuilder.h"
+#include "DefaultWorldBuilder.h"
 
 #include <utility>
 
 namespace game
 {
 
-WorldBuilder::WorldBuilder(std::shared_ptr<CharacterFactory> characterFactoryInit,
+DefaultWorldBuilder::DefaultWorldBuilder(std::shared_ptr<CharacterFactory> characterFactoryInit,
                            std::shared_ptr<ObstacleFactory> obstacleFactoryInit,
                            std::shared_ptr<components::core::SharedContext> sharedContextInit)
     : characterFactory{std::move(characterFactoryInit)},
@@ -15,7 +15,7 @@ WorldBuilder::WorldBuilder(std::shared_ptr<CharacterFactory> characterFactoryIni
 }
 
 std::vector<std::shared_ptr<components::core::ComponentOwner>>
-WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
+DefaultWorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
 {
     std::vector<std::shared_ptr<components::core::ComponentOwner>> worldObjects;
 
@@ -144,7 +144,7 @@ WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
     return worldObjects;
 }
 
-std::shared_ptr<components::core::ComponentOwner> WorldBuilder::getPlayer() const
+std::shared_ptr<components::core::ComponentOwner> DefaultWorldBuilder::getPlayer() const
 {
     return player;
 }

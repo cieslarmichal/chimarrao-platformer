@@ -35,7 +35,7 @@ set(SOURCES
         src/CharacterFactory.cpp
         src/ItemFactory.cpp
         src/ObstacleFactory.cpp
-        src/WorldBuilder.cpp
+        src/DefaultWorldBuilder.cpp
         )
 
 
