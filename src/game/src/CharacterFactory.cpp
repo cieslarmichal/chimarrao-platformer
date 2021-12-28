@@ -13,7 +13,7 @@
 #include "core/IdleNpcMovementComponent.h"
 #include "core/ItemCollectorComponent.h"
 #include "core/KeyboardAttackComponent.h"
-#include "core/KeyboardMovementComponent.h"
+#include "core/KeyboardAnimatedMovementComponent.h"
 #include "core/MeleeAttack.h"
 #include "core/VelocityComponent.h"
 
@@ -39,7 +39,7 @@ CharacterFactory::createPlayer(const utils::Vector2f& position)
         player->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{6.f, 3.75f}, position,
                                      graphics::Color::White, graphics::VisibilityLayer::Second);
     auto graphicsId = graphicsComponent->getGraphicsId();
-    player->addComponent<components::core::KeyboardMovementComponent>();
+    player->addComponent<components::core::KeyboardAnimatedMovementComponent>();
     const std::shared_ptr<animations::Animator> playerAnimator =
         animatorFactory->createPlayerAnimator(graphicsId);
     player->addComponent<components::core::AnimationComponent>(playerAnimator);

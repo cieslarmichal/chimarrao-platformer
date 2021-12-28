@@ -10,7 +10,7 @@
 #include "StlOperators.h"
 #include "core/AnimationComponent.h"
 #include "core/DirectionComponent.h"
-#include "core/KeyboardMovementComponent.h"
+#include "core/KeyboardAnimatedMovementComponent.h"
 
 using namespace physics;
 using namespace components::core;
@@ -53,13 +53,13 @@ public:
         componentOwnerWithPlayerCollider2->addComponent<DirectionComponent>();
         componentOwnerWitStaticTransform->addComponent<DirectionComponent>();
 
-        componentOwnerWithDefaultCollider1->addComponent<KeyboardMovementComponent>();
-        componentOwnerWithDefaultCollider2->addComponent<KeyboardMovementComponent>();
-        componentOwnerWithTileCollider1->addComponent<KeyboardMovementComponent>();
-        componentOwnerWithTileCollider2->addComponent<KeyboardMovementComponent>();
-        componentOwnerWithPlayerCollider1->addComponent<KeyboardMovementComponent>();
-        componentOwnerWithPlayerCollider2->addComponent<KeyboardMovementComponent>();
-        componentOwnerWitStaticTransform->addComponent<KeyboardMovementComponent>();
+        componentOwnerWithDefaultCollider1->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWithDefaultCollider2->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWithTileCollider1->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWithTileCollider2->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWithPlayerCollider1->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWithPlayerCollider2->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWitStaticTransform->addComponent<KeyboardAnimatedMovementComponent>();
 
         componentOwnerWithDefaultCollider1->loadDependentComponents();
         componentOwnerWithDefaultCollider2->loadDependentComponents();
@@ -72,25 +72,25 @@ public:
 
     static bool canMoveLeft(const std::shared_ptr<ComponentOwner>& componentOwner)
     {
-        auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
+        auto movementComponent = componentOwner->getComponent<KeyboardAnimatedMovementComponent>();
         return movementComponent->isAllowedToMoveLeft();
     }
 
     static bool canMoveRight(const std::shared_ptr<ComponentOwner>& componentOwner)
     {
-        auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
+        auto movementComponent = componentOwner->getComponent<KeyboardAnimatedMovementComponent>();
         return movementComponent->isAllowedToMoveRight();
     }
 
     static bool canMoveUp(const std::shared_ptr<ComponentOwner>& componentOwner)
     {
-        auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
+        auto movementComponent = componentOwner->getComponent<KeyboardAnimatedMovementComponent>();
         return movementComponent->isAllowedToMoveUp();
     }
 
     static bool canMoveDown(const std::shared_ptr<ComponentOwner>& componentOwner)
     {
-        auto movementComponent = componentOwner->getComponent<KeyboardMovementComponent>();
+        auto movementComponent = componentOwner->getComponent<KeyboardAnimatedMovementComponent>();
         return movementComponent->isAllowedToMoveDown();
     }
 

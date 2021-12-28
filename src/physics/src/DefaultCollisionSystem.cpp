@@ -3,7 +3,7 @@
 #include "core/FollowerComponent.h"
 #include "core/FreeFallMovementComponent.h"
 #include "core/IdleNpcMovementComponent.h"
-#include "core/KeyboardMovementComponent.h"
+#include "core/KeyboardAnimatedMovementComponent.h"
 
 namespace physics
 {
@@ -83,7 +83,7 @@ void DefaultCollisionSystem::resolve()
 
         for (const auto& collider : collidersInCollisionLayer)
         {
-            if (not collider->getOwner().getComponent<components::core::KeyboardMovementComponent>() and
+            if (not collider->getOwner().getComponent<components::core::KeyboardAnimatedMovementComponent>() and
                 not collider->getOwner().getComponent<components::core::FollowerComponent>() and
                 not collider->getOwner().getComponent<components::core::IdleNpcMovementComponent>() and
                 not collider->getOwner().getComponent<components::core::FreeFallMovementComponent>())

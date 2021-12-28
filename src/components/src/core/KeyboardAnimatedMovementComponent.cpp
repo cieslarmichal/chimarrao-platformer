@@ -1,4 +1,4 @@
-#include "KeyboardMovementComponent.h"
+#include "KeyboardAnimatedMovementComponent.h"
 
 #include "AnimationComponent.h"
 #include "exceptions/DependentComponentNotFound.h"
@@ -6,12 +6,12 @@
 namespace components::core
 {
 
-KeyboardMovementComponent::KeyboardMovementComponent(ComponentOwner* ownerInit)
+KeyboardAnimatedMovementComponent::KeyboardAnimatedMovementComponent(ComponentOwner* ownerInit)
     : MovementComponent{ownerInit, 6.f}
 {
 }
 
-void KeyboardMovementComponent::loadDependentComponents()
+void KeyboardAnimatedMovementComponent::loadDependentComponents()
 {
     animation = owner->getComponent<AnimationComponent>();
     if (animation)
@@ -36,7 +36,7 @@ void KeyboardMovementComponent::loadDependentComponents()
     }
 }
 
-void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
+void KeyboardAnimatedMovementComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
     if (not enabled)
     {
@@ -117,7 +117,7 @@ void KeyboardMovementComponent::update(utils::DeltaTime deltaTime, const input::
     velocityComponent->setVelocity(currentMovementSpeed);
 }
 
-void KeyboardMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input&)
+void KeyboardAnimatedMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input&)
 {
     if (not enabled)
     {

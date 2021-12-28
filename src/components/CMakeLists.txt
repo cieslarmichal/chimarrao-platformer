@@ -3,7 +3,8 @@ set(SOURCES
         src/core/Component.cpp
         src/core/TransformComponent.cpp
         src/core/GraphicsComponent.cpp
-        src/core/KeyboardMovementComponent.cpp
+        src/core/KeyboardAnimatedMovementComponent.cpp
+        src/core/KeyboardHorizontalMovementComponent.cpp
         src/core/AnimationComponent.cpp
         src/core/TextComponent.cpp
         src/core/ClickableComponent.cpp
@@ -40,7 +41,8 @@ set(UT_SOURCES
         src/core/ComponentTest.cpp
         src/core/TransformComponentTest.cpp
         src/core/GraphicsComponentTest.cpp
-        src/core/KeyboardMovementComponentTest.cpp
+        src/core/KeyboardAnimatedMovementComponentTest.cpp
+        src/core/KeyboardHorizontalMovementComponentTest.cpp
         src/core/AnimationComponentTest.cpp
         src/core/TextComponentTest.cpp
         src/core/ClickableComponentTest.cpp

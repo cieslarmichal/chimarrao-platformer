@@ -8,7 +8,7 @@
 
 #include "AnimationComponent.h"
 #include "DeltaTime.h"
-#include "KeyboardMovementComponent.h"
+#include "KeyboardAnimatedMovementComponent.h"
 
 using namespace components::core;
 using namespace ::testing;
@@ -20,7 +20,8 @@ public:
     {
         componentOwnerWithMovementComponent.addComponent<AnimationComponent>(animator);
         velocityComponent = componentOwnerWithMovementComponent.addComponent<VelocityComponent>();
-        movementComponent = componentOwnerWithMovementComponent.addComponent<KeyboardMovementComponent>();
+        movementComponent =
+            componentOwnerWithMovementComponent.addComponent<KeyboardAnimatedMovementComponent>();
         boxColliderComponentWithMovement.loadDependentComponents();
     }
 
@@ -69,7 +70,7 @@ public:
                                                        sharedContext};
     BoxColliderComponent boxColliderComponentWithMovement{&componentOwnerWithMovementComponent, size,
                                                           CollisionLayer::Default};
-    std::shared_ptr<KeyboardMovementComponent> movementComponent;
+    std::shared_ptr<KeyboardAnimatedMovementComponent> movementComponent;
     std::shared_ptr<VelocityComponent> velocityComponent;
 
     ComponentOwner componentOwnerNotIntersecting{positionOutsideTarget, "componentOwnerNotIntersecting",

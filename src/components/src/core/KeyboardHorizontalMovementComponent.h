@@ -6,19 +6,16 @@
 
 namespace components::core
 {
-class AnimationComponent;
-
-class KeyboardMovementComponent : public MovementComponent
+class KeyboardHorizontalMovementComponent : public MovementComponent
 {
 public:
-    explicit KeyboardMovementComponent(ComponentOwner*);
+    explicit KeyboardHorizontalMovementComponent(ComponentOwner*);
 
     void loadDependentComponents() override;
     void update(utils::DeltaTime time, const input::Input& input) override;
     void lateUpdate(utils::DeltaTime time, const input::Input& input) override;
 
 private:
-    std::shared_ptr<AnimationComponent> animation;
     std::shared_ptr<VelocityComponent> velocityComponent;
 };
 }

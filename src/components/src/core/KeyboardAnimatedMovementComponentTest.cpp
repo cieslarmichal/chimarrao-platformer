@@ -1,4 +1,4 @@
-#include "KeyboardMovementComponent.h"
+#include "KeyboardAnimatedMovementComponent.h"
 
 #include "gtest/gtest.h"
 
@@ -15,10 +15,10 @@ using namespace input;
 using namespace components::core;
 using namespace animations;
 
-class KeyboardMovementComponentTest : public Test
+class KeyboardAnimatedMovementComponentTest : public Test
 {
 public:
-    KeyboardMovementComponentTest()
+    KeyboardAnimatedMovementComponentTest()
     {
         componentOwner.addComponent<AnimationComponent>(animator);
         componentOwner.addComponent<VelocityComponent>();
@@ -32,35 +32,37 @@ public:
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
     std::shared_ptr<components::core::SharedContext> sharedContext =
         std::make_shared<components::core::SharedContext>(rendererPool);
-    ComponentOwner componentOwner{position, "keyboardMovementComponentTest", sharedContext};
+    ComponentOwner componentOwner{position, "keyboardAnimatedMovementComponentTest", sharedContext};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
     StrictMock<input::InputMock> input;
-    KeyboardMovementComponent keyboardMovementComponent{&componentOwner};
+    KeyboardAnimatedMovementComponent keyboardMovementComponent{&componentOwner};
 };
 
-TEST_F(KeyboardMovementComponentTest,
+TEST_F(KeyboardAnimatedMovementComponentTest,
        loadDependentComponentsWithoutAnimatorComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator", sharedContext};
-    KeyboardMovementComponent keyboardMovementComponentWithoutAnimator{&componentOwnerWithoutAnimator};
+    KeyboardAnimatedMovementComponent keyboardMovementComponentWithoutAnimator{
+        &componentOwnerWithoutAnimator};
     componentOwnerWithoutAnimator.addComponent<VelocityComponent>();
 
     ASSERT_THROW(keyboardMovementComponentWithoutAnimator.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
 }
 
-TEST_F(KeyboardMovementComponentTest,
+TEST_F(KeyboardAnimatedMovementComponentTest,
        loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity", sharedContext};
-    KeyboardMovementComponent keyboardMovementComponentWithoutVelocity{&componentOwnerWithoutVelocity};
+    KeyboardAnimatedMovementComponent keyboardMovementComponentWithoutVelocity{
+        &componentOwnerWithoutVelocity};
     componentOwnerWithoutVelocity.addComponent<AnimationComponent>(animator);
 
     ASSERT_THROW(keyboardMovementComponentWithoutVelocity.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
 }
 
-TEST_F(KeyboardMovementComponentTest, givenInputStatusWithNoKeyPressed_shouldSetAnimationTypeToIdle)
+TEST_F(KeyboardAnimatedMovementComponentTest, givenInputStatusWithNoKeyPressed_shouldSetAnimationTypeToIdle)
 {
     keyboardMovementComponent.blockMoveDown();
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
@@ -72,7 +74,7 @@ TEST_F(KeyboardMovementComponentTest, givenInputStatusWithNoKeyPressed_shouldSet
     keyboardMovementComponent.update(deltaTime, input);
 }
 
-TEST_F(KeyboardMovementComponentTest,
+TEST_F(KeyboardAnimatedMovementComponentTest,
        givenInputStatusWithRightKeyPressed_shouldSetAnimationDirectionToRightAndSetAnimationTypeToWalk)
 {
     keyboardMovementComponent.blockMoveDown();
@@ -88,7 +90,7 @@ TEST_F(KeyboardMovementComponentTest,
     keyboardMovementComponent.update(deltaTime, input);
 }
 
-TEST_F(KeyboardMovementComponentTest,
+TEST_F(KeyboardAnimatedMovementComponentTest,
        givenInputStatusWithLeftKeyPressed_shouldSetAnimationDirectionToLeftAndSetAnimationTypeToWalk)
 {
     keyboardMovementComponent.blockMoveDown();
@@ -103,7 +105,7 @@ TEST_F(KeyboardMovementComponentTest,
     keyboardMovementComponent.update(deltaTime, input);
 }
 
-TEST_F(KeyboardMovementComponentTest,
+TEST_F(KeyboardAnimatedMovementComponentTest,
        givenRightKeyPressed_update_shouldAddPositionChangeFromInputToTransformComponent)
 {
     keyboardMovementComponent.blockMoveDown();
@@ -127,7 +129,8 @@ TEST_F(KeyboardMovementComponentTest,
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
 
-TEST_F(KeyboardMovementComponentTest, givenRightKeyPressedAndBlockedRightMovement_update_shouldNotMoveRight)
+TEST_F(KeyboardAnimatedMovementComponentTest,
+       givenRightKeyPressedAndBlockedRightMovement_update_shouldNotMoveRight)
 {
     keyboardMovementComponent.blockMoveDown();
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
@@ -149,7 +152,7 @@ TEST_F(KeyboardMovementComponentTest, givenRightKeyPressedAndBlockedRightMovemen
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
 
-TEST_F(KeyboardMovementComponentTest,
+TEST_F(KeyboardAnimatedMovementComponentTest,
        givenLeftKeyPressed_update_shouldAddPositionChangeFromInputToTransformComponent)
 {
     keyboardMovementComponent.blockMoveDown();
@@ -172,7 +175,8 @@ TEST_F(KeyboardMovementComponentTest,
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
 
-TEST_F(KeyboardMovementComponentTest, givenLeftKeyPressedAndBlockedLeftMovement_update_shouldNotMoveLeft)
+TEST_F(KeyboardAnimatedMovementComponentTest,
+       givenLeftKeyPressedAndBlockedLeftMovement_update_shouldNotMoveLeft)
 {
     keyboardMovementComponent.blockMoveDown();
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(true));
@@ -193,7 +197,7 @@ TEST_F(KeyboardMovementComponentTest, givenLeftKeyPressedAndBlockedLeftMovement_
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
 
-TEST_F(KeyboardMovementComponentTest,
+TEST_F(KeyboardAnimatedMovementComponentTest,
        givenUpKeyPressedAndObjectCannotMoveDown_update_shouldAddPositionChangeFromInputToTransformComponent)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
@@ -215,7 +219,7 @@ TEST_F(KeyboardMovementComponentTest,
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
 
-TEST_F(KeyboardMovementComponentTest, givenUpKeyPressedAndBlockedUpMovement_update_shouldNotMoveUp)
+TEST_F(KeyboardAnimatedMovementComponentTest, givenUpKeyPressedAndBlockedUpMovement_update_shouldNotMoveUp)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(false));
@@ -234,7 +238,7 @@ TEST_F(KeyboardMovementComponentTest, givenUpKeyPressedAndBlockedUpMovement_upda
     ASSERT_EQ(positionAfterUpdate, positionBeforeUpdate);
 }
 
-TEST_F(KeyboardMovementComponentTest, givenRightAndDownKeysPressed_update_shouldRollAndMoveRight)
+TEST_F(KeyboardAnimatedMovementComponentTest, givenRightAndDownKeysPressed_update_shouldRollAndMoveRight)
 {
     keyboardMovementComponent.blockMoveDown();
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(false));
@@ -259,7 +263,7 @@ TEST_F(KeyboardMovementComponentTest, givenRightAndDownKeysPressed_update_should
     ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
 }
 
-TEST_F(KeyboardMovementComponentTest, givenLeftAndDownKeysPressed_update_shouldRollAndMoveLeft)
+TEST_F(KeyboardAnimatedMovementComponentTest, givenLeftAndDownKeysPressed_update_shouldRollAndMoveLeft)
 {
     keyboardMovementComponent.blockMoveDown();
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Left)).WillOnce(Return(true));
