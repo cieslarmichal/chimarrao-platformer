@@ -11,10 +11,10 @@
 #include "ComponentOwner.h"
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
-#include "health/HealthComponent.h"
 #include "ProjectPathReader.h"
 #include "exceptions/DependentComponentNotFound.h"
 #include "exceptions/InvalidCapacity.h"
+#include "health/HealthComponent.h"
 
 using namespace components::core;
 using namespace ::testing;

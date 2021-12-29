@@ -1,11 +1,11 @@
 #include "ItemFactory.h"
 
-#include "ProjectPathReader.h"
-#include "TimerFactory.h"
 #include "BoxColliderComponent.h"
 #include "CollectableItemComponent.h"
 #include "FreeFallMovementComponent.h"
 #include "ItemHealEffect.h"
+#include "ProjectPathReader.h"
+#include "TimerFactory.h"
 
 namespace game
 {

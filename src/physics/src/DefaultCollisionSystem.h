@@ -5,10 +5,10 @@
 #include <vector>
 
 #include "Bitmask.h"
-#include "CollisionSystem.h"
-#include "Quadtree.h"
 #include "BoxColliderComponent.h"
 #include "CollisionLayer.h"
+#include "CollisionSystem.h"
+#include "Quadtree.h"
 
 namespace physics
 {

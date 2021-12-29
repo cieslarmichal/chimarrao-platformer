@@ -3,10 +3,10 @@
 #include <memory>
 
 #include "BackgroundConfig.h"
+#include "ComponentOwner.h"
 #include "InputManager.h"
 #include "RendererPool.h"
 #include "UIComponent.h"
-#include "ComponentOwner.h"
 
 namespace components::ui
 {

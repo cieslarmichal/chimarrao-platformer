@@ -3,9 +3,9 @@
 #include <memory>
 #include <vector>
 
+#include "ComponentOwner.h"
 #include "DeltaTime.h"
 #include "Input.h"
-#include "ComponentOwner.h"
 
 namespace game
 {

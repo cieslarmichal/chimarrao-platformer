@@ -1,8 +1,8 @@
 #include "SettingsStateUIConfigBuilder.h"
 
 #include "CommonUIConfigElements.h"
-#include "ProjectPathReader.h"
 #include "DefaultUIManager.h"
+#include "ProjectPathReader.h"
 
 namespace game
 {

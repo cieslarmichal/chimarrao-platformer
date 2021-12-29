@@ -11,8 +11,8 @@ DefaultStates::DefaultStates(const std::shared_ptr<window::Window>& windowInit,
                              std::shared_ptr<TileMap> tileMapInit,
                              std::shared_ptr<audio::MusicManager> musicManager)
     : tileMap{std::move(tileMapInit)},
-      stateFactory{
-          std::make_unique<StateFactory>(windowInit, rendererPoolInit, fileAccessInit, *this, tileMap, musicManager)}
+      stateFactory{std::make_unique<StateFactory>(windowInit, rendererPoolInit, fileAccessInit, *this,
+                                                  tileMap, musicManager)}
 {
 }
 

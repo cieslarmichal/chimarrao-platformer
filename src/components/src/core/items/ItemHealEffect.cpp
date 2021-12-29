@@ -1,7 +1,7 @@
 #include "ItemHealEffect.h"
 
-#include "health/HealthComponent.h"
 #include "exceptions/DependentComponentNotFound.h"
+#include "health/HealthComponent.h"
 
 namespace components::core
 {

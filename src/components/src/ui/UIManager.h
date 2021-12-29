@@ -5,9 +5,9 @@
 
 #include "DeltaTime.h"
 #include "Input.h"
+#include "KeyAction.h"
 #include "UIComponentType.h"
 #include "UIConfig.h"
-#include "KeyAction.h"
 
 namespace components::ui
 {

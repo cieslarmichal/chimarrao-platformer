@@ -1,9 +1,9 @@
 #include "GameFactory.h"
 
+#include "AudioFactory.h"
 #include "DefaultStates.h"
 #include "FileAccessFactory.h"
 #include "GraphicsFactory.h"
-#include "AudioFactory.h"
 #include "InputManagerFactory.h"
 #include "WindowFactory.h"
 #include "editor/DefaultTileMap.h"

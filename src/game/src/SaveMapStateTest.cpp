@@ -6,9 +6,9 @@
 #include "InputMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
+#include "UIManagerMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapMock.h"
-#include "UIManagerMock.h"
 
 #include "StlOperators.h"
 

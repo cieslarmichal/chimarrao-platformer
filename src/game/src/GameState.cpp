@@ -2,11 +2,11 @@
 
 #include <utility>
 
+#include "DefaultUIManager.h"
 #include "GameStateUIConfigBuilder.h"
 #include "HeadsUpDisplayUIConfigBuilder.h"
 #include "ProjectPathReader.h"
 #include "TimerFactory.h"
-#include "DefaultUIManager.h"
 
 namespace game
 {
@@ -22,24 +22,19 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
                      std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                      std::shared_ptr<components::ui::UIManager> uiManagerInit,
                      std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit,
-                     std::shared_ptr<TileMap> tileMapInit, std::shared_ptr<physics::RayCast> rayCastInit,
-                     std::shared_ptr<physics::Quadtree> quadtreeInit,
+                     std::shared_ptr<TileMap> tileMapInit,
                      const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
-                     std::shared_ptr<audio::MusicManager> musicManagerInit)
+                     std::shared_ptr<audio::MusicManager> musicManagerInit,
+                     std::unique_ptr<WorldBuilder> worldBuilderInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
       uiManager{std::move(uiManagerInit)},
       componentOwnersManager{std::move(componentOwnersManagerInit)},
       tileMap{std::move(tileMapInit)},
-      rayCast{std::move(rayCastInit)},
-      quadtree{std::move(quadtreeInit)},
       sharedContext{sharedContextInit},
-      characterFactory{std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadtree)},
-      itemFactory{std::make_shared<ItemFactory>(sharedContext)},
-      obstacleFactory{std::make_shared<ObstacleFactory>(sharedContext)},
-      worldBuilder{std::make_unique<DefaultWorldBuilder>(characterFactory, obstacleFactory, sharedContext)},
-      musicManager{std::move(musicManagerInit)}
+      musicManager{std::move(musicManagerInit)},
+      worldBuilder{std::move(worldBuilderInit)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
 

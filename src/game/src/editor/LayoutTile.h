@@ -2,13 +2,13 @@
 
 #include <memory>
 
-#include "TileInfo.h"
-#include "TileMap.h"
-#include "Timer.h"
 #include "ClickableComponent.h"
 #include "ComponentOwner.h"
 #include "GraphicsComponent.h"
 #include "MouseOverComponent.h"
+#include "TileInfo.h"
+#include "TileMap.h"
+#include "Timer.h"
 
 namespace game
 {

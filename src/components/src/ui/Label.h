@@ -2,11 +2,11 @@
 
 #include <memory>
 
+#include "ComponentOwner.h"
 #include "LabelConfig.h"
 #include "RendererPool.h"
 #include "Timer.h"
 #include "UIComponent.h"
-#include "ComponentOwner.h"
 
 namespace components::ui
 {

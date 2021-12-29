@@ -2,10 +2,10 @@
 
 #include <utility>
 
+#include "DefaultUIManager.h"
 #include "ProjectPathReader.h"
 #include "SettingsStateUIConfigBuilder.h"
 #include "TimerFactory.h"
-#include "DefaultUIManager.h"
 
 namespace game
 {

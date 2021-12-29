@@ -64,12 +64,16 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     }
     case StateType::Game:
     {
+        auto rayCast = collisionSystemFactory->createRayCast();
+        auto quadTree = collisionSystemFactory->getQuadTree();
+        auto worldBuilder = std::make_unique<DefaultWorldBuilder>(
+            std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadTree),
+            std::make_shared<ObstacleFactory>(sharedContext), sharedContext);
         return std::make_unique<GameState>(
             window, rendererPool, fileAccess, states,
             std::make_unique<components::ui::DefaultUIManager>(sharedContext),
             std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()),
-            tileMap, collisionSystemFactory->createRayCast(), collisionSystemFactory->getQuadTree(),
-            sharedContext, musicManager);
+            tileMap, sharedContext, musicManager, std::move(worldBuilder));
     }
     case StateType::Menu:
     {

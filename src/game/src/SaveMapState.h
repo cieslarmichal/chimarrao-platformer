@@ -1,12 +1,12 @@
 #pragma once
 
+#include "DefaultUIManager.h"
 #include "GridButtonsNavigator.h"
 #include "State.h"
 #include "Timer.h"
-#include "editor/TileMap.h"
-#include "DefaultUIManager.h"
 #include "UIConfig.h"
 #include "UIManager.h"
+#include "editor/TileMap.h"
 
 namespace game
 {

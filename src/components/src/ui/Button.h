@@ -3,12 +3,12 @@
 #include <memory>
 
 #include "ButtonConfig.h"
+#include "ComponentOwner.h"
 #include "InputManager.h"
+#include "KeyAction.h"
 #include "RendererPool.h"
 #include "Timer.h"
 #include "UIComponent.h"
-#include "ComponentOwner.h"
-#include "KeyAction.h"
 
 namespace components::ui
 {

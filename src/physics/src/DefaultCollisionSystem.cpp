@@ -83,7 +83,8 @@ void DefaultCollisionSystem::resolve()
 
         for (const auto& collider : collidersInCollisionLayer)
         {
-            if (not collider->getOwner().getComponent<components::core::KeyboardAnimatedMovementComponent>() and
+            if (not collider->getOwner()
+                        .getComponent<components::core::KeyboardAnimatedMovementComponent>() and
                 not collider->getOwner().getComponent<components::core::FollowerComponent>() and
                 not collider->getOwner().getComponent<components::core::IdleNpcMovementComponent>() and
                 not collider->getOwner().getComponent<components::core::FreeFallMovementComponent>())

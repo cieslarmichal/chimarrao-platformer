@@ -1,12 +1,12 @@
 #pragma once
 
+#include "MusicManager.h"
 #include "PhysicsFactory.h"
 #include "RendererPool.h"
 #include "State.h"
 #include "States.h"
 #include "Window.h"
 #include "editor/TileMap.h"
-#include "MusicManager.h"
 
 namespace game
 {
@@ -15,7 +15,8 @@ class StateFactory
 {
 public:
     StateFactory(std::shared_ptr<window::Window>, std::shared_ptr<graphics::RendererPool>,
-                 std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<TileMap>, std::shared_ptr<audio::MusicManager>);
+                 std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<TileMap>,
+                 std::shared_ptr<audio::MusicManager>);
 
     std::unique_ptr<State> createState(StateType);
 

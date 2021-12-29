@@ -1,8 +1,8 @@
 #pragma once
 
 #include "AnimatorFactory.h"
-#include "RendererPool.h"
 #include "ComponentOwner.h"
+#include "RendererPool.h"
 
 namespace game
 {

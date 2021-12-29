@@ -5,10 +5,10 @@
 #include <utility>
 
 #include "Color.h"
+#include "KeyAction.h"
 #include "UniqueName.h"
 #include "Vector.h"
 #include "VisibilityLayer.h"
-#include "KeyAction.h"
 
 namespace components::ui
 {

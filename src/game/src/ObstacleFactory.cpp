@@ -1,8 +1,8 @@
 #include "ObstacleFactory.h"
 
+#include "AnimationComponent.h"
 #include "BoxColliderComponent.h"
 #include "editor/TileType.h"
-#include "AnimationComponent.h"
 
 namespace game
 {
@@ -48,9 +48,9 @@ std::shared_ptr<components::core::ComponentOwner> ObstacleFactory::createTree(co
     auto tree = std::make_shared<components::core::ComponentOwner>(
         position, "tree" + std::to_string(numberOfTreesInGame), sharedContext);
     tree->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{4, 4}, position,
-                                tileTypeToPathTexture(TileType::Tree), graphics::VisibilityLayer::Second);
+                               tileTypeToPathTexture(TileType::Tree), graphics::VisibilityLayer::Second);
     tree->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4, 4},
-                                                                components::core::CollisionLayer::Tile);
+                                                               components::core::CollisionLayer::Tile);
     return tree;
 }
 
@@ -76,13 +76,13 @@ ObstacleFactory::createCampfire(const utils::Vector2f& position)
         position, "campfire" + std::to_string(numberOfCampfiresInGame), sharedContext);
     auto campfireGraphicsComponent =
         campfire->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{4.f, 4.f}, position,
-                                  graphics::Color::White, graphics::VisibilityLayer::Second);
+                                       graphics::Color::White, graphics::VisibilityLayer::Second);
     const auto campfireGraphicsId = campfireGraphicsComponent->getGraphicsId();
     const std::shared_ptr<animations::Animator> campfireAnimation =
         animatorFactory->createCampfireAnimator(campfireGraphicsId);
     campfire->addComponent<components::core::AnimationComponent>(campfireAnimation);
     campfire->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4, 4},
-                                                                components::core::CollisionLayer::Tile);
+                                                                   components::core::CollisionLayer::Tile);
     return campfire;
 }
 
@@ -94,9 +94,9 @@ ObstacleFactory::createChest(const utils::Vector2f& position)
     auto chest = std::make_shared<components::core::ComponentOwner>(
         position, "chest" + std::to_string(numberOfChestsInGame), sharedContext);
     chest->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{4, 4}, position,
-                               tileTypeToPathTexture(TileType::Chest), graphics::VisibilityLayer::Second);
+                                tileTypeToPathTexture(TileType::Chest), graphics::VisibilityLayer::Second);
     chest->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4, 4},
-                                                               components::core::CollisionLayer::Tile);
+                                                                components::core::CollisionLayer::Tile);
     return chest;
 }
 }

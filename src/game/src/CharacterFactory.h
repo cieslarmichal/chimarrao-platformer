@@ -3,10 +3,10 @@
 #include <memory>
 
 #include "AnimatorFactory.h"
+#include "ComponentOwner.h"
 #include "Quadtree.h"
 #include "RayCast.h"
 #include "RendererPool.h"
-#include "ComponentOwner.h"
 #include "editor/TileMap.h"
 
 namespace game

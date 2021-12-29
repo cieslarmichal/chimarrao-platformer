@@ -10,7 +10,7 @@ class DefaultWorldBuilder : public WorldBuilder
 {
 public:
     DefaultWorldBuilder(std::shared_ptr<CharacterFactory>, std::shared_ptr<ObstacleFactory>,
-                 std::shared_ptr<components::core::SharedContext>);
+                        std::shared_ptr<components::core::SharedContext>);
 
     std::vector<std::shared_ptr<components::core::ComponentOwner>>
     buildWorldObjects(const std::shared_ptr<TileMap>&) override;

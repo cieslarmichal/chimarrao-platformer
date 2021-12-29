@@ -1,6 +1,5 @@
 #include "CharacterFactory.h"
 
-#include "TimerFactory.h"
 #include "AnimationComponent.h"
 #include "ArtificialIntelligenceAttackComponent.h"
 #include "BoxColliderComponent.h"
@@ -8,14 +7,15 @@
 #include "DirectionComponent.h"
 #include "FollowerComponent.h"
 #include "GraphicsComponent.h"
-#include "health/HealthBarComponent.h"
-#include "health/HealthComponent.h"
 #include "IdleNpcMovementComponent.h"
 #include "ItemCollectorComponent.h"
-#include "KeyboardAttackComponent.h"
 #include "KeyboardAnimatedMovementComponent.h"
+#include "KeyboardAttackComponent.h"
 #include "MeleeAttack.h"
+#include "TimerFactory.h"
 #include "VelocityComponent.h"
+#include "health/HealthBarComponent.h"
+#include "health/HealthComponent.h"
 
 namespace game
 {

@@ -3,11 +3,11 @@
 #include <memory>
 
 #include "CheckBoxConfig.h"
+#include "ComponentOwner.h"
 #include "InputManager.h"
 #include "RendererPool.h"
 #include "Timer.h"
 #include "UIComponent.h"
-#include "ComponentOwner.h"
 
 namespace components::ui
 {

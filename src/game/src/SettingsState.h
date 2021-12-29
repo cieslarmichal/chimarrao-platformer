@@ -1,9 +1,9 @@
 #pragma once
 
+#include "ComponentOwner.h"
 #include "GridButtonsNavigator.h"
 #include "State.h"
 #include "Timer.h"
-#include "ComponentOwner.h"
 #include "UIConfig.h"
 #include "UIManager.h"
 

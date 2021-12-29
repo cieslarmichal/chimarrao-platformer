@@ -6,8 +6,8 @@ namespace game
 {
 
 DefaultWorldBuilder::DefaultWorldBuilder(std::shared_ptr<CharacterFactory> characterFactoryInit,
-                           std::shared_ptr<ObstacleFactory> obstacleFactoryInit,
-                           std::shared_ptr<components::core::SharedContext> sharedContextInit)
+                                         std::shared_ptr<ObstacleFactory> obstacleFactoryInit,
+                                         std::shared_ptr<components::core::SharedContext> sharedContextInit)
     : characterFactory{std::move(characterFactoryInit)},
       obstacleFactory{std::move(obstacleFactoryInit)},
       sharedContext{std::move(sharedContextInit)}

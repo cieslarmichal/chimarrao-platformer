@@ -2,11 +2,11 @@
 
 #include <memory>
 
+#include "ComponentOwner.h"
 #include "ImageConfig.h"
+#include "KeyAction.h"
 #include "RendererPool.h"
 #include "UIComponent.h"
-#include "ComponentOwner.h"
-#include "KeyAction.h"
 
 namespace components::ui
 {

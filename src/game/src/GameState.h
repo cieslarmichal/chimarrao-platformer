@@ -2,18 +2,18 @@
 
 #include "CharacterFactory.h"
 #include "CollisionSystem.h"
+#include "ComponentOwner.h"
 #include "ComponentOwnersManager.h"
+#include "DefaultWorldBuilder.h"
 #include "HeadsUpDisplay.h"
 #include "ItemFactory.h"
+#include "MusicManager.h"
+#include "ObstacleFactory.h"
 #include "RayCast.h"
 #include "State.h"
 #include "Timer.h"
-#include "ComponentOwner.h"
-#include "editor/TileMap.h"
 #include "UIManager.h"
-#include "MusicManager.h"
-#include "ObstacleFactory.h"
-#include "DefaultWorldBuilder.h"
+#include "editor/TileMap.h"
 
 namespace game
 {
@@ -21,11 +21,10 @@ class GameState : public State
 {
 public:
     GameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
-                       std::shared_ptr<utils::FileAccess>, States&,
-                       std::shared_ptr<components::ui::UIManager>, std::unique_ptr<ComponentOwnersManager>,
-                       std::shared_ptr<TileMap>, std::shared_ptr<physics::RayCast>,
-                       std::shared_ptr<physics::Quadtree>,
-                       const std::shared_ptr<components::core::SharedContext>&, std::shared_ptr<audio::MusicManager>);
+              std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>,
+              std::unique_ptr<ComponentOwnersManager>, std::shared_ptr<TileMap>,
+              const std::shared_ptr<components::core::SharedContext>&, std::shared_ptr<audio::MusicManager>,
+              std::unique_ptr<WorldBuilder>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -47,11 +46,8 @@ private:
     std::shared_ptr<physics::RayCast> rayCast;
     std::shared_ptr<physics::Quadtree> quadtree;
     const std::shared_ptr<components::core::SharedContext>& sharedContext;
-    std::shared_ptr<CharacterFactory> characterFactory;
-    std::shared_ptr<ItemFactory> itemFactory;
-    std::shared_ptr<ObstacleFactory> obstacleFactory;
-    std::unique_ptr<DefaultWorldBuilder> worldBuilder;
     std::shared_ptr<audio::MusicManager> musicManager;
     audio::MusicId musicId;
+    std::unique_ptr<WorldBuilder> worldBuilder;
 };
 }

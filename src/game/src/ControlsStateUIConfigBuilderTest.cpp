@@ -5,8 +5,8 @@
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
-#include "WindowMock.h"
 #include "UIManagerMock.h"
+#include "WindowMock.h"
 
 #include "ControlsState.h"
 #include "StlOperators.h"

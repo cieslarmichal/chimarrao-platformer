@@ -9,9 +9,9 @@
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
 #include "TimerMock.h"
+#include "UIManagerMock.h"
 #include "WindowMock.h"
 #include "editor/TileMapMock.h"
-#include "UIManagerMock.h"
 
 using namespace game;
 using namespace components::ui;
@@ -38,7 +38,7 @@ public:
         EXPECT_CALL(*window, registerObserver(_));
         EXPECT_CALL(*window, removeObserver(_));
         EXPECT_CALL(*uiManager, createUI(_));
-        EXPECT_CALL(*tileMap, getSize()).WillOnce(Return(utils::Vector2i{1, 1}));
+        EXPECT_CALL(*tileMap, getSize()).WillRepeatedly(Return(utils::Vector2i{1, 1}));
         EXPECT_CALL(*tileMap, setTileMapInfo(_));
         EXPECT_CALL(*tileMap, getTile(_)).WillRepeatedly(ReturnRef(tile));
     }

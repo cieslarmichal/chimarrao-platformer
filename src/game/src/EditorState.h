@@ -4,10 +4,10 @@
 
 #include "State.h"
 #include "Timer.h"
-#include "editor/LayoutTile.h"
-#include "editor/TileMap.h"
 #include "UIConfig.h"
 #include "UIManager.h"
+#include "editor/LayoutTile.h"
+#include "editor/TileMap.h"
 
 namespace game
 {

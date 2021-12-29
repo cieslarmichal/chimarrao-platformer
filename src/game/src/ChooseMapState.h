@@ -1,13 +1,13 @@
 #pragma once
 
+#include "ComponentOwner.h"
 #include "MapsReader.h"
 #include "PaginatedButtonsNavigator.h"
 #include "State.h"
 #include "Timer.h"
-#include "ComponentOwner.h"
-#include "editor/TileMap.h"
 #include "UIConfig.h"
 #include "UIManager.h"
+#include "editor/TileMap.h"
 
 namespace game
 {
