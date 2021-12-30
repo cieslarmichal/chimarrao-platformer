@@ -11,7 +11,7 @@ class MouseOverComponent : public Component
 {
 public:
     MouseOverComponent(ComponentOwner*, std::function<void(void)> mouseOverAction,
-                       std::function<void(void)> mouseOutAction);
+                       std::function<void(void)> mouseOutAction, bool relative = true);
 
     void loadDependentComponents() override;
     void update(utils::DeltaTime, const input::Input&) override;
@@ -25,5 +25,6 @@ private:
     std::function<void(void)> mouseOverAction;
     std::function<void(void)> mouseOutAction;
     bool mouseOver;
+    const bool relative;
 };
 }

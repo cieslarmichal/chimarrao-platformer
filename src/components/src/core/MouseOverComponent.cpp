@@ -8,11 +8,12 @@ namespace components::core
 
 MouseOverComponent::MouseOverComponent(ComponentOwner* ownerInit,
                                        std::function<void(void)> mouseOverActionInit,
-                                       std::function<void(void)> mouseOutActionInit)
+                                       std::function<void(void)> mouseOutActionInit, bool relative)
     : Component(ownerInit),
       mouseOverAction{std::move(mouseOverActionInit)},
       mouseOutAction{std::move(mouseOutActionInit)},
-      mouseOver{false}
+      mouseOver{false},
+      relative{relative}
 {
 }
 
@@ -36,12 +37,14 @@ void MouseOverComponent::update(utils::DeltaTime, const input::Input& input)
         return;
     }
 
-    if (not mouseOver && boxCollider->intersects(input.getMouseRelativePosition()))
+    const auto mousePosition = relative? input.getMouseRelativePosition(): input.getMouseAbsolutePosition();
+
+    if (not mouseOver && boxCollider->intersects(mousePosition))
     {
         mouseOverAction();
         mouseOver = true;
     }
-    else if (mouseOver && not boxCollider->intersects(input.getMouseRelativePosition()))
+    else if (mouseOver && not boxCollider->intersects(mousePosition))
     {
         mouseOutAction();
         mouseOver = false;
