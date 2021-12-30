@@ -1,27 +1,11 @@
 #include "KeyboardHorizontalMovementComponent.h"
 
-#include "exceptions/DependentComponentNotFound.h"
-
 namespace components::core
 {
 
 KeyboardHorizontalMovementComponent::KeyboardHorizontalMovementComponent(ComponentOwner* ownerInit)
-    : MovementComponent{ownerInit, 6.f}
+    : MovementComponent{ownerInit, 16.f}
 {
-}
-
-void KeyboardHorizontalMovementComponent::loadDependentComponents()
-{
-    velocityComponent = owner->getComponent<VelocityComponent>();
-    if (velocityComponent)
-    {
-        velocityComponent->loadDependentComponents();
-    }
-    else
-    {
-        throw exceptions::DependentComponentNotFound{
-            "KeyboardMovementComponent: Velocity component not found"};
-    }
 }
 
 void KeyboardHorizontalMovementComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
@@ -31,7 +15,7 @@ void KeyboardHorizontalMovementComponent::update(utils::DeltaTime deltaTime, con
         return;
     }
 
-    auto currentMovementSpeed = velocityComponent->getVelocity();
+    auto currentMovementSpeed = utils::Vector2f{0, 0};
 
     if (input.isKeyPressed(input::InputKey::Left))
     {
@@ -43,19 +27,6 @@ void KeyboardHorizontalMovementComponent::update(utils::DeltaTime deltaTime, con
         currentMovementSpeed.x = movementSpeed;
     }
 
-    velocityComponent->setVelocity(currentMovementSpeed);
-}
-
-void KeyboardHorizontalMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input&)
-{
-    if (not enabled)
-    {
-        return;
-    }
-
-    auto currentMovementSpeed = velocityComponent->getVelocity();
-
-    velocityComponent->setVelocity(currentMovementSpeed);
     const float xFrameMove = currentMovementSpeed.x * deltaTime.count();
     const float yFrameMove = currentMovementSpeed.y * deltaTime.count();
     owner->transform->addPosition(xFrameMove, yFrameMove);

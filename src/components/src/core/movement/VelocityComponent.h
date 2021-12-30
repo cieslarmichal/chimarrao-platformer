@@ -7,16 +7,16 @@ namespace components::core
 class VelocityComponent : public Component
 {
 public:
-    explicit VelocityComponent(ComponentOwner* owner);
+    VelocityComponent(ComponentOwner* owner, const utils::Vector2f& velocity = utils::Vector2f{0, 0});
 
-    void setVelocity(const sf::Vector2f& vel);
+    void setVelocity(const utils::Vector2f& vel);
     void setVelocity(float x, float y);
-    const sf::Vector2f& getVelocity() const;
+    const utils::Vector2f& getVelocity() const;
 
 private:
     void trimVelocity();
 
-    sf::Vector2f velocity;
-    sf::Vector2f maxVelocity;
+    utils::Vector2f velocity;
+    utils::Vector2f maxVelocity;
 };
 }

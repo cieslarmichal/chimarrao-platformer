@@ -36,7 +36,10 @@ private:
     createTextFieldConfigs(ChooseMapState*);
     static std::vector<std::unique_ptr<components::ui::ImageConfig>> createImageConfigs(ChooseMapState*);
 
-    static const std::vector<std::string> mapButtonsUniqueNames;
-    static const std::vector<std::string> iconNames;
+    static const std::vector<std::string> allMapButtonsUniqueNames;
+    static std::vector<std::string> actualMapButtonsUniqueNames;
+    static const std::vector<std::string> allIconNames;
+    static std::vector<std::string> actualIconNames;
+    static std::size_t numberOfButtons;
 };
 }

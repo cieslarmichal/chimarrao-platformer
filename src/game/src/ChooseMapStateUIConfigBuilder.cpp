@@ -23,17 +23,25 @@ const auto mapButtonSize = utils::Vector2f{15.f, 4.f};
 const auto iconSize = utils::Vector2f{4, 4};
 }
 
-const std::vector<std::string> ChooseMapStateUIConfigBuilder::mapButtonsUniqueNames{
+const std::vector<std::string> ChooseMapStateUIConfigBuilder::allMapButtonsUniqueNames{
     "chooseMap1MapButton", "chooseMap2MapButton", "chooseMap3MapButton", "chooseMap4MapButton",
     "chooseMap5MapButton"};
 
-const std::vector<std::string> ChooseMapStateUIConfigBuilder::iconNames{
+std::vector<std::string> ChooseMapStateUIConfigBuilder::actualMapButtonsUniqueNames{};
+
+const std::vector<std::string> ChooseMapStateUIConfigBuilder::allIconNames{
     "chooseMapIcon1Image", "chooseMapIcon2Image", "chooseMapIcon3Image",
     "chooseMapIcon4Image", "chooseMapIcon5Image", "chooseMapIcon6Image"};
+
+std::vector<std::string> ChooseMapStateUIConfigBuilder::actualIconNames{"chooseMapIcon1Image"};
+
+std::size_t ChooseMapStateUIConfigBuilder::numberOfButtons{0};
 
 std::unique_ptr<components::ui::UIConfig>
 ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(ChooseMapState* chooseMapState)
 {
+    numberOfButtons = chooseMapState->mapNames.size();
+
     return std::make_unique<components::ui::UIConfig>(
         createBackgroundConfig(chooseMapState), createButtonConfigs(chooseMapState),
         createCheckBoxConfigs(chooseMapState), createLabelConfigs(chooseMapState),
@@ -42,14 +50,14 @@ ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(ChooseMapState* chooseMap
 
 std::vector<std::string> ChooseMapStateUIConfigBuilder::getNonNavigationButtonNames()
 {
-    auto buttonNames = mapButtonsUniqueNames;
+    auto buttonNames = actualMapButtonsUniqueNames;
     buttonNames.emplace_back("chooseMapBackToMenuButton");
     return buttonNames;
 }
 
 std::vector<std::string> ChooseMapStateUIConfigBuilder::getIconNames()
 {
-    return iconNames;
+    return actualIconNames;
 }
 
 std::unique_ptr<components::ui::BackgroundConfig>
@@ -111,9 +119,13 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
         leftButtonClickAction, leftButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(leftButtonConfig));
 
-    for (std::size_t mapIndex = 0; mapIndex < mapButtonsUniqueNames.size(); mapIndex++)
+    for (std::size_t mapIndex = 0;
+         mapIndex < allMapButtonsUniqueNames.size() and mapIndex < chooseMapState->mapFilePaths.size();
+         mapIndex++)
     {
-        const auto& buttonUniqueName = mapButtonsUniqueNames[mapIndex];
+        const auto& buttonUniqueName = allMapButtonsUniqueNames[mapIndex];
+        actualMapButtonsUniqueNames.push_back(buttonUniqueName);
+
         auto& mapNameToDisplay = chooseMapState->mapNames[mapIndex];
         auto& mapFilePath = chooseMapState->mapFilePaths[mapIndex];
         const auto buttonPosition =
@@ -175,19 +187,24 @@ ChooseMapStateUIConfigBuilder::createImageConfigs(ChooseMapState*)
 {
     std::vector<std::unique_ptr<components::ui::ImageConfig>> imagesConfig;
 
-    for (std::size_t iconIndex = 0; iconIndex < iconNames.size(); iconIndex++)
+    for (std::size_t iconIndex = 0; iconIndex < allIconNames.size() and iconIndex < numberOfButtons;
+         iconIndex++)
     {
+        const auto& iconName = allIconNames[iconIndex];
+
+        actualIconNames.push_back(iconName);
+
         auto iconPosition =
             utils::Vector2f{firstMapButtonPosition.x + mapButtonSize.x,
                             firstMapButtonPosition.y + static_cast<float>(iconIndex) * 6.f - 0.5f};
-        if (iconIndex == iconNames.size() - 1)
+        if (iconIndex == allIconNames.size() - 1)
         {
             iconPosition.x -= 1.f;
             iconPosition.y += 3.5f;
         }
 
         auto imageConfig = std::make_unique<components::ui::ImageConfig>(
-            iconNames[iconIndex], iconPosition, iconSize, graphics::VisibilityLayer::First, iconPath);
+            iconName, iconPosition, iconSize, graphics::VisibilityLayer::First, iconPath);
         imagesConfig.push_back(std::move(imageConfig));
     }
 

@@ -46,5 +46,6 @@ private:
     std::shared_ptr<TileMap> tileMap;
     std::shared_ptr<components::ui::UIManager> uiManager;
     const std::shared_ptr<components::core::SharedContext>& sharedContext;
+    std::shared_ptr<components::core::ComponentOwner> camera;
 };
 }

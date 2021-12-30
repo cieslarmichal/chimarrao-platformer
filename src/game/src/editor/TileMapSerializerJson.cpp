@@ -19,9 +19,9 @@ std::string TileMapSerializerJson::serialize(const TileMapInfo& tileMapInfo) con
     checkMapSize(tileMapInfo.mapSize, tileMapInfo.tiles);
     json["info"]["mapSize"]["x"] = tileMapInfo.mapSize.x;
     json["info"]["mapSize"]["y"] = tileMapInfo.mapSize.y;
-    for (int x = 0; x < tileMapInfo.tiles.size(); x++)
+    for (int x = 0; x < static_cast<int>(tileMapInfo.tiles.size()); x++)
     {
-        for (int y = 0; y < tileMapInfo.tiles[x].size(); y++)
+        for (int y = 0; y < static_cast<int>(tileMapInfo.tiles[x].size()); y++)
         {
             json["data"]["tiles"][x][y] = tileTypeToInt(tileMapInfo.tiles[x][y]->type);
         }
@@ -54,7 +54,7 @@ void TileMapSerializerJson::checkMapName(const std::string& name) const
 void TileMapSerializerJson::checkMapSize(const utils::Vector2i& size,
                                          const std::vector<std::vector<std::shared_ptr<TileInfo>>>& map) const
 {
-    if (size.y != map.size())
+    if (size.y != static_cast<int>(map.size()))
     {
         throw exceptions::WrongMapSize{"TileMapSerializerJson: Wrong map size"};
     }
@@ -62,7 +62,7 @@ void TileMapSerializerJson::checkMapSize(const utils::Vector2i& size,
     {
         for (const auto& row : map)
         {
-            if (size.x != row.size())
+            if (size.x != static_cast<int>(row.size()))
             {
                 throw exceptions::WrongMapSize{"TileMapSerializerJson: Wrong map size"};
             }
@@ -150,7 +150,7 @@ TileMapSerializerJson::parseTiles(const nlohmann::json& mapDataJson, utils::Vect
         throw exceptions::InvalidField{
             R"(TileMapSerializerJson: Field "tiles" is not an array or has wrong size)"};
     }
-    if (tilesJson.size() != size.y)
+    if (static_cast<int>(tilesJson.size()) != size.y)
     {
         throw exceptions::InvalidField{R"(TileMapSerializerJson: Field "tiles" has wrong size)"};
     }
@@ -161,7 +161,7 @@ TileMapSerializerJson::parseTiles(const nlohmann::json& mapDataJson, utils::Vect
             throw exceptions::InvalidField{
                 R"(TileMapSerializerJson: Field "tiles" is not an array or has wrong size)"};
         }
-        if (tilesJson[yIter].size() != size.x)
+        if (static_cast<int>(tilesJson[yIter].size()) != size.x)
         {
             throw exceptions::InvalidField{R"(TileMapSerializerJson: Field "tiles" has wrong size)"};
         }

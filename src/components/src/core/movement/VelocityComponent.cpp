@@ -5,9 +5,10 @@
 namespace components::core
 {
 
-VelocityComponent::VelocityComponent(ComponentOwner* owner)
-    : Component{owner}, velocity{0.f, 0.f}, maxVelocity{100.f, 100.f}
+VelocityComponent::VelocityComponent(ComponentOwner* owner, const utils::Vector2f& velocityInit)
+    : Component{owner}, velocity{velocityInit}, maxVelocity{100.f, 100.f}
 {
+    trimVelocity();
 }
 
 void VelocityComponent::setVelocity(const sf::Vector2f& vel)

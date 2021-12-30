@@ -2,9 +2,11 @@
 
 #include <utility>
 
+#include "CameraComponent.h"
 #include "DefaultUIManager.h"
 #include "EditorMenuState.h"
 #include "EditorStateUIConfigBuilder.h"
+#include "KeyboardHorizontalMovementComponent.h"
 #include "TimerFactory.h"
 
 namespace game
@@ -15,6 +17,7 @@ const int rendererPoolSizeX = 80;
 const int rendererPoolSizeY = 60;
 const int tileSizeX = 4;
 const int tileSizeY = 4;
+const utils::Vector2f cameraInitialPosition{rendererPoolSizeX / 2.f, rendererPoolSizeY / 2.f};
 }
 
 EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
@@ -37,6 +40,14 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
     tileMap->setTileMapInfo(TileMapInfo{"", tileMap->getSize(), {}});
     setTileMap();
 
+    camera =
+        std::make_shared<components::core::ComponentOwner>(cameraInitialPosition, "camera", sharedContext);
+    camera->addComponent<components::core::KeyboardHorizontalMovementComponent>();
+    camera->addComponent<components::core::CameraComponent>(
+        sharedContext->rendererPool, utils::FloatRect{0, 0, static_cast<float>(tileMap->getSize().x) * 4.f,
+                                                      static_cast<float>(tileMap->getSize().y) * 4.f});
+    camera->loadDependentComponents();
+
     pauseTimer = utils::TimerFactory::createTimer();
 }
 
@@ -48,54 +59,15 @@ NextState EditorState::update(const utils::DeltaTime& deltaTime, const input::In
         pause();
     }
 
-    if (moveTimer->getElapsedSeconds() > timeBetweenTileMoves && input.isKeyPressed(input::InputKey::Left) &&
-        layoutTileMap.front().getPosition().x < 0)
-    {
-        moveTimer->restart();
-        for (auto& layoutTile : layoutTileMap)
-        {
-            layoutTile.moveTile({0.3f, 0.f});
-        }
-    }
-    else if (moveTimer->getElapsedSeconds() > timeBetweenTileMoves &&
-             input.isKeyPressed(input::InputKey::Right))
-    {
-        if (layoutTileMap.back().getPosition().x + tileSizeX > rendererPoolSizeX)
-        {
-            moveTimer->restart();
-            for (auto& layoutTile : layoutTileMap)
-            {
-                layoutTile.moveTile({-0.3f, 0.f});
-            }
-        }
-        else
-        {
-            const auto tileMapSizeBeforeExtend = tileMap->getSize().x;
-
-            tileMap->extend();
-
-            for (int y = 0; y < tileMap->getSize().y; ++y)
-            {
-                for (int x = tileMapSizeBeforeExtend; x < tileMap->getSize().x; ++x)
-                {
-                    auto tileTypeOpt = tileMap->getTile(utils::Vector2i{x, y})->type;
-                    auto& tileType = tileTypeOpt ? *tileTypeOpt : *currentTileType;
-                    layoutTileMap.emplace_back(LayoutTile{sharedContext, utils::Vector2i{x, y},
-                                                          utils::Vector2f{tileSizeX, tileSizeY}, tileType,
-                                                          *tileMap});
-                    layoutTileMap.back().moveTile({-80.f, 0.f});
-                }
-            }
-        }
-    }
-
     if (not paused)
     {
         for (auto& layoutTile : layoutTileMap)
         {
             layoutTile.update(deltaTime, input);
         }
+
         uiManager->update(deltaTime, input);
+        camera->update(deltaTime, input);
     }
 
     return NextState::Same;
@@ -109,6 +81,8 @@ void EditorState::lateUpdate(const utils::DeltaTime& deltaTime, const input::Inp
         {
             tile->lateUpdate(deltaTime, input);
         }
+
+        camera->lateUpdate(deltaTime, input);
     }
 }
 
@@ -133,6 +107,7 @@ void EditorState::activate()
         layoutTile.activate();
     }
     uiManager->activate();
+    camera->enable();
 
     setTileMap();
 }
@@ -146,6 +121,7 @@ void EditorState::deactivate()
         layoutTile.deactivate();
     }
     uiManager->deactivate();
+    camera->disable();
 }
 
 void EditorState::pause()
@@ -156,6 +132,8 @@ void EditorState::pause()
     {
         layoutTile.pause();
     }
+
+    camera->disable();
 
     states.addNextState(StateType::EditorMenu);
 }

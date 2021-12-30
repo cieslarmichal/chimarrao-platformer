@@ -31,14 +31,16 @@ ChooseMapState::ChooseMapState(const std::shared_ptr<window::Window>& windowInit
                                               tileMap->loadFromFile(mapPath);
                                               states.deactivateCurrentState();
                                               states.addNextState(StateType::Game);
-                                          }},
-      buttonsNavigator{std::make_unique<PaginatedButtonsNavigator>(
-          uiManager, ChooseMapStateUIConfigBuilder::getNonNavigationButtonNames(),
-          ChooseMapStateUIConfigBuilder::getIconNames(), mapNames, paginatedButtonActionForButtonIndex, 5,
-          buttonColor, buttonHoverColor, utils::TimerFactory::createTimer(),
-          utils::TimerFactory::createTimer())}
+                                          }}
 {
     this->uiManager->createUI(ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(this));
+
+    buttonsNavigator = std::make_unique<PaginatedButtonsNavigator>(
+        uiManager, ChooseMapStateUIConfigBuilder::getNonNavigationButtonNames(),
+        ChooseMapStateUIConfigBuilder::getIconNames(), mapNames, paginatedButtonActionForButtonIndex, 5,
+        buttonColor, buttonHoverColor, utils::TimerFactory::createTimer(),
+        utils::TimerFactory::createTimer());
+
     buttonsNavigator->initialize();
 }
 

@@ -36,7 +36,7 @@ void RenderTargetSfml::draw(const sf::Drawable& drawable)
 void RenderTargetSfml::setView()
 {
     view.setSize(boost::numeric_cast<float>(areaSize.x), boost::numeric_cast<float>(areaSize.y));
-    view.setCenter(center);
+    view.setCenter(this->center);
     view = getLetterboxView(view, windowSize.x, windowSize.y);
     window->setView(view);
 
@@ -64,9 +64,9 @@ bool RenderTargetSfml::setActive(bool)
     return true;
 }
 
-void RenderTargetSfml::setCenter(const utils::Vector2f& center)
+void RenderTargetSfml::setCenter(const utils::Vector2f& newCenter)
 {
-    this->center = center;
+    this->center = newCenter;
 }
 
 const utils::Vector2f& RenderTargetSfml::getCenter() const
