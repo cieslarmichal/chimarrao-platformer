@@ -22,24 +22,24 @@ class ChooseMapState;
 class ChooseMapStateUIConfigBuilder
 {
 public:
-    static std::unique_ptr<components::ui::UIConfig> createChooseMapUIConfig(ChooseMapState*);
-    static std::vector<std::string> getNonNavigationButtonNames();
-    static std::vector<std::string> getIconNames();
+    ChooseMapStateUIConfigBuilder();
+
+    std::unique_ptr<components::ui::UIConfig> createChooseMapUIConfig(ChooseMapState*);
+    std::vector<std::string> getNonNavigationButtonNames();
+    std::vector<std::string> getIconNames();
 
 private:
-    static std::unique_ptr<components::ui::BackgroundConfig> createBackgroundConfig(ChooseMapState*);
-    static std::vector<std::unique_ptr<components::ui::ButtonConfig>> createButtonConfigs(ChooseMapState*);
-    static std::vector<std::unique_ptr<components::ui::CheckBoxConfig>>
-    createCheckBoxConfigs(ChooseMapState*);
-    static std::vector<std::unique_ptr<components::ui::LabelConfig>> createLabelConfigs(ChooseMapState*);
-    static std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
-    createTextFieldConfigs(ChooseMapState*);
-    static std::vector<std::unique_ptr<components::ui::ImageConfig>> createImageConfigs(ChooseMapState*);
+    std::unique_ptr<components::ui::BackgroundConfig> createBackgroundConfig(ChooseMapState*);
+    std::vector<std::unique_ptr<components::ui::ButtonConfig>> createButtonConfigs(ChooseMapState*);
+    std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> createCheckBoxConfigs(ChooseMapState*);
+    std::vector<std::unique_ptr<components::ui::LabelConfig>> createLabelConfigs(ChooseMapState*);
+    std::vector<std::unique_ptr<components::ui::TextFieldConfig>> createTextFieldConfigs(ChooseMapState*);
+    std::vector<std::unique_ptr<components::ui::ImageConfig>> createImageConfigs(ChooseMapState*);
 
-    static const std::vector<std::string> allMapButtonsUniqueNames;
-    static std::vector<std::string> actualMapButtonsUniqueNames;
-    static const std::vector<std::string> allIconNames;
-    static std::vector<std::string> actualIconNames;
-    static std::size_t numberOfButtons;
+    const std::vector<std::string> allMapButtonsUniqueNames;
+    std::vector<std::string> actualMapButtonsUniqueNames;
+    const std::vector<std::string> allIconNames;
+    std::vector<std::string> actualIconNames;
+    std::size_t numberOfButtons;
 };
 }

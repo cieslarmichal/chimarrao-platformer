@@ -17,8 +17,10 @@ public:
     void setKeyPressed(InputKey) override;
     bool isKeyReleased(InputKey) const override;
     void setReleasedKeys() override;
-    void setMousePosition(const utils::Vector2f&) override;
-    utils::Vector2f getMousePosition() const override;
+    void setMouseRelativePosition(const utils::Vector2f&) override;
+    void setMouseAbsolutePosition(const utils::Vector2f&) override;
+    utils::Vector2f getMouseRelativePosition() const override;
+    utils::Vector2f getMouseAbsolutePosition() const override;
     void clearPressedKeys() override;
 
 private:
@@ -26,7 +28,8 @@ private:
     std::vector<bool> pressedKeys;
     std::vector<bool> pressedKeysHistory;
     std::vector<bool> releasedKeys;
-    utils::Vector2f mousePosition{};
+    utils::Vector2f mouseRelativePosition{};
+    utils::Vector2f mouseAbsolutePosition{};
 };
 
 bool operator==(const InputSfml&, const Input&);

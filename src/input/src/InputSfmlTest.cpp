@@ -25,7 +25,7 @@ TEST_F(InputSfmlTest, initialInput_pressedKeysAndReleasedKeysAndMousePositionSho
         ASSERT_FALSE(input.isKeyReleased(key));
     }
 
-    ASSERT_EQ(input.getMousePosition(), zeroPosition);
+    ASSERT_EQ(input.getMouseRelativePosition(), zeroPosition);
 }
 
 TEST_F(InputSfmlTest, shouldSetKeyPressed)
@@ -52,11 +52,18 @@ TEST_F(InputSfmlTest, shouldClearPressedKeys)
     }
 }
 
-TEST_F(InputSfmlTest, shouldSetMousePosition)
+TEST_F(InputSfmlTest, shouldSetRelativeMousePosition)
 {
-    input.setMousePosition(position);
+    input.setMouseRelativePosition(position);
 
-    ASSERT_EQ(input.getMousePosition(), position);
+    ASSERT_EQ(input.getMouseRelativePosition(), position);
+}
+
+TEST_F(InputSfmlTest, shouldSetAbsoluteMousePosition)
+{
+    input.setMouseAbsolutePosition(position);
+
+    ASSERT_EQ(input.getMouseAbsolutePosition(), position);
 }
 
 TEST_F(InputSfmlTest, afterKeysPressed_shouldNotSetReleasedKey)

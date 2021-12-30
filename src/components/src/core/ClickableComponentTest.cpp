@@ -84,7 +84,7 @@ TEST_F(ClickableComponentTest, givenMousePositionOutsideHitboxAndLeftMouseKeyNot
 TEST_F(ClickableComponentTest, givenMousePositionOutsideHitboxAndLeftMouseKeyClicked_shouldNotCallAction)
 {
     EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(true));
-    EXPECT_CALL(input, getMousePosition()).WillOnce(Return(positionOutsideTarget));
+    EXPECT_CALL(input, getMouseRelativePosition()).WillOnce(Return(positionOutsideTarget));
 
     clickableComponent.update(deltaTime, input);
 
@@ -103,7 +103,7 @@ TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxAndLeftMouseKeyNotC
 TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxLeftMouseKeyClicked_shouldCallAction)
 {
     EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(true));
-    EXPECT_CALL(input, getMousePosition()).WillOnce(Return(positionInsideTarget));
+    EXPECT_CALL(input, getMouseRelativePosition()).WillOnce(Return(positionInsideTarget));
 
     clickableComponent.update(deltaTime, input);
 
@@ -137,7 +137,7 @@ TEST_F(ClickableComponentTest,
     localClickableComponent.loadDependentComponents();
     EXPECT_CALL(input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
     EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(true));
-    EXPECT_CALL(input, getMousePosition()).WillRepeatedly(Return(positionInsideTarget));
+    EXPECT_CALL(input, getMouseRelativePosition()).WillRepeatedly(Return(positionInsideTarget));
 
     localClickableComponent.update(deltaTime, input);
 
@@ -155,7 +155,7 @@ TEST_F(ClickableComponentTest,
     localClickableComponent.loadDependentComponents();
     EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
-    EXPECT_CALL(input, getMousePosition()).WillOnce(Return(positionInsideTarget));
+    EXPECT_CALL(input, getMouseRelativePosition()).WillOnce(Return(positionInsideTarget));
 
     localClickableComponent.update(deltaTime, input);
 
@@ -175,7 +175,7 @@ TEST_F(ClickableComponentTest,
     localClickableComponent.setKeyActions(validKeyActionVectorAfterChange);
 
     EXPECT_CALL(input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
-    EXPECT_CALL(input, getMousePosition()).WillOnce(Return(positionInsideTarget));
+    EXPECT_CALL(input, getMouseRelativePosition()).WillOnce(Return(positionInsideTarget));
 
     localClickableComponent.update(deltaTime, input);
 

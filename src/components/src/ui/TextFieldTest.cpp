@@ -145,7 +145,7 @@ TEST_F(TextFieldTest, update_withKeyboardCharactersInput_shouldAppendThemToText)
 {
     auto textField = TextField(sharedContext, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::MouseLeft)).WillOnce(Return(true));
-    EXPECT_CALL(input, getMousePosition()).WillRepeatedly(Return(utils::Vector2f{26, 6}));
+    EXPECT_CALL(input, getMouseRelativePosition()).WillRepeatedly(Return(utils::Vector2f{26, 6}));
     expectReadAllAlphanumericalButtonsAsNonPressedExceptOfGivenButtons(
         {input::InputKey::A, input::InputKey::B});
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Backspace)).WillOnce(Return(false));
@@ -160,7 +160,7 @@ TEST_F(TextFieldTest, update_withKeyboardCharactersInputAndDeleteKeypress_should
 {
     auto textField = TextField(sharedContext, createValidConfig(), std::move(timerInit));
     EXPECT_CALL(input, isKeyPressed(input::InputKey::MouseLeft)).WillOnce(Return(true));
-    EXPECT_CALL(input, getMousePosition()).WillRepeatedly(Return(utils::Vector2f{26, 6}));
+    EXPECT_CALL(input, getMouseRelativePosition()).WillRepeatedly(Return(utils::Vector2f{26, 6}));
     expectReadAllAlphanumericalButtonsAsNonPressedExceptOfGivenButtons(
         {input::InputKey::A, input::InputKey::B});
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Backspace)).WillOnce(Return(true));

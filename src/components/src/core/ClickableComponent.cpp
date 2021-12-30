@@ -45,7 +45,7 @@ void ClickableComponent::update(utils::DeltaTime, const input::Input& input)
     for (auto& keyAction : keyActions)
     {
         if (not keyAction.clicked && input.isKeyReleased(keyAction.key) &&
-            boxCollider->intersects(input.getMousePosition()))
+            boxCollider->intersects(input.getMouseRelativePosition()))
         {
             keyAction.action();
         }

@@ -35,7 +35,8 @@ const Input& DefaultInputManager::readInput()
     }
 
     input->setReleasedKeys();
-    input->setMousePosition(window->getMousePosition(true));
+    input->setMouseRelativePosition(window->getMousePosition(true));
+    input->setMouseAbsolutePosition(window->getMousePosition(false));
 
     return *input;
 }

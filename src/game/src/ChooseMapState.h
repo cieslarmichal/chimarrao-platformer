@@ -18,11 +18,9 @@ class ChooseMapState : public State
     friend class ChooseMapStateUIConfigBuilder;
 
 public:
-    explicit ChooseMapState(const std::shared_ptr<window::Window>&,
-                            const std::shared_ptr<graphics::RendererPool>&,
-                            std::shared_ptr<utils::FileAccess>, States&,
-                            std::shared_ptr<components::ui::UIManager>, std::shared_ptr<TileMap>,
-                            std::unique_ptr<MapsReader>);
+    ChooseMapState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
+                   std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>,
+                   std::shared_ptr<TileMap>, std::unique_ptr<MapsReader>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;

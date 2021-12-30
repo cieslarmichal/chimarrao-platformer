@@ -33,13 +33,14 @@ ChooseMapState::ChooseMapState(const std::shared_ptr<window::Window>& windowInit
                                               states.addNextState(StateType::Game);
                                           }}
 {
-    this->uiManager->createUI(ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(this));
+    ChooseMapStateUIConfigBuilder uiConfigBuilder;
+
+    this->uiManager->createUI(uiConfigBuilder.createChooseMapUIConfig(this));
 
     buttonsNavigator = std::make_unique<PaginatedButtonsNavigator>(
-        uiManager, ChooseMapStateUIConfigBuilder::getNonNavigationButtonNames(),
-        ChooseMapStateUIConfigBuilder::getIconNames(), mapNames, paginatedButtonActionForButtonIndex, 5,
-        buttonColor, buttonHoverColor, utils::TimerFactory::createTimer(),
-        utils::TimerFactory::createTimer());
+        uiManager, uiConfigBuilder.getNonNavigationButtonNames(), uiConfigBuilder.getIconNames(), mapNames,
+        paginatedButtonActionForButtonIndex, 5, buttonColor, buttonHoverColor,
+        utils::TimerFactory::createTimer(), utils::TimerFactory::createTimer());
 
     buttonsNavigator->initialize();
 }

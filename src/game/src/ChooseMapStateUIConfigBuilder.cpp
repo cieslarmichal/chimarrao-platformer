@@ -23,19 +23,15 @@ const auto mapButtonSize = utils::Vector2f{15.f, 4.f};
 const auto iconSize = utils::Vector2f{4, 4};
 }
 
-const std::vector<std::string> ChooseMapStateUIConfigBuilder::allMapButtonsUniqueNames{
-    "chooseMap1MapButton", "chooseMap2MapButton", "chooseMap3MapButton", "chooseMap4MapButton",
-    "chooseMap5MapButton"};
-
-std::vector<std::string> ChooseMapStateUIConfigBuilder::actualMapButtonsUniqueNames{};
-
-const std::vector<std::string> ChooseMapStateUIConfigBuilder::allIconNames{
-    "chooseMapIcon1Image", "chooseMapIcon2Image", "chooseMapIcon3Image",
-    "chooseMapIcon4Image", "chooseMapIcon5Image", "chooseMapIcon6Image"};
-
-std::vector<std::string> ChooseMapStateUIConfigBuilder::actualIconNames{"chooseMapIcon1Image"};
-
-std::size_t ChooseMapStateUIConfigBuilder::numberOfButtons{0};
+ChooseMapStateUIConfigBuilder::ChooseMapStateUIConfigBuilder()
+    : allMapButtonsUniqueNames{"chooseMap1MapButton", "chooseMap2MapButton", "chooseMap3MapButton",
+                               "chooseMap4MapButton", "chooseMap5MapButton"},
+      actualMapButtonsUniqueNames{},
+      allIconNames{"chooseMapIcon1Image", "chooseMapIcon2Image", "chooseMapIcon3Image",
+                   "chooseMapIcon4Image", "chooseMapIcon5Image", "chooseMapIcon6Image"},
+      actualIconNames{}
+{
+}
 
 std::unique_ptr<components::ui::UIConfig>
 ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(ChooseMapState* chooseMapState)
@@ -50,9 +46,7 @@ ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(ChooseMapState* chooseMap
 
 std::vector<std::string> ChooseMapStateUIConfigBuilder::getNonNavigationButtonNames()
 {
-    auto buttonNames = actualMapButtonsUniqueNames;
-    buttonNames.emplace_back("chooseMapBackToMenuButton");
-    return buttonNames;
+    return actualMapButtonsUniqueNames;
 }
 
 std::vector<std::string> ChooseMapStateUIConfigBuilder::getIconNames()
@@ -155,6 +149,8 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
         buttonsConfig.emplace_back(std::move(mapButtonConfig));
     }
 
+    actualMapButtonsUniqueNames.emplace_back("chooseMapBackToMenuButton");
+
     return buttonsConfig;
 }
 
@@ -187,25 +183,30 @@ ChooseMapStateUIConfigBuilder::createImageConfigs(ChooseMapState*)
 {
     std::vector<std::unique_ptr<components::ui::ImageConfig>> imagesConfig;
 
-    for (std::size_t iconIndex = 0; iconIndex < allIconNames.size() and iconIndex < numberOfButtons;
-         iconIndex++)
+    for (std::size_t iconIndex = 0; iconIndex < allIconNames.size(); iconIndex++)
     {
         const auto& iconName = allIconNames[iconIndex];
-
-        actualIconNames.push_back(iconName);
-
         auto iconPosition =
             utils::Vector2f{firstMapButtonPosition.x + mapButtonSize.x,
                             firstMapButtonPosition.y + static_cast<float>(iconIndex) * 6.f - 0.5f};
-        if (iconIndex == allIconNames.size() - 1)
+
+        if (iconIndex >= numberOfButtons)
         {
-            iconPosition.x -= 1.f;
-            iconPosition.y += 3.5f;
+            if (iconIndex == allIconNames.size() - 1)
+            {
+                iconPosition.x -= 1.f;
+                iconPosition.y += 3.5f;
+            }
+            else
+            {
+                continue;
+            }
         }
 
         auto imageConfig = std::make_unique<components::ui::ImageConfig>(
             iconName, iconPosition, iconSize, graphics::VisibilityLayer::First, iconPath);
         imagesConfig.push_back(std::move(imageConfig));
+        actualIconNames.push_back(iconName);
     }
 
     return imagesConfig;

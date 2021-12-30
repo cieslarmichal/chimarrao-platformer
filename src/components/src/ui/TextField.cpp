@@ -66,7 +66,7 @@ void TextField::update(utils::DeltaTime deltaTime, const input::Input& input)
         if (auto textFieldHitBox =
                 coreComponentsOwner->getComponent<components::core::BoxColliderComponent>())
         {
-            if (not textFieldHitBox->intersects(input.getMousePosition()))
+            if (not textFieldHitBox->intersects(input.getMouseRelativePosition()))
             {
                 textFieldClicked = false;
                 mouseOutFieldAction();

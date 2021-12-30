@@ -36,12 +36,12 @@ void MouseOverComponent::update(utils::DeltaTime, const input::Input& input)
         return;
     }
 
-    if (not mouseOver && boxCollider->intersects(input.getMousePosition()))
+    if (not mouseOver && boxCollider->intersects(input.getMouseRelativePosition()))
     {
         mouseOverAction();
         mouseOver = true;
     }
-    else if (mouseOver && not boxCollider->intersects(input.getMousePosition()))
+    else if (mouseOver && not boxCollider->intersects(input.getMouseRelativePosition()))
     {
         mouseOutAction();
         mouseOver = false;

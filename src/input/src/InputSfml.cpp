@@ -39,14 +39,24 @@ void InputSfml::setReleasedKeys()
     pressedKeysHistory = pressedKeys;
 }
 
-void InputSfml::setMousePosition(const utils::Vector2f& position)
+void InputSfml::setMouseRelativePosition(const utils::Vector2f& position)
 {
-    mousePosition = position;
+    mouseRelativePosition = position;
 }
 
-utils::Vector2f InputSfml::getMousePosition() const
+void InputSfml::setMouseAbsolutePosition(const utils::Vector2f& position)
 {
-    return mousePosition;
+    mouseAbsolutePosition = position;
+}
+
+utils::Vector2f InputSfml::getMouseRelativePosition() const
+{
+    return mouseRelativePosition;
+}
+
+utils::Vector2f InputSfml::getMouseAbsolutePosition() const
+{
+    return mouseAbsolutePosition;
 }
 
 void InputSfml::clearPressedKeys()
@@ -82,7 +92,7 @@ std::tuple<std::vector<InputKey>, std::vector<InputKey>> getKeysInformation(cons
 bool operator==(const Input& lhs, const Input& rhs)
 {
     return getKeysInformation(lhs) == getKeysInformation(rhs) &&
-           lhs.getMousePosition() == rhs.getMousePosition();
+           lhs.getMouseRelativePosition() == rhs.getMouseRelativePosition();
 }
 
 std::ostream& operator<<(std::ostream& os, const Input& inputStatus)
@@ -90,7 +100,7 @@ std::ostream& operator<<(std::ostream& os, const Input& inputStatus)
     const auto [pressedKeys, releasedKeys] = getKeysInformation(inputStatus);
     os << "PressedKeys: " << pressedKeys << std::endl;
     os << "ReleasedKeys: " << releasedKeys << std::endl;
-    os << "Mouse position: " << inputStatus.getMousePosition();
+    os << "Mouse position: " << inputStatus.getMouseRelativePosition();
     return os;
 }
 

@@ -61,11 +61,12 @@ class ChooseMapStateUIConfigBuilderTest : public ChooseMapStateUIConfigBuilderTe
 public:
     ChooseMapState chooseMapState{
         window, rendererPool, fileAccess, states, uiManager, tileMap, std::move(mapsReaderInit)};
+    ChooseMapStateUIConfigBuilder uiConfigBuilder;
 };
 
 TEST_F(ChooseMapStateUIConfigBuilderTest, createChooseMapUI)
 {
-    const auto chooseMapUI = ChooseMapStateUIConfigBuilder::createChooseMapUIConfig(&chooseMapState);
+    const auto chooseMapUI = uiConfigBuilder.createChooseMapUIConfig(&chooseMapState);
 
     std::vector<std::string> actualLabelNames;
     std::transform(chooseMapUI->labelsConfig.begin(), chooseMapUI->labelsConfig.end(),
@@ -92,14 +93,18 @@ TEST_F(ChooseMapStateUIConfigBuilderTest, createChooseMapUI)
 
 TEST_F(ChooseMapStateUIConfigBuilderTest, getButtonNames)
 {
-    const auto actualNonNavigationButtonNames = ChooseMapStateUIConfigBuilder::getNonNavigationButtonNames();
+    uiConfigBuilder.createChooseMapUIConfig(&chooseMapState);
+
+    const auto actualNonNavigationButtonNames = uiConfigBuilder.getNonNavigationButtonNames();
 
     ASSERT_EQ(actualNonNavigationButtonNames, expectedNonNavigationButtonNames);
 }
 
 TEST_F(ChooseMapStateUIConfigBuilderTest, getIconNames)
 {
-    const auto actualIconNames = ChooseMapStateUIConfigBuilder::getIconNames();
+    uiConfigBuilder.createChooseMapUIConfig(&chooseMapState);
+
+    const auto actualIconNames = uiConfigBuilder.getIconNames();
 
     ASSERT_EQ(actualIconNames, expectedImagesNames);
 }

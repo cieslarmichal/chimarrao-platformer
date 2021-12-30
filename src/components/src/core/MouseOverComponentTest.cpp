@@ -87,7 +87,7 @@ TEST_F(MouseOverComponentTest, givenMousePositionOutsideHitbox_shouldNotCallAnyA
     MouseOverComponent mouseOverComponent{&componentOwner, [this] { mouseOverAction(); },
                                           [this] { mouseOutAction(); }};
     prepareMouseOverComponent(mouseOverComponent);
-    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionOutsideTarget1));
+    EXPECT_CALL(*input, getMouseRelativePosition()).WillOnce(Return(positionOutsideTarget1));
 
     mouseOverComponent.update(deltaTime, *input);
 
@@ -100,7 +100,7 @@ TEST_F(MouseOverComponentTest, givenMousePositionInsideHitbox_shouldCallMouseOve
     MouseOverComponent mouseOverComponent{&componentOwner, [this] { mouseOverAction(); },
                                           [this] { mouseOutAction(); }};
     prepareMouseOverComponent(mouseOverComponent);
-    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget1));
+    EXPECT_CALL(*input, getMouseRelativePosition()).WillOnce(Return(positionInsideTarget1));
 
     mouseOverComponent.update(deltaTime, *input);
 
@@ -115,10 +115,10 @@ TEST_F(MouseOverComponentTest,
                                           [this] { mouseOutAction(); }};
     prepareMouseOverComponent(mouseOverComponent);
 
-    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget1));
+    EXPECT_CALL(*input, getMouseRelativePosition()).WillOnce(Return(positionInsideTarget1));
     mouseOverComponent.update(deltaTime, *input);
 
-    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionOutsideTarget1));
+    EXPECT_CALL(*input, getMouseRelativePosition()).WillOnce(Return(positionOutsideTarget1));
     mouseOverComponent.update(deltaTime, *input);
 
     ASSERT_TRUE(mouseWasOut(1));
@@ -131,10 +131,10 @@ TEST_F(MouseOverComponentTest, givenMousePositionInsideHitboxTwice_shouldCallMou
                                           [this] { mouseOutAction(); }};
     prepareMouseOverComponent(mouseOverComponent);
 
-    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget1));
+    EXPECT_CALL(*input, getMouseRelativePosition()).WillOnce(Return(positionInsideTarget1));
     mouseOverComponent.update(deltaTime, *input);
 
-    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget2));
+    EXPECT_CALL(*input, getMouseRelativePosition()).WillOnce(Return(positionInsideTarget2));
     mouseOverComponent.update(deltaTime, *input);
 
     ASSERT_FALSE(mouseWasOut());
@@ -147,7 +147,7 @@ TEST_F(MouseOverComponentTest, givenMousePositionInsideHitboxOutAndAgainInside_s
                                           [this] { mouseOutAction(); }};
     prepareMouseOverComponent(mouseOverComponent);
 
-    EXPECT_CALL(*input, getMousePosition())
+    EXPECT_CALL(*input, getMouseRelativePosition())
         .WillOnce(Return(positionInsideTarget1))
         .WillOnce(Return(positionOutsideTarget1))
         .WillOnce(Return(positionInsideTarget2));
@@ -165,7 +165,7 @@ TEST_F(MouseOverComponentTest, givenMousePositionTwiceOverAndOut_shouldCallMouse
                                           [this] { mouseOutAction(); }};
     prepareMouseOverComponent(mouseOverComponent);
 
-    EXPECT_CALL(*input, getMousePosition())
+    EXPECT_CALL(*input, getMouseRelativePosition())
         .WillOnce(Return(positionInsideTarget1))
         .WillOnce(Return(positionOutsideTarget1))
         .WillOnce(Return(positionInsideTarget2))
@@ -200,7 +200,7 @@ TEST_F(MouseOverComponentTest,
                                           [this] { mouseOutAction(); }};
     prepareMouseOverComponent(mouseOverComponent);
 
-    EXPECT_CALL(*input, getMousePosition()).WillOnce(Return(positionInsideTarget1));
+    EXPECT_CALL(*input, getMouseRelativePosition()).WillOnce(Return(positionInsideTarget1));
     mouseOverComponent.update(deltaTime, *input);
 
     mouseOverComponent.disable();
