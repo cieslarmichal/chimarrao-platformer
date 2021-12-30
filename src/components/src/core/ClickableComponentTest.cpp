@@ -75,6 +75,7 @@ TEST_F(ClickableComponentTest,
 TEST_F(ClickableComponentTest, givenMousePositionOutsideHitboxAndLeftMouseKeyNotClicked_shouldNotCallAction)
 {
     EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(false));
+    EXPECT_CALL(input, getMouseRelativePosition()).WillOnce(Return(positionOutsideTarget));
 
     clickableComponent.update(deltaTime, input);
 
@@ -94,6 +95,7 @@ TEST_F(ClickableComponentTest, givenMousePositionOutsideHitboxAndLeftMouseKeyCli
 TEST_F(ClickableComponentTest, givenMousePositionInsideHitboxAndLeftMouseKeyNotClicked_shouldNotCallAction)
 {
     EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(false));
+    EXPECT_CALL(input, getMouseRelativePosition()).WillOnce(Return(positionInsideTarget));
 
     clickableComponent.update(deltaTime, input);
 
@@ -155,7 +157,7 @@ TEST_F(ClickableComponentTest,
     localClickableComponent.loadDependentComponents();
     EXPECT_CALL(input, isKeyReleased(InputKey::MouseLeft)).WillOnce(Return(false));
     EXPECT_CALL(input, isKeyReleased(InputKey::MouseRight)).WillOnce(Return(true));
-    EXPECT_CALL(input, getMouseRelativePosition()).WillOnce(Return(positionInsideTarget));
+    EXPECT_CALL(input, getMouseRelativePosition()).WillRepeatedly(Return(positionInsideTarget));
 
     localClickableComponent.update(deltaTime, input);
 

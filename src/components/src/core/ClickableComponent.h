@@ -11,8 +11,8 @@ namespace components::core
 class ClickableComponent : public Component
 {
 public:
-    ClickableComponent(ComponentOwner*, std::function<void(void)> action);
-    ClickableComponent(ComponentOwner*, const std::vector<KeyAction>&);
+    ClickableComponent(ComponentOwner*, std::function<void(void)> action, bool relative = true);
+    ClickableComponent(ComponentOwner*, const std::vector<KeyAction>&, bool relative = true);
 
     void loadDependentComponents() override;
     void update(utils::DeltaTime, const input::Input&) override;
@@ -24,5 +24,6 @@ public:
 private:
     std::shared_ptr<BoxColliderComponent> boxCollider;
     std::vector<KeyAction> keyActions;
+    const bool relative;
 };
 }

@@ -9,15 +9,16 @@
 
 namespace components::core
 {
-ClickableComponent::ClickableComponent(ComponentOwner* ownerInit, std::function<void(void)> actionInit)
-    : Component(ownerInit)
+ClickableComponent::ClickableComponent(ComponentOwner* ownerInit, std::function<void(void)> actionInit,
+                                       bool relative)
+    : Component(ownerInit), relative{relative}
 {
     keyActions.push_back({input::InputKey::MouseLeft, std::move(actionInit)});
 }
 
 ClickableComponent::ClickableComponent(ComponentOwner* ownerInit,
-                                       const std::vector<KeyAction>& keyActionsInit)
-    : Component(ownerInit)
+                                       const std::vector<KeyAction>& keyActionsInit, bool relative)
+    : Component(ownerInit), relative{relative}
 {
     setKeyActions(keyActionsInit);
 }
@@ -44,8 +45,10 @@ void ClickableComponent::update(utils::DeltaTime, const input::Input& input)
 
     for (auto& keyAction : keyActions)
     {
+        const auto mousePosition = relative? input.getMouseRelativePosition(): input.getMouseAbsolutePosition();
+
         if (not keyAction.clicked && input.isKeyReleased(keyAction.key) &&
-            boxCollider->intersects(input.getMouseRelativePosition()))
+            boxCollider->intersects(mousePosition))
         {
             keyAction.action();
         }
