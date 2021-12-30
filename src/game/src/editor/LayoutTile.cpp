@@ -53,7 +53,7 @@ LayoutTile::LayoutTile(const std::shared_ptr<components::core::SharedContext>& s
     componentOwner->addComponent<components::core::ClickableComponent>(
         std::vector<components::core::KeyAction>{
             {input::InputKey::MouseRight, onRightMouseButtonClickActionLambda},
-            {input::InputKey::MouseLeft, onLeftMouseButtonClickActionLambda}});
+            {input::InputKey::MouseLeft, onLeftMouseButtonClickActionLambda}}, false);
     const auto onMouseOverActionLambda = [=, &tileMap, &currentTileType]
     {
         graphicsComponent->setVisibility(graphics::VisibilityLayer::First);
@@ -81,7 +81,7 @@ LayoutTile::LayoutTile(const std::shared_ptr<components::core::SharedContext>& s
         graphicsComponent->setOutline(0.0f, graphics::Color::Transparent);
     };
     componentOwner->addComponent<components::core::MouseOverComponent>(onMouseOverActionLambda,
-                                                                       onMouseOutActionLambda);
+                                                                       onMouseOutActionLambda, false);
     componentOwner->loadDependentComponents();
     componentOwner->enable();
     freezeClickableTileTimer = utils::TimerFactory::createTimer();
