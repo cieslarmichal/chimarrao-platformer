@@ -24,17 +24,17 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                          const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                          std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                          std::shared_ptr<components::ui::UIManager> uiManagerInit,
-                         std::shared_ptr<TileMap> tileMapInit, std::unique_ptr<utils::Timer> moveTimer,
-                         const std::shared_ptr<components::core::SharedContext>& sharedContext)
+                         std::shared_ptr<TileMap> tileMapInit,
+                         const std::shared_ptr<components::core::SharedContext>& sharedContext,
+                         std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
-      moveTimer{std::move(moveTimer)},
       timeAfterStateCouldBePaused{0.5f},
-      timeBetweenTileMoves{0.005f},
       currentTileType{std::make_shared<TileType>(defaultTileType)},
       tileMap{std::move(tileMapInit)},
       uiManager{std::move(uiManagerInit)},
-      sharedContext{sharedContext}
+      sharedContext{sharedContext},
+      componentOwnersManager{std::move(componentOwnersManagerInit)}
 {
     uiManager->createUI(EditorStateUIConfigBuilder::createEditorUIConfig(this));
     tileMap->setTileMapInfo(TileMapInfo{"", tileMap->getSize(), {}});
@@ -46,7 +46,23 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
     camera->addComponent<components::core::CameraComponent>(
         sharedContext->rendererPool, utils::FloatRect{0, 0, static_cast<float>(tileMap->getSize().x) * 4.f,
                                                       static_cast<float>(tileMap->getSize().y) * 4.f});
+    camera->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{4.f, 4.f},
+                                 cameraInitialPosition, graphics::Color::Red,
+                                 graphics::VisibilityLayer::Second);
+    camera->addComponent<components::core::VelocityComponent>();
+    camera->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4.f, 4.f},
+                                                                 components::core::CollisionLayer::Default);
     camera->loadDependentComponents();
+
+    auto leftMapBorder = std::make_shared<components::core::ComponentOwner>(
+        utils::Vector2f{-1, 0}, "editor left border", sharedContext);
+    leftMapBorder->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{1, static_cast<float>(tileMap->getSize().y) * 4.f},
+        components::core::CollisionLayer::Default);
+    componentOwnersManager->add(camera);
+    componentOwnersManager->add(leftMapBorder);
+
+    componentOwnersManager->processNewObjects();
 
     pauseTimer = utils::TimerFactory::createTimer();
 }
@@ -67,8 +83,10 @@ NextState EditorState::update(const utils::DeltaTime& deltaTime, const input::In
         }
 
         uiManager->update(deltaTime, input);
-        camera->update(deltaTime, input);
+        componentOwnersManager->update(deltaTime, input);
     }
+
+    componentOwnersManager->processRemovals();
 
     return NextState::Same;
 }
@@ -81,8 +99,6 @@ void EditorState::lateUpdate(const utils::DeltaTime& deltaTime, const input::Inp
         {
             tile->lateUpdate(deltaTime, input);
         }
-
-        camera->lateUpdate(deltaTime, input);
     }
 }
 
@@ -107,7 +123,7 @@ void EditorState::activate()
         layoutTile.activate();
     }
     uiManager->activate();
-    camera->enable();
+    componentOwnersManager->activate();
 
     setTileMap();
 }
@@ -121,7 +137,7 @@ void EditorState::deactivate()
         layoutTile.deactivate();
     }
     uiManager->deactivate();
-    camera->disable();
+    componentOwnersManager->deactivate();
 }
 
 void EditorState::pause()
@@ -133,7 +149,7 @@ void EditorState::pause()
         layoutTile.pause();
     }
 
-    camera->disable();
+    componentOwnersManager->deactivate();
 
     states.addNextState(StateType::EditorMenu);
 }

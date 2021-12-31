@@ -1,12 +1,12 @@
 #pragma once
 
 #include "MusicManager.h"
-#include "PhysicsFactory.h"
 #include "RendererPool.h"
 #include "State.h"
 #include "States.h"
 #include "Window.h"
 #include "editor/TileMap.h"
+#include "SharedContext.h"
 
 namespace game
 {
@@ -26,7 +26,6 @@ private:
     std::shared_ptr<utils::FileAccess> fileAccess;
     States& states;
     std::shared_ptr<TileMap> tileMap;
-    std::unique_ptr<physics::PhysicsFactory> collisionSystemFactory;
     std::shared_ptr<components::core::SharedContext> sharedContext;
     std::shared_ptr<audio::MusicManager> musicManager;
 };

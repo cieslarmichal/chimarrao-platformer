@@ -34,6 +34,16 @@ public:
     StrictMock<input::InputMock> input;
 };
 
+TEST_F(KeyboardHorizontalMovementComponentTest,
+       loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
+{
+    ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity", sharedContext};
+    KeyboardHorizontalMovementComponent movementComponentWithoutVelocity{&componentOwnerWithoutVelocity};
+
+    ASSERT_THROW(movementComponentWithoutVelocity.loadDependentComponents(),
+                 components::core::exceptions::DependentComponentNotFound);
+}
+
 TEST_F(KeyboardHorizontalMovementComponentTest, leftButtonPressed_shouldMoveLeft)
 {
     const auto positionBefore = owner.transform->getPosition();
@@ -41,6 +51,7 @@ TEST_F(KeyboardHorizontalMovementComponentTest, leftButtonPressed_shouldMoveLeft
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(false));
 
     movementComponent.update(deltaTime, input);
+    movementComponent.lateUpdate(deltaTime, input);
 
     const auto positionAfter = owner.transform->getPosition();
     ASSERT_TRUE(positionAfter.x < positionBefore.x);
@@ -53,6 +64,7 @@ TEST_F(KeyboardHorizontalMovementComponentTest, rightButtonPressed_shouldMoveRig
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Right)).WillOnce(Return(true));
 
     movementComponent.update(deltaTime, input);
+    movementComponent.lateUpdate(deltaTime, input);
 
     const auto positionAfter = owner.transform->getPosition();
     ASSERT_TRUE(positionAfter.x > positionBefore.x);

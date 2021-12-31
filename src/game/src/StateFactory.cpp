@@ -15,6 +15,7 @@
 #include "MenuStateUIConfigBuilder.h"
 #include "PaginatedButtonsNavigator.h"
 #include "PauseState.h"
+#include "PhysicsFactory.h"
 #include "SaveMapState.h"
 #include "SettingsState.h"
 #include "SettingsStateUIConfigBuilder.h"
@@ -33,7 +34,6 @@ StateFactory::StateFactory(std::shared_ptr<window::Window> windowInit,
       fileAccess{std::move(fileAccessInit)},
       states{statesInit},
       tileMap{std::move(tileMapInit)},
-      collisionSystemFactory{physics::PhysicsFactory::createCollisionSystemFactory()},
       sharedContext{std::make_shared<components::core::SharedContext>(rendererPool)},
       musicManager{std::move(musicManagerInit)}
 {
@@ -57,18 +57,23 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     }
     case StateType::Editor:
     {
+        auto collisionSystemFactory = physics::PhysicsFactory::createCollisionSystemFactory();
+
         return std::make_unique<EditorState>(
             window, rendererPool, fileAccess, states,
-            std::make_unique<components::ui::DefaultUIManager>(sharedContext), tileMap,
-            utils::TimerFactory::createTimer(), sharedContext);
+            std::make_unique<components::ui::DefaultUIManager>(sharedContext), tileMap, sharedContext,
+            std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()));
     }
     case StateType::Game:
     {
+        auto collisionSystemFactory = physics::PhysicsFactory::createCollisionSystemFactory();
         auto rayCast = collisionSystemFactory->createRayCast();
         auto quadTree = collisionSystemFactory->getQuadTree();
+
         auto worldBuilder = std::make_unique<DefaultWorldBuilder>(
             std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadTree),
             std::make_shared<ObstacleFactory>(sharedContext), sharedContext);
+
         return std::make_unique<GameState>(
             window, rendererPool, fileAccess, states,
             std::make_unique<components::ui::DefaultUIManager>(sharedContext),
