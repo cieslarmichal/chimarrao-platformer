@@ -4,6 +4,7 @@
 
 #include "gtest/gtest.h"
 
+#include "ComponentOwnersManagerMock.h"
 #include "FileAccessMock.h"
 #include "InputMock.h"
 #include "RendererPoolMock.h"
@@ -41,6 +42,8 @@ public:
         EXPECT_CALL(*tileMap, getSize()).WillRepeatedly(Return(utils::Vector2i{1, 1}));
         EXPECT_CALL(*tileMap, setTileMapInfo(_));
         EXPECT_CALL(*tileMap, getTile(_)).WillRepeatedly(ReturnRef(tile));
+        EXPECT_CALL(*componentOwnersManager, processNewObjects());
+        EXPECT_CALL(*componentOwnersManager, add(_)).Times(2);
     }
 
     std::shared_ptr<StrictMock<window::WindowMock>> window =
@@ -59,18 +62,22 @@ public:
     StrictMock<utils::TimerMock>* timer{timerInit.get()};
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
+    std::unique_ptr<StrictMock<ComponentOwnersManagerMock>> componentOwnersManagerInit{
+        std::make_unique<StrictMock<ComponentOwnersManagerMock>>()};
+    StrictMock<ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
 };
 
 class EditorStateTest : public EditorStateTest_Base
 {
 public:
-    EditorState editorState{window,    rendererPool, fileAccess,           states,
-                            uiManager, tileMap,      std::move(timerInit), sharedContext};
+    EditorState editorState{window,    rendererPool, fileAccess,    states,
+                            uiManager, tileMap,      sharedContext, std::move(componentOwnersManagerInit)};
 };
 
 TEST_F(EditorStateTest, activate_shouldActivateUI)
 {
     EXPECT_CALL(*uiManager, activate());
+    EXPECT_CALL(*componentOwnersManager, activate());
 
     editorState.activate();
 }
@@ -78,6 +85,7 @@ TEST_F(EditorStateTest, activate_shouldActivateUI)
 TEST_F(EditorStateTest, deactivate_shouldDeactivateUI)
 {
     EXPECT_CALL(*uiManager, deactivate());
+    EXPECT_CALL(*componentOwnersManager, deactivate());
 
     editorState.deactivate();
 }
@@ -93,12 +101,3 @@ TEST_F(EditorStateTest, render_shouldRenderAllFromRendererPool)
 
     editorState.render();
 }
-
-// TODO: uncomment
-
-// TEST_F(EditorStateTest, update_shouldUpdateUI)
-//{
-//     EXPECT_CALL(*uiManager, update(deltaTime, Ref(input)));
-//
-//     editorState.update(deltaTime, input);
-// }

@@ -6,8 +6,11 @@
 
 components::core::CameraComponent::CameraComponent(components::core::ComponentOwner* owner,
                                                    std::shared_ptr<graphics::RendererPool> rendererPool,
-                                                   utils::FloatRect mapRect)
-    : Component(owner), rendererPool{std::move(rendererPool)}, mapRect{mapRect}
+                                                   utils::FloatRect mapRect, bool blockCameraOnRightSide)
+    : Component(owner),
+      rendererPool{std::move(rendererPool)},
+      mapRect{mapRect},
+      blockCameraOnRightSide{blockCameraOnRightSide}
 {
 }
 
@@ -29,7 +32,9 @@ void components::core::CameraComponent::lateUpdate(utils::DeltaTime, const input
     {
         cameraViewCenter.x = mapRect.left + cameraViewSize.x / 2;
     }
-    else if (cameraViewCenter.x > mapRect.left + mapRect.width - cameraViewSize.x / 2)
+
+    if (blockCameraOnRightSide and
+        cameraViewCenter.x > mapRect.left + mapRect.width - cameraViewSize.x / 2)
     {
         cameraViewCenter.x = mapRect.left + mapRect.width - cameraViewSize.x / 2;
     }

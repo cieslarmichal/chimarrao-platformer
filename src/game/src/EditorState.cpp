@@ -44,11 +44,10 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
         std::make_shared<components::core::ComponentOwner>(cameraInitialPosition, "camera", sharedContext);
     camera->addComponent<components::core::KeyboardHorizontalMovementComponent>();
     camera->addComponent<components::core::CameraComponent>(
-        sharedContext->rendererPool, utils::FloatRect{0, 0, static_cast<float>(tileMap->getSize().x) * 4.f,
-                                                      static_cast<float>(tileMap->getSize().y) * 4.f});
-    camera->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{4.f, 4.f},
-                                 cameraInitialPosition, graphics::Color::Red,
-                                 graphics::VisibilityLayer::Second);
+        sharedContext->rendererPool,
+        utils::FloatRect{0, 0, static_cast<float>(tileMap->getSize().x) * 4.f,
+                         static_cast<float>(tileMap->getSize().y) * 4.f},
+        false);
     camera->addComponent<components::core::VelocityComponent>();
     camera->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4.f, 4.f},
                                                                  components::core::CollisionLayer::Default);
@@ -84,6 +83,26 @@ NextState EditorState::update(const utils::DeltaTime& deltaTime, const input::In
 
         uiManager->update(deltaTime, input);
         componentOwnersManager->update(deltaTime, input);
+
+        if (camera->transform->getPosition().x + tileSizeX >
+            static_cast<float>(tileMap->getSize().x) * tileSizeX)
+        {
+            const auto tileMapSizeBeforeExtend = tileMap->getSize().x;
+
+            tileMap->extend();
+
+            for (int y = 0; y < tileMap->getSize().y; ++y)
+            {
+                for (int x = tileMapSizeBeforeExtend; x < tileMap->getSize().x; ++x)
+                {
+                    auto tileTypeOpt = tileMap->getTile(utils::Vector2i{x, y})->type;
+                    auto& tileType = tileTypeOpt ? *tileTypeOpt : *currentTileType;
+                    layoutTileMap.emplace_back(LayoutTile{sharedContext, utils::Vector2i{x, y},
+                                                          utils::Vector2f{tileSizeX, tileSizeY}, tileType,
+                                                          *tileMap});
+                }
+            }
+        }
     }
 
     componentOwnersManager->processRemovals();

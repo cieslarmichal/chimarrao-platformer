@@ -2,6 +2,7 @@
 
 #include "gtest/gtest.h"
 
+#include "ComponentOwnersManagerMock.h"
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
@@ -48,9 +49,12 @@ public:
         std::make_shared<NiceMock<components::ui::UIManagerMock>>()};
     std::unique_ptr<NiceMock<utils::TimerMock>> timerInit{std::make_unique<NiceMock<utils::TimerMock>>()};
     NiceMock<utils::TimerMock>* timer{timerInit.get()};
+    std::unique_ptr<NiceMock<ComponentOwnersManagerMock>> componentOwnersManagerInit{
+        std::make_unique<NiceMock<ComponentOwnersManagerMock>>()};
+    NiceMock<ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
 
-    EditorState editorState{window,    rendererPool, fileAccess,           states,
-                            uiManager, tileMap,      std::move(timerInit), sharedContext};
+    EditorState editorState{window,    rendererPool, fileAccess,    states,
+                            uiManager, tileMap,      sharedContext, std::move(componentOwnersManagerInit)};
 };
 
 TEST_F(EditorStateUIConfigBuilderTest, createEditorUI)
