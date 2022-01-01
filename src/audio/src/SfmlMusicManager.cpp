@@ -2,6 +2,7 @@
 
 #include "MusicIdGenerator.h"
 #include "exceptions/MusicNotFound.h"
+#include "exceptions/InvalidVolume.h"
 
 namespace audio
 {
@@ -32,6 +33,21 @@ void SfmlMusicManager::play(const MusicId& musicId)
 
     music.setLoop(true);
     music.play();
+}
+
+void SfmlMusicManager::setVolume(const MusicId& musicId, int volumePercents)
+{
+    if (volumePercents < 0 or volumePercents > 100)
+    {
+        throw exceptions::InvalidVolume{"Volume should be set between 0 and 100 percents"};
+    }
+
+    throwIfMusicWithGivenIdNotFound(musicId);
+
+    const auto musicPath = musicIdsToPaths.at(musicId);
+    auto& music = musicStorage->getMusic(musicPath);
+
+    music.setVolume(static_cast<float>(volumePercents));
 }
 
 void SfmlMusicManager::pause(const MusicId& musicId)

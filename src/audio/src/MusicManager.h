@@ -15,6 +15,7 @@ public:
     virtual MusicId acquire(const MusicPath&) = 0;
     virtual void release(const MusicId&) = 0;
     virtual void play(const MusicId&) = 0;
+    virtual void setVolume(const MusicId&, int volumePercents) = 0;
     virtual void pause(const MusicId&) = 0;
     virtual void stop(const MusicId&) = 0;
 };

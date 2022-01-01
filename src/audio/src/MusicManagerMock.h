@@ -12,6 +12,7 @@ public:
     MOCK_METHOD(MusicId, acquire, (const MusicPath& musicPath), (override));
     MOCK_METHOD(void, release, (const MusicId&), (override));
     MOCK_METHOD(void, play, (const MusicId&), (override));
+    MOCK_METHOD(void, setVolume, (const MusicId&, int volumePercents), (override));
     MOCK_METHOD(void, pause, (const MusicId&), (override));
     MOCK_METHOD(void, stop, (const MusicId&), (override));
 };

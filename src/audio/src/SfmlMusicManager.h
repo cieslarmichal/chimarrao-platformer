@@ -16,6 +16,7 @@ public:
     MusicId acquire(const MusicPath&) override;
     void release(const MusicId&) override;
     void play(const MusicId&) override;
+    void setVolume(const MusicId&, int volumePercents) override;
     void pause(const MusicId&) override;
     void stop(const MusicId&) override;
 
