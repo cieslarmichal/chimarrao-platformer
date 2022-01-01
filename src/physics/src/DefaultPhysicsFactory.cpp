@@ -5,7 +5,10 @@
 namespace physics
 {
 
-DefaultPhysicsFactory::DefaultPhysicsFactory() : quadtree{std::make_shared<DefaultQuadtree>()} {}
+DefaultPhysicsFactory::DefaultPhysicsFactory(const utils::FloatRect& mapBoundaries)
+    : quadtree{std::make_shared<DefaultQuadtree>(mapBoundaries)}
+{
+}
 
 std::unique_ptr<CollisionSystem> DefaultPhysicsFactory::createCollisionSystem() const
 {

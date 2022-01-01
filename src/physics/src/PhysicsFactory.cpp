@@ -4,8 +4,9 @@
 
 namespace physics
 {
-std::unique_ptr<PhysicsFactory> PhysicsFactory::createCollisionSystemFactory()
+std::unique_ptr<PhysicsFactory>
+PhysicsFactory::createCollisionSystemFactory(const utils::FloatRect& mapBounds)
 {
-    return std::make_unique<DefaultPhysicsFactory>();
+    return std::make_unique<DefaultPhysicsFactory>(mapBounds);
 }
 }

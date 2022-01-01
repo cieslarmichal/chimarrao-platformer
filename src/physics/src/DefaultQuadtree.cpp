@@ -16,6 +16,8 @@ double calculateDistanceBetweenRects(const utils::FloatRect& lhs, const utils::F
 
 DefaultQuadtree::DefaultQuadtree() : DefaultQuadtree{5, 5, 0, {0, 0, 160, 60}} {}
 
+DefaultQuadtree::DefaultQuadtree(const utils::FloatRect& bounds) : DefaultQuadtree{5, 5, 0, bounds} {}
+
 DefaultQuadtree::DefaultQuadtree(int maxObjectsInNodeBeforeSplitInit, int maxNumberOfSplitsInit,
                                  int treeDepthLevelInit, utils::FloatRect boundsInit)
     : children{nullptr, nullptr, nullptr, nullptr},

@@ -57,7 +57,10 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     }
     case StateType::Editor:
     {
-        auto collisionSystemFactory = physics::PhysicsFactory::createCollisionSystemFactory();
+        const auto tileMapSize = tileMap->getSize();
+        const auto mapBoundaries =
+            utils::FloatRect(0, 0, static_cast<float>(tileMapSize.x), static_cast<float>(tileMapSize.y));
+        auto collisionSystemFactory = physics::PhysicsFactory::createCollisionSystemFactory(mapBoundaries);
 
         return std::make_unique<EditorState>(
             window, rendererPool, fileAccess, states,
@@ -66,7 +69,10 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     }
     case StateType::Game:
     {
-        auto collisionSystemFactory = physics::PhysicsFactory::createCollisionSystemFactory();
+        const auto tileMapSize = tileMap->getSize();
+        const auto mapBoundaries =
+            utils::FloatRect(0, 0, static_cast<float>(tileMapSize.x), static_cast<float>(tileMapSize.y));
+        auto collisionSystemFactory = physics::PhysicsFactory::createCollisionSystemFactory(mapBoundaries);
         auto rayCast = collisionSystemFactory->createRayCast();
         auto quadTree = collisionSystemFactory->getQuadTree();
 

@@ -10,6 +10,7 @@ class DefaultQuadtree : public Quadtree
 {
 public:
     DefaultQuadtree();
+    DefaultQuadtree(const utils::FloatRect& bounds);
     DefaultQuadtree(int maxObjectsInNodeBeforeSplit, int maxNumberOfSplits, int currentTreeDepthLevel,
                     utils::FloatRect bounds);
 
