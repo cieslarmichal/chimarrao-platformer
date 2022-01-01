@@ -6,10 +6,10 @@
 
 namespace components::core
 {
-class FollowerComponent : public MovementComponent
+class EnemyFollowerComponent : public MovementComponent
 {
 public:
-    FollowerComponent(ComponentOwner* owner, ComponentOwner* followedOwner);
+    EnemyFollowerComponent(ComponentOwner* owner, ComponentOwner* followedOwner);
 
     void loadDependentComponents() override;
     void update(utils::DeltaTime time, const input::Input& input) override;

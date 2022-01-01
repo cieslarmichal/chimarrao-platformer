@@ -1,6 +1,6 @@
 #include "DefaultCollisionSystem.h"
 
-#include "FollowerComponent.h"
+#include "FriendFollowerComponent.h"
 #include "FreeFallMovementComponent.h"
 #include "IdleNpcMovementComponent.h"
 #include "KeyboardAnimatedMovementComponent.h"
@@ -86,7 +86,7 @@ void DefaultCollisionSystem::resolve()
         {
             if (not collider->getOwner()
                         .getComponent<components::core::KeyboardAnimatedMovementComponent>() and
-                not collider->getOwner().getComponent<components::core::FollowerComponent>() and
+                not collider->getOwner().getComponent<components::core::FriendFollowerComponent>() and
                 not collider->getOwner().getComponent<components::core::IdleNpcMovementComponent>() and
                 not collider->getOwner().getComponent<components::core::FreeFallMovementComponent>() and
                 not collider->getOwner()

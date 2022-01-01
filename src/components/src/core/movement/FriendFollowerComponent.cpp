@@ -1,16 +1,16 @@
-#include "FollowerComponent.h"
+#include "FriendFollowerComponent.h"
 
 #include "exceptions/DependentComponentNotFound.h"
 
 namespace components::core
 {
 
-FollowerComponent::FollowerComponent(ComponentOwner* owner, ComponentOwner* followedOwner)
+FriendFollowerComponent::FriendFollowerComponent(ComponentOwner* owner, ComponentOwner* followedOwner)
     : MovementComponent{owner, 5.25f}, followedOwner{followedOwner}
 {
 }
 
-void FollowerComponent::loadDependentComponents()
+void FriendFollowerComponent::loadDependentComponents()
 {
     animation = owner->getComponent<AnimationComponent>();
     if (animation)
@@ -33,7 +33,7 @@ void FollowerComponent::loadDependentComponents()
     }
 }
 
-void FollowerComponent::update(utils::DeltaTime deltaTime, const input::Input&)
+void FriendFollowerComponent::update(utils::DeltaTime deltaTime, const input::Input&)
 {
     if (not enabled)
     {
@@ -42,13 +42,23 @@ void FollowerComponent::update(utils::DeltaTime deltaTime, const input::Input&)
 
     auto currentMovementSpeed = velocityComponent->getVelocity();
 
-    if (followedOwner->transform->getPosition().x - owner->transform->getPosition().x < -2.f)
+    if (followedOwner->transform->getPosition().x - owner->transform->getPosition().x < -6.f)
     {
+        if (not canMoveLeft and not canMoveDown and canMoveUp)
+        {
+            currentMovementSpeed.y = -3.4f * 4.5f;
+        }
+
         animation->setAnimationDirection(animations::AnimationDirection::Left);
         currentMovementSpeed.x = -movementSpeed;
     }
     else if (followedOwner->transform->getPosition().x - owner->transform->getPosition().x > 2.f)
     {
+        if (not canMoveRight and not canMoveDown and canMoveUp)
+        {
+            currentMovementSpeed.y = -3.4f * 4.5f;
+        }
+
         animation->setAnimationDirection(animations::AnimationDirection::Right);
         currentMovementSpeed.x = movementSpeed;
     }
@@ -73,7 +83,7 @@ void FollowerComponent::update(utils::DeltaTime deltaTime, const input::Input&)
     velocityComponent->setVelocity(currentMovementSpeed);
 }
 
-void FollowerComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input&)
+void FriendFollowerComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input&)
 {
     if (not enabled)
     {

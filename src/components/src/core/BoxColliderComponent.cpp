@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "FollowerComponent.h"
+#include "FriendFollowerComponent.h"
 #include "FreeFallMovementComponent.h"
 #include "IdleNpcMovementComponent.h"
 #include "KeyboardAnimatedMovementComponent.h"
@@ -31,7 +31,7 @@ void BoxColliderComponent::loadDependentComponents()
     movementComponent = owner->getComponent<KeyboardAnimatedMovementComponent>();
     if (not movementComponent)
     {
-        movementComponent = owner->getComponent<FollowerComponent>();
+        movementComponent = owner->getComponent<FriendFollowerComponent>();
     }
 
     if (not movementComponent)

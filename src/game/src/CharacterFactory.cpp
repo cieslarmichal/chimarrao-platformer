@@ -5,7 +5,7 @@
 #include "BoxColliderComponent.h"
 #include "CameraComponent.h"
 #include "DirectionComponent.h"
-#include "FollowerComponent.h"
+#include "FriendFollowerComponent.h"
 #include "GraphicsComponent.h"
 #include "IdleNpcMovementComponent.h"
 #include "ItemCollectorComponent.h"
@@ -69,7 +69,7 @@ CharacterFactory::createRabbitFollower(const std::shared_ptr<components::core::C
         follower->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2.f, 2.f}, position,
                                        graphics::Color::White, graphics::VisibilityLayer::Second);
     auto followerGraphicsId = followerGraphicsComponent->getGraphicsId();
-    follower->addComponent<components::core::FollowerComponent>(player.get());
+    follower->addComponent<components::core::FriendFollowerComponent>(player.get());
     const std::shared_ptr<animations::Animator> bunnyAnimator =
         animatorFactory->createBunnyAnimator(followerGraphicsId);
     follower->addComponent<components::core::AnimationComponent>(bunnyAnimator);
@@ -116,7 +116,7 @@ CharacterFactory::createBanditEnemy(const std::shared_ptr<components::core::Comp
         enemy->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{3.5f, 3.75f}, position,
                                     graphics::Color::White, graphics::VisibilityLayer::Second);
     auto enemyGraphicsId = enemyGraphicsComponent->getGraphicsId();
-    enemy->addComponent<components::core::FollowerComponent>(player.get());
+    enemy->addComponent<components::core::FriendFollowerComponent>(player.get());
     const std::shared_ptr<animations::Animator> banditAnimator =
         animatorFactory->createBanditAnimator(enemyGraphicsId);
     enemy->addComponent<components::core::AnimationComponent>(banditAnimator);

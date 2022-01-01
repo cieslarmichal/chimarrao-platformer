@@ -21,7 +21,7 @@ set(SOURCES
         src/ui/DefaultUIManager.cpp
         src/ui/UIComponentFactory.cpp
         src/core/CameraComponent.cpp
-        src/core/movement/FollowerComponent.cpp
+        src/core/movement/FriendFollowerComponent.cpp
         src/core/movement/MovementComponent.cpp
         src/core/health/HealthComponent.cpp
         src/core/health/HealthBarComponent.cpp
@@ -51,7 +51,7 @@ set(UT_SOURCES
         src/core/IdComponentTest.cpp
         src/core/movement/VelocityComponentTest.cpp
         src/core/CameraComponentTest.cpp
-        src/core/movement/FollowerComponentTest.cpp
+        src/core/movement/FriendFollowerComponentTest.cpp
         src/core/movement/MovementComponentTest.cpp
         src/core/health/HealthComponentTest.cpp
         src/core/health/HealthBarComponentTest.cpp

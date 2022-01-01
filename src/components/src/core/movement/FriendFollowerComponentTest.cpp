@@ -1,4 +1,4 @@
-#include "FollowerComponent.h"
+#include "FriendFollowerComponent.h"
 
 #include "gtest/gtest.h"
 
@@ -21,10 +21,10 @@ const utils::Vector2f positionOnLeft{3, 60};
 const utils::Vector2f positionOnRight = {154, 60};
 }
 
-class FollowerComponentTest : public Test
+class FriendFollowerComponentTest : public Test
 {
 public:
-    FollowerComponentTest()
+    FriendFollowerComponentTest()
     {
         followerOwner1.addComponent<AnimationComponent>(animator);
         followerOwner1.addComponent<VelocityComponent>();
@@ -45,35 +45,35 @@ public:
     ComponentOwner followerOwner2{position, "followerComponentTest2", sharedContext};
     ComponentOwner followedOwner1{positionOnLeft, "followerComponentTest3", sharedContext};
     ComponentOwner followedOwner2{positionOnRight, "followerComponentTest4", sharedContext};
-    FollowerComponent follower1{&followerOwner1, &followedOwner1};
-    FollowerComponent follower2{&followerOwner2, &followedOwner2};
+    FriendFollowerComponent follower1{&followerOwner1, &followedOwner1};
+    FriendFollowerComponent follower2{&followerOwner2, &followedOwner2};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
     StrictMock<input::InputMock> input;
 };
 
-TEST_F(FollowerComponentTest,
+TEST_F(FriendFollowerComponentTest,
        loadDependentComponentsWithoutAnimatorComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator", sharedContext};
-    FollowerComponent followerComponentWithoutAnimator{&componentOwnerWithoutAnimator, &followedOwner1};
+    FriendFollowerComponent followerComponentWithoutAnimator{&componentOwnerWithoutAnimator, &followedOwner1};
     componentOwnerWithoutAnimator.addComponent<VelocityComponent>();
 
     ASSERT_THROW(followerComponentWithoutAnimator.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
 }
 
-TEST_F(FollowerComponentTest,
+TEST_F(FriendFollowerComponentTest,
        loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity", sharedContext};
-    FollowerComponent followerComponentWithoutVelocity{&componentOwnerWithoutVelocity, &followedOwner1};
+    FriendFollowerComponent followerComponentWithoutVelocity{&componentOwnerWithoutVelocity, &followedOwner1};
     componentOwnerWithoutVelocity.addComponent<AnimationComponent>(animator);
 
     ASSERT_THROW(followerComponentWithoutVelocity.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
 }
 
-TEST_F(FollowerComponentTest, followedTargetOnLeft_shouldMoveLeft)
+TEST_F(FriendFollowerComponentTest, followedTargetOnLeft_shouldMoveLeft)
 {
     follower1.blockMoveDown();
     const auto positionBefore = follower1.getOwner().transform->getPosition();
@@ -87,7 +87,7 @@ TEST_F(FollowerComponentTest, followedTargetOnLeft_shouldMoveLeft)
     ASSERT_TRUE(positionAfter.x < positionBefore.x);
 }
 
-TEST_F(FollowerComponentTest, followedTargetOnRight_shouldMoveRight)
+TEST_F(FriendFollowerComponentTest, followedTargetOnRight_shouldMoveRight)
 {
     follower2.blockMoveDown();
     const auto positionBefore = follower2.getOwner().transform->getPosition();
