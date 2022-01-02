@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
+#include "FriendlyFireValidatorMock.h"
 #include "RendererPoolMock.h"
 
 #include "DefaultQuadtree.h"
@@ -68,14 +69,20 @@ public:
     std::shared_ptr<HealthComponent> targetHealthComponentOnLeftOutOfRange;
     std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::DefaultRayCast>(quadtree);
-    MeleeAttack meleeAttack{&componentOwner1, rayCast};
+    std::unique_ptr<StrictMock<FriendlyFireValidatorMock>> friendlyFireValidatorInit{
+        std::make_unique<StrictMock<FriendlyFireValidatorMock>>()};
+    StrictMock<FriendlyFireValidatorMock>* friendlyFireValidator{friendlyFireValidatorInit.get()};
+    MeleeAttack meleeAttack{&componentOwner1, rayCast, std::move(friendlyFireValidatorInit)};
 };
 
 TEST_F(MeleeAttackTest,
        givenComponentOwnerWithoutDirectionComponent_attack_shouldThrowDependentComponentNotFound)
 {
+    std::unique_ptr<StrictMock<FriendlyFireValidatorMock>> friendlyFireValidatorInit2{
+        std::make_unique<StrictMock<FriendlyFireValidatorMock>>()};
     ComponentOwner componentOwnerWithoutDirection{position1, "componentOwnerWithoutDirection", sharedContext};
-    MeleeAttack meleeAttackWithoutDirection{&componentOwnerWithoutDirection, rayCast};
+    MeleeAttack meleeAttackWithoutDirection{&componentOwnerWithoutDirection, rayCast,
+                                            std::move(friendlyFireValidatorInit2)};
 
     ASSERT_THROW(meleeAttackWithoutDirection.attack(),
                  components::core::exceptions::DependentComponentNotFound);
@@ -84,11 +91,14 @@ TEST_F(MeleeAttackTest,
 TEST_F(MeleeAttackTest,
        givenComponentOwnerWithoutBoxColliderComponent_attack_shouldThrowDependentComponentNotFound)
 {
+    std::unique_ptr<StrictMock<FriendlyFireValidatorMock>> friendlyFireValidatorInit2{
+        std::make_unique<StrictMock<FriendlyFireValidatorMock>>()};
     ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider",
                                                     sharedContext};
     componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>();
     componentOwnerWithoutBoxCollider.addComponent<DirectionComponent>();
-    MeleeAttack meleeAttackWithoutBoxCollider{&componentOwnerWithoutBoxCollider, rayCast};
+    MeleeAttack meleeAttackWithoutBoxCollider{&componentOwnerWithoutBoxCollider, rayCast,
+                                              std::move(friendlyFireValidatorInit2)};
 
     ASSERT_THROW(meleeAttackWithoutBoxCollider.attack(),
                  components::core::exceptions::DependentComponentNotFound);
@@ -99,10 +109,27 @@ TEST_F(MeleeAttackTest, givenTargetInAttackRangeOnRight_shouldDealDamageToTarget
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnRightInRange);
     EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Right));
-
+    EXPECT_CALL(*friendlyFireValidator,
+                validate(&boxColliderComponent1->getOwner(), &boxColliderComponentOnRightInRange->getOwner()))
+        .WillOnce(Return(FriendlyFireValidationResult::AttackAllowed));
     meleeAttack.attack();
 
     ASSERT_EQ(targetHealthComponentOnRightInRange->getCurrentHealth(), 90);
+}
+
+TEST_F(MeleeAttackTest,
+       givenTargetInAttackRangeOnRightAndVictimIsNotAllowedToAttack_shouldNotDealAnyDamageToTarget)
+{
+    quadtree->insertCollider(boxColliderComponent1);
+    quadtree->insertCollider(boxColliderComponentOnRightInRange);
+    EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Right));
+    EXPECT_CALL(*friendlyFireValidator,
+                validate(&boxColliderComponent1->getOwner(), &boxColliderComponentOnRightInRange->getOwner()))
+        .WillOnce(Return(FriendlyFireValidationResult::AttackNotAllowed));
+
+    meleeAttack.attack();
+
+    ASSERT_EQ(targetHealthComponentOnRightInRange->getCurrentHealth(), 100);
 }
 
 TEST_F(MeleeAttackTest, givenTargetOutOfAttackRangeOnRight_shouldNotDealAnyDamageToTarget)
@@ -121,10 +148,28 @@ TEST_F(MeleeAttackTest, givenTargetInAttackRangeOnLeft_shouldDealDamageToTarget)
     quadtree->insertCollider(boxColliderComponent1);
     quadtree->insertCollider(boxColliderComponentOnLeftInRange);
     EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Left));
+    EXPECT_CALL(*friendlyFireValidator,
+                validate(&boxColliderComponent1->getOwner(), &boxColliderComponentOnLeftInRange->getOwner()))
+        .WillOnce(Return(FriendlyFireValidationResult::AttackAllowed));
 
     meleeAttack.attack();
 
     ASSERT_EQ(targetHealthComponentOnLeftInRange->getCurrentHealth(), 90);
+}
+
+TEST_F(MeleeAttackTest,
+       givenTargetInAttackRangeOnLeftAndVictimIsNotAllowedToAttack_shouldNotDealAnyDamageToTarget)
+{
+    quadtree->insertCollider(boxColliderComponent1);
+    quadtree->insertCollider(boxColliderComponentOnLeftInRange);
+    EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Left));
+    EXPECT_CALL(*friendlyFireValidator,
+                validate(&boxColliderComponent1->getOwner(), &boxColliderComponentOnLeftInRange->getOwner()))
+        .WillOnce(Return(FriendlyFireValidationResult::AttackNotAllowed));
+
+    meleeAttack.attack();
+
+    ASSERT_EQ(targetHealthComponentOnLeftInRange->getCurrentHealth(), 100);
 }
 
 TEST_F(MeleeAttackTest, givenTargetOutOfAttackRangeOnLeft_shouldNotDealAnyDamageToTarget)

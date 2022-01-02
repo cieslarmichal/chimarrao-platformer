@@ -23,19 +23,19 @@ inline std::string toString(FriendlyFireValidationResult friendlyFireValidationR
     return friendlyFireValidationResultToString.at(friendlyFireValidationResult);
 }
 
-inline FriendlyFireValidationResult toCollisionLayer(const std::string& collisionLayerAsString)
+inline FriendlyFireValidationResult toFriendlyFireValidationResult(const std::string& friendlyFireAsString)
 {
-    const auto collisionLayerAsLowerString = utils::StringHelper::getLowerCases(collisionLayerAsString);
+    const auto friendlyFireAsLowerString = utils::StringHelper::getLowerCases(friendlyFireAsString);
 
-    std::unordered_map<std::string, FriendlyFireValidationResult> stringToCollisionLayer{
+    std::unordered_map<std::string, FriendlyFireValidationResult> stringToFriendlyFireValidationResult{
         {"attackAllowed", FriendlyFireValidationResult::AttackNotAllowed},
         {"attackNotAllowed", FriendlyFireValidationResult::AttackNotAllowed}};
 
-    return stringToCollisionLayer.at(collisionLayerAsLowerString);
+    return stringToFriendlyFireValidationResult.at(friendlyFireAsLowerString);
 }
 
-inline std::ostream& operator<<(std::ostream& os, FriendlyFireValidationResult collisionLayer)
+inline std::ostream& operator<<(std::ostream& os, FriendlyFireValidationResult friendlyFireValidationResult)
 {
-    return os << "FriendlyFireValidationResult::" << toString(collisionLayer);
+    return os << "FriendlyFireValidationResult::" << toString(friendlyFireValidationResult);
 }
 }

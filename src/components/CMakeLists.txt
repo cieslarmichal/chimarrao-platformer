@@ -35,6 +35,7 @@ set(SOURCES
         src/core/items/ItemHealEffect.cpp
         src/core/attack/MeleeAttack.cpp
         src/core/attack/ArtificialIntelligenceAttackComponent.cpp
+        src/core/attack/DefaultFriendlyFireValidator.cpp
         )
 
 set(UT_SOURCES
@@ -73,6 +74,7 @@ set(UT_SOURCES
         src/core/items/ItemHealEffectTest.cpp
         src/core/attack/MeleeAttackTest.cpp
         src/core/attack/ArtificialIntelligenceAttackComponentTest.cpp
+        src/core/attack/DefaultFriendlyFireValidatorTest.cpp
         )
 
 add_library(components ${SOURCES})

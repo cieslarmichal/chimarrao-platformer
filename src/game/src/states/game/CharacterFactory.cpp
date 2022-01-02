@@ -53,7 +53,9 @@ CharacterFactory::createPlayer(const utils::Vector2f& position)
                                                       static_cast<float>(tileMap->getSize().y) * 4.f});
     player->addComponent<components::core::HealthComponent>(1000);
     player->addComponent<components::core::DirectionComponent>();
-    auto attackStrategy = std::make_shared<components::core::MeleeAttack>(player.get(), rayCast);
+    auto friendlyFireValidator = std::make_unique<components::core::DefaultFriendlyFireValidator>();
+    auto attackStrategy = std::make_shared<components::core::MeleeAttack>(player.get(), rayCast,
+                                                                          std::move(friendlyFireValidator));
     player->addComponent<components::core::KeyboardAttackComponent>(attackStrategy);
     player->addComponent<components::core::HealthBarComponent>(sharedContext->rendererPool,
                                                                utils::Vector2f{1.5, -1});
@@ -129,7 +131,9 @@ CharacterFactory::createBanditEnemy(const std::shared_ptr<components::core::Comp
         utils::Vector2f{2.f, 2.95f}, components::core::CollisionLayer::Player, utils::Vector2f{0.7f, 0.8f});
     enemy->addComponent<components::core::VelocityComponent>();
     enemy->addComponent<components::core::DirectionComponent>();
-    auto attackStrategy = std::make_shared<components::core::MeleeAttack>(enemy.get(), rayCast);
+    auto friendlyFireValidator = std::make_unique<components::core::DefaultFriendlyFireValidator>();
+    auto attackStrategy = std::make_shared<components::core::MeleeAttack>(enemy.get(), rayCast,
+                                                                          std::move(friendlyFireValidator));
     enemy->addComponent<components::core::ArtificialIntelligenceAttackComponent>(player.get(),
                                                                                  attackStrategy);
     enemy->addComponent<components::core::HealthComponent>(50);

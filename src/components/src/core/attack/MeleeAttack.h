@@ -7,13 +7,14 @@
 #include "DirectionComponent.h"
 #include "RayCast.h"
 #include "Timer.h"
+#include "DefaultFriendlyFireValidator.h"
 
 namespace components::core
 {
 class MeleeAttack : public AttackStrategy
 {
 public:
-    MeleeAttack(ComponentOwner* owner, std::shared_ptr<physics::RayCast>);
+    MeleeAttack(ComponentOwner* owner, std::shared_ptr<physics::RayCast>, std::unique_ptr<FriendlyFireValidator>);
 
     void attack() override;
 
@@ -27,5 +28,6 @@ private:
     float range{4};
     unsigned int damage{10};
     std::once_flag componentsInitialized;
+    std::unique_ptr<FriendlyFireValidator> friendlyFireValidator;
 };
 }

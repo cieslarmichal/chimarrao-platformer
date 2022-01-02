@@ -8,8 +8,9 @@
 namespace components::core
 {
 
-MeleeAttack::MeleeAttack(ComponentOwner* owner, std::shared_ptr<physics::RayCast> rayCast)
-    : owner{owner}, rayCast{std::move(rayCast)}
+MeleeAttack::MeleeAttack(ComponentOwner* owner, std::shared_ptr<physics::RayCast> rayCast,
+                         std::unique_ptr<FriendlyFireValidator> friendlyFireValidatorInit)
+    : owner{owner}, rayCast{std::move(rayCast)}, friendlyFireValidator{std::move(friendlyFireValidatorInit)}
 {
 }
 
@@ -30,6 +31,12 @@ void MeleeAttack::attack()
 
     if (result.collision)
     {
+        if (friendlyFireValidator->validate(owner, result.collision) ==
+            FriendlyFireValidationResult::AttackNotAllowed)
+        {
+            return;
+        }
+
         if (auto health = result.collision->getComponent<HealthComponent>())
         {
             health->loseHealthPoints(damage);
