@@ -80,6 +80,7 @@ target_include_directories(game PUBLIC
         src/states
         src/states/editor
         src/states/game
+        src/states/game/levels
         src/states/chooseMap
         src/states/controls
         src/states/settings
