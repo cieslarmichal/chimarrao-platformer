@@ -24,15 +24,16 @@ public:
     void setTileMapInfo(const TileMapInfo&) override;
     void setName(const std::string&) override;
     const std::string& getName() const override;
-    std::string getPath() const override;
     void setTile(utils::Vector2i position, TileType value) override;
     std::shared_ptr<TileInfo>& getTile(utils::Vector2i position) override;
     utils::Vector2i getSize() const override;
     void extend() override;
+    bool isCustomMap() const override;
 
 private:
     TileMapInfo tileMapInfo;
     std::unique_ptr<TileMapSerializer> tileMapSerializer;
     std::shared_ptr<utils::FileAccess> fileAccess;
+    bool customMap{true};
 };
 }

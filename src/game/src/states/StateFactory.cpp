@@ -10,16 +10,15 @@
 #include "EditorState.h"
 #include "FileSystemMapsReader.h"
 #include "GameState.h"
-#include "navigators/GridButtonsNavigator.h"
-#include "states/menu/MenuState.h"
-#include "states/menu/MenuStateUIConfigBuilder.h"
-#include "navigators/PaginatedButtonsNavigator.h"
-#include "states/pause/PauseState.h"
+#include "NewGameState.h"
 #include "PhysicsFactory.h"
 #include "SaveMapState.h"
 #include "SettingsState.h"
 #include "SettingsStateUIConfigBuilder.h"
 #include "TimerFactory.h"
+#include "menu/MenuState.h"
+#include "menu/MenuStateUIConfigBuilder.h"
+#include "pause/PauseState.h"
 
 namespace game
 {
@@ -57,9 +56,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     }
     case StateType::Editor:
     {
-        const auto tileMapSize = tileMap->getSize();
-        const auto mapBoundaries =
-            utils::FloatRect(0, 0, static_cast<float>(tileMapSize.x), static_cast<float>(tileMapSize.y));
+        const auto mapBoundaries = utils::FloatRect(0, 0, 80, 60);
         auto collisionSystemFactory = physics::PhysicsFactory::createCollisionSystemFactory(mapBoundaries);
 
         return std::make_unique<EditorState>(
@@ -113,6 +110,10 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
         auto uiManager = std::make_shared<components::ui::DefaultUIManager>(sharedContext);
         return std::make_unique<ChooseMapState>(window, rendererPool, fileAccess, states, uiManager, tileMap,
                                                 std::make_unique<FileSystemMapsReader>(fileAccess));
+    }
+    case StateType::NewGame:
+    {
+        return std::make_unique<NewGameState>(window, rendererPool, fileAccess, states, tileMap);
     }
     default:
     {

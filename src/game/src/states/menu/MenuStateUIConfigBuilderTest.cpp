@@ -4,7 +4,7 @@
 
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
-#include "states/StatesMock.h"
+#include "StatesMock.h"
 #include "UIManagerMock.h"
 #include "WindowMock.h"
 
@@ -17,16 +17,18 @@ using namespace ::testing;
 
 namespace
 {
-const std::vector<std::string> expectedButtonNames{
-    "menuPlayButton", "menuMapEditorButton", "menuControlsButton", "menuSettingsButton", "menuExitButton"};
+const std::vector<std::string> expectedButtonNames{"menuNewGameButton",   "menuChooseMapButton",
+                                                   "menuMapEditorButton", "menuControlsButton",
+                                                   "menuSettingsButton",  "menuExitButton"};
 const std::vector<std::string> expectedImagesNames{"menuIcon1Image", "menuIcon2Image", "menuIcon3Image",
-                                                   "menuIcon4Image", "menuIcon5Image"};
+                                                   "menuIcon4Image", "menuIcon5Image", "menuIcon6Image"};
 const std::vector<std::vector<GridButtonInfo>> expectedGridButtonsInfo{
-    {GridButtonInfo{"menuPlayButton", 0, false, false}},
-    {GridButtonInfo{"menuMapEditorButton", 1, false, false}},
-    {GridButtonInfo{"menuControlsButton", 2, false, false}},
-    {GridButtonInfo{"menuSettingsButton", 3, false, false}},
-    {GridButtonInfo{"menuExitButton", 4, false, false}}};
+    {GridButtonInfo{"menuNewGameButton", 0, false, false}},
+    {GridButtonInfo{"menuChooseMapButton", 1, false, false}},
+    {GridButtonInfo{"menuMapEditorButton", 2, false, false}},
+    {GridButtonInfo{"menuControlsButton", 3, false, false}},
+    {GridButtonInfo{"menuSettingsButton", 4, false, false}},
+    {GridButtonInfo{"menuExitButton", 5, false, false}}};
 }
 class MenuStateUIConfigBuilderTest : public Test
 {

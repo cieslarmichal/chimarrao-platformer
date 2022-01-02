@@ -1,7 +1,7 @@
 #include "GameFactory.h"
 
 #include "AudioFactory.h"
-#include "states/DefaultStates.h"
+#include "DefaultStates.h"
 #include "FileAccessFactory.h"
 #include "GraphicsFactory.h"
 #include "InputManagerFactory.h"

@@ -3,8 +3,8 @@
 #include <utility>
 
 #include "MenuStateUIConfigBuilder.h"
-#include "navigators/PaginatedButtonsNavigator.h"
 #include "TimerFactory.h"
+#include "navigators/PaginatedButtonsNavigator.h"
 
 namespace game
 {
@@ -81,6 +81,7 @@ void MenuState::handleWindowSizeChange(const utils::Vector2u& windowSize)
 void MenuState::newGame()
 {
     states.deactivateCurrentState();
+    states.addNextState(StateType::NewGame);
 }
 
 void MenuState::chooseMap()

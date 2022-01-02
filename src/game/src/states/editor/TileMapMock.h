@@ -14,10 +14,10 @@ public:
     MOCK_METHOD(void, setTileMapInfo, (const TileMapInfo&), (override));
     MOCK_METHOD(void, setName, (const std::string&), (override));
     MOCK_METHOD(const std::string&, getName, (), (const override));
-    MOCK_METHOD(std::string, getPath, (), (const override));
     MOCK_METHOD(void, setTile, (utils::Vector2i position, TileType value), (override));
     MOCK_METHOD(std::shared_ptr<TileInfo>&, getTile, (utils::Vector2i position), (override));
     MOCK_METHOD(utils::Vector2i, getSize, (), (const override));
     MOCK_METHOD(void, extend, (), (override));
+    MOCK_METHOD(bool, isCustomMap, (), (const override));
 };
 }

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "navigators/GridButtonsNavigator.h"
-#include "states/State.h"
+#include "State.h"
 #include "UIConfig.h"
 #include "UIManager.h"
 

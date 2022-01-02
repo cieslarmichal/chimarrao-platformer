@@ -10,7 +10,7 @@
 #include "MusicManager.h"
 #include "ObstacleFactory.h"
 #include "RayCast.h"
-#include "states/State.h"
+#include "State.h"
 #include "Timer.h"
 #include "UIManager.h"
 #include "TileMap.h"

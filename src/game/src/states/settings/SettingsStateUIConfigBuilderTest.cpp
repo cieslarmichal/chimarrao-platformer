@@ -4,7 +4,7 @@
 
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
-#include "states/StatesMock.h"
+#include "StatesMock.h"
 #include "UIManagerMock.h"
 #include "WindowMock.h"
 

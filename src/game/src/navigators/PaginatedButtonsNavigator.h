@@ -1,6 +1,6 @@
 #pragma once
 
-#include "states/NextState.h"
+#include "NextState.h"
 #include "Timer.h"
 #include "UIManager.h"
 

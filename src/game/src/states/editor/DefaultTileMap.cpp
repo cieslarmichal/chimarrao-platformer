@@ -26,8 +26,9 @@ DefaultTileMap::DefaultTileMap(std::string name, utils::Vector2i mapSizeInit,
 
 void DefaultTileMap::saveToFile()
 {
-    auto serializedMapInfo = tileMapSerializer->serialize(tileMapInfo);
-    fileAccess->write(getPath(), serializedMapInfo);
+    const auto serializedMapInfo = tileMapSerializer->serialize(tileMapInfo);
+    const auto path = utils::ProjectPathReader::getProjectRootPath() + "maps/custom/" + tileMapInfo.name + ".map";
+    fileAccess->write(path, serializedMapInfo);
 }
 
 std::shared_ptr<TileInfo>& DefaultTileMap::getTile(utils::Vector2i position)
@@ -50,11 +51,6 @@ const std::string& DefaultTileMap::getName() const
     return tileMapInfo.name;
 }
 
-std::string DefaultTileMap::getPath() const
-{
-    return utils::ProjectPathReader::getProjectRootPath() + "maps/custom/" + tileMapInfo.name + ".map";
-}
-
 void DefaultTileMap::setTileMapInfo(const TileMapInfo& newTileMapInfo)
 {
     tileMapInfo = newTileMapInfo;
@@ -73,6 +69,11 @@ void DefaultTileMap::setTileMapInfo(const TileMapInfo& newTileMapInfo)
 
 void DefaultTileMap::loadFromFile(const std::string& path)
 {
+    if (path.find("story/") != std::string::npos)
+    {
+        customMap = false;
+    }
+
     auto mapFile = fileAccess->readContent(path);
     auto tileMapInfoFroFile = tileMapSerializer->deserialize(mapFile);
     setTileMapInfo(tileMapInfoFroFile);
@@ -106,5 +107,10 @@ void DefaultTileMap::extend()
 
     tileMapInfo.mapSize.x *= 2;
     tileMapInfo.tiles = extendedTiles;
+}
+
+bool DefaultTileMap::isCustomMap() const
+{
+    return customMap;
 }
 }

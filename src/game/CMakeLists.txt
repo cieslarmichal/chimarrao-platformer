@@ -26,7 +26,7 @@ set(SOURCES
         src/states/DefaultStates.cpp
         src/states/StateFactory.cpp
         src/GameFactory.cpp
-        src/FileSystemMapsReader.cpp
+        src/states/chooseMap/FileSystemMapsReader.cpp
         src/DefaultComponentOwnersManager.cpp
         src/navigators/PaginatedButtonsNavigator.cpp
         src/navigators/GridButtonsNavigator.cpp
@@ -52,7 +52,7 @@ set(UT_SOURCES
         src/states/controls/ControlsStateTest.cpp
         src/states/editor/SaveMapStateTest.cpp
         src/states/chooseMap/ChooseMapStateTest.cpp
-        src/FileSystemMapsReaderTest.cpp
+        src/states/chooseMap/FileSystemMapsReaderTest.cpp
         src/states/controls/ControlsStateUIConfigBuilderTest.cpp
         src/states/editor/EditorMenuStateUIConfigBuilderTest.cpp
         src/states/editor/EditorStateUIConfigBuilderTest.cpp
@@ -64,7 +64,7 @@ set(UT_SOURCES
         src/states/editor/TileMapSerializerJsonTest.cpp
         src/states/chooseMap/ChooseMapStateUIConfigBuilderTest.cpp
         src/states/editor/LayoutTileTest.cpp
-        src/states/editor/TileMapTest.cpp
+        src/states/editor/DefaultTileMapTest.cpp
         src/states/editor/TileTypeTest.cpp
         src/DefaultComponentOwnersManagerTest.cpp
         src/navigators/PaginatedButtonsNavigatorTest.cpp
@@ -77,6 +77,7 @@ set(UT_SOURCES
 add_library(game ${SOURCES})
 target_include_directories(game PUBLIC
         src
+        src/states
         src/states/editor
         src/states/game
         src/states/chooseMap

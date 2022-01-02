@@ -4,7 +4,7 @@
 
 #include "InputManagerMock.h"
 #include "InputMock.h"
-#include "states/StatesMock.h"
+#include "StatesMock.h"
 #include "WindowMock.h"
 
 using namespace game;

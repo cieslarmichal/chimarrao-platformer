@@ -76,7 +76,7 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
     };
     auto newGameButtonMouseOverActions =
         components::ui::MouseOverActions{newGameButtonOnMouseOver, newGameOnMouseOut};
-    const auto newGameButtonClickAction = [=] { menuState->chooseMap(); };
+    const auto newGameButtonClickAction = [=] { menuState->newGame(); };
     auto newGameButtonConfig = std::make_unique<components::ui::ButtonConfig>(
         "menuNewGameButton", newGameButtonPosition, buttonSize, buttonColor, "New game", graphics::Color::Black, 35,
         fontPath, utils::Vector2f{3, 1}, newGameButtonClickAction, newGameButtonMouseOverActions);

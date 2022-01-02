@@ -5,8 +5,8 @@
 #include "GameTimer.h"
 #include "InputManager.h"
 #include "RendererPool.h"
-#include "states/State.h"
-#include "states/States.h"
+#include "State.h"
+#include "States.h"
 #include "Window.h"
 #include "TileMap.h"
 

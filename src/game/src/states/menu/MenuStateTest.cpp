@@ -5,7 +5,7 @@
 #include "FileAccessMock.h"
 #include "InputMock.h"
 #include "RendererPoolMock.h"
-#include "states/StatesMock.h"
+#include "StatesMock.h"
 #include "UIManagerMock.h"
 #include "WindowMock.h"
 
@@ -31,7 +31,7 @@ public:
         EXPECT_CALL(*uiManager, createUI(_));
         expectHideAllIcons();
         EXPECT_CALL(*uiManager, activateComponent("menuIcon1Image"));
-        EXPECT_CALL(*uiManager, setColor("menuPlayButton", buttonHoverColor));
+        EXPECT_CALL(*uiManager, setColor("menuNewGameButton", buttonHoverColor));
     }
 
     void expectHideAllIcons()
@@ -41,6 +41,7 @@ public:
         EXPECT_CALL(*uiManager, deactivateComponent("menuIcon3Image"));
         EXPECT_CALL(*uiManager, deactivateComponent("menuIcon4Image"));
         EXPECT_CALL(*uiManager, deactivateComponent("menuIcon5Image"));
+        EXPECT_CALL(*uiManager, deactivateComponent("menuIcon6Image"));
     }
 
     std::shared_ptr<StrictMock<window::WindowMock>> window =

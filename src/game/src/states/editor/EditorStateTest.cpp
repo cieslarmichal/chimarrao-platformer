@@ -8,7 +8,7 @@
 #include "FileAccessMock.h"
 #include "InputMock.h"
 #include "RendererPoolMock.h"
-#include "states/StatesMock.h"
+#include "StatesMock.h"
 #include "TimerMock.h"
 #include "UIManagerMock.h"
 #include "WindowMock.h"

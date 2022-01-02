@@ -27,7 +27,7 @@ const TileMapInfo newTileMapInfoWithTiles{
       std::make_shared<TileInfo>(std::optional<TileType>{std::nullopt})}}};
 }
 
-class TileMapTest : public Test
+class DefaultTileMapTest : public Test
 {
 public:
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
@@ -38,21 +38,14 @@ public:
     DefaultTileMap tileMap{mapName, mapSize, std::move(mapSerializerInit), fileAccess};
 };
 
-TEST_F(TileMapTest, getName_shouldReturnMapName)
+TEST_F(DefaultTileMapTest, getName_shouldReturnMapName)
 {
     auto name = tileMap.getName();
 
     EXPECT_EQ(mapName, name);
 }
 
-TEST_F(TileMapTest, getPath_shouldReturnMapPath)
-{
-    auto path = tileMap.getPath();
-
-    EXPECT_EQ(mapPath, path);
-}
-
-TEST_F(TileMapTest, setName_giveNewNam_getNameShouldReturnNewName)
+TEST_F(DefaultTileMapTest, setName_giveNewNam_getNameShouldReturnNewName)
 {
     tileMap.setName(newMapName);
     auto name = tileMap.getName();
@@ -60,7 +53,7 @@ TEST_F(TileMapTest, setName_giveNewNam_getNameShouldReturnNewName)
     EXPECT_EQ(newMapName, name);
 }
 
-TEST_F(TileMapTest, saveToFile_shouldUserSerializerAndFileAccess)
+TEST_F(DefaultTileMapTest, saveToFile_shouldUserSerializerAndFileAccess)
 {
     EXPECT_CALL(*mapSerializer, serialize(_)).WillOnce(Return(serializedMap));
     EXPECT_CALL(*fileAccess, write(mapPath, serializedMap));
@@ -68,14 +61,14 @@ TEST_F(TileMapTest, saveToFile_shouldUserSerializerAndFileAccess)
     tileMap.saveToFile();
 }
 
-TEST_F(TileMapTest, getTile_givePositionOnMap_shouldReturnEmptyTile)
+TEST_F(DefaultTileMapTest, getTile_givePositionOnMap_shouldReturnEmptyTile)
 {
     auto tile = tileMap.getTile(positionOnMap);
 
     EXPECT_EQ(std::nullopt, tile->type);
 }
 
-TEST_F(TileMapTest, setTile_givePositionOnMapAndBrickType_getterShouldReturnBrickType)
+TEST_F(DefaultTileMapTest, setTile_givePositionOnMapAndBrickType_getterShouldReturnBrickType)
 {
     tileMap.setTile(positionOnMap, TileType::Brick);
     auto tile = tileMap.getTile(positionOnMap);
@@ -83,7 +76,7 @@ TEST_F(TileMapTest, setTile_givePositionOnMapAndBrickType_getterShouldReturnBric
     EXPECT_EQ(TileType::Brick, tile->type);
 }
 
-TEST_F(TileMapTest, setTileMapInfo_giveNewTileMapInfoWithTiles_shouldSetAllValues)
+TEST_F(DefaultTileMapTest, setTileMapInfo_giveNewTileMapInfoWithTiles_shouldSetAllValues)
 {
     tileMap.setTileMapInfo(newTileMapInfoWithTiles);
     auto& tile = tileMap.getTile(positionOnNewMap);
