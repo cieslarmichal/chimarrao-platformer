@@ -5,10 +5,10 @@
 #include "GameTimer.h"
 #include "InputManager.h"
 #include "RendererPool.h"
-#include "State.h"
-#include "States.h"
+#include "states/State.h"
+#include "states/States.h"
 #include "Window.h"
-#include "editor/TileMap.h"
+#include "TileMap.h"
 
 namespace game
 {

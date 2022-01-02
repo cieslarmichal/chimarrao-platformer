@@ -1,79 +1,89 @@
 set(SOURCES
         src/GameTimer.cpp
         src/Game.cpp
-        src/State.cpp
-        src/GameState.cpp
-        src/MenuState.cpp
-        src/EditorState.cpp
-        src/PauseState.cpp
-        src/editor/DefaultTileMap.cpp
-        src/EditorMenuState.cpp
-        src/SettingsState.cpp
-        src/ControlsState.cpp
-        src/SaveMapState.cpp
-        src/ChooseMapState.cpp
-        src/editor/LayoutTile.cpp
-        src/editor/TileMapSerializerJson.cpp
-        src/ControlsStateUIConfigBuilder.cpp
-        src/EditorMenuStateUIConfigBuilder.cpp
-        src/EditorStateUIConfigBuilder.cpp
-        src/GameStateUIConfigBuilder.cpp
-        src/MenuStateUIConfigBuilder.cpp
-        src/PauseStateUIConfigBuilder.cpp
-        src/SaveMapStateUIConfigBuilder.cpp
-        src/SettingsStateUIConfigBuilder.cpp
-        src/ChooseMapStateUIConfigBuilder.cpp
-        src/DefaultStates.cpp
-        src/StateFactory.cpp
+        src/states/State.cpp
+        src/states/game/GameState.cpp
+        src/states/menu/MenuState.cpp
+        src/states/editor/EditorState.cpp
+        src/states/pause/PauseState.cpp
+        src/states/editor/DefaultTileMap.cpp
+        src/states/editor/EditorMenuState.cpp
+        src/states/settings/SettingsState.cpp
+        src/states/controls/ControlsState.cpp
+        src/states/editor/SaveMapState.cpp
+        src/states/chooseMap/ChooseMapState.cpp
+        src/states/editor/LayoutTile.cpp
+        src/states/editor/TileMapSerializerJson.cpp
+        src/states/controls/ControlsStateUIConfigBuilder.cpp
+        src/states/editor/EditorMenuStateUIConfigBuilder.cpp
+        src/states/editor/EditorStateUIConfigBuilder.cpp
+        src/states/game/GameStateUIConfigBuilder.cpp
+        src/states/menu/MenuStateUIConfigBuilder.cpp
+        src/states/pause/PauseStateUIConfigBuilder.cpp
+        src/states/editor/SaveMapStateUIConfigBuilder.cpp
+        src/states/settings/SettingsStateUIConfigBuilder.cpp
+        src/states/chooseMap/ChooseMapStateUIConfigBuilder.cpp
+        src/states/DefaultStates.cpp
+        src/states/StateFactory.cpp
         src/GameFactory.cpp
         src/FileSystemMapsReader.cpp
         src/DefaultComponentOwnersManager.cpp
-        src/PaginatedButtonsNavigator.cpp
-        src/GridButtonsNavigator.cpp
-        src/HeadsUpDisplay.cpp
-        src/HeadsUpDisplayUIConfigBuilder.cpp
-        src/CharacterFactory.cpp
-        src/ItemFactory.cpp
-        src/ObstacleFactory.cpp
-        src/DefaultWorldBuilder.cpp
+        src/navigators/PaginatedButtonsNavigator.cpp
+        src/navigators/GridButtonsNavigator.cpp
+        src/states/game/HeadsUpDisplay.cpp
+        src/states/game/HeadsUpDisplayUIConfigBuilder.cpp
+        src/states/game/CharacterFactory.cpp
+        src/states/game/ItemFactory.cpp
+        src/states/game/ObstacleFactory.cpp
+        src/states/game/DefaultWorldBuilder.cpp
         )
 
 
 set(UT_SOURCES
         src/GameTimerTest.cpp
         src/GameTest.cpp
-        src/GameStateTest.cpp
-        src/MenuStateTest.cpp
-        src/EditorStateTest.cpp
-        src/PauseStateTest.cpp
-        src/EditorMenuStateTest.cpp
-        src/SettingsStateTest.cpp
-        src/ControlsStateTest.cpp
-        src/SaveMapStateTest.cpp
-        src/ChooseMapStateTest.cpp
+        src/states/game/GameStateTest.cpp
+        src/states/menu/MenuStateTest.cpp
+        src/states/editor/EditorStateTest.cpp
+        src/states/pause/PauseStateTest.cpp
+        src/states/editor/EditorMenuStateTest.cpp
+        src/states/settings/SettingsStateTest.cpp
+        src/states/controls/ControlsStateTest.cpp
+        src/states/editor/SaveMapStateTest.cpp
+        src/states/chooseMap/ChooseMapStateTest.cpp
         src/FileSystemMapsReaderTest.cpp
-        src/ControlsStateUIConfigBuilderTest.cpp
-        src/EditorMenuStateUIConfigBuilderTest.cpp
-        src/EditorStateUIConfigBuilderTest.cpp
-        src/GameStateUIConfigBuilderTest.cpp
-        src/MenuStateUIConfigBuilderTest.cpp
-        src/PauseStateUIConfigBuilderTest.cpp
-        src/SaveMapStateUIConfigBuilderTest.cpp
-        src/SettingsStateUIConfigBuilderTest.cpp
-        src/editor/TileMapSerializerJsonTest.cpp
-        src/ChooseMapStateUIConfigBuilderTest.cpp
-        src/editor/LayoutTileTest.cpp
-        src/editor/TileMapTest.cpp
-        src/editor/TileTypeTest.cpp
+        src/states/controls/ControlsStateUIConfigBuilderTest.cpp
+        src/states/editor/EditorMenuStateUIConfigBuilderTest.cpp
+        src/states/editor/EditorStateUIConfigBuilderTest.cpp
+        src/states/game/GameStateUIConfigBuilderTest.cpp
+        src/states/menu/MenuStateUIConfigBuilderTest.cpp
+        src/states/pause/PauseStateUIConfigBuilderTest.cpp
+        src/states/editor/SaveMapStateUIConfigBuilderTest.cpp
+        src/states/settings/SettingsStateUIConfigBuilderTest.cpp
+        src/states/editor/TileMapSerializerJsonTest.cpp
+        src/states/chooseMap/ChooseMapStateUIConfigBuilderTest.cpp
+        src/states/editor/LayoutTileTest.cpp
+        src/states/editor/TileMapTest.cpp
+        src/states/editor/TileTypeTest.cpp
         src/DefaultComponentOwnersManagerTest.cpp
-        src/PaginatedButtonsNavigatorTest.cpp
-        src/GridButtonsNavigatorTest.cpp
-        src/HeadsUpDisplayTest.cpp
-        src/HeadsUpDisplayUIConfigBuilderTest.cpp
+        src/navigators/PaginatedButtonsNavigatorTest.cpp
+        src/navigators/GridButtonsNavigatorTest.cpp
+        src/states/game/HeadsUpDisplayTest.cpp
+        src/states/game/HeadsUpDisplayUIConfigBuilderTest.cpp
         )
 
 add_library(game ${SOURCES})
-target_include_directories(game PUBLIC src ${JSON_INCLUDE_DIR} ${Boost_INCLUDE_DIR})
+target_include_directories(game PUBLIC
+        src
+        src/states/editor
+        src/states/game
+        src/states/chooseMap
+        src/states/controls
+        src/states/settings
+        src/navigators
+        ${JSON_INCLUDE_DIR}
+        ${Boost_INCLUDE_DIR}
+        )
 target_link_libraries(game PUBLIC utils graphics input components physics nfd audio)
 target_compile_options(game PUBLIC ${FLAGS})
 
