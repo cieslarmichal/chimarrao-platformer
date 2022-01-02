@@ -53,7 +53,8 @@ LayoutTile::LayoutTile(const std::shared_ptr<components::core::SharedContext>& s
     componentOwner->addComponent<components::core::ClickableComponent>(
         std::vector<components::core::KeyAction>{
             {input::InputKey::MouseRight, onRightMouseButtonClickActionLambda},
-            {input::InputKey::MouseLeft, onLeftMouseButtonClickActionLambda}}, false);
+            {input::InputKey::MouseLeft, onLeftMouseButtonClickActionLambda}},
+        false);
     const auto onMouseOverActionLambda = [=, &tileMap, &currentTileType]
     {
         graphicsComponent->setVisibility(graphics::VisibilityLayer::First);

@@ -2,11 +2,11 @@
 
 #include "MusicManager.h"
 #include "RendererPool.h"
+#include "SharedContext.h"
 #include "State.h"
 #include "States.h"
 #include "Window.h"
 #include "editor/TileMap.h"
-#include "SharedContext.h"
 
 namespace game
 {

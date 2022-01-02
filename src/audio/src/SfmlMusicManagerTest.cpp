@@ -6,8 +6,8 @@
 
 #include "MusicIdGenerator.h"
 #include "ProjectPathReader.h"
-#include "exceptions/MusicNotFound.h"
 #include "exceptions/InvalidVolume.h"
+#include "exceptions/MusicNotFound.h"
 
 using namespace audio;
 using namespace ::testing;

@@ -5,6 +5,7 @@
 #include "BoxColliderComponent.h"
 #include "CameraComponent.h"
 #include "DirectionComponent.h"
+#include "EnemyFollowerComponent.h"
 #include "FriendFollowerComponent.h"
 #include "GraphicsComponent.h"
 #include "IdleNpcMovementComponent.h"
@@ -116,7 +117,7 @@ CharacterFactory::createBanditEnemy(const std::shared_ptr<components::core::Comp
         enemy->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{3.5f, 3.75f}, position,
                                     graphics::Color::White, graphics::VisibilityLayer::Second);
     auto enemyGraphicsId = enemyGraphicsComponent->getGraphicsId();
-    enemy->addComponent<components::core::FriendFollowerComponent>(player.get());
+    enemy->addComponent<components::core::EnemyFollowerComponent>(player.get());
     const std::shared_ptr<animations::Animator> banditAnimator =
         animatorFactory->createBanditAnimator(enemyGraphicsId);
     enemy->addComponent<components::core::AnimationComponent>(banditAnimator);

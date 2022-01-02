@@ -2,8 +2,9 @@
 
 #include <cmath>
 
-#include "FriendFollowerComponent.h"
+#include "EnemyFollowerComponent.h"
 #include "FreeFallMovementComponent.h"
+#include "FriendFollowerComponent.h"
 #include "IdleNpcMovementComponent.h"
 #include "KeyboardAnimatedMovementComponent.h"
 #include "KeyboardHorizontalMovementComponent.h"
@@ -29,9 +30,15 @@ void BoxColliderComponent::update(utils::DeltaTime deltaTime, const input::Input
 void BoxColliderComponent::loadDependentComponents()
 {
     movementComponent = owner->getComponent<KeyboardAnimatedMovementComponent>();
+
     if (not movementComponent)
     {
         movementComponent = owner->getComponent<FriendFollowerComponent>();
+    }
+
+    if (not movementComponent)
+    {
+        movementComponent = owner->getComponent<EnemyFollowerComponent>();
     }
 
     if (not movementComponent)

@@ -1,8 +1,8 @@
 #include "SfmlMusicManager.h"
 
 #include "MusicIdGenerator.h"
-#include "exceptions/MusicNotFound.h"
 #include "exceptions/InvalidVolume.h"
+#include "exceptions/MusicNotFound.h"
 
 namespace audio
 {

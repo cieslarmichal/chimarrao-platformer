@@ -37,7 +37,7 @@ void MouseOverComponent::update(utils::DeltaTime, const input::Input& input)
         return;
     }
 
-    const auto mousePosition = relative? input.getMouseRelativePosition(): input.getMouseAbsolutePosition();
+    const auto mousePosition = relative ? input.getMouseRelativePosition() : input.getMouseAbsolutePosition();
 
     if (not mouseOver && boxCollider->intersects(mousePosition))
     {

@@ -33,8 +33,7 @@ void components::core::CameraComponent::lateUpdate(utils::DeltaTime, const input
         cameraViewCenter.x = mapRect.left + cameraViewSize.x / 2;
     }
 
-    if (blockCameraOnRightSide and
-        cameraViewCenter.x > mapRect.left + mapRect.width - cameraViewSize.x / 2)
+    if (blockCameraOnRightSide and cameraViewCenter.x > mapRect.left + mapRect.width - cameraViewSize.x / 2)
     {
         cameraViewCenter.x = mapRect.left + mapRect.width - cameraViewSize.x / 2;
     }

@@ -16,7 +16,6 @@
 #include "WindowMock.h"
 #include "WorldBuilderMock.h"
 #include "editor/TileMapMock.h"
-#include "editor/TileMapSerializerMock.h"
 
 #include "AnimationComponent.h"
 #include "DirectionComponent.h"
@@ -50,6 +49,7 @@ public:
         EXPECT_CALL(*uiManager, createUI(_));
         EXPECT_CALL(*musicManager, acquire(_));
         EXPECT_CALL(*musicManager, play(_));
+        EXPECT_CALL(*musicManager, setVolume(_, _));
     }
 
     const unsigned int initialHealthPoints{100};
