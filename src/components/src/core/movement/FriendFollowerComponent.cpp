@@ -5,8 +5,8 @@
 namespace components::core
 {
 
-FriendFollowerComponent::FriendFollowerComponent(ComponentOwner* owner, ComponentOwner* followedOwner)
-    : MovementComponent{owner, 5.25f}, followedOwner{followedOwner}
+FriendFollowerComponent::FriendFollowerComponent(ComponentOwner* owner, ComponentOwner* player)
+    : MovementComponent{owner, 5.25f}, player{player}
 {
 }
 
@@ -41,26 +41,37 @@ void FriendFollowerComponent::update(utils::DeltaTime deltaTime, const input::In
     }
 
     auto currentMovementSpeed = velocityComponent->getVelocity();
+    currentMovementSpeed.x = 0;
 
-    if (followedOwner->transform->getPosition().x - owner->transform->getPosition().x < -6.f)
+    const auto distanceBetweenFriendAndPlayerOnXAxis =
+        player->transform->getPosition().x - owner->transform->getPosition().x;
+
+    if (distanceBetweenFriendAndPlayerOnXAxis < -8.f)
     {
         if (not canMoveLeft and not canMoveDown and canMoveUp)
         {
             currentMovementSpeed.y = -3.4f * 4.5f;
         }
 
-        animation->setAnimationDirection(animations::AnimationDirection::Left);
         currentMovementSpeed.x = -movementSpeed;
     }
-    else if (followedOwner->transform->getPosition().x - owner->transform->getPosition().x > 2.f)
+    else if (distanceBetweenFriendAndPlayerOnXAxis > 4.f)
     {
         if (not canMoveRight and not canMoveDown and canMoveUp)
         {
             currentMovementSpeed.y = -3.4f * 4.5f;
         }
 
-        animation->setAnimationDirection(animations::AnimationDirection::Right);
         currentMovementSpeed.x = movementSpeed;
+    }
+
+    if (distanceBetweenFriendAndPlayerOnXAxis < -4)
+    {
+        animation->setAnimationDirection(animations::AnimationDirection::Left);
+    }
+    else
+    {
+        animation->setAnimationDirection(animations::AnimationDirection::Right);
     }
 
     if (not canMoveDown)
