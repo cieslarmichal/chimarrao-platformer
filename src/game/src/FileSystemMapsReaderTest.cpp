@@ -12,7 +12,7 @@ using namespace ::testing;
 class FileSystemMapsReaderTest : public Test
 {
 public:
-    const std::string mapsDirectory = utils::ProjectPathReader::getProjectRootPath() + "maps";
+    const std::string mapsDirectory = utils::ProjectPathReader::getProjectRootPath() + "maps/custom";
     const std::vector<std::string> filePaths{"xxx", "yyyy"};
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();

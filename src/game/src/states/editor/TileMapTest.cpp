@@ -13,7 +13,7 @@ namespace
 const std::string mapName{"name"};
 const std::string newMapName{"new_name"};
 const std::string serializedMap{"serialized_map"};
-const std::string mapPath{utils::ProjectPathReader::getProjectRootPath() + "maps/name.map"};
+const std::string mapPath{utils::ProjectPathReader::getProjectRootPath() + "maps/custom/name.map"};
 const utils::Vector2i mapSize{3, 4};
 const utils::Vector2i positionOnMap{2, 2};
 const utils::Vector2i newMapSize{2, 2};

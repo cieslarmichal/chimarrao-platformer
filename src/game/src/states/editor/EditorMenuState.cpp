@@ -121,7 +121,7 @@ std::optional<std::string> getPathToMap()
 {
     NFD_Init();
     nfdchar_t* outPath;
-    auto mapsPath = utils::ProjectPathReader::getProjectRootPath() + "maps";
+    auto mapsPath = utils::ProjectPathReader::getProjectRootPath() + "maps/custom";
     nfdfilteritem_t filterItem[1] = {{"Map File", "map"}};
     nfdresult_t result = NFD_OpenDialog(&outPath, filterItem, 1, mapsPath.c_str());
     if (result == NFD_OKAY)

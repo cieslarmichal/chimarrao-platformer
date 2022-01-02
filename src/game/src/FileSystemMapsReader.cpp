@@ -1,7 +1,6 @@
 #include "FileSystemMapsReader.h"
 
 #include <algorithm>
-#include <iterator>
 
 #include "ProjectPathReader.h"
 
@@ -9,7 +8,7 @@ namespace game
 {
 
 const std::string FileSystemMapsReader::mapsDirectory{utils::ProjectPathReader::getProjectRootPath() +
-                                                      "maps"};
+                                                      "maps/custom"};
 
 FileSystemMapsReader::FileSystemMapsReader(std::shared_ptr<utils::FileAccess> fileAccessInit)
     : fileAccess{std::move(fileAccessInit)}

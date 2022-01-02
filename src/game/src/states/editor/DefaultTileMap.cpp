@@ -52,7 +52,7 @@ const std::string& DefaultTileMap::getName() const
 
 std::string DefaultTileMap::getPath() const
 {
-    return utils::ProjectPathReader::getProjectRootPath() + "maps/" + tileMapInfo.name + ".map";
+    return utils::ProjectPathReader::getProjectRootPath() + "maps/custom/" + tileMapInfo.name + ".map";
 }
 
 void DefaultTileMap::setTileMapInfo(const TileMapInfo& newTileMapInfo)

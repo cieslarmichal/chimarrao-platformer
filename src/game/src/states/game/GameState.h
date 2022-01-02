@@ -43,8 +43,6 @@ private:
     std::unique_ptr<ComponentOwnersManager> componentOwnersManager;
     std::shared_ptr<TileMap> tileMap;
     std::unique_ptr<HeadsUpDisplay> hud;
-    std::shared_ptr<physics::RayCast> rayCast;
-    std::shared_ptr<physics::Quadtree> quadtree;
     const std::shared_ptr<components::core::SharedContext>& sharedContext;
     std::shared_ptr<audio::MusicManager> musicManager;
     audio::MusicId musicId;

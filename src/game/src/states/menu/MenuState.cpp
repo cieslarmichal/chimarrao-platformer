@@ -81,7 +81,6 @@ void MenuState::handleWindowSizeChange(const utils::Vector2u& windowSize)
 void MenuState::newGame()
 {
     states.deactivateCurrentState();
-    states.addNextState(StateType::NewGame);
 }
 
 void MenuState::chooseMap()
