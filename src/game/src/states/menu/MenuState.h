@@ -30,7 +30,8 @@ public:
     void handleWindowSizeChange(const utils::Vector2u& windowSize) override;
 
 private:
-    void runGame();
+    void newGame();
+    void chooseMap();
     void runMapEditor();
     void runControls();
     void runSettings();

@@ -78,7 +78,13 @@ void MenuState::handleWindowSizeChange(const utils::Vector2u& windowSize)
     uiManager->freezeAllButtons();
 }
 
-void MenuState::runGame()
+void MenuState::newGame()
+{
+    states.deactivateCurrentState();
+    states.addNextState(StateType::NewGame);
+}
+
+void MenuState::chooseMap()
 {
     states.deactivateCurrentState();
     states.addNextState(StateType::ChooseMap);

@@ -9,12 +9,13 @@ namespace game
 {
 namespace
 {
-const auto gameButtonPosition = utils::Vector2f{50, 7};
-const auto mapEditorButtonPosition = utils::Vector2f{50, 17};
-const auto controlsButtonPosition = utils::Vector2f{50, 27};
-const auto settingsButtonPosition = utils::Vector2f{50, 37};
-const auto exitButtonPosition = utils::Vector2f{50, 47};
-const std::vector<utils::Vector2f> buttonsPositions{gameButtonPosition, mapEditorButtonPosition,
+const auto newGameButtonPosition = utils::Vector2f{50, 5};
+const auto chooseMapButtonPosition = utils::Vector2f{50, 14};
+const auto mapEditorButtonPosition = utils::Vector2f{50, 23};
+const auto controlsButtonPosition = utils::Vector2f{50, 32};
+const auto settingsButtonPosition = utils::Vector2f{50, 41};
+const auto exitButtonPosition = utils::Vector2f{50, 50};
+const std::vector<utils::Vector2f> buttonsPositions{newGameButtonPosition, chooseMapButtonPosition, mapEditorButtonPosition,
                                                     controlsButtonPosition, settingsButtonPosition,
                                                     exitButtonPosition};
 const auto buttonColor = graphics::Color(251, 190, 102);
@@ -24,7 +25,7 @@ const auto iconSize = utils::Vector2f{4, 4};
 }
 
 std::vector<std::string> MenuStateUIConfigBuilder::iconNames{
-    "menuIcon1Image", "menuIcon2Image", "menuIcon3Image", "menuIcon4Image", "menuIcon5Image"};
+    "menuIcon1Image", "menuIcon2Image", "menuIcon3Image", "menuIcon4Image", "menuIcon5Image", "menuIcon6Image"};
 
 std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUIConfig(MenuState* menuState)
 {
@@ -36,11 +37,12 @@ std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUI
 std::vector<std::vector<GridButtonInfo>> MenuStateUIConfigBuilder::getGridButtonsInfo()
 {
     std::vector<std::vector<GridButtonInfo>> gridButtonsInfo{
-        {GridButtonInfo{"menuPlayButton", 0, false, false}},
-        {GridButtonInfo{"menuMapEditorButton", 1, false, false}},
-        {GridButtonInfo{"menuControlsButton", 2, false, false}},
-        {GridButtonInfo{"menuSettingsButton", 3, false, false}},
-        {GridButtonInfo{"menuExitButton", 4, false, false}}};
+        {GridButtonInfo{"menuNewGameButton", 0, false, false}},
+        {GridButtonInfo{"menuChooseMapButton", 1, false, false}},
+        {GridButtonInfo{"menuMapEditorButton", 2, false, false}},
+        {GridButtonInfo{"menuControlsButton", 3, false, false}},
+        {GridButtonInfo{"menuSettingsButton", 4, false, false}},
+        {GridButtonInfo{"menuExitButton", 5, false, false}}};
 
     return gridButtonsInfo;
 }
@@ -62,23 +64,41 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
 {
     std::vector<std::unique_ptr<components::ui::ButtonConfig>> buttonsConfig;
 
-    const auto playButtonOnMouseOver = [=]
+    const auto newGameButtonOnMouseOver = [=]
     {
-        menuState->buttonsNavigator->setFocusOnButton("menuPlayButton");
-        menuState->uiManager->setColor("menuPlayButton", buttonHoverColor);
+        menuState->buttonsNavigator->setFocusOnButton("menuNewGameButton");
+        menuState->uiManager->setColor("menuNewGameButton", buttonHoverColor);
     };
-    const auto playButtonOnMouseOut = [=]
+    const auto newGameOnMouseOut = [=]
     {
         menuState->buttonsNavigator->loseFocus();
-        menuState->uiManager->setColor("menuPlayButton", buttonColor);
+        menuState->uiManager->setColor("menuNewGameButton", buttonColor);
     };
-    auto playButtonMouseOverActions =
-        components::ui::MouseOverActions{playButtonOnMouseOver, playButtonOnMouseOut};
-    const auto playButtonClickAction = [=] { menuState->runGame(); };
-    auto playButtonConfig = std::make_unique<components::ui::ButtonConfig>(
-        "menuPlayButton", gameButtonPosition, buttonSize, buttonColor, "Play", graphics::Color::Black, 35,
-        fontPath, utils::Vector2f{7, 1}, playButtonClickAction, playButtonMouseOverActions);
-    buttonsConfig.emplace_back(std::move(playButtonConfig));
+    auto newGameButtonMouseOverActions =
+        components::ui::MouseOverActions{newGameButtonOnMouseOver, newGameOnMouseOut};
+    const auto newGameButtonClickAction = [=] { menuState->chooseMap(); };
+    auto newGameButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "menuNewGameButton", newGameButtonPosition, buttonSize, buttonColor, "New game", graphics::Color::Black, 35,
+        fontPath, utils::Vector2f{3, 1}, newGameButtonClickAction, newGameButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(newGameButtonConfig));
+
+    const auto chooseMapButtonOnMouseOver = [=]
+    {
+        menuState->buttonsNavigator->setFocusOnButton("menuChooseMapButton");
+        menuState->uiManager->setColor("menuChooseMapButton", buttonHoverColor);
+    };
+    const auto chooseMapOnMouseOut = [=]
+    {
+        menuState->buttonsNavigator->loseFocus();
+        menuState->uiManager->setColor("menuChooseMapButton", buttonColor);
+    };
+    auto chooseMapButtonMouseOverActions =
+        components::ui::MouseOverActions{chooseMapButtonOnMouseOver, chooseMapOnMouseOut};
+    const auto chooseMapButtonClickAction = [=] { menuState->chooseMap(); };
+    auto chooseMapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
+        "menuChooseMapButton", chooseMapButtonPosition, buttonSize, buttonColor, "Choose map", graphics::Color::Black, 35,
+        fontPath, utils::Vector2f{1, 1}, chooseMapButtonClickAction, chooseMapButtonMouseOverActions);
+    buttonsConfig.emplace_back(std::move(chooseMapButtonConfig));
 
     const auto mapEditorButtonOnMouseOver = [=]
     {
