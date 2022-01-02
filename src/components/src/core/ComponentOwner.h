@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Component.h"
+#include "ComponentOwnerType.h"
 #include "DeltaTime.h"
 #include "GraphicsComponent.h"
 #include "IdComponent.h"
@@ -18,7 +19,7 @@ class ComponentOwner
 {
 public:
     ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit,
-                   std::shared_ptr<SharedContext>);
+                   std::shared_ptr<SharedContext>, ComponentOwnerType = ComponentOwnerType::Default);
 
     void loadDependentComponents();
     void update(utils::DeltaTime, const input::Input&);
@@ -90,6 +91,7 @@ public:
     std::vector<std::shared_ptr<GraphicsComponent>> allGraphics;
     std::shared_ptr<IdComponent> id;
     std::shared_ptr<SharedContext> sharedContext;
+    ComponentOwnerType type;
 
 protected:
     std::vector<std::shared_ptr<Component>> components;

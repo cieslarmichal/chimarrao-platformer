@@ -35,7 +35,8 @@ CharacterFactory::CharacterFactory(const std::shared_ptr<components::core::Share
 std::shared_ptr<components::core::ComponentOwner>
 CharacterFactory::createPlayer(const utils::Vector2f& position)
 {
-    auto player = std::make_shared<components::core::ComponentOwner>(position, "player", sharedContext);
+    auto player = std::make_shared<components::core::ComponentOwner>(
+        position, "player", sharedContext, components::core::ComponentOwnerType::Player);
     auto graphicsComponent =
         player->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{6.f, 3.75f}, position,
                                      graphics::Color::White, graphics::VisibilityLayer::Second);
@@ -65,7 +66,8 @@ std::shared_ptr<components::core::ComponentOwner>
 CharacterFactory::createRabbitFollower(const std::shared_ptr<components::core::ComponentOwner>& player,
                                        const utils::Vector2f& position)
 {
-    auto follower = std::make_shared<components::core::ComponentOwner>(position, "follower", sharedContext);
+    auto follower = std::make_shared<components::core::ComponentOwner>(
+        position, "follower", sharedContext, components::core::ComponentOwnerType::Friend);
     auto followerGraphicsComponent =
         follower->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2.f, 2.f}, position,
                                        graphics::Color::White, graphics::VisibilityLayer::Second);
@@ -90,7 +92,8 @@ CharacterFactory::createDruidNpc(const std::shared_ptr<components::core::Compone
     static int numberOfDruidsInGame = 0;
     numberOfDruidsInGame++;
     auto npc = std::make_shared<components::core::ComponentOwner>(
-        position, "npcDruid" + std::to_string(numberOfDruidsInGame), sharedContext);
+        position, "npcDruid" + std::to_string(numberOfDruidsInGame), sharedContext,
+        components::core::ComponentOwnerType::Friend);
     auto npcGraphicsComponent =
         npc->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{3.f, 3.5f}, position,
                                   graphics::Color::White, graphics::VisibilityLayer::Second);
@@ -112,7 +115,8 @@ CharacterFactory::createBanditEnemy(const std::shared_ptr<components::core::Comp
     static int numberOfBanditsInGame = 0;
     numberOfBanditsInGame++;
     auto enemy = std::make_shared<components::core::ComponentOwner>(
-        position, "bandit" + std::to_string(numberOfBanditsInGame), sharedContext);
+        position, "bandit" + std::to_string(numberOfBanditsInGame), sharedContext,
+        components::core::ComponentOwnerType::Enemy);
     auto enemyGraphicsComponent =
         enemy->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{3.5f, 3.75f}, position,
                                     graphics::Color::White, graphics::VisibilityLayer::Second);

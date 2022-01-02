@@ -7,8 +7,8 @@ namespace components::core
 {
 
 ComponentOwner::ComponentOwner(const utils::Vector2f& position, const std::string& uniqueNameInit,
-                               std::shared_ptr<SharedContext> sharedContext)
-    : sharedContext{std::move(sharedContext)}, uniqueName{uniqueNameInit}
+                               std::shared_ptr<SharedContext> sharedContext, ComponentOwnerType type)
+    : sharedContext{std::move(sharedContext)}, type{type}, uniqueName{uniqueNameInit}
 
 {
     transform = addComponent<TransformComponent>(position);
