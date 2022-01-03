@@ -22,6 +22,7 @@ public:
     {
         EXPECT_CALL(*tileMap, loadFromFile(_));
         EXPECT_CALL(*worldBuilder, buildWorldObjects(_)).WillOnce(Return(worldObjects));
+        EXPECT_CALL(*worldBuilder, getPlayer()).WillOnce(Return(player));
         EXPECT_CALL(*componentOwnersManager, processNewObjects());
         EXPECT_CALL(*componentOwnersManager, add(_)).Times(3);
     }

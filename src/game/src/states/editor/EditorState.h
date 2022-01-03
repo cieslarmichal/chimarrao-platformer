@@ -3,12 +3,12 @@
 #include <vector>
 
 #include "ComponentOwnersManager.h"
+#include "LayoutTile.h"
 #include "State.h"
+#include "TileMap.h"
 #include "Timer.h"
 #include "UIConfig.h"
 #include "UIManager.h"
-#include "LayoutTile.h"
-#include "TileMap.h"
 
 namespace game
 {

@@ -10,15 +10,15 @@
 #include "RayCastMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
+#include "TileMapMock.h"
 #include "TimerMock.h"
 #include "UIManagerMock.h"
 #include "WindowMock.h"
 #include "WorldBuilderMock.h"
-#include "TileMapMock.h"
 
 #include "AnimationComponent.h"
-#include "DirectionComponent.h"
 #include "CustomGameState.h"
+#include "DirectionComponent.h"
 #include "HealthComponent.h"
 #include "ItemCollectorComponent.h"
 #include "ProjectPathReader.h"
@@ -88,10 +88,10 @@ public:
 TEST_F(GameStateUIConfigBuilderTest, createGameUI)
 {
     CustomGameState gameState{window,       rendererPool,
-                        fileAccess,   states,
-                        uiManager,    std::move(componentOwnersManagerInit),
-                        tileMap,      sharedContext,
-                        musicManager, std::move(worldBuilderInit)};
+                              fileAccess,   states,
+                              uiManager,    std::move(componentOwnersManagerInit),
+                              tileMap,      sharedContext,
+                              musicManager, std::move(worldBuilderInit)};
     const auto gameUI = GameStateUIConfigBuilder::createGameUIConfig();
 
     ASSERT_EQ(gameUI->backgroundConfig->uniqueName, "gameBackground");

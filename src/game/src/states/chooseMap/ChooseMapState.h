@@ -2,12 +2,12 @@
 
 #include "ComponentOwner.h"
 #include "MapsReader.h"
-#include "navigators/PaginatedButtonsNavigator.h"
 #include "State.h"
+#include "TileMap.h"
 #include "Timer.h"
 #include "UIConfig.h"
 #include "UIManager.h"
-#include "TileMap.h"
+#include "navigators/PaginatedButtonsNavigator.h"
 
 namespace game
 {

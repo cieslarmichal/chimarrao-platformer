@@ -1,11 +1,11 @@
 #pragma once
 
 #include "ComponentOwner.h"
-#include "navigators/GridButtonsNavigator.h"
 #include "State.h"
 #include "Timer.h"
 #include "UIConfig.h"
 #include "UIManager.h"
+#include "navigators/GridButtonsNavigator.h"
 
 namespace game
 {

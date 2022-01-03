@@ -1,9 +1,9 @@
 #pragma once
 
-#include "navigators/GridButtonsNavigator.h"
 #include "State.h"
 #include "UIConfig.h"
 #include "UIManager.h"
+#include "navigators/GridButtonsNavigator.h"
 
 namespace game
 {

@@ -5,9 +5,9 @@
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
+#include "TileMapMock.h"
 #include "UIManagerMock.h"
 #include "WindowMock.h"
-#include "TileMapMock.h"
 
 #include "SaveMapState.h"
 #include "StlOperators.h"

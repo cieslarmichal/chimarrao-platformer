@@ -3,8 +3,8 @@
 #include <memory>
 #include <vector>
 
-#include "navigators/GridButtonInfo.h"
 #include "SettingsState.h"
+#include "navigators/GridButtonInfo.h"
 
 namespace components::ui
 {

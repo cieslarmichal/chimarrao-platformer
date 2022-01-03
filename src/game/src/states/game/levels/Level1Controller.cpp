@@ -2,6 +2,9 @@
 
 #include <utility>
 
+#include "MovementComponent.h"
+#include "TimerFactory.h"
+
 namespace game
 {
 namespace
@@ -18,6 +21,7 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
     tileMap->loadFromFile(levelMap);
 
     const auto worldObjects = worldBuilder->buildWorldObjects(tileMap);
+    mainCharacters.player = worldBuilder->getPlayer();
 
     for (const auto& worldObject : worldObjects)
     {
@@ -25,10 +29,30 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
     }
 
     ownersManager->processNewObjects();
+
+    timer = utils::TimerFactory::createTimer();
 }
 
 SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
+    const auto elapsedSeconds = timer->getElapsedSeconds();
+
+    if (elapsedSeconds > 0.3 and not playerBlocked)
+    {
+        auto playerMovementComponent =
+            mainCharacters.player->getComponent<components::core::MovementComponent>();
+        playerMovementComponent->lock();
+        playerBlocked = true;
+    }
+
+    if (elapsedSeconds > 5 and not playerUnblocked)
+    {
+        auto playerMovementComponent =
+            mainCharacters.player->getComponent<components::core::MovementComponent>();
+        playerMovementComponent->unlock();
+        playerUnblocked = true;
+    }
+
     ownersManager->update(deltaTime, input);
     ownersManager->processRemovals();
 

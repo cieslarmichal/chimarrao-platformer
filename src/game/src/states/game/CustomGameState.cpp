@@ -18,14 +18,14 @@ const auto soundtrackPath = projectPath + "resources/game_music_loop.wav";
 }
 
 CustomGameState::CustomGameState(const std::shared_ptr<window::Window>& windowInit,
-                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                     std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                     std::shared_ptr<components::ui::UIManager> uiManagerInit,
-                     std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit,
-                     std::shared_ptr<TileMap> tileMapInit,
-                     const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
-                     std::shared_ptr<audio::MusicManager> musicManagerInit,
-                     std::unique_ptr<WorldBuilder> worldBuilderInit)
+                                 const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
+                                 std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
+                                 std::shared_ptr<components::ui::UIManager> uiManagerInit,
+                                 std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit,
+                                 std::shared_ptr<TileMap> tileMapInit,
+                                 const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
+                                 std::shared_ptr<audio::MusicManager> musicManagerInit,
+                                 std::unique_ptr<WorldBuilder> worldBuilderInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},

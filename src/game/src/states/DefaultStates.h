@@ -6,8 +6,8 @@
 #include "RendererPool.h"
 #include "StateFactory.h"
 #include "States.h"
-#include "Window.h"
 #include "TileMap.h"
+#include "Window.h"
 
 namespace game
 {

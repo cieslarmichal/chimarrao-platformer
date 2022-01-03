@@ -11,11 +11,11 @@
 #include "RayCastMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
+#include "TileMapMock.h"
 #include "TimerMock.h"
 #include "UIManagerMock.h"
 #include "WindowMock.h"
 #include "WorldBuilderMock.h"
-#include "TileMapMock.h"
 
 #include "AnimationComponent.h"
 #include "DirectionComponent.h"
@@ -98,10 +98,10 @@ class CustomGameStateTest : public CustomGameStateTest_Base
 {
 public:
     CustomGameState gameState{window,       rendererPool,
-                        fileAccess,   states,
-                        uiManager,    std::move(componentOwnersManagerInit),
-                        tileMap,      sharedContext,
-                        musicManager, std::move(worldBuilderInit)};
+                              fileAccess,   states,
+                              uiManager,    std::move(componentOwnersManagerInit),
+                              tileMap,      sharedContext,
+                              musicManager, std::move(worldBuilderInit)};
 };
 
 TEST_F(CustomGameStateTest, activate_shouldActivateUIAndOwners)

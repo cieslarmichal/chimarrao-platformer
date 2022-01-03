@@ -4,6 +4,7 @@
 #include "Level1MainCharacters.h"
 #include "LevelController.h"
 #include "TileMap.h"
+#include "Timer.h"
 #include "WorldBuilder.h"
 
 namespace game
@@ -19,8 +20,11 @@ public:
     void deactivate() override;
 
 private:
+    std::unique_ptr<utils::Timer> timer;
     Level1MainCharacters mainCharacters;
     std::unique_ptr<ComponentOwnersManager> ownersManager;
     std::shared_ptr<WorldBuilder> worldBuilder;
+    bool playerBlocked{false};
+    bool playerUnblocked{false};
 };
 }

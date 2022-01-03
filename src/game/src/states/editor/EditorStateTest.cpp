@@ -9,10 +9,10 @@
 #include "InputMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
+#include "TileMapMock.h"
 #include "TimerMock.h"
 #include "UIManagerMock.h"
 #include "WindowMock.h"
-#include "TileMapMock.h"
 
 using namespace game;
 using namespace components::ui;

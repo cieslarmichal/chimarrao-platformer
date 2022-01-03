@@ -27,7 +27,8 @@ DefaultTileMap::DefaultTileMap(std::string name, utils::Vector2i mapSizeInit,
 void DefaultTileMap::saveToFile()
 {
     const auto serializedMapInfo = tileMapSerializer->serialize(tileMapInfo);
-    const auto path = utils::ProjectPathReader::getProjectRootPath() + "maps/custom/" + tileMapInfo.name + ".map";
+    const auto path =
+        utils::ProjectPathReader::getProjectRootPath() + "maps/custom/" + tileMapInfo.name + ".map";
     fileAccess->write(path, serializedMapInfo);
 }
 

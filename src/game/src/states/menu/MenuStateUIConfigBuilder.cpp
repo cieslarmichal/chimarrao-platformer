@@ -2,8 +2,8 @@
 
 #include "CommonUIConfigElements.h"
 #include "MenuState.h"
-#include "navigators/PaginatedButtonsNavigator.h"
 #include "ProjectPathReader.h"
+#include "navigators/PaginatedButtonsNavigator.h"
 
 namespace game
 {
@@ -15,17 +15,18 @@ const auto mapEditorButtonPosition = utils::Vector2f{50, 23};
 const auto controlsButtonPosition = utils::Vector2f{50, 32};
 const auto settingsButtonPosition = utils::Vector2f{50, 41};
 const auto exitButtonPosition = utils::Vector2f{50, 50};
-const std::vector<utils::Vector2f> buttonsPositions{newGameButtonPosition, chooseMapButtonPosition, mapEditorButtonPosition,
-                                                    controlsButtonPosition, settingsButtonPosition,
-                                                    exitButtonPosition};
+const std::vector<utils::Vector2f> buttonsPositions{newGameButtonPosition,   chooseMapButtonPosition,
+                                                    mapEditorButtonPosition, controlsButtonPosition,
+                                                    settingsButtonPosition,  exitButtonPosition};
 const auto buttonColor = graphics::Color(251, 190, 102);
 const auto buttonHoverColor = graphics::Color(205, 128, 66);
 const auto buttonSize = utils::Vector2f{23, 6};
 const auto iconSize = utils::Vector2f{4, 4};
 }
 
-std::vector<std::string> MenuStateUIConfigBuilder::iconNames{
-    "menuIcon1Image", "menuIcon2Image", "menuIcon3Image", "menuIcon4Image", "menuIcon5Image", "menuIcon6Image"};
+std::vector<std::string> MenuStateUIConfigBuilder::iconNames{"menuIcon1Image", "menuIcon2Image",
+                                                             "menuIcon3Image", "menuIcon4Image",
+                                                             "menuIcon5Image", "menuIcon6Image"};
 
 std::unique_ptr<components::ui::UIConfig> MenuStateUIConfigBuilder::createMenuUIConfig(MenuState* menuState)
 {
@@ -78,8 +79,9 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
         components::ui::MouseOverActions{newGameButtonOnMouseOver, newGameOnMouseOut};
     const auto newGameButtonClickAction = [=] { menuState->newGame(); };
     auto newGameButtonConfig = std::make_unique<components::ui::ButtonConfig>(
-        "menuNewGameButton", newGameButtonPosition, buttonSize, buttonColor, "New game", graphics::Color::Black, 35,
-        fontPath, utils::Vector2f{3, 1}, newGameButtonClickAction, newGameButtonMouseOverActions);
+        "menuNewGameButton", newGameButtonPosition, buttonSize, buttonColor, "New game",
+        graphics::Color::Black, 35, fontPath, utils::Vector2f{3, 1}, newGameButtonClickAction,
+        newGameButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(newGameButtonConfig));
 
     const auto chooseMapButtonOnMouseOver = [=]
@@ -96,8 +98,9 @@ MenuStateUIConfigBuilder::createButtonConfigs(MenuState* menuState)
         components::ui::MouseOverActions{chooseMapButtonOnMouseOver, chooseMapOnMouseOut};
     const auto chooseMapButtonClickAction = [=] { menuState->chooseMap(); };
     auto chooseMapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
-        "menuChooseMapButton", chooseMapButtonPosition, buttonSize, buttonColor, "Choose map", graphics::Color::Black, 35,
-        fontPath, utils::Vector2f{1, 1}, chooseMapButtonClickAction, chooseMapButtonMouseOverActions);
+        "menuChooseMapButton", chooseMapButtonPosition, buttonSize, buttonColor, "Choose map",
+        graphics::Color::Black, 35, fontPath, utils::Vector2f{1, 1}, chooseMapButtonClickAction,
+        chooseMapButtonMouseOverActions);
     buttonsConfig.emplace_back(std::move(chooseMapButtonConfig));
 
     const auto mapEditorButtonOnMouseOver = [=]

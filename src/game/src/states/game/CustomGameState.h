@@ -1,6 +1,7 @@
 #pragma once
 
 #include <queue>
+
 #include "CharacterFactory.h"
 #include "CollisionSystem.h"
 #include "ComponentOwner.h"
@@ -8,14 +9,14 @@
 #include "DefaultWorldBuilder.h"
 #include "HeadsUpDisplay.h"
 #include "ItemFactory.h"
+#include "LevelController.h"
 #include "MusicManager.h"
 #include "ObstacleFactory.h"
 #include "RayCast.h"
 #include "State.h"
+#include "TileMap.h"
 #include "Timer.h"
 #include "UIManager.h"
-#include "TileMap.h"
-#include "LevelController.h"
 
 namespace game
 {
@@ -23,10 +24,10 @@ class CustomGameState : public State
 {
 public:
     CustomGameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
-              std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>,
-              std::unique_ptr<ComponentOwnersManager>, std::shared_ptr<TileMap>,
-              const std::shared_ptr<components::core::SharedContext>&, std::shared_ptr<audio::MusicManager>,
-              std::unique_ptr<WorldBuilder>);
+                    std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>,
+                    std::unique_ptr<ComponentOwnersManager>, std::shared_ptr<TileMap>,
+                    const std::shared_ptr<components::core::SharedContext>&,
+                    std::shared_ptr<audio::MusicManager>, std::unique_ptr<WorldBuilder>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;

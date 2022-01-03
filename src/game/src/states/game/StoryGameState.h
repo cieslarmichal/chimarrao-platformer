@@ -1,6 +1,7 @@
 #pragma once
 
 #include <queue>
+
 #include "CharacterFactory.h"
 #include "CollisionSystem.h"
 #include "ComponentOwner.h"
@@ -8,15 +9,15 @@
 #include "DefaultWorldBuilder.h"
 #include "HeadsUpDisplay.h"
 #include "ItemFactory.h"
+#include "LevelController.h"
 #include "MusicManager.h"
 #include "ObstacleFactory.h"
+#include "PhysicsFactory.h"
 #include "RayCast.h"
 #include "State.h"
+#include "TileMap.h"
 #include "Timer.h"
 #include "UIManager.h"
-#include "TileMap.h"
-#include "LevelController.h"
-#include "PhysicsFactory.h"
 
 namespace game
 {
@@ -24,10 +25,10 @@ class StoryGameState : public State
 {
 public:
     StoryGameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
-                    std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>,
-                    std::shared_ptr<TileMap>,
-                    const std::shared_ptr<components::core::SharedContext>&, std::shared_ptr<audio::MusicManager>,
-                    std::shared_ptr<CharacterFactory>, std::shared_ptr<ObstacleFactory>, std::unique_ptr<physics::PhysicsFactory>);
+                   std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>,
+                   std::shared_ptr<TileMap>, const std::shared_ptr<components::core::SharedContext>&,
+                   std::shared_ptr<audio::MusicManager>, std::shared_ptr<CharacterFactory>,
+                   std::shared_ptr<ObstacleFactory>, std::unique_ptr<physics::PhysicsFactory>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;

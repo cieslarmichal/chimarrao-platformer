@@ -6,10 +6,10 @@
 #include "FileAccessMock.h"
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
+#include "TileMapMock.h"
 #include "TimerMock.h"
 #include "UIManagerMock.h"
 #include "WindowMock.h"
-#include "TileMapMock.h"
 
 #include "EditorState.h"
 

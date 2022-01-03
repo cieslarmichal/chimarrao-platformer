@@ -2,12 +2,12 @@
 
 #include "AudioFactory.h"
 #include "DefaultStates.h"
+#include "DefaultTileMap.h"
 #include "FileAccessFactory.h"
 #include "GraphicsFactory.h"
 #include "InputManagerFactory.h"
-#include "WindowFactory.h"
-#include "DefaultTileMap.h"
 #include "TileMapSerializerJson.h"
+#include "WindowFactory.h"
 
 namespace game
 {

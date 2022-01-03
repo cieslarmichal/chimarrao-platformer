@@ -3,8 +3,8 @@
 #include "CommonUIConfigElements.h"
 #include "EditorState.h"
 #include "ProjectPathReader.h"
-#include "Vector.h"
 #include "TileType.h"
+#include "Vector.h"
 
 namespace game
 {
