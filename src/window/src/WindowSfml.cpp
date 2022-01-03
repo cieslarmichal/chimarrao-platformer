@@ -10,7 +10,7 @@ namespace window
 {
 WindowSfml::WindowSfml(const utils::Vector2u& windowSize, std::string windowTitleInit,
                        std::unique_ptr<WindowObservationHandler> observationHandlerInit)
-    : observationHandler{std::move(observationHandlerInit)}, windowTitle{std::move(windowTitleInit)}
+    : windowTitle{std::move(windowTitleInit)}, observationHandler{std::move(observationHandlerInit)}
 {
     windowSettings.displayMode = DisplayMode::Window;
     windowSettings.resolution = Resolution{windowSize.x, windowSize.y};

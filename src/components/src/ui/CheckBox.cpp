@@ -32,7 +32,7 @@ CheckBox::CheckBox(const std::shared_ptr<core::SharedContext>& sharedContext,
     coreComponentsOwner->addComponent<components::core::BoxColliderComponent>(checkBoxConfig->size);
 
     auto clickAction = checkBoxConfig->clickAction;
-    auto checkBoxClickedAction = [=]
+    auto checkBoxClickedAction = [=, this]
     {
         clickAction();
         toggle();

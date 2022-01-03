@@ -71,7 +71,7 @@ boost::optional<int> IncrementalFilePathsCreator::extractNumberFromFileName(cons
     int number;
 
     int i = 0;
-    while (i < filePath.size() && numberCounter < 2)
+    while (i < static_cast<int>(filePath.size()) && numberCounter < 2)
     {
         if (isdigit(filePath[i]))
         {
@@ -88,7 +88,7 @@ boost::optional<int> IncrementalFilePathsCreator::extractNumberFromFileName(cons
         i++;
     }
 
-    int numberPosition = static_cast<int>(filePath.find(numberAsString));
+    auto numberPosition = filePath.find(numberAsString);
     if (numberCounter != 1 || numberPosition == std::string::npos)
     {
         return boost::none;

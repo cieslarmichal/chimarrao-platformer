@@ -47,14 +47,14 @@ public:
         utils::Vector2u{192, 128},
         utils::IntRect{40, 64, 40, 32},
         1,
-        1.2f};
+        1.2f, false, false};
     const SingleFileAnimationSettings bunnySingleFileWalkAnimationSettings{
         "walk",
         "resources/bunny-hop-spritesheet.png",
         utils::Vector2u{192, 128},
         utils::IntRect{0, 32, 48, 32},
         4,
-        2.0f};
+        2.0f, false, false};
     const TextureRect firstIdleTextureRect{projectPath + "resources/bunny-hop-spritesheet.png",
                                            utils::IntRect{40, 64, 40, 32}};
     const TextureRect firstWalkTextureRect{projectPath + "resources/bunny-hop-spritesheet.png",
