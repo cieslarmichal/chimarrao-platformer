@@ -1,4 +1,4 @@
-#include "Level1aController.h"
+#include "Level1Controller.h"
 
 #include "gtest/gtest.h"
 
@@ -13,10 +13,10 @@ using namespace game;
 using namespace components::core;
 using namespace ::testing;
 
-class Level1aControllerTest_Base : public Test
+class Level1ControllerTest_Base : public Test
 {
 public:
-    Level1aControllerTest_Base()
+    Level1ControllerTest_Base()
     {
         EXPECT_CALL(*tileMap, loadFromFile(_));
     }
@@ -39,16 +39,16 @@ public:
     std::shared_ptr<ComponentOwner> player = std::make_shared<ComponentOwner>(position1, "Level1aControllerTest_Base1", sharedContext);
     std::shared_ptr<ComponentOwner> rabbit = std::make_shared<ComponentOwner>(position2, "Level1aControllerTest_Base2", sharedContext);
     std::shared_ptr<ComponentOwner> npc = std::make_shared<ComponentOwner>(position3, "Level1aControllerTest_Base3", sharedContext);
-    std::shared_ptr<Level1aMainCharacters> mainCharacters = std::make_shared<Level1aMainCharacters>(player, rabbit, npc);
+    std::shared_ptr<Level1MainCharacters> mainCharacters = std::make_shared<Level1MainCharacters>(player, rabbit, npc);
 };
 
-class Level1aControllerTest : public Level1aControllerTest_Base
+class Level1ControllerTest : public Level1ControllerTest_Base
 {
 public:
-    Level1aController levelController{tileMap, mainCharacters};
+    Level1Controller levelController{tileMap, mainCharacters};
 };
 
-TEST_F(Level1aControllerTest, update_shouldReturnFalse)
+TEST_F(Level1ControllerTest, update_shouldReturnFalse)
 {
     ASSERT_EQ(levelController.update(), false);
 }
