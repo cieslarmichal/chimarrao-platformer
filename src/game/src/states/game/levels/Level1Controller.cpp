@@ -13,7 +13,7 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
                                      std::shared_ptr<Level1MainCharacters> level1AMainCharacters)
     : mainCharacters{std::move(level1AMainCharacters)}
 {
-    const auto map = mapsDirectory + "level1a.map";
+    const auto map = mapsDirectory + "level1.map";
     tileMap->loadFromFile(map);
 }
 

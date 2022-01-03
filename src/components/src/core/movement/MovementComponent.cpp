@@ -77,4 +77,15 @@ bool MovementComponent::isAllowedToMoveDown() const
 {
     return canMoveDown;
 }
+
+void MovementComponent::lock()
+{
+    locked = true;
+}
+
+void MovementComponent::unlock()
+{
+    locked = false;
+}
+
 }

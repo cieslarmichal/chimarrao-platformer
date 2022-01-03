@@ -25,6 +25,8 @@ public:
     bool isAllowedToMoveLeft() const;
     bool isAllowedToMoveUp() const;
     bool isAllowedToMoveDown() const;
+    void lock();
+    void unlock();
 
 protected:
     float movementSpeed;
@@ -32,5 +34,6 @@ protected:
     bool canMoveLeft{true};
     bool canMoveUp{true};
     bool canMoveDown{true};
+    bool locked{false};
 };
 }

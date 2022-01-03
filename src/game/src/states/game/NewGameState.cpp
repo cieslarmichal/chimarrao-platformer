@@ -13,7 +13,7 @@ NewGameState::NewGameState(const std::shared_ptr<window::Window>& windowInit,
                            const std::shared_ptr<TileMap>& tileMap)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit}
 {
-    const auto firstMap = mapsDirectory + "level1a.map";
+    const auto firstMap = mapsDirectory + "level1.map";
     tileMap->loadFromFile(firstMap);
 }
 
