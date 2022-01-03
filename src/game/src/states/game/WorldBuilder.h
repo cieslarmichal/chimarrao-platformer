@@ -13,5 +13,7 @@ public:
     virtual std::vector<std::shared_ptr<components::core::ComponentOwner>>
     buildWorldObjects(const std::shared_ptr<TileMap>&) = 0;
     virtual std::shared_ptr<components::core::ComponentOwner> getPlayer() const = 0;
+    virtual std::shared_ptr<components::core::ComponentOwner> getRabbit() const = 0;
+    virtual std::shared_ptr<components::core::ComponentOwner> getNpc() const = 0;
 };
 }

@@ -1,10 +1,8 @@
-#include "SaveMapState.h"
 
 #include "gtest/gtest.h"
 
 #include "RendererPoolMock.h"
 #include "StatesMock.h"
-#include "UIManagerMock.h"
 #include "WindowMock.h"
 #include "TileMapMock.h"
 #include "NewGameState.h"

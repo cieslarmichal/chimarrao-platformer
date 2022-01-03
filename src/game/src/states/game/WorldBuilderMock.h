@@ -12,5 +12,7 @@ public:
     MOCK_METHOD(std::vector<std::shared_ptr<components::core::ComponentOwner>>, buildWorldObjects,
                 (const std::shared_ptr<TileMap>&), (override));
     MOCK_METHOD(std::shared_ptr<components::core::ComponentOwner>, getPlayer, (), (const override));
+    MOCK_METHOD(std::shared_ptr<components::core::ComponentOwner>, getRabbit, (), (const override));
+    MOCK_METHOD(std::shared_ptr<components::core::ComponentOwner>, getNpc, (), (const override));
 };
 }

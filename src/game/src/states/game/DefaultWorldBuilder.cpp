@@ -89,13 +89,13 @@ DefaultWorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             case TileType::Npc:
             {
-                auto npc = characterFactory->createDruidNpc(player, position);
+                npc = characterFactory->createDruidNpc(player, position);
                 worldObjects.push_back(npc);
                 break;
             }
             case TileType::Rabbit:
             {
-                auto rabbit = characterFactory->createRabbitFollower(player, position);
+                rabbit = characterFactory->createRabbitFollower(player, position);
                 worldObjects.push_back(rabbit);
                 break;
             }
@@ -147,5 +147,15 @@ DefaultWorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
 std::shared_ptr<components::core::ComponentOwner> DefaultWorldBuilder::getPlayer() const
 {
     return player;
+}
+
+std::shared_ptr<components::core::ComponentOwner> DefaultWorldBuilder::getRabbit() const
+{
+    return rabbit;
+}
+
+std::shared_ptr<components::core::ComponentOwner> DefaultWorldBuilder::getNpc() const
+{
+    return npc;
 }
 }

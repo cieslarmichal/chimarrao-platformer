@@ -37,6 +37,7 @@ set(SOURCES
         src/states/game/ObstacleFactory.cpp
         src/states/game/DefaultWorldBuilder.cpp
         src/states/game/NewGameState.cpp
+        src/states/game/levels/Level1aController.cpp
         )
 
 
@@ -72,6 +73,7 @@ set(UT_SOURCES
         src/states/game/HeadsUpDisplayTest.cpp
         src/states/game/HeadsUpDisplayUIConfigBuilderTest.cpp
         src/states/game/NewGameStateTest.cpp
+        src/states/game/levels/Level1aControllerTest.cpp
         )
 
 add_library(game ${SOURCES})
