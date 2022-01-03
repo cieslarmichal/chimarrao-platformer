@@ -17,6 +17,6 @@ public:
     virtual std::shared_ptr<RayCast> createRayCast() const = 0;
     virtual std::shared_ptr<Quadtree> getQuadTree() const = 0;
 
-    static std::unique_ptr<PhysicsFactory> createCollisionSystemFactory(const utils::FloatRect& mapBounds);
+    static std::unique_ptr<PhysicsFactory> createPhysicsFactory(const utils::FloatRect& mapBounds);
 };
 }

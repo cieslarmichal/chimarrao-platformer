@@ -5,7 +5,7 @@
 namespace physics
 {
 std::unique_ptr<PhysicsFactory>
-PhysicsFactory::createCollisionSystemFactory(const utils::FloatRect& mapBounds)
+PhysicsFactory::createPhysicsFactory(const utils::FloatRect& mapBounds)
 {
     return std::make_unique<DefaultPhysicsFactory>(mapBounds);
 }

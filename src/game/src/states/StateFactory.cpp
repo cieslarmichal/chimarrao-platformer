@@ -5,20 +5,20 @@
 #include "ChooseMapState.h"
 #include "ChooseMapStateUIConfigBuilder.h"
 #include "ControlsState.h"
+#include "CustomGameState.h"
 #include "DefaultComponentOwnersManager.h"
 #include "EditorMenuState.h"
 #include "EditorState.h"
 #include "FileSystemMapsReader.h"
-#include "CustomGameState.h"
 #include "PhysicsFactory.h"
 #include "SaveMapState.h"
 #include "SettingsState.h"
 #include "SettingsStateUIConfigBuilder.h"
+#include "StoryGameState.h"
 #include "TimerFactory.h"
 #include "menu/MenuState.h"
 #include "menu/MenuStateUIConfigBuilder.h"
 #include "pause/PauseState.h"
-#include "StoryGameState.h"
 
 namespace game
 {
@@ -57,7 +57,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     case StateType::Editor:
     {
         const auto mapBoundaries = utils::FloatRect(0, 0, 80, 60);
-        auto collisionSystemFactory = physics::PhysicsFactory::createCollisionSystemFactory(mapBoundaries);
+        auto collisionSystemFactory = physics::PhysicsFactory::createPhysicsFactory(mapBoundaries);
 
         return std::make_unique<EditorState>(
             window, rendererPool, fileAccess, states,
@@ -69,7 +69,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
         const auto tileMapSize = tileMap->getSize();
         const auto mapBoundaries =
             utils::FloatRect(0, 0, static_cast<float>(tileMapSize.x), static_cast<float>(tileMapSize.y));
-        auto collisionSystemFactory = physics::PhysicsFactory::createCollisionSystemFactory(mapBoundaries);
+        auto collisionSystemFactory = physics::PhysicsFactory::createPhysicsFactory(mapBoundaries);
         auto rayCast = collisionSystemFactory->createRayCast();
         auto quadTree = collisionSystemFactory->getQuadTree();
 
@@ -88,19 +88,17 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
         const auto tileMapSize = tileMap->getSize();
         const auto mapBoundaries =
             utils::FloatRect(0, 0, static_cast<float>(tileMapSize.x), static_cast<float>(tileMapSize.y));
-        auto collisionSystemFactory = physics::PhysicsFactory::createCollisionSystemFactory(mapBoundaries);
-        auto rayCast = collisionSystemFactory->createRayCast();
-        auto quadTree = collisionSystemFactory->getQuadTree();
+        auto physicsFactory = physics::PhysicsFactory::createPhysicsFactory(mapBoundaries);
+        auto rayCast = physicsFactory->createRayCast();
+        auto quadTree = physicsFactory->getQuadTree();
 
-        auto worldBuilder = std::make_unique<DefaultWorldBuilder>(
-            std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadTree),
-            std::make_shared<ObstacleFactory>(sharedContext), sharedContext);
+        auto characterFactory = std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadTree);
+        auto obstacleFactory = std::make_shared<ObstacleFactory>(sharedContext);
 
         return std::make_unique<StoryGameState>(
             window, rendererPool, fileAccess, states,
-            std::make_unique<components::ui::DefaultUIManager>(sharedContext),
-            std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()),
-            tileMap, sharedContext, musicManager, std::move(worldBuilder));
+            std::make_unique<components::ui::DefaultUIManager>(sharedContext), tileMap, sharedContext,
+            musicManager, characterFactory, obstacleFactory, std::move(physicsFactory));
     }
     case StateType::Menu:
     {

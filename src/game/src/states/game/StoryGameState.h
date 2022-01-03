@@ -16,6 +16,7 @@
 #include "UIManager.h"
 #include "TileMap.h"
 #include "LevelController.h"
+#include "PhysicsFactory.h"
 
 namespace game
 {
@@ -24,9 +25,9 @@ class StoryGameState : public State
 public:
     StoryGameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
                     std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>,
-                    std::unique_ptr<ComponentOwnersManager>, std::shared_ptr<TileMap>,
+                    std::shared_ptr<TileMap>,
                     const std::shared_ptr<components::core::SharedContext>&, std::shared_ptr<audio::MusicManager>,
-                    std::unique_ptr<WorldBuilder>);
+                    std::shared_ptr<CharacterFactory>, std::shared_ptr<ObstacleFactory>, std::unique_ptr<physics::PhysicsFactory>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -42,12 +43,14 @@ private:
     std::unique_ptr<utils::Timer> timer;
     const float timeAfterStateCouldBePaused;
     std::shared_ptr<components::ui::UIManager> uiManager;
-    std::unique_ptr<ComponentOwnersManager> componentOwnersManager;
     std::shared_ptr<TileMap> tileMap;
     std::unique_ptr<HeadsUpDisplay> hud;
     const std::shared_ptr<components::core::SharedContext>& sharedContext;
     std::shared_ptr<audio::MusicManager> musicManager;
     audio::MusicId musicId;
-    std::unique_ptr<WorldBuilder> worldBuilder;
+    std::shared_ptr<CharacterFactory> characterFactory;
+    std::shared_ptr<ObstacleFactory> obstacleFactory;
+    std::unique_ptr<physics::PhysicsFactory> physicsFactory;
+    std::queue<std::unique_ptr<LevelController>> levelControllers;
 };
 }
