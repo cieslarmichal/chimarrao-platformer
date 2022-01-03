@@ -140,7 +140,7 @@ ChooseMapStateUIConfigBuilder::createButtonConfigs(ChooseMapState* chooseMapStat
         {
             chooseMapState->tileMap->loadFromFile(mapFilePath);
             chooseMapState->states.deactivateCurrentState();
-            chooseMapState->states.addNextState(StateType::Game);
+            chooseMapState->states.addNextState(StateType::CustomGame);
         };
         auto mapButtonConfig = std::make_unique<components::ui::ButtonConfig>(
             buttonUniqueName, buttonPosition, mapButtonSize, buttonColor, mapNameToDisplay,

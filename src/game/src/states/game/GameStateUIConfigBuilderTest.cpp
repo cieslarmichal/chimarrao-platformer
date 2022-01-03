@@ -92,7 +92,7 @@ TEST_F(GameStateUIConfigBuilderTest, createGameUI)
                         uiManager,    std::move(componentOwnersManagerInit),
                         tileMap,      sharedContext,
                         musicManager, std::move(worldBuilderInit)};
-    const auto gameUI = GameStateUIConfigBuilder::createGameUIConfig(&gameState);
+    const auto gameUI = GameStateUIConfigBuilder::createGameUIConfig();
 
     ASSERT_EQ(gameUI->backgroundConfig->uniqueName, "gameBackground");
     ASSERT_TRUE(gameUI->buttonsConfig.empty());

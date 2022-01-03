@@ -124,7 +124,7 @@ TEST_F(CustomGameStateTest, deactivate_shouldDeactivateUIAndOwners)
 
 TEST_F(CustomGameStateTest, getType_shouldReturnChooseMap)
 {
-    ASSERT_EQ(gameState.getType(), StateType::Game);
+    ASSERT_EQ(gameState.getType(), StateType::CustomGame);
 }
 
 TEST_F(CustomGameStateTest, render_shouldRenderAllFromRendererPool)

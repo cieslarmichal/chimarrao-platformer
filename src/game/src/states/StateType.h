@@ -14,23 +14,23 @@ enum class StateType
     Controls,
     EditorMenu,
     Editor,
-    Game,
+    CustomGame,
     Menu,
     Pause,
     SaveMap,
     Settings,
     ChooseMap,
-    NewGame
+    StoryGame
 };
 
 inline std::string toString(StateType stateType)
 {
     std::unordered_map<StateType, std::string> stateTypeToString{
         {StateType::Controls, "Controls"},   {StateType::EditorMenu, "EditorMenu"},
-        {StateType::Editor, "Editor"},       {StateType::Game, "Game"},
+        {StateType::Editor, "Editor"},       {StateType::CustomGame, "Game"},
         {StateType::Menu, "Menu"},           {StateType::Pause, "Pause"},
         {StateType::SaveMap, "SaveMap"},     {StateType::Settings, "Settings"},
-        {StateType::ChooseMap, "ChooseMap"}, {StateType::NewGame, "NewGame"}};
+        {StateType::ChooseMap, "ChooseMap"}, {StateType::StoryGame, "StoryGame"}};
 
     try
     {
@@ -48,10 +48,10 @@ inline StateType toStateType(const std::string& stateTypeAsString)
 
     std::unordered_map<std::string, StateType> stringToStateType{
         {"controls", StateType::Controls},   {"editormenu", StateType::EditorMenu},
-        {"editor", StateType::Editor},       {"game", StateType::Game},
+        {"editor", StateType::Editor},       {"customgame", StateType::CustomGame},
         {"menu", StateType::Menu},           {"pause", StateType::Pause},
         {"savemap", StateType::SaveMap},     {"settings", StateType::Settings},
-        {"choosemap", StateType::ChooseMap}, {"newgame", StateType::NewGame}};
+        {"choosemap", StateType::ChooseMap}, {"storygame", StateType::StoryGame}};
 
     try
     {

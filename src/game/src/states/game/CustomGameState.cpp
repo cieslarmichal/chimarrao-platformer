@@ -88,7 +88,7 @@ void CustomGameState::render()
 
 StateType CustomGameState::getType() const
 {
-    return StateType::Game;
+    return StateType::CustomGame;
 }
 
 void CustomGameState::activate()

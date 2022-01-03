@@ -36,6 +36,10 @@ StoryGameState::StoryGameState(const std::shared_ptr<window::Window>& windowInit
       musicManager{std::move(musicManagerInit)},
       worldBuilder{std::move(worldBuilderInit)}
 {
+    const std::string mapsDirectory{utils::ProjectPathReader::getProjectRootPath() + "maps/story/"};
+    const auto map = mapsDirectory + "level1.map";
+    tileMap->loadFromFile(map);
+
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig());
 
     const auto worldObjects = worldBuilder->buildWorldObjects(tileMap);
@@ -88,7 +92,7 @@ void StoryGameState::render()
 
 StateType StoryGameState::getType() const
 {
-    return StateType::Game;
+    return StateType::StoryGame;
 }
 
 void StoryGameState::activate()

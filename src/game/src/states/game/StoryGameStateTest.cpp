@@ -124,7 +124,7 @@ TEST_F(StoryGameStateTest, deactivate_shouldDeactivateUIAndOwners)
 
 TEST_F(StoryGameStateTest, getType_shouldReturnChooseMap)
 {
-    ASSERT_EQ(gameState.getType(), StateType::Game);
+    ASSERT_EQ(gameState.getType(), StateType::StoryGame);
 }
 
 TEST_F(StoryGameStateTest, render_shouldRenderAllFromRendererPool)

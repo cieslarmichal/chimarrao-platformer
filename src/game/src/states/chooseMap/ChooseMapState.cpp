@@ -30,7 +30,7 @@ ChooseMapState::ChooseMapState(const std::shared_ptr<window::Window>& windowInit
                                               const auto& mapPath = mapFilePaths[index];
                                               tileMap->loadFromFile(mapPath);
                                               states.deactivateCurrentState();
-                                              states.addNextState(StateType::Game);
+                                              states.addNextState(StateType::CustomGame);
                                           }}
 {
     ChooseMapStateUIConfigBuilder uiConfigBuilder;
