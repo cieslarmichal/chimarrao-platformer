@@ -1,4 +1,4 @@
-#include "GameState.h"
+#include "StoryGameState.h"
 
 #include <utility>
 
@@ -17,15 +17,15 @@ const auto projectPath = utils::ProjectPathReader::getProjectRootPath();
 const auto soundtrackPath = projectPath + "resources/game_music_loop.wav";
 }
 
-GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
-                     const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                     std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                     std::shared_ptr<components::ui::UIManager> uiManagerInit,
-                     std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit,
-                     std::shared_ptr<TileMap> tileMapInit,
-                     const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
-                     std::shared_ptr<audio::MusicManager> musicManagerInit,
-                     std::unique_ptr<WorldBuilder> worldBuilderInit)
+StoryGameState::StoryGameState(const std::shared_ptr<window::Window>& windowInit,
+                                 const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
+                                 std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
+                                 std::shared_ptr<components::ui::UIManager> uiManagerInit,
+                                 std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit,
+                                 std::shared_ptr<TileMap> tileMapInit,
+                                 const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
+                                 std::shared_ptr<audio::MusicManager> musicManagerInit,
+                                 std::unique_ptr<WorldBuilder> worldBuilderInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},
@@ -36,7 +36,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
       musicManager{std::move(musicManagerInit)},
       worldBuilder{std::move(worldBuilderInit)}
 {
-    uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig(this));
+    uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig());
 
     const auto worldObjects = worldBuilder->buildWorldObjects(tileMap);
     const auto player = worldBuilder->getPlayer();
@@ -59,7 +59,7 @@ GameState::GameState(const std::shared_ptr<window::Window>& windowInit,
     musicManager->setVolume(musicId, 15);
 }
 
-NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
+NextState StoryGameState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
     if (timer->getElapsedSeconds() > timeAfterStateCouldBePaused &&
         input.isKeyPressed(input::InputKey::Escape))
@@ -79,19 +79,19 @@ NextState GameState::update(const utils::DeltaTime& deltaTime, const input::Inpu
     return NextState::Same;
 }
 
-void GameState::lateUpdate(const utils::DeltaTime&, const input::Input&) {}
+void StoryGameState::lateUpdate(const utils::DeltaTime&, const input::Input&) {}
 
-void GameState::render()
+void StoryGameState::render()
 {
     rendererPool->renderAll();
 }
 
-StateType GameState::getType() const
+StateType StoryGameState::getType() const
 {
     return StateType::Game;
 }
 
-void GameState::activate()
+void StoryGameState::activate()
 {
     active = true;
     paused = false;
@@ -101,7 +101,7 @@ void GameState::activate()
     musicManager->play(musicId);
 }
 
-void GameState::deactivate()
+void StoryGameState::deactivate()
 {
     active = false;
     timer->restart();
@@ -110,7 +110,7 @@ void GameState::deactivate()
     musicManager->stop(musicId);
 }
 
-void GameState::pause()
+void StoryGameState::pause()
 {
     paused = true;
     componentOwnersManager->deactivate();

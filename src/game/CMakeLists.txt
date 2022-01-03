@@ -2,7 +2,8 @@ set(SOURCES
         src/GameTimer.cpp
         src/Game.cpp
         src/states/State.cpp
-        src/states/game/GameState.cpp
+        src/states/game/CustomGameState.cpp
+        src/states/game/StoryGameState.cpp
         src/states/menu/MenuState.cpp
         src/states/editor/EditorState.cpp
         src/states/pause/PauseState.cpp
@@ -44,7 +45,8 @@ set(SOURCES
 set(UT_SOURCES
         src/GameTimerTest.cpp
         src/GameTest.cpp
-        src/states/game/GameStateTest.cpp
+        src/states/game/CustomGameStateTest.cpp
+        src/states/game/StoryGameStateTest.cpp
         src/states/menu/MenuStateTest.cpp
         src/states/editor/EditorStateTest.cpp
         src/states/pause/PauseStateTest.cpp

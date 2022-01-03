@@ -1,19 +1,19 @@
 #include "GameStateUIConfigBuilder.h"
 
 #include "CommonUIConfigElements.h"
-#include "GameState.h"
+#include "CustomGameState.h"
 
 namespace game
 {
 
-std::unique_ptr<components::ui::UIConfig> GameStateUIConfigBuilder::createGameUIConfig(GameState* gameState)
+std::unique_ptr<components::ui::UIConfig> GameStateUIConfigBuilder::createGameUIConfig()
 {
     return std::make_unique<components::ui::UIConfig>(
-        createBackgroundConfig(gameState), createButtonConfigs(gameState), createCheckBoxConfigs(gameState),
-        createLabelConfigs(gameState), createTextFieldConfigs(gameState), createImageConfigs(gameState));
+        createBackgroundConfig(), createButtonConfigs(), createCheckBoxConfigs(),
+        createLabelConfigs(), createTextFieldConfigs(), createImageConfigs());
 }
 
-std::unique_ptr<components::ui::BackgroundConfig> GameStateUIConfigBuilder::createBackgroundConfig(GameState*)
+std::unique_ptr<components::ui::BackgroundConfig> GameStateUIConfigBuilder::createBackgroundConfig()
 {
     return std::make_unique<components::ui::BackgroundConfig>(
         "gameBackground", utils::Vector2f{0, 0}, utils::Vector2f{80, 60},
@@ -21,31 +21,31 @@ std::unique_ptr<components::ui::BackgroundConfig> GameStateUIConfigBuilder::crea
 }
 
 std::vector<std::unique_ptr<components::ui::ButtonConfig>>
-GameStateUIConfigBuilder::createButtonConfigs(GameState*)
+GameStateUIConfigBuilder::createButtonConfigs()
 {
     return {};
 }
 
 std::vector<std::unique_ptr<components::ui::CheckBoxConfig>>
-GameStateUIConfigBuilder::createCheckBoxConfigs(GameState*)
+GameStateUIConfigBuilder::createCheckBoxConfigs()
 {
     return {};
 }
 
 std::vector<std::unique_ptr<components::ui::LabelConfig>>
-GameStateUIConfigBuilder::createLabelConfigs(GameState*)
+GameStateUIConfigBuilder::createLabelConfigs()
 {
     return {};
 }
 
 std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
-GameStateUIConfigBuilder::createTextFieldConfigs(GameState*)
+GameStateUIConfigBuilder::createTextFieldConfigs()
 {
     return {};
 }
 
 std::vector<std::unique_ptr<components::ui::ImageConfig>>
-GameStateUIConfigBuilder::createImageConfigs(GameState*)
+GameStateUIConfigBuilder::createImageConfigs()
 {
     return {};
 }

@@ -16,19 +16,17 @@ struct ImageConfig;
 
 namespace game
 {
-class GameState;
-
 class GameStateUIConfigBuilder
 {
 public:
-    static std::unique_ptr<components::ui::UIConfig> createGameUIConfig(GameState*);
+    static std::unique_ptr<components::ui::UIConfig> createGameUIConfig();
 
 private:
-    static std::unique_ptr<components::ui::BackgroundConfig> createBackgroundConfig(GameState*);
-    static std::vector<std::unique_ptr<components::ui::ButtonConfig>> createButtonConfigs(GameState*);
-    static std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> createCheckBoxConfigs(GameState*);
-    static std::vector<std::unique_ptr<components::ui::LabelConfig>> createLabelConfigs(GameState*);
-    static std::vector<std::unique_ptr<components::ui::TextFieldConfig>> createTextFieldConfigs(GameState*);
-    static std::vector<std::unique_ptr<components::ui::ImageConfig>> createImageConfigs(GameState*);
+    static std::unique_ptr<components::ui::BackgroundConfig> createBackgroundConfig();
+    static std::vector<std::unique_ptr<components::ui::ButtonConfig>> createButtonConfigs();
+    static std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> createCheckBoxConfigs();
+    static std::vector<std::unique_ptr<components::ui::LabelConfig>> createLabelConfigs();
+    static std::vector<std::unique_ptr<components::ui::TextFieldConfig>> createTextFieldConfigs();
+    static std::vector<std::unique_ptr<components::ui::ImageConfig>> createImageConfigs();
 };
 }

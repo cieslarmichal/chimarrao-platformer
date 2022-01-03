@@ -1,4 +1,4 @@
-#include "GameState.h"
+#include "StoryGameState.h"
 
 #include "gtest/gtest.h"
 
@@ -28,10 +28,10 @@ using namespace components::ui;
 using namespace components::core;
 using namespace ::testing;
 
-class GameStateTest_Base : public Test
+class StoryGameStateTest_Base : public Test
 {
 public:
-    GameStateTest_Base()
+    StoryGameStateTest_Base()
     {
         owner1->addComponent<HealthComponent>(initialHealthPoints);
         owner1->addComponent<DirectionComponent>();
@@ -94,17 +94,17 @@ public:
     std::vector<std::shared_ptr<components::core::ComponentOwner>> worldObjects{owner1, owner2};
 };
 
-class GameStateTest : public GameStateTest_Base
+class StoryGameStateTest : public StoryGameStateTest_Base
 {
 public:
-    GameState gameState{window,       rendererPool,
-                        fileAccess,   states,
-                        uiManager,    std::move(componentOwnersManagerInit),
-                        tileMap,      sharedContext,
-                        musicManager, std::move(worldBuilderInit)};
+    StoryGameState gameState{window,       rendererPool,
+                              fileAccess,   states,
+                              uiManager,    std::move(componentOwnersManagerInit),
+                              tileMap,      sharedContext,
+                              musicManager, std::move(worldBuilderInit)};
 };
 
-TEST_F(GameStateTest, activate_shouldActivateUIAndOwners)
+TEST_F(StoryGameStateTest, activate_shouldActivateUIAndOwners)
 {
     EXPECT_CALL(*componentOwnersManager, activate());
     EXPECT_CALL(*uiManager, activate());
@@ -113,7 +113,7 @@ TEST_F(GameStateTest, activate_shouldActivateUIAndOwners)
     gameState.activate();
 }
 
-TEST_F(GameStateTest, deactivate_shouldDeactivateUIAndOwners)
+TEST_F(StoryGameStateTest, deactivate_shouldDeactivateUIAndOwners)
 {
     EXPECT_CALL(*componentOwnersManager, deactivate());
     EXPECT_CALL(*uiManager, deactivate());
@@ -122,19 +122,19 @@ TEST_F(GameStateTest, deactivate_shouldDeactivateUIAndOwners)
     gameState.deactivate();
 }
 
-TEST_F(GameStateTest, getType_shouldReturnChooseMap)
+TEST_F(StoryGameStateTest, getType_shouldReturnChooseMap)
 {
     ASSERT_EQ(gameState.getType(), StateType::Game);
 }
 
-TEST_F(GameStateTest, render_shouldRenderAllFromRendererPool)
+TEST_F(StoryGameStateTest, render_shouldRenderAllFromRendererPool)
 {
     EXPECT_CALL(*rendererPool, renderAll());
 
     gameState.render();
 }
 
-TEST_F(GameStateTest, update_shouldUpdateUIAndOwners)
+TEST_F(StoryGameStateTest, update_shouldUpdateUIAndOwners)
 {
     EXPECT_CALL(*componentOwnersManager, update(deltaTime, Ref(input)));
     EXPECT_CALL(*componentOwnersManager, processRemovals());

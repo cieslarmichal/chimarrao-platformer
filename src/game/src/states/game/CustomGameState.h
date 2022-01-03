@@ -1,5 +1,6 @@
 #pragma once
 
+#include <queue>
 #include "CharacterFactory.h"
 #include "CollisionSystem.h"
 #include "ComponentOwner.h"
@@ -14,13 +15,14 @@
 #include "Timer.h"
 #include "UIManager.h"
 #include "TileMap.h"
+#include "LevelController.h"
 
 namespace game
 {
-class GameState : public State
+class CustomGameState : public State
 {
 public:
-    GameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
+    CustomGameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
               std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>,
               std::unique_ptr<ComponentOwnersManager>, std::shared_ptr<TileMap>,
               const std::shared_ptr<components::core::SharedContext>&, std::shared_ptr<audio::MusicManager>,

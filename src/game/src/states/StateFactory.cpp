@@ -9,7 +9,7 @@
 #include "EditorMenuState.h"
 #include "EditorState.h"
 #include "FileSystemMapsReader.h"
-#include "GameState.h"
+#include "CustomGameState.h"
 #include "NewGameState.h"
 #include "PhysicsFactory.h"
 #include "SaveMapState.h"
@@ -77,7 +77,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
             std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadTree),
             std::make_shared<ObstacleFactory>(sharedContext), sharedContext);
 
-        return std::make_unique<GameState>(
+        return std::make_unique<CustomGameState>(
             window, rendererPool, fileAccess, states,
             std::make_unique<components::ui::DefaultUIManager>(sharedContext),
             std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()),
