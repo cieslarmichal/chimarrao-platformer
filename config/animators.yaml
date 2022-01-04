@@ -31,6 +31,12 @@ multipleFilesAnimators:
         timeBetweenTexturesInSeconds: 0.095
         loopsAllowed: false
         interruptionAllowed: false
+      - type: sleep
+        firstTexturePath: resources/Player/Dead/dead-1.png
+        numberOfTextures: 6
+        timeBetweenTexturesInSeconds: 0.15
+        loopsAllowed: false
+        interruptionAllowed: false
   - name: druid
     animations:
       - type: idle

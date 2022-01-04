@@ -96,7 +96,14 @@ ObstacleFactory::createCampfire(const utils::Vector2f& position,
     campfire->addComponent<components::core::TextComponent>(
         sharedContext->rendererPool, position, "Press E to sleep", fontPath, 9, graphics::Color::Black,
         utils::Vector2f{-1.5, -2.f});
-    campfire->addComponent<components::core::LimitedSpaceActionComponent>(player.get(), []() {});
+    campfire->addComponent<components::core::LimitedSpaceActionComponent>(
+        player.get(),
+        [&]()
+        {
+            player->getComponent<components::core::AnimationComponent>()->setAnimation(
+                animations::AnimationType::Sleep);
+            player->getComponent<components::core::MovementComponent>()->lock();
+        });
     return campfire;
 }
 

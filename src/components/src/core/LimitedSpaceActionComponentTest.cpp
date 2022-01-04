@@ -29,8 +29,7 @@ class LimitedSpaceActionComponentTest : public Test
 public:
     LimitedSpaceActionComponentTest()
     {
-        owner.addComponent<TextComponent>(rendererPool, position, "press E to action", fontPath,
-                                          dummyFontSize);
+        owner.addComponent<TextComponent>(rendererPool, position, "press E to action", fontPath, dummyFontSize);
         owner.loadDependentComponents();
 
         player.addComponent<VelocityComponent>();
