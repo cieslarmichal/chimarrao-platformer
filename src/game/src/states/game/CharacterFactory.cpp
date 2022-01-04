@@ -60,7 +60,7 @@ CharacterFactory::createPlayer(const utils::Vector2f& position)
                                                                           std::move(friendlyFireValidator));
     player->addComponent<components::core::KeyboardAttackComponent>(attackStrategy);
     player->addComponent<components::core::HealthBarComponent>(sharedContext->rendererPool,
-                                                               utils::Vector2f{1.5, -1});
+                                                               utils::Vector2f{1.8, -0.8});
     const std::shared_ptr<utils::Timer> itemCollectorTimer = utils::TimerFactory::createTimer();
     player->addComponent<components::core::ItemCollectorComponent>(quadtree, rayCast, 8, itemCollectorTimer);
     return player;
@@ -144,7 +144,7 @@ CharacterFactory::createBanditEnemy(const std::shared_ptr<components::core::Comp
                                                                                  attackStrategy);
     enemy->addComponent<components::core::HealthComponent>(50);
     enemy->addComponent<components::core::HealthBarComponent>(sharedContext->rendererPool,
-                                                              utils::Vector2f{0.6, -1});
+                                                              utils::Vector2f{1.f, -0.5});
     return enemy;
 }
 
