@@ -2,6 +2,9 @@
 
 #include "AnimationComponent.h"
 #include "BoxColliderComponent.h"
+#include "CommonUIConfigElements.h"
+#include "LimitedSpaceActionComponent.h"
+#include "TextComponent.h"
 #include "TileType.h"
 
 namespace game
@@ -54,7 +57,9 @@ std::shared_ptr<components::core::ComponentOwner> ObstacleFactory::createTree(co
     return tree;
 }
 
-std::shared_ptr<components::core::ComponentOwner> ObstacleFactory::createBush(const utils::Vector2f& position)
+std::shared_ptr<components::core::ComponentOwner>
+ObstacleFactory::createBush(const utils::Vector2f& position,
+                            const std::shared_ptr<components::core::ComponentOwner>& player)
 {
     static int numberOfBushesInGame = 0;
     numberOfBushesInGame++;
@@ -64,11 +69,16 @@ std::shared_ptr<components::core::ComponentOwner> ObstacleFactory::createBush(co
                                tileTypeToPathTexture(TileType::Bush), graphics::VisibilityLayer::Second);
     bush->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4, 4},
                                                                components::core::CollisionLayer::Tile);
+    bush->addComponent<components::core::TextComponent>(sharedContext->rendererPool, position,
+                                                        "Press E to search", fontPath, 9,
+                                                        graphics::Color::Black, utils::Vector2f{-1.5, -2.f});
+    bush->addComponent<components::core::LimitedSpaceActionComponent>(player.get(), []() {});
     return bush;
 }
 
 std::shared_ptr<components::core::ComponentOwner>
-ObstacleFactory::createCampfire(const utils::Vector2f& position)
+ObstacleFactory::createCampfire(const utils::Vector2f& position,
+                                const std::shared_ptr<components::core::ComponentOwner>& player)
 {
     static int numberOfCampfiresInGame = 0;
     numberOfCampfiresInGame++;
@@ -83,6 +93,10 @@ ObstacleFactory::createCampfire(const utils::Vector2f& position)
     campfire->addComponent<components::core::AnimationComponent>(campfireAnimation);
     campfire->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4, 4},
                                                                    components::core::CollisionLayer::Tile);
+    campfire->addComponent<components::core::TextComponent>(
+        sharedContext->rendererPool, position, "Press E to sleep", fontPath, 9, graphics::Color::Black,
+        utils::Vector2f{-1.5, -2.f});
+    campfire->addComponent<components::core::LimitedSpaceActionComponent>(player.get(), []() {});
     return campfire;
 }
 

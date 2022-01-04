@@ -11,7 +11,11 @@ namespace components::core
 namespace
 {
 const auto distance = [](const utils::Vector2f& v1, const utils::Vector2f& v2)
-{ return std::sqrt(std::pow(v2.x - v1.x, 2) + std::pow(v2.y - v1.y, 2)); };
+{
+    const auto middleOfV1 = utils::Vector2f{v1.x + 2, v1.y + 2};
+    const auto middleOfV2 = utils::Vector2f{v2.x + 2, v2.y + 2};
+    return std::sqrt(std::pow(middleOfV2.x - middleOfV1.x, 2) + std::pow(middleOfV2.y - middleOfV1.y, 2));
+};
 }
 
 LimitedSpaceActionComponent::LimitedSpaceActionComponent(ComponentOwner* owner, ComponentOwner* player,
@@ -74,6 +78,18 @@ void LimitedSpaceActionComponent::update(utils::DeltaTime, const input::Input& i
             textComponent->disable();
             playersItemCollector->enable();
             action();
+        }
+    }
+    else
+    {
+        if (textComponent->isEnabled())
+        {
+            textComponent->disable();
+        }
+
+        if (not playersItemCollector->isEnabled())
+        {
+            playersItemCollector->enable();
         }
     }
 }

@@ -4,6 +4,7 @@
 #include "ArtificialIntelligenceAttackComponent.h"
 #include "BoxColliderComponent.h"
 #include "CameraComponent.h"
+#include "CommonUIConfigElements.h"
 #include "DirectionComponent.h"
 #include "EnemyFollowerComponent.h"
 #include "FriendFollowerComponent.h"
@@ -12,6 +13,7 @@
 #include "ItemCollectorComponent.h"
 #include "KeyboardAnimatedMovementComponent.h"
 #include "KeyboardAttackComponent.h"
+#include "LimitedSpaceActionComponent.h"
 #include "MeleeAttack.h"
 #include "TimerFactory.h"
 #include "VelocityComponent.h"
@@ -107,6 +109,10 @@ CharacterFactory::createDruidNpc(const std::shared_ptr<components::core::Compone
         utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f});
     npc->addComponent<components::core::VelocityComponent>();
     npc->addComponent<components::core::IdleNpcMovementComponent>(player.get());
+    npc->addComponent<components::core::TextComponent>(sharedContext->rendererPool, position,
+                                                       "Press E to talk", fontPath, 9, graphics::Color::Black,
+                                                       utils::Vector2f{-1.5, -2});
+    npc->addComponent<components::core::LimitedSpaceActionComponent>(player.get(), []() {});
     return npc;
 }
 

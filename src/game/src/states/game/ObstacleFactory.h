@@ -14,8 +14,12 @@ public:
     std::shared_ptr<components::core::ComponentOwner> createBrick(const utils::Vector2f& position);
     std::shared_ptr<components::core::ComponentOwner> createGrass(const utils::Vector2f& position);
     std::shared_ptr<components::core::ComponentOwner> createTree(const utils::Vector2f& position);
-    std::shared_ptr<components::core::ComponentOwner> createBush(const utils::Vector2f& position);
-    std::shared_ptr<components::core::ComponentOwner> createCampfire(const utils::Vector2f& position);
+    std::shared_ptr<components::core::ComponentOwner>
+    createBush(const utils::Vector2f& position,
+               const std::shared_ptr<components::core::ComponentOwner>& player);
+    std::shared_ptr<components::core::ComponentOwner>
+    createCampfire(const utils::Vector2f& position,
+                   const std::shared_ptr<components::core::ComponentOwner>& player);
     std::shared_ptr<components::core::ComponentOwner> createChest(const utils::Vector2f& position);
 
 private:

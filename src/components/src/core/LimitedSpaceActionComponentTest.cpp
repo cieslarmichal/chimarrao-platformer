@@ -29,7 +29,8 @@ class LimitedSpaceActionComponentTest : public Test
 public:
     LimitedSpaceActionComponentTest()
     {
-        owner.addComponent<TextComponent>(rendererPool, position, "press E to action", fontPath, dummyFontSize);
+        owner.addComponent<TextComponent>(rendererPool, position, "press E to action", fontPath,
+                                          dummyFontSize);
         owner.loadDependentComponents();
 
         player.addComponent<VelocityComponent>();
@@ -112,7 +113,7 @@ TEST_F(LimitedSpaceActionComponentTest, distanceBetweenOwnerAndPlayerIsMoreThan1
 
 TEST_F(
     LimitedSpaceActionComponentTest,
-    distanceBetweenOwnerAndPlayerIsLessThan15AndKeyNotPressed_shouldDisableItemCollectorAndEnableTextAndNotCallAction)
+    distanceBetweenOwnerAndPlayerIsLessThan10AndKeyNotPressed_shouldDisableItemCollectorAndEnableTextAndNotCallAction)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::E)).WillOnce(Return(false));
 
@@ -125,7 +126,7 @@ TEST_F(
 
 TEST_F(
     LimitedSpaceActionComponentTest,
-    distanceBetweenOwnerAndPlayerIsLessThan15AndKeyPressed_shouldEnableItemCollectorAndDisableTextAndCallAction)
+    distanceBetweenOwnerAndPlayerIsLessThan10AndKeyPressed_shouldEnableItemCollectorAndDisableTextAndCallAction)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::E)).WillOnce(Return(true));
 

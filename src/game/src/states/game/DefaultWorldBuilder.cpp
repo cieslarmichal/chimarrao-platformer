@@ -71,13 +71,13 @@ DefaultWorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             case TileType::Bush:
             {
-                auto bush = obstacleFactory->createBush(position);
+                auto bush = obstacleFactory->createBush(position, player);
                 worldObjects.push_back(bush);
                 break;
             }
             case TileType::Campfire:
             {
-                auto campfire = obstacleFactory->createCampfire(position);
+                auto campfire = obstacleFactory->createCampfire(position, player);
                 worldObjects.push_back(campfire);
                 break;
             }
