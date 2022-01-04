@@ -57,6 +57,11 @@ void ItemCollectorComponent::loadDependentComponents()
 
 void ItemCollectorComponent::update(utils::DeltaTime, const input::Input& input)
 {
+    if (not enabled)
+    {
+        return;
+    }
+
     if (possibilityToCollectNextItemTimer->getElapsedSeconds() > timeAfterNextItemCanBeCollected and
         input.isKeyPressed(input::InputKey::E))
     {

@@ -36,6 +36,7 @@ set(SOURCES
         src/core/attack/MeleeAttack.cpp
         src/core/attack/ArtificialIntelligenceAttackComponent.cpp
         src/core/attack/DefaultFriendlyFireValidator.cpp
+        src/core/LimitedSpaceActionComponent.cpp
         )
 
 set(UT_SOURCES
@@ -75,6 +76,7 @@ set(UT_SOURCES
         src/core/attack/MeleeAttackTest.cpp
         src/core/attack/ArtificialIntelligenceAttackComponentTest.cpp
         src/core/attack/DefaultFriendlyFireValidatorTest.cpp
+        src/core/LimitedSpaceActionComponentTest.cpp
         )
 
 add_library(components ${SOURCES})
