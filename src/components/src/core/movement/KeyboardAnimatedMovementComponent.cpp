@@ -38,7 +38,7 @@ void KeyboardAnimatedMovementComponent::loadDependentComponents()
 
 void KeyboardAnimatedMovementComponent::update(utils::DeltaTime deltaTime, const input::Input& input)
 {
-    if (not enabled)
+    if (not enabled or locked)
     {
         return;
     }
