@@ -29,7 +29,8 @@ class LimitedSpaceActionComponentTest : public Test
 public:
     LimitedSpaceActionComponentTest()
     {
-        owner.addComponent<TextComponent>(rendererPool, position, "press E to action", fontPath, dummyFontSize);
+        owner.addComponent<TextComponent>(rendererPool, position1, "press E to action", fontPath,
+                                          dummyFontSize);
         owner.loadDependentComponents();
 
         player.addComponent<VelocityComponent>();
@@ -56,10 +57,8 @@ public:
     const int clickValue{42};
     const unsigned capacity{1};
     const utils::Vector2f size{4, 4};
-    const utils::Vector2f position{0, 0};
     const utils::Vector2f position1{8, 0};
-    const utils::Vector2f position2{2, 0};
-    const utils::Vector2f position3{3, 0};
+    const utils::Vector2f position2{5, 0};
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
     std::shared_ptr<components::core::SharedContext> sharedContext =
@@ -69,7 +68,6 @@ public:
     std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
         std::make_shared<StrictMock<animations::AnimatorMock>>();
-    std::shared_ptr<StrictMock<ItemEffectMock>> itemEffect = std::make_shared<StrictMock<ItemEffectMock>>();
     std::shared_ptr<physics::Quadtree> quadtree = std::make_shared<physics::DefaultQuadtree>();
     std::shared_ptr<physics::RayCast> rayCast = std::make_shared<physics::DefaultRayCast>(quadtree);
     std::shared_ptr<StrictMock<utils::TimerMock>> timer{std::make_shared<StrictMock<utils::TimerMock>>()};
@@ -82,7 +80,7 @@ public:
 TEST_F(LimitedSpaceActionComponentTest,
        loadDependentComponentsWithoutTextComponent_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner componentOwnerWithoutText{position, "componentOwnerWithoutTextComponent", sharedContext};
+    ComponentOwner componentOwnerWithoutText{position1, "componentOwnerWithoutTextComponent", sharedContext};
     LimitedSpaceActionComponent limitedSpaceActionComponentWithoutTextComponent{
         &componentOwnerWithoutText, &player, [this] { clickAction(actionVariable); }};
 
@@ -93,7 +91,8 @@ TEST_F(LimitedSpaceActionComponentTest,
 TEST_F(LimitedSpaceActionComponentTest,
        loadDependentComponentsWithoutPlayersItemCollector_shouldThrowDependentComponentNotFound)
 {
-    ComponentOwner playerWithoutItemCollector{position, "playerWithoutItemCollectorComponent", sharedContext};
+    ComponentOwner playerWithoutItemCollector{position1, "playerWithoutItemCollectorComponent",
+                                              sharedContext};
     LimitedSpaceActionComponent limitedSpaceActionComponentWithoutItemCollector{
         &owner, &playerWithoutItemCollector, [this] { clickAction(actionVariable); }};
 
@@ -101,7 +100,7 @@ TEST_F(LimitedSpaceActionComponentTest,
                  components::core::exceptions::DependentComponentNotFound);
 }
 
-TEST_F(LimitedSpaceActionComponentTest, distanceBetweenOwnerAndPlayerIsMoreThan15_shouldNotCallAction)
+TEST_F(LimitedSpaceActionComponentTest, distanceBetweenOwnerAndPlayerIsMoreThan6_shouldNotCallAction)
 {
     player.transform->setPosition(100, 50);
 
@@ -112,7 +111,7 @@ TEST_F(LimitedSpaceActionComponentTest, distanceBetweenOwnerAndPlayerIsMoreThan1
 
 TEST_F(
     LimitedSpaceActionComponentTest,
-    distanceBetweenOwnerAndPlayerIsLessThan10AndKeyNotPressed_shouldDisableItemCollectorAndEnableTextAndNotCallAction)
+    distanceBetweenOwnerAndPlayerIsLessThan6AndKeyNotPressed_shouldDisableItemCollectorAndEnableTextAndNotCallAction)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::E)).WillOnce(Return(false));
 
@@ -125,7 +124,7 @@ TEST_F(
 
 TEST_F(
     LimitedSpaceActionComponentTest,
-    distanceBetweenOwnerAndPlayerIsLessThan10AndKeyPressed_shouldEnableItemCollectorAndDisableTextAndCallAction)
+    distanceBetweenOwnerAndPlayerIsLessThan6AndKeyPressed_shouldEnableItemCollectorAndDisableTextAndCallAction)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::E)).WillOnce(Return(true));
 
@@ -134,4 +133,19 @@ TEST_F(
     ASSERT_FALSE(owner.getComponent<TextComponent>()->isEnabled());
     ASSERT_TRUE(player.getComponent<ItemCollectorComponent>()->isEnabled());
     ASSERT_TRUE(actionPerformed(actionVariable));
+}
+
+TEST_F(
+    LimitedSpaceActionComponentTest,
+    distanceBetweenOwnerAndPlayerIsLessThan6AndThenPlayerGoesAwayWithoutPressingKey_shouldEnableItemCollectorAndDisableText)
+{
+    EXPECT_CALL(input, isKeyPressed(input::InputKey::E)).WillOnce(Return(false));
+
+    limitedSpaceActionComponent.update(deltaTime, input);
+    player.transform->setPosition(100, 50);
+    limitedSpaceActionComponent.update(deltaTime, input);
+
+    ASSERT_FALSE(owner.getComponent<TextComponent>()->isEnabled());
+    ASSERT_TRUE(player.getComponent<ItemCollectorComponent>()->isEnabled());
+    ASSERT_FALSE(actionPerformed(actionVariable));
 }

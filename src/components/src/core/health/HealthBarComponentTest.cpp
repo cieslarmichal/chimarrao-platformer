@@ -27,8 +27,8 @@ public:
         EXPECT_CALL(*rendererPool, release(graphicsId));
     }
 
-    const utils::Vector2f size{3.f, 0.5f};
-    const utils::Vector2f sizeAfterLostHealth{1.5f, 0.5f};
+    const utils::Vector2f size{2.5f, 0.4f};
+    const utils::Vector2f sizeAfterLostHealth{1.25f, 0.4f};
     const graphics::Color color{graphics::Color::Red};
     const graphics::VisibilityLayer initialVisibility{graphics::VisibilityLayer::First};
     const utils::DeltaTime deltaTime{3};

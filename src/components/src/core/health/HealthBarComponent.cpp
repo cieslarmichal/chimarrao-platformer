@@ -13,9 +13,8 @@ HealthBarComponent::HealthBarComponent(ComponentOwner* owner,
                                        const utils::Vector2f& offset)
     : Component{owner}
 {
-    bar =
-        owner->addGraphicsComponent(rendererPool, maximumSize, owner->transform->getPosition(),
-                                    graphics::Color::Red, graphics::VisibilityLayer::First, offset);
+    bar = owner->addGraphicsComponent(rendererPool, maximumSize, owner->transform->getPosition(),
+                                      graphics::Color::Red, graphics::VisibilityLayer::First, offset);
 }
 
 void HealthBarComponent::loadDependentComponents()

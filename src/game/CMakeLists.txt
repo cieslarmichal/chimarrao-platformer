@@ -36,7 +36,8 @@ set(SOURCES
         src/states/game/CharacterFactory.cpp
         src/states/game/ItemFactory.cpp
         src/states/game/ObstacleFactory.cpp
-        src/states/game/DefaultWorldBuilder.cpp
+        src/states/game/levels/Level1WorldBuilder.cpp
+        src/states/game/CustomWorldBuilder.cpp
         src/states/game/levels/Level1Controller.cpp
         )
 
@@ -44,7 +45,6 @@ set(SOURCES
 set(UT_SOURCES
         src/GameTimerTest.cpp
         src/GameTest.cpp
-        src/states/game/CustomGameStateTest.cpp
         src/states/menu/MenuStateTest.cpp
         src/states/editor/EditorStateTest.cpp
         src/states/pause/PauseStateTest.cpp
@@ -72,7 +72,6 @@ set(UT_SOURCES
         src/navigators/GridButtonsNavigatorTest.cpp
         src/states/game/HeadsUpDisplayTest.cpp
         src/states/game/HeadsUpDisplayUIConfigBuilderTest.cpp
-        src/states/game/levels/Level1ControllerTest.cpp
         )
 
 add_library(game ${SOURCES})

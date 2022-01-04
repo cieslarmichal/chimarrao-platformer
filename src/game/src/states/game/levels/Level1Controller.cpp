@@ -2,6 +2,7 @@
 
 #include <utility>
 
+#include "Level1WorldBuilder.h"
 #include "MovementComponent.h"
 #include "TimerFactory.h"
 
@@ -15,11 +16,15 @@ const std::string levelMap{mapsDirectory + "level1.map"};
 
 Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
                                    std::unique_ptr<ComponentOwnersManager> ownersManagerInit,
-                                   std::shared_ptr<WorldBuilder> worldBuilderInit)
-    : ownersManager{std::move(ownersManagerInit)}, worldBuilder{std::move(worldBuilderInit)}
+                                   const std::shared_ptr<CharacterFactory>& characterFactory,
+                                   const std::shared_ptr<ObstacleFactory>& obstacleFactory,
+                                   const std::shared_ptr<components::core::SharedContext>& sharedContext)
+    : ownersManager{std::move(ownersManagerInit)}
 {
     tileMap->loadFromFile(levelMap);
 
+    auto worldBuilder =
+        std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, sharedContext, this);
     const auto worldObjects = worldBuilder->buildWorldObjects(tileMap);
     mainCharacters.player = worldBuilder->getPlayer();
 
@@ -68,4 +73,10 @@ void Level1Controller::deactivate()
 {
     ownersManager->deactivate();
 }
+
+Level1MainCharacters Level1Controller::getCharacters() const
+{
+    return mainCharacters;
+}
+
 }

@@ -69,19 +69,17 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
         const auto tileMapSize = tileMap->getSize();
         const auto mapBoundaries =
             utils::FloatRect(0, 0, static_cast<float>(tileMapSize.x), static_cast<float>(tileMapSize.y));
-        auto collisionSystemFactory = physics::PhysicsFactory::createPhysicsFactory(mapBoundaries);
-        auto rayCast = collisionSystemFactory->createRayCast();
-        auto quadTree = collisionSystemFactory->getQuadTree();
+        auto physicsFactory = physics::PhysicsFactory::createPhysicsFactory(mapBoundaries);
+        auto rayCast = physicsFactory->createRayCast();
+        auto quadTree = physicsFactory->getQuadTree();
 
-        auto worldBuilder = std::make_unique<DefaultWorldBuilder>(
-            std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadTree),
-            std::make_shared<ObstacleFactory>(sharedContext), sharedContext);
+        auto characterFactory = std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadTree);
+        auto obstacleFactory = std::make_shared<ObstacleFactory>(sharedContext);
 
         return std::make_unique<CustomGameState>(
             window, rendererPool, fileAccess, states,
-            std::make_unique<components::ui::DefaultUIManager>(sharedContext),
-            std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()),
-            tileMap, sharedContext, musicManager, std::move(worldBuilder));
+            std::make_unique<components::ui::DefaultUIManager>(sharedContext), tileMap, sharedContext,
+            musicManager, characterFactory, obstacleFactory, std::move(physicsFactory));
     }
     case StateType::StoryGame:
     {

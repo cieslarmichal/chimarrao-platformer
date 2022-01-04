@@ -1,13 +1,13 @@
-#include "DefaultWorldBuilder.h"
+#include "CustomWorldBuilder.h"
 
 #include <utility>
 
 namespace game
 {
 
-DefaultWorldBuilder::DefaultWorldBuilder(std::shared_ptr<CharacterFactory> characterFactoryInit,
-                                         std::shared_ptr<ObstacleFactory> obstacleFactoryInit,
-                                         std::shared_ptr<components::core::SharedContext> sharedContextInit)
+CustomWorldBuilder::CustomWorldBuilder(std::shared_ptr<CharacterFactory> characterFactoryInit,
+                                       std::shared_ptr<ObstacleFactory> obstacleFactoryInit,
+                                       std::shared_ptr<components::core::SharedContext> sharedContextInit)
     : characterFactory{std::move(characterFactoryInit)},
       obstacleFactory{std::move(obstacleFactoryInit)},
       sharedContext{std::move(sharedContextInit)}
@@ -15,7 +15,7 @@ DefaultWorldBuilder::DefaultWorldBuilder(std::shared_ptr<CharacterFactory> chara
 }
 
 std::vector<std::shared_ptr<components::core::ComponentOwner>>
-DefaultWorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
+CustomWorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
 {
     std::vector<std::shared_ptr<components::core::ComponentOwner>> worldObjects;
 
@@ -144,17 +144,17 @@ DefaultWorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
     return worldObjects;
 }
 
-std::shared_ptr<components::core::ComponentOwner> DefaultWorldBuilder::getPlayer() const
+std::shared_ptr<components::core::ComponentOwner> CustomWorldBuilder::getPlayer() const
 {
     return player;
 }
 
-std::shared_ptr<components::core::ComponentOwner> DefaultWorldBuilder::getRabbit() const
+std::shared_ptr<components::core::ComponentOwner> CustomWorldBuilder::getRabbit() const
 {
     return rabbit;
 }
 
-std::shared_ptr<components::core::ComponentOwner> DefaultWorldBuilder::getNpc() const
+std::shared_ptr<components::core::ComponentOwner> CustomWorldBuilder::getNpc() const
 {
     return npc;
 }
