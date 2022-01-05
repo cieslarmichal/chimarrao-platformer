@@ -45,7 +45,7 @@ StoryGameState::StoryGameState(const std::shared_ptr<window::Window>& windowInit
 
     auto level1Controller = std::make_unique<Level1Controller>(
         tileMap, std::make_unique<DefaultComponentOwnersManager>(physicsFactory->createCollisionSystem()),
-        characterFactory, obstacleFactory, sharedContext);
+        characterFactory, obstacleFactory, sharedContext, fileAccess);
     const auto player = level1Controller->getCharacters().player;
 
     levelControllers.push(std::move(level1Controller));

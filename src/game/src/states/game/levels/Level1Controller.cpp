@@ -18,8 +18,9 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
                                    std::unique_ptr<ComponentOwnersManager> ownersManagerInit,
                                    const std::shared_ptr<CharacterFactory>& characterFactory,
                                    const std::shared_ptr<ObstacleFactory>& obstacleFactory,
-                                   const std::shared_ptr<components::core::SharedContext>& sharedContext)
-    : ownersManager{std::move(ownersManagerInit)}
+                                   const std::shared_ptr<components::core::SharedContext>& sharedContext,
+                                   std::shared_ptr<utils::FileAccess> fileAccessInit)
+    : ownersManager{std::move(ownersManagerInit)}, fileAccess{std::move(fileAccessInit)}
 {
     tileMap->loadFromFile(levelMap);
 
