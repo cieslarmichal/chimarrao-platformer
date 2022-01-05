@@ -1,0 +1,15 @@
+druid: Oh, you found me
+player: Hi
+player: Do you know where can I find some food?
+druid: Have you seen those bushes?
+player: Yes, I guess so
+player: Do they have any fruits?
+druid: Unfortunately no, they don't
+player: But...
+player: I am starving.
+druid: Don't worry!
+druid: Those bushes have something better
+druid: They have yerba drinks!
+druid: It will make all your worries disappear
+player: I need to try some
+player: Thanks, bye!

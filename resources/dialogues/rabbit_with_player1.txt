@@ -1,0 +1,2 @@
+player: Hello my friend!
+rabbit: Hi, where are you coming from?
