@@ -1,21 +1,16 @@
 #pragma once
 
-#include "DialogueTrack.h"
-#include "FileAccess.h"
 #include <memory>
-#include "DialoguesParser.h"
+
+#include "DialogueTrack.h"
 
 namespace game
 {
 class DialoguesReader
 {
 public:
-    explicit DialoguesReader(std::shared_ptr<utils::FileAccess>);
+    virtual ~DialoguesReader() = default;
 
-    DialogueTrack read(const std::string& dialogueTrackPath) const;
-
-private:
-    std::shared_ptr<utils::FileAccess> fileAccess;
-    DialoguesParser dialoguesParser;
+    virtual DialogueTrack read(const std::string& dialogueTrackPath) const = 0;
 };
 }

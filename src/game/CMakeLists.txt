@@ -40,7 +40,7 @@ set(SOURCES
         src/states/game/CustomWorldBuilder.cpp
         src/states/game/levels/Level1Controller.cpp
         src/states/game/levels/Level1DialoguesController.cpp
-        src/states/game/dialogues/DialoguesReader.cpp
+        src/states/game/dialogues/DefaultDialoguesReader.cpp
         src/states/game/dialogues/DialoguesValidator.cpp
         src/states/game/dialogues/DialoguesParser.cpp
         )
@@ -76,7 +76,7 @@ set(UT_SOURCES
         src/states/game/HeadsUpDisplayTest.cpp
         src/states/game/HeadsUpDisplayUIConfigBuilderTest.cpp
         src/states/game/levels/Level1DialoguesControllerTest.cpp
-        src/states/game/dialogues/DialoguesReaderTest.cpp
+        src/states/game/dialogues/DefaultDialoguesReaderTest.cpp
         src/states/game/dialogues/DialoguesValidatorTest.cpp
         src/states/game/dialogues/DialoguesParserTest.cpp
         )

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "DefaultDialoguesReader.h"
 #include "Level1MainCharacters.h"
 
 namespace game

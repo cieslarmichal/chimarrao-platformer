@@ -1,4 +1,4 @@
-#include "DialoguesReader.h"
+#include "DefaultDialoguesReader.h"
 
 #include "gtest/gtest.h"
 
@@ -31,7 +31,7 @@ public:
     std::shared_ptr<StrictMock<utils::FileAccessMock>> fileAccess =
         std::make_shared<StrictMock<utils::FileAccessMock>>();
 
-    DialoguesReader reader{fileAccess};
+    DefaultDialoguesReader reader{fileAccess};
 };
 
 TEST_F(DialoguesReaderTest, fileAccessThrow_shouldThrow)

@@ -1,7 +1,8 @@
 #pragma once
 
-#include "DialogueEntry.h"
 #include <vector>
+
+#include "DialogueEntry.h"
 
 namespace game
 {

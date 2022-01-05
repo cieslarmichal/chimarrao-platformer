@@ -12,7 +12,8 @@ const std::vector<std::string> dialogueLinesWithoutActor{{": Hello"}, {"player: 
 const std::vector<std::string> dialogueLinesWithoutActorAndSeparator{{"Hello"}, {"player: Hi"}};
 const std::vector<std::string> dialogueLinesWithInvalidActor{{"bear: Hello"}, {"player: Hi"}};
 const std::vector<std::string> dialogueLinesWithEmptyLine{{"druid: Hello"}, {""}, {"player: Hi"}};
-const std::vector<std::string> dialogueLinesWithNoSpaceBetweenSeparatorAndStatement{{"druid:"}, {"player: Hi"}};
+const std::vector<std::string> dialogueLinesWithNoSpaceBetweenSeparatorAndStatement{{"druid:"},
+                                                                                    {"player: Hi"}};
 const std::vector<std::string> dialogueLinesWithEmptyStatement{{"druid: "}, {"player: Hi"}};
 const std::vector<std::string> validDialogueLines{{"druid: Oh, you found me"},
                                                   {"player: Hi"},
