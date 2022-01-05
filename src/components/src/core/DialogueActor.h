@@ -7,7 +7,7 @@
 
 #include "StringHelper.h"
 
-namespace game
+namespace components::core
 {
 enum class DialogueActor
 {
