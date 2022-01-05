@@ -10,7 +10,7 @@ namespace game
 {
 struct DialogueEntry
 {
-    DialogueActor actor;
+    components::core::DialogueActor actor;
     std::string statement;
 };
 

@@ -49,7 +49,7 @@ bool DialoguesValidator::validate(const std::vector<std::string>& dialogueLines)
 
         const auto actorName = utils::StringHelper::substring(dialogueLine, 0, separatorPosition);
 
-        const auto validActorName = dialogueActors.contains(actorName);
+        const auto validActorName = components::core::dialogueActors.contains(actorName);
 
         if (not validActorName)
         {

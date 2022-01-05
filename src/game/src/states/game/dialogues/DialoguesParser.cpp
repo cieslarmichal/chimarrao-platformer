@@ -34,7 +34,7 @@ DialogueTrack DialoguesParser::parse(const std::vector<std::string>& dialogueLin
         const auto actorName = utils::StringHelper::substring(dialogueLine, 0, separatorPosition);
         const auto statement =
             utils::StringHelper::substring(dialogueLine, separatorPosition + 2, dialogueLine.size());
-        const auto dialogueActor = toDialogueActor(actorName);
+        const auto dialogueActor = components::core::toDialogueActor(actorName);
         dialogueTrack.push_back({dialogueActor, statement});
     }
 
