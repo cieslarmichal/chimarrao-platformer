@@ -2,6 +2,7 @@
 
 #include <utility>
 
+#include "DefaultDialoguesReader.h"
 #include "Level1WorldBuilder.h"
 #include "MovementComponent.h"
 #include "TimerFactory.h"
@@ -28,6 +29,8 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
         std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, sharedContext, this);
     const auto worldObjects = worldBuilder->buildWorldObjects(tileMap);
     mainCharacters.player = worldBuilder->getPlayer();
+    mainCharacters.rabbit = worldBuilder->getRabbit();
+    mainCharacters.npc = worldBuilder->getNpc();
 
     for (const auto& worldObject : worldObjects)
     {
@@ -37,6 +40,9 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
     ownersManager->processNewObjects();
 
     timer = utils::TimerFactory::createTimer();
+
+    dialoguesController = std::make_unique<Level1DialoguesController>(
+        &mainCharacters, std::make_unique<DefaultDialoguesReader>(fileAccess));
 }
 
 SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, const input::Input& input)

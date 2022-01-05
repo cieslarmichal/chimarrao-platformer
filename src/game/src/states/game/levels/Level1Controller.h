@@ -7,6 +7,7 @@
 #include "ObstacleFactory.h"
 #include "TileMap.h"
 #include "Timer.h"
+#include "Level1DialoguesController.h"
 
 namespace game
 {
@@ -33,5 +34,6 @@ private:
     std::shared_ptr<utils::FileAccess> fileAccess;
     bool playerBlocked{false};
     bool playerUnblocked{false};
+    std::unique_ptr<Level1DialoguesController> dialoguesController;
 };
 }
