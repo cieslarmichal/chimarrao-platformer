@@ -67,9 +67,10 @@ void StringHelper::cutOffString(std::string& line, size_t startIndexToCutInclude
     line = cutOffFromString(line, startIndexToCutIncluded, endIndexToCutIncluded);
 }
 
-std::string StringHelper::substring(const std::string& line, size_t startIndex, size_t endIndex)
+std::string StringHelper::substring(const std::string& line, size_t startIndexIncluded,
+                                    size_t endIndexExcluded)
 {
-    return line.substr(startIndex, endIndex - startIndex);
+    return line.substr(startIndexIncluded, endIndexExcluded - startIndexIncluded);
 }
 
 std::string StringHelper::getLowerCases(const std::string& input)

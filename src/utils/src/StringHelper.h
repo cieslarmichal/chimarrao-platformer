@@ -18,7 +18,7 @@ public:
     static std::string cutOffFromString(const std::string& line, size_t startIndexToCut,
                                         size_t endIndexToCut);
     static void cutOffString(std::string& line, size_t startIndexToCutIncluded, size_t endIndexToCutIncluded);
-    static std::string substring(const std::string& line, size_t startIndex, size_t endIndex);
+    static std::string substring(const std::string& line, size_t startIndexIncluded, size_t endIndexExcluded);
     static std::string getLowerCases(const std::string&);
     static void trim(std::string&);
 };

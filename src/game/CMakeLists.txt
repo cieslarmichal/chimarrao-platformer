@@ -39,8 +39,11 @@ set(SOURCES
         src/states/game/levels/Level1WorldBuilder.cpp
         src/states/game/CustomWorldBuilder.cpp
         src/states/game/levels/Level1Controller.cpp
+        src/states/game/levels/Level1DialoguesController.cpp
+        src/states/game/dialogues/DialoguesReader.cpp
+        src/states/game/dialogues/DialoguesValidator.cpp
+        src/states/game/dialogues/DialoguesParser.cpp
         )
-
 
 set(UT_SOURCES
         src/GameTimerTest.cpp
@@ -72,6 +75,10 @@ set(UT_SOURCES
         src/navigators/GridButtonsNavigatorTest.cpp
         src/states/game/HeadsUpDisplayTest.cpp
         src/states/game/HeadsUpDisplayUIConfigBuilderTest.cpp
+        src/states/game/levels/Level1DialoguesControllerTest.cpp
+        src/states/game/dialogues/DialoguesReaderTest.cpp
+        src/states/game/dialogues/DialoguesValidatorTest.cpp
+        src/states/game/dialogues/DialoguesParserTest.cpp
         )
 
 add_library(game ${SOURCES})
@@ -81,6 +88,7 @@ target_include_directories(game PUBLIC
         src/states/editor
         src/states/game
         src/states/game/levels
+        src/states/game/dialogues
         src/states/chooseMap
         src/states/controls
         src/states/settings
