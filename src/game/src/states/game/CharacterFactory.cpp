@@ -53,14 +53,12 @@ CharacterFactory::createPlayer(const utils::Vector2f& position)
     player->addComponent<components::core::CameraComponent>(
         sharedContext->rendererPool, utils::FloatRect{0, 0, static_cast<float>(tileMap->getSize().x) * 4.f,
                                                       static_cast<float>(tileMap->getSize().y) * 4.f});
-    player->addComponent<components::core::HealthComponent>(1000);
+    player->addComponent<components::core::HealthComponent>(100);
     player->addComponent<components::core::DirectionComponent>();
     auto friendlyFireValidator = std::make_unique<components::core::DefaultFriendlyFireValidator>();
     auto attackStrategy = std::make_shared<components::core::MeleeAttack>(player.get(), rayCast,
                                                                           std::move(friendlyFireValidator));
     player->addComponent<components::core::KeyboardAttackComponent>(attackStrategy);
-    player->addComponent<components::core::HealthBarComponent>(sharedContext->rendererPool,
-                                                               utils::Vector2f{1.8, -0.8});
     const std::shared_ptr<utils::Timer> itemCollectorTimer = utils::TimerFactory::createTimer();
     player->addComponent<components::core::ItemCollectorComponent>(quadtree, rayCast, 8, itemCollectorTimer);
     player->addComponent<components::core::TextComponent>(sharedContext->rendererPool, position, "", fontPath,
@@ -87,11 +85,9 @@ CharacterFactory::createRabbitFollower(const std::shared_ptr<components::core::C
         utils::Vector2f{2.f, 2.f}, components::core::CollisionLayer::Player, utils::Vector2f{0.f, 0.f});
     follower->addComponent<components::core::VelocityComponent>();
     follower->addComponent<components::core::HealthComponent>(50);
-    follower->addComponent<components::core::HealthBarComponent>(sharedContext->rendererPool,
-                                                                 utils::Vector2f{0, -1});
     follower->addComponent<components::core::TextComponent>(sharedContext->rendererPool, position, "",
                                                             fontPath, 9, graphics::Color::Black,
-                                                            utils::Vector2f{-1.5, -2});
+                                                            utils::Vector2f{-1.5, -3.6});
     return follower;
 }
 

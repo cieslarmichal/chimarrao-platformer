@@ -2,6 +2,7 @@
 
 #include <utility>
 
+#include "AnimationComponent.h"
 #include "DefaultDialoguesReader.h"
 #include "Level1WorldBuilder.h"
 #include "MovementComponent.h"
@@ -53,7 +54,12 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
     if (elapsedSeconds > 0.3)
     {
         std::call_once(playerWithRabbitDialogueStarted,
-                       [this] { dialoguesController->startPlayerWithRabbitDialogue(); });
+                       [this]
+                       {
+                           mainCharacters.player->getComponent<components::core::AnimationComponent>()
+                               ->setAnimationDirection(animations::AnimationDirection::Left);
+                           dialoguesController->startPlayerWithRabbitDialogue();
+                       });
     }
 
     dialoguesController->update();

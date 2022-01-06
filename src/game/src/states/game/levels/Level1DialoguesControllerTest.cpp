@@ -129,6 +129,7 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
     controller.update();
 
     ASSERT_FALSE(rabbit->getComponent<components::core::TextComponent>()->isEnabled());
+    ASSERT_TRUE(player->getComponent<components::core::TextComponent>()->isEnabled());
 }
 
 TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
@@ -144,6 +145,7 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
     controller.update();
 
     ASSERT_FALSE(player->getComponent<components::core::TextComponent>()->isEnabled());
+    ASSERT_TRUE(rabbit->getComponent<components::core::TextComponent>()->isEnabled());
 }
 
 TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
@@ -180,6 +182,7 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithDruidDialogue,
     controller.update();
 
     ASSERT_FALSE(player->getComponent<components::core::TextComponent>()->isEnabled());
+    ASSERT_TRUE(druid->getComponent<components::core::TextComponent>()->isEnabled());
 }
 
 TEST_F(Level1DialoguesControllerTest_PlayerWithDruidDialogue,
@@ -195,6 +198,7 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithDruidDialogue,
     controller.update();
 
     ASSERT_FALSE(druid->getComponent<components::core::TextComponent>()->isEnabled());
+    ASSERT_TRUE(player->getComponent<components::core::TextComponent>()->isEnabled());
 }
 
 TEST_F(Level1DialoguesControllerTest_PlayerWithDruidDialogue,

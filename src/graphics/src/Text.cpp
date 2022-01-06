@@ -11,7 +11,7 @@ Text::Text(const GraphicsId& graphicsId, const utils::Vector2f& position, const 
     setFont(font);
     setString(text);
     setFillColor(color);
-    setOutlineThickness(0.2f);
+    setOutlineThickness(0.1f);
     setCharacterSize(characterSize);
     setPosition(position);
 }

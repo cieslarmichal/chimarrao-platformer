@@ -21,7 +21,7 @@ Level1DialoguesController::Level1DialoguesController(Level1MainCharacters* level
       playerWithRabbitDialogueTrack1{dialoguesReader->read(playerWithRabbitDialogueFile1)},
       playerWithDruidDialogueTrack{dialoguesReader->read(playerWithDruidDialogueFile)},
       dialogueAliveTimer{std::move(timerInit)},
-      dialogueTimeToLive{1.5f}
+      dialogueTimeToLive{2.5f}
 {
 }
 
@@ -60,17 +60,17 @@ void Level1DialoguesController::handlePlayerWithRabbit1Dialogue()
             if (dialogueEntry->actor == components::core::DialogueActor::Player)
             {
                 mainCharacters->rabbit->getComponent<components::core::TextComponent>()->disable();
-
                 mainCharacters->player->getComponent<components::core::TextComponent>()->setText(
                     dialogueEntry->statement);
+                mainCharacters->player->getComponent<components::core::TextComponent>()->enable();
             }
 
             if (dialogueEntry->actor == components::core::DialogueActor::Rabbit)
             {
                 mainCharacters->player->getComponent<components::core::TextComponent>()->disable();
-
                 mainCharacters->rabbit->getComponent<components::core::TextComponent>()->setText(
                     dialogueEntry->statement);
+                mainCharacters->rabbit->getComponent<components::core::TextComponent>()->enable();
             }
         }
         else
@@ -91,17 +91,18 @@ void Level1DialoguesController::handlePlayerWithDruidDialogue()
             if (dialogueEntry->actor == components::core::DialogueActor::Player)
             {
                 mainCharacters->npc->getComponent<components::core::TextComponent>()->disable();
-
                 mainCharacters->player->getComponent<components::core::TextComponent>()->setText(
                     dialogueEntry->statement);
+                mainCharacters->player->getComponent<components::core::TextComponent>()->enable();
             }
 
             if (dialogueEntry->actor == components::core::DialogueActor::Druid)
             {
                 mainCharacters->player->getComponent<components::core::TextComponent>()->disable();
-
                 mainCharacters->npc->getComponent<components::core::TextComponent>()->setText(
                     dialogueEntry->statement);
+                mainCharacters->npc->getComponent<components::core::TextComponent>()->enable();
+
             }
         }
         else

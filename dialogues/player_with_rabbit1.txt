@@ -1,2 +1,7 @@
-player: Hello my friend!
-rabbit: Hi, where are you coming from?
+player: Hello bunny!
+rabbit: Hi,
+rabbit: where are you coming from?
+player: I was sick of living in the city
+player: I left my job and my current life
+player: and went to the mountains...
+player: now I'm here
