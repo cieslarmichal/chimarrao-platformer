@@ -88,4 +88,9 @@ void MovementComponent::unlock()
     locked = false;
 }
 
+bool MovementComponent::isLocked() const
+{
+    return locked;
+}
+
 }

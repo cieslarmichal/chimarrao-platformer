@@ -27,6 +27,7 @@ public:
     bool isAllowedToMoveDown() const;
     void lock();
     void unlock();
+    bool isLocked() const;
 
 protected:
     float movementSpeed;

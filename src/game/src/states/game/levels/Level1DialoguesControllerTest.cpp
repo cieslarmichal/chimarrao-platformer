@@ -7,7 +7,10 @@
 #include "TimerMock.h"
 
 #include "DialogueActorComponent.h"
+#include "KeyboardHorizontalMovementComponent.h"
+#include "MovementComponent.h"
 #include "ProjectPathReader.h"
+#include "TextComponent.h"
 
 using namespace game;
 using namespace ::testing;
@@ -31,18 +34,20 @@ const std::vector<DialogueEntry> dialogueEntriesBetweenPlayerAndRabbit{
 const utils::Vector2f position1{8, 0};
 const utils::Vector2f position2{5, 0};
 const utils::Vector2f position3{12, 0};
+const auto projectPath = utils::ProjectPathReader::getProjectRootPath();
+const auto dummyFontSize = 4;
+const auto fontPath = projectPath + "resources/fonts/VeraMono.ttf";
 }
 
-class Level1DialoguesControllerTest : public Test
+class Level1DialoguesControllerTest_Base : public Test
 {
 public:
-    Level1DialoguesControllerTest()
+    Level1DialoguesControllerTest_Base()
     {
-        druid->addComponent<components::core::DialogueActorComponent>(components::core::DialogueActor::Druid);
-        player->addComponent<components::core::DialogueActorComponent>(
-            components::core::DialogueActor::Player);
-        rabbit->addComponent<components::core::DialogueActorComponent>(
-            components::core::DialogueActor::Rabbit);
+        EXPECT_CALL(*dialoguesReader, read(playerWithRabbitDialogueFile1))
+            .WillOnce(Return(dialogueEntriesBetweenPlayerAndRabbit));
+        EXPECT_CALL(*dialoguesReader, read(playerWithDruidDialogueFile))
+            .WillOnce(Return(dialogueEntriesBetweenPlayerAndDruid));
     }
 
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
@@ -66,15 +71,147 @@ public:
     StrictMock<utils::TimerMock>* timer{timerInit.get()};
 };
 
-TEST_F(Level1DialoguesControllerTest, createDialogueController_shouldReadDialogueTracks)
+class Level1DialoguesControllerTest : public Level1DialoguesControllerTest_Base
 {
-    EXPECT_CALL(*dialoguesReader, read(playerWithRabbitDialogueFile1))
-        .WillOnce(Return(dialogueEntriesBetweenPlayerAndRabbit));
-    EXPECT_CALL(*dialoguesReader, read(playerWithDruidDialogueFile))
-        .WillOnce(Return(dialogueEntriesBetweenPlayerAndDruid));
+public:
+    Level1DialoguesControllerTest()
+    {
+        player->addComponent<components::core::KeyboardHorizontalMovementComponent>();
+        auto playerText = player->addComponent<components::core::TextComponent>(
+            rendererPool, position1, "xxx", fontPath, dummyFontSize);
+        playerTextId = playerText->getGraphicsId();
+        auto rabbitText = rabbit->addComponent<components::core::TextComponent>(
+            rendererPool, position2, "yyy", fontPath, dummyFontSize);
+        rabbitTextId = rabbitText->getGraphicsId();
+        auto druidText = druid->addComponent<components::core::TextComponent>(rendererPool, position3, "zzz",
+                                                                              fontPath, dummyFontSize);
+        druidTextId = druidText->getGraphicsId();
+    }
 
     Level1DialoguesController controller{&mainCharacters, std::move(dialoguesReaderInit),
                                          std::move(timerInit)};
+    graphics::GraphicsId playerTextId;
+    graphics::GraphicsId rabbitTextId;
+    graphics::GraphicsId druidTextId;
+};
+
+TEST_F(Level1DialoguesControllerTest, startPlayerWithRabbitDialogue_shouldLockPlayerMovementAndRestartTimer)
+{
+    EXPECT_CALL(*timer, restart());
+
+    controller.startPlayerWithRabbitDialogue();
+
+    ASSERT_TRUE(player->getComponent<components::core::MovementComponent>()->isLocked());
 }
 
-TEST_F(Level1DialoguesControllerTest, startPlayerWithRabbitDialogue) {}
+TEST_F(Level1DialoguesControllerTest, startPlayerWithDruidDialogue_shouldLockPlayerMovementAndRestartTimer)
+{
+    EXPECT_CALL(*timer, restart());
+
+    controller.startPlayerWithDruidDialogue();
+
+    ASSERT_TRUE(player->getComponent<components::core::MovementComponent>()->isLocked());
+}
+
+class Level1DialoguesControllerTest_PlayerWithRabbitDialogue : public Level1DialoguesControllerTest
+{
+public:
+};
+
+TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
+       firstDialogueUpdate_shouldSetPlayerTextAndDisableRabbitText)
+{
+    EXPECT_CALL(*timer, restart()).Times(2);
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(5));
+    EXPECT_CALL(*rendererPool, setText(playerTextId, "hello bunny"));
+    controller.startPlayerWithRabbitDialogue();
+
+    controller.update();
+
+    ASSERT_FALSE(rabbit->getComponent<components::core::TextComponent>()->isEnabled());
+}
+
+TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
+       secondDialogueUpdate_shouldSetRabbitTextAndDisablePlayerText)
+{
+    EXPECT_CALL(*timer, restart()).Times(3);
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    EXPECT_CALL(*rendererPool, setText(playerTextId, "hello bunny"));
+    EXPECT_CALL(*rendererPool, setText(rabbitTextId, "hello my love"));
+    controller.startPlayerWithRabbitDialogue();
+
+    controller.update();
+    controller.update();
+
+    ASSERT_FALSE(player->getComponent<components::core::TextComponent>()->isEnabled());
+}
+
+TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
+       after4Dialogues_shouldUnlockPlayerAndDisableTexts)
+{
+    EXPECT_CALL(*timer, restart()).Times(6);
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    controller.startPlayerWithRabbitDialogue();
+
+    controller.update();
+    controller.update();
+    controller.update();
+    controller.update();
+    controller.update();
+
+    ASSERT_FALSE(player->getComponent<components::core::MovementComponent>()->isLocked());
+    ASSERT_FALSE(player->getComponent<components::core::TextComponent>()->isEnabled());
+    ASSERT_FALSE(rabbit->getComponent<components::core::TextComponent>()->isEnabled());
+}
+
+class Level1DialoguesControllerTest_PlayerWithDruidDialogue : public Level1DialoguesControllerTest
+{
+public:
+};
+
+TEST_F(Level1DialoguesControllerTest_PlayerWithDruidDialogue,
+       firstUpdate_shouldSetDruidTextAndDisablePlayerText)
+{
+    EXPECT_CALL(*timer, restart()).Times(2);
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(5));
+    EXPECT_CALL(*rendererPool, setText(druidTextId, "Oh, you found me"));
+    controller.startPlayerWithDruidDialogue();
+
+    controller.update();
+
+    ASSERT_FALSE(player->getComponent<components::core::TextComponent>()->isEnabled());
+}
+
+TEST_F(Level1DialoguesControllerTest_PlayerWithDruidDialogue,
+       secondDialogueUpdate_shouldSetPlayerTextAndDisableDruidText)
+{
+    EXPECT_CALL(*timer, restart()).Times(3);
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    EXPECT_CALL(*rendererPool, setText(druidTextId, "Oh, you found me"));
+    EXPECT_CALL(*rendererPool, setText(playerTextId, "Hi"));
+    controller.startPlayerWithDruidDialogue();
+
+    controller.update();
+    controller.update();
+
+    ASSERT_FALSE(druid->getComponent<components::core::TextComponent>()->isEnabled());
+}
+
+TEST_F(Level1DialoguesControllerTest_PlayerWithDruidDialogue,
+       after5Dialogues_shouldUnlockPlayerAndDisableTexts)
+{
+    EXPECT_CALL(*timer, restart()).Times(7);
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    controller.startPlayerWithDruidDialogue();
+
+    controller.update();
+    controller.update();
+    controller.update();
+    controller.update();
+    controller.update();
+    controller.update();
+
+    ASSERT_FALSE(player->getComponent<components::core::MovementComponent>()->isLocked());
+    ASSERT_FALSE(player->getComponent<components::core::TextComponent>()->isEnabled());
+    ASSERT_FALSE(druid->getComponent<components::core::TextComponent>()->isEnabled());
+}

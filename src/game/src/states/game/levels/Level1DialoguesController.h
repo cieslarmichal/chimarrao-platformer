@@ -17,6 +17,12 @@ public:
     void startPlayerWithDruidDialogue();
 
 private:
+    void handlePlayerWithRabbit1Dialogue();
+    void handlePlayerWithDruidDialogue();
+    void finishPlayerWithRabbit1Dialogue();
+    void finishPlayerWithDruidDialogue();
+
+
     Level1MainCharacters* mainCharacters;
     std::unique_ptr<DialoguesReader> dialoguesReader;
     DialogueTrack playerWithRabbitDialogueTrack1;

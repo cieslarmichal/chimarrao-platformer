@@ -29,23 +29,11 @@ void Level1DialoguesController::update()
 {
     if (playerWithRabbitDialogue1IsOngoing)
     {
-        if (dialogueAliveTimer->getElapsedSeconds() >= dialogueTimeToLive)
-        {
-        }
-//        for (const auto& dialogueEntry : playerWithRabbitDialogueTrack1)
-//        {
-//            if (dialogueEntry.actor == components::core::DialogueActor::Player)
-//            {
-//                mainCharacters->player->getComponent<components::core::TextComponent>()->setText(
-//                    dialogueEntry.statement);
-//            }
-//
-//            if (dialogueEntry.actor == components::core::DialogueActor::Rabbit)
-//            {
-//                mainCharacters->rabbit->getComponent<components::core::TextComponent>()->setText(
-//                    dialogueEntry.statement);
-//            }
-//        }
+        handlePlayerWithRabbit1Dialogue();
+    }
+    else if (playerWithDruidDialogueIsOngoing)
+    {
+        handlePlayerWithDruidDialogue();
     }
 }
 
@@ -61,6 +49,84 @@ void Level1DialoguesController::startPlayerWithDruidDialogue()
     playerWithDruidDialogueIsOngoing = true;
     mainCharacters->player->getComponent<components::core::MovementComponent>()->lock();
     dialogueAliveTimer->restart();
+}
+
+void Level1DialoguesController::handlePlayerWithRabbit1Dialogue()
+{
+    if (dialogueAliveTimer->getElapsedSeconds() >= dialogueTimeToLive)
+    {
+        if (const auto dialogueEntry = playerWithRabbitDialogueTrack1.getNextDialogue())
+        {
+            if (dialogueEntry->actor == components::core::DialogueActor::Player)
+            {
+                mainCharacters->rabbit->getComponent<components::core::TextComponent>()->disable();
+
+                mainCharacters->player->getComponent<components::core::TextComponent>()->setText(
+                    dialogueEntry->statement);
+            }
+
+            if (dialogueEntry->actor == components::core::DialogueActor::Rabbit)
+            {
+                mainCharacters->player->getComponent<components::core::TextComponent>()->disable();
+
+                mainCharacters->rabbit->getComponent<components::core::TextComponent>()->setText(
+                    dialogueEntry->statement);
+            }
+        }
+        else
+        {
+            finishPlayerWithRabbit1Dialogue();
+        }
+
+        dialogueAliveTimer->restart();
+    }
+}
+
+void Level1DialoguesController::handlePlayerWithDruidDialogue()
+{
+    if (dialogueAliveTimer->getElapsedSeconds() >= dialogueTimeToLive)
+    {
+        if (const auto dialogueEntry = playerWithDruidDialogueTrack.getNextDialogue())
+        {
+            if (dialogueEntry->actor == components::core::DialogueActor::Player)
+            {
+                mainCharacters->npc->getComponent<components::core::TextComponent>()->disable();
+
+                mainCharacters->player->getComponent<components::core::TextComponent>()->setText(
+                    dialogueEntry->statement);
+            }
+
+            if (dialogueEntry->actor == components::core::DialogueActor::Druid)
+            {
+                mainCharacters->player->getComponent<components::core::TextComponent>()->disable();
+
+                mainCharacters->npc->getComponent<components::core::TextComponent>()->setText(
+                    dialogueEntry->statement);
+            }
+        }
+        else
+        {
+            finishPlayerWithDruidDialogue();
+        }
+
+        dialogueAliveTimer->restart();
+    }
+}
+
+void Level1DialoguesController::finishPlayerWithRabbit1Dialogue()
+{
+    mainCharacters->player->getComponent<components::core::TextComponent>()->disable();
+    mainCharacters->rabbit->getComponent<components::core::TextComponent>()->disable();
+    mainCharacters->player->getComponent<components::core::MovementComponent>()->unlock();
+    playerWithRabbitDialogue1IsOngoing = false;
+}
+
+void Level1DialoguesController::finishPlayerWithDruidDialogue()
+{
+    mainCharacters->player->getComponent<components::core::TextComponent>()->disable();
+    mainCharacters->npc->getComponent<components::core::TextComponent>()->disable();
+    mainCharacters->player->getComponent<components::core::MovementComponent>()->unlock();
+    playerWithDruidDialogueIsOngoing = false;
 }
 
 }
