@@ -98,7 +98,7 @@ ObstacleFactory::createCampfire(const utils::Vector2f& position,
         utils::Vector2f{-1.5, -2.f});
     campfire->addComponent<components::core::LimitedSpaceActionComponent>(
         player.get(),
-        [&]()
+        [=]()
         {
             player->getComponent<components::core::AnimationComponent>()->setAnimation(
                 animations::AnimationType::Sleep);
