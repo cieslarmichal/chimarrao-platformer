@@ -10,7 +10,7 @@ namespace
 const std::string actorWithStatementSeparator{":"};
 }
 
-DialogueTrack DialoguesParser::parse(const std::string& dialoguesFileContent) const
+std::vector<DialogueEntry> DialoguesParser::parse(const std::string& dialoguesFileContent) const
 {
     const auto dialogueLines = utils::StringHelper::split(dialoguesFileContent);
 
@@ -24,9 +24,9 @@ DialogueTrack DialoguesParser::parse(const std::string& dialoguesFileContent) co
     return parse(dialogueLines);
 }
 
-DialogueTrack DialoguesParser::parse(const std::vector<std::string>& dialogueLines) const
+std::vector<DialogueEntry> DialoguesParser::parse(const std::vector<std::string>& dialogueLines) const
 {
-    DialogueTrack dialogueTrack;
+    std::vector<DialogueEntry> dialogueEntries;
 
     for (const auto& dialogueLine : dialogueLines)
     {
@@ -35,10 +35,10 @@ DialogueTrack DialoguesParser::parse(const std::vector<std::string>& dialogueLin
         const auto statement =
             utils::StringHelper::substring(dialogueLine, separatorPosition + 2, dialogueLine.size());
         const auto dialogueActor = components::core::toDialogueActor(actorName);
-        dialogueTrack.push_back({dialogueActor, statement});
+        dialogueEntries.push_back({dialogueActor, statement});
     }
 
-    return dialogueTrack;
+    return dialogueEntries;
 }
 
 }

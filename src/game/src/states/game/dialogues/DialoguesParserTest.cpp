@@ -31,7 +31,7 @@ const std::string validContent{"druid: Oh, you found me\n"
                                "player: Do you know where can I find some food?\n"
                                "druid: Have you seen those bushes?\n"
                                "player: Yes, I guess so"};
-const DialogueTrack expectedDialogueTrack{{components::core::DialogueActor::Druid, "Oh, you found me"},
+const std::vector<DialogueEntry> expectedDialogueEntries{{components::core::DialogueActor::Druid, "Oh, you found me"},
                                           {components::core::DialogueActor::Player, "Hi"},
                                           {components::core::DialogueActor::Player, "Do you know where can I find some food?"},
                                           {components::core::DialogueActor::Druid, "Have you seen those bushes?"},
@@ -63,5 +63,5 @@ TEST_F(DialoguesParserTest, parseValidFileContent_shouldReturnDialogueTrack)
 {
     const auto dialogueTrack = parser.parse(validContent);
 
-    ASSERT_EQ(dialogueTrack, expectedDialogueTrack);
+    ASSERT_EQ(dialogueTrack, expectedDialogueEntries);
 }

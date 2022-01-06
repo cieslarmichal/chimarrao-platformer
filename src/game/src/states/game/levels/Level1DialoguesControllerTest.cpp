@@ -4,6 +4,7 @@
 
 #include "DialoguesReaderMock.h"
 #include "RendererPoolMock.h"
+#include "TimerMock.h"
 
 #include "DialogueActorComponent.h"
 #include "ProjectPathReader.h"
@@ -16,13 +17,13 @@ namespace
 const std::string dialoguesDirectory = utils::ProjectPathReader::getProjectRootPath() + "dialogues/";
 const std::string playerWithRabbitDialogueFile1 = dialoguesDirectory + "player_with_rabbit1.txt";
 const std::string playerWithDruidDialogueFile = dialoguesDirectory + "player_with_druid.txt";
-const DialogueTrack dialogueTrackBetweenPlayerAndDruid{
+const std::vector<DialogueEntry> dialogueEntriesBetweenPlayerAndDruid{
     {components::core::DialogueActor::Druid, "Oh, you found me"},
     {components::core::DialogueActor::Player, "Hi"},
     {components::core::DialogueActor::Player, "Do you know where can I find some food?"},
     {components::core::DialogueActor::Druid, "Have you seen those bushes?"},
     {components::core::DialogueActor::Player, "Yes, I guess so"}};
-const DialogueTrack dialogueTrackBetweenPlayerAndRabbit{
+const std::vector<DialogueEntry> dialogueEntriesBetweenPlayerAndRabbit{
     {components::core::DialogueActor::Player, "hello bunny"},
     {components::core::DialogueActor::Rabbit, "hello my love"},
     {components::core::DialogueActor::Player, "where are we going?"},
@@ -61,16 +62,19 @@ public:
         std::make_shared<components::core::ComponentOwner>(position3, "Level1DialoguesControllerTest3",
                                                            sharedContext);
     Level1MainCharacters mainCharacters{player, rabbit, druid};
+    std::unique_ptr<StrictMock<utils::TimerMock>> timerInit{std::make_unique<StrictMock<utils::TimerMock>>()};
+    StrictMock<utils::TimerMock>* timer{timerInit.get()};
 };
 
 TEST_F(Level1DialoguesControllerTest, createDialogueController_shouldReadDialogueTracks)
 {
-    EXPECT_CALL(*dialoguesReader, read(playerWithRabbitDialogueFile1)).WillOnce(Return(dialogueTrackBetweenPlayerAndRabbit));
-    EXPECT_CALL(*dialoguesReader, read(playerWithDruidDialogueFile)).WillOnce(Return(dialogueTrackBetweenPlayerAndDruid));
+    EXPECT_CALL(*dialoguesReader, read(playerWithRabbitDialogueFile1))
+        .WillOnce(Return(dialogueEntriesBetweenPlayerAndRabbit));
+    EXPECT_CALL(*dialoguesReader, read(playerWithDruidDialogueFile))
+        .WillOnce(Return(dialogueEntriesBetweenPlayerAndDruid));
 
-    Level1DialoguesController controller{&mainCharacters, std::move(dialoguesReaderInit)};
+    Level1DialoguesController controller{&mainCharacters, std::move(dialoguesReaderInit),
+                                         std::move(timerInit)};
 }
 
-TEST_F(Level1DialoguesControllerTest, startPlayerWithRabbitDialogue)
-{
-}
+TEST_F(Level1DialoguesControllerTest, startPlayerWithRabbitDialogue) {}

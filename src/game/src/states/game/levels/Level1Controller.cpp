@@ -42,7 +42,8 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
     timer = utils::TimerFactory::createTimer();
 
     dialoguesController = std::make_unique<Level1DialoguesController>(
-        &mainCharacters, std::make_unique<DefaultDialoguesReader>(fileAccess));
+        &mainCharacters, std::make_unique<DefaultDialoguesReader>(fileAccess),
+        utils::TimerFactory::createTimer());
 }
 
 SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, const input::Input& input)

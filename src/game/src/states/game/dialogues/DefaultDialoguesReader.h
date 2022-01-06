@@ -13,7 +13,7 @@ class DefaultDialoguesReader : public DialoguesReader
 public:
     explicit DefaultDialoguesReader(std::shared_ptr<utils::FileAccess>);
 
-    DialogueTrack read(const std::string& dialogueTrackPath) const override;
+    std::vector<DialogueEntry> read(const std::string& dialogueTrackPath) const override;
 
 private:
     std::shared_ptr<utils::FileAccess> fileAccess;

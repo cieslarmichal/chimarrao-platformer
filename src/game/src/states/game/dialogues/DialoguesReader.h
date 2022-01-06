@@ -11,6 +11,6 @@ class DialoguesReader
 public:
     virtual ~DialoguesReader() = default;
 
-    virtual DialogueTrack read(const std::string& dialogueTrackPath) const = 0;
+    virtual std::vector<DialogueEntry> read(const std::string& dialogueTrackPath) const = 0;
 };
 }

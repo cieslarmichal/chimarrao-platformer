@@ -6,5 +6,15 @@
 
 namespace game
 {
-using DialogueTrack = std::vector<DialogueEntry>;
+class DialogueTrack
+{
+public:
+    explicit DialogueTrack(std::vector<DialogueEntry>);
+
+    std::optional<DialogueEntry> getNextDialogue() const;
+
+private:
+    std::vector<DialogueEntry> entries;
+    mutable int currentEntryIndex;
+};
 }

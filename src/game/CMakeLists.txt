@@ -43,6 +43,7 @@ set(SOURCES
         src/states/game/dialogues/DefaultDialoguesReader.cpp
         src/states/game/dialogues/DialoguesValidator.cpp
         src/states/game/dialogues/DialoguesParser.cpp
+        src/states/game/dialogues/DialogueTrack.cpp
         )
 
 set(UT_SOURCES
@@ -79,6 +80,7 @@ set(UT_SOURCES
         src/states/game/dialogues/DefaultDialoguesReaderTest.cpp
         src/states/game/dialogues/DialoguesValidatorTest.cpp
         src/states/game/dialogues/DialoguesParserTest.cpp
+        src/states/game/dialogues/DialogueTrackTest.cpp
         )
 
 add_library(game ${SOURCES})

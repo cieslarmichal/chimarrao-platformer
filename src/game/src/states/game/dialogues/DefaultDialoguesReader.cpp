@@ -8,7 +8,7 @@ DefaultDialoguesReader::DefaultDialoguesReader(std::shared_ptr<utils::FileAccess
 {
 }
 
-DialogueTrack DefaultDialoguesReader::read(const std::string& dialogueTrackPath) const
+std::vector<DialogueEntry> DefaultDialoguesReader::read(const std::string& dialogueTrackPath) const
 {
     const auto fileContent = fileAccess->readContent(dialogueTrackPath);
 
