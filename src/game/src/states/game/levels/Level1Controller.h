@@ -32,8 +32,8 @@ private:
     Level1MainCharacters mainCharacters;
     std::unique_ptr<ComponentOwnersManager> ownersManager;
     std::shared_ptr<utils::FileAccess> fileAccess;
-    bool playerBlocked{false};
-    bool playerUnblocked{false};
     std::unique_ptr<Level1DialoguesController> dialoguesController;
+    std::once_flag playerWithRabbitDialogueStarted;
+    std::once_flag playerWithDruidDialogueStarted;
 };
 }

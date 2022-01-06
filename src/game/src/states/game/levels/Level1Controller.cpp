@@ -50,22 +50,13 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
 {
     const auto elapsedSeconds = timer->getElapsedSeconds();
 
-    if (elapsedSeconds > 0.3 and not playerBlocked)
+    if (elapsedSeconds > 0.3)
     {
-        auto playerMovementComponent =
-            mainCharacters.player->getComponent<components::core::MovementComponent>();
-        playerMovementComponent->lock();
-        playerBlocked = true;
+        std::call_once(playerWithRabbitDialogueStarted,
+                       [this] { dialoguesController->startPlayerWithRabbitDialogue(); });
     }
 
-    if (elapsedSeconds > 5 and not playerUnblocked)
-    {
-        auto playerMovementComponent =
-            mainCharacters.player->getComponent<components::core::MovementComponent>();
-        playerMovementComponent->unlock();
-        playerUnblocked = true;
-    }
-
+    dialoguesController->update();
     ownersManager->update(deltaTime, input);
     ownersManager->processRemovals();
 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mutex>
 #include "DefaultDialoguesReader.h"
 #include "Level1MainCharacters.h"
 #include "Timer.h"
@@ -21,7 +22,6 @@ private:
     void handlePlayerWithDruidDialogue();
     void finishPlayerWithRabbit1Dialogue();
     void finishPlayerWithDruidDialogue();
-
 
     Level1MainCharacters* mainCharacters;
     std::unique_ptr<DialoguesReader> dialoguesReader;
