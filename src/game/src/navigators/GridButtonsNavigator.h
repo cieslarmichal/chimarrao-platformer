@@ -10,7 +10,7 @@ namespace game
 class GridButtonsNavigator
 {
 public:
-    explicit GridButtonsNavigator(std::shared_ptr<components::ui::UIManager>,
+    GridButtonsNavigator(std::shared_ptr<components::ui::UIManager>,
                                   const std::vector<std::vector<GridButtonInfo>>& gridButtonsInfo,
                                   const std::vector<std::string>& iconNames,
                                   graphics::Color buttonsDefaultColor, graphics::Color buttonsHoverColor,

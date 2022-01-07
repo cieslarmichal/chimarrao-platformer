@@ -24,8 +24,7 @@ public:
                          const utils::Vector2f& position);
     std::shared_ptr<components::core::ComponentOwner>
     createDruidNpc(const std::shared_ptr<components::core::ComponentOwner>& player,
-                   const utils::Vector2f& position,
-                   std::function<void(void)> interaction);
+                   const utils::Vector2f& position, std::function<void(void)> interaction);
     std::shared_ptr<components::core::ComponentOwner>
     createBanditEnemy(const std::shared_ptr<components::core::ComponentOwner>& player,
                       const utils::Vector2f& position);

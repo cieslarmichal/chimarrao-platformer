@@ -10,6 +10,7 @@
 #include "EditorMenuState.h"
 #include "EditorState.h"
 #include "FileSystemMapsReader.h"
+#include "GameOverState.h"
 #include "PhysicsFactory.h"
 #include "SaveMapState.h"
 #include "SettingsState.h"
@@ -106,6 +107,12 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     case StateType::Pause:
     {
         return std::make_unique<PauseState>(
+            window, rendererPool, fileAccess, states,
+            std::make_unique<components::ui::DefaultUIManager>(sharedContext));
+    }
+    case StateType::GameOver:
+    {
+        return std::make_unique<GameOverState>(
             window, rendererPool, fileAccess, states,
             std::make_unique<components::ui::DefaultUIManager>(sharedContext));
     }

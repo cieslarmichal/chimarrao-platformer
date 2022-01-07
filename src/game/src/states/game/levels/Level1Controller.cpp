@@ -60,16 +60,16 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
 
 SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    //    if (startFirstDialogueTimer->getElapsedSeconds() > timeNeededToStartFirstDialogue)
-    //    {
-    //        std::call_once(playerWithRabbitDialogueStarted,
-    //                       [this]
-    //                       {
-    //                           mainCharacters.player->getComponent<components::core::AnimationComponent>()
-    //                               ->setAnimationDirection(animations::AnimationDirection::Left);
-    //                           dialoguesController->startPlayerWithRabbitDialogue();
-    //                       });
-    //    }
+    if (startFirstDialogueTimer->getElapsedSeconds() > timeNeededToStartFirstDialogue)
+    {
+        std::call_once(playerWithRabbitDialogueStarted,
+                       [this]
+                       {
+                           mainCharacters.player->getComponent<components::core::AnimationComponent>()
+                               ->setAnimationDirection(animations::AnimationDirection::Left);
+                           dialoguesController->startPlayerWithRabbitDialogue();
+                       });
+    }
 
     if (playerSleeping and sleepTimer->getElapsedSeconds() > sleepTime)
     {
@@ -81,7 +81,7 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
 
     if (playerDead and deadTimer->getElapsedSeconds() > deadTime)
     {
-        storyGameState->endGame();
+        storyGameState->gameOver();
     }
 
     dialoguesController->update();

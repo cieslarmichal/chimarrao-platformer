@@ -41,7 +41,6 @@ private:
     StoryGameState* storyGameState;
     std::unique_ptr<Level1DialoguesController> dialoguesController;
     std::once_flag playerWithRabbitDialogueStarted;
-    std::once_flag playerWithDruidDialogueStarted;
     std::unique_ptr<utils::Timer> startFirstDialogueTimer;
     std::unique_ptr<utils::Timer> sleepTimer;
     std::unique_ptr<utils::Timer> deadTimer;

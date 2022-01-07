@@ -43,7 +43,7 @@ public:
 
 private:
     void pause();
-    void endGame();
+    void gameOver();
 
     bool paused;
     std::unique_ptr<utils::Timer> timer;

@@ -8,14 +8,13 @@
 
 namespace game
 {
-class PauseState : public State
+class GameOverState : public State
 {
-    friend class PauseStateUIConfigBuilder;
+    friend class GameOverStateUIConfigBuilder;
 
 public:
-    PauseState(const std::shared_ptr<window::Window>&,
-                        const std::shared_ptr<graphics::RendererPool>&, std::shared_ptr<utils::FileAccess>,
-                        States&, std::shared_ptr<components::ui::UIManager>);
+    GameOverState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
+                  std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -25,12 +24,9 @@ public:
     void deactivate() override;
 
 private:
-    void backToGame();
     void backToMenu();
 
-    bool shouldBackToGame;
     bool shouldBackToMenu;
     std::shared_ptr<components::ui::UIManager> uiManager;
-    std::unique_ptr<GridButtonsNavigator> buttonsNavigator;
 };
 }
