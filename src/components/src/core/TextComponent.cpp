@@ -49,6 +49,11 @@ void TextComponent::setText(const std::string& text)
     rendererPool->setText(id, text);
 }
 
+void TextComponent::setOffset(const utils::Vector2f& offset)
+{
+    transformOffset = offset;
+}
+
 std::string TextComponent::getText() const
 {
     return *rendererPool->getText(id);

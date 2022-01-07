@@ -24,6 +24,7 @@ public:
     const graphics::GraphicsId& getGraphicsId();
     void setColor(const graphics::Color&);
     void setText(const std::string&);
+    void setOffset(const utils::Vector2f&);
     std::string getText() const;
     void enable() override;
     void disable() override;

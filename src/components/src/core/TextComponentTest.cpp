@@ -124,6 +124,21 @@ TEST_F(
     expectReleaseGraphicsId();
 }
 
+TEST_F(
+    TextComponentTest,
+    componentCreatedWithoutTransformOffsetAndSetOffsetLater_lateUpdate_shouldSynchronizePositionWithTransformComponentConsideringTransformOffset)
+{
+    expectCreateTextComponent();
+    const auto textComponent = createTextComponent();
+    componentOwner.transform->setPosition(position2);
+    EXPECT_CALL(*rendererPool, setPosition(graphicsId, position2 + offset));
+
+    textComponent->setOffset(offset);
+
+    textComponent->lateUpdate(deltaTime, input);
+    expectReleaseGraphicsId();
+}
+
 TEST_F(TextComponentTest, disableComponent_shouldSetInvisibleAndSetDisabled)
 {
     expectCreateTextComponent();
