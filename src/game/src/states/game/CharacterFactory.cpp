@@ -19,6 +19,7 @@
 #include "VelocityComponent.h"
 #include "health/HealthBarComponent.h"
 #include "health/HealthComponent.h"
+#include "DialogueTextComponent.h"
 
 namespace game
 {
@@ -61,8 +62,8 @@ CharacterFactory::createPlayer(const utils::Vector2f& position)
     player->addComponent<components::core::KeyboardAttackComponent>(attackStrategy);
     const std::shared_ptr<utils::Timer> itemCollectorTimer = utils::TimerFactory::createTimer();
     player->addComponent<components::core::ItemCollectorComponent>(quadtree, rayCast, 8, itemCollectorTimer);
-    player->addComponent<components::core::TextComponent>(sharedContext->rendererPool, position, "", fontPath,
-                                                          9, graphics::Color::Black,
+    player->addComponent<components::core::DialogueTextComponent>(sharedContext->rendererPool, position, "", fontPath,
+                                                          9, -0.3f, graphics::Color::Black,
                                                           utils::Vector2f{0, -2});
     return player;
 }
@@ -85,8 +86,8 @@ CharacterFactory::createRabbitFollower(const std::shared_ptr<components::core::C
         utils::Vector2f{2.f, 2.f}, components::core::CollisionLayer::Player, utils::Vector2f{0.f, 0.f});
     follower->addComponent<components::core::VelocityComponent>();
     follower->addComponent<components::core::HealthComponent>(50);
-    follower->addComponent<components::core::TextComponent>(sharedContext->rendererPool, position, "",
-                                                            fontPath, 9, graphics::Color::Black,
+    follower->addComponent<components::core::DialogueTextComponent>(sharedContext->rendererPool, position, "",
+                                                            fontPath, 9, -2.2, graphics::Color::Black,
                                                             utils::Vector2f{0, -3.6});
     return follower;
 }
@@ -111,9 +112,9 @@ CharacterFactory::createDruidNpc(const std::shared_ptr<components::core::Compone
         utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f});
     npc->addComponent<components::core::VelocityComponent>();
     npc->addComponent<components::core::IdleNpcMovementComponent>(player.get());
-    npc->addComponent<components::core::TextComponent>(sharedContext->rendererPool, position,
-                                                       "Press E to talk", fontPath, 9, graphics::Color::Black,
-                                                       utils::Vector2f{-1.5, -2});
+    npc->addComponent<components::core::DialogueTextComponent>(sharedContext->rendererPool, position,
+                                                       "Press E to talk", fontPath, 9, 0, graphics::Color::Black,
+                                                       utils::Vector2f{0, -2});
     npc->addComponent<components::core::LimitedSpaceActionComponent>(player.get(), []() {});
     return npc;
 }

@@ -2,7 +2,7 @@
 
 #include "MovementComponent.h"
 #include "ProjectPathReader.h"
-#include "TextComponent.h"
+#include "DialogueTextComponent.h"
 
 namespace game
 {
@@ -59,18 +59,18 @@ void Level1DialoguesController::handlePlayerWithRabbit1Dialogue()
         {
             if (dialogueEntry->actor == components::core::DialogueActor::Player)
             {
-                mainCharacters->rabbit->getComponent<components::core::TextComponent>()->disable();
-                mainCharacters->player->getComponent<components::core::TextComponent>()->setText(
+                mainCharacters->rabbit->getComponent<components::core::DialogueTextComponent>()->disable();
+                mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->setText(
                     dialogueEntry->statement);
-                mainCharacters->player->getComponent<components::core::TextComponent>()->enable();
+                mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->enable();
             }
 
             if (dialogueEntry->actor == components::core::DialogueActor::Rabbit)
             {
-                mainCharacters->player->getComponent<components::core::TextComponent>()->disable();
-                mainCharacters->rabbit->getComponent<components::core::TextComponent>()->setText(
+                mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->disable();
+                mainCharacters->rabbit->getComponent<components::core::DialogueTextComponent>()->setText(
                     dialogueEntry->statement);
-                mainCharacters->rabbit->getComponent<components::core::TextComponent>()->enable();
+                mainCharacters->rabbit->getComponent<components::core::DialogueTextComponent>()->enable();
             }
         }
         else
@@ -90,18 +90,18 @@ void Level1DialoguesController::handlePlayerWithDruidDialogue()
         {
             if (dialogueEntry->actor == components::core::DialogueActor::Player)
             {
-                mainCharacters->npc->getComponent<components::core::TextComponent>()->disable();
-                mainCharacters->player->getComponent<components::core::TextComponent>()->setText(
+                mainCharacters->npc->getComponent<components::core::DialogueTextComponent>()->disable();
+                mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->setText(
                     dialogueEntry->statement);
-                mainCharacters->player->getComponent<components::core::TextComponent>()->enable();
+                mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->enable();
             }
 
             if (dialogueEntry->actor == components::core::DialogueActor::Druid)
             {
-                mainCharacters->player->getComponent<components::core::TextComponent>()->disable();
-                mainCharacters->npc->getComponent<components::core::TextComponent>()->setText(
+                mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->disable();
+                mainCharacters->npc->getComponent<components::core::DialogueTextComponent>()->setText(
                     dialogueEntry->statement);
-                mainCharacters->npc->getComponent<components::core::TextComponent>()->enable();
+                mainCharacters->npc->getComponent<components::core::DialogueTextComponent>()->enable();
 
             }
         }
@@ -116,16 +116,16 @@ void Level1DialoguesController::handlePlayerWithDruidDialogue()
 
 void Level1DialoguesController::finishPlayerWithRabbit1Dialogue()
 {
-    mainCharacters->player->getComponent<components::core::TextComponent>()->disable();
-    mainCharacters->rabbit->getComponent<components::core::TextComponent>()->disable();
+    mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->disable();
+    mainCharacters->rabbit->getComponent<components::core::DialogueTextComponent>()->disable();
     mainCharacters->player->getComponent<components::core::MovementComponent>()->unlock();
     playerWithRabbitDialogue1IsOngoing = false;
 }
 
 void Level1DialoguesController::finishPlayerWithDruidDialogue()
 {
-    mainCharacters->player->getComponent<components::core::TextComponent>()->disable();
-    mainCharacters->npc->getComponent<components::core::TextComponent>()->disable();
+    mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->disable();
+    mainCharacters->npc->getComponent<components::core::DialogueTextComponent>()->disable();
     mainCharacters->player->getComponent<components::core::MovementComponent>()->unlock();
     playerWithDruidDialogueIsOngoing = false;
 }

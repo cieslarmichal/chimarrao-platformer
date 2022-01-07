@@ -6,19 +6,20 @@
 
 #include "Component.h"
 #include "RendererPool.h"
-#include "Vector.h"
 #include "TextComponent.h"
+#include "Vector.h"
 
 namespace components::core
 {
 class DialogueTextComponent : public Component
 {
 public:
-    DialogueTextComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>, const utils::Vector2f& position,
-                  const std::string& text, const graphics::FontPath&, unsigned characterSize,
-                  const graphics::Color& = graphics::Color::Black,
-                  const utils::Vector2f& transformOffset = utils::Vector2f{0, 0},
-                  bool relativeRendering = false);
+    DialogueTextComponent(ComponentOwner*, std::shared_ptr<graphics::RendererPool>,
+                          const utils::Vector2f& position, const std::string& text, const graphics::FontPath&,
+                          unsigned characterSize, float initialOffsetForCalculatingOffsetPosition = 0,
+                          const graphics::Color& = graphics::Color::Black,
+                          const utils::Vector2f& transformOffset = utils::Vector2f{0, 0},
+                          bool relativeRendering = false);
 
     void setText(const std::string& text);
     void enable() override;

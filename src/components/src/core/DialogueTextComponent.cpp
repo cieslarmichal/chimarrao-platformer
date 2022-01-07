@@ -10,7 +10,7 @@ namespace components::core
 DialogueTextComponent::DialogueTextComponent(ComponentOwner* owner,
                                              std::shared_ptr<graphics::RendererPool> rendererPool,
                                              const utils::Vector2f& position, const std::string& text,
-                                             const graphics::FontPath& fontPath, unsigned int characterSize,
+                                             const graphics::FontPath& fontPath, unsigned int characterSize, float initialOffsetForCalculatingOffsetPosition,
                                              const graphics::Color& color,
                                              const utils::Vector2f& transformOffset, bool relativeRendering)
     : Component(owner)
@@ -20,7 +20,7 @@ DialogueTextComponent::DialogueTextComponent(ComponentOwner* owner,
                                            color, transformOffset, relativeRendering);
     int decreaseOffsetCounter = 0;
     const float decreaseOffsetValue = 0.5;
-    float currentOffset = 3.f;
+    float currentOffset = 3.f + initialOffsetForCalculatingOffsetPosition;
 
     numberOfCharactersToOffset.reserve(maximumTextLength);
 
