@@ -16,6 +16,11 @@ HealthComponent::HealthComponent(ComponentOwner* owner, unsigned int initialHeal
 
 void HealthComponent::gainHealthPoints(unsigned int points)
 {
+    if (dead)
+    {
+        return;
+    }
+
     if (currentHealthPoints + points < maximumHealthPoints)
     {
         currentHealthPoints += points;
@@ -28,6 +33,11 @@ void HealthComponent::gainHealthPoints(unsigned int points)
 
 void HealthComponent::loseHealthPoints(unsigned int points)
 {
+    if (dead)
+    {
+        return;
+    }
+
     if (points <= currentHealthPoints)
     {
         currentHealthPoints -= points;
@@ -39,8 +49,16 @@ void HealthComponent::loseHealthPoints(unsigned int points)
 
     if (currentHealthPoints == 0)
     {
-        deadAction();
-        getOwner().remove();
+        dead = true;
+
+        if (deadAction)
+        {
+            deadAction();
+        }
+        else
+        {
+            getOwner().remove();
+        }
     }
 }
 
@@ -56,6 +74,6 @@ unsigned int HealthComponent::getMaximumHealth() const
 
 bool HealthComponent::isDead() const
 {
-    return currentHealthPoints == 0;
+    return dead;
 }
 }

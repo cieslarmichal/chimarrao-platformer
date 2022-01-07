@@ -44,8 +44,11 @@ private:
     std::once_flag playerWithDruidDialogueStarted;
     std::unique_ptr<utils::Timer> startFirstDialogueTimer;
     std::unique_ptr<utils::Timer> sleepTimer;
+    std::unique_ptr<utils::Timer> deadTimer;
     const float timeNeededToStartFirstDialogue;
     const float sleepTime;
+    const float deadTime;
     bool playerSleeping;
+    bool playerDead;
 };
 }

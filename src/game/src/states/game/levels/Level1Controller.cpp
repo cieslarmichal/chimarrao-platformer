@@ -6,8 +6,8 @@
 #include "DefaultDialoguesReader.h"
 #include "Level1WorldBuilder.h"
 #include "MovementComponent.h"
-#include "TimerFactory.h"
 #include "StoryGameState.h"
+#include "TimerFactory.h"
 
 namespace game
 {
@@ -31,7 +31,9 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
       storyGameState{storyGameStateInit},
       timeNeededToStartFirstDialogue{0.3f},
       sleepTime{5.f},
-      playerSleeping{false}
+      deadTime{2.f},
+      playerSleeping{false},
+      playerDead{false}
 {
     tileMap->loadFromFile(levelMap);
 
@@ -49,6 +51,7 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
 
     startFirstDialogueTimer = utils::TimerFactory::createTimer();
     sleepTimer = utils::TimerFactory::createTimer();
+    deadTimer = utils::TimerFactory::createTimer();
 
     dialoguesController = std::make_unique<Level1DialoguesController>(
         &mainCharacters, std::make_unique<DefaultDialoguesReader>(fileAccess),
@@ -57,16 +60,16 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
 
 SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    if (startFirstDialogueTimer->getElapsedSeconds() > timeNeededToStartFirstDialogue)
-    {
-        std::call_once(playerWithRabbitDialogueStarted,
-                       [this]
-                       {
-                           mainCharacters.player->getComponent<components::core::AnimationComponent>()
-                               ->setAnimationDirection(animations::AnimationDirection::Left);
-                           dialoguesController->startPlayerWithRabbitDialogue();
-                       });
-    }
+    //    if (startFirstDialogueTimer->getElapsedSeconds() > timeNeededToStartFirstDialogue)
+    //    {
+    //        std::call_once(playerWithRabbitDialogueStarted,
+    //                       [this]
+    //                       {
+    //                           mainCharacters.player->getComponent<components::core::AnimationComponent>()
+    //                               ->setAnimationDirection(animations::AnimationDirection::Left);
+    //                           dialoguesController->startPlayerWithRabbitDialogue();
+    //                       });
+    //    }
 
     if (playerSleeping and sleepTimer->getElapsedSeconds() > sleepTime)
     {
@@ -74,6 +77,11 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
         mainCharacters.player->getComponent<components::core::AnimationComponent>()->setAnimation(
             animations::AnimationType::Idle);
         mainCharacters.player->getComponent<components::core::MovementComponent>()->unlock();
+    }
+
+    if (playerDead and deadTimer->getElapsedSeconds() > deadTime)
+    {
+        storyGameState->endGame();
     }
 
     dialoguesController->update();
@@ -114,7 +122,11 @@ void Level1Controller::druidAction()
 
 void Level1Controller::deadPlayerAction()
 {
-    storyGameState->endGame();
+    deadTimer->restart();
+    playerDead = true;
+    mainCharacters.player->getComponent<components::core::AnimationComponent>()->setAnimation(
+        animations::AnimationType::Sleep);
+    mainCharacters.player->getComponent<components::core::MovementComponent>()->lock();
 }
 
 }
