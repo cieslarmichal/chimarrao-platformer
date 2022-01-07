@@ -28,7 +28,7 @@ CustomWorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             {
                 const auto position =
                     utils::Vector2f{static_cast<float>(x) * 4.f, static_cast<float>(y) * 4.f};
-                player = characterFactory->createPlayer(position);
+                player = characterFactory->createPlayer(position, [](){});
                 worldObjects.push_back(player);
             }
         }

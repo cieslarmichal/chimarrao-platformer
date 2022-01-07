@@ -5,8 +5,12 @@
 namespace components::core
 {
 
-HealthComponent::HealthComponent(ComponentOwner* owner, unsigned int initialHealthPoints)
-    : Component(owner), currentHealthPoints{initialHealthPoints}, maximumHealthPoints{initialHealthPoints}
+HealthComponent::HealthComponent(ComponentOwner* owner, unsigned int initialHealthPoints,
+                                 std::function<void(void)> deadAction)
+    : Component(owner),
+      currentHealthPoints{initialHealthPoints},
+      maximumHealthPoints{initialHealthPoints},
+      deadAction{std::move(deadAction)}
 {
 }
 
@@ -35,6 +39,7 @@ void HealthComponent::loseHealthPoints(unsigned int points)
 
     if (currentHealthPoints == 0)
     {
+        deadAction();
         getOwner().remove();
     }
 }

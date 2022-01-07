@@ -21,9 +21,13 @@
 
 namespace game
 {
+class Level1Controller;
+
 class StoryGameState : public State
 {
 public:
+    friend class Level1Controller;
+
     StoryGameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
                    std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>,
                    std::shared_ptr<TileMap>, const std::shared_ptr<components::core::SharedContext>&,
@@ -39,6 +43,7 @@ public:
 
 private:
     void pause();
+    void endGame();
 
     bool paused;
     std::unique_ptr<utils::Timer> timer;

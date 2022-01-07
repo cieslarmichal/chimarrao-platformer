@@ -17,7 +17,8 @@ public:
     CharacterFactory(const std::shared_ptr<components::core::SharedContext>&, std::shared_ptr<TileMap>,
                      std::shared_ptr<physics::RayCast>, std::shared_ptr<physics::Quadtree>);
 
-    std::shared_ptr<components::core::ComponentOwner> createPlayer(const utils::Vector2f& position);
+    std::shared_ptr<components::core::ComponentOwner> createPlayer(const utils::Vector2f& position,
+                                                                   std::function<void(void)> deadAction);
     std::shared_ptr<components::core::ComponentOwner>
     createRabbitFollower(const std::shared_ptr<components::core::ComponentOwner>& player,
                          const utils::Vector2f& position);

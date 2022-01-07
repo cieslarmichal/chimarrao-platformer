@@ -30,7 +30,7 @@ Level1WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             {
                 const auto position =
                     utils::Vector2f{static_cast<float>(x) * 4.f, static_cast<float>(y) * 4.f};
-                player = characterFactory->createPlayer(position);
+                player = characterFactory->createPlayer(position, [this](){level1Controller->deadPlayerAction();});
                 worldObjects.push_back(player);
             }
         }

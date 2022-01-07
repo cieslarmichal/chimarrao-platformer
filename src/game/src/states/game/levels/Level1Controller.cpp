@@ -7,6 +7,7 @@
 #include "Level1WorldBuilder.h"
 #include "MovementComponent.h"
 #include "TimerFactory.h"
+#include "StoryGameState.h"
 
 namespace game
 {
@@ -21,11 +22,13 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
                                    const std::shared_ptr<CharacterFactory>& characterFactory,
                                    const std::shared_ptr<ObstacleFactory>& obstacleFactory,
                                    const std::shared_ptr<components::core::SharedContext>& sharedContext,
-                                   std::shared_ptr<utils::FileAccess> fileAccessInit)
+                                   std::shared_ptr<utils::FileAccess> fileAccessInit,
+                                   StoryGameState* storyGameStateInit)
     : worldBuilder{std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, sharedContext,
                                                         this)},
       ownersManager{std::move(ownersManagerInit)},
       fileAccess{std::move(fileAccessInit)},
+      storyGameState{storyGameStateInit},
       timeNeededToStartFirstDialogue{0.3f},
       sleepTime{5.f},
       playerSleeping{false}
@@ -107,6 +110,11 @@ void Level1Controller::campfireAction()
 void Level1Controller::druidAction()
 {
     dialoguesController->startPlayerWithDruidDialogue();
+}
+
+void Level1Controller::deadPlayerAction()
+{
+    storyGameState->endGame();
 }
 
 }

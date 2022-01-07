@@ -12,6 +12,7 @@
 namespace game
 {
 class Level1WorldBuilder;
+class StoryGameState;
 
 class Level1Controller : public LevelController
 {
@@ -21,7 +22,7 @@ public:
     Level1Controller(const std::shared_ptr<TileMap>&, std::unique_ptr<ComponentOwnersManager>,
                      const std::shared_ptr<CharacterFactory>&, const std::shared_ptr<ObstacleFactory>&,
                      const std::shared_ptr<components::core::SharedContext>&,
-                     std::shared_ptr<utils::FileAccess>);
+                     std::shared_ptr<utils::FileAccess>, StoryGameState*);
 
     SwitchToNextLevel update(const utils::DeltaTime& deltaTime, const input::Input& input) override;
     void activate() override;
@@ -31,11 +32,13 @@ public:
 private:
     void campfireAction();
     void druidAction();
+    void deadPlayerAction();
 
     std::unique_ptr<Level1WorldBuilder> worldBuilder;
     Level1MainCharacters mainCharacters;
     std::unique_ptr<ComponentOwnersManager> ownersManager;
     std::shared_ptr<utils::FileAccess> fileAccess;
+    StoryGameState* storyGameState;
     std::unique_ptr<Level1DialoguesController> dialoguesController;
     std::once_flag playerWithRabbitDialogueStarted;
     std::once_flag playerWithDruidDialogueStarted;

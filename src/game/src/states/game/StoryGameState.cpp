@@ -45,7 +45,7 @@ StoryGameState::StoryGameState(const std::shared_ptr<window::Window>& windowInit
 
     auto level1Controller = std::make_unique<Level1Controller>(
         tileMap, std::make_unique<DefaultComponentOwnersManager>(physicsFactory->createCollisionSystem()),
-        characterFactory, obstacleFactory, sharedContext, fileAccess);
+        characterFactory, obstacleFactory, sharedContext, fileAccess, this);
     const auto player = level1Controller->getCharacters().player;
 
     levelControllers.push(std::move(level1Controller));
@@ -116,6 +116,13 @@ void StoryGameState::pause()
     levelControllers.front()->deactivate();
     musicManager->pause(musicId);
     states.addNextState(StateType::Pause);
+}
+
+void StoryGameState::endGame()
+{
+    paused = true;
+    levelControllers.front()->deactivate();
+    musicManager->pause(musicId);
 }
 
 }
