@@ -56,4 +56,15 @@ void DialogueTextComponent::disable()
 {
     textComponent->disable();
 }
+
+bool DialogueTextComponent::isEnabled() const
+{
+    return textComponent->isEnabled();
+}
+
+graphics::GraphicsId DialogueTextComponent::getGraphicsId() const
+{
+    return textComponent->getGraphicsId();
+}
+
 }

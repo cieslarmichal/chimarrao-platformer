@@ -10,7 +10,7 @@
 #include "KeyboardHorizontalMovementComponent.h"
 #include "MovementComponent.h"
 #include "ProjectPathReader.h"
-#include "TextComponent.h"
+#include "DialogueTextComponent.h"
 
 using namespace game;
 using namespace ::testing;
@@ -77,13 +77,13 @@ public:
     Level1DialoguesControllerTest()
     {
         player->addComponent<components::core::KeyboardHorizontalMovementComponent>();
-        auto playerText = player->addComponent<components::core::TextComponent>(
+        auto playerText = player->addComponent<components::core::DialogueTextComponent>(
             rendererPool, position1, "xxx", fontPath, dummyFontSize);
         playerTextId = playerText->getGraphicsId();
-        auto rabbitText = rabbit->addComponent<components::core::TextComponent>(
+        auto rabbitText = rabbit->addComponent<components::core::DialogueTextComponent>(
             rendererPool, position2, "yyy", fontPath, dummyFontSize);
         rabbitTextId = rabbitText->getGraphicsId();
-        auto druidText = druid->addComponent<components::core::TextComponent>(rendererPool, position3, "zzz",
+        auto druidText = druid->addComponent<components::core::DialogueTextComponent>(rendererPool, position3, "zzz",
                                                                               fontPath, dummyFontSize);
         druidTextId = druidText->getGraphicsId();
     }
@@ -128,8 +128,8 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
 
     controller.update();
 
-    ASSERT_FALSE(rabbit->getComponent<components::core::TextComponent>()->isEnabled());
-    ASSERT_TRUE(player->getComponent<components::core::TextComponent>()->isEnabled());
+    ASSERT_FALSE(rabbit->getComponent<components::core::DialogueTextComponent>()->isEnabled());
+    ASSERT_TRUE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
 }
 
 TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
@@ -144,8 +144,8 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
     controller.update();
     controller.update();
 
-    ASSERT_FALSE(player->getComponent<components::core::TextComponent>()->isEnabled());
-    ASSERT_TRUE(rabbit->getComponent<components::core::TextComponent>()->isEnabled());
+    ASSERT_FALSE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
+    ASSERT_TRUE(rabbit->getComponent<components::core::DialogueTextComponent>()->isEnabled());
 }
 
 TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
@@ -162,8 +162,8 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
     controller.update();
 
     ASSERT_FALSE(player->getComponent<components::core::MovementComponent>()->isLocked());
-    ASSERT_FALSE(player->getComponent<components::core::TextComponent>()->isEnabled());
-    ASSERT_FALSE(rabbit->getComponent<components::core::TextComponent>()->isEnabled());
+    ASSERT_FALSE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
+    ASSERT_FALSE(rabbit->getComponent<components::core::DialogueTextComponent>()->isEnabled());
 }
 
 class Level1DialoguesControllerTest_PlayerWithDruidDialogue : public Level1DialoguesControllerTest
@@ -181,8 +181,8 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithDruidDialogue,
 
     controller.update();
 
-    ASSERT_FALSE(player->getComponent<components::core::TextComponent>()->isEnabled());
-    ASSERT_TRUE(druid->getComponent<components::core::TextComponent>()->isEnabled());
+    ASSERT_FALSE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
+    ASSERT_TRUE(druid->getComponent<components::core::DialogueTextComponent>()->isEnabled());
 }
 
 TEST_F(Level1DialoguesControllerTest_PlayerWithDruidDialogue,
@@ -197,8 +197,8 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithDruidDialogue,
     controller.update();
     controller.update();
 
-    ASSERT_FALSE(druid->getComponent<components::core::TextComponent>()->isEnabled());
-    ASSERT_TRUE(player->getComponent<components::core::TextComponent>()->isEnabled());
+    ASSERT_FALSE(druid->getComponent<components::core::DialogueTextComponent>()->isEnabled());
+    ASSERT_TRUE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
 }
 
 TEST_F(Level1DialoguesControllerTest_PlayerWithDruidDialogue,
@@ -216,6 +216,6 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithDruidDialogue,
     controller.update();
 
     ASSERT_FALSE(player->getComponent<components::core::MovementComponent>()->isLocked());
-    ASSERT_FALSE(player->getComponent<components::core::TextComponent>()->isEnabled());
-    ASSERT_FALSE(druid->getComponent<components::core::TextComponent>()->isEnabled());
+    ASSERT_FALSE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
+    ASSERT_FALSE(druid->getComponent<components::core::DialogueTextComponent>()->isEnabled());
 }

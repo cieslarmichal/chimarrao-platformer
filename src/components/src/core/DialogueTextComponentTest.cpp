@@ -15,7 +15,7 @@ public:
     std::shared_ptr<DialogueTextComponent> createDialogueTextComponent()
     {
         return std::make_shared<DialogueTextComponent>(&componentOwner, rendererPool, position1, text, fontPath,
-                                               characterSize, color1);
+                                               characterSize, 0, color1);
     }
 
     const utils::Vector2f offset{10, 10};

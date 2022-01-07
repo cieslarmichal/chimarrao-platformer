@@ -24,6 +24,8 @@ public:
     void setText(const std::string& text);
     void enable() override;
     void disable() override;
+    bool isEnabled() const override;
+    graphics::GraphicsId getGraphicsId() const;
 
 private:
     std::unordered_map<unsigned, float> numberOfCharactersToOffset;

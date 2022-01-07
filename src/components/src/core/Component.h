@@ -20,7 +20,7 @@ public:
     virtual void lateUpdate(utils::DeltaTime, const input::Input& input);
     virtual void enable();
     virtual void disable();
-    bool isEnabled() const;
+    virtual bool isEnabled() const;
     std::string getOwnerName() const;
     unsigned int getOwnerId() const;
     bool shouldBeRemoved() const;

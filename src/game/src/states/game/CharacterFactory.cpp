@@ -75,7 +75,7 @@ CharacterFactory::createRabbitFollower(const std::shared_ptr<components::core::C
     auto follower = std::make_shared<components::core::ComponentOwner>(
         position, "follower", sharedContext, components::core::ComponentOwnerType::Friend);
     auto followerGraphicsComponent =
-        follower->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2.f, 2.f}, position,
+        follower->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{1.5f, 1.5f}, position,
                                        graphics::Color::White, graphics::VisibilityLayer::Second);
     auto followerGraphicsId = followerGraphicsComponent->getGraphicsId();
     follower->addComponent<components::core::FriendFollowerComponent>(player.get());
@@ -83,7 +83,7 @@ CharacterFactory::createRabbitFollower(const std::shared_ptr<components::core::C
         animatorFactory->createBunnyAnimator(followerGraphicsId);
     follower->addComponent<components::core::AnimationComponent>(bunnyAnimator);
     follower->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{2.f, 2.f}, components::core::CollisionLayer::Player, utils::Vector2f{0.f, 0.f});
+        utils::Vector2f{1.5f, 1.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.f, 0.f});
     follower->addComponent<components::core::VelocityComponent>();
     follower->addComponent<components::core::HealthComponent>(50);
     follower->addComponent<components::core::DialogueTextComponent>(sharedContext->rendererPool, position, "",
