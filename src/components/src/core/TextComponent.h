@@ -26,6 +26,7 @@ public:
     void setText(const std::string&);
     void setOffset(const utils::Vector2f&);
     std::string getText() const;
+    utils::Vector2f getOffset() const;
     void enable() override;
     void disable() override;
 

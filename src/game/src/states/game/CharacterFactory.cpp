@@ -63,7 +63,7 @@ CharacterFactory::createPlayer(const utils::Vector2f& position)
     player->addComponent<components::core::ItemCollectorComponent>(quadtree, rayCast, 8, itemCollectorTimer);
     player->addComponent<components::core::TextComponent>(sharedContext->rendererPool, position, "", fontPath,
                                                           9, graphics::Color::Black,
-                                                          utils::Vector2f{-1.5, -2});
+                                                          utils::Vector2f{0, -2});
     return player;
 }
 
@@ -87,7 +87,7 @@ CharacterFactory::createRabbitFollower(const std::shared_ptr<components::core::C
     follower->addComponent<components::core::HealthComponent>(50);
     follower->addComponent<components::core::TextComponent>(sharedContext->rendererPool, position, "",
                                                             fontPath, 9, graphics::Color::Black,
-                                                            utils::Vector2f{-1.5, -3.6});
+                                                            utils::Vector2f{0, -3.6});
     return follower;
 }
 

@@ -59,6 +59,11 @@ std::string TextComponent::getText() const
     return *rendererPool->getText(id);
 }
 
+utils::Vector2f TextComponent::getOffset() const
+{
+    return transformOffset;
+}
+
 void TextComponent::enable()
 {
     Component::enable();

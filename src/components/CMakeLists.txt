@@ -38,6 +38,7 @@ set(SOURCES
         src/core/attack/DefaultFriendlyFireValidator.cpp
         src/core/LimitedSpaceActionComponent.cpp
         src/core/DialogueActorComponent.cpp
+        src/core/DialogueTextComponent.cpp
         )
 
 set(UT_SOURCES
@@ -79,6 +80,7 @@ set(UT_SOURCES
         src/core/attack/DefaultFriendlyFireValidatorTest.cpp
         src/core/LimitedSpaceActionComponentTest.cpp
         src/core/DialogueActorComponentTest.cpp
+        src/core/DialogueTextComponentTest.cpp
         )
 
 add_library(components ${SOURCES})
