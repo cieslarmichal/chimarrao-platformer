@@ -79,7 +79,8 @@ Level1WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             case TileType::Campfire:
             {
-                auto campfire = obstacleFactory->createCampfire(position, player);
+                auto campfire = obstacleFactory->createCampfire(
+                    position, player, [this]() { level1Controller->campfireAction(); });
                 worldObjects.push_back(campfire);
                 break;
             }

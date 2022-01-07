@@ -10,7 +10,8 @@ namespace components::core
 DialogueTextComponent::DialogueTextComponent(ComponentOwner* owner,
                                              std::shared_ptr<graphics::RendererPool> rendererPool,
                                              const utils::Vector2f& position, const std::string& text,
-                                             const graphics::FontPath& fontPath, unsigned int characterSize, float initialOffsetForCalculatingOffsetPosition,
+                                             const graphics::FontPath& fontPath, unsigned int characterSize,
+                                             float initialOffsetForCalculatingOffsetPosition,
                                              const graphics::Color& color,
                                              const utils::Vector2f& transformOffset, bool relativeRendering)
     : Component(owner)

@@ -1,8 +1,8 @@
 #include "Level1DialoguesController.h"
 
+#include "DialogueTextComponent.h"
 #include "MovementComponent.h"
 #include "ProjectPathReader.h"
-#include "DialogueTextComponent.h"
 
 namespace game
 {
@@ -102,7 +102,6 @@ void Level1DialoguesController::handlePlayerWithDruidDialogue()
                 mainCharacters->npc->getComponent<components::core::DialogueTextComponent>()->setText(
                     dialogueEntry->statement);
                 mainCharacters->npc->getComponent<components::core::DialogueTextComponent>()->enable();
-
             }
         }
         else

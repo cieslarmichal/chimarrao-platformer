@@ -19,7 +19,8 @@ public:
                const std::shared_ptr<components::core::ComponentOwner>& player);
     std::shared_ptr<components::core::ComponentOwner>
     createCampfire(const utils::Vector2f& position,
-                   const std::shared_ptr<components::core::ComponentOwner>& player);
+                   const std::shared_ptr<components::core::ComponentOwner>& player,
+                   std::function<void(void)> action);
     std::shared_ptr<components::core::ComponentOwner> createChest(const utils::Vector2f& position);
 
 private:

@@ -3,8 +3,8 @@
 #include <memory>
 
 #include "DialoguesParser.h"
-#include "FileAccess.h"
 #include "DialoguesReader.h"
+#include "FileAccess.h"
 
 namespace game
 {

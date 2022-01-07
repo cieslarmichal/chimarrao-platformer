@@ -7,10 +7,10 @@
 #include "TimerMock.h"
 
 #include "DialogueActorComponent.h"
+#include "DialogueTextComponent.h"
 #include "KeyboardHorizontalMovementComponent.h"
 #include "MovementComponent.h"
 #include "ProjectPathReader.h"
-#include "DialogueTextComponent.h"
 
 using namespace game;
 using namespace ::testing;
@@ -83,8 +83,8 @@ public:
         auto rabbitText = rabbit->addComponent<components::core::DialogueTextComponent>(
             rendererPool, position2, "yyy", fontPath, dummyFontSize);
         rabbitTextId = rabbitText->getGraphicsId();
-        auto druidText = druid->addComponent<components::core::DialogueTextComponent>(rendererPool, position3, "zzz",
-                                                                              fontPath, dummyFontSize);
+        auto druidText = druid->addComponent<components::core::DialogueTextComponent>(
+            rendererPool, position3, "zzz", fontPath, dummyFontSize);
         druidTextId = druidText->getGraphicsId();
     }
 

@@ -3,6 +3,7 @@
 #include "gtest/gtest.h"
 
 #include "RendererPoolMock.h"
+
 #include "ComponentOwner.h"
 
 using namespace components::core;

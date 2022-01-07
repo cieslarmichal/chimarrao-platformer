@@ -2,8 +2,9 @@
 
 #include "gtest/gtest.h"
 
-#include "ComponentOwner.h"
 #include "RendererPoolMock.h"
+
+#include "ComponentOwner.h"
 
 using namespace components::core;
 using namespace graphics;
@@ -14,8 +15,8 @@ class DialogueTextComponentTest : public Test
 public:
     std::shared_ptr<DialogueTextComponent> createDialogueTextComponent()
     {
-        return std::make_shared<DialogueTextComponent>(&componentOwner, rendererPool, position1, text, fontPath,
-                                               characterSize, 0, color1);
+        return std::make_shared<DialogueTextComponent>(&componentOwner, rendererPool, position1, text,
+                                                       fontPath, characterSize, 0, color1);
     }
 
     const utils::Vector2f offset{10, 10};
@@ -28,8 +29,7 @@ public:
     const unsigned characterSize{15};
     const Color color1{Color::Black};
     const VisibilityLayer invisible{VisibilityLayer::Invisible};
-    std::shared_ptr<NiceMock<RendererPoolMock>> rendererPool =
-        std::make_shared<NiceMock<RendererPoolMock>>();
+    std::shared_ptr<NiceMock<RendererPoolMock>> rendererPool = std::make_shared<NiceMock<RendererPoolMock>>();
     std::shared_ptr<components::core::SharedContext> sharedContext =
         std::make_shared<components::core::SharedContext>(rendererPool);
     ComponentOwner componentOwner{position1, "textComponentTest", sharedContext};

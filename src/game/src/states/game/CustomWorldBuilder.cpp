@@ -77,7 +77,7 @@ CustomWorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             case TileType::Campfire:
             {
-                auto campfire = obstacleFactory->createCampfire(position, player);
+                auto campfire = obstacleFactory->createCampfire(position, player, []() {});
                 worldObjects.push_back(campfire);
                 break;
             }

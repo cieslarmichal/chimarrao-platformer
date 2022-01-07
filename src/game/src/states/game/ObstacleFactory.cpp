@@ -1,5 +1,7 @@
 #include "ObstacleFactory.h"
 
+#include <utility>
+
 #include "AnimationComponent.h"
 #include "BoxColliderComponent.h"
 #include "CommonUIConfigElements.h"
@@ -78,7 +80,8 @@ ObstacleFactory::createBush(const utils::Vector2f& position,
 
 std::shared_ptr<components::core::ComponentOwner>
 ObstacleFactory::createCampfire(const utils::Vector2f& position,
-                                const std::shared_ptr<components::core::ComponentOwner>& player)
+                                const std::shared_ptr<components::core::ComponentOwner>& player,
+                                std::function<void(void)> action)
 {
     static int numberOfCampfiresInGame = 0;
     numberOfCampfiresInGame++;
@@ -96,14 +99,7 @@ ObstacleFactory::createCampfire(const utils::Vector2f& position,
     campfire->addComponent<components::core::TextComponent>(
         sharedContext->rendererPool, position, "Press E to sleep", fontPath, 9, graphics::Color::Black,
         utils::Vector2f{-1.5, -2.f});
-    campfire->addComponent<components::core::LimitedSpaceActionComponent>(
-        player.get(),
-        [=]()
-        {
-            player->getComponent<components::core::AnimationComponent>()->setAnimation(
-                animations::AnimationType::Sleep);
-            player->getComponent<components::core::MovementComponent>()->lock();
-        });
+    campfire->addComponent<components::core::LimitedSpaceActionComponent>(player.get(), std::move(action));
     return campfire;
 }
 

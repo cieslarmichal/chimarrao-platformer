@@ -22,12 +22,16 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
                                    const std::shared_ptr<ObstacleFactory>& obstacleFactory,
                                    const std::shared_ptr<components::core::SharedContext>& sharedContext,
                                    std::shared_ptr<utils::FileAccess> fileAccessInit)
-    : ownersManager{std::move(ownersManagerInit)}, fileAccess{std::move(fileAccessInit)}
+    : worldBuilder{std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, sharedContext,
+                                                        this)},
+      ownersManager{std::move(ownersManagerInit)},
+      fileAccess{std::move(fileAccessInit)},
+      timeNeededToStartFirstDialogue{0.3f},
+      sleepTime{5.f},
+      playerSleeping{false}
 {
     tileMap->loadFromFile(levelMap);
-
-    auto worldBuilder =
-        std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, sharedContext, this);
+    
     const auto worldObjects = worldBuilder->buildWorldObjects(tileMap);
     mainCharacters.player = worldBuilder->getPlayer();
     mainCharacters.rabbit = worldBuilder->getRabbit();
@@ -40,7 +44,8 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
 
     ownersManager->processNewObjects();
 
-    timer = utils::TimerFactory::createTimer();
+    startFirstDialogueTimer = utils::TimerFactory::createTimer();
+    sleepTimer = utils::TimerFactory::createTimer();
 
     dialoguesController = std::make_unique<Level1DialoguesController>(
         &mainCharacters, std::make_unique<DefaultDialoguesReader>(fileAccess),
@@ -49,9 +54,7 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
 
 SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
-    const auto elapsedSeconds = timer->getElapsedSeconds();
-
-    if (elapsedSeconds > 0.3)
+    if (startFirstDialogueTimer->getElapsedSeconds() > timeNeededToStartFirstDialogue)
     {
         std::call_once(playerWithRabbitDialogueStarted,
                        [this]
@@ -60,6 +63,14 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
                                ->setAnimationDirection(animations::AnimationDirection::Left);
                            dialoguesController->startPlayerWithRabbitDialogue();
                        });
+    }
+
+    if (playerSleeping and sleepTimer->getElapsedSeconds() > sleepTime)
+    {
+        playerSleeping = false;
+        mainCharacters.player->getComponent<components::core::AnimationComponent>()->setAnimation(
+            animations::AnimationType::Idle);
+        mainCharacters.player->getComponent<components::core::MovementComponent>()->unlock();
     }
 
     dialoguesController->update();
@@ -82,6 +93,15 @@ void Level1Controller::deactivate()
 Level1MainCharacters Level1Controller::getCharacters() const
 {
     return mainCharacters;
+}
+
+void Level1Controller::campfireAction()
+{
+    sleepTimer->restart();
+    playerSleeping = true;
+    mainCharacters.player->getComponent<components::core::AnimationComponent>()->setAnimation(
+        animations::AnimationType::Sleep);
+    mainCharacters.player->getComponent<components::core::MovementComponent>()->lock();
 }
 
 }

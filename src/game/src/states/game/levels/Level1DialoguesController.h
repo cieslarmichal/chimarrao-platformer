@@ -1,6 +1,7 @@
 #pragma once
 
 #include <mutex>
+
 #include "DefaultDialoguesReader.h"
 #include "Level1MainCharacters.h"
 #include "Timer.h"
