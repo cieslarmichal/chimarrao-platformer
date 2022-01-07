@@ -89,7 +89,7 @@ CustomWorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             case TileType::Npc:
             {
-                npc = characterFactory->createDruidNpc(player, position);
+                npc = characterFactory->createDruidNpc(player, position, [](){});
                 worldObjects.push_back(npc);
                 break;
             }

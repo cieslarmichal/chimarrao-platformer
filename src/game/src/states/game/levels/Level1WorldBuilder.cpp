@@ -92,7 +92,8 @@ Level1WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             case TileType::Npc:
             {
-                npc = characterFactory->createDruidNpc(player, position);
+                npc = characterFactory->createDruidNpc(player, position,
+                                                       [this]() { level1Controller->druidAction(); });
                 worldObjects.push_back(npc);
                 break;
             }

@@ -31,7 +31,7 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
       playerSleeping{false}
 {
     tileMap->loadFromFile(levelMap);
-    
+
     const auto worldObjects = worldBuilder->buildWorldObjects(tileMap);
     mainCharacters.player = worldBuilder->getPlayer();
     mainCharacters.rabbit = worldBuilder->getRabbit();
@@ -102,6 +102,11 @@ void Level1Controller::campfireAction()
     mainCharacters.player->getComponent<components::core::AnimationComponent>()->setAnimation(
         animations::AnimationType::Sleep);
     mainCharacters.player->getComponent<components::core::MovementComponent>()->lock();
+}
+
+void Level1Controller::druidAction()
+{
+    dialoguesController->startPlayerWithDruidDialogue();
 }
 
 }

@@ -30,6 +30,7 @@ public:
 
 private:
     void campfireAction();
+    void druidAction();
 
     std::unique_ptr<Level1WorldBuilder> worldBuilder;
     Level1MainCharacters mainCharacters;

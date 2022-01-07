@@ -1,5 +1,7 @@
 #include "CharacterFactory.h"
 
+#include <utility>
+
 #include "AnimationComponent.h"
 #include "ArtificialIntelligenceAttackComponent.h"
 #include "BoxColliderComponent.h"
@@ -94,7 +96,7 @@ CharacterFactory::createRabbitFollower(const std::shared_ptr<components::core::C
 
 std::shared_ptr<components::core::ComponentOwner>
 CharacterFactory::createDruidNpc(const std::shared_ptr<components::core::ComponentOwner>& player,
-                                 const utils::Vector2f& position)
+                                 const utils::Vector2f& position, std::function<void(void)> interaction)
 {
     static int numberOfDruidsInGame = 0;
     numberOfDruidsInGame++;
@@ -115,7 +117,7 @@ CharacterFactory::createDruidNpc(const std::shared_ptr<components::core::Compone
     npc->addComponent<components::core::DialogueTextComponent>(
         sharedContext->rendererPool, position, "Press E to talk", fontPath, 9, 0, graphics::Color::Black,
         utils::Vector2f{0, -2});
-    npc->addComponent<components::core::LimitedSpaceActionComponent>(player.get(), []() {});
+    npc->addComponent<components::core::LimitedSpaceActionComponent>(player.get(), std::move(interaction));
     return npc;
 }
 
