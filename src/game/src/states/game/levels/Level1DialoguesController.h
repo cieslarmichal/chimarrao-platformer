@@ -15,20 +15,26 @@ public:
                               std::unique_ptr<utils::Timer>);
 
     void update();
-    void startPlayerWithRabbitDialogue();
+    void startPlayerWithRabbitFirstDialogue();
+    void startPlayerWithRabbitLastDialogue();
     void startPlayerWithDruidDialogue();
+    bool hasPlayerWithRabbitLastDialogueFinished();
 
 private:
-    void handlePlayerWithRabbit1Dialogue();
+    void handlePlayerWithRabbitFirstDialogue();
+    void handlePlayerWithRabbitLastDialogue();
     void handlePlayerWithDruidDialogue();
-    void finishPlayerWithRabbit1Dialogue();
+    void finishPlayerWithRabbitFirstDialogue();
+    void finishPlayerWithRabbitLastDialogue();
     void finishPlayerWithDruidDialogue();
 
     Level1MainCharacters* mainCharacters;
     std::unique_ptr<DialoguesReader> dialoguesReader;
-    DialogueTrack playerWithRabbitDialogueTrack1;
+    DialogueTrack playerWithRabbitFirstDialogueTrack;
+    DialogueTrack playerWithRabbitLastDialogueTrack;
     DialogueTrack playerWithDruidDialogueTrack;
-    bool playerWithRabbitDialogue1IsOngoing{false};
+    bool playerWithRabbitFirstDialogueIsOngoing{false};
+    bool playerWithRabbitLastDialogueIsOngoing{false};
     bool playerWithDruidDialogueIsOngoing{false};
     std::unique_ptr<utils::Timer> dialogueAliveTimer;
     const float dialogueTimeToLive;

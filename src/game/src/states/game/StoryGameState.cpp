@@ -126,4 +126,12 @@ void StoryGameState::gameOver()
     states.addNextState(StateType::GameOver);
 }
 
+void StoryGameState::gameFinishedSuccessfully()
+{
+    paused = true;
+    levelControllers.front()->deactivate();
+    musicManager->pause(musicId);
+//    states.addNextState(StateType::GameOver);
+}
+
 }

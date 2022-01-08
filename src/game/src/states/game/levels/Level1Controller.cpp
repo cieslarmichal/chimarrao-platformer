@@ -33,7 +33,9 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
       sleepTime{5.f},
       deadTime{2.f},
       playerSleeping{false},
-      playerDead{false}
+      playerDead{false},
+      playerSleepingNextToLastCampfire{false},
+      levelFinished{false}
 {
     tileMap->loadFromFile(levelMap);
 
@@ -67,7 +69,7 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
                        {
                            mainCharacters.player->getComponent<components::core::AnimationComponent>()
                                ->setAnimationDirection(animations::AnimationDirection::Left);
-                           dialoguesController->startPlayerWithRabbitDialogue();
+                           dialoguesController->startPlayerWithRabbitFirstDialogue();
                        });
     }
 
@@ -77,6 +79,20 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
         mainCharacters.player->getComponent<components::core::AnimationComponent>()->setAnimation(
             animations::AnimationType::Idle);
         mainCharacters.player->getComponent<components::core::MovementComponent>()->unlock();
+
+        if (playerSleepingNextToLastCampfire)
+        {
+            playerSleepingNextToLastCampfire = false;
+            mainCharacters.player->getComponent<components::core::AnimationComponent>()
+                ->setAnimationDirection(animations::AnimationDirection::Left);
+            dialoguesController->startPlayerWithRabbitLastDialogue();
+            levelFinished = true;
+        }
+    }
+
+    if (levelFinished and dialoguesController->hasPlayerWithRabbitLastDialogueFinished())
+    {
+        storyGameState->gameFinishedSuccessfully();
     }
 
     if (playerDead and deadTimer->getElapsedSeconds() > deadTime)
@@ -106,10 +122,20 @@ Level1MainCharacters Level1Controller::getCharacters() const
     return mainCharacters;
 }
 
-void Level1Controller::campfireAction()
+void Level1Controller::firstCampfireAction()
 {
     sleepTimer->restart();
     playerSleeping = true;
+    mainCharacters.player->getComponent<components::core::AnimationComponent>()->setAnimation(
+        animations::AnimationType::Sleep);
+    mainCharacters.player->getComponent<components::core::MovementComponent>()->lock();
+}
+
+void Level1Controller::lastCampfireAction()
+{
+    sleepTimer->restart();
+    playerSleeping = true;
+    playerSleepingNextToLastCampfire = true;
     mainCharacters.player->getComponent<components::core::AnimationComponent>()->setAnimation(
         animations::AnimationType::Sleep);
     mainCharacters.player->getComponent<components::core::MovementComponent>()->lock();

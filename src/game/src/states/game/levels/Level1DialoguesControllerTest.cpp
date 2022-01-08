@@ -19,6 +19,7 @@ namespace
 {
 const std::string dialoguesDirectory = utils::ProjectPathReader::getProjectRootPath() + "dialogues/";
 const std::string playerWithRabbitDialogueFile1 = dialoguesDirectory + "player_with_rabbit1.txt";
+const std::string playerWithRabbitDialogueFile2 = dialoguesDirectory + "player_with_rabbit2.txt";
 const std::string playerWithDruidDialogueFile = dialoguesDirectory + "player_with_druid.txt";
 const std::vector<DialogueEntry> dialogueEntriesBetweenPlayerAndDruid{
     {components::core::DialogueActor::Druid, "Oh, you found me"},
@@ -26,11 +27,16 @@ const std::vector<DialogueEntry> dialogueEntriesBetweenPlayerAndDruid{
     {components::core::DialogueActor::Player, "Do you know where can I find some food?"},
     {components::core::DialogueActor::Druid, "Have you seen those bushes?"},
     {components::core::DialogueActor::Player, "Yes, I guess so"}};
-const std::vector<DialogueEntry> dialogueEntriesBetweenPlayerAndRabbit{
+const std::vector<DialogueEntry> dialogueEntriesBetweenPlayerAndRabbit1{
     {components::core::DialogueActor::Player, "hello bunny"},
     {components::core::DialogueActor::Rabbit, "hello my love"},
     {components::core::DialogueActor::Player, "where are we going?"},
     {components::core::DialogueActor::Rabbit, "i dont know"}};
+const std::vector<DialogueEntry> dialogueEntriesBetweenPlayerAndRabbit2{
+    {components::core::DialogueActor::Rabbit, "1"},
+    {components::core::DialogueActor::Player, "2"},
+    {components::core::DialogueActor::Player, "3"},
+    {components::core::DialogueActor::Rabbit, "4"}};
 const utils::Vector2f position1{8, 0};
 const utils::Vector2f position2{5, 0};
 const utils::Vector2f position3{12, 0};
@@ -45,7 +51,9 @@ public:
     Level1DialoguesControllerTest_Base()
     {
         EXPECT_CALL(*dialoguesReader, read(playerWithRabbitDialogueFile1))
-            .WillOnce(Return(dialogueEntriesBetweenPlayerAndRabbit));
+            .WillOnce(Return(dialogueEntriesBetweenPlayerAndRabbit1));
+        EXPECT_CALL(*dialoguesReader, read(playerWithRabbitDialogueFile2))
+            .WillOnce(Return(dialogueEntriesBetweenPlayerAndRabbit2));
         EXPECT_CALL(*dialoguesReader, read(playerWithDruidDialogueFile))
             .WillOnce(Return(dialogueEntriesBetweenPlayerAndDruid));
     }
@@ -95,11 +103,22 @@ public:
     graphics::GraphicsId druidTextId;
 };
 
-TEST_F(Level1DialoguesControllerTest, startPlayerWithRabbitDialogue_shouldLockPlayerMovementAndRestartTimer)
+TEST_F(Level1DialoguesControllerTest,
+       startPlayerWithRabbitFirstDialogue_shouldLockPlayerMovementAndRestartTimer)
 {
     EXPECT_CALL(*timer, restart());
 
-    controller.startPlayerWithRabbitDialogue();
+    controller.startPlayerWithRabbitFirstDialogue();
+
+    ASSERT_TRUE(player->getComponent<components::core::MovementComponent>()->isLocked());
+}
+
+TEST_F(Level1DialoguesControllerTest,
+       startPlayerWithRabbitLastDialogue_shouldLockPlayerMovementAndRestartTimer)
+{
+    EXPECT_CALL(*timer, restart());
+
+    controller.startPlayerWithRabbitFirstDialogue();
 
     ASSERT_TRUE(player->getComponent<components::core::MovementComponent>()->isLocked());
 }
@@ -113,18 +132,18 @@ TEST_F(Level1DialoguesControllerTest, startPlayerWithDruidDialogue_shouldLockPla
     ASSERT_TRUE(player->getComponent<components::core::MovementComponent>()->isLocked());
 }
 
-class Level1DialoguesControllerTest_PlayerWithRabbitDialogue : public Level1DialoguesControllerTest
+class Level1DialoguesControllerTest_PlayerWithRabbitFirstDialogue : public Level1DialoguesControllerTest
 {
 public:
 };
 
-TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
+TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitFirstDialogue,
        firstDialogueUpdate_shouldSetPlayerTextAndDisableRabbitText)
 {
     EXPECT_CALL(*timer, restart()).Times(2);
     EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(5));
     EXPECT_CALL(*rendererPool, setText(playerTextId, "hello bunny"));
-    controller.startPlayerWithRabbitDialogue();
+    controller.startPlayerWithRabbitFirstDialogue();
 
     controller.update();
 
@@ -132,14 +151,14 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
     ASSERT_TRUE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
 }
 
-TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
+TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitFirstDialogue,
        secondDialogueUpdate_shouldSetRabbitTextAndDisablePlayerText)
 {
     EXPECT_CALL(*timer, restart()).Times(3);
     EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
     EXPECT_CALL(*rendererPool, setText(playerTextId, "hello bunny"));
     EXPECT_CALL(*rendererPool, setText(rabbitTextId, "hello my love"));
-    controller.startPlayerWithRabbitDialogue();
+    controller.startPlayerWithRabbitFirstDialogue();
 
     controller.update();
     controller.update();
@@ -148,12 +167,12 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
     ASSERT_TRUE(rabbit->getComponent<components::core::DialogueTextComponent>()->isEnabled());
 }
 
-TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
+TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitFirstDialogue,
        after4Dialogues_shouldUnlockPlayerAndDisableTexts)
 {
     EXPECT_CALL(*timer, restart()).Times(6);
     EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
-    controller.startPlayerWithRabbitDialogue();
+    controller.startPlayerWithRabbitFirstDialogue();
 
     controller.update();
     controller.update();
@@ -161,6 +180,62 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitDialogue,
     controller.update();
     controller.update();
 
+    ASSERT_FALSE(player->getComponent<components::core::MovementComponent>()->isLocked());
+    ASSERT_FALSE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
+    ASSERT_FALSE(rabbit->getComponent<components::core::DialogueTextComponent>()->isEnabled());
+}
+
+class Level1DialoguesControllerTest_PlayerWithRabbitLastDialogue : public Level1DialoguesControllerTest
+{
+public:
+};
+
+TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitLastDialogue,
+       firstDialogueUpdate_shouldSetPlayerTextAndDisableRabbitText)
+{
+    EXPECT_CALL(*timer, restart()).Times(2);
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(5));
+    EXPECT_CALL(*rendererPool, setText(rabbitTextId, "1"));
+    controller.startPlayerWithRabbitLastDialogue();
+
+    controller.update();
+
+    ASSERT_FALSE(controller.hasPlayerWithRabbitLastDialogueFinished());
+    ASSERT_TRUE(rabbit->getComponent<components::core::DialogueTextComponent>()->isEnabled());
+    ASSERT_FALSE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
+}
+
+TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitLastDialogue,
+       secondDialogueUpdate_shouldSetRabbitTextAndDisablePlayerText)
+{
+    EXPECT_CALL(*timer, restart()).Times(3);
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    EXPECT_CALL(*rendererPool, setText(rabbitTextId, "1"));
+    EXPECT_CALL(*rendererPool, setText(playerTextId, "2"));
+    controller.startPlayerWithRabbitLastDialogue();
+
+    controller.update();
+    controller.update();
+
+    ASSERT_FALSE(controller.hasPlayerWithRabbitLastDialogueFinished());
+    ASSERT_TRUE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
+    ASSERT_FALSE(rabbit->getComponent<components::core::DialogueTextComponent>()->isEnabled());
+}
+
+TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitLastDialogue,
+       after4Dialogues_shouldUnlockPlayerAndDisableTexts)
+{
+    EXPECT_CALL(*timer, restart()).Times(6);
+    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    controller.startPlayerWithRabbitLastDialogue();
+
+    controller.update();
+    controller.update();
+    controller.update();
+    controller.update();
+    controller.update();
+
+    ASSERT_TRUE(controller.hasPlayerWithRabbitLastDialogueFinished());
     ASSERT_FALSE(player->getComponent<components::core::MovementComponent>()->isLocked());
     ASSERT_FALSE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
     ASSERT_FALSE(rabbit->getComponent<components::core::DialogueTextComponent>()->isEnabled());

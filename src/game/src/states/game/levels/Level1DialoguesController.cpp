@@ -10,6 +10,7 @@ namespace
 {
 const std::string dialoguesDirectory = utils::ProjectPathReader::getProjectRootPath() + "dialogues/";
 const std::string playerWithRabbitDialogueFile1 = dialoguesDirectory + "player_with_rabbit1.txt";
+const std::string playerWithRabbitDialogueFile2 = dialoguesDirectory + "player_with_rabbit2.txt";
 const std::string playerWithDruidDialogueFile = dialoguesDirectory + "player_with_druid.txt";
 }
 
@@ -18,7 +19,8 @@ Level1DialoguesController::Level1DialoguesController(Level1MainCharacters* level
                                                      std::unique_ptr<utils::Timer> timerInit)
     : mainCharacters{level1MainCharacters},
       dialoguesReader{std::move(dialoguesReaderInit)},
-      playerWithRabbitDialogueTrack1{dialoguesReader->read(playerWithRabbitDialogueFile1)},
+      playerWithRabbitFirstDialogueTrack{dialoguesReader->read(playerWithRabbitDialogueFile1)},
+      playerWithRabbitLastDialogueTrack{dialoguesReader->read(playerWithRabbitDialogueFile2)},
       playerWithDruidDialogueTrack{dialoguesReader->read(playerWithDruidDialogueFile)},
       dialogueAliveTimer{std::move(timerInit)},
       dialogueTimeToLive{2.5f}
@@ -27,19 +29,30 @@ Level1DialoguesController::Level1DialoguesController(Level1MainCharacters* level
 
 void Level1DialoguesController::update()
 {
-    if (playerWithRabbitDialogue1IsOngoing)
+    if (playerWithRabbitFirstDialogueIsOngoing)
     {
-        handlePlayerWithRabbit1Dialogue();
+        handlePlayerWithRabbitFirstDialogue();
     }
     else if (playerWithDruidDialogueIsOngoing)
     {
         handlePlayerWithDruidDialogue();
     }
+    else if (playerWithRabbitLastDialogueIsOngoing)
+    {
+        handlePlayerWithRabbitLastDialogue();
+    }
 }
 
-void Level1DialoguesController::startPlayerWithRabbitDialogue()
+void Level1DialoguesController::startPlayerWithRabbitFirstDialogue()
 {
-    playerWithRabbitDialogue1IsOngoing = true;
+    playerWithRabbitFirstDialogueIsOngoing = true;
+    mainCharacters->player->getComponent<components::core::MovementComponent>()->lock();
+    dialogueAliveTimer->restart();
+}
+
+void Level1DialoguesController::startPlayerWithRabbitLastDialogue()
+{
+    playerWithRabbitLastDialogueIsOngoing = true;
     mainCharacters->player->getComponent<components::core::MovementComponent>()->lock();
     dialogueAliveTimer->restart();
 }
@@ -51,11 +64,11 @@ void Level1DialoguesController::startPlayerWithDruidDialogue()
     dialogueAliveTimer->restart();
 }
 
-void Level1DialoguesController::handlePlayerWithRabbit1Dialogue()
+void Level1DialoguesController::handlePlayerWithRabbitFirstDialogue()
 {
     if (dialogueAliveTimer->getElapsedSeconds() >= dialogueTimeToLive)
     {
-        if (const auto dialogueEntry = playerWithRabbitDialogueTrack1.getNextDialogue())
+        if (const auto dialogueEntry = playerWithRabbitFirstDialogueTrack.getNextDialogue())
         {
             if (dialogueEntry->actor == components::core::DialogueActor::Player)
             {
@@ -75,7 +88,38 @@ void Level1DialoguesController::handlePlayerWithRabbit1Dialogue()
         }
         else
         {
-            finishPlayerWithRabbit1Dialogue();
+            finishPlayerWithRabbitFirstDialogue();
+        }
+
+        dialogueAliveTimer->restart();
+    }
+}
+
+void Level1DialoguesController::handlePlayerWithRabbitLastDialogue()
+{
+    if (dialogueAliveTimer->getElapsedSeconds() >= dialogueTimeToLive)
+    {
+        if (const auto dialogueEntry = playerWithRabbitLastDialogueTrack.getNextDialogue())
+        {
+            if (dialogueEntry->actor == components::core::DialogueActor::Player)
+            {
+                mainCharacters->rabbit->getComponent<components::core::DialogueTextComponent>()->disable();
+                mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->setText(
+                    dialogueEntry->statement);
+                mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->enable();
+            }
+
+            if (dialogueEntry->actor == components::core::DialogueActor::Rabbit)
+            {
+                mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->disable();
+                mainCharacters->rabbit->getComponent<components::core::DialogueTextComponent>()->setText(
+                    dialogueEntry->statement);
+                mainCharacters->rabbit->getComponent<components::core::DialogueTextComponent>()->enable();
+            }
+        }
+        else
+        {
+            finishPlayerWithRabbitLastDialogue();
         }
 
         dialogueAliveTimer->restart();
@@ -113,12 +157,20 @@ void Level1DialoguesController::handlePlayerWithDruidDialogue()
     }
 }
 
-void Level1DialoguesController::finishPlayerWithRabbit1Dialogue()
+void Level1DialoguesController::finishPlayerWithRabbitFirstDialogue()
 {
     mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->disable();
     mainCharacters->rabbit->getComponent<components::core::DialogueTextComponent>()->disable();
     mainCharacters->player->getComponent<components::core::MovementComponent>()->unlock();
-    playerWithRabbitDialogue1IsOngoing = false;
+    playerWithRabbitFirstDialogueIsOngoing = false;
+}
+
+void Level1DialoguesController::finishPlayerWithRabbitLastDialogue()
+{
+    mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->disable();
+    mainCharacters->rabbit->getComponent<components::core::DialogueTextComponent>()->disable();
+    mainCharacters->player->getComponent<components::core::MovementComponent>()->unlock();
+    playerWithRabbitLastDialogueIsOngoing = false;
 }
 
 void Level1DialoguesController::finishPlayerWithDruidDialogue()
@@ -127,6 +179,11 @@ void Level1DialoguesController::finishPlayerWithDruidDialogue()
     mainCharacters->npc->getComponent<components::core::DialogueTextComponent>()->disable();
     mainCharacters->player->getComponent<components::core::MovementComponent>()->unlock();
     playerWithDruidDialogueIsOngoing = false;
+}
+
+bool Level1DialoguesController::hasPlayerWithRabbitLastDialogueFinished()
+{
+    return not playerWithRabbitLastDialogueIsOngoing;
 }
 
 }

@@ -2,6 +2,8 @@
 
 #include <utility>
 
+#include "exceptions/InvalidTileMap.h"
+
 namespace game
 {
 
@@ -36,6 +38,14 @@ Level1WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
         }
     }
+
+    if (not player)
+    {
+        throw exceptions::InvalidTileMap{"player does not exist in map"};
+    }
+
+    std::vector<utils::Vector2f> campfirePositions;
+    std::vector<utils::Vector2f> bushPositions;
 
     for (int x = 0; x < tileMap->getSize().x; x++)
     {
@@ -74,15 +84,12 @@ Level1WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             case TileType::Bush:
             {
-                auto bush = obstacleFactory->createBush(position, player);
-                worldObjects.push_back(bush);
+                bushPositions.push_back(position);
                 break;
             }
             case TileType::Campfire:
             {
-                auto campfire = obstacleFactory->createCampfire(
-                    position, player, [this]() { level1Controller->campfireAction(); });
-                worldObjects.push_back(campfire);
+                campfirePositions.push_back(position);
                 break;
             }
             case TileType::Chest:
@@ -106,8 +113,8 @@ Level1WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             case TileType::Bandit:
             {
-                auto bandit = characterFactory->createBanditEnemy(player, position);
-                worldObjects.push_back(bandit);
+//                auto bandit = characterFactory->createBanditEnemy(player, position);
+//                worldObjects.push_back(bandit);
                 break;
             }
             case TileType::Player:
@@ -116,6 +123,36 @@ Level1WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             }
         }
+    }
+
+    if (campfirePositions.size() != 2)
+    {
+        throw exceptions::InvalidTileMap{"number of campfires is not equal 2"};
+    }
+
+    std::sort(campfirePositions.begin(), campfirePositions.end(),
+              [](const utils::Vector2f& lhs, const utils::Vector2f& rhs) { return lhs.x < rhs.x; });
+
+    auto firstCampfireInLevel = obstacleFactory->createCampfire(
+        campfirePositions[0], player, [this]() { level1Controller->firstCampfireAction(); });
+    worldObjects.push_back(firstCampfireInLevel);
+
+    auto lastCampfireInLevel = obstacleFactory->createCampfire(
+        campfirePositions[1], player, [this]() { level1Controller->lastCampfireAction(); });
+    worldObjects.push_back(lastCampfireInLevel);
+
+    //    if (bushPositions.size() != 3)
+    //    {
+    //        throw exceptions::InvalidTileMap{"number of bushes is not equal 3"};
+    //    }
+
+    std::sort(bushPositions.begin(), bushPositions.end(),
+              [](const utils::Vector2f& lhs, const utils::Vector2f& rhs) { return lhs.x < rhs.x; });
+
+    for (const auto& bushPosition : bushPositions)
+    {
+        auto bush = obstacleFactory->createBush(bushPosition, player);
+        worldObjects.push_back(bush);
     }
 
     auto leftMapBorder = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{-1, 0},

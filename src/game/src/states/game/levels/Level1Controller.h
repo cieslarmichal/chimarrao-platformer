@@ -30,7 +30,8 @@ public:
     Level1MainCharacters getCharacters() const;
 
 private:
-    void campfireAction();
+    void firstCampfireAction();
+    void lastCampfireAction();
     void druidAction();
     void deadPlayerAction();
 
@@ -49,5 +50,7 @@ private:
     const float deadTime;
     bool playerSleeping;
     bool playerDead;
+    bool playerSleepingNextToLastCampfire;
+    bool levelFinished;
 };
 }

@@ -1,0 +1,2 @@
+player: Bye
+rabbit: Bye

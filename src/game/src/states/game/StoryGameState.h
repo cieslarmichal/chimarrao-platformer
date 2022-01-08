@@ -44,6 +44,7 @@ public:
 private:
     void pause();
     void gameOver();
+    void gameFinishedSuccessfully();
 
     bool paused;
     std::unique_ptr<utils::Timer> timer;
