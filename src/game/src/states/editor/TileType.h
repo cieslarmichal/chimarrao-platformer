@@ -21,12 +21,13 @@ enum class TileType
     Player,
     Npc,
     Bandit,
-    Rabbit
+    Rabbit,
+    Soil,
 };
 
-const std::vector<TileType> tileTypes{TileType::Brick,    TileType::Grass, TileType::Tree,   TileType::Bush,
-                                      TileType::Campfire, TileType::Chest, TileType::Player, TileType::Npc,
-                                      TileType::Bandit,   TileType::Rabbit};
+const std::vector<TileType> tileTypes{TileType::Brick, TileType::Grass,    TileType::Soil,  TileType::Tree,
+                                      TileType::Bush,  TileType::Campfire, TileType::Chest, TileType::Player,
+                                      TileType::Npc,   TileType::Bandit,   TileType::Rabbit};
 
 const TileType defaultTileType = TileType::Brick;
 
@@ -41,6 +42,7 @@ inline std::string tileTypeToPathTexture(TileType type)
     const std::unordered_map<TileType, std::string> tileTextures{
         {TileType::Brick, utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/brick.png"},
         {TileType::Grass, utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/2.png"},
+        {TileType::Soil, utils::ProjectPathReader::getProjectRootPath() + "resources/Tiles/10.png"},
         {TileType::Tree, utils::ProjectPathReader::getProjectRootPath() + "resources/tree.png"},
         {TileType::Bush, utils::ProjectPathReader::getProjectRootPath() + "resources/bush.png"},
         {TileType::Campfire,
@@ -65,9 +67,9 @@ inline std::string tileTypeToPathTexture(TileType type)
 inline int tileTypeToInt(std::optional<TileType> type)
 {
     const std::unordered_map<std::optional<TileType>, int> tileTypeToInt{
-        {std::nullopt, 0},   {TileType::Grass, 1},    {TileType::Brick, 2},  {TileType::Tree, 3},
-        {TileType::Bush, 4}, {TileType::Campfire, 5}, {TileType::Chest, 6},  {TileType::Player, 7},
-        {TileType::Npc, 8},  {TileType::Bandit, 9},   {TileType::Rabbit, 10}};
+        {std::nullopt, 0},   {TileType::Grass, 1},    {TileType::Brick, 2},   {TileType::Tree, 3},
+        {TileType::Bush, 4}, {TileType::Campfire, 5}, {TileType::Chest, 6},   {TileType::Player, 7},
+        {TileType::Npc, 8},  {TileType::Bandit, 9},   {TileType::Rabbit, 10}, {TileType::Soil, 11}};
 
     try
     {
@@ -82,9 +84,9 @@ inline int tileTypeToInt(std::optional<TileType> type)
 inline std::optional<TileType> intToTileType(int tileTypeInt)
 {
     const std::unordered_map<int, std::optional<TileType>> intToTileType{
-        {0, std::nullopt},   {1, TileType::Grass},    {2, TileType::Brick},  {3, TileType::Tree},
-        {4, TileType::Bush}, {5, TileType::Campfire}, {6, TileType::Chest},  {7, TileType::Player},
-        {8, TileType::Npc},  {9, TileType::Bandit},   {10, TileType::Rabbit}};
+        {0, std::nullopt},   {1, TileType::Grass},    {2, TileType::Brick},   {3, TileType::Tree},
+        {4, TileType::Bush}, {5, TileType::Campfire}, {6, TileType::Chest},   {7, TileType::Player},
+        {8, TileType::Npc},  {9, TileType::Bandit},   {10, TileType::Rabbit}, {11, TileType::Soil}};
 
     try
     {

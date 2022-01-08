@@ -68,14 +68,18 @@ Level1WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
                 worldObjects.push_back(brick);
                 break;
             }
-
             case TileType::Grass:
             {
                 auto grass = obstacleFactory->createGrass(position);
                 worldObjects.push_back(grass);
                 break;
             }
-
+            case TileType::Soil:
+            {
+                auto grass = obstacleFactory->createSoil(position);
+                worldObjects.push_back(grass);
+                break;
+            }
             case TileType::Tree:
             {
                 auto tree = obstacleFactory->createTree(position);

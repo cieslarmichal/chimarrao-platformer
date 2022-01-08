@@ -13,6 +13,7 @@ public:
 
     std::shared_ptr<components::core::ComponentOwner> createBrick(const utils::Vector2f& position);
     std::shared_ptr<components::core::ComponentOwner> createGrass(const utils::Vector2f& position);
+    std::shared_ptr<components::core::ComponentOwner> createSoil(const utils::Vector2f& position);
     std::shared_ptr<components::core::ComponentOwner> createTree(const utils::Vector2f& position);
     std::shared_ptr<components::core::ComponentOwner>
     createBush(const utils::Vector2f& position,

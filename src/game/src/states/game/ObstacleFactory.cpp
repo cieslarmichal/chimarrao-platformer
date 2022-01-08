@@ -46,6 +46,19 @@ ObstacleFactory::createGrass(const utils::Vector2f& position)
     return grass;
 }
 
+std::shared_ptr<components::core::ComponentOwner> ObstacleFactory::createSoil(const utils::Vector2f& position)
+{
+    static int numberOfSoilsInGame = 0;
+    numberOfSoilsInGame++;
+    auto soil = std::make_shared<components::core::ComponentOwner>(
+        position, "soil" + std::to_string(numberOfSoilsInGame), sharedContext);
+    soil->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{4, 4}, position,
+                               tileTypeToPathTexture(TileType::Soil), graphics::VisibilityLayer::Second);
+    soil->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4, 4},
+                                                               components::core::CollisionLayer::Tile);
+    return soil;
+}
+
 std::shared_ptr<components::core::ComponentOwner> ObstacleFactory::createTree(const utils::Vector2f& position)
 {
     static int numberOfTreesInGame = 0;
@@ -116,4 +129,5 @@ ObstacleFactory::createChest(const utils::Vector2f& position)
                                                                 components::core::CollisionLayer::Tile);
     return chest;
 }
+
 }
