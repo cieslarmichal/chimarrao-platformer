@@ -13,6 +13,11 @@ void AnimationComponent::update(utils::DeltaTime deltaTime, const input::Input&)
     animator->update(deltaTime);
 }
 
+void AnimationComponent::forceAnimation(animations::AnimationType animationType)
+{
+    animator->forceAnimation(animationType);
+}
+
 void AnimationComponent::setAnimation(animations::AnimationType animationType)
 {
     animator->setAnimation(animationType);

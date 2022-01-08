@@ -56,7 +56,7 @@ CharacterFactory::createPlayer(const utils::Vector2f& position, std::function<vo
     player->addComponent<components::core::CameraComponent>(
         sharedContext->rendererPool, utils::FloatRect{0, 0, static_cast<float>(tileMap->getSize().x) * 4.f,
                                                       static_cast<float>(tileMap->getSize().y) * 4.f});
-    player->addComponent<components::core::HealthComponent>(100, std::move(deadAction));
+    player->addComponent<components::core::HealthComponent>(200, std::move(deadAction));
     player->addComponent<components::core::DirectionComponent>();
     auto friendlyFireValidator = std::make_unique<components::core::DefaultFriendlyFireValidator>();
     auto attackStrategy = std::make_shared<components::core::MeleeAttack>(player.get(), rayCast,

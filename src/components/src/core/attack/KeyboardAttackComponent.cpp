@@ -29,7 +29,8 @@ void KeyboardAttackComponent::loadDependentComponents()
 void KeyboardAttackComponent::update(utils::DeltaTime, const input::Input& input)
 {
     if (input.isKeyPressed(input::InputKey::Space) and
-        animation->getAnimationType() != animations::AnimationType::Attack)
+        animation->getAnimationType() != animations::AnimationType::Attack and
+        animation->getAnimationType() != animations::AnimationType::Sleep)
     {
         animation->setAnimation(animations::AnimationType::Attack);
         attemptToAttack = true;

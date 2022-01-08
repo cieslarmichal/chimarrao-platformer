@@ -104,6 +104,24 @@ void MultipleFileAnimator::setAnimationDirection(AnimationDirection animationDir
     }
 }
 
+void MultipleFileAnimator::forceAnimation(AnimationType animationType)
+{
+    if (not containsAnimation(animationType))
+    {
+        throw exceptions::AnimationTypeNotSupported{"Animation of type: " + toString(animationType) +
+                                                    " is not supported in " + animatorName};
+    }
+
+    if (currentAnimationType != animationType)
+    {
+        currentAnimationType = animationType;
+        animations.at(currentAnimationType).reset();
+        newAnimationTypeIsSet = true;
+    }
+
+    setAnimationDirection(currentAnimationDirection);
+}
+
 AnimationType MultipleFileAnimator::getAnimationType() const
 {
     return currentAnimationType;

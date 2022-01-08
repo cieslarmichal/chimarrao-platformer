@@ -71,6 +71,7 @@ TEST_F(
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(true));
     EXPECT_CALL(*animator, getAnimationType())
         .WillOnce(Return(animations::AnimationType::Idle))
+        .WillOnce(Return(animations::AnimationType::Idle))
         .WillOnce(Return(animations::AnimationType::Attack));
     EXPECT_CALL(*animator, setAnimation(animations::AnimationType::Attack));
     EXPECT_CALL(*animator, getCurrentAnimationProgressInPercents()).WillOnce(Return(58));
@@ -84,6 +85,7 @@ TEST_F(
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(true));
     EXPECT_CALL(*animator, getAnimationType())
+        .WillOnce(Return(animations::AnimationType::Idle))
         .WillOnce(Return(animations::AnimationType::Idle))
         .WillOnce(Return(animations::AnimationType::Attack));
     EXPECT_CALL(*animator, setAnimation(animations::AnimationType::Attack));

@@ -58,7 +58,7 @@ StoryGameState::StoryGameState(const std::shared_ptr<window::Window>& windowInit
 
     musicId = musicManager->acquire(soundtrackPath);
     musicManager->play(musicId);
-    musicManager->setVolume(musicId, 15);
+    musicManager->setVolume(musicId, 3);
 }
 
 NextState StoryGameState::update(const utils::DeltaTime& deltaTime, const input::Input& input)

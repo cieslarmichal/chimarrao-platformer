@@ -25,6 +25,7 @@ public:
     void setAnimation(AnimationType) override;
     void setAnimation(AnimationType, AnimationDirection) override;
     void setAnimationDirection(AnimationDirection) override;
+    void forceAnimation(AnimationType) override;
     AnimationType getAnimationType() const override;
     AnimationDirection getAnimationDirection() const override;
     unsigned int getCurrentAnimationProgressInPercents() override;

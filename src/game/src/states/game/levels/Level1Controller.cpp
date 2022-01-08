@@ -124,7 +124,7 @@ void Level1Controller::deadPlayerAction()
 {
     deadTimer->restart();
     playerDead = true;
-    mainCharacters.player->getComponent<components::core::AnimationComponent>()->setAnimation(
+    mainCharacters.player->getComponent<components::core::AnimationComponent>()->forceAnimation(
         animations::AnimationType::Sleep);
     mainCharacters.player->getComponent<components::core::MovementComponent>()->lock();
 }

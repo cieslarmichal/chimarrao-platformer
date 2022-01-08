@@ -17,6 +17,7 @@ public:
     virtual void setAnimation(AnimationType) = 0;
     virtual void setAnimation(AnimationType, AnimationDirection) = 0;
     virtual void setAnimationDirection(AnimationDirection) = 0;
+    virtual void forceAnimation(AnimationType) = 0;
     virtual AnimationType getAnimationType() const = 0;
     virtual AnimationDirection getAnimationDirection() const = 0;
     virtual unsigned int getCurrentAnimationProgressInPercents() = 0;

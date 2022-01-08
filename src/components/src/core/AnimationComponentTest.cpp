@@ -44,6 +44,13 @@ TEST_F(AnimationComponentTest, setAnimationByAnimationType)
     animationComponent.setAnimation(animationType);
 }
 
+TEST_F(AnimationComponentTest, forceAnimation)
+{
+    EXPECT_CALL(*animator, forceAnimation(animationType));
+
+    animationComponent.forceAnimation(animationType);
+}
+
 TEST_F(AnimationComponentTest, setAnimationByAnimationTypeAndAnimationDirection)
 {
     EXPECT_CALL(*animator, setAnimation(animationType, animationDirection));
