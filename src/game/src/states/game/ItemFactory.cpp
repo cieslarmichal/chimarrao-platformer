@@ -36,7 +36,26 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createYerba(const
     yerbaItem->addComponent<components::core::FreeFallMovementComponent>();
     yerbaItem->addComponent<components::core::CollectableItemComponent>(
         "yerba" + std::to_string(numberOfYerbaItemsInGame), components::core::ItemType::Yerba,
-        std::make_shared<components::core::ItemHealEffect>(10));
+        std::make_shared<components::core::ItemHealEffect>(100));
+    return yerbaItem;
+}
+
+std::shared_ptr<components::core::ComponentOwner>
+ItemFactory::createBlueberries(const utils::Vector2f& position)
+{
+    static int numberOfBlueberriesItemsInGame = 0;
+    numberOfBlueberriesItemsInGame++;
+    auto yerbaItem = std::make_shared<components::core::ComponentOwner>(
+        position, "blueberriesItem" + std::to_string(numberOfBlueberriesItemsInGame), sharedContext);
+    yerbaItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
+                                    yerbaTexturePath, graphics::VisibilityLayer::Second);
+    yerbaItem->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{2, 2},
+                                                                    components::core::CollisionLayer::Player);
+    yerbaItem->addComponent<components::core::VelocityComponent>();
+    yerbaItem->addComponent<components::core::FreeFallMovementComponent>();
+    yerbaItem->addComponent<components::core::CollectableItemComponent>(
+        "blueberries" + std::to_string(numberOfBlueberriesItemsInGame),
+        components::core::ItemType::Blueberries, std::make_shared<components::core::ItemHealEffect>(20));
     return yerbaItem;
 }
 
@@ -75,4 +94,5 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createMeat(const 
         std::make_shared<components::core::ItemHealEffect>(5));
     return meatItem;
 }
+
 }

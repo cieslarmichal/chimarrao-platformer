@@ -12,13 +12,16 @@ enum class ItemType
 {
     Yerba,
     Meat,
-    Apple
+    Apple,
+    Blueberries
 };
 
 inline std::string toString(ItemType itemType)
 {
-    std::unordered_map<ItemType, std::string> itemTypeToString{
-        {ItemType::Yerba, "Yerba"}, {ItemType::Meat, "Meat"}, {ItemType::Apple, "Apple"}};
+    std::unordered_map<ItemType, std::string> itemTypeToString{{ItemType::Yerba, "Yerba"},
+                                                               {ItemType::Meat, "Meat"},
+                                                               {ItemType::Apple, "Apple"},
+                                                               {ItemType::Blueberries, "Blueberries"}};
 
     try
     {
@@ -34,8 +37,10 @@ inline ItemType toItemType(const std::string& itemTypeAsString)
 {
     const auto itemTypeLowerString = utils::StringHelper::getLowerCases(itemTypeAsString);
 
-    std::unordered_map<std::string, ItemType> stringToItemType{
-        {"yerba", ItemType::Yerba}, {"meat", ItemType::Meat}, {"apple", ItemType::Apple}};
+    std::unordered_map<std::string, ItemType> stringToItemType{{"yerba", ItemType::Yerba},
+                                                               {"meat", ItemType::Meat},
+                                                               {"apple", ItemType::Apple},
+                                                               {"blueberries", ItemType::Blueberries}};
 
     try
     {
