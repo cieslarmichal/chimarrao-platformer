@@ -1,7 +1,7 @@
-#include "GameOverState.h"
+#include "GameVictoryState.h"
 
-#include "GameOverStateUIConfigBuilder.h"
 #include "TimerFactory.h"
+#include "GameVictoryStateUIConfigBuilder.h"
 
 namespace game
 {
@@ -12,7 +12,7 @@ const auto buttonColor = graphics::Color{65, 105, 200};
 const auto buttonHoverColor = graphics::Color(4, 8, 97);
 }
 
-GameOverState::GameOverState(const std::shared_ptr<window::Window>& windowInit,
+GameVictoryState::GameVictoryState(const std::shared_ptr<window::Window>& windowInit,
                              const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
                              std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
                              std::shared_ptr<components::ui::UIManager> uiManagerInit)
@@ -20,10 +20,10 @@ GameOverState::GameOverState(const std::shared_ptr<window::Window>& windowInit,
       shouldBackToMenu{false},
       uiManager{std::move(uiManagerInit)}
 {
-    uiManager->createUI(GameOverStateUIConfigBuilder::createGameOverUIConfig(this));
+    uiManager->createUI(GameVictoryStateUIConfigBuilder::createGameVictoryUIConfig(this));
 }
 
-NextState GameOverState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
+NextState GameVictoryState::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
     if (shouldBackToMenu)
     {
@@ -34,31 +34,31 @@ NextState GameOverState::update(const utils::DeltaTime& deltaTime, const input::
     return NextState::Same;
 }
 
-void GameOverState::lateUpdate(const utils::DeltaTime&, const input::Input&) {}
+void GameVictoryState::lateUpdate(const utils::DeltaTime&, const input::Input&) {}
 
-void GameOverState::render()
+void GameVictoryState::render()
 {
     rendererPool->renderAll();
 }
 
-StateType GameOverState::getType() const
+StateType GameVictoryState::getType() const
 {
-    return StateType::GameOver;
+    return StateType::GameVictory;
 }
 
-void GameOverState::activate()
+void GameVictoryState::activate()
 {
     active = true;
     uiManager->activate();
 }
 
-void GameOverState::deactivate()
+void GameVictoryState::deactivate()
 {
     active = false;
     uiManager->deactivate();
 }
 
-void GameOverState::backToMenu()
+void GameVictoryState::backToMenu()
 {
     shouldBackToMenu = true;
 }

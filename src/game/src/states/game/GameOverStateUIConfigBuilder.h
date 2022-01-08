@@ -3,8 +3,6 @@
 #include <memory>
 #include <vector>
 
-#include "navigators/GridButtonInfo.h"
-
 namespace components::ui
 {
 struct UIConfig;

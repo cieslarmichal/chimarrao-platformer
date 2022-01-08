@@ -21,7 +21,8 @@ enum class StateType
     Settings,
     ChooseMap,
     StoryGame,
-    GameOver
+    GameOver,
+    GameVictory
 };
 
 inline std::string toString(StateType stateType)
@@ -32,7 +33,7 @@ inline std::string toString(StateType stateType)
         {StateType::Menu, "Menu"},           {StateType::Pause, "Pause"},
         {StateType::SaveMap, "SaveMap"},     {StateType::Settings, "Settings"},
         {StateType::ChooseMap, "ChooseMap"}, {StateType::StoryGame, "StoryGame"},
-        {StateType::GameOver, "GameOver"}};
+        {StateType::GameOver, "GameOver"},   {StateType::GameOver, "GameVictory"}};
 
     try
     {
@@ -54,7 +55,7 @@ inline StateType toStateType(const std::string& stateTypeAsString)
         {"menu", StateType::Menu},           {"pause", StateType::Pause},
         {"savemap", StateType::SaveMap},     {"settings", StateType::Settings},
         {"choosemap", StateType::ChooseMap}, {"storygame", StateType::StoryGame},
-        {"gameover", StateType::GameOver}};
+        {"gameover", StateType::GameOver},   {"gamevictory", StateType::GameVictory}};
 
     try
     {

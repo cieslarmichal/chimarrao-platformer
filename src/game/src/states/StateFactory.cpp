@@ -20,6 +20,7 @@
 #include "menu/MenuState.h"
 #include "menu/MenuStateUIConfigBuilder.h"
 #include "pause/PauseState.h"
+#include "GameVictoryState.h"
 
 namespace game
 {
@@ -113,6 +114,12 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
     case StateType::GameOver:
     {
         return std::make_unique<GameOverState>(
+            window, rendererPool, fileAccess, states,
+            std::make_unique<components::ui::DefaultUIManager>(sharedContext));
+    }
+    case StateType::GameVictory:
+    {
+        return std::make_unique<GameVictoryState>(
             window, rendererPool, fileAccess, states,
             std::make_unique<components::ui::DefaultUIManager>(sharedContext));
     }

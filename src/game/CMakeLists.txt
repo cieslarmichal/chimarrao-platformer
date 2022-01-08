@@ -8,6 +8,7 @@ set(SOURCES
         src/states/editor/EditorState.cpp
         src/states/pause/PauseState.cpp
         src/states/game/GameOverState.cpp
+        src/states/game/GameVictoryState.cpp
         src/states/editor/DefaultTileMap.cpp
         src/states/editor/EditorMenuState.cpp
         src/states/settings/SettingsState.cpp
@@ -23,6 +24,7 @@ set(SOURCES
         src/states/menu/MenuStateUIConfigBuilder.cpp
         src/states/pause/PauseStateUIConfigBuilder.cpp
         src/states/game/GameOverStateUIConfigBuilder.cpp
+        src/states/game/GameVictoryStateUIConfigBuilder.cpp
         src/states/editor/SaveMapStateUIConfigBuilder.cpp
         src/states/settings/SettingsStateUIConfigBuilder.cpp
         src/states/chooseMap/ChooseMapStateUIConfigBuilder.cpp
@@ -56,6 +58,8 @@ set(UT_SOURCES
         src/states/pause/PauseStateTest.cpp
         src/states/game/GameOverStateTest.cpp
         src/states/game/GameOverStateUIConfigBuilderTest.cpp
+        src/states/game/GameVictoryStateTest.cpp
+        src/states/game/GameVictoryStateUIConfigBuilderTest.cpp
         src/states/editor/EditorMenuStateTest.cpp
         src/states/settings/SettingsStateTest.cpp
         src/states/controls/ControlsStateTest.cpp
