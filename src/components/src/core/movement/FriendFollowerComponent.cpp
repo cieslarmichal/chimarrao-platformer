@@ -6,7 +6,7 @@ namespace components::core
 {
 
 FriendFollowerComponent::FriendFollowerComponent(ComponentOwner* owner, ComponentOwner* player)
-    : MovementComponent{owner, 5.25f}, player{player}
+    : MovementComponent{owner, 6.5f}, player{player}
 {
 }
 
@@ -53,7 +53,7 @@ void FriendFollowerComponent::update(utils::DeltaTime deltaTime, const input::In
             currentMovementSpeed.y = -3.4f * 4.5f;
         }
 
-        currentMovementSpeed.x = -movementSpeed;
+        currentMovementSpeed.x = -maximumMovementSpeed;
     }
     else if (distanceBetweenFriendAndPlayerOnXAxis > 4.f)
     {
@@ -62,7 +62,7 @@ void FriendFollowerComponent::update(utils::DeltaTime deltaTime, const input::In
             currentMovementSpeed.y = -3.4f * 4.5f;
         }
 
-        currentMovementSpeed.x = movementSpeed;
+        currentMovementSpeed.x = maximumMovementSpeed;
     }
 
     if (distanceBetweenFriendAndPlayerOnXAxis < -4)

@@ -9,9 +9,8 @@ namespace components::core
 class MovementComponent : public Component
 {
 public:
-    MovementComponent(ComponentOwner*, float movementSpeed);
+    MovementComponent(ComponentOwner*, float maximumMovementSpeed);
 
-    void setMovementSpeed(float speed);
     float getMovementSpeed() const;
     void allowMoveRight();
     void blockMoveRight();
@@ -30,7 +29,7 @@ public:
     bool isLocked() const;
 
 protected:
-    float movementSpeed;
+    const float maximumMovementSpeed;
     bool canMoveRight{true};
     bool canMoveLeft{true};
     bool canMoveUp{true};

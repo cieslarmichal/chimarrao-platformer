@@ -2,13 +2,23 @@
 
 #include <cmath>
 
+#include "exceptions/DependentComponentNotFound.h"
+
 namespace components::core
 {
 
 VelocityComponent::VelocityComponent(ComponentOwner* owner, const utils::Vector2f& velocityInit)
     : Component{owner}, velocity{velocityInit}, maxVelocity{100.f, 100.f}
 {
-    trimVelocity();
+}
+
+void VelocityComponent::loadDependentComponents()
+{
+    healthComponent = owner->getComponent<HealthComponent>();
+    if (healthComponent)
+    {
+        healthComponent->loadDependentComponents();
+    }
 }
 
 void VelocityComponent::setVelocity(const sf::Vector2f& vel)
@@ -53,6 +63,18 @@ void VelocityComponent::trimVelocity()
             velocity.y = -maxVelocity.y;
         }
     }
+
+    if (healthComponent)
+    {
+        decreaseVelocityByCurrentHealth();
+    }
 }
 
+void VelocityComponent::decreaseVelocityByCurrentHealth()
+{
+    const auto currentHealth = healthComponent->getCurrentHealth();
+    const auto maximumHealth = healthComponent->getMaximumHealth();
+
+    velocity.x = static_cast<float>(currentHealth) / static_cast<float>(maximumHealth) * velocity.x;
+}
 }

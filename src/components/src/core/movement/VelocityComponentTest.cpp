@@ -4,18 +4,26 @@
 
 #include "RendererPoolMock.h"
 
+#include "exceptions/DependentComponentNotFound.h"
+
 using namespace ::testing;
 using namespace components::core;
 
 class VelocityComponentTest : public Test
 {
 public:
-    const float x{1.0};
-    const float y{2.0};
+    VelocityComponentTest()
+    {
+        healthComponent = componentOwner.addComponent<HealthComponent>(100);
+        velocityComponent.loadDependentComponents();
+    }
+
     const utils::Vector2f position1{0.0, 10.0};
     const utils::Vector2f velocity{10.0, 15.0};
     const utils::Vector2f maximalVelocity{100.f, 15.f};
+    const utils::Vector2f trimmedVelocityByHealth{50.f, 15.f};
     const utils::Vector2f velocityBiggerThanMaximal{150.0, 15.0};
+    std::shared_ptr<HealthComponent> healthComponent;
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
     std::shared_ptr<components::core::SharedContext> sharedContext =
@@ -41,4 +49,13 @@ TEST_F(VelocityComponentTest, givenVelocityBiggerThanMaximal_shouldTrimVelocityT
     velocityComponent.setVelocity(velocityBiggerThanMaximal);
 
     ASSERT_EQ(velocityComponent.getVelocity(), maximalVelocity);
+}
+
+TEST_F(VelocityComponentTest, givenMaximalVelocityWithDecreasedHealthByHalf_shouldTrimVelocityByHalf)
+{
+    healthComponent->loseHealthPoints(50);
+
+    velocityComponent.setVelocity(maximalVelocity);
+
+    ASSERT_EQ(velocityComponent.getVelocity(), trimmedVelocityByHealth);
 }

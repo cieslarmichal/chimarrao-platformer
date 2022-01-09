@@ -56,7 +56,7 @@ void KeyboardAnimatedMovementComponent::update(utils::DeltaTime deltaTime, const
             animation->getAnimationType() == animations::AnimationType::Roll)
         {
             animation->setAnimation(animations::AnimationType::Roll);
-            currentMovementSpeed.x = -1.5f * movementSpeed;
+            currentMovementSpeed.x = -1.5f * maximumMovementSpeed;
         }
         else
         {
@@ -64,12 +64,12 @@ void KeyboardAnimatedMovementComponent::update(utils::DeltaTime deltaTime, const
             {
                 if (input.isKeyPressed(input::InputKey::Shift))
                 {
-                    currentMovementSpeed.x = -1.7f * movementSpeed;
+                    currentMovementSpeed.x = -1.7f * maximumMovementSpeed;
                     running = true;
                 }
                 else
                 {
-                    currentMovementSpeed.x = -movementSpeed;
+                    currentMovementSpeed.x = -maximumMovementSpeed;
                 }
             }
         }
@@ -83,7 +83,7 @@ void KeyboardAnimatedMovementComponent::update(utils::DeltaTime deltaTime, const
             animation->getAnimationType() == animations::AnimationType::Roll)
         {
             animation->setAnimation(animations::AnimationType::Roll);
-            currentMovementSpeed.x = 1.5f * movementSpeed;
+            currentMovementSpeed.x = 1.5f * maximumMovementSpeed;
         }
         else
         {
@@ -91,12 +91,12 @@ void KeyboardAnimatedMovementComponent::update(utils::DeltaTime deltaTime, const
             {
                 if (input.isKeyPressed(input::InputKey::Shift))
                 {
-                    currentMovementSpeed.x = 1.7f * movementSpeed;
+                    currentMovementSpeed.x = 1.7f * maximumMovementSpeed;
                     running = true;
                 }
                 else
                 {
-                    currentMovementSpeed.x = movementSpeed;
+                    currentMovementSpeed.x = maximumMovementSpeed;
                 }
             }
         }

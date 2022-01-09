@@ -34,12 +34,12 @@ void KeyboardHorizontalMovementComponent::update(utils::DeltaTime, const input::
 
     if (input.isKeyPressed(input::InputKey::Left))
     {
-        currentMovementSpeed.x = -movementSpeed;
+        currentMovementSpeed.x = -maximumMovementSpeed;
     }
 
     if (input.isKeyPressed(input::InputKey::Right))
     {
-        currentMovementSpeed.x = movementSpeed;
+        currentMovementSpeed.x = maximumMovementSpeed;
     }
 
     velocityComponent->setVelocity(currentMovementSpeed);

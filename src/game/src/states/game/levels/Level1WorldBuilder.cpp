@@ -122,8 +122,8 @@ Level1WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             case TileType::Bandit:
             {
-                //                auto bandit = characterFactory->createBanditEnemy(player, position);
-                //                worldObjects.push_back(bandit);
+                auto bandit = characterFactory->createBanditEnemy(player, position);
+                worldObjects.push_back(bandit);
                 break;
             }
             case TileType::Player:

@@ -52,7 +52,7 @@ void EnemyFollowerComponent::update(utils::DeltaTime deltaTime, const input::Inp
             currentMovementSpeed.y = -3.4f * 4.5f;
         }
 
-        currentMovementSpeed.x = -movementSpeed;
+        currentMovementSpeed.x = -maximumMovementSpeed;
     }
     else if (distanceBetweenEnemyAndPlayerOnXAxis > 2.f and distanceBetweenEnemyAndPlayerOnXAxis < 45.f)
     {
@@ -61,7 +61,7 @@ void EnemyFollowerComponent::update(utils::DeltaTime deltaTime, const input::Inp
             currentMovementSpeed.y = -3.4f * 4.5f;
         }
 
-        currentMovementSpeed.x = movementSpeed;
+        currentMovementSpeed.x = maximumMovementSpeed;
     }
 
     if (distanceBetweenEnemyAndPlayerOnXAxis < 0)

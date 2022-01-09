@@ -26,13 +26,6 @@ TEST_F(MovementComponentTest, initialMovementSpeed_shouldBeTheSameAsFromConstruc
     ASSERT_EQ(movementComponent.getMovementSpeed(), initialMovementSpeed);
 }
 
-TEST_F(MovementComponentTest, setMovementSpeed)
-{
-    movementComponent.setMovementSpeed(movementSpeed);
-
-    ASSERT_EQ(movementComponent.getMovementSpeed(), movementSpeed);
-}
-
 TEST_F(MovementComponentTest, allowMoveRight)
 {
     ASSERT_TRUE(movementComponent.isAllowedToMoveRight());

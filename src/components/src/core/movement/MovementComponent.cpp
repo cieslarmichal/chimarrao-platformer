@@ -3,19 +3,14 @@
 namespace components::core
 {
 
-MovementComponent::MovementComponent(ComponentOwner* owner, float movementSpeed)
-    : Component{owner}, movementSpeed{movementSpeed}
+MovementComponent::MovementComponent(ComponentOwner* owner, float maximumMovementSpeed)
+    : Component{owner}, maximumMovementSpeed{maximumMovementSpeed}
 {
-}
-
-void MovementComponent::setMovementSpeed(float speed)
-{
-    movementSpeed = speed;
 }
 
 float MovementComponent::getMovementSpeed() const
 {
-    return movementSpeed;
+    return maximumMovementSpeed;
 }
 
 void MovementComponent::allowMoveRight()
