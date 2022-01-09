@@ -1,15 +1,15 @@
-druid: Oh, you found me
-player: Hi
-player: Do you know where can I find some food?
-druid: Have you seen those bushes?
-player: Yes, I guess so
-player: Do they have any fruits?
-druid: Unfortunately no, they don't
-player: But...
-player: I am starving.
-druid: Don't worry!
-druid: Those bushes have something better
-druid: They have yerba drinks!
-druid: It will make all your worries disappear
-player: I need to try some
-player: Thanks, bye!
+druid: Oh, good you're still here!
+player: What happened?
+druid: I wanted to warn you...
+druid: There are many bandits nearby.
+druid: Lately, they've formed a group.
+player: Oh no...
+player: Do you know the number?
+druid: No, but I can share a trick with you.
+druid: When you will meet them, press F!
+druid: I can guarantee they will be surprised.
+player: How can I repay you?
+druid: Oh, just stop as many bandits as possible.
+druid: They hurt others and they don't respect nature.
+player: I promise I will!
+druid: Goodbye!

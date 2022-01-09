@@ -1,15 +1,21 @@
-druid: Oh, you found me
-player: Hi
-player: Do you know where can I find some food?
-druid: Have you seen those bushes?
-player: Yes, I guess so
-player: Do they have any fruits?
-druid: Unfortunately no, they don't
-player: But...
-player: I am starving.
-druid: Don't worry!
-druid: Those bushes have something better
-druid: They have yerba drinks!
-druid: It will make all your worries disappear
-player: I need to try some
-player: Thanks, bye!
+druid: Oh, hello!
+player: Hi, who are you?
+druid: I can't tell you my name
+druid: but you can call me Druid.
+player: My name is Rogue.
+druid: How can I help you, Rogue?
+player: Sometimes, I have problems with food
+player: Most of the fruit I come across is poisonous...
+player: Could you help me?
+druid: Actually, yes.
+druid: You will see bushes on the way.
+druid: The fruit you will pick up
+druid: is delicious and can be eaten by human.
+druid: There is a special type of a plant too.
+druid: You can pick chimmarao up
+druid: from some of these bushes.
+druid: It is and extraordinary plant,
+druid: it can boost you energy rapidly. 
+player: Interesting...thank you very much!
+player: I will go now and look for this plant.
+druid: Good luck!

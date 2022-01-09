@@ -1,7 +1,30 @@
-player: Hello bunny!
-rabbit: Hi,
-rabbit: where are you coming from?
-player: I was sick of living in the city
-player: I left my job and my current life
-player: and went to the mountains...
-player: now I'm here
+rabbit: Hello!
+player: Hi! 
+player: You're probably wondering,
+player: who we are.
+player: I am Rogue and this...
+rabbit: Call me Bunny!
+player: ...this is my best friend,
+player: a very impatient Bunny.
+player: We are in the harsh mountains 
+player: of Paraguay.
+player: I used to live in the city
+player: and work as a programmer. 
+player: Then, there was a sudden leap
+player: in technology development.
+player: People became rich and...mean to each other.
+player: There was fraud. Crime.
+player: I missed nature and minimalism
+player: so much that I decided to leave the city.
+player: And here I am, and...
+rabbit: and I am here too!
+rabbit: I have been following Rogue
+rabbit: since the moment he entered the forest.
+rabbit: He behaved so funny in the beginning!
+rabbit: It's much better now. 
+player: That's true! Bunny's intuition 
+player: helps us find our way and warns us
+player: if there are bandits nearby.
+rabbit: ...and Rogue's strength
+rabbit: helps us get rid of the bandits!
+player: Let's go for a new adventure!

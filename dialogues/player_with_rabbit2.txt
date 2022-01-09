@@ -1,2 +1,11 @@
-player: Bye
-rabbit: Bye
+player: Hey, Bunny, wake up!
+rabbit: I did!
+player: Look at the sky!
+rabbit: It's amazing...
+rabbit: There is nothing more beautiful
+rabbit: than a sunrise!
+player: It's nice, but I prefer sunsets.
+rabbit: You always have to argue...
+player: Come on, Bunny!
+player: It's a new day.
+rabbit: It's a new life.
