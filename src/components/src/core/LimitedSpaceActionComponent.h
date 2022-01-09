@@ -13,7 +13,7 @@ class LimitedSpaceActionComponent : public Component
 {
 public:
     LimitedSpaceActionComponent(ComponentOwner* owner, ComponentOwner* player,
-                                std::function<void(void)> action);
+                                std::function<void(void)> action, double actionThreshold = 6.0);
 
     void loadDependentComponents() override;
     void update(utils::DeltaTime, const input::Input&) override;
@@ -23,7 +23,7 @@ private:
     ComponentOwner* player;
     std::function<void(void)> action;
     std::shared_ptr<TextComponent> textComponent;
-    const double minimumDistanceInWhichActionCanBePerformed{6};
+    const double actionThreshold;
     bool actionPerformed{false};
 };
 

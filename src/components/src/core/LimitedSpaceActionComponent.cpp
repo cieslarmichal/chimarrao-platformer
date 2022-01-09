@@ -19,8 +19,9 @@ const auto distance = [](const utils::Vector2f& v1, const utils::Vector2f& v2)
 }
 
 LimitedSpaceActionComponent::LimitedSpaceActionComponent(ComponentOwner* owner, ComponentOwner* player,
-                                                         std::function<void(void)> action)
-    : Component(owner), player{player}, action{std::move(action)}
+                                                         std::function<void(void)> action,
+                                                         double actionThreshold)
+    : Component(owner), player{player}, action{std::move(action)}, actionThreshold{actionThreshold}
 {
 }
 
@@ -49,7 +50,7 @@ void LimitedSpaceActionComponent::update(utils::DeltaTime, const input::Input& i
     const auto playerPosition = player->transform->getPosition();
     const auto distanceBetweenOwnerAndPlayer = distance(ownerPosition, playerPosition);
 
-    if (distanceBetweenOwnerAndPlayer < minimumDistanceInWhichActionCanBePerformed)
+    if (distanceBetweenOwnerAndPlayer < actionThreshold)
     {
         if (not textComponent->isEnabled())
         {

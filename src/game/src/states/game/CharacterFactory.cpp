@@ -117,7 +117,8 @@ CharacterFactory::createDruidNpc(const std::shared_ptr<components::core::Compone
     npc->addComponent<components::core::DialogueTextComponent>(
         sharedContext->rendererPool, position, "Press E to talk", fontPath, 9, 0, graphics::Color::Black,
         utils::Vector2f{0, -2});
-    npc->addComponent<components::core::LimitedSpaceActionComponent>(player.get(), std::move(interaction));
+    npc->addComponent<components::core::LimitedSpaceActionComponent>(player.get(), std::move(interaction),
+                                                                     10);
     return npc;
 }
 
