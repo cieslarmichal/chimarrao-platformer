@@ -33,7 +33,8 @@ public:
 private:
     void firstCampfireAction();
     void lastCampfireAction();
-    void druidAction();
+    void druidFirstAction();
+    void druidSecondAction();
     void deadPlayerAction();
 
     std::unique_ptr<Level1WorldBuilder> worldBuilder;
@@ -53,5 +54,6 @@ private:
     bool playerDead;
     bool playerSleepingNextToLastCampfire;
     bool levelFinished;
+    bool playerTalkedToDruid;
 };
 }

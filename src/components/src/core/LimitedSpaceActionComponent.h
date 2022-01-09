@@ -17,6 +17,7 @@ public:
 
     void loadDependentComponents() override;
     void update(utils::DeltaTime, const input::Input&) override;
+    void setAction(std::function<void(void)> newAction);
 
 private:
     ComponentOwner* player;

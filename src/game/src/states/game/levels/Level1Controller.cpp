@@ -5,9 +5,11 @@
 #include "AnimationComponent.h"
 #include "DefaultDialoguesReader.h"
 #include "Level1WorldBuilder.h"
+#include "LimitedSpaceActionComponent.h"
 #include "MovementComponent.h"
 #include "StoryGameState.h"
 #include "TimerFactory.h"
+#include "DialogueTextComponent.h"
 
 namespace game
 {
@@ -25,8 +27,8 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
                                    const std::shared_ptr<components::core::SharedContext>& sharedContext,
                                    std::shared_ptr<utils::FileAccess> fileAccessInit,
                                    StoryGameState* storyGameStateInit)
-    : worldBuilder{std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, itemFactory, sharedContext,
-                                                        this)},
+    : worldBuilder{std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, itemFactory,
+                                                        sharedContext, this)},
       ownersManager{std::move(ownersManagerInit)},
       fileAccess{std::move(fileAccessInit)},
       storyGameState{storyGameStateInit},
@@ -36,7 +38,8 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
       playerSleeping{false},
       playerDead{false},
       playerSleepingNextToLastCampfire{false},
-      levelFinished{false}
+      levelFinished{false},
+      playerTalkedToDruid{false}
 {
     tileMap->loadFromFile(levelMap);
 
@@ -68,9 +71,9 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
         std::call_once(playerWithRabbitDialogueStarted,
                        [this]
                        {
-//                           mainCharacters.player->getComponent<components::core::AnimationComponent>()
-//                               ->setAnimationDirection(animations::AnimationDirection::Left);
-//                           dialoguesController->startPlayerWithRabbitFirstDialogue();
+                           //                           mainCharacters.player->getComponent<components::core::AnimationComponent>()
+                           //                               ->setAnimationDirection(animations::AnimationDirection::Left);
+                           //                           dialoguesController->startPlayerWithRabbitFirstDialogue();
                        });
     }
 
@@ -99,6 +102,14 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
     if (playerDead and deadTimer->getElapsedSeconds() > deadTime)
     {
         storyGameState->gameOver();
+    }
+
+    if (playerTalkedToDruid and dialoguesController->hasPlayerWithDruidFirstDialogueFinished())
+    {
+        mainCharacters.npc->getComponent<components::core::DialogueTextComponent>()->setText("Press E to talk");
+        mainCharacters.npc->getComponent<components::core::LimitedSpaceActionComponent>()->setAction(
+            [this]() { druidSecondAction(); });
+        playerTalkedToDruid = false;
     }
 
     dialoguesController->update();
@@ -142,9 +153,15 @@ void Level1Controller::lastCampfireAction()
     mainCharacters.player->getComponent<components::core::MovementComponent>()->lock();
 }
 
-void Level1Controller::druidAction()
+void Level1Controller::druidFirstAction()
 {
-    dialoguesController->startPlayerWithDruidDialogue();
+    dialoguesController->startPlayerWithDruidFirstDialogue();
+    playerTalkedToDruid = true;
+}
+
+void Level1Controller::druidSecondAction()
+{
+    dialoguesController->startPlayerWithDruidSecondDialogue();
 }
 
 void Level1Controller::deadPlayerAction()

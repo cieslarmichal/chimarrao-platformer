@@ -72,4 +72,10 @@ void LimitedSpaceActionComponent::update(utils::DeltaTime, const input::Input& i
     }
 }
 
+void LimitedSpaceActionComponent::setAction(std::function<void(void)> newAction)
+{
+    action = std::move(newAction);
+    actionPerformed = false;
+}
+
 }
