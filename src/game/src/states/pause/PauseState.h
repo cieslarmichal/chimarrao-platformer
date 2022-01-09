@@ -13,9 +13,8 @@ class PauseState : public State
     friend class PauseStateUIConfigBuilder;
 
 public:
-    PauseState(const std::shared_ptr<window::Window>&,
-                        const std::shared_ptr<graphics::RendererPool>&, std::shared_ptr<utils::FileAccess>,
-                        States&, std::shared_ptr<components::ui::UIManager>);
+    PauseState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
+               std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;

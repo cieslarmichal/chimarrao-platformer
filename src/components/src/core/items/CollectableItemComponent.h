@@ -16,6 +16,7 @@ public:
     void collectBy(ComponentOwner* newCollector);
     void drop();
     void use();
+    bool canBeUsed();
     ItemType getType() const;
     std::string getName() const;
 

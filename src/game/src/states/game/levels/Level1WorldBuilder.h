@@ -9,8 +9,9 @@ namespace game
 class Level1WorldBuilder
 {
 public:
-    Level1WorldBuilder(std::shared_ptr<CharacterFactory>, std::shared_ptr<ObstacleFactory>, std::shared_ptr<ItemFactory>,
-                       std::shared_ptr<components::core::SharedContext>, Level1Controller*);
+    Level1WorldBuilder(std::shared_ptr<CharacterFactory>, std::shared_ptr<ObstacleFactory>,
+                       std::shared_ptr<ItemFactory>, std::shared_ptr<components::core::SharedContext>,
+                       Level1Controller*);
 
     std::vector<std::shared_ptr<components::core::ComponentOwner>>
     buildWorldObjects(const std::shared_ptr<TileMap>&);

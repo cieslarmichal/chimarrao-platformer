@@ -4,12 +4,12 @@
 
 #include "AnimationComponent.h"
 #include "DefaultDialoguesReader.h"
+#include "DialogueTextComponent.h"
 #include "Level1WorldBuilder.h"
 #include "LimitedSpaceActionComponent.h"
 #include "MovementComponent.h"
 #include "StoryGameState.h"
 #include "TimerFactory.h"
-#include "DialogueTextComponent.h"
 
 namespace game
 {
@@ -106,7 +106,8 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
 
     if (playerTalkedToDruid and dialoguesController->hasPlayerWithDruidFirstDialogueFinished())
     {
-        mainCharacters.npc->getComponent<components::core::DialogueTextComponent>()->setText("Press E to talk");
+        mainCharacters.npc->getComponent<components::core::DialogueTextComponent>()->setText(
+            "Press E to talk");
         mainCharacters.npc->getComponent<components::core::LimitedSpaceActionComponent>()->setAction(
             [this]() { druidSecondAction(); });
         playerTalkedToDruid = false;

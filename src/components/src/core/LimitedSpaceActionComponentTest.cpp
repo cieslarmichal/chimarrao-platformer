@@ -81,9 +81,8 @@ TEST_F(LimitedSpaceActionComponentTest, distanceBetweenOwnerAndPlayerIsMoreThan6
     ASSERT_FALSE(actionPerformed(actionVariable));
 }
 
-TEST_F(
-    LimitedSpaceActionComponentTest,
-    distanceBetweenOwnerAndPlayerIsLessThan6AndKeyNotPressed_shouldAndEnableTextAndNotCallAction)
+TEST_F(LimitedSpaceActionComponentTest,
+       distanceBetweenOwnerAndPlayerIsLessThan6AndKeyNotPressed_shouldAndEnableTextAndNotCallAction)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::E)).WillOnce(Return(false));
 
@@ -93,9 +92,8 @@ TEST_F(
     ASSERT_FALSE(actionPerformed(actionVariable));
 }
 
-TEST_F(
-    LimitedSpaceActionComponentTest,
-    distanceBetweenOwnerAndPlayerIsLessThan6AndKeyPressed_shouldrAndDisableTextAndCallAction)
+TEST_F(LimitedSpaceActionComponentTest,
+       distanceBetweenOwnerAndPlayerIsLessThan6AndKeyPressed_shouldrAndDisableTextAndCallAction)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::E)).WillOnce(Return(true));
 
@@ -105,9 +103,8 @@ TEST_F(
     ASSERT_TRUE(actionPerformed(actionVariable));
 }
 
-TEST_F(
-    LimitedSpaceActionComponentTest,
-    distanceBetweenOwnerAndPlayerIsLessThan6AndThenPlayerGoesAwayWithoutPressingKey_shoulddDisableText)
+TEST_F(LimitedSpaceActionComponentTest,
+       distanceBetweenOwnerAndPlayerIsLessThan6AndThenPlayerGoesAwayWithoutPressingKey_shoulddDisableText)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::E)).WillOnce(Return(false));
 

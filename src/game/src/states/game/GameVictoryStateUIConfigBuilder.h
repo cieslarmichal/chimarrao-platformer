@@ -26,7 +26,8 @@ public:
 private:
     static std::unique_ptr<components::ui::BackgroundConfig> createBackgroundConfig(GameVictoryState*);
     static std::vector<std::unique_ptr<components::ui::ButtonConfig>> createButtonConfigs(GameVictoryState*);
-    static std::vector<std::unique_ptr<components::ui::CheckBoxConfig>> createCheckBoxConfigs(GameVictoryState*);
+    static std::vector<std::unique_ptr<components::ui::CheckBoxConfig>>
+    createCheckBoxConfigs(GameVictoryState*);
     static std::vector<std::unique_ptr<components::ui::LabelConfig>> createLabelConfigs(GameVictoryState*);
     static std::vector<std::unique_ptr<components::ui::TextFieldConfig>>
     createTextFieldConfigs(GameVictoryState*);

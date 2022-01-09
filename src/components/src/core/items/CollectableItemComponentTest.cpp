@@ -15,7 +15,8 @@ class CollectableItemComponentTest : public Test
 {
 public:
     const utils::Vector2f position{20, 20};
-    const std::string itemName{"name"};
+    const std::string itemName1{"name1"};
+    const std::string itemName2{"name2"};
     const ItemType itemType{ItemType::Apple};
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
@@ -24,7 +25,8 @@ public:
     ComponentOwner owner{position, "CollectableItemComponentTest1", sharedContext};
     ComponentOwner collector{position, "CollectableItemComponentTest2", sharedContext};
     std::shared_ptr<StrictMock<ItemEffectMock>> itemEffect = std::make_shared<StrictMock<ItemEffectMock>>();
-    CollectableItemComponent collectableItem{&owner, itemName, itemType, itemEffect};
+    CollectableItemComponent collectableItem{&owner, itemName1, itemType, itemEffect};
+    CollectableItemComponent collectableItemWithoutEffect{&owner, itemName2, itemType, nullptr};
 };
 
 TEST_F(CollectableItemComponentTest, collect_shouldDisableComponents)
@@ -51,9 +53,23 @@ TEST_F(CollectableItemComponentTest, use_shouldAffectCollectorAndRemoveItself)
     ASSERT_TRUE(owner.shouldBeRemoved());
 }
 
+TEST_F(CollectableItemComponentTest, useWithoutCollector_shouldNotRemoveItself)
+{
+    collectableItem.use();
+
+    ASSERT_FALSE(owner.shouldBeRemoved());
+}
+
+TEST_F(CollectableItemComponentTest, useWithoutEffect_shouldNotRemoveItself)
+{
+    collectableItemWithoutEffect.use();
+
+    ASSERT_FALSE(owner.shouldBeRemoved());
+}
+
 TEST_F(CollectableItemComponentTest, shouldReturnName)
 {
-    ASSERT_EQ(collectableItem.getName(), itemName);
+    ASSERT_EQ(collectableItem.getName(), itemName1);
 }
 
 TEST_F(CollectableItemComponentTest, shouldReturnItemType)

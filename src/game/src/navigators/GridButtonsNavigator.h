@@ -11,11 +11,10 @@ class GridButtonsNavigator
 {
 public:
     GridButtonsNavigator(std::shared_ptr<components::ui::UIManager>,
-                                  const std::vector<std::vector<GridButtonInfo>>& gridButtonsInfo,
-                                  const std::vector<std::string>& iconNames,
-                                  graphics::Color buttonsDefaultColor, graphics::Color buttonsHoverColor,
-                                  std::unique_ptr<utils::Timer> moveTimer,
-                                  std::unique_ptr<utils::Timer> actionTimer);
+                         const std::vector<std::vector<GridButtonInfo>>& gridButtonsInfo,
+                         const std::vector<std::string>& iconNames, graphics::Color buttonsDefaultColor,
+                         graphics::Color buttonsHoverColor, std::unique_ptr<utils::Timer> moveTimer,
+                         std::unique_ptr<utils::Timer> actionTimer);
 
     void initialize();
     NextState update(const utils::DeltaTime&, const input::Input&);

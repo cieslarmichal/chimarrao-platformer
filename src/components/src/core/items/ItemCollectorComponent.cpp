@@ -83,7 +83,7 @@ void ItemCollectorComponent::collect(const std::shared_ptr<CollectableItemCompon
         items.push_back(item);
     }
 
-    std::cerr << items.size()<< std::endl;
+    std::cerr << items.size() << std::endl;
 }
 
 void ItemCollectorComponent::collectNearestItem()
@@ -124,6 +124,11 @@ void ItemCollectorComponent::use(const std::string& itemName)
 {
     const auto foundItem = findItemByName(itemName);
     if (foundItem == items.end())
+    {
+        return;
+    }
+
+    if (not (*foundItem)->canBeUsed())
     {
         return;
     }

@@ -77,7 +77,7 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createApple(const
     appleItem->addComponent<components::core::FreeFallMovementComponent>();
     appleItem->addComponent<components::core::CollectableItemComponent>(
         "apple" + std::to_string(numberOfAppleItemsInGame), components::core::ItemType::Apple,
-        std::make_shared<components::core::ItemHealEffect>(5));
+        std::make_shared<components::core::ItemHealEffect>(25));
     return appleItem;
 }
 
@@ -95,8 +95,7 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createKey(const u
     keyItem->addComponent<components::core::VelocityComponent>();
     keyItem->addComponent<components::core::FreeFallMovementComponent>();
     keyItem->addComponent<components::core::CollectableItemComponent>(
-        "key" + std::to_string(numberOfKeysItemsInGame), components::core::ItemType::Key,
-        std::make_shared<components::core::ItemHealEffect>(5));
+        "key" + std::to_string(numberOfKeysItemsInGame), components::core::ItemType::Key, nullptr);
     return keyItem;
 }
 

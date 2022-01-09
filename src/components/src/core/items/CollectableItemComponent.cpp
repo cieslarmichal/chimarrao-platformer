@@ -31,7 +31,7 @@ void CollectableItemComponent::drop()
 
 void CollectableItemComponent::use()
 {
-    if (not collector)
+    if (not collector or not effect)
     {
         return;
     }
@@ -39,6 +39,11 @@ void CollectableItemComponent::use()
     effect->affect(collector);
     collector = nullptr;
     owner->remove();
+}
+
+bool CollectableItemComponent::canBeUsed()
+{
+    return collector and effect;
 }
 
 ItemType CollectableItemComponent::getType() const

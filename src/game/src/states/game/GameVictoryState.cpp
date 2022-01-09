@@ -1,7 +1,7 @@
 #include "GameVictoryState.h"
 
-#include "TimerFactory.h"
 #include "GameVictoryStateUIConfigBuilder.h"
+#include "TimerFactory.h"
 
 namespace game
 {
@@ -13,9 +13,9 @@ const auto buttonHoverColor = graphics::Color(4, 8, 97);
 }
 
 GameVictoryState::GameVictoryState(const std::shared_ptr<window::Window>& windowInit,
-                             const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
-                             std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
-                             std::shared_ptr<components::ui::UIManager> uiManagerInit)
+                                   const std::shared_ptr<graphics::RendererPool>& rendererPoolInit,
+                                   std::shared_ptr<utils::FileAccess> fileAccessInit, States& statesInit,
+                                   std::shared_ptr<components::ui::UIManager> uiManagerInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       shouldBackToMenu{false},
       uiManager{std::move(uiManagerInit)}

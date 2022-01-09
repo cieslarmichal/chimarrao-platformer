@@ -11,7 +11,7 @@ UniqueName::UniqueName(std::string nameInit) : name{std::move(nameInit)}
 {
     if (uniqueNames.count(name))
     {
-        throw exceptions::NameIsNotUnique{name + " is already used in program"};
+        throw exceptions::NameIsNotUnique{"'" + name + "' is already used in program"};
     }
 
     uniqueNames.insert(name);
