@@ -2,12 +2,17 @@
 
 #include "gtest/gtest.h"
 
+#include "AnimatorMock.h"
+#include "AttackStrategyMock.h"
 #include "DialoguesReaderMock.h"
+#include "InputMock.h"
 #include "RendererPoolMock.h"
 #include "TimerMock.h"
 
+#include "AnimationComponent.h"
 #include "DialogueActorComponent.h"
 #include "DialogueTextComponent.h"
+#include "KeyboardAttackComponent.h"
 #include "KeyboardHorizontalMovementComponent.h"
 #include "MovementComponent.h"
 #include "ProjectPathReader.h"
@@ -84,8 +89,17 @@ public:
         std::make_shared<components::core::ComponentOwner>(position3, "Level1DialoguesControllerTest3",
                                                            sharedContext);
     Level1MainCharacters mainCharacters{player, rabbit, druid};
-    std::unique_ptr<StrictMock<utils::TimerMock>> timerInit{std::make_unique<StrictMock<utils::TimerMock>>()};
-    StrictMock<utils::TimerMock>* timer{timerInit.get()};
+    std::unique_ptr<StrictMock<utils::TimerMock>> dialogueAliveTimerInit{
+        std::make_unique<StrictMock<utils::TimerMock>>()};
+    StrictMock<utils::TimerMock>* dialogueAliveTimer{dialogueAliveTimerInit.get()};
+    std::unique_ptr<StrictMock<utils::TimerMock>> dialogueSkipTimerInit{
+        std::make_unique<StrictMock<utils::TimerMock>>()};
+    StrictMock<utils::TimerMock>* dialogueSkipTimer{dialogueSkipTimerInit.get()};
+    StrictMock<input::InputMock> input;
+    std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
+        std::make_shared<StrictMock<animations::AnimatorMock>>();
+    std::shared_ptr<StrictMock<components::core::AttackStrategyMock>> attackStrategy =
+        std::make_shared<StrictMock<components::core::AttackStrategyMock>>();
 };
 
 class Level1DialoguesControllerTest : public Level1DialoguesControllerTest_Base
@@ -94,6 +108,9 @@ public:
     Level1DialoguesControllerTest()
     {
         player->addComponent<components::core::KeyboardHorizontalMovementComponent>();
+        player->addComponent<components::core::AnimationComponent>(animator);
+        player->addComponent<components::core::KeyboardAttackComponent>(attackStrategy);
+
         auto playerText = player->addComponent<components::core::DialogueTextComponent>(
             rendererPool, position1, "xxx", fontPath, dummyFontSize);
         playerTextId = playerText->getGraphicsId();
@@ -106,7 +123,7 @@ public:
     }
 
     Level1DialoguesController controller{&mainCharacters, std::move(dialoguesReaderInit),
-                                         std::move(timerInit)};
+                                         std::move(dialogueAliveTimerInit), std::move(dialogueSkipTimerInit)};
     graphics::GraphicsId playerTextId;
     graphics::GraphicsId rabbitTextId;
     graphics::GraphicsId druidTextId;
@@ -115,7 +132,7 @@ public:
 TEST_F(Level1DialoguesControllerTest,
        startPlayerWithRabbitFirstDialogue_shouldLockPlayerMovementAndRestartTimer)
 {
-    EXPECT_CALL(*timer, restart());
+    EXPECT_CALL(*dialogueAliveTimer, restart());
 
     controller.startPlayerWithRabbitFirstDialogue();
 
@@ -125,7 +142,7 @@ TEST_F(Level1DialoguesControllerTest,
 TEST_F(Level1DialoguesControllerTest,
        startPlayerWithRabbitLastDialogue_shouldLockPlayerMovementAndRestartTimer)
 {
-    EXPECT_CALL(*timer, restart());
+    EXPECT_CALL(*dialogueAliveTimer, restart());
 
     controller.startPlayerWithRabbitFirstDialogue();
 
@@ -134,7 +151,7 @@ TEST_F(Level1DialoguesControllerTest,
 
 TEST_F(Level1DialoguesControllerTest, startPlayerWithDruidDialogue_shouldLockPlayerMovementAndRestartTimer)
 {
-    EXPECT_CALL(*timer, restart());
+    EXPECT_CALL(*dialogueAliveTimer, restart());
 
     controller.startPlayerWithDruidFirstDialogue();
 
@@ -149,12 +166,13 @@ public:
 TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitFirstDialogue,
        firstDialogueUpdate_shouldSetPlayerTextAndDisableRabbitText)
 {
-    EXPECT_CALL(*timer, restart()).Times(2);
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(5));
+    EXPECT_CALL(*dialogueAliveTimer, restart()).Times(2);
+    EXPECT_CALL(*dialogueSkipTimer, restart());
+    EXPECT_CALL(*dialogueAliveTimer, getElapsedSeconds()).WillOnce(Return(5));
     EXPECT_CALL(*rendererPool, setText(playerTextId, "hello bunny"));
     controller.startPlayerWithRabbitFirstDialogue();
 
-    controller.update();
+    controller.update(input);
 
     ASSERT_FALSE(rabbit->getComponent<components::core::DialogueTextComponent>()->isEnabled());
     ASSERT_TRUE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
@@ -163,14 +181,15 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitFirstDialogue,
 TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitFirstDialogue,
        secondDialogueUpdate_shouldSetRabbitTextAndDisablePlayerText)
 {
-    EXPECT_CALL(*timer, restart()).Times(3);
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    EXPECT_CALL(*dialogueAliveTimer, restart()).Times(3);
+    EXPECT_CALL(*dialogueSkipTimer, restart()).Times(2);
+    EXPECT_CALL(*dialogueAliveTimer, getElapsedSeconds()).WillRepeatedly(Return(5));
     EXPECT_CALL(*rendererPool, setText(playerTextId, "hello bunny"));
     EXPECT_CALL(*rendererPool, setText(rabbitTextId, "hello my love"));
     controller.startPlayerWithRabbitFirstDialogue();
 
-    controller.update();
-    controller.update();
+    controller.update(input);
+    controller.update(input);
 
     ASSERT_FALSE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
     ASSERT_TRUE(rabbit->getComponent<components::core::DialogueTextComponent>()->isEnabled());
@@ -179,15 +198,16 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitFirstDialogue,
 TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitFirstDialogue,
        after4Dialogues_shouldUnlockPlayerAndDisableTexts)
 {
-    EXPECT_CALL(*timer, restart()).Times(6);
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    EXPECT_CALL(*dialogueAliveTimer, restart()).Times(6);
+    EXPECT_CALL(*dialogueSkipTimer, restart()).Times(5);
+    EXPECT_CALL(*dialogueAliveTimer, getElapsedSeconds()).WillRepeatedly(Return(5));
     controller.startPlayerWithRabbitFirstDialogue();
 
-    controller.update();
-    controller.update();
-    controller.update();
-    controller.update();
-    controller.update();
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
 
     ASSERT_FALSE(player->getComponent<components::core::MovementComponent>()->isLocked());
     ASSERT_FALSE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
@@ -202,12 +222,13 @@ public:
 TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitLastDialogue,
        firstDialogueUpdate_shouldSetPlayerTextAndDisableRabbitText)
 {
-    EXPECT_CALL(*timer, restart()).Times(2);
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(5));
+    EXPECT_CALL(*dialogueAliveTimer, restart()).Times(2);
+    EXPECT_CALL(*dialogueSkipTimer, restart());
+    EXPECT_CALL(*dialogueAliveTimer, getElapsedSeconds()).WillOnce(Return(5));
     EXPECT_CALL(*rendererPool, setText(rabbitTextId, "1"));
     controller.startPlayerWithRabbitLastDialogue();
 
-    controller.update();
+    controller.update(input);
 
     ASSERT_FALSE(controller.hasPlayerWithRabbitLastDialogueFinished());
     ASSERT_TRUE(rabbit->getComponent<components::core::DialogueTextComponent>()->isEnabled());
@@ -217,14 +238,15 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitLastDialogue,
 TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitLastDialogue,
        secondDialogueUpdate_shouldSetRabbitTextAndDisablePlayerText)
 {
-    EXPECT_CALL(*timer, restart()).Times(3);
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    EXPECT_CALL(*dialogueAliveTimer, restart()).Times(3);
+    EXPECT_CALL(*dialogueSkipTimer, restart()).Times(2);
+    EXPECT_CALL(*dialogueAliveTimer, getElapsedSeconds()).WillRepeatedly(Return(5));
     EXPECT_CALL(*rendererPool, setText(rabbitTextId, "1"));
     EXPECT_CALL(*rendererPool, setText(playerTextId, "2"));
     controller.startPlayerWithRabbitLastDialogue();
 
-    controller.update();
-    controller.update();
+    controller.update(input);
+    controller.update(input);
 
     ASSERT_FALSE(controller.hasPlayerWithRabbitLastDialogueFinished());
     ASSERT_TRUE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
@@ -234,15 +256,16 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitLastDialogue,
 TEST_F(Level1DialoguesControllerTest_PlayerWithRabbitLastDialogue,
        after4Dialogues_shouldUnlockPlayerAndDisableTexts)
 {
-    EXPECT_CALL(*timer, restart()).Times(6);
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    EXPECT_CALL(*dialogueAliveTimer, restart()).Times(6);
+    EXPECT_CALL(*dialogueSkipTimer, restart()).Times(5);
+    EXPECT_CALL(*dialogueAliveTimer, getElapsedSeconds()).WillRepeatedly(Return(5));
     controller.startPlayerWithRabbitLastDialogue();
 
-    controller.update();
-    controller.update();
-    controller.update();
-    controller.update();
-    controller.update();
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
 
     ASSERT_TRUE(controller.hasPlayerWithRabbitLastDialogueFinished());
     ASSERT_FALSE(player->getComponent<components::core::MovementComponent>()->isLocked());
@@ -258,12 +281,13 @@ public:
 TEST_F(Level1DialoguesControllerTest_PlayerWithDruidFirstDialogue,
        firstUpdate_shouldSetDruidTextAndDisablePlayerText)
 {
-    EXPECT_CALL(*timer, restart()).Times(2);
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(5));
+    EXPECT_CALL(*dialogueAliveTimer, restart()).Times(2);
+    EXPECT_CALL(*dialogueSkipTimer, restart()).Times(1);
+    EXPECT_CALL(*dialogueAliveTimer, getElapsedSeconds()).WillOnce(Return(5));
     EXPECT_CALL(*rendererPool, setText(druidTextId, "Oh, you found me"));
     controller.startPlayerWithDruidFirstDialogue();
 
-    controller.update();
+    controller.update(input);
 
     ASSERT_FALSE(controller.hasPlayerWithDruidFirstDialogueFinished());
     ASSERT_FALSE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
@@ -273,14 +297,15 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithDruidFirstDialogue,
 TEST_F(Level1DialoguesControllerTest_PlayerWithDruidFirstDialogue,
        secondDialogueUpdate_shouldSetPlayerTextAndDisableDruidText)
 {
-    EXPECT_CALL(*timer, restart()).Times(3);
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    EXPECT_CALL(*dialogueAliveTimer, restart()).Times(3);
+    EXPECT_CALL(*dialogueSkipTimer, restart()).Times(2);
+    EXPECT_CALL(*dialogueAliveTimer, getElapsedSeconds()).WillRepeatedly(Return(5));
     EXPECT_CALL(*rendererPool, setText(druidTextId, "Oh, you found me"));
     EXPECT_CALL(*rendererPool, setText(playerTextId, "Hi"));
     controller.startPlayerWithDruidFirstDialogue();
 
-    controller.update();
-    controller.update();
+    controller.update(input);
+    controller.update(input);
 
     ASSERT_FALSE(controller.hasPlayerWithDruidFirstDialogueFinished());
     ASSERT_FALSE(druid->getComponent<components::core::DialogueTextComponent>()->isEnabled());
@@ -290,16 +315,17 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithDruidFirstDialogue,
 TEST_F(Level1DialoguesControllerTest_PlayerWithDruidFirstDialogue,
        after5Dialogues_shouldUnlockPlayerAndDisableTexts)
 {
-    EXPECT_CALL(*timer, restart()).Times(7);
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    EXPECT_CALL(*dialogueAliveTimer, restart()).Times(7);
+    EXPECT_CALL(*dialogueSkipTimer, restart()).Times(6);
+    EXPECT_CALL(*dialogueAliveTimer, getElapsedSeconds()).WillRepeatedly(Return(5));
     controller.startPlayerWithDruidFirstDialogue();
 
-    controller.update();
-    controller.update();
-    controller.update();
-    controller.update();
-    controller.update();
-    controller.update();
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
 
     ASSERT_TRUE(controller.hasPlayerWithDruidFirstDialogueFinished());
     ASSERT_FALSE(player->getComponent<components::core::MovementComponent>()->isLocked());
@@ -315,12 +341,13 @@ public:
 TEST_F(Level1DialoguesControllerTest_PlayerWithDruidSecondDialogue,
        firstUpdate_shouldSetDruidTextAndDisablePlayerText)
 {
-    EXPECT_CALL(*timer, restart()).Times(2);
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillOnce(Return(5));
+    EXPECT_CALL(*dialogueAliveTimer, restart()).Times(2);
+    EXPECT_CALL(*dialogueSkipTimer, restart());
+    EXPECT_CALL(*dialogueAliveTimer, getElapsedSeconds()).WillOnce(Return(5));
     EXPECT_CALL(*rendererPool, setText(druidTextId, "zzz"));
     controller.startPlayerWithDruidSecondDialogue();
 
-    controller.update();
+    controller.update(input);
 
     ASSERT_FALSE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
     ASSERT_TRUE(druid->getComponent<components::core::DialogueTextComponent>()->isEnabled());
@@ -329,14 +356,15 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithDruidSecondDialogue,
 TEST_F(Level1DialoguesControllerTest_PlayerWithDruidSecondDialogue,
        secondDialogueUpdate_shouldSetPlayerTextAndDisableDruidText)
 {
-    EXPECT_CALL(*timer, restart()).Times(3);
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    EXPECT_CALL(*dialogueAliveTimer, restart()).Times(3);
+    EXPECT_CALL(*dialogueSkipTimer, restart()).Times(2);
+    EXPECT_CALL(*dialogueAliveTimer, getElapsedSeconds()).WillRepeatedly(Return(5));
     EXPECT_CALL(*rendererPool, setText(druidTextId, "zzz"));
     EXPECT_CALL(*rendererPool, setText(playerTextId, "xxx"));
     controller.startPlayerWithDruidSecondDialogue();
 
-    controller.update();
-    controller.update();
+    controller.update(input);
+    controller.update(input);
 
     ASSERT_FALSE(druid->getComponent<components::core::DialogueTextComponent>()->isEnabled());
     ASSERT_TRUE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());
@@ -345,16 +373,17 @@ TEST_F(Level1DialoguesControllerTest_PlayerWithDruidSecondDialogue,
 TEST_F(Level1DialoguesControllerTest_PlayerWithDruidSecondDialogue,
        after5Dialogues_shouldUnlockPlayerAndDisableTexts)
 {
-    EXPECT_CALL(*timer, restart()).Times(7);
-    EXPECT_CALL(*timer, getElapsedSeconds()).WillRepeatedly(Return(5));
+    EXPECT_CALL(*dialogueAliveTimer, restart()).Times(7);
+    EXPECT_CALL(*dialogueSkipTimer, restart()).Times(6);
+    EXPECT_CALL(*dialogueAliveTimer, getElapsedSeconds()).WillRepeatedly(Return(5));
     controller.startPlayerWithDruidSecondDialogue();
 
-    controller.update();
-    controller.update();
-    controller.update();
-    controller.update();
-    controller.update();
-    controller.update();
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
+    controller.update(input);
 
     ASSERT_FALSE(player->getComponent<components::core::MovementComponent>()->isLocked());
     ASSERT_FALSE(player->getComponent<components::core::DialogueTextComponent>()->isEnabled());

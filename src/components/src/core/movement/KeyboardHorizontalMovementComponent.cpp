@@ -19,7 +19,7 @@ void KeyboardHorizontalMovementComponent::loadDependentComponents()
     }
     else
     {
-        throw exceptions::DependentComponentNotFound{"FollowerComponent: Velocity component not found"};
+        throw exceptions::DependentComponentNotFound{"KeyboardHorizontalMovementComponent: Velocity component not found"};
     }
 }
 

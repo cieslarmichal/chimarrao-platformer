@@ -12,9 +12,9 @@ class Level1DialoguesController
 {
 public:
     Level1DialoguesController(Level1MainCharacters*, std::unique_ptr<DialoguesReader>,
-                              std::unique_ptr<utils::Timer>);
+                              std::unique_ptr<utils::Timer> dialogueAliveTimer, std::unique_ptr<utils::Timer> dialogueSkipTimer);
 
-    void update();
+    void update(const input::Input& input);
     void startPlayerWithRabbitFirstDialogue();
     void startPlayerWithRabbitLastDialogue();
     void startPlayerWithDruidFirstDialogue();
@@ -23,10 +23,10 @@ public:
     bool hasPlayerWithDruidFirstDialogueFinished();
 
 private:
-    void handlePlayerWithRabbitFirstDialogue();
-    void handlePlayerWithRabbitLastDialogue();
-    void handlePlayerWithDruidFirstDialogue();
-    void handlePlayerWithDruidSecondDialogue();
+    void handlePlayerWithRabbitFirstDialogue(const input::Input& input);
+    void handlePlayerWithRabbitLastDialogue(const input::Input& input);
+    void handlePlayerWithDruidFirstDialogue(const input::Input& input);
+    void handlePlayerWithDruidSecondDialogue(const input::Input& input);
     void finishPlayerWithRabbitFirstDialogue();
     void finishPlayerWithRabbitLastDialogue();
     void finishPlayerWithDruidFirstDialogue();
@@ -44,5 +44,7 @@ private:
     bool playerWithDruidSecondDialogueIsOngoing{false};
     std::unique_ptr<utils::Timer> dialogueAliveTimer;
     const float dialogueTimeToLive;
+    std::unique_ptr<utils::Timer> dialogueSkipTimer;
+    const float dialogueMinimumSkipTime;
 };
 }

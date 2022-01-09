@@ -29,7 +29,7 @@ void EnemyFollowerComponent::loadDependentComponents()
     }
     else
     {
-        throw exceptions::DependentComponentNotFound{"FollowerComponent: Velocity component not found"};
+        throw exceptions::DependentComponentNotFound{"EnemyFollowerComponent: Velocity component not found"};
     }
 }
 

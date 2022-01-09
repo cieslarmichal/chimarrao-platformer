@@ -67,7 +67,7 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
 
     dialoguesController = std::make_unique<Level1DialoguesController>(
         &mainCharacters, std::make_unique<DefaultDialoguesReader>(fileAccess),
-        utils::TimerFactory::createTimer());
+        utils::TimerFactory::createTimer(), utils::TimerFactory::createTimer());
 }
 
 SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, const input::Input& input)
@@ -129,7 +129,7 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
         playerTalkedToDruid = false;
     }
 
-    dialoguesController->update();
+    dialoguesController->update(input);
     ownersManager->update(deltaTime, input);
     ownersManager->processRemovals();
 
