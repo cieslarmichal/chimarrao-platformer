@@ -75,6 +75,11 @@ void Background::setColor(graphics::Color color)
     coreComponentsOwner->getMainGraphicsComponent()->setColor(color);
 }
 
+void Background::setTexture(const graphics::TexturePath& texturePath)
+{
+    coreComponentsOwner->getMainGraphicsComponent()->setTexture(texturePath);
+}
+
 bool Background::isActive() const
 {
     return coreComponentsOwner->areComponentsEnabled();

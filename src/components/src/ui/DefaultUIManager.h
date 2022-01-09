@@ -24,6 +24,7 @@ public:
     void activate() override;
     void deactivate() override;
     void setColor(const std::string& componentName, graphics::Color) override;
+    void setTexture(const std::string& componentName, const std::string& texturePath) override;
     void changeClickAction(const std::string& componentName, const std::vector<core::KeyAction>&) override;
     void invokeClickAction(const std::string& componentName,
                            input::InputKey keyAssignedToClickAction) override;

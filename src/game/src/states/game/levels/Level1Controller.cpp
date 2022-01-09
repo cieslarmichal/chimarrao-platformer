@@ -15,8 +15,12 @@ namespace game
 {
 namespace
 {
-const std::string mapsDirectory{utils::ProjectPathReader::getProjectRootPath() + "maps/story/"};
+const std::string projectPath{utils::ProjectPathReader::getProjectRootPath()};
+const std::string mapsDirectory{projectPath + "maps/story/"};
 const std::string levelMap{mapsDirectory + "level1.map"};
+const std::string gameBackgroundUIName{"gameBackground"};
+const std::string gameBackgroundPathBlackAndWhite{projectPath +
+                                                  "resources/BG/background_mountains_black_and_white.png"};
 }
 
 Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
@@ -26,11 +30,13 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
                                    const std::shared_ptr<ItemFactory>& itemFactory,
                                    const std::shared_ptr<components::core::SharedContext>& sharedContext,
                                    std::shared_ptr<utils::FileAccess> fileAccessInit,
+                                   std::shared_ptr<components::ui::UIManager> uiManagerInit,
                                    StoryGameState* storyGameStateInit)
     : worldBuilder{std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, itemFactory,
                                                         sharedContext, this)},
       ownersManager{std::move(ownersManagerInit)},
       fileAccess{std::move(fileAccessInit)},
+      uiManager{std::move(uiManagerInit)},
       storyGameState{storyGameStateInit},
       timeNeededToStartFirstDialogue{0.3f},
       sleepTime{5.f},
@@ -94,9 +100,19 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
         }
     }
 
-    if (levelFinished and dialoguesController->hasPlayerWithRabbitLastDialogueFinished())
+    if (levelFinished)
     {
-        storyGameState->gameFinishedSuccessfully();
+        std::call_once(backgroundChanged,
+                       [this]
+                       {
+                           uiManager->setTexture(gameBackgroundUIName, gameBackgroundPathBlackAndWhite);
+                           uiManager->setColor(gameBackgroundUIName, graphics::Color(254, 150, 24, 255));
+                       });
+
+        if (dialoguesController->hasPlayerWithRabbitLastDialogueFinished())
+        {
+            storyGameState->gameFinishedSuccessfully();
+        }
     }
 
     if (playerDead and deadTimer->getElapsedSeconds() > deadTime)

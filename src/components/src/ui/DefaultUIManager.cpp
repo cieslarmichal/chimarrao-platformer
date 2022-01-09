@@ -155,6 +155,26 @@ void DefaultUIManager::setColor(const std::string& componentName, graphics::Colo
     }
 }
 
+void DefaultUIManager::setTexture(const std::string& componentName, const std::string& texturePath)
+{
+    switch (getComponentType(componentName))
+    {
+    case UIComponentType::Background:
+    {
+        background->setTexture(texturePath);
+        break;
+    }
+    case UIComponentType::Image:
+    {
+        const auto& image = tryToGetComponentByName(images, componentName);
+        image->setTexture(texturePath);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 void DefaultUIManager::changeClickAction(const std::string& componentName,
                                          const std::vector<core::KeyAction>& keyActions)
 {

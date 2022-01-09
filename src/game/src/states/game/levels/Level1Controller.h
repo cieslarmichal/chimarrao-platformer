@@ -8,6 +8,7 @@
 #include "ObstacleFactory.h"
 #include "TileMap.h"
 #include "Timer.h"
+#include "UIManager.h"
 
 namespace game
 {
@@ -23,7 +24,7 @@ public:
                      const std::shared_ptr<CharacterFactory>&, const std::shared_ptr<ObstacleFactory>&,
                      const std::shared_ptr<ItemFactory>&,
                      const std::shared_ptr<components::core::SharedContext>&,
-                     std::shared_ptr<utils::FileAccess>, StoryGameState*);
+                     std::shared_ptr<utils::FileAccess>, std::shared_ptr<components::ui::UIManager>, StoryGameState*);
 
     SwitchToNextLevel update(const utils::DeltaTime& deltaTime, const input::Input& input) override;
     void activate() override;
@@ -41,9 +42,11 @@ private:
     Level1MainCharacters mainCharacters;
     std::unique_ptr<ComponentOwnersManager> ownersManager;
     std::shared_ptr<utils::FileAccess> fileAccess;
+    std::shared_ptr<components::ui::UIManager> uiManager;
     StoryGameState* storyGameState;
     std::unique_ptr<Level1DialoguesController> dialoguesController;
     std::once_flag playerWithRabbitDialogueStarted;
+    std::once_flag backgroundChanged;
     std::unique_ptr<utils::Timer> startFirstDialogueTimer;
     std::unique_ptr<utils::Timer> sleepTimer;
     std::unique_ptr<utils::Timer> deadTimer;

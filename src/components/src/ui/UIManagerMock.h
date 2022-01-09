@@ -14,6 +14,7 @@ public:
     MOCK_METHOD(void, activate, (), (override));
     MOCK_METHOD(void, deactivate, (), (override));
     MOCK_METHOD(void, setColor, (const std::string& componentName, graphics::Color), (override));
+    MOCK_METHOD(void, setTexture, (const std::string& componentName, const std::string&), (override));
     MOCK_METHOD(void, changeClickAction,
                 (const std::string& componentName, const std::vector<core::KeyAction>&), (override));
     MOCK_METHOD(void, invokeClickAction,

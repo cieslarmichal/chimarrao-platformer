@@ -21,6 +21,7 @@ public:
     virtual void activate() = 0;
     virtual void deactivate() = 0;
     virtual void setColor(const std::string& componentName, graphics::Color) = 0;
+    virtual void setTexture(const std::string& componentName, const std::string& texturePath) = 0;
     virtual void changeClickAction(const std::string& componentName, const std::vector<core::KeyAction>&) = 0;
     virtual void invokeClickAction(const std::string& componentName,
                                    input::InputKey keyAssignedToClickAction) = 0;

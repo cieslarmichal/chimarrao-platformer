@@ -92,3 +92,11 @@ TEST_F(BackgroundTest, setColor)
 
     background.setColor(dummyColor);
 }
+
+TEST_F(BackgroundTest, setTexture)
+{
+    auto background = Background(sharedContext, createValidConfig());
+    EXPECT_CALL(*rendererPool, setTexture(_, _, _));
+
+    background.setTexture(imagePath);
+}

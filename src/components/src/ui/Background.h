@@ -20,6 +20,7 @@ public:
     void activate() override;
     void deactivate() override;
     void setColor(graphics::Color);
+    void setTexture(const graphics::TexturePath& texturePath);
     bool isActive() const override;
 
 private:

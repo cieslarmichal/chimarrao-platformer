@@ -7,7 +7,6 @@
 #include "GameStateUIConfigBuilder.h"
 #include "HeadsUpDisplayUIConfigBuilder.h"
 #include "Level1Controller.h"
-#include "Level1WorldBuilder.h"
 #include "ProjectPathReader.h"
 #include "TimerFactory.h"
 
@@ -47,7 +46,7 @@ StoryGameState::StoryGameState(const std::shared_ptr<window::Window>& windowInit
 
     auto level1Controller = std::make_unique<Level1Controller>(
         tileMap, std::make_unique<DefaultComponentOwnersManager>(physicsFactory->createCollisionSystem()),
-        characterFactory, obstacleFactory, itemFactory, sharedContext, fileAccess, this);
+        characterFactory, obstacleFactory, itemFactory, sharedContext, fileAccess, uiManager, this);
     const auto player = level1Controller->getCharacters().player;
 
     levelControllers.push(std::move(level1Controller));
