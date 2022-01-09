@@ -27,11 +27,11 @@ public:
     FriendFollowerComponentTest()
     {
         followerOwner1.addComponent<AnimationComponent>(animator);
-        followerOwner1.addComponent<VelocityComponent>();
+        followerOwner1.addComponent<VelocityComponent>(6);
         follower1.loadDependentComponents();
 
         followerOwner2.addComponent<AnimationComponent>(animator);
-        followerOwner2.addComponent<VelocityComponent>();
+        followerOwner2.addComponent<VelocityComponent>(6);
         follower2.loadDependentComponents();
     }
 
@@ -56,7 +56,7 @@ TEST_F(FriendFollowerComponentTest,
 {
     ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator", sharedContext};
     FriendFollowerComponent followerComponentWithoutAnimator{&componentOwnerWithoutAnimator, &followedOwner1};
-    componentOwnerWithoutAnimator.addComponent<VelocityComponent>();
+    componentOwnerWithoutAnimator.addComponent<VelocityComponent>(6);
 
     ASSERT_THROW(followerComponentWithoutAnimator.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);

@@ -20,7 +20,7 @@ class MeleeAttackTest : public Test
 public:
     MeleeAttackTest()
     {
-        componentOwner1.addComponent<VelocityComponent>();
+        componentOwner1.addComponent<VelocityComponent>(6);
         componentOwner1.addComponent<DirectionComponent>();
         componentOwner1.addComponent<AnimationComponent>(animator);
         componentOwner1.addComponent<BoxColliderComponent>(size);
@@ -95,7 +95,7 @@ TEST_F(MeleeAttackTest,
         std::make_unique<StrictMock<FriendlyFireValidatorMock>>()};
     ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider",
                                                     sharedContext};
-    componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>();
+    componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>(6);
     componentOwnerWithoutBoxCollider.addComponent<DirectionComponent>();
     MeleeAttack meleeAttackWithoutBoxCollider{&componentOwnerWithoutBoxCollider, rayCast,
                                               std::move(friendlyFireValidatorInit2)};

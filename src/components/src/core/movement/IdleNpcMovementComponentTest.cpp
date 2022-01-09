@@ -27,11 +27,11 @@ public:
     IdleNpcMovementTest()
     {
         idleOwner1.addComponent<AnimationComponent>(animator);
-        idleOwner1.addComponent<VelocityComponent>();
+        idleOwner1.addComponent<VelocityComponent>(6);
         idleNpcMovementComponent1.loadDependentComponents();
 
         idleOwner2.addComponent<AnimationComponent>(animator);
-        idleOwner2.addComponent<VelocityComponent>();
+        idleOwner2.addComponent<VelocityComponent>(6);
         idleNpcMovementComponent2.loadDependentComponents();
     }
 
@@ -56,7 +56,7 @@ TEST_F(IdleNpcMovementTest,
 {
     ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator", sharedContext};
     IdleNpcMovementComponent idleComponentWithoutAnimator{&componentOwnerWithoutAnimator, &player1};
-    componentOwnerWithoutAnimator.addComponent<VelocityComponent>();
+    componentOwnerWithoutAnimator.addComponent<VelocityComponent>(6);
 
     ASSERT_THROW(idleComponentWithoutAnimator.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);

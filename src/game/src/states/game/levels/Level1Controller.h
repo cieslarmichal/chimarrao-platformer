@@ -24,7 +24,8 @@ public:
                      const std::shared_ptr<CharacterFactory>&, const std::shared_ptr<ObstacleFactory>&,
                      const std::shared_ptr<ItemFactory>&,
                      const std::shared_ptr<components::core::SharedContext>&,
-                     std::shared_ptr<utils::FileAccess>, std::shared_ptr<components::ui::UIManager>, StoryGameState*);
+                     std::shared_ptr<utils::FileAccess>, std::shared_ptr<components::ui::UIManager>,
+                     StoryGameState*);
 
     SwitchToNextLevel update(const utils::DeltaTime& deltaTime, const input::Input& input) override;
     void activate() override;

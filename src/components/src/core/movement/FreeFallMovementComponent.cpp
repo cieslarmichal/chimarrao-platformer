@@ -5,7 +5,7 @@
 namespace components::core
 {
 
-FreeFallMovementComponent::FreeFallMovementComponent(ComponentOwner* owner) : MovementComponent{owner, 0.f} {}
+FreeFallMovementComponent::FreeFallMovementComponent(ComponentOwner* owner) : MovementComponent{owner} {}
 
 void FreeFallMovementComponent::loadDependentComponents()
 {

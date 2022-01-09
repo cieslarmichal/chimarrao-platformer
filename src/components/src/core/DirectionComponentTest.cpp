@@ -15,7 +15,7 @@ class DirectionComponentTest : public Test
 public:
     DirectionComponentTest()
     {
-        velocityComponent = componentOwner.addComponent<VelocityComponent>();
+        velocityComponent = componentOwner.addComponent<VelocityComponent>(6);
         componentOwner.addComponent<AnimationComponent>(animator);
         directionComponent.loadDependentComponents();
     }

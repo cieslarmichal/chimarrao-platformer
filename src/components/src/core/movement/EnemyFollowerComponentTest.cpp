@@ -21,19 +21,19 @@ public:
     EnemyFollowerComponentTest()
     {
         followerOwner1.addComponent<AnimationComponent>(animator);
-        followerOwner1.addComponent<VelocityComponent>();
+        followerOwner1.addComponent<VelocityComponent>(6);
         follower1.loadDependentComponents();
 
         followerOwner2.addComponent<AnimationComponent>(animator);
-        followerOwner2.addComponent<VelocityComponent>();
+        followerOwner2.addComponent<VelocityComponent>(6);
         follower2.loadDependentComponents();
 
         followerOwner3.addComponent<AnimationComponent>(animator);
-        followerOwner3.addComponent<VelocityComponent>();
+        followerOwner3.addComponent<VelocityComponent>(6);
         follower3.loadDependentComponents();
 
         followerOwner4.addComponent<AnimationComponent>(animator);
-        followerOwner4.addComponent<VelocityComponent>();
+        followerOwner4.addComponent<VelocityComponent>(6);
         follower4.loadDependentComponents();
     }
 
@@ -72,7 +72,7 @@ TEST_F(EnemyFollowerComponentTest,
     ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator", sharedContext};
     EnemyFollowerComponent followerComponentWithoutAnimator{&componentOwnerWithoutAnimator,
                                                             &followedOwnerInRangeOnLeft};
-    componentOwnerWithoutAnimator.addComponent<VelocityComponent>();
+    componentOwnerWithoutAnimator.addComponent<VelocityComponent>(6);
 
     ASSERT_THROW(followerComponentWithoutAnimator.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);

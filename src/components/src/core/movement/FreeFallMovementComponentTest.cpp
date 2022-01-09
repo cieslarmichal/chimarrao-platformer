@@ -17,7 +17,7 @@ class FreeFallMovementTest : public Test
 public:
     FreeFallMovementTest()
     {
-        fallingOwner.addComponent<VelocityComponent>();
+        fallingOwner.addComponent<VelocityComponent>(6);
         freeFallMovementComponent.loadDependentComponents();
     }
 

@@ -21,7 +21,7 @@ public:
     KeyboardAnimatedMovementComponentTest()
     {
         componentOwner.addComponent<AnimationComponent>(animator);
-        componentOwner.addComponent<VelocityComponent>();
+        velocityComponent = componentOwner.addComponent<VelocityComponent>(100);
         keyboardMovementComponent.loadDependentComponents();
     }
 
@@ -32,6 +32,7 @@ public:
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
     std::shared_ptr<components::core::SharedContext> sharedContext =
         std::make_shared<components::core::SharedContext>(rendererPool);
+    std::shared_ptr<VelocityComponent> velocityComponent;
     ComponentOwner componentOwner{position, "keyboardAnimatedMovementComponentTest", sharedContext};
     std::shared_ptr<StrictMock<AnimatorMock>> animator = std::make_shared<StrictMock<AnimatorMock>>();
     StrictMock<input::InputMock> input;
@@ -44,7 +45,7 @@ TEST_F(KeyboardAnimatedMovementComponentTest,
     ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator", sharedContext};
     KeyboardAnimatedMovementComponent keyboardMovementComponentWithoutAnimator{
         &componentOwnerWithoutAnimator};
-    componentOwnerWithoutAnimator.addComponent<VelocityComponent>();
+    componentOwnerWithoutAnimator.addComponent<VelocityComponent>(100);
 
     ASSERT_THROW(keyboardMovementComponentWithoutAnimator.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
@@ -125,7 +126,7 @@ TEST_F(KeyboardAnimatedMovementComponentTest,
     keyboardMovementComponent.update(deltaTime, input);
     keyboardMovementComponent.lateUpdate(deltaTime, input);
 
-    const auto positionChangeToRight = deltaTime.count() * keyboardMovementComponent.getMovementSpeed();
+    const auto positionChangeToRight = deltaTime.count() * velocityComponent->getMaxMovementSpeed();
     const auto expectedPositionAfterUpdate =
         utils::Vector2f{positionBeforeUpdate.x + positionChangeToRight, positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
@@ -173,7 +174,7 @@ TEST_F(KeyboardAnimatedMovementComponentTest,
     keyboardMovementComponent.update(deltaTime, input);
     keyboardMovementComponent.lateUpdate(deltaTime, input);
 
-    const auto positionChangeToLeft = -deltaTime.count() * keyboardMovementComponent.getMovementSpeed();
+    const auto positionChangeToLeft = -deltaTime.count() * velocityComponent->getMaxMovementSpeed();
     const auto expectedPositionAfterUpdate =
         utils::Vector2f{positionBeforeUpdate.x + positionChangeToLeft, positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
@@ -261,12 +262,8 @@ TEST_F(KeyboardAnimatedMovementComponentTest, givenRightAndDownKeysPressed_updat
     keyboardMovementComponent.update(deltaTime, input);
     keyboardMovementComponent.lateUpdate(deltaTime, input);
 
-    const auto positionChangeToRight =
-        1.5f * deltaTime.count() * keyboardMovementComponent.getMovementSpeed();
-    const auto expectedPositionAfterUpdate =
-        utils::Vector2f{positionBeforeUpdate.x + positionChangeToRight, positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
-    ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
+    ASSERT_TRUE(positionAfterUpdate.x > positionBeforeUpdate.x);
 }
 
 TEST_F(KeyboardAnimatedMovementComponentTest, givenLeftAndDownKeysPressed_update_shouldRollAndMoveLeft)
@@ -285,10 +282,6 @@ TEST_F(KeyboardAnimatedMovementComponentTest, givenLeftAndDownKeysPressed_update
     keyboardMovementComponent.update(deltaTime, input);
     keyboardMovementComponent.lateUpdate(deltaTime, input);
 
-    const auto positionChangeToLeft =
-        -1.5f * deltaTime.count() * keyboardMovementComponent.getMovementSpeed();
-    const auto expectedPositionAfterUpdate =
-        utils::Vector2f{positionBeforeUpdate.x + positionChangeToLeft, positionBeforeUpdate.y};
     const auto positionAfterUpdate = componentOwner.transform->getPosition();
-    ASSERT_EQ(positionAfterUpdate, expectedPositionAfterUpdate);
+    ASSERT_TRUE(positionAfterUpdate.x < positionBeforeUpdate.x);
 }

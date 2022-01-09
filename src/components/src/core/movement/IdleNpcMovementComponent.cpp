@@ -6,7 +6,7 @@ namespace components::core
 {
 
 IdleNpcMovementComponent::IdleNpcMovementComponent(ComponentOwner* owner, ComponentOwner* player)
-    : MovementComponent{owner, 0.f}, player{player}
+    : MovementComponent{owner}, player{player}
 {
 }
 

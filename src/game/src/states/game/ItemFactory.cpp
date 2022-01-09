@@ -34,7 +34,7 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createYerba(const
     auto colliderComponent = yerbaItem->addComponent<components::core::BoxColliderComponent>(
         utils::Vector2f{2, 2}, components::core::CollisionLayer::Player);
     colliderComponent->disable();
-    yerbaItem->addComponent<components::core::VelocityComponent>();
+    yerbaItem->addComponent<components::core::VelocityComponent>(0);
     yerbaItem->addComponent<components::core::FreeFallMovementComponent>();
     yerbaItem->addComponent<components::core::CollectableItemComponent>(
         "yerba" + std::to_string(numberOfYerbaItemsInGame), components::core::ItemType::Yerba,
@@ -54,7 +54,7 @@ ItemFactory::createBlueberries(const utils::Vector2f& position)
     auto colliderComponent = blueberriesItem->addComponent<components::core::BoxColliderComponent>(
         utils::Vector2f{2, 2}, components::core::CollisionLayer::Player);
     colliderComponent->disable();
-    blueberriesItem->addComponent<components::core::VelocityComponent>();
+    blueberriesItem->addComponent<components::core::VelocityComponent>(0);
     blueberriesItem->addComponent<components::core::FreeFallMovementComponent>();
     blueberriesItem->addComponent<components::core::CollectableItemComponent>(
         "blueberries" + std::to_string(numberOfBlueberriesItemsInGame),
@@ -73,7 +73,7 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createApple(const
     auto colliderComponent = appleItem->addComponent<components::core::BoxColliderComponent>(
         utils::Vector2f{2, 2}, components::core::CollisionLayer::Player);
     colliderComponent->disable();
-    appleItem->addComponent<components::core::VelocityComponent>();
+    appleItem->addComponent<components::core::VelocityComponent>(0);
     appleItem->addComponent<components::core::FreeFallMovementComponent>();
     appleItem->addComponent<components::core::CollectableItemComponent>(
         "apple" + std::to_string(numberOfAppleItemsInGame), components::core::ItemType::Apple,
@@ -92,7 +92,7 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createKey(const u
     auto colliderComponent = keyItem->addComponent<components::core::BoxColliderComponent>(
         utils::Vector2f{2, 2}, components::core::CollisionLayer::Player);
     colliderComponent->disable();
-    keyItem->addComponent<components::core::VelocityComponent>();
+    keyItem->addComponent<components::core::VelocityComponent>(0);
     keyItem->addComponent<components::core::FreeFallMovementComponent>();
     keyItem->addComponent<components::core::CollectableItemComponent>(
         "key" + std::to_string(numberOfKeysItemsInGame), components::core::ItemType::Key, nullptr);

@@ -6,7 +6,7 @@ namespace components::core
 {
 
 EnemyFollowerComponent::EnemyFollowerComponent(ComponentOwner* owner, ComponentOwner* player)
-    : MovementComponent{owner, 5.25f}, player{player}
+    : MovementComponent{owner}, player{player}
 {
 }
 
@@ -19,7 +19,7 @@ void EnemyFollowerComponent::loadDependentComponents()
     }
     else
     {
-        throw exceptions::DependentComponentNotFound{"FollowerComponent: Animation component not found"};
+        throw exceptions::DependentComponentNotFound{"EnemyFollowerComponent: Animation component not found"};
     }
 
     velocityComponent = owner->getComponent<VelocityComponent>();
@@ -41,6 +41,7 @@ void EnemyFollowerComponent::update(utils::DeltaTime deltaTime, const input::Inp
     }
 
     auto currentMovementSpeed = velocityComponent->getVelocity();
+    auto maximumMovementSpeed = velocityComponent->getMaxMovementSpeed();
 
     const auto distanceBetweenEnemyAndPlayerOnXAxis =
         player->transform->getPosition().x - owner->transform->getPosition().x;

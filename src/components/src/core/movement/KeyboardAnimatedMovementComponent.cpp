@@ -7,7 +7,7 @@ namespace components::core
 {
 
 KeyboardAnimatedMovementComponent::KeyboardAnimatedMovementComponent(ComponentOwner* ownerInit)
-    : MovementComponent{ownerInit, 8.f}
+    : MovementComponent{ownerInit}
 {
 }
 
@@ -44,6 +44,7 @@ void KeyboardAnimatedMovementComponent::update(utils::DeltaTime deltaTime, const
     }
 
     auto currentMovementSpeed = velocityComponent->getVelocity();
+    auto maximumMovementSpeed = velocityComponent->getMaxMovementSpeed();
 
     bool running = false;
 

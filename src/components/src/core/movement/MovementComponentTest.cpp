@@ -18,13 +18,8 @@ public:
     std::shared_ptr<components::core::SharedContext> sharedContext =
         std::make_shared<components::core::SharedContext>(rendererPool);
     ComponentOwner componentOwner{position, "keyboardMovementComponentTest", sharedContext};
-    MovementComponent movementComponent{&componentOwner, initialMovementSpeed};
+    MovementComponent movementComponent{&componentOwner};
 };
-
-TEST_F(MovementComponentTest, initialMovementSpeed_shouldBeTheSameAsFromConstructor)
-{
-    ASSERT_EQ(movementComponent.getMovementSpeed(), initialMovementSpeed);
-}
 
 TEST_F(MovementComponentTest, allowMoveRight)
 {

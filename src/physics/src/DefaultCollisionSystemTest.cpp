@@ -37,13 +37,13 @@ public:
         componentOwnerWithPlayerCollider2->addComponent<AnimationComponent>(animator);
         componentOwnerWitStaticTransform->addComponent<AnimationComponent>(animator);
 
-        componentOwnerWithDefaultCollider1->addComponent<VelocityComponent>();
-        componentOwnerWithDefaultCollider2->addComponent<VelocityComponent>();
-        componentOwnerWithTileCollider1->addComponent<VelocityComponent>();
-        componentOwnerWithTileCollider2->addComponent<VelocityComponent>();
-        componentOwnerWithPlayerCollider1->addComponent<VelocityComponent>();
-        componentOwnerWithPlayerCollider2->addComponent<VelocityComponent>();
-        componentOwnerWitStaticTransform->addComponent<VelocityComponent>();
+        componentOwnerWithDefaultCollider1->addComponent<VelocityComponent>(6);
+        componentOwnerWithDefaultCollider2->addComponent<VelocityComponent>(6);
+        componentOwnerWithTileCollider1->addComponent<VelocityComponent>(6);
+        componentOwnerWithTileCollider2->addComponent<VelocityComponent>(6);
+        componentOwnerWithPlayerCollider1->addComponent<VelocityComponent>(6);
+        componentOwnerWithPlayerCollider2->addComponent<VelocityComponent>(6);
+        componentOwnerWitStaticTransform->addComponent<VelocityComponent>(6);
 
         componentOwnerWithDefaultCollider1->addComponent<DirectionComponent>();
         componentOwnerWithDefaultCollider2->addComponent<DirectionComponent>();

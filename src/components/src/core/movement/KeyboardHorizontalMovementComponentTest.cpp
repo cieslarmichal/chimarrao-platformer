@@ -19,7 +19,7 @@ class KeyboardHorizontalMovementComponentTest : public Test
 public:
     KeyboardHorizontalMovementComponentTest()
     {
-        owner.addComponent<VelocityComponent>();
+        owner.addComponent<VelocityComponent>(6);
         movementComponent.loadDependentComponents();
     }
 

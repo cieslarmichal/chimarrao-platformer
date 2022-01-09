@@ -34,7 +34,7 @@ public:
     ItemCollectorComponentTest()
     {
         itemCollectorOwner.addComponent<HealthComponent>(initialHealthPoints);
-        const auto velocity = itemCollectorOwner.addComponent<VelocityComponent>();
+        const auto velocity = itemCollectorOwner.addComponent<VelocityComponent>(6);
         velocity->setVelocity(5, 0);
         itemCollectorOwner.addComponent<DirectionComponent>();
         itemCollectorOwner.addComponent<AnimationComponent>(animator);
@@ -125,7 +125,7 @@ TEST_F(ItemCollectorComponentTest,
 {
     ComponentOwner componentOwnerWithoutBoxCollider{position, "componentOwnerWithoutBoxCollider",
                                                     sharedContext};
-    componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>();
+    componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>(6);
     componentOwnerWithoutBoxCollider.addComponent<DirectionComponent>();
     ItemCollectorComponent itemCollectorWithoutBoxCollider{&componentOwnerWithoutBoxCollider, quadtree,
                                                            rayCast, capacity1, std::move(timerInit)};

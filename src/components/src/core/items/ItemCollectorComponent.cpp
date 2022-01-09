@@ -128,7 +128,7 @@ void ItemCollectorComponent::use(const std::string& itemName)
         return;
     }
 
-    if (not (*foundItem)->canBeUsed())
+    if (not(*foundItem)->canBeUsed())
     {
         return;
     }

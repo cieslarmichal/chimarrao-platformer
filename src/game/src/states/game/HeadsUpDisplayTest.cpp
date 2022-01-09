@@ -35,7 +35,7 @@ public:
     HeadsUpDisplayTest()
     {
         player->addComponent<HealthComponent>(initialHealthPoints);
-        const auto velocity = player->addComponent<VelocityComponent>();
+        const auto velocity = player->addComponent<VelocityComponent>(6);
         velocity->setVelocity(5, 0);
         player->addComponent<DirectionComponent>();
         player->addComponent<AnimationComponent>(animator);

@@ -48,7 +48,7 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
         utils::FloatRect{0, 0, static_cast<float>(tileMap->getSize().x) * 4.f,
                          static_cast<float>(tileMap->getSize().y) * 4.f},
         false);
-    camera->addComponent<components::core::VelocityComponent>();
+    camera->addComponent<components::core::VelocityComponent>(16);
     camera->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4.f, 4.f},
                                                                  components::core::CollisionLayer::Default);
     camera->loadDependentComponents();

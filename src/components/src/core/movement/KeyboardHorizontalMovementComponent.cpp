@@ -6,7 +6,7 @@ namespace components::core
 {
 
 KeyboardHorizontalMovementComponent::KeyboardHorizontalMovementComponent(ComponentOwner* ownerInit)
-    : MovementComponent{ownerInit, 16.f}
+    : MovementComponent{ownerInit}
 {
 }
 
@@ -19,7 +19,8 @@ void KeyboardHorizontalMovementComponent::loadDependentComponents()
     }
     else
     {
-        throw exceptions::DependentComponentNotFound{"KeyboardHorizontalMovementComponent: Velocity component not found"};
+        throw exceptions::DependentComponentNotFound{
+            "KeyboardHorizontalMovementComponent: Velocity component not found"};
     }
 }
 
@@ -31,6 +32,7 @@ void KeyboardHorizontalMovementComponent::update(utils::DeltaTime, const input::
     }
 
     auto currentMovementSpeed = utils::Vector2f{0, 0};
+    auto maximumMovementSpeed = velocityComponent->getMaxMovementSpeed();
 
     if (input.isKeyPressed(input::InputKey::Left))
     {

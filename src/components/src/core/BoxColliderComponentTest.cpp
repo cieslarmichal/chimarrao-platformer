@@ -19,7 +19,7 @@ public:
     BoxColliderComponentTest()
     {
         componentOwnerWithMovementComponent.addComponent<AnimationComponent>(animator);
-        velocityComponent = componentOwnerWithMovementComponent.addComponent<VelocityComponent>();
+        velocityComponent = componentOwnerWithMovementComponent.addComponent<VelocityComponent>(6);
         movementComponent =
             componentOwnerWithMovementComponent.addComponent<KeyboardAnimatedMovementComponent>();
         boxColliderComponentWithMovement.loadDependentComponents();

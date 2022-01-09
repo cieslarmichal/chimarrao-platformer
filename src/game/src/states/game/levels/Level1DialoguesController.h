@@ -12,7 +12,8 @@ class Level1DialoguesController
 {
 public:
     Level1DialoguesController(Level1MainCharacters*, std::unique_ptr<DialoguesReader>,
-                              std::unique_ptr<utils::Timer> dialogueAliveTimer, std::unique_ptr<utils::Timer> dialogueSkipTimer);
+                              std::unique_ptr<utils::Timer> dialogueAliveTimer,
+                              std::unique_ptr<utils::Timer> dialogueSkipTimer);
 
     void update(const input::Input& input);
     void startPlayerWithRabbitFirstDialogue();
