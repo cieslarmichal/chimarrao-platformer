@@ -7,7 +7,7 @@ namespace components::core
 {
 
 KeyboardAnimatedMovementComponent::KeyboardAnimatedMovementComponent(ComponentOwner* ownerInit)
-    : MovementComponent{ownerInit, 40.f}
+    : MovementComponent{ownerInit, 8.f}
 {
 }
 
@@ -45,6 +45,8 @@ void KeyboardAnimatedMovementComponent::update(utils::DeltaTime deltaTime, const
 
     auto currentMovementSpeed = velocityComponent->getVelocity();
 
+    bool running = false;
+
     if (input.isKeyPressed(input::InputKey::Left) &&
         (animation->getAnimationDirection() != animations::AnimationDirection::Right ||
          animation->getAnimationType() != animations::AnimationType::Roll))
@@ -60,7 +62,15 @@ void KeyboardAnimatedMovementComponent::update(utils::DeltaTime deltaTime, const
         {
             if (animation->getAnimationType() != animations::AnimationType::Roll)
             {
-                currentMovementSpeed.x = -movementSpeed;
+                if (input.isKeyPressed(input::InputKey::Shift))
+                {
+                    currentMovementSpeed.x = -1.7f * movementSpeed;
+                    running = true;
+                }
+                else
+                {
+                    currentMovementSpeed.x = -movementSpeed;
+                }
             }
         }
     }
@@ -79,7 +89,15 @@ void KeyboardAnimatedMovementComponent::update(utils::DeltaTime deltaTime, const
         {
             if (animation->getAnimationType() != animations::AnimationType::Roll)
             {
-                currentMovementSpeed.x = movementSpeed;
+                if (input.isKeyPressed(input::InputKey::Shift))
+                {
+                    currentMovementSpeed.x = 1.7f * movementSpeed;
+                    running = true;
+                }
+                else
+                {
+                    currentMovementSpeed.x = movementSpeed;
+                }
             }
         }
     }
@@ -96,6 +114,10 @@ void KeyboardAnimatedMovementComponent::update(utils::DeltaTime deltaTime, const
         if (currentMovementSpeed.x == 0.f)
         {
             animation->setAnimation(animations::AnimationType::Idle);
+        }
+        else if (running)
+        {
+            animation->setAnimation(animations::AnimationType::Run);
         }
         else
         {
