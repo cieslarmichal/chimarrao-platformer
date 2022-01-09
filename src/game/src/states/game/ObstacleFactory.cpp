@@ -140,16 +140,39 @@ ObstacleFactory::createCampfire(const utils::Vector2f& position,
 }
 
 std::shared_ptr<components::core::ComponentOwner>
-ObstacleFactory::createChest(const utils::Vector2f& position)
+ObstacleFactory::createEmptyChest(const utils::Vector2f& position)
 {
-    static int numberOfChestsInGame = 0;
-    numberOfChestsInGame++;
+    static int numberOfEmptyChestsInGame = 0;
+    numberOfEmptyChestsInGame++;
+    auto emptyChest = std::make_shared<components::core::ComponentOwner>(
+        position, "emptyChest" + std::to_string(numberOfEmptyChestsInGame), sharedContext);
+    emptyChest->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{4, 4}, position,
+                                     tileTypeToPathTexture(TileType::Chest),
+                                     graphics::VisibilityLayer::Second);
+    emptyChest->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4, 4},
+                                                                     components::core::CollisionLayer::Tile);
+    return emptyChest;
+}
+
+std::shared_ptr<components::core::ComponentOwner>
+ObstacleFactory::createChestWithItem(const utils::Vector2f& position,
+                                     const std::shared_ptr<components::core::ComponentOwner>& player,
+                                     const std::shared_ptr<components::core::CollectableItemComponent>& item)
+{
+    static int numberOfChestsWithItemsInGame = 0;
+    numberOfChestsWithItemsInGame++;
     auto chest = std::make_shared<components::core::ComponentOwner>(
-        position, "chest" + std::to_string(numberOfChestsInGame), sharedContext);
+        position, "chestWithItem" + std::to_string(numberOfChestsWithItemsInGame), sharedContext);
     chest->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{4, 4}, position,
                                 tileTypeToPathTexture(TileType::Chest), graphics::VisibilityLayer::Second);
     chest->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{4, 4},
                                                                 components::core::CollisionLayer::Tile);
+    chest->addComponent<components::core::TextComponent>(sharedContext->rendererPool, position,
+                                                         "Press E to search", fontPath, 9,
+                                                         graphics::Color::Black, utils::Vector2f{-1.5, -2.f});
+    chest->addComponent<components::core::LimitedSpaceActionComponent>(
+        player.get(),
+        [=]() { player->getComponent<components::core::ItemCollectorComponent>()->collect(item); });
     return chest;
 }
 

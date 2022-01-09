@@ -1,10 +1,10 @@
 #pragma once
 
 #include "AnimatorFactory.h"
+#include "CollectableItemComponent.h"
 #include "ComponentOwner.h"
 #include "ItemFactory.h"
 #include "RendererPool.h"
-#include "CollectableItemComponent.h"
 
 namespace game
 {
@@ -28,7 +28,11 @@ public:
     createCampfire(const utils::Vector2f& position,
                    const std::shared_ptr<components::core::ComponentOwner>& player,
                    std::function<void(void)> action);
-    std::shared_ptr<components::core::ComponentOwner> createChest(const utils::Vector2f& position);
+    std::shared_ptr<components::core::ComponentOwner> createEmptyChest(const utils::Vector2f& position);
+    std::shared_ptr<components::core::ComponentOwner>
+    createChestWithItem(const utils::Vector2f& position,
+                        const std::shared_ptr<components::core::ComponentOwner>& player,
+                        const std::shared_ptr<components::core::CollectableItemComponent>& item);
 
 private:
     const std::shared_ptr<components::core::SharedContext>& sharedContext;

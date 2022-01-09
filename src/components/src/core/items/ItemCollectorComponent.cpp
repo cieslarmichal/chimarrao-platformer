@@ -72,7 +72,7 @@ void ItemCollectorComponent::update(utils::DeltaTime, const input::Input& input)
 
 void ItemCollectorComponent::collect(const std::shared_ptr<CollectableItemComponent>& item)
 {
-    if (not enabled or items.size() >= capacity)
+    if (items.size() >= capacity)
     {
         return;
     }

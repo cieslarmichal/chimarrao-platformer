@@ -22,7 +22,6 @@ private:
     ComponentOwner* player;
     std::function<void(void)> action;
     std::shared_ptr<TextComponent> textComponent;
-    std::shared_ptr<ItemCollectorComponent> playersItemCollector;
     const double minimumDistanceInWhichActionCanBePerformed{6};
     bool actionPerformed{false};
 };

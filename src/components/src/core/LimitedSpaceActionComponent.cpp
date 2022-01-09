@@ -36,17 +36,6 @@ void LimitedSpaceActionComponent::loadDependentComponents()
         throw exceptions::DependentComponentNotFound{"LimitedSpaceActionComponent: TextComponent not found"};
     }
     textComponent->disable();
-
-    playersItemCollector = player->getComponent<ItemCollectorComponent>();
-    if (playersItemCollector)
-    {
-        playersItemCollector->loadDependentComponents();
-    }
-    else
-    {
-        throw exceptions::DependentComponentNotFound{
-            "LimitedSpaceActionComponent: player's ItemCollectorComponent not found"};
-    }
 }
 
 void LimitedSpaceActionComponent::update(utils::DeltaTime, const input::Input& input)
@@ -67,11 +56,6 @@ void LimitedSpaceActionComponent::update(utils::DeltaTime, const input::Input& i
             textComponent->enable();
         }
 
-        if (playersItemCollector->isEnabled())
-        {
-            playersItemCollector->disable();
-        }
-
         if (input.isKeyPressed(input::InputKey::E))
         {
             actionPerformed = true;
@@ -84,11 +68,6 @@ void LimitedSpaceActionComponent::update(utils::DeltaTime, const input::Input& i
         if (textComponent->isEnabled())
         {
             textComponent->disable();
-        }
-
-        if (not playersItemCollector->isEnabled())
-        {
-            playersItemCollector->enable();
         }
     }
 }

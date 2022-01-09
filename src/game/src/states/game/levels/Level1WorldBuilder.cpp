@@ -100,7 +100,10 @@ Level1WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             case TileType::Chest:
             {
-                auto chest = obstacleFactory->createChest(position);
+                auto key = itemFactory->createKey({position.x + 1, position.x + 1});
+                auto keyCollectableItem = key->getComponent<components::core::CollectableItemComponent>();
+                auto chest = obstacleFactory->createChestWithItem(position, player, keyCollectableItem);
+                worldObjects.push_back(key);
                 worldObjects.push_back(chest);
                 break;
             }

@@ -87,7 +87,7 @@ CustomWorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             case TileType::Chest:
             {
-                auto chest = obstacleFactory->createChest(position);
+                auto chest = obstacleFactory->createEmptyChest(position);
                 worldObjects.push_back(chest);
                 break;
             }
