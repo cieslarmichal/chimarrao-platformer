@@ -21,6 +21,7 @@ class Level1Controller : public LevelController
 public:
     Level1Controller(const std::shared_ptr<TileMap>&, std::unique_ptr<ComponentOwnersManager>,
                      const std::shared_ptr<CharacterFactory>&, const std::shared_ptr<ObstacleFactory>&,
+                     const std::shared_ptr<ItemFactory>&,
                      const std::shared_ptr<components::core::SharedContext>&,
                      std::shared_ptr<utils::FileAccess>, StoryGameState*);
 

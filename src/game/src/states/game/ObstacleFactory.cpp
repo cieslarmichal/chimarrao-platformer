@@ -92,6 +92,29 @@ ObstacleFactory::createBush(const utils::Vector2f& position,
 }
 
 std::shared_ptr<components::core::ComponentOwner>
+ObstacleFactory::createBushWithItem(const utils::Vector2f& position,
+                                    const std::shared_ptr<components::core::ComponentOwner>& player,
+                                    const std::shared_ptr<components::core::CollectableItemComponent>& item)
+{
+    static int numberOfBushesWithItemInGame = 0;
+    numberOfBushesWithItemInGame++;
+    auto bushWithItem = std::make_shared<components::core::ComponentOwner>(
+        position, "bushWithItem" + std::to_string(numberOfBushesWithItemInGame), sharedContext);
+    bushWithItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{4, 4}, position,
+                                       tileTypeToPathTexture(TileType::Bush),
+                                       graphics::VisibilityLayer::Second);
+    bushWithItem->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{4, 4}, components::core::CollisionLayer::Tile);
+    bushWithItem->addComponent<components::core::TextComponent>(
+        sharedContext->rendererPool, position, "Press E to search", fontPath, 9, graphics::Color::Black,
+        utils::Vector2f{-1.5, -2.f});
+    bushWithItem->addComponent<components::core::LimitedSpaceActionComponent>(
+        player.get(),
+        [=]() { player->getComponent<components::core::ItemCollectorComponent>()->collect(item); });
+    return bushWithItem;
+}
+
+std::shared_ptr<components::core::ComponentOwner>
 ObstacleFactory::createCampfire(const utils::Vector2f& position,
                                 const std::shared_ptr<components::core::ComponentOwner>& player,
                                 std::function<void(void)> action)

@@ -13,8 +13,8 @@ namespace
 {
 const auto projectPath = utils::ProjectPathReader::getProjectRootPath();
 const auto yerbaTexturePath = projectPath + "resources/yerba_item.png";
-const auto appleTexturePath = projectPath + "resources/Fantasy World/Food Icons/PNG/Transparent/apple.png";
-const auto meatTexturePath = projectPath + "resources/Fantasy World/Food Icons/PNG/Transparent/meat.png";
+const auto appleTexturePath = projectPath + "resources/apple.png";
+const auto blueberriesTexturePath = projectPath + "resources/blueberries.png";
 }
 
 ItemFactory::ItemFactory(const std::shared_ptr<components::core::SharedContext>& sharedContext)
@@ -48,7 +48,7 @@ ItemFactory::createBlueberries(const utils::Vector2f& position)
     auto yerbaItem = std::make_shared<components::core::ComponentOwner>(
         position, "blueberriesItem" + std::to_string(numberOfBlueberriesItemsInGame), sharedContext);
     yerbaItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
-                                    yerbaTexturePath, graphics::VisibilityLayer::Second);
+                                    blueberriesTexturePath, graphics::VisibilityLayer::Second);
     yerbaItem->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{2, 2},
                                                                     components::core::CollisionLayer::Player);
     yerbaItem->addComponent<components::core::VelocityComponent>();
@@ -75,24 +75,6 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createApple(const
         "apple" + std::to_string(numberOfAppleItemsInGame), components::core::ItemType::Apple,
         std::make_shared<components::core::ItemHealEffect>(5));
     return appleItem;
-}
-
-std::shared_ptr<components::core::ComponentOwner> ItemFactory::createMeat(const utils::Vector2f& position)
-{
-    static int numberOfMeatItemsInGame = 0;
-    numberOfMeatItemsInGame++;
-    auto meatItem = std::make_shared<components::core::ComponentOwner>(
-        position, "meatItem" + std::to_string(numberOfMeatItemsInGame), sharedContext);
-    meatItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
-                                   meatTexturePath, graphics::VisibilityLayer::Second);
-    meatItem->addComponent<components::core::BoxColliderComponent>(utils::Vector2f{2, 2},
-                                                                   components::core::CollisionLayer::Player);
-    meatItem->addComponent<components::core::VelocityComponent>();
-    meatItem->addComponent<components::core::FreeFallMovementComponent>();
-    meatItem->addComponent<components::core::CollectableItemComponent>(
-        "meat" + std::to_string(numberOfMeatItemsInGame), components::core::ItemType::Meat,
-        std::make_shared<components::core::ItemHealEffect>(5));
-    return meatItem;
 }
 
 }

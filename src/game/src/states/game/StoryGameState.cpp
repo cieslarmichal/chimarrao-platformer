@@ -29,6 +29,7 @@ StoryGameState::StoryGameState(const std::shared_ptr<window::Window>& windowInit
                                std::shared_ptr<audio::MusicManager> musicManagerInit,
                                std::shared_ptr<CharacterFactory> characterFactoryInit,
                                std::shared_ptr<ObstacleFactory> obstacleFactoryInit,
+                               std::shared_ptr<ItemFactory> itemFactoryInit,
                                std::unique_ptr<physics::PhysicsFactory> physicsFactoryInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
@@ -39,13 +40,14 @@ StoryGameState::StoryGameState(const std::shared_ptr<window::Window>& windowInit
       musicManager{std::move(musicManagerInit)},
       characterFactory{std::move(characterFactoryInit)},
       obstacleFactory{std::move(obstacleFactoryInit)},
+      itemFactory{std::move(itemFactoryInit)},
       physicsFactory{std::move(physicsFactoryInit)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig());
 
     auto level1Controller = std::make_unique<Level1Controller>(
         tileMap, std::make_unique<DefaultComponentOwnersManager>(physicsFactory->createCollisionSystem()),
-        characterFactory, obstacleFactory, sharedContext, fileAccess, this);
+        characterFactory, obstacleFactory, itemFactory, sharedContext, fileAccess, this);
     const auto player = level1Controller->getCharacters().player;
 
     levelControllers.push(std::move(level1Controller));

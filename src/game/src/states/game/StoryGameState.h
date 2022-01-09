@@ -32,7 +32,7 @@ public:
                    std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>,
                    std::shared_ptr<TileMap>, const std::shared_ptr<components::core::SharedContext>&,
                    std::shared_ptr<audio::MusicManager>, std::shared_ptr<CharacterFactory>,
-                   std::shared_ptr<ObstacleFactory>, std::unique_ptr<physics::PhysicsFactory>);
+                   std::shared_ptr<ObstacleFactory>, std::shared_ptr<ItemFactory>, std::unique_ptr<physics::PhysicsFactory>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -57,6 +57,7 @@ private:
     audio::MusicId musicId;
     std::shared_ptr<CharacterFactory> characterFactory;
     std::shared_ptr<ObstacleFactory> obstacleFactory;
+    std::shared_ptr<ItemFactory> itemFactory;
     std::unique_ptr<physics::PhysicsFactory> physicsFactory;
     std::queue<std::unique_ptr<LevelController>> levelControllers;
 };

@@ -9,10 +9,12 @@ namespace game
 
 Level1WorldBuilder::Level1WorldBuilder(std::shared_ptr<CharacterFactory> characterFactoryInit,
                                        std::shared_ptr<ObstacleFactory> obstacleFactoryInit,
+                                       std::shared_ptr<ItemFactory> itemFactoryInit,
                                        std::shared_ptr<components::core::SharedContext> sharedContextInit,
                                        Level1Controller* level1ControllerInit)
     : characterFactory{std::move(characterFactoryInit)},
       obstacleFactory{std::move(obstacleFactoryInit)},
+      itemFactory{std::move(itemFactoryInit)},
       sharedContext{std::move(sharedContextInit)},
       level1Controller{level1ControllerInit}
 {
@@ -117,8 +119,8 @@ Level1WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
             }
             case TileType::Bandit:
             {
-//                auto bandit = characterFactory->createBanditEnemy(player, position);
-//                worldObjects.push_back(bandit);
+                //                auto bandit = characterFactory->createBanditEnemy(player, position);
+                //                worldObjects.push_back(bandit);
                 break;
             }
             case TileType::Player:
@@ -145,19 +147,32 @@ Level1WorldBuilder::buildWorldObjects(const std::shared_ptr<TileMap>& tileMap)
         campfirePositions[1], player, [this]() { level1Controller->lastCampfireAction(); });
     worldObjects.push_back(lastCampfireInLevel);
 
-    //    if (bushPositions.size() != 3)
-    //    {
-    //        throw exceptions::InvalidTileMap{"number of bushes is not equal 3"};
-    //    }
+    if (bushPositions.size() != 3)
+    {
+        throw exceptions::InvalidTileMap{"number of bushes is not equal 3"};
+    }
 
     std::sort(bushPositions.begin(), bushPositions.end(),
               [](const utils::Vector2f& lhs, const utils::Vector2f& rhs) { return lhs.x < rhs.x; });
 
-    for (const auto& bushPosition : bushPositions)
-    {
-        auto bush = obstacleFactory->createBush(bushPosition, player);
-        worldObjects.push_back(bush);
-    }
+    auto blueberries = itemFactory->createBlueberries({bushPositions[0].x + 1, bushPositions[0].y + 1});
+    auto blueberriesCollectableItem = blueberries->getComponent<components::core::CollectableItemComponent>();
+    auto blueberriesBush =
+        obstacleFactory->createBushWithItem(bushPositions[0], player, blueberriesCollectableItem);
+    worldObjects.push_back(blueberries);
+    worldObjects.push_back(blueberriesBush);
+
+    auto apple = itemFactory->createApple({bushPositions[1].x + 1, bushPositions[1].y + 1});
+    auto appleCollectableItem = apple->getComponent<components::core::CollectableItemComponent>();
+    auto appleBush = obstacleFactory->createBushWithItem(bushPositions[1], player, appleCollectableItem);
+    worldObjects.push_back(apple);
+    worldObjects.push_back(appleBush);
+
+    auto yerba = itemFactory->createYerba({bushPositions[2].x + 1, bushPositions[2].y + 1});
+    auto yerbaCollectableItem = yerba->getComponent<components::core::CollectableItemComponent>();
+    auto yerbaBush = obstacleFactory->createBushWithItem(bushPositions[2], player, yerbaCollectableItem);
+    worldObjects.push_back(yerba);
+    worldObjects.push_back(yerbaBush);
 
     auto leftMapBorder = std::make_shared<components::core::ComponentOwner>(utils::Vector2f{-1, 0},
                                                                             "left border", sharedContext);

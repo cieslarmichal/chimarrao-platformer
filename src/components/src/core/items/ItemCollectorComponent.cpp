@@ -70,9 +70,25 @@ void ItemCollectorComponent::update(utils::DeltaTime, const input::Input& input)
     }
 }
 
+void ItemCollectorComponent::collect(const std::shared_ptr<CollectableItemComponent>& item)
+{
+    if (not enabled or items.size() >= capacity)
+    {
+        return;
+    }
+
+    if (item)
+    {
+        item->collectBy(owner);
+        items.push_back(item);
+    }
+
+    std::cerr << items.size()<< std::endl;
+}
+
 void ItemCollectorComponent::collectNearestItem()
 {
-    if (items.size() >= capacity)
+    if (not enabled or items.size() >= capacity)
     {
         return;
     }

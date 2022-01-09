@@ -9,7 +9,7 @@ namespace game
 class Level1WorldBuilder
 {
 public:
-    Level1WorldBuilder(std::shared_ptr<CharacterFactory>, std::shared_ptr<ObstacleFactory>,
+    Level1WorldBuilder(std::shared_ptr<CharacterFactory>, std::shared_ptr<ObstacleFactory>, std::shared_ptr<ItemFactory>,
                        std::shared_ptr<components::core::SharedContext>, Level1Controller*);
 
     std::vector<std::shared_ptr<components::core::ComponentOwner>>
@@ -21,6 +21,7 @@ public:
 private:
     std::shared_ptr<CharacterFactory> characterFactory;
     std::shared_ptr<ObstacleFactory> obstacleFactory;
+    std::shared_ptr<ItemFactory> itemFactory;
     std::shared_ptr<components::core::SharedContext> sharedContext;
     Level1Controller* level1Controller;
     std::shared_ptr<components::core::ComponentOwner> player;

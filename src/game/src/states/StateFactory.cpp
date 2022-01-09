@@ -11,6 +11,7 @@
 #include "EditorState.h"
 #include "FileSystemMapsReader.h"
 #include "GameOverState.h"
+#include "GameVictoryState.h"
 #include "PhysicsFactory.h"
 #include "SaveMapState.h"
 #include "SettingsState.h"
@@ -20,7 +21,6 @@
 #include "menu/MenuState.h"
 #include "menu/MenuStateUIConfigBuilder.h"
 #include "pause/PauseState.h"
-#include "GameVictoryState.h"
 
 namespace game
 {
@@ -94,11 +94,12 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
 
         auto characterFactory = std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadTree);
         auto obstacleFactory = std::make_shared<ObstacleFactory>(sharedContext);
+        auto itemFactory = std::make_shared<ItemFactory>(sharedContext);
 
         return std::make_unique<StoryGameState>(
             window, rendererPool, fileAccess, states,
             std::make_unique<components::ui::DefaultUIManager>(sharedContext), tileMap, sharedContext,
-            musicManager, characterFactory, obstacleFactory, std::move(physicsFactory));
+            musicManager, characterFactory, obstacleFactory, itemFactory, std::move(physicsFactory));
     }
     case StateType::Menu:
     {

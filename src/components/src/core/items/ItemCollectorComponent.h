@@ -20,6 +20,7 @@ public:
 
     void loadDependentComponents() override;
     void update(utils::DeltaTime, const input::Input&) override;
+    void collect(const std::shared_ptr<CollectableItemComponent>&);
     void collectNearestItem();
     void drop(const std::string& itemName);
     void use(const std::string& itemName);

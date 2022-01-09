@@ -76,7 +76,6 @@ void LimitedSpaceActionComponent::update(utils::DeltaTime, const input::Input& i
         {
             actionPerformed = true;
             textComponent->disable();
-            playersItemCollector->enable();
             action();
         }
     }

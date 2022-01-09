@@ -21,10 +21,11 @@ Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
                                    std::unique_ptr<ComponentOwnersManager> ownersManagerInit,
                                    const std::shared_ptr<CharacterFactory>& characterFactory,
                                    const std::shared_ptr<ObstacleFactory>& obstacleFactory,
+                                   const std::shared_ptr<ItemFactory>& itemFactory,
                                    const std::shared_ptr<components::core::SharedContext>& sharedContext,
                                    std::shared_ptr<utils::FileAccess> fileAccessInit,
                                    StoryGameState* storyGameStateInit)
-    : worldBuilder{std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, sharedContext,
+    : worldBuilder{std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, itemFactory, sharedContext,
                                                         this)},
       ownersManager{std::move(ownersManagerInit)},
       fileAccess{std::move(fileAccessInit)},
@@ -67,9 +68,9 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
         std::call_once(playerWithRabbitDialogueStarted,
                        [this]
                        {
-                           mainCharacters.player->getComponent<components::core::AnimationComponent>()
-                               ->setAnimationDirection(animations::AnimationDirection::Left);
-                           dialoguesController->startPlayerWithRabbitFirstDialogue();
+//                           mainCharacters.player->getComponent<components::core::AnimationComponent>()
+//                               ->setAnimationDirection(animations::AnimationDirection::Left);
+//                           dialoguesController->startPlayerWithRabbitFirstDialogue();
                        });
     }
 
