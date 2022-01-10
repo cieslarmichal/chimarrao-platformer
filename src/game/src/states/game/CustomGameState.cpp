@@ -36,7 +36,7 @@ CustomGameState::CustomGameState(const std::shared_ptr<window::Window>& windowIn
       tileMap{std::move(tileMapInit)},
       sharedContext{sharedContextInit},
       musicManager{std::move(musicManagerInit)},
-      ownersManager{std::make_unique<DefaultComponentOwnersManager>(physicsFactory->createCollisionSystem())}
+      ownersManager{std::make_unique<components::core::DefaultComponentOwnersManager>(physicsFactory->createCollisionSystem())}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig());
 

@@ -41,6 +41,7 @@ set(SOURCES
         src/core/LimitedSpaceActionComponent.cpp
         src/core/DialogueActorComponent.cpp
         src/core/DialogueTextComponent.cpp
+        src/core/DefaultComponentOwnersManager.cpp
         )
 
 set(UT_SOURCES
@@ -84,6 +85,7 @@ set(UT_SOURCES
         src/core/LimitedSpaceActionComponentTest.cpp
         src/core/DialogueActorComponentTest.cpp
         src/core/DialogueTextComponentTest.cpp
+        src/core/DefaultComponentOwnersManagerTest.cpp
         )
 
 add_library(components ${SOURCES})

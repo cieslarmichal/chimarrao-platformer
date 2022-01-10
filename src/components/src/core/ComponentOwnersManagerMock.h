@@ -4,12 +4,12 @@
 
 #include "ComponentOwnersManager.h"
 
-namespace game
+namespace components::core
 {
 class ComponentOwnersManagerMock : public ComponentOwnersManager
 {
 public:
-    MOCK_METHOD(void, add, (std::shared_ptr<components::core::ComponentOwner>), (override));
+    MOCK_METHOD(void, add, (std::shared_ptr<ComponentOwner>), (override));
     MOCK_METHOD(void, update, (const utils::DeltaTime&, const input::Input&), (override));
     MOCK_METHOD(void, processNewObjects, (), (override));
     MOCK_METHOD(void, processRemovals, (), (override));

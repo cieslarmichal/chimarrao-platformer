@@ -1,13 +1,12 @@
 #include "KeyboardDistanceAttackComponent.h"
 
-#include "HealthComponent.h"
-#include "exceptions/DependentComponentNotFound.h"
+#include "DistanceAttack.h"
 
 namespace components::core
 {
 
-KeyboardDistanceAttackComponent::KeyboardDistanceAttackComponent(ComponentOwner* owner,
-                                                           std::shared_ptr<DistanceAttack> distanceAttackInit)
+KeyboardDistanceAttackComponent::KeyboardDistanceAttackComponent(
+    ComponentOwner* owner, std::shared_ptr<DistanceAttack> distanceAttackInit)
     : Component{owner}, distanceAttack{std::move(distanceAttackInit)}
 
 {

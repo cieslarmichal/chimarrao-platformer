@@ -26,7 +26,7 @@ EditorState::EditorState(const std::shared_ptr<window::Window>& windowInit,
                          std::shared_ptr<components::ui::UIManager> uiManagerInit,
                          std::shared_ptr<TileMap> tileMapInit,
                          const std::shared_ptr<components::core::SharedContext>& sharedContext,
-                         std::unique_ptr<ComponentOwnersManager> componentOwnersManagerInit)
+                         std::unique_ptr<components::core::ComponentOwnersManager> componentOwnersManagerInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
       timeAfterStateCouldBePaused{0.5f},

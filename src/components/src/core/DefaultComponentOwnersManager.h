@@ -3,14 +3,14 @@
 #include "CollisionSystem.h"
 #include "ComponentOwnersManager.h"
 
-namespace game
+namespace components::core
 {
 class DefaultComponentOwnersManager : public ComponentOwnersManager
 {
 public:
     explicit DefaultComponentOwnersManager(std::unique_ptr<physics::CollisionSystem>);
 
-    void add(std::shared_ptr<components::core::ComponentOwner>) override;
+    void add(std::shared_ptr<ComponentOwner>) override;
     void update(const utils::DeltaTime&, const input::Input&) override;
     void processNewObjects() override;
     void processRemovals() override;
@@ -18,8 +18,8 @@ public:
     void deactivate() override;
 
 private:
-    std::vector<std::shared_ptr<components::core::ComponentOwner>> componentOwners;
-    std::vector<std::shared_ptr<components::core::ComponentOwner>> newComponentOwners;
+    std::vector<std::shared_ptr<ComponentOwner>> componentOwners;
+    std::vector<std::shared_ptr<ComponentOwner>> newComponentOwners;
     std::unique_ptr<physics::CollisionSystem> collisionSystem;
 };
 }

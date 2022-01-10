@@ -62,9 +62,9 @@ public:
     StrictMock<utils::TimerMock>* timer{timerInit.get()};
     const utils::DeltaTime deltaTime{1.0};
     StrictMock<input::InputMock> input;
-    std::unique_ptr<StrictMock<ComponentOwnersManagerMock>> componentOwnersManagerInit{
-        std::make_unique<StrictMock<ComponentOwnersManagerMock>>()};
-    StrictMock<ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
+    std::unique_ptr<StrictMock<components::core::ComponentOwnersManagerMock>> componentOwnersManagerInit{
+        std::make_unique<StrictMock<components::core::ComponentOwnersManagerMock>>()};
+    StrictMock<components::core::ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
 };
 
 class EditorStateTest : public EditorStateTest_Base

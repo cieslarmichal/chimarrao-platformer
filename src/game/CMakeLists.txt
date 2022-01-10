@@ -32,7 +32,6 @@ set(SOURCES
         src/states/StateFactory.cpp
         src/GameFactory.cpp
         src/states/chooseMap/FileSystemMapsReader.cpp
-        src/DefaultComponentOwnersManager.cpp
         src/navigators/PaginatedButtonsNavigator.cpp
         src/navigators/GridButtonsNavigator.cpp
         src/states/game/HeadsUpDisplay.cpp
@@ -79,7 +78,6 @@ set(UT_SOURCES
         src/states/editor/LayoutTileTest.cpp
         src/states/editor/DefaultTileMapTest.cpp
         src/states/editor/TileTypeTest.cpp
-        src/DefaultComponentOwnersManagerTest.cpp
         src/navigators/PaginatedButtonsNavigatorTest.cpp
         src/navigators/GridButtonsNavigatorTest.cpp
         src/states/game/HeadsUpDisplayTest.cpp

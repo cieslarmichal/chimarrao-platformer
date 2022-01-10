@@ -45,7 +45,7 @@ StoryGameState::StoryGameState(const std::shared_ptr<window::Window>& windowInit
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig());
 
     auto level1Controller = std::make_unique<Level1Controller>(
-        tileMap, std::make_unique<DefaultComponentOwnersManager>(physicsFactory->createCollisionSystem()),
+        tileMap, std::make_unique<components::core::DefaultComponentOwnersManager>(physicsFactory->createCollisionSystem()),
         characterFactory, obstacleFactory, itemFactory, sharedContext, fileAccess, uiManager, this);
     const auto player = level1Controller->getCharacters().player;
 

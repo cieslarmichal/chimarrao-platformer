@@ -20,7 +20,7 @@ class Level1Controller : public LevelController
     friend class Level1WorldBuilder;
 
 public:
-    Level1Controller(const std::shared_ptr<TileMap>&, std::unique_ptr<ComponentOwnersManager>,
+    Level1Controller(const std::shared_ptr<TileMap>&, std::unique_ptr<components::core::ComponentOwnersManager>,
                      const std::shared_ptr<CharacterFactory>&, const std::shared_ptr<ObstacleFactory>&,
                      const std::shared_ptr<ItemFactory>&,
                      const std::shared_ptr<components::core::SharedContext>&,
@@ -41,7 +41,7 @@ private:
 
     std::unique_ptr<Level1WorldBuilder> worldBuilder;
     Level1MainCharacters mainCharacters;
-    std::unique_ptr<ComponentOwnersManager> ownersManager;
+    std::unique_ptr<components::core::ComponentOwnersManager> ownersManager;
     std::shared_ptr<utils::FileAccess> fileAccess;
     std::shared_ptr<components::ui::UIManager> uiManager;
     StoryGameState* storyGameState;

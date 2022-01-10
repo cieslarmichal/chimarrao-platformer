@@ -22,7 +22,7 @@ public:
     EditorState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
                 std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>,
                 std::shared_ptr<TileMap>, const std::shared_ptr<components::core::SharedContext>&,
-                std::unique_ptr<ComponentOwnersManager>);
+                std::unique_ptr<components::core::ComponentOwnersManager>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -45,6 +45,6 @@ private:
     std::shared_ptr<components::ui::UIManager> uiManager;
     const std::shared_ptr<components::core::SharedContext>& sharedContext;
     std::shared_ptr<components::core::ComponentOwner> camera;
-    std::unique_ptr<ComponentOwnersManager> componentOwnersManager;
+    std::unique_ptr<components::core::ComponentOwnersManager> componentOwnersManager;
 };
 }

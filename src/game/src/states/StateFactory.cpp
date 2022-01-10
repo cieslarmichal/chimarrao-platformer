@@ -64,7 +64,7 @@ std::unique_ptr<State> StateFactory::createState(StateType stateType)
         return std::make_unique<EditorState>(
             window, rendererPool, fileAccess, states,
             std::make_unique<components::ui::DefaultUIManager>(sharedContext), tileMap, sharedContext,
-            std::make_unique<DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()));
+            std::make_unique<components::core::DefaultComponentOwnersManager>(collisionSystemFactory->createCollisionSystem()));
     }
     case StateType::CustomGame:
     {

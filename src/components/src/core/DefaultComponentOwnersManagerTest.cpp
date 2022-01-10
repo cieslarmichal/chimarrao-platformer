@@ -4,7 +4,6 @@
 #include "InputMock.h"
 #include "RendererPoolMock.h"
 
-using namespace game;
 using namespace components::core;
 using namespace ::testing;
 
@@ -16,8 +15,8 @@ public:
     const utils::Vector2f position1{20, 20};
     std::shared_ptr<NiceMock<graphics::RendererPoolMock>> rendererPool =
         std::make_shared<NiceMock<graphics::RendererPoolMock>>();
-    std::shared_ptr<components::core::SharedContext> sharedContext =
-        std::make_shared<components::core::SharedContext>(rendererPool);
+    std::shared_ptr<SharedContext> sharedContext =
+        std::make_shared<SharedContext>(rendererPool);
     std::shared_ptr<ComponentOwner> componentOwner =
         std::make_shared<ComponentOwner>(position1, "componentOwnersMangerTest1", sharedContext);
 

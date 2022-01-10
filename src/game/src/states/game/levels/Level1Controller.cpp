@@ -24,7 +24,7 @@ const std::string gameBackgroundPathBlackAndWhite{projectPath +
 }
 
 Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
-                                   std::unique_ptr<ComponentOwnersManager> ownersManagerInit,
+                                   std::unique_ptr<components::core::ComponentOwnersManager> ownersManagerInit,
                                    const std::shared_ptr<CharacterFactory>& characterFactory,
                                    const std::shared_ptr<ObstacleFactory>& obstacleFactory,
                                    const std::shared_ptr<ItemFactory>& itemFactory,

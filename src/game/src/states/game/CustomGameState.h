@@ -49,6 +49,6 @@ private:
     const std::shared_ptr<components::core::SharedContext>& sharedContext;
     std::shared_ptr<audio::MusicManager> musicManager;
     audio::MusicId musicId;
-    std::unique_ptr<ComponentOwnersManager> ownersManager;
+    std::unique_ptr<components::core::ComponentOwnersManager> ownersManager;
 };
 }

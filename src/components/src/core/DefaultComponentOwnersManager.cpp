@@ -2,7 +2,7 @@
 
 #include "GraphicsComponent.h"
 
-namespace game
+namespace components::core
 {
 
 DefaultComponentOwnersManager::DefaultComponentOwnersManager(
@@ -11,7 +11,7 @@ DefaultComponentOwnersManager::DefaultComponentOwnersManager(
 {
 }
 
-void DefaultComponentOwnersManager::add(std::shared_ptr<components::core::ComponentOwner> owner)
+void DefaultComponentOwnersManager::add(std::shared_ptr<ComponentOwner> owner)
 {
     newComponentOwners.push_back(owner);
 }
