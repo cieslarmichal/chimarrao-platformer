@@ -5,6 +5,7 @@ set(SOURCES
         src/core/GraphicsComponent.cpp
         src/core/movement/KeyboardAnimatedMovementComponent.cpp
         src/core/movement/KeyboardHorizontalMovementComponent.cpp
+        src/core/movement/ProjectileFlyMovementComponent.cpp
         src/core/AnimationComponent.cpp
         src/core/TextComponent.cpp
         src/core/ClickableComponent.cpp
@@ -51,6 +52,7 @@ set(UT_SOURCES
         src/core/GraphicsComponentTest.cpp
         src/core/movement/KeyboardAnimatedMovementComponentTest.cpp
         src/core/movement/KeyboardHorizontalMovementComponentTest.cpp
+        src/core/movement/ProjectileFlyMovementComponentTest.cpp
         src/core/AnimationComponentTest.cpp
         src/core/TextComponentTest.cpp
         src/core/ClickableComponentTest.cpp
