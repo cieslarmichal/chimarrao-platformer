@@ -6,13 +6,13 @@
 namespace components::core
 {
 
-DistanceAttack::DistanceAttack(ComponentOwner* owner, std::shared_ptr<physics::RayCast> rayCast,
-                               std::unique_ptr<FriendlyFireValidator> friendlyFireValidatorInit,
+DistanceAttack::DistanceAttack(ComponentOwner* owner,
+                               const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
                                std::shared_ptr<components::core::ComponentOwnersManager> ownersManagerInit)
     : owner{owner},
-      rayCast{std::move(rayCast)},
-      friendlyFireValidator{std::move(friendlyFireValidatorInit)},
-      ownersManager{std::move(ownersManagerInit)}
+      sharedContext{sharedContextInit},
+      ownersManager{std::move(ownersManagerInit)},
+      animatorFactory{animations::AnimatorFactory::createAnimatorFactory(sharedContext->rendererPool)}
 {
 }
 
@@ -24,26 +24,28 @@ void DistanceAttack::attack()
     const auto& ownerPosition = boxColliderComponent->getPosition();
     const auto size = boxColliderComponent->getSize();
 
-    const auto startPoint =
-        utils::Vector2f{ownerPosition.x + (size.x / 2.f), ownerPosition.y + (size.y / 2.f)};
-    const auto endPoint =
-        utils::Vector2f{startPoint.x + (static_cast<float>(heading.x) * range), startPoint.y};
+    const auto startPositionOnXAxis = heading.x == 1 ? ownerPosition.x + size.x + 1 : ownerPosition.x - 1;
+    const auto startPositionOnYAxis = ownerPosition.y + (size.y / 2.f);
+    const auto startPosition = utils::Vector2f{startPositionOnXAxis, startPositionOnYAxis};
 
-    const auto result = rayCast->cast(startPoint, endPoint, owner->getId(), 2);
+    static int numberOfProjectilesInGame = 0;
+    numberOfProjectilesInGame++;
+    projectile = std::make_shared<components::core::ComponentOwner>(
+        startPosition, "projectile" + std::to_string(numberOfProjectilesInGame), sharedContext,
+        components::core::ComponentOwnerType::Friend);
+    auto projectileGraphicsComponent = projectile->addGraphicsComponent(
+        sharedContext->rendererPool, utils::Vector2f{3.f, 3.5f}, startPosition, graphics::Color::White,
+        graphics::VisibilityLayer::Second);
+    auto projectileGraphicsId = projectileGraphicsComponent->getGraphicsId();
+    const std::shared_ptr<animations::Animator> druidAnimator =
+        animatorFactory->createDruidAnimator(projectileGraphicsId);
+    projectile->addComponent<components::core::AnimationComponent>(druidAnimator);
+    projectile->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f});
+    projectile->addComponent<components::core::VelocityComponent>(0);
+    //    projectile->addComponent<components::core::IdleNpcMovementComponent>(player.get());
 
-    if (result.collision)
-    {
-        if (friendlyFireValidator->validate(owner, result.collision) ==
-            FriendlyFireValidationResult::AttackNotAllowed)
-        {
-            return;
-        }
-
-        if (auto health = result.collision->getComponent<HealthComponent>())
-        {
-            health->loseHealthPoints(damage);
-        }
-    }
+    ownersManager->add(projectile);
 }
 
 void DistanceAttack::loadDependentComponents()

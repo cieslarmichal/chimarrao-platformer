@@ -8,14 +8,14 @@
 #include "DirectionComponent.h"
 #include "RayCast.h"
 #include "Timer.h"
+#include "AnimatorFactory.h"
 
 namespace components::core
 {
 class DistanceAttack
 {
 public:
-    DistanceAttack(ComponentOwner* owner, std::shared_ptr<physics::RayCast>,
-                   std::unique_ptr<FriendlyFireValidator>,
+    DistanceAttack(ComponentOwner* owner, const std::shared_ptr<components::core::SharedContext>&,
                    std::shared_ptr<components::core::ComponentOwnersManager>);
 
     void attack();
@@ -24,13 +24,14 @@ private:
     void loadDependentComponents();
 
     ComponentOwner* owner;
-    std::shared_ptr<physics::RayCast> rayCast;
+    const std::shared_ptr<components::core::SharedContext>& sharedContext;
     std::shared_ptr<DirectionComponent> directionComponent;
     std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     float range{4};
     unsigned int damage{10};
     std::once_flag componentsInitialized;
-    std::unique_ptr<FriendlyFireValidator> friendlyFireValidator;
     std::shared_ptr<components::core::ComponentOwnersManager> ownersManager;
+    std::shared_ptr<components::core::ComponentOwner> projectile;
+    std::unique_ptr<animations::AnimatorFactory> animatorFactory;
 };
 }
