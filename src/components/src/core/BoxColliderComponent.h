@@ -36,6 +36,7 @@ public:
     utils::Vector2f getPosition() const;
     CollisionLayer getCollisionLayer() const;
     void setCollisionLayer(CollisionLayer layer);
+    ComponentOwner* getCurrentColliderOnXAxis() const;
 
 private:
     CollisionLayer collisionLayer;
@@ -46,7 +47,7 @@ private:
     std::shared_ptr<VelocityComponent> velocityComponent;
     utils::Vector2f size;
     utils::DeltaTime currentDeltaTime;
-    std::shared_ptr<GraphicsComponent> debugGraphics;
     std::unordered_map<std::string, Direction> colliderNamesWithDistancesOnXAxis;
+    ComponentOwner* currentColliderOnXAxis;
 };
 }

@@ -15,7 +15,11 @@ namespace components::core
 BoxColliderComponent::BoxColliderComponent(ComponentOwner* owner, const utils::Vector2f& sizeInit,
                                            CollisionLayer collisionLayerInit,
                                            const utils::Vector2f& offsetInit)
-    : Component{owner}, collisionLayer{collisionLayerInit}, offset{offsetInit}, size{sizeInit}
+    : Component{owner},
+      collisionLayer{collisionLayerInit},
+      offset{offsetInit},
+      size{sizeInit},
+      currentColliderOnXAxis{nullptr}
 {
     collisionBoundaries.width = sizeInit.x;
     collisionBoundaries.height = sizeInit.y;
@@ -122,6 +126,8 @@ void BoxColliderComponent::resolveOverlapX(const std::shared_ptr<BoxColliderComp
         movementComponent->blockMoveRight();
         colliderNamesWithDistancesOnXAxis[other->getOwnerName()] = Direction::Right;
     }
+
+    currentColliderOnXAxis = other->owner;
 }
 
 void BoxColliderComponent::resolveOverlapY(const std::shared_ptr<BoxColliderComponent>& other)
@@ -220,12 +226,6 @@ const utils::FloatRect& BoxColliderComponent::getNextFrameXCollisionBox()
         collisionBoundaries.left + velocityComponent->getVelocity().x * currentDeltaTime.count();
     nextFrameCollisionBoundaries.top = collisionBoundaries.top;
 
-    //    if (collisionLayer == CollisionLayer::Player)
-    //    {
-    //        debugGraphics->setPosition(
-    //            utils::Vector2f{nextFrameCollisionBoundaries.left, nextFrameCollisionBoundaries.top});
-    //    }
-
     return nextFrameCollisionBoundaries;
 }
 
@@ -242,13 +242,12 @@ const utils::FloatRect& BoxColliderComponent::getNextFrameYCollisionBox()
     nextFrameCollisionBoundaries.top =
         collisionBoundaries.top + velocityComponent->getVelocity().y * currentDeltaTime.count();
 
-    //    if (collisionLayer == CollisionLayer::Player)
-    //    {
-    //        debugGraphics->setPosition(
-    //            utils::Vector2f{nextFrameCollisionBoundaries.left, nextFrameCollisionBoundaries.top});
-    //    }
-
     return nextFrameCollisionBoundaries;
+}
+
+ComponentOwner* BoxColliderComponent::getCurrentColliderOnXAxis() const
+{
+    return currentColliderOnXAxis;
 }
 
 }
