@@ -23,18 +23,17 @@ const std::string gameBackgroundPathBlackAndWhite{projectPath +
                                                   "resources/BG/background_mountains_black_and_white.png"};
 }
 
-Level1Controller::Level1Controller(const std::shared_ptr<TileMap>& tileMap,
-                                   std::unique_ptr<components::core::ComponentOwnersManager> ownersManagerInit,
-                                   const std::shared_ptr<CharacterFactory>& characterFactory,
-                                   const std::shared_ptr<ObstacleFactory>& obstacleFactory,
-                                   const std::shared_ptr<ItemFactory>& itemFactory,
-                                   const std::shared_ptr<components::core::SharedContext>& sharedContext,
-                                   std::shared_ptr<utils::FileAccess> fileAccessInit,
-                                   std::shared_ptr<components::ui::UIManager> uiManagerInit,
-                                   StoryGameState* storyGameStateInit)
-    : worldBuilder{std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, itemFactory,
-                                                        sharedContext, this)},
-      ownersManager{std::move(ownersManagerInit)},
+Level1Controller::Level1Controller(
+    const std::shared_ptr<TileMap>& tileMap,
+    std::shared_ptr<components::core::ComponentOwnersManager> ownersManagerInit,
+    const std::shared_ptr<CharacterFactory>& characterFactory,
+    const std::shared_ptr<ObstacleFactory>& obstacleFactory, const std::shared_ptr<ItemFactory>& itemFactory,
+    const std::shared_ptr<components::core::SharedContext>& sharedContext,
+    std::shared_ptr<utils::FileAccess> fileAccessInit,
+    std::shared_ptr<components::ui::UIManager> uiManagerInit, StoryGameState* storyGameStateInit)
+    : ownersManager{std::move(ownersManagerInit)},
+      worldBuilder{std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, itemFactory,
+                                                        sharedContext, this, ownersManager)},
       fileAccess{std::move(fileAccessInit)},
       uiManager{std::move(uiManagerInit)},
       storyGameState{storyGameStateInit},

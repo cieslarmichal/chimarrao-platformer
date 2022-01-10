@@ -64,7 +64,8 @@ public:
     StrictMock<input::InputMock> input;
     std::unique_ptr<StrictMock<components::core::ComponentOwnersManagerMock>> componentOwnersManagerInit{
         std::make_unique<StrictMock<components::core::ComponentOwnersManagerMock>>()};
-    StrictMock<components::core::ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
+    StrictMock<components::core::ComponentOwnersManagerMock>* componentOwnersManager{
+        componentOwnersManagerInit.get()};
 };
 
 class EditorStateTest : public EditorStateTest_Base

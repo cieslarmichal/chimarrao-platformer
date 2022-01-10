@@ -26,8 +26,6 @@ CustomGameState::CustomGameState(const std::shared_ptr<window::Window>& windowIn
                                  std::shared_ptr<TileMap> tileMapInit,
                                  const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
                                  std::shared_ptr<audio::MusicManager> musicManagerInit,
-                                 const std::shared_ptr<CharacterFactory>& characterFactory,
-                                 const std::shared_ptr<ObstacleFactory>& obstacleFactory,
                                  std::unique_ptr<physics::PhysicsFactory> physicsFactory)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
@@ -36,10 +34,16 @@ CustomGameState::CustomGameState(const std::shared_ptr<window::Window>& windowIn
       tileMap{std::move(tileMapInit)},
       sharedContext{sharedContextInit},
       musicManager{std::move(musicManagerInit)},
-      ownersManager{std::make_unique<components::core::DefaultComponentOwnersManager>(physicsFactory->createCollisionSystem())}
+      ownersManager{std::make_shared<components::core::DefaultComponentOwnersManager>(
+          physicsFactory->createCollisionSystem())}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig());
 
+    auto rayCast = physicsFactory->createRayCast();
+    auto quadTree = physicsFactory->getQuadTree();
+    auto characterFactory =
+        std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadTree, ownersManager);
+    auto obstacleFactory = std::make_shared<ObstacleFactory>(sharedContext);
     auto worldBuilder =
         std::make_unique<CustomWorldBuilder>(characterFactory, obstacleFactory, sharedContext);
 

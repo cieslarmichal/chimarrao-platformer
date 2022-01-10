@@ -7,12 +7,14 @@
 namespace game
 {
 
-Level1WorldBuilder::Level1WorldBuilder(std::shared_ptr<CharacterFactory> characterFactoryInit,
-                                       std::shared_ptr<ObstacleFactory> obstacleFactoryInit,
-                                       std::shared_ptr<ItemFactory> itemFactoryInit,
-                                       std::shared_ptr<components::core::SharedContext> sharedContextInit,
-                                       Level1Controller* level1ControllerInit)
-    : characterFactory{std::move(characterFactoryInit)},
+Level1WorldBuilder::Level1WorldBuilder(
+    std::shared_ptr<CharacterFactory> characterFactoryInit,
+    std::shared_ptr<ObstacleFactory> obstacleFactoryInit, std::shared_ptr<ItemFactory> itemFactoryInit,
+    std::shared_ptr<components::core::SharedContext> sharedContextInit,
+    Level1Controller* level1ControllerInit,
+    std::shared_ptr<components::core::ComponentOwnersManager> ownersManagerInit)
+    : ownersManager{std::move(ownersManagerInit)},
+      characterFactory{std::move(characterFactoryInit)},
       obstacleFactory{std::move(obstacleFactoryInit)},
       itemFactory{std::move(itemFactoryInit)},
       sharedContext{std::move(sharedContextInit)},

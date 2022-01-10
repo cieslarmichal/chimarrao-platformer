@@ -1,5 +1,3 @@
-#include "MeleeAttack.h"
-
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
@@ -9,6 +7,7 @@
 #include "DefaultQuadtree.h"
 #include "DefaultRayCast.h"
 #include "DirectionComponent.h"
+#include "MeleeAttack.h"
 #include "exceptions/DependentComponentNotFound.h"
 #include "health/HealthComponent.h"
 

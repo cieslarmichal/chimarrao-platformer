@@ -27,8 +27,7 @@ public:
     CustomGameState(const std::shared_ptr<window::Window>&, const std::shared_ptr<graphics::RendererPool>&,
                     std::shared_ptr<utils::FileAccess>, States&, std::shared_ptr<components::ui::UIManager>,
                     std::shared_ptr<TileMap>, const std::shared_ptr<components::core::SharedContext>&,
-                    std::shared_ptr<audio::MusicManager>, const std::shared_ptr<CharacterFactory>&,
-                    const std::shared_ptr<ObstacleFactory>&, std::unique_ptr<physics::PhysicsFactory>);
+                    std::shared_ptr<audio::MusicManager>, std::unique_ptr<physics::PhysicsFactory>);
 
     NextState update(const utils::DeltaTime&, const input::Input&) override;
     void lateUpdate(const utils::DeltaTime&, const input::Input&) override;
@@ -49,6 +48,6 @@ private:
     const std::shared_ptr<components::core::SharedContext>& sharedContext;
     std::shared_ptr<audio::MusicManager> musicManager;
     audio::MusicId musicId;
-    std::unique_ptr<components::core::ComponentOwnersManager> ownersManager;
+    std::shared_ptr<components::core::ComponentOwnersManager> ownersManager;
 };
 }

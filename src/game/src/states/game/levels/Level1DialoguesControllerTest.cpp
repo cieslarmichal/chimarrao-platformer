@@ -4,19 +4,19 @@
 
 #include "AnimatorMock.h"
 #include "DialoguesReaderMock.h"
+#include "FriendlyFireValidatorMock.h"
 #include "InputMock.h"
+#include "RayCastMock.h"
 #include "RendererPoolMock.h"
 #include "TimerMock.h"
 
 #include "AnimationComponent.h"
 #include "DialogueActorComponent.h"
 #include "DialogueTextComponent.h"
-#include "KeyboardMeleeAttackComponent.h"
 #include "KeyboardHorizontalMovementComponent.h"
+#include "KeyboardMeleeAttackComponent.h"
 #include "MovementComponent.h"
 #include "ProjectPathReader.h"
-#include "RayCastMock.h"
-#include "FriendlyFireValidatorMock.h"
 
 using namespace game;
 using namespace ::testing;
@@ -103,9 +103,11 @@ public:
         std::make_shared<StrictMock<physics::RayCastMock>>();
     std::unique_ptr<StrictMock<components::core::FriendlyFireValidatorMock>> friendlyFireValidatorInit{
         std::make_unique<StrictMock<components::core::FriendlyFireValidatorMock>>()};
-    StrictMock<components::core::FriendlyFireValidatorMock>* friendlyFireValidator{friendlyFireValidatorInit.get()};
+    StrictMock<components::core::FriendlyFireValidatorMock>* friendlyFireValidator{
+        friendlyFireValidatorInit.get()};
     std::shared_ptr<components::core::MeleeAttack> meleeAttack =
-        std::make_shared<components::core::MeleeAttack>(player.get(), rayCast, std::move(friendlyFireValidatorInit));
+        std::make_shared<components::core::MeleeAttack>(player.get(), rayCast,
+                                                        std::move(friendlyFireValidatorInit));
 };
 
 class Level1DialoguesControllerTest : public Level1DialoguesControllerTest_Base

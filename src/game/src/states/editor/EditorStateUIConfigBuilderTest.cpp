@@ -51,7 +51,8 @@ public:
     NiceMock<utils::TimerMock>* timer{timerInit.get()};
     std::unique_ptr<NiceMock<components::core::ComponentOwnersManagerMock>> componentOwnersManagerInit{
         std::make_unique<NiceMock<components::core::ComponentOwnersManagerMock>>()};
-    NiceMock<components::core::ComponentOwnersManagerMock>* componentOwnersManager{componentOwnersManagerInit.get()};
+    NiceMock<components::core::ComponentOwnersManagerMock>* componentOwnersManager{
+        componentOwnersManagerInit.get()};
 
     EditorState editorState{window,    rendererPool, fileAccess,    states,
                             uiManager, tileMap,      sharedContext, std::move(componentOwnersManagerInit)};

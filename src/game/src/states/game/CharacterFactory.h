@@ -4,6 +4,7 @@
 
 #include "AnimatorFactory.h"
 #include "ComponentOwner.h"
+#include "ComponentOwnersManager.h"
 #include "Quadtree.h"
 #include "RayCast.h"
 #include "RendererPool.h"
@@ -15,7 +16,8 @@ class CharacterFactory
 {
 public:
     CharacterFactory(const std::shared_ptr<components::core::SharedContext>&, std::shared_ptr<TileMap>,
-                     std::shared_ptr<physics::RayCast>, std::shared_ptr<physics::Quadtree>);
+                     std::shared_ptr<physics::RayCast>, std::shared_ptr<physics::Quadtree>,
+                     std::shared_ptr<components::core::ComponentOwnersManager>);
 
     std::shared_ptr<components::core::ComponentOwner> createPlayer(const utils::Vector2f& position,
                                                                    std::function<void(void)> deadAction);
@@ -35,5 +37,6 @@ private:
     std::shared_ptr<physics::RayCast> rayCast;
     std::shared_ptr<physics::Quadtree> quadtree;
     std::unique_ptr<animations::AnimatorFactory> animatorFactory;
+    std::shared_ptr<components::core::ComponentOwnersManager> ownersManager;
 };
 }

@@ -25,15 +25,17 @@
 
 namespace game
 {
-CharacterFactory::CharacterFactory(const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
-                                   std::shared_ptr<TileMap> tileMapInit,
-                                   std::shared_ptr<physics::RayCast> rayCastInit,
-                                   std::shared_ptr<physics::Quadtree> quadtreeInit)
+CharacterFactory::CharacterFactory(
+    const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
+    std::shared_ptr<TileMap> tileMapInit, std::shared_ptr<physics::RayCast> rayCastInit,
+    std::shared_ptr<physics::Quadtree> quadtreeInit,
+    std::shared_ptr<components::core::ComponentOwnersManager> ownersManagerInit)
     : sharedContext{sharedContextInit},
       tileMap{std::move(tileMapInit)},
       rayCast{std::move(rayCastInit)},
       quadtree{std::move(quadtreeInit)},
-      animatorFactory{animations::AnimatorFactory::createAnimatorFactory(sharedContext->rendererPool)}
+      animatorFactory{animations::AnimatorFactory::createAnimatorFactory(sharedContext->rendererPool)},
+      ownersManager{std::move(ownersManagerInit)}
 {
 }
 

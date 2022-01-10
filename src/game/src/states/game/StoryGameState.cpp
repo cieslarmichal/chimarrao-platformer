@@ -26,9 +26,6 @@ StoryGameState::StoryGameState(const std::shared_ptr<window::Window>& windowInit
                                std::shared_ptr<TileMap> tileMapInit,
                                const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
                                std::shared_ptr<audio::MusicManager> musicManagerInit,
-                               std::shared_ptr<CharacterFactory> characterFactoryInit,
-                               std::shared_ptr<ObstacleFactory> obstacleFactoryInit,
-                               std::shared_ptr<ItemFactory> itemFactoryInit,
                                std::unique_ptr<physics::PhysicsFactory> physicsFactoryInit)
     : State{windowInit, rendererPoolInit, std::move(fileAccessInit), statesInit},
       paused{false},
@@ -37,16 +34,22 @@ StoryGameState::StoryGameState(const std::shared_ptr<window::Window>& windowInit
       tileMap{std::move(tileMapInit)},
       sharedContext{sharedContextInit},
       musicManager{std::move(musicManagerInit)},
-      characterFactory{std::move(characterFactoryInit)},
-      obstacleFactory{std::move(obstacleFactoryInit)},
-      itemFactory{std::move(itemFactoryInit)},
       physicsFactory{std::move(physicsFactoryInit)}
 {
     uiManager->createUI(GameStateUIConfigBuilder::createGameUIConfig());
 
-    auto level1Controller = std::make_unique<Level1Controller>(
-        tileMap, std::make_unique<components::core::DefaultComponentOwnersManager>(physicsFactory->createCollisionSystem()),
-        characterFactory, obstacleFactory, itemFactory, sharedContext, fileAccess, uiManager, this);
+    auto ownersManager = std::make_shared<components::core::DefaultComponentOwnersManager>(
+        physicsFactory->createCollisionSystem());
+    auto rayCast = physicsFactory->createRayCast();
+    auto quadTree = physicsFactory->getQuadTree();
+    auto characterFactory =
+        std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadTree, ownersManager);
+    auto obstacleFactory = std::make_shared<ObstacleFactory>(sharedContext);
+    auto itemFactory = std::make_shared<ItemFactory>(sharedContext);
+
+    auto level1Controller =
+        std::make_unique<Level1Controller>(tileMap, ownersManager, characterFactory, obstacleFactory,
+                                           itemFactory, sharedContext, fileAccess, uiManager, this);
     const auto player = level1Controller->getCharacters().player;
 
     levelControllers.push(std::move(level1Controller));

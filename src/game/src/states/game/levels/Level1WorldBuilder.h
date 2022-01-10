@@ -11,7 +11,7 @@ class Level1WorldBuilder
 public:
     Level1WorldBuilder(std::shared_ptr<CharacterFactory>, std::shared_ptr<ObstacleFactory>,
                        std::shared_ptr<ItemFactory>, std::shared_ptr<components::core::SharedContext>,
-                       Level1Controller*);
+                       Level1Controller*, std::shared_ptr<components::core::ComponentOwnersManager>);
 
     std::vector<std::shared_ptr<components::core::ComponentOwner>>
     buildWorldObjects(const std::shared_ptr<TileMap>&);
@@ -20,6 +20,7 @@ public:
     std::shared_ptr<components::core::ComponentOwner> getNpc() const;
 
 private:
+    std::shared_ptr<components::core::ComponentOwnersManager> ownersManager;
     std::shared_ptr<CharacterFactory> characterFactory;
     std::shared_ptr<ObstacleFactory> obstacleFactory;
     std::shared_ptr<ItemFactory> itemFactory;

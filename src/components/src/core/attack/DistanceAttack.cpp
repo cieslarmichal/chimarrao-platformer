@@ -7,8 +7,12 @@ namespace components::core
 {
 
 DistanceAttack::DistanceAttack(ComponentOwner* owner, std::shared_ptr<physics::RayCast> rayCast,
-                         std::unique_ptr<FriendlyFireValidator> friendlyFireValidatorInit)
-    : owner{owner}, rayCast{std::move(rayCast)}, friendlyFireValidator{std::move(friendlyFireValidatorInit)}
+                               std::unique_ptr<FriendlyFireValidator> friendlyFireValidatorInit,
+                               std::shared_ptr<components::core::ComponentOwnersManager> ownersManagerInit)
+    : owner{owner},
+      rayCast{std::move(rayCast)},
+      friendlyFireValidator{std::move(friendlyFireValidatorInit)},
+      ownersManager{std::move(ownersManagerInit)}
 {
 }
 
