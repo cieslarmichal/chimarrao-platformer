@@ -42,7 +42,8 @@ TEST_F(DistanceAttackTest,
        givenComponentOwnerWithoutDirectionComponent_attack_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutDirection{position1, "componentOwnerWithoutDirection", sharedContext};
-    DistanceAttack distanceAttackWithoutDirection{&componentOwnerWithoutDirection, sharedContext, componentOwnersManager};
+    DistanceAttack distanceAttackWithoutDirection{&componentOwnerWithoutDirection, sharedContext,
+                                                  componentOwnersManager};
 
     ASSERT_THROW(distanceAttackWithoutDirection.attack(),
                  components::core::exceptions::DependentComponentNotFound);
@@ -55,7 +56,8 @@ TEST_F(DistanceAttackTest,
                                                     sharedContext};
     componentOwnerWithoutBoxCollider.addComponent<VelocityComponent>(6);
     componentOwnerWithoutBoxCollider.addComponent<DirectionComponent>();
-    DistanceAttack distanceAttackWithoutBoxCollider{&componentOwnerWithoutBoxCollider, sharedContext, componentOwnersManager};
+    DistanceAttack distanceAttackWithoutBoxCollider{&componentOwnerWithoutBoxCollider, sharedContext,
+                                                    componentOwnersManager};
 
     ASSERT_THROW(distanceAttackWithoutBoxCollider.attack(),
                  components::core::exceptions::DependentComponentNotFound);

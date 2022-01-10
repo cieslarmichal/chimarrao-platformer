@@ -3,6 +3,7 @@
 
 #include "gtest/gtest.h"
 
+#include "AnimatorMock.h"
 #include "InputMock.h"
 #include "RendererPoolMock.h"
 
@@ -10,7 +11,6 @@
 #include "ComponentOwner.h"
 #include "VelocityComponent.h"
 #include "exceptions/DependentComponentNotFound.h"
-#include "AnimatorMock.h"
 
 using namespace components::core;
 using namespace animations;
@@ -48,8 +48,8 @@ TEST_F(ProjectileFlyMovementComponentTest,
        loadDependentComponentsWithoutAnimatorComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutAnimator{position, "componentOwnerWithoutAnimator", sharedContext};
-    ProjectileFlyMovementComponent movementComponentWithoutAnimator{
-        &componentOwnerWithoutAnimator, animations::AnimationDirection::Right};
+    ProjectileFlyMovementComponent movementComponentWithoutAnimator{&componentOwnerWithoutAnimator,
+                                                                    animations::AnimationDirection::Right};
     componentOwnerWithoutAnimator.addComponent<VelocityComponent>(100);
 
     ASSERT_THROW(movementComponentWithoutAnimator.loadDependentComponents(),
@@ -60,7 +60,8 @@ TEST_F(ProjectileFlyMovementComponentTest,
        loadDependentComponentsWithoutVelocityComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutVelocity{position, "componentOwnerWithoutVelocity", sharedContext};
-    ProjectileFlyMovementComponent movementComponentWithoutVelocity{&componentOwnerWithoutVelocity, animations::AnimationDirection::Right};
+    ProjectileFlyMovementComponent movementComponentWithoutVelocity{&componentOwnerWithoutVelocity,
+                                                                    animations::AnimationDirection::Right};
     componentOwnerWithoutVelocity.addComponent<AnimationComponent>(animator);
     ASSERT_THROW(movementComponentWithoutVelocity.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);

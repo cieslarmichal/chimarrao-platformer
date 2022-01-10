@@ -43,6 +43,7 @@ set(SOURCES
         src/core/DialogueActorComponent.cpp
         src/core/DialogueTextComponent.cpp
         src/core/DefaultComponentOwnersManager.cpp
+        src/core/attack/ExplodeOnCollisionComponent.cpp
         )
 
 set(UT_SOURCES
@@ -88,6 +89,7 @@ set(UT_SOURCES
         src/core/DialogueActorComponentTest.cpp
         src/core/DialogueTextComponentTest.cpp
         src/core/DefaultComponentOwnersManagerTest.cpp
+        src/core/attack/ExplodeOnCollisionComponentTest.cpp
         )
 
 add_library(components ${SOURCES})

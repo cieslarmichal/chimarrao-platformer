@@ -37,6 +37,7 @@ public:
     CollisionLayer getCollisionLayer() const;
     void setCollisionLayer(CollisionLayer layer);
     ComponentOwner* getCurrentColliderOnXAxis() const;
+    void setColliderOnXAxis(ComponentOwner*);
 
 private:
     CollisionLayer collisionLayer;

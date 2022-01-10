@@ -1,0 +1,27 @@
+#pragma once
+
+#include <mutex>
+
+#include "AnimatorFactory.h"
+#include "BoxColliderComponent.h"
+#include "ComponentOwnersManager.h"
+#include "DirectionComponent.h"
+
+namespace components::core
+{
+class ExplodeOnCollisionComponent : public Component
+{
+public:
+    ExplodeOnCollisionComponent(ComponentOwner* owner, unsigned int damage);
+
+    void loadDependentComponents() override;
+    void update(utils::DeltaTime, const input::Input&) override;
+
+private:
+    std::shared_ptr<BoxColliderComponent> boxColliderComponent;
+    std::shared_ptr<AnimationComponent> animationComponent;
+    const unsigned int damage;
+    bool explosionStarted;
+    ComponentOwner* target;
+};
+}

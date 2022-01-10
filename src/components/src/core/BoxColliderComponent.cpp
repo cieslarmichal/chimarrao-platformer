@@ -250,4 +250,9 @@ ComponentOwner* BoxColliderComponent::getCurrentColliderOnXAxis() const
     return currentColliderOnXAxis;
 }
 
+void BoxColliderComponent::setColliderOnXAxis(ComponentOwner* collider)
+{
+    currentColliderOnXAxis = collider;
+}
+
 }
