@@ -72,8 +72,7 @@ void ProjectileFlyMovementComponent::lateUpdate(utils::DeltaTime deltaTime, cons
     {
         if (canMoveLeft)
         {
-            //        animation->setAnimation(animations::AnimationType::Fly,
-            //        animations::AnimationDirection::Left);
+            animation->setAnimation(animations::AnimationType::Fly, animations::AnimationDirection::Left);
         }
         else
         {
@@ -85,8 +84,7 @@ void ProjectileFlyMovementComponent::lateUpdate(utils::DeltaTime deltaTime, cons
     {
         if (canMoveRight)
         {
-            //        animation->setAnimation(animations::AnimationType::Fly,
-            //        animations::AnimationDirection::Right);
+            animation->setAnimation(animations::AnimationType::Fly, animations::AnimationDirection::Right);
         }
         else
         {
