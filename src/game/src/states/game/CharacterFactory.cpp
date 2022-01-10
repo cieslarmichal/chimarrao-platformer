@@ -15,7 +15,7 @@
 #include "IdleNpcMovementComponent.h"
 #include "ItemCollectorComponent.h"
 #include "KeyboardAnimatedMovementComponent.h"
-#include "KeyboardAttackComponent.h"
+#include "KeyboardMeleeAttackComponent.h"
 #include "LimitedSpaceActionComponent.h"
 #include "MeleeAttack.h"
 #include "TimerFactory.h"
@@ -61,7 +61,7 @@ CharacterFactory::createPlayer(const utils::Vector2f& position, std::function<vo
     auto friendlyFireValidator = std::make_unique<components::core::DefaultFriendlyFireValidator>();
     auto attackStrategy = std::make_shared<components::core::MeleeAttack>(player.get(), rayCast,
                                                                           std::move(friendlyFireValidator));
-    player->addComponent<components::core::KeyboardAttackComponent>(attackStrategy);
+    player->addComponent<components::core::KeyboardMeleeAttackComponent>(attackStrategy);
     const std::shared_ptr<utils::Timer> itemCollectorTimer = utils::TimerFactory::createTimer();
     player->addComponent<components::core::ItemCollectorComponent>(quadtree, rayCast, 8, itemCollectorTimer);
     player->addComponent<components::core::DialogueTextComponent>(sharedContext->rendererPool, position, "",

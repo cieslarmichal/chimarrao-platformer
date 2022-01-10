@@ -12,7 +12,7 @@
 #include "AnimationComponent.h"
 #include "DialogueActorComponent.h"
 #include "DialogueTextComponent.h"
-#include "KeyboardAttackComponent.h"
+#include "KeyboardMeleeAttackComponent.h"
 #include "KeyboardHorizontalMovementComponent.h"
 #include "MovementComponent.h"
 #include "ProjectPathReader.h"
@@ -109,7 +109,7 @@ public:
     {
         player->addComponent<components::core::KeyboardHorizontalMovementComponent>();
         player->addComponent<components::core::AnimationComponent>(animator);
-        player->addComponent<components::core::KeyboardAttackComponent>(attackStrategy);
+        player->addComponent<components::core::KeyboardMeleeAttackComponent>(attackStrategy);
 
         auto playerText = player->addComponent<components::core::DialogueTextComponent>(
             rendererPool, position1, "xxx", fontPath, dummyFontSize);

@@ -1,4 +1,4 @@
-#include "KeyboardAttackComponent.h"
+#include "KeyboardMeleeAttackComponent.h"
 
 #include "HealthComponent.h"
 #include "exceptions/DependentComponentNotFound.h"
@@ -6,14 +6,14 @@
 namespace components::core
 {
 
-KeyboardAttackComponent::KeyboardAttackComponent(ComponentOwner* owner,
+KeyboardMeleeAttackComponent::KeyboardMeleeAttackComponent(ComponentOwner* owner,
                                                  std::shared_ptr<AttackStrategy> attackStrategy)
     : Component{owner}, attackStrategy{std::move(attackStrategy)}
 
 {
 }
 
-void KeyboardAttackComponent::loadDependentComponents()
+void KeyboardMeleeAttackComponent::loadDependentComponents()
 {
     animation = owner->getComponent<AnimationComponent>();
     if (animation)
@@ -26,7 +26,7 @@ void KeyboardAttackComponent::loadDependentComponents()
     }
 }
 
-void KeyboardAttackComponent::update(utils::DeltaTime, const input::Input& input)
+void KeyboardMeleeAttackComponent::update(utils::DeltaTime, const input::Input& input)
 {
     if (not enabled)
     {

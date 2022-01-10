@@ -1,4 +1,4 @@
-#include "KeyboardAttackComponent.h"
+#include "KeyboardMeleeAttackComponent.h"
 
 #include "gtest/gtest.h"
 
@@ -12,10 +12,10 @@
 using namespace ::testing;
 using namespace components::core;
 
-class KeyboardAttackComponentTest : public Test
+class KeyboardMeleeAttackComponentTest : public Test
 {
 public:
-    KeyboardAttackComponentTest()
+    KeyboardMeleeAttackComponentTest()
     {
         componentOwner.addComponent<AnimationComponent>(animator);
         attackComponent.loadDependentComponents();
@@ -34,29 +34,29 @@ public:
         std::make_shared<StrictMock<animations::AnimatorMock>>();
     std::shared_ptr<StrictMock<AttackStrategyMock>> attackStrategy =
         std::make_shared<StrictMock<AttackStrategyMock>>();
-    KeyboardAttackComponent attackComponent{&componentOwner, attackStrategy};
+    KeyboardMeleeAttackComponent attackComponent{&componentOwner, attackStrategy};
 };
 
-TEST_F(KeyboardAttackComponentTest,
+TEST_F(KeyboardMeleeAttackComponentTest,
        loadDependentComponentsWithoutAnimationComponent_shouldThrowDependentComponentNotFound)
 {
     ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider",
                                                     sharedContext};
-    KeyboardAttackComponent attackComponentWithoutBoxCollider{&componentOwnerWithoutBoxCollider,
+    KeyboardMeleeAttackComponent attackComponentWithoutBoxCollider{&componentOwnerWithoutBoxCollider,
                                                               attackStrategy};
 
     ASSERT_THROW(attackComponentWithoutBoxCollider.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
 }
 
-TEST_F(KeyboardAttackComponentTest, givenSpaceNotPressed_shouldNotCallAttackStrategy)
+TEST_F(KeyboardMeleeAttackComponentTest, givenSpaceNotPressed_shouldNotCallAttackStrategy)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(false));
 
     attackComponent.update(deltaTime, input);
 }
 
-TEST_F(KeyboardAttackComponentTest, givenSpacePressedAndAnimationIsAlreadyAttack_shouldNotCallAttackStrategy)
+TEST_F(KeyboardMeleeAttackComponentTest, givenSpacePressedAndAnimationIsAlreadyAttack_shouldNotCallAttackStrategy)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(true));
     EXPECT_CALL(*animator, getAnimationType()).WillOnce(Return(animations::AnimationType::Attack));
@@ -65,7 +65,7 @@ TEST_F(KeyboardAttackComponentTest, givenSpacePressedAndAnimationIsAlreadyAttack
 }
 
 TEST_F(
-    KeyboardAttackComponentTest,
+    KeyboardMeleeAttackComponentTest,
     givenSpacePressedAndAnimationIsDifferentThanAttackAndAttackAnimationProgressInLessThan60Percents_shouldSetAnimationToAttackAndNotCallAttackStrategy)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(true));
@@ -80,7 +80,7 @@ TEST_F(
 }
 
 TEST_F(
-    KeyboardAttackComponentTest,
+    KeyboardMeleeAttackComponentTest,
     givenSpacePressedAndAnimationIsDifferentThanAttackAndAttackAnimationProgressInMoreThan60Percents_shouldSetAnimationToAttackAndCallAttackStrategy)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(true));

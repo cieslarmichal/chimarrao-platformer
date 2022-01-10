@@ -1,7 +1,7 @@
 #include "Level1DialoguesController.h"
 
 #include "DialogueTextComponent.h"
-#include "KeyboardAttackComponent.h"
+#include "KeyboardMeleeAttackComponent.h"
 #include "MovementComponent.h"
 #include "ProjectPathReader.h"
 
@@ -57,7 +57,7 @@ void Level1DialoguesController::startPlayerWithRabbitFirstDialogue()
 {
     playerWithRabbitFirstDialogueIsOngoing = true;
     mainCharacters->player->getComponent<components::core::MovementComponent>()->lock();
-    mainCharacters->player->getComponent<components::core::KeyboardAttackComponent>()->disable();
+    mainCharacters->player->getComponent<components::core::KeyboardMeleeAttackComponent>()->disable();
     dialogueAliveTimer->restart();
 }
 
@@ -65,7 +65,7 @@ void Level1DialoguesController::startPlayerWithRabbitLastDialogue()
 {
     playerWithRabbitLastDialogueIsOngoing = true;
     mainCharacters->player->getComponent<components::core::MovementComponent>()->lock();
-    mainCharacters->player->getComponent<components::core::KeyboardAttackComponent>()->disable();
+    mainCharacters->player->getComponent<components::core::KeyboardMeleeAttackComponent>()->disable();
     dialogueAliveTimer->restart();
 }
 
@@ -73,7 +73,7 @@ void Level1DialoguesController::startPlayerWithDruidFirstDialogue()
 {
     playerWithDruidFirstDialogueIsOngoing = true;
     mainCharacters->player->getComponent<components::core::MovementComponent>()->lock();
-    mainCharacters->player->getComponent<components::core::KeyboardAttackComponent>()->disable();
+    mainCharacters->player->getComponent<components::core::KeyboardMeleeAttackComponent>()->disable();
     dialogueAliveTimer->restart();
 }
 
@@ -81,7 +81,7 @@ void Level1DialoguesController::startPlayerWithDruidSecondDialogue()
 {
     playerWithDruidSecondDialogueIsOngoing = true;
     mainCharacters->player->getComponent<components::core::MovementComponent>()->lock();
-    mainCharacters->player->getComponent<components::core::KeyboardAttackComponent>()->disable();
+    mainCharacters->player->getComponent<components::core::KeyboardMeleeAttackComponent>()->disable();
     dialogueAliveTimer->restart();
 }
 
@@ -224,7 +224,7 @@ void Level1DialoguesController::handlePlayerWithDruidSecondDialogue(const input:
 void Level1DialoguesController::finishPlayerWithRabbitFirstDialogue()
 {
     mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->disable();
-    mainCharacters->player->getComponent<components::core::KeyboardAttackComponent>()->enable();
+    mainCharacters->player->getComponent<components::core::KeyboardMeleeAttackComponent>()->enable();
     mainCharacters->rabbit->getComponent<components::core::DialogueTextComponent>()->disable();
     mainCharacters->player->getComponent<components::core::MovementComponent>()->unlock();
     playerWithRabbitFirstDialogueIsOngoing = false;
@@ -233,7 +233,7 @@ void Level1DialoguesController::finishPlayerWithRabbitFirstDialogue()
 void Level1DialoguesController::finishPlayerWithRabbitLastDialogue()
 {
     mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->disable();
-    mainCharacters->player->getComponent<components::core::KeyboardAttackComponent>()->enable();
+    mainCharacters->player->getComponent<components::core::KeyboardMeleeAttackComponent>()->enable();
     mainCharacters->rabbit->getComponent<components::core::DialogueTextComponent>()->disable();
     mainCharacters->player->getComponent<components::core::MovementComponent>()->unlock();
     playerWithRabbitLastDialogueIsOngoing = false;
@@ -242,7 +242,7 @@ void Level1DialoguesController::finishPlayerWithRabbitLastDialogue()
 void Level1DialoguesController::finishPlayerWithDruidFirstDialogue()
 {
     mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->disable();
-    mainCharacters->player->getComponent<components::core::KeyboardAttackComponent>()->enable();
+    mainCharacters->player->getComponent<components::core::KeyboardMeleeAttackComponent>()->enable();
     mainCharacters->npc->getComponent<components::core::DialogueTextComponent>()->disable();
     mainCharacters->player->getComponent<components::core::MovementComponent>()->unlock();
     playerWithDruidFirstDialogueIsOngoing = false;
@@ -251,7 +251,7 @@ void Level1DialoguesController::finishPlayerWithDruidFirstDialogue()
 void Level1DialoguesController::finishPlayerWithDruidSecondDialogue()
 {
     mainCharacters->player->getComponent<components::core::DialogueTextComponent>()->disable();
-    mainCharacters->player->getComponent<components::core::KeyboardAttackComponent>()->enable();
+    mainCharacters->player->getComponent<components::core::KeyboardMeleeAttackComponent>()->enable();
     mainCharacters->npc->getComponent<components::core::DialogueTextComponent>()->disable();
     mainCharacters->player->getComponent<components::core::MovementComponent>()->unlock();
     playerWithDruidSecondDialogueIsOngoing = false;
