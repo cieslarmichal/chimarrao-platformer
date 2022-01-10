@@ -3,7 +3,6 @@
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
-#include "AttackStrategyMock.h"
 #include "DialoguesReaderMock.h"
 #include "InputMock.h"
 #include "RendererPoolMock.h"
@@ -16,6 +15,8 @@
 #include "KeyboardHorizontalMovementComponent.h"
 #include "MovementComponent.h"
 #include "ProjectPathReader.h"
+#include "RayCastMock.h"
+#include "FriendlyFireValidatorMock.h"
 
 using namespace game;
 using namespace ::testing;
@@ -98,8 +99,13 @@ public:
     StrictMock<input::InputMock> input;
     std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
         std::make_shared<StrictMock<animations::AnimatorMock>>();
-    std::shared_ptr<StrictMock<components::core::AttackStrategyMock>> attackStrategy =
-        std::make_shared<StrictMock<components::core::AttackStrategyMock>>();
+    std::shared_ptr<StrictMock<physics::RayCastMock>> rayCast =
+        std::make_shared<StrictMock<physics::RayCastMock>>();
+    std::unique_ptr<StrictMock<components::core::FriendlyFireValidatorMock>> friendlyFireValidatorInit{
+        std::make_unique<StrictMock<components::core::FriendlyFireValidatorMock>>()};
+    StrictMock<components::core::FriendlyFireValidatorMock>* friendlyFireValidator{friendlyFireValidatorInit.get()};
+    std::shared_ptr<components::core::MeleeAttack> meleeAttack =
+        std::make_shared<components::core::MeleeAttack>(player.get(), rayCast, std::move(friendlyFireValidatorInit));
 };
 
 class Level1DialoguesControllerTest : public Level1DialoguesControllerTest_Base
@@ -109,7 +115,7 @@ public:
     {
         player->addComponent<components::core::KeyboardHorizontalMovementComponent>();
         player->addComponent<components::core::AnimationComponent>(animator);
-        player->addComponent<components::core::KeyboardMeleeAttackComponent>(attackStrategy);
+        player->addComponent<components::core::KeyboardMeleeAttackComponent>(meleeAttack);
 
         auto playerText = player->addComponent<components::core::DialogueTextComponent>(
             rendererPool, position1, "xxx", fontPath, dummyFontSize);

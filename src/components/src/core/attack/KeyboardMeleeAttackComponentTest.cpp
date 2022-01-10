@@ -3,8 +3,9 @@
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
-#include "AttackStrategyMock.h"
+#include "FriendlyFireValidatorMock.h"
 #include "InputMock.h"
+#include "RayCastMock.h"
 #include "RendererPoolMock.h"
 
 #include "exceptions/DependentComponentNotFound.h"
@@ -18,7 +19,12 @@ public:
     KeyboardMeleeAttackComponentTest()
     {
         componentOwner.addComponent<AnimationComponent>(animator);
+        componentOwner.addComponent<VelocityComponent>(6);
+        componentOwner.addComponent<DirectionComponent>();
+        componentOwner.addComponent<AnimationComponent>(animator);
+        componentOwner.addComponent<BoxColliderComponent>(size);
         attackComponent.loadDependentComponents();
+        componentOwner.loadDependentComponents();
     }
 
     const utils::Vector2f size{5, 5};
@@ -32,9 +38,15 @@ public:
     const utils::DeltaTime deltaTime{3};
     std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
         std::make_shared<StrictMock<animations::AnimatorMock>>();
-    std::shared_ptr<StrictMock<AttackStrategyMock>> attackStrategy =
-        std::make_shared<StrictMock<AttackStrategyMock>>();
-    KeyboardMeleeAttackComponent attackComponent{&componentOwner, attackStrategy};
+    std::shared_ptr<StrictMock<physics::RayCastMock>> rayCast =
+        std::make_shared<StrictMock<physics::RayCastMock>>();
+    std::unique_ptr<StrictMock<FriendlyFireValidatorMock>> friendlyFireValidatorInit{
+        std::make_unique<StrictMock<FriendlyFireValidatorMock>>()};
+    StrictMock<FriendlyFireValidatorMock>* friendlyFireValidator{friendlyFireValidatorInit.get()};
+    std::shared_ptr<MeleeAttack> meleeAttack =
+        std::make_shared<MeleeAttack>(&componentOwner, rayCast, std::move(friendlyFireValidatorInit));
+    KeyboardMeleeAttackComponent attackComponent{&componentOwner, meleeAttack};
+    physics::RayCastResult rayCastResult;
 };
 
 TEST_F(KeyboardMeleeAttackComponentTest,
@@ -43,7 +55,7 @@ TEST_F(KeyboardMeleeAttackComponentTest,
     ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider",
                                                     sharedContext};
     KeyboardMeleeAttackComponent attackComponentWithoutBoxCollider{&componentOwnerWithoutBoxCollider,
-                                                              attackStrategy};
+                                                                   meleeAttack};
 
     ASSERT_THROW(attackComponentWithoutBoxCollider.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
@@ -56,7 +68,8 @@ TEST_F(KeyboardMeleeAttackComponentTest, givenSpaceNotPressed_shouldNotCallAttac
     attackComponent.update(deltaTime, input);
 }
 
-TEST_F(KeyboardMeleeAttackComponentTest, givenSpacePressedAndAnimationIsAlreadyAttack_shouldNotCallAttackStrategy)
+TEST_F(KeyboardMeleeAttackComponentTest,
+       givenSpacePressedAndAnimationIsAlreadyAttack_shouldNotCallAttackStrategy)
 {
     EXPECT_CALL(input, isKeyPressed(input::InputKey::Space)).WillOnce(Return(true));
     EXPECT_CALL(*animator, getAnimationType()).WillOnce(Return(animations::AnimationType::Attack));
@@ -90,7 +103,8 @@ TEST_F(
         .WillOnce(Return(animations::AnimationType::Attack));
     EXPECT_CALL(*animator, setAnimation(animations::AnimationType::Attack));
     EXPECT_CALL(*animator, getCurrentAnimationProgressInPercents()).WillOnce(Return(63));
-    EXPECT_CALL(*attackStrategy, attack());
+    EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Left));
+    EXPECT_CALL(*rayCast, cast(_, _, _, _)).WillOnce(Return(rayCastResult));
 
     attackComponent.update(deltaTime, input);
 }

@@ -3,8 +3,9 @@
 #include "gtest/gtest.h"
 
 #include "AnimatorMock.h"
-#include "AttackStrategyMock.h"
+#include "FriendlyFireValidatorMock.h"
 #include "InputMock.h"
+#include "RayCastMock.h"
 #include "RendererPoolMock.h"
 
 #include "exceptions/DependentComponentNotFound.h"
@@ -18,6 +19,11 @@ public:
     ArtificialIntelligenceAttackComponentTest()
     {
         componentOwner.addComponent<AnimationComponent>(animator);
+        componentOwner.addComponent<VelocityComponent>(6);
+        componentOwner.addComponent<DirectionComponent>();
+        componentOwner.addComponent<AnimationComponent>(animator);
+        componentOwner.addComponent<BoxColliderComponent>(size);
+        componentOwner.loadDependentComponents();
     }
 
     const utils::Vector2f size{5, 5};
@@ -35,8 +41,14 @@ public:
     const utils::DeltaTime deltaTime{3};
     std::shared_ptr<StrictMock<animations::AnimatorMock>> animator =
         std::make_shared<StrictMock<animations::AnimatorMock>>();
-    std::shared_ptr<StrictMock<AttackStrategyMock>> attackStrategy =
-        std::make_shared<StrictMock<AttackStrategyMock>>();
+    std::shared_ptr<StrictMock<physics::RayCastMock>> rayCast =
+        std::make_shared<StrictMock<physics::RayCastMock>>();
+    std::unique_ptr<StrictMock<FriendlyFireValidatorMock>> friendlyFireValidatorInit{
+        std::make_unique<StrictMock<FriendlyFireValidatorMock>>()};
+    StrictMock<FriendlyFireValidatorMock>* friendlyFireValidator{friendlyFireValidatorInit.get()};
+    std::shared_ptr<MeleeAttack> meleeAttack =
+        std::make_shared<MeleeAttack>(&componentOwner, rayCast, std::move(friendlyFireValidatorInit));
+    physics::RayCastResult rayCastResult;
 };
 
 TEST_F(ArtificialIntelligenceAttackComponentTest,
@@ -45,7 +57,7 @@ TEST_F(ArtificialIntelligenceAttackComponentTest,
     ComponentOwner componentOwnerWithoutBoxCollider{position1, "componentOwnerWithoutBoxCollider",
                                                     sharedContext};
     ArtificialIntelligenceAttackComponent attackComponentWithoutBoxCollider{&componentOwnerWithoutBoxCollider,
-                                                                            &targetInRange, attackStrategy};
+                                                                            &targetInRange, meleeAttack};
 
     ASSERT_THROW(attackComponentWithoutBoxCollider.loadDependentComponents(),
                  components::core::exceptions::DependentComponentNotFound);
@@ -53,7 +65,7 @@ TEST_F(ArtificialIntelligenceAttackComponentTest,
 
 TEST_F(ArtificialIntelligenceAttackComponentTest, givenTargetOutOfRange_shouldNotCallAttackStrategy)
 {
-    ArtificialIntelligenceAttackComponent attackComponent{&componentOwner, &targetOutOfRange, attackStrategy};
+    ArtificialIntelligenceAttackComponent attackComponent{&componentOwner, &targetOutOfRange, meleeAttack};
     attackComponent.loadDependentComponents();
 
     attackComponent.update(deltaTime, input);
@@ -62,7 +74,7 @@ TEST_F(ArtificialIntelligenceAttackComponentTest, givenTargetOutOfRange_shouldNo
 TEST_F(ArtificialIntelligenceAttackComponentTest,
        givenTargetInRangeAndAnimationIsAlreadyAttack_shouldNotCallAttackStrategy)
 {
-    ArtificialIntelligenceAttackComponent attackComponent{&componentOwner, &targetInRange, attackStrategy};
+    ArtificialIntelligenceAttackComponent attackComponent{&componentOwner, &targetInRange, meleeAttack};
     attackComponent.loadDependentComponents();
     EXPECT_CALL(*animator, getAnimationType()).WillOnce(Return(animations::AnimationType::Attack));
 
@@ -73,7 +85,7 @@ TEST_F(
     ArtificialIntelligenceAttackComponentTest,
     givenSpacePressedAndAnimationIsDifferentThanAttackAndAttackAnimationProgressInLessThan60Percents_shouldSetAnimationToAttackAndNotCallAttackStrategy)
 {
-    ArtificialIntelligenceAttackComponent attackComponent{&componentOwner, &targetInRange, attackStrategy};
+    ArtificialIntelligenceAttackComponent attackComponent{&componentOwner, &targetInRange, meleeAttack};
     attackComponent.loadDependentComponents();
     EXPECT_CALL(*animator, getAnimationType())
         .WillOnce(Return(animations::AnimationType::Idle))
@@ -88,14 +100,15 @@ TEST_F(
     ArtificialIntelligenceAttackComponentTest,
     givenSpacePressedAndAnimationIsDifferentThanAttackAndAttackAnimationProgressInMoreThan60Percents_shouldSetAnimationToAttackAndCallAttackStrategy)
 {
-    ArtificialIntelligenceAttackComponent attackComponent{&componentOwner, &targetInRange, attackStrategy};
+    ArtificialIntelligenceAttackComponent attackComponent{&componentOwner, &targetInRange, meleeAttack};
     attackComponent.loadDependentComponents();
     EXPECT_CALL(*animator, getAnimationType())
         .WillOnce(Return(animations::AnimationType::Idle))
         .WillOnce(Return(animations::AnimationType::Attack));
     EXPECT_CALL(*animator, setAnimation(animations::AnimationType::Attack));
     EXPECT_CALL(*animator, getCurrentAnimationProgressInPercents()).WillOnce(Return(63));
-    EXPECT_CALL(*attackStrategy, attack());
+    EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Left));
+    EXPECT_CALL(*rayCast, cast(_, _, _, _)).WillOnce(Return(rayCastResult));
 
     attackComponent.update(deltaTime, input);
 }

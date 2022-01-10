@@ -2,7 +2,6 @@
 
 #include <mutex>
 
-#include "AttackStrategy.h"
 #include "BoxColliderComponent.h"
 #include "DefaultFriendlyFireValidator.h"
 #include "DirectionComponent.h"
@@ -11,13 +10,13 @@
 
 namespace components::core
 {
-class MeleeAttack : public AttackStrategy
+class MeleeAttack
 {
 public:
     MeleeAttack(ComponentOwner* owner, std::shared_ptr<physics::RayCast>,
                 std::unique_ptr<FriendlyFireValidator>);
 
-    void attack() override;
+    void attack();
 
 private:
     void loadDependentComponents();

@@ -7,8 +7,8 @@ namespace components::core
 {
 
 KeyboardMeleeAttackComponent::KeyboardMeleeAttackComponent(ComponentOwner* owner,
-                                                 std::shared_ptr<AttackStrategy> attackStrategy)
-    : Component{owner}, attackStrategy{std::move(attackStrategy)}
+                                                           std::shared_ptr<MeleeAttack> meleeAttackInit)
+    : Component{owner}, meleeAttack{std::move(meleeAttackInit)}
 
 {
 }
@@ -44,7 +44,7 @@ void KeyboardMeleeAttackComponent::update(utils::DeltaTime, const input::Input& 
     if (attemptToAttack and animation->getAnimationType() == animations::AnimationType::Attack &&
         animation->getCurrentAnimationProgressInPercents() >= 60)
     {
-        attackStrategy->attack();
+        meleeAttack->attack();
         attemptToAttack = false;
     }
 }

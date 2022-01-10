@@ -6,8 +6,8 @@ namespace components::core
 {
 
 ArtificialIntelligenceAttackComponent::ArtificialIntelligenceAttackComponent(
-    ComponentOwner* owner, ComponentOwner* target, std::shared_ptr<AttackStrategy> attackStrategy)
-    : Component{owner}, target{target}, attackStrategy{std::move(attackStrategy)}
+    ComponentOwner* owner, ComponentOwner* target, std::shared_ptr<MeleeAttack> meleeAttack)
+    : Component{owner}, target{target}, meleeAttack{std::move(meleeAttack)}
 
 {
 }
@@ -37,7 +37,7 @@ void ArtificialIntelligenceAttackComponent::update(utils::DeltaTime, const input
     if (attemptToAttack and animation->getAnimationType() == animations::AnimationType::Attack &&
         animation->getCurrentAnimationProgressInPercents() >= 60)
     {
-        attackStrategy->attack();
+        meleeAttack->attack();
         attemptToAttack = false;
     }
 }

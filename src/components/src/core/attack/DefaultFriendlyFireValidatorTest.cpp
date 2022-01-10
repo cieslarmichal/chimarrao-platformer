@@ -2,7 +2,6 @@
 
 #include "gtest/gtest.h"
 
-#include "AttackStrategyMock.h"
 #include "InputMock.h"
 #include "RendererPoolMock.h"
 
