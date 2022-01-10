@@ -28,12 +28,14 @@ set(SOURCES
         src/core/health/HealthBarComponent.cpp
         src/core/DirectionComponent.cpp
         src/core/attack/KeyboardMeleeAttackComponent.cpp
+        src/core/attack/KeyboardDistanceAttackComponent.cpp
         src/core/movement/IdleNpcMovementComponent.cpp
         src/core/movement/FreeFallMovementComponent.cpp
         src/core/items/CollectableItemComponent.cpp
         src/core/items/ItemCollectorComponent.cpp
         src/core/items/ItemHealEffect.cpp
         src/core/attack/MeleeAttack.cpp
+        src/core/attack/DistanceAttack.cpp
         src/core/attack/ArtificialIntelligenceAttackComponent.cpp
         src/core/attack/DefaultFriendlyFireValidator.cpp
         src/core/LimitedSpaceActionComponent.cpp
@@ -76,6 +78,7 @@ set(UT_SOURCES
         src/core/items/ItemCollectorComponentTest.cpp
         src/core/items/ItemHealEffectTest.cpp
         src/core/attack/MeleeAttackTest.cpp
+        src/core/attack/DistanceAttackTest.cpp
         src/core/attack/ArtificialIntelligenceAttackComponentTest.cpp
         src/core/attack/DefaultFriendlyFireValidatorTest.cpp
         src/core/LimitedSpaceActionComponentTest.cpp
