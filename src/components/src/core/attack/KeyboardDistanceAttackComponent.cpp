@@ -8,7 +8,7 @@ namespace components::core
 
 KeyboardDistanceAttackComponent::KeyboardDistanceAttackComponent(
     ComponentOwner* owner, std::shared_ptr<DistanceAttack> distanceAttackInit)
-    : Component{owner}, distanceAttack{std::move(distanceAttackInit)}, timeBetweenAttacks{1.f}
+    : Component{owner}, distanceAttack{std::move(distanceAttackInit)}, timeBetweenAttacks{2.f}
 {
     attackIntervalTimer = utils::TimerFactory::createTimer();
 }
@@ -24,6 +24,7 @@ void KeyboardDistanceAttackComponent::update(utils::DeltaTime, const input::Inpu
         input.isKeyPressed(input::InputKey::F))
     {
         distanceAttack->attack();
+        attackIntervalTimer->restart();
     }
 }
 

@@ -18,6 +18,8 @@ void DefaultComponentOwnersManager::add(std::shared_ptr<ComponentOwner> owner)
 
 void DefaultComponentOwnersManager::update(const utils::DeltaTime& deltaTime, const input::Input& input)
 {
+    processNewObjects();
+
     for (auto& componentOwner : componentOwners)
     {
         componentOwner->update(deltaTime, input);

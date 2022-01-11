@@ -46,12 +46,11 @@ void DistanceAttack::attack()
         utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f});
     const auto animationDirection =
         heading.x == 1 ? animations::AnimationDirection::Right : animations::AnimationDirection::Left;
-    projectile->addComponent<components::core::VelocityComponent>(10);
+    projectile->addComponent<components::core::VelocityComponent>(30);
     projectile->addComponent<components::core::ProjectileFlyMovementComponent>(animationDirection);
     projectile->addComponent<components::core::ExplodeOnCollisionComponent>(50);
 
     ownersManager->add(projectile);
-    ownersManager->processNewObjects();
 }
 
 void DistanceAttack::loadDependentComponents()

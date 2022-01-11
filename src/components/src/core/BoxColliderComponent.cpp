@@ -8,6 +8,7 @@
 #include "IdleNpcMovementComponent.h"
 #include "KeyboardAnimatedMovementComponent.h"
 #include "KeyboardHorizontalMovementComponent.h"
+#include "ProjectileFlyMovementComponent.h"
 
 namespace components::core
 {
@@ -58,6 +59,11 @@ void BoxColliderComponent::loadDependentComponents()
     if (not movementComponent)
     {
         movementComponent = owner->getComponent<KeyboardHorizontalMovementComponent>();
+    }
+
+    if (not movementComponent)
+    {
+        movementComponent = owner->getComponent<ProjectileFlyMovementComponent>();
     }
 
     velocityComponent = owner->getComponent<VelocityComponent>();

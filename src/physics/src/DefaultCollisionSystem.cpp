@@ -6,6 +6,7 @@
 #include "IdleNpcMovementComponent.h"
 #include "KeyboardAnimatedMovementComponent.h"
 #include "KeyboardHorizontalMovementComponent.h"
+#include "ProjectileFlyMovementComponent.h"
 
 namespace physics
 {
@@ -92,7 +93,8 @@ void DefaultCollisionSystem::resolve()
                 not collider->getOwner().getComponent<components::core::IdleNpcMovementComponent>() and
                 not collider->getOwner().getComponent<components::core::FreeFallMovementComponent>() and
                 not collider->getOwner()
-                        .getComponent<components::core::KeyboardHorizontalMovementComponent>())
+                        .getComponent<components::core::KeyboardHorizontalMovementComponent>() and
+                not collider->getOwner().getComponent<components::core::ProjectileFlyMovementComponent>())
             {
                 continue;
             }
