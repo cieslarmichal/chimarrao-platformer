@@ -46,7 +46,7 @@ public:
     std::shared_ptr<MeleeAttack> meleeAttack =
         std::make_shared<MeleeAttack>(&componentOwner, rayCast, std::move(friendlyFireValidatorInit));
     KeyboardMeleeAttackComponent attackComponent{&componentOwner, meleeAttack};
-    physics::RayCastResult rayCastResult;
+    physics::RayCastResult rayCastResult{nullptr};
 };
 
 TEST_F(KeyboardMeleeAttackComponentTest,

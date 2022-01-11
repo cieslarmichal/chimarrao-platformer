@@ -20,12 +20,14 @@ public:
     {
         componentOwner1.addComponent<VelocityComponent>(6);
         componentOwner1.addComponent<DirectionComponent>();
+        componentOwner1.addComponent<MovementComponent>();
         componentOwner1.addComponent<AnimationComponent>(animator);
         boxColliderComponent1 = componentOwner1.addComponent<BoxColliderComponent>(size);
         componentOwner1.loadDependentComponents();
 
         componentOwnerOnRightInRange.addComponent<VelocityComponent>(6);
         componentOwnerOnRightInRange.addComponent<DirectionComponent>();
+        componentOwnerOnRightInRange.addComponent<MovementComponent>();
         componentOwnerOnRightInRange.addComponent<AnimationComponent>(animator);
         targetHealthComponentInRange = componentOwnerOnRightInRange.addComponent<HealthComponent>(100);
         componentOwnerOnRightInRange.addComponent<BoxColliderComponent>(size);
@@ -33,6 +35,7 @@ public:
 
         componentOwnerOnRightOutOfRange.addComponent<VelocityComponent>(6);
         componentOwnerOnRightOutOfRange.addComponent<DirectionComponent>();
+        componentOwnerOnRightOutOfRange.addComponent<MovementComponent>();
         componentOwnerOnRightOutOfRange.addComponent<AnimationComponent>(animator);
         targetHealthComponentOutOfRange = componentOwnerOnRightOutOfRange.addComponent<HealthComponent>(100);
         componentOwnerOnRightOutOfRange.addComponent<BoxColliderComponent>(size);
@@ -97,19 +100,6 @@ TEST_F(ExplodeOnCollisionComponentTest, givenTargetInAttackRangeAndAnimationFini
     explodeOnCollisionComponent.update(deltaTime, input);
 
     ASSERT_EQ(targetHealthComponentInRange->getCurrentHealth(), 90);
-}
-
-TEST_F(ExplodeOnCollisionComponentTest,
-       givenTargetInAttackRangeAndAnimationNotFinished_shouldNotDealDamageToTarget)
-{
-    explodeOnCollisionComponent.loadDependentComponents();
-    boxColliderComponent1->setColliderOnXAxis(&componentOwnerOnRightInRange);
-    EXPECT_CALL(*animator, setAnimation(animations::AnimationType::Explode));
-    EXPECT_CALL(*animator, getCurrentAnimationProgressInPercents()).WillOnce(Return(50));
-
-    explodeOnCollisionComponent.update(deltaTime, input);
-
-    ASSERT_EQ(targetHealthComponentInRange->getCurrentHealth(), 100);
 }
 
 TEST_F(ExplodeOnCollisionComponentTest, givenTargetOutOfAttackRange_shouldNotDealAnyDamageToTarget)

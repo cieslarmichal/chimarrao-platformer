@@ -34,6 +34,7 @@ TEST_F(DefaultComponentOwnersManagerTest, addComponentOwner_shouldNotThrow)
 TEST_F(DefaultComponentOwnersManagerTest, update_shouldUpdateCollisions)
 {
     EXPECT_CALL(*collisionSystem, update());
+    EXPECT_CALL(*collisionSystem, processRemovals());
 
     componentOwnersManager.update(deltaTime, input);
 }

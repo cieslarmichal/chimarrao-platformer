@@ -26,7 +26,8 @@ void DistanceAttack::attack()
     const auto& ownerPosition = boxColliderComponent->getPosition();
     const auto size = boxColliderComponent->getSize();
 
-    const auto startPositionOnXAxis = heading.x == 1 ? ownerPosition.x + size.x + 1 : ownerPosition.x - size.x;
+    const auto startPositionOnXAxis =
+        heading.x == 1 ? ownerPosition.x + size.x + 1 : ownerPosition.x - size.x;
     const auto startPositionOnYAxis = ownerPosition.y;
     const auto startPosition = utils::Vector2f{startPositionOnXAxis, startPositionOnYAxis};
 
