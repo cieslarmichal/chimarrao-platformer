@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ComponentOwner.h"
+#include "Timer.h"
 
 namespace components::core
 {
@@ -15,5 +16,7 @@ public:
 
 private:
     std::shared_ptr<DistanceAttack> distanceAttack;
+    std::unique_ptr<utils::Timer> attackIntervalTimer;
+    const float timeBetweenAttacks;
 };
 }

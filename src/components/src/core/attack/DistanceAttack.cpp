@@ -51,6 +51,7 @@ void DistanceAttack::attack()
     projectile->addComponent<components::core::ExplodeOnCollisionComponent>(50);
 
     ownersManager->add(projectile);
+    ownersManager->processNewObjects();
 }
 
 void DistanceAttack::loadDependentComponents()

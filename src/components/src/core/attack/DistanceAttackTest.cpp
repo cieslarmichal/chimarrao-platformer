@@ -67,6 +67,7 @@ TEST_F(DistanceAttackTest, attack_shouldAddNewObjectToComponentOwnersManager)
 {
     EXPECT_CALL(*animator, getAnimationDirection()).WillOnce(Return(animations::AnimationDirection::Left));
     EXPECT_CALL(*componentOwnersManager, add(_));
+    EXPECT_CALL(*componentOwnersManager, processNewObjects());
 
     distanceAttack.attack();
 }
