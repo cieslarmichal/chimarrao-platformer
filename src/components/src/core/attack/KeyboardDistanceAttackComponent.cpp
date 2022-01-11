@@ -19,7 +19,7 @@ void KeyboardDistanceAttackComponent::update(utils::DeltaTime, const input::Inpu
         return;
     }
 
-    if (input.isKeyPressed(input::InputKey::Space))
+    if (input.isKeyPressed(input::InputKey::F))
     {
         distanceAttack->attack();
     }
