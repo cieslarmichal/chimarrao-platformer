@@ -58,8 +58,6 @@ Level1Controller::Level1Controller(
         ownersManager->add(worldObject);
     }
 
-    ownersManager->processNewObjects();
-
     startFirstDialogueTimer = utils::TimerFactory::createTimer();
     sleepTimer = utils::TimerFactory::createTimer();
     deadTimer = utils::TimerFactory::createTimer();
@@ -130,7 +128,6 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
 
     dialoguesController->update(input);
     ownersManager->update(deltaTime, input);
-    ownersManager->processRemovals();
 
     return false;
 }

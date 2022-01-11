@@ -67,7 +67,7 @@ multipleFilesAnimators:
         interruptionAllowed: true
       - type: explode
         firstTexturePath: resources/comet/explode/explode-1.png
-        numberOfTextures: 7
+        numberOfTextures: 6
         timeBetweenTexturesInSeconds: 0.1
         loopsAllowed: false
         interruptionAllowed: false

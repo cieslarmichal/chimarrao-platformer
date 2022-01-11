@@ -20,8 +20,10 @@ public:
 private:
     std::shared_ptr<BoxColliderComponent> boxColliderComponent;
     std::shared_ptr<AnimationComponent> animationComponent;
+    std::shared_ptr<MovementComponent> movementComponent;
     const unsigned int damage;
     bool explosionStarted;
+    bool explosionFinished;
     ComponentOwner* target;
 };
 }

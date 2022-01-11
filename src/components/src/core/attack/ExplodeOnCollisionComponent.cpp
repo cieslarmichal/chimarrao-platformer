@@ -6,7 +6,7 @@ namespace components::core
 {
 
 ExplodeOnCollisionComponent::ExplodeOnCollisionComponent(ComponentOwner* owner, unsigned int damage)
-    : Component{owner}, damage{damage}, explosionStarted{false}, target{nullptr}
+    : Component{owner}, damage{damage}, explosionStarted{false}, explosionFinished{false}, target{nullptr}
 {
 }
 
@@ -33,28 +33,44 @@ void ExplodeOnCollisionComponent::loadDependentComponents()
         throw exceptions::DependentComponentNotFound{
             "ExplodeOnCollisionComponent: BoxColliderComponent not found"};
     }
+
+    movementComponent = owner->getComponent<MovementComponent>();
+    if (movementComponent)
+    {
+        movementComponent->loadDependentComponents();
+    }
+    else
+    {
+        throw exceptions::DependentComponentNotFound{
+            "ExplodeOnCollisionComponent: MovementComponent not found"};
+    }
 }
 
 void ExplodeOnCollisionComponent::update(utils::DeltaTime, const input::Input&)
 {
-    if (not target)
+    if (explosionFinished)
     {
-        target = boxColliderComponent->getCurrentColliderOnXAxis();
+        return;
     }
 
-    if (target and not explosionStarted)
+    const auto validTarget = boxColliderComponent->getCurrentColliderOnXAxis();
+
+    if (validTarget and not explosionStarted)
     {
+        target = validTarget;
         animationComponent->setAnimation(animations::AnimationType::Explode);
         explosionStarted = true;
-    }
+        movementComponent->lock();
 
-    if (explosionStarted and animationComponent->getCurrentAnimationProgressInPercents() == 100)
-    {
         if (auto health = target->getComponent<HealthComponent>())
         {
             health->loseHealthPoints(damage);
         }
+    }
 
+    if (explosionStarted and animationComponent->getCurrentAnimationProgressInPercents() == 100)
+    {
+        explosionFinished = true;
         owner->remove();
     }
 }

@@ -38,7 +38,7 @@ void ProjectileFlyMovementComponent::loadDependentComponents()
 
 void ProjectileFlyMovementComponent::update(utils::DeltaTime, const input::Input&)
 {
-    if (not enabled)
+    if (not enabled or locked)
     {
         return;
     }
@@ -61,7 +61,7 @@ void ProjectileFlyMovementComponent::update(utils::DeltaTime, const input::Input
 
 void ProjectileFlyMovementComponent::lateUpdate(utils::DeltaTime deltaTime, const input::Input&)
 {
-    if (not enabled)
+    if (not enabled or locked)
     {
         return;
     }

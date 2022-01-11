@@ -20,6 +20,7 @@ void DefaultComponentOwnersManager::update(const utils::DeltaTime& deltaTime, co
 {
     processNewObjects();
 
+    std::cerr << componentOwners.size()<< std::endl;
     for (auto& componentOwner : componentOwners)
     {
         componentOwner->update(deltaTime, input);
@@ -31,6 +32,8 @@ void DefaultComponentOwnersManager::update(const utils::DeltaTime& deltaTime, co
     {
         componentOwner->lateUpdate(deltaTime, input);
     }
+
+    processRemovals();
 }
 
 void DefaultComponentOwnersManager::processNewObjects()

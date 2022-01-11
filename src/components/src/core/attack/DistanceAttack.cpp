@@ -26,7 +26,7 @@ void DistanceAttack::attack()
     const auto& ownerPosition = boxColliderComponent->getPosition();
     const auto size = boxColliderComponent->getSize();
 
-    const auto startPositionOnXAxis = heading.x == 1 ? ownerPosition.x + size.x + 1 : ownerPosition.x - 1;
+    const auto startPositionOnXAxis = heading.x == 1 ? ownerPosition.x + size.x + 1 : ownerPosition.x - size.x;
     const auto startPositionOnYAxis = ownerPosition.y;
     const auto startPosition = utils::Vector2f{startPositionOnXAxis, startPositionOnYAxis};
 
@@ -46,7 +46,7 @@ void DistanceAttack::attack()
         utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f});
     const auto animationDirection =
         heading.x == 1 ? animations::AnimationDirection::Right : animations::AnimationDirection::Left;
-    projectile->addComponent<components::core::VelocityComponent>(30);
+    projectile->addComponent<components::core::VelocityComponent>(35);
     projectile->addComponent<components::core::ProjectileFlyMovementComponent>(animationDirection);
     projectile->addComponent<components::core::ExplodeOnCollisionComponent>(50);
 
