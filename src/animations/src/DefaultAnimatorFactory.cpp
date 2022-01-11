@@ -32,6 +32,12 @@ std::unique_ptr<Animator> DefaultAnimatorFactory::createDruidAnimator(graphics::
                                                   "druid", AnimationType::Walk);
 }
 
+std::unique_ptr<Animator> DefaultAnimatorFactory::createCometAnimator(graphics::GraphicsId graphicsId) const
+{
+    return std::make_unique<MultipleFileAnimator>(graphicsId, rendererPool, animatorSettingsRepository,
+                                                  "comet", AnimationType::Fly);
+}
+
 std::unique_ptr<Animator> DefaultAnimatorFactory::createBanditAnimator(graphics::GraphicsId graphicsId) const
 {
     return std::make_unique<SingleFileAnimator>(graphicsId, rendererPool, animatorSettingsRepository,

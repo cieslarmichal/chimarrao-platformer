@@ -1,5 +1,7 @@
 #include "DistanceAttack.h"
 
+#include "ExplodeOnCollisionComponent.h"
+#include "ProjectileFlyMovementComponent.h"
 #include "exceptions/DependentComponentNotFound.h"
 #include "health/HealthComponent.h"
 
@@ -37,13 +39,16 @@ void DistanceAttack::attack()
         sharedContext->rendererPool, utils::Vector2f{3.f, 3.5f}, startPosition, graphics::Color::White,
         graphics::VisibilityLayer::Second);
     auto projectileGraphicsId = projectileGraphicsComponent->getGraphicsId();
-    const std::shared_ptr<animations::Animator> druidAnimator =
-        animatorFactory->createDruidAnimator(projectileGraphicsId);
-    projectile->addComponent<components::core::AnimationComponent>(druidAnimator);
+    const std::shared_ptr<animations::Animator> cometAnimator =
+        animatorFactory->createCometAnimator(projectileGraphicsId);
+    projectile->addComponent<components::core::AnimationComponent>(cometAnimator);
     projectile->addComponent<components::core::BoxColliderComponent>(
         utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f});
+    const auto animationDirection =
+        heading.x == 1 ? animations::AnimationDirection::Right : animations::AnimationDirection::Left;
     projectile->addComponent<components::core::VelocityComponent>(0);
-    //    projectile->addComponent<components::core::IdleNpcMovementComponent>(player.get());
+    projectile->addComponent<components::core::ProjectileFlyMovementComponent>(animationDirection);
+    projectile->addComponent<components::core::ExplodeOnCollisionComponent>(50);
 
     ownersManager->add(projectile);
 }

@@ -13,6 +13,7 @@ public:
     std::unique_ptr<Animator> createBunnyAnimator(graphics::GraphicsId) const override;
     std::unique_ptr<Animator> createPlayerAnimator(graphics::GraphicsId) const override;
     std::unique_ptr<Animator> createDruidAnimator(graphics::GraphicsId) const override;
+    std::unique_ptr<Animator> createCometAnimator(graphics::GraphicsId) const override;
     std::unique_ptr<Animator> createBanditAnimator(graphics::GraphicsId) const override;
     std::unique_ptr<Animator> createCampfireAnimator(graphics::GraphicsId) const override;
 

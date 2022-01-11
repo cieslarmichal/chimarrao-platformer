@@ -19,6 +19,7 @@ public:
     virtual std::unique_ptr<Animator> createBunnyAnimator(graphics::GraphicsId) const = 0;
     virtual std::unique_ptr<Animator> createPlayerAnimator(graphics::GraphicsId) const = 0;
     virtual std::unique_ptr<Animator> createDruidAnimator(graphics::GraphicsId) const = 0;
+    virtual std::unique_ptr<Animator> createCometAnimator(graphics::GraphicsId) const = 0;
     virtual std::unique_ptr<Animator> createBanditAnimator(graphics::GraphicsId) const = 0;
     virtual std::unique_ptr<Animator> createCampfireAnimator(graphics::GraphicsId) const = 0;
 
