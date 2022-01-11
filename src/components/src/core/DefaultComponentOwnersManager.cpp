@@ -20,7 +20,6 @@ void DefaultComponentOwnersManager::update(const utils::DeltaTime& deltaTime, co
 {
     processNewObjects();
 
-    std::cerr << componentOwners.size()<< std::endl;
     for (auto& componentOwner : componentOwners)
     {
         componentOwner->update(deltaTime, input);
@@ -46,7 +45,7 @@ void DefaultComponentOwnersManager::processNewObjects()
         }
 
         componentOwners.insert(componentOwners.end(), newComponentOwners.begin(), newComponentOwners.end());
-        collisionSystem->add(componentOwners);
+        collisionSystem->add(newComponentOwners);
         newComponentOwners.clear();
     }
 }
