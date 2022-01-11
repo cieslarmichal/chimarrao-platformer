@@ -9,12 +9,14 @@
 #include "CommonUIConfigElements.h"
 #include "DialogueTextComponent.h"
 #include "DirectionComponent.h"
+#include "DistanceAttack.h"
 #include "EnemyFollowerComponent.h"
 #include "FriendFollowerComponent.h"
 #include "GraphicsComponent.h"
 #include "IdleNpcMovementComponent.h"
 #include "ItemCollectorComponent.h"
 #include "KeyboardAnimatedMovementComponent.h"
+#include "KeyboardDistanceAttackComponent.h"
 #include "KeyboardMeleeAttackComponent.h"
 #include "LimitedSpaceActionComponent.h"
 #include "MeleeAttack.h"
@@ -61,9 +63,12 @@ CharacterFactory::createPlayer(const utils::Vector2f& position, std::function<vo
     player->addComponent<components::core::HealthComponent>(200, std::move(deadAction));
     player->addComponent<components::core::DirectionComponent>();
     auto friendlyFireValidator = std::make_unique<components::core::DefaultFriendlyFireValidator>();
-    auto attackStrategy = std::make_shared<components::core::MeleeAttack>(player.get(), rayCast,
-                                                                          std::move(friendlyFireValidator));
-    player->addComponent<components::core::KeyboardMeleeAttackComponent>(attackStrategy);
+    auto meleeAttack = std::make_shared<components::core::MeleeAttack>(player.get(), rayCast,
+                                                                       std::move(friendlyFireValidator));
+    player->addComponent<components::core::KeyboardMeleeAttackComponent>(meleeAttack);
+    auto distanceAttack =
+        std::make_shared<components::core::DistanceAttack>(player.get(), sharedContext, ownersManager);
+    player->addComponent<components::core::KeyboardDistanceAttackComponent>(distanceAttack);
     const std::shared_ptr<utils::Timer> itemCollectorTimer = utils::TimerFactory::createTimer();
     player->addComponent<components::core::ItemCollectorComponent>(quadtree, rayCast, 8, itemCollectorTimer);
     player->addComponent<components::core::DialogueTextComponent>(sharedContext->rendererPool, position, "",

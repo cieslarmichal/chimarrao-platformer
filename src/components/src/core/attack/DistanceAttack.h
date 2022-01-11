@@ -28,7 +28,6 @@ private:
     unsigned int damage{10};
     std::once_flag componentsInitialized;
     std::shared_ptr<components::core::ComponentOwnersManager> ownersManager;
-    std::shared_ptr<components::core::ComponentOwner> projectile;
     std::unique_ptr<animations::AnimatorFactory> animatorFactory;
 };
 }

@@ -60,13 +60,13 @@ multipleFilesAnimators:
   - name: comet
     animations:
       - type: fly
-        firstTexturePath: resources/comet/fly-1.png
+        firstTexturePath: resources/comet/fly/fly-1.png
         numberOfTextures: 3
         timeBetweenTexturesInSeconds: 0.13
         loopsAllowed: true
         interruptionAllowed: true
       - type: explode
-        firstTexturePath: resources/comet/explode-1.png
+        firstTexturePath: resources/comet/explode/explode-1.png
         numberOfTextures: 7
         timeBetweenTexturesInSeconds: 0.1
         loopsAllowed: false

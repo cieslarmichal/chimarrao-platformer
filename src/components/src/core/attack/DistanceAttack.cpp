@@ -27,12 +27,12 @@ void DistanceAttack::attack()
     const auto size = boxColliderComponent->getSize();
 
     const auto startPositionOnXAxis = heading.x == 1 ? ownerPosition.x + size.x + 1 : ownerPosition.x - 1;
-    const auto startPositionOnYAxis = ownerPosition.y + (size.y / 2.f);
+    const auto startPositionOnYAxis = ownerPosition.y;
     const auto startPosition = utils::Vector2f{startPositionOnXAxis, startPositionOnYAxis};
 
     static int numberOfProjectilesInGame = 0;
     numberOfProjectilesInGame++;
-    projectile = std::make_shared<components::core::ComponentOwner>(
+    auto projectile = std::make_shared<components::core::ComponentOwner>(
         startPosition, "projectile" + std::to_string(numberOfProjectilesInGame), sharedContext,
         components::core::ComponentOwnerType::Friend);
     auto projectileGraphicsComponent = projectile->addGraphicsComponent(
@@ -46,7 +46,7 @@ void DistanceAttack::attack()
         utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f});
     const auto animationDirection =
         heading.x == 1 ? animations::AnimationDirection::Right : animations::AnimationDirection::Left;
-    projectile->addComponent<components::core::VelocityComponent>(0);
+    projectile->addComponent<components::core::VelocityComponent>(10);
     projectile->addComponent<components::core::ProjectileFlyMovementComponent>(animationDirection);
     projectile->addComponent<components::core::ExplodeOnCollisionComponent>(50);
 
