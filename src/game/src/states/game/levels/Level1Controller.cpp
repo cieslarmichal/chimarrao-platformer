@@ -78,9 +78,9 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
         std::call_once(playerWithRabbitDialogueStarted,
                        [this]
                        {
-                           //                           mainCharacters.player->getComponent<components::core::AnimationComponent>()
-                           //                               ->setAnimationDirection(animations::AnimationDirection::Left);
-                           //                           dialoguesController->startPlayerWithRabbitFirstDialogue();
+                           mainCharacters.player->getComponent<components::core::AnimationComponent>()
+                               ->setAnimationDirection(animations::AnimationDirection::Left);
+                           dialoguesController->startPlayerWithRabbitFirstDialogue();
                        });
     }
 
