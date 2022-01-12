@@ -82,8 +82,6 @@ void ItemCollectorComponent::collect(const std::shared_ptr<CollectableItemCompon
         item->collectBy(owner);
         items.push_back(item);
     }
-
-    std::cerr << items.size() << std::endl;
 }
 
 void ItemCollectorComponent::collectNearestItem()

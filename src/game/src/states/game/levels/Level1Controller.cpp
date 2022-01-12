@@ -5,6 +5,8 @@
 #include "AnimationComponent.h"
 #include "DefaultDialoguesReader.h"
 #include "DialogueTextComponent.h"
+#include "DistanceAttack.h"
+#include "KeyboardDistanceAttackComponent.h"
 #include "Level1WorldBuilder.h"
 #include "LimitedSpaceActionComponent.h"
 #include "MovementComponent.h"
@@ -28,10 +30,11 @@ Level1Controller::Level1Controller(
     std::shared_ptr<components::core::ComponentOwnersManager> ownersManagerInit,
     const std::shared_ptr<CharacterFactory>& characterFactory,
     const std::shared_ptr<ObstacleFactory>& obstacleFactory, const std::shared_ptr<ItemFactory>& itemFactory,
-    const std::shared_ptr<components::core::SharedContext>& sharedContext,
+    std::shared_ptr<components::core::SharedContext>  sharedContextInit,
     std::shared_ptr<utils::FileAccess> fileAccessInit,
     std::shared_ptr<components::ui::UIManager> uiManagerInit, StoryGameState* storyGameStateInit)
     : ownersManager{std::move(ownersManagerInit)},
+      sharedContext{std::move(sharedContextInit)},
       worldBuilder{std::make_unique<Level1WorldBuilder>(characterFactory, obstacleFactory, itemFactory,
                                                         sharedContext, this, ownersManager)},
       fileAccess{std::move(fileAccessInit)},
@@ -44,7 +47,8 @@ Level1Controller::Level1Controller(
       playerDead{false},
       playerSleepingNextToLastCampfire{false},
       levelFinished{false},
-      playerTalkedToDruid{false}
+      playerTalkedToDruid1{false},
+      playerTalkedToDruid2{false}
 {
     tileMap->loadFromFile(levelMap);
 
@@ -117,13 +121,19 @@ SwitchToNextLevel Level1Controller::update(const utils::DeltaTime& deltaTime, co
         storyGameState->gameOver();
     }
 
-    if (playerTalkedToDruid and dialoguesController->hasPlayerWithDruidFirstDialogueFinished())
+    if (playerTalkedToDruid1 and dialoguesController->hasPlayerWithDruidFirstDialogueFinished())
     {
         mainCharacters.npc->getComponent<components::core::DialogueTextComponent>()->setText(
             "Press E to talk");
         mainCharacters.npc->getComponent<components::core::LimitedSpaceActionComponent>()->setAction(
             [this]() { druidSecondAction(); });
-        playerTalkedToDruid = false;
+        playerTalkedToDruid1 = false;
+    }
+
+    if (playerTalkedToDruid2 and dialoguesController->hasPlayerWithDruidFirstDialogueFinished())
+    {
+        addDistanceAttackToPlayer();
+        playerTalkedToDruid2 = false;
     }
 
     dialoguesController->update(input);
@@ -169,12 +179,13 @@ void Level1Controller::lastCampfireAction()
 void Level1Controller::druidFirstAction()
 {
     dialoguesController->startPlayerWithDruidFirstDialogue();
-    playerTalkedToDruid = true;
+    playerTalkedToDruid1 = true;
 }
 
 void Level1Controller::druidSecondAction()
 {
     dialoguesController->startPlayerWithDruidSecondDialogue();
+    playerTalkedToDruid2 = true;
 }
 
 void Level1Controller::deadPlayerAction()
@@ -184,6 +195,13 @@ void Level1Controller::deadPlayerAction()
     mainCharacters.player->getComponent<components::core::AnimationComponent>()->forceAnimation(
         animations::AnimationType::Sleep);
     mainCharacters.player->getComponent<components::core::MovementComponent>()->lock();
+}
+
+void Level1Controller::addDistanceAttackToPlayer()
+{
+    auto distanceAttack = std::make_shared<components::core::DistanceAttack>(mainCharacters.player.get(),
+                                                                             sharedContext, ownersManager);
+    mainCharacters.player->addComponent<components::core::KeyboardDistanceAttackComponent>(distanceAttack);
 }
 
 }

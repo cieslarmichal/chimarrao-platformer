@@ -66,9 +66,6 @@ CharacterFactory::createPlayer(const utils::Vector2f& position, std::function<vo
     auto meleeAttack = std::make_shared<components::core::MeleeAttack>(player.get(), rayCast,
                                                                        std::move(friendlyFireValidator));
     player->addComponent<components::core::KeyboardMeleeAttackComponent>(meleeAttack);
-    auto distanceAttack =
-        std::make_shared<components::core::DistanceAttack>(player.get(), sharedContext, ownersManager);
-    player->addComponent<components::core::KeyboardDistanceAttackComponent>(distanceAttack);
     const std::shared_ptr<utils::Timer> itemCollectorTimer = utils::TimerFactory::createTimer();
     player->addComponent<components::core::ItemCollectorComponent>(quadtree, rayCast, 8, itemCollectorTimer);
     player->addComponent<components::core::DialogueTextComponent>(sharedContext->rendererPool, position, "",
