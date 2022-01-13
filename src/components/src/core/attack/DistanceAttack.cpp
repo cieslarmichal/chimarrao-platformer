@@ -43,12 +43,14 @@ void DistanceAttack::attack()
     const std::shared_ptr<animations::Animator> cometAnimator =
         animatorFactory->createCometAnimator(projectileGraphicsId);
     projectile->addComponent<components::core::AnimationComponent>(cometAnimator);
-    projectile->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f});
     const auto animationDirection =
         heading.x == 1 ? animations::AnimationDirection::Right : animations::AnimationDirection::Left;
     projectile->addComponent<components::core::VelocityComponent>(35);
-    projectile->addComponent<components::core::ProjectileFlyMovementComponent>(animationDirection);
+    auto movementComponent =
+        projectile->addComponent<components::core::ProjectileFlyMovementComponent>(animationDirection);
+    projectile->addComponent<components::core::BoxColliderComponent>(
+        utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f},
+        movementComponent);
     projectile->addComponent<components::core::ExplodeOnCollisionComponent>(50);
 
     ownersManager->add(projectile);
