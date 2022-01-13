@@ -30,7 +30,7 @@ Level1Controller::Level1Controller(
     std::shared_ptr<components::core::ComponentOwnersManager> ownersManagerInit,
     const std::shared_ptr<CharacterFactory>& characterFactory,
     const std::shared_ptr<ObstacleFactory>& obstacleFactory, const std::shared_ptr<ItemFactory>& itemFactory,
-    std::shared_ptr<components::core::SharedContext>  sharedContextInit,
+    std::shared_ptr<components::core::SharedContext> sharedContextInit,
     std::shared_ptr<utils::FileAccess> fileAccessInit,
     std::shared_ptr<components::ui::UIManager> uiManagerInit, StoryGameState* storyGameStateInit)
     : ownersManager{std::move(ownersManagerInit)},

@@ -21,13 +21,40 @@ class DefaultCollisionSystemTest : public Test
 public:
     DefaultCollisionSystemTest()
     {
-        componentOwnerWithDefaultCollider1->addComponent<BoxColliderComponent>(size, CollisionLayer::Default);
-        componentOwnerWithDefaultCollider2->addComponent<BoxColliderComponent>(size, CollisionLayer::Default);
-        componentOwnerWithTileCollider1->addComponent<BoxColliderComponent>(size, CollisionLayer::Tile);
-        componentOwnerWithTileCollider2->addComponent<BoxColliderComponent>(size, CollisionLayer::Tile);
-        componentOwnerWithPlayerCollider1->addComponent<BoxColliderComponent>(size, CollisionLayer::Player);
-        componentOwnerWithPlayerCollider2->addComponent<BoxColliderComponent>(size, CollisionLayer::Player);
-        componentOwnerWitStaticTransform->addComponent<BoxColliderComponent>(size, CollisionLayer::Player);
+        auto movementComponent1 =
+            componentOwnerWithDefaultCollider1->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWithDefaultCollider1->addComponent<BoxColliderComponent>(
+            size, CollisionLayer::Default, utils::Vector2f{0, 0}, movementComponent1);
+
+        auto movementComponent2 =
+            componentOwnerWithDefaultCollider2->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWithDefaultCollider2->addComponent<BoxColliderComponent>(
+            size, CollisionLayer::Default, utils::Vector2f{0, 0}, movementComponent2);
+
+        auto movementComponent3 =
+            componentOwnerWithTileCollider1->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWithTileCollider1->addComponent<BoxColliderComponent>(
+            size, CollisionLayer::Tile, utils::Vector2f{0, 0}, movementComponent3);
+
+        auto movementComponent4 =
+            componentOwnerWithTileCollider2->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWithTileCollider2->addComponent<BoxColliderComponent>(
+            size, CollisionLayer::Tile, utils::Vector2f{0, 0}, movementComponent4);
+
+        auto movementComponent5 =
+            componentOwnerWithPlayerCollider1->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWithPlayerCollider1->addComponent<BoxColliderComponent>(
+            size, CollisionLayer::Player, utils::Vector2f{0, 0}, movementComponent5);
+
+        auto movementComponent6 =
+            componentOwnerWithPlayerCollider2->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWithPlayerCollider2->addComponent<BoxColliderComponent>(
+            size, CollisionLayer::Player, utils::Vector2f{0, 0}, movementComponent6);
+
+        auto movementComponent7 =
+            componentOwnerWitStaticTransform->addComponent<KeyboardAnimatedMovementComponent>();
+        componentOwnerWitStaticTransform->addComponent<BoxColliderComponent>(
+            size, CollisionLayer::Player, utils::Vector2f{0, 0}, movementComponent7);
 
         componentOwnerWithDefaultCollider1->addComponent<AnimationComponent>(animator);
         componentOwnerWithDefaultCollider2->addComponent<AnimationComponent>(animator);
@@ -53,14 +80,6 @@ public:
         componentOwnerWithPlayerCollider2->addComponent<DirectionComponent>();
         componentOwnerWitStaticTransform->addComponent<DirectionComponent>();
 
-        componentOwnerWithDefaultCollider1->addComponent<KeyboardAnimatedMovementComponent>();
-        componentOwnerWithDefaultCollider2->addComponent<KeyboardAnimatedMovementComponent>();
-        componentOwnerWithTileCollider1->addComponent<KeyboardAnimatedMovementComponent>();
-        componentOwnerWithTileCollider2->addComponent<KeyboardAnimatedMovementComponent>();
-        componentOwnerWithPlayerCollider1->addComponent<KeyboardAnimatedMovementComponent>();
-        componentOwnerWithPlayerCollider2->addComponent<KeyboardAnimatedMovementComponent>();
-        componentOwnerWitStaticTransform->addComponent<KeyboardAnimatedMovementComponent>();
-
         componentOwnerWithDefaultCollider1->loadDependentComponents();
         componentOwnerWithDefaultCollider2->loadDependentComponents();
         componentOwnerWithTileCollider1->loadDependentComponents();
@@ -72,25 +91,25 @@ public:
 
     static bool canMoveLeft(const std::shared_ptr<ComponentOwner>& componentOwner)
     {
-        auto movementComponent = componentOwner->getComponent<KeyboardAnimatedMovementComponent>();
+        auto movementComponent = componentOwner->getComponent<MovementComponent>();
         return movementComponent->isAllowedToMoveLeft();
     }
 
     static bool canMoveRight(const std::shared_ptr<ComponentOwner>& componentOwner)
     {
-        auto movementComponent = componentOwner->getComponent<KeyboardAnimatedMovementComponent>();
+        auto movementComponent = componentOwner->getComponent<MovementComponent>();
         return movementComponent->isAllowedToMoveRight();
     }
 
     static bool canMoveUp(const std::shared_ptr<ComponentOwner>& componentOwner)
     {
-        auto movementComponent = componentOwner->getComponent<KeyboardAnimatedMovementComponent>();
+        auto movementComponent = componentOwner->getComponent<MovementComponent>();
         return movementComponent->isAllowedToMoveUp();
     }
 
     static bool canMoveDown(const std::shared_ptr<ComponentOwner>& componentOwner)
     {
-        auto movementComponent = componentOwner->getComponent<KeyboardAnimatedMovementComponent>();
+        auto movementComponent = componentOwner->getComponent<MovementComponent>();
         return movementComponent->isAllowedToMoveDown();
     }
 

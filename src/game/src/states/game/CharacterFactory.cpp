@@ -27,17 +27,15 @@
 
 namespace game
 {
-CharacterFactory::CharacterFactory(
-    const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
-    std::shared_ptr<TileMap> tileMapInit, std::shared_ptr<physics::RayCast> rayCastInit,
-    std::shared_ptr<physics::Quadtree> quadtreeInit,
-    std::shared_ptr<components::core::ComponentOwnersManager> ownersManagerInit)
+CharacterFactory::CharacterFactory(const std::shared_ptr<components::core::SharedContext>& sharedContextInit,
+                                   std::shared_ptr<TileMap> tileMapInit,
+                                   std::shared_ptr<physics::RayCast> rayCastInit,
+                                   std::shared_ptr<physics::Quadtree> quadtreeInit)
     : sharedContext{sharedContextInit},
       tileMap{std::move(tileMapInit)},
       rayCast{std::move(rayCastInit)},
       quadtree{std::move(quadtreeInit)},
-      animatorFactory{animations::AnimatorFactory::createAnimatorFactory(sharedContext->rendererPool)},
-      ownersManager{std::move(ownersManagerInit)}
+      animatorFactory{animations::AnimatorFactory::createAnimatorFactory(sharedContext->rendererPool)}
 {
 }
 
@@ -50,12 +48,13 @@ CharacterFactory::createPlayer(const utils::Vector2f& position, std::function<vo
         player->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{6.f, 3.75f}, position,
                                      graphics::Color::White, graphics::VisibilityLayer::Second);
     auto graphicsId = graphicsComponent->getGraphicsId();
-    player->addComponent<components::core::KeyboardAnimatedMovementComponent>();
     const std::shared_ptr<animations::Animator> playerAnimator =
         animatorFactory->createPlayerAnimator(graphicsId);
     player->addComponent<components::core::AnimationComponent>(playerAnimator);
+    auto movementComponent = player->addComponent<components::core::KeyboardAnimatedMovementComponent>();
     player->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{2.f, 3.75f}, components::core::CollisionLayer::Player, utils::Vector2f{2.f, -0.1f});
+        utils::Vector2f{2.f, 3.75f}, components::core::CollisionLayer::Player, utils::Vector2f{2.f, -0.1f},
+        movementComponent);
     player->addComponent<components::core::VelocityComponent>(8);
     player->addComponent<components::core::CameraComponent>(
         sharedContext->rendererPool, utils::FloatRect{0, 0, static_cast<float>(tileMap->getSize().x) * 4.f,
@@ -84,12 +83,13 @@ CharacterFactory::createRabbitFollower(const std::shared_ptr<components::core::C
         follower->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{1.5f, 1.5f}, position,
                                        graphics::Color::White, graphics::VisibilityLayer::Second);
     auto followerGraphicsId = followerGraphicsComponent->getGraphicsId();
-    follower->addComponent<components::core::FriendFollowerComponent>(player.get());
     const std::shared_ptr<animations::Animator> bunnyAnimator =
         animatorFactory->createBunnyAnimator(followerGraphicsId);
     follower->addComponent<components::core::AnimationComponent>(bunnyAnimator);
+    auto movementComponent = follower->addComponent<components::core::FriendFollowerComponent>(player.get());
     follower->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{1.5f, 1.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.f, 0.f});
+        utils::Vector2f{1.5f, 1.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.f, 0.f},
+        movementComponent);
     follower->addComponent<components::core::VelocityComponent>(6.5);
     follower->addComponent<components::core::HealthComponent>(50);
     follower->addComponent<components::core::DialogueTextComponent>(sharedContext->rendererPool, position, "",
@@ -114,10 +114,11 @@ CharacterFactory::createDruidNpc(const std::shared_ptr<components::core::Compone
     const std::shared_ptr<animations::Animator> druidAnimator =
         animatorFactory->createDruidAnimator(npcGraphicsId);
     npc->addComponent<components::core::AnimationComponent>(druidAnimator);
+    auto movementComponent = npc->addComponent<components::core::IdleNpcMovementComponent>(player.get());
     npc->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f});
+        utils::Vector2f{1.6f, 3.5f}, components::core::CollisionLayer::Player, utils::Vector2f{0.6f, -0.1f},
+        movementComponent);
     npc->addComponent<components::core::VelocityComponent>(0);
-    npc->addComponent<components::core::IdleNpcMovementComponent>(player.get());
     npc->addComponent<components::core::DialogueTextComponent>(
         sharedContext->rendererPool, position, "Press E to talk", fontPath, 9, 0, graphics::Color::Black,
         utils::Vector2f{0, -2});
@@ -139,12 +140,13 @@ CharacterFactory::createBanditEnemy(const std::shared_ptr<components::core::Comp
         enemy->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{3.5f, 3.75f}, position,
                                     graphics::Color::White, graphics::VisibilityLayer::Second);
     auto enemyGraphicsId = enemyGraphicsComponent->getGraphicsId();
-    enemy->addComponent<components::core::EnemyFollowerComponent>(player.get());
     const std::shared_ptr<animations::Animator> banditAnimator =
         animatorFactory->createBanditAnimator(enemyGraphicsId);
     enemy->addComponent<components::core::AnimationComponent>(banditAnimator);
+    auto movementComponent = enemy->addComponent<components::core::EnemyFollowerComponent>(player.get());
     enemy->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{2.f, 2.95f}, components::core::CollisionLayer::Player, utils::Vector2f{0.7f, 0.8f});
+        utils::Vector2f{2.f, 2.95f}, components::core::CollisionLayer::Player, utils::Vector2f{0.7f, 0.8f},
+        movementComponent);
     enemy->addComponent<components::core::VelocityComponent>(5.5);
     enemy->addComponent<components::core::DirectionComponent>();
     auto friendlyFireValidator = std::make_unique<components::core::DefaultFriendlyFireValidator>();

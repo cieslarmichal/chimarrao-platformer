@@ -19,7 +19,8 @@ class BoxColliderComponent : public Component
 public:
     BoxColliderComponent(ComponentOwner*, const utils::Vector2f& size,
                          CollisionLayer collisionLayer = CollisionLayer::Default,
-                         const utils::Vector2f& offset = {0, 0});
+                         const utils::Vector2f& offset = {0, 0},
+                         std::shared_ptr<MovementComponent> = nullptr);
 
     void update(utils::DeltaTime, const input::Input&) override;
     void loadDependentComponents() override;

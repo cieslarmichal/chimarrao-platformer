@@ -15,10 +15,12 @@ namespace components::core
 
 BoxColliderComponent::BoxColliderComponent(ComponentOwner* owner, const utils::Vector2f& sizeInit,
                                            CollisionLayer collisionLayerInit,
-                                           const utils::Vector2f& offsetInit)
+                                           const utils::Vector2f& offsetInit,
+                                           std::shared_ptr<MovementComponent> movementComponentInit)
     : Component{owner},
       collisionLayer{collisionLayerInit},
       offset{offsetInit},
+      movementComponent{std::move(movementComponentInit)},
       size{sizeInit},
       currentColliderOnXAxis{nullptr}
 {
@@ -34,36 +36,9 @@ void BoxColliderComponent::update(utils::DeltaTime deltaTime, const input::Input
 
 void BoxColliderComponent::loadDependentComponents()
 {
-    movementComponent = owner->getComponent<KeyboardAnimatedMovementComponent>();
-
-    if (not movementComponent)
+    if (movementComponent)
     {
-        movementComponent = owner->getComponent<FriendFollowerComponent>();
-    }
-
-    if (not movementComponent)
-    {
-        movementComponent = owner->getComponent<EnemyFollowerComponent>();
-    }
-
-    if (not movementComponent)
-    {
-        movementComponent = owner->getComponent<IdleNpcMovementComponent>();
-    }
-
-    if (not movementComponent)
-    {
-        movementComponent = owner->getComponent<FreeFallMovementComponent>();
-    }
-
-    if (not movementComponent)
-    {
-        movementComponent = owner->getComponent<KeyboardHorizontalMovementComponent>();
-    }
-
-    if (not movementComponent)
-    {
-        movementComponent = owner->getComponent<ProjectileFlyMovementComponent>();
+        movementComponent->loadDependentComponents();
     }
 
     velocityComponent = owner->getComponent<VelocityComponent>();

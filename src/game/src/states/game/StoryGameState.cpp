@@ -42,8 +42,7 @@ StoryGameState::StoryGameState(const std::shared_ptr<window::Window>& windowInit
         physicsFactory->createCollisionSystem());
     auto rayCast = physicsFactory->createRayCast();
     auto quadTree = physicsFactory->getQuadTree();
-    auto characterFactory =
-        std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadTree, ownersManager);
+    auto characterFactory = std::make_shared<CharacterFactory>(sharedContext, tileMap, rayCast, quadTree);
     auto obstacleFactory = std::make_shared<ObstacleFactory>(sharedContext);
     auto itemFactory = std::make_shared<ItemFactory>(sharedContext);
 

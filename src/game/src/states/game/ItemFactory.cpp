@@ -31,11 +31,12 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createYerba(const
         position, "yerbaItem" + std::to_string(numberOfYerbaItemsInGame), sharedContext);
     yerbaItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
                                     yerbaTexturePath, graphics::VisibilityLayer::Second);
+    auto movementComponent = yerbaItem->addComponent<components::core::FreeFallMovementComponent>();
     auto colliderComponent = yerbaItem->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{2, 2}, components::core::CollisionLayer::Player);
+        utils::Vector2f{2, 2}, components::core::CollisionLayer::Player, utils::Vector2f{0, 0},
+        movementComponent);
     colliderComponent->disable();
     yerbaItem->addComponent<components::core::VelocityComponent>(0);
-    yerbaItem->addComponent<components::core::FreeFallMovementComponent>();
     yerbaItem->addComponent<components::core::CollectableItemComponent>(
         "yerba" + std::to_string(numberOfYerbaItemsInGame), components::core::ItemType::Yerba,
         std::make_shared<components::core::ItemHealEffect>(100));
@@ -51,11 +52,12 @@ ItemFactory::createBlueberries(const utils::Vector2f& position)
         position, "blueberriesItem" + std::to_string(numberOfBlueberriesItemsInGame), sharedContext);
     blueberriesItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
                                           blueberriesTexturePath, graphics::VisibilityLayer::Second);
+    auto movementComponent = blueberriesItem->addComponent<components::core::FreeFallMovementComponent>();
     auto colliderComponent = blueberriesItem->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{2, 2}, components::core::CollisionLayer::Player);
+        utils::Vector2f{2, 2}, components::core::CollisionLayer::Player, utils::Vector2f{0, 0},
+        movementComponent);
     colliderComponent->disable();
     blueberriesItem->addComponent<components::core::VelocityComponent>(0);
-    blueberriesItem->addComponent<components::core::FreeFallMovementComponent>();
     blueberriesItem->addComponent<components::core::CollectableItemComponent>(
         "blueberries" + std::to_string(numberOfBlueberriesItemsInGame),
         components::core::ItemType::Blueberries, std::make_shared<components::core::ItemHealEffect>(20));
@@ -70,11 +72,12 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createApple(const
         position, "appleItem" + std::to_string(numberOfAppleItemsInGame), sharedContext);
     appleItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
                                     appleTexturePath, graphics::VisibilityLayer::Second);
+    auto movementComponent = appleItem->addComponent<components::core::FreeFallMovementComponent>();
     auto colliderComponent = appleItem->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{2, 2}, components::core::CollisionLayer::Player);
+        utils::Vector2f{2, 2}, components::core::CollisionLayer::Player, utils::Vector2f{0, 0},
+        movementComponent);
     colliderComponent->disable();
     appleItem->addComponent<components::core::VelocityComponent>(0);
-    appleItem->addComponent<components::core::FreeFallMovementComponent>();
     appleItem->addComponent<components::core::CollectableItemComponent>(
         "apple" + std::to_string(numberOfAppleItemsInGame), components::core::ItemType::Apple,
         std::make_shared<components::core::ItemHealEffect>(25));
@@ -89,11 +92,12 @@ std::shared_ptr<components::core::ComponentOwner> ItemFactory::createKey(const u
         position, "keyItem" + std::to_string(numberOfKeysItemsInGame), sharedContext);
     keyItem->addGraphicsComponent(sharedContext->rendererPool, utils::Vector2f{2, 2}, position,
                                   keyTexturePath, graphics::VisibilityLayer::Second);
+    auto movementComponent = keyItem->addComponent<components::core::FreeFallMovementComponent>();
     auto colliderComponent = keyItem->addComponent<components::core::BoxColliderComponent>(
-        utils::Vector2f{2, 2}, components::core::CollisionLayer::Player);
+        utils::Vector2f{2, 2}, components::core::CollisionLayer::Player, utils::Vector2f{0, 0},
+        movementComponent);
     colliderComponent->disable();
     keyItem->addComponent<components::core::VelocityComponent>(0);
-    keyItem->addComponent<components::core::FreeFallMovementComponent>();
     keyItem->addComponent<components::core::CollectableItemComponent>(
         "key" + std::to_string(numberOfKeysItemsInGame), components::core::ItemType::Key, nullptr);
     return keyItem;
